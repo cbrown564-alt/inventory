@@ -1,6 +1,8 @@
 # Research Brief: AI-Powered Property Inventory Tool for UK Tenancy Deposits
 
 > Compiled 2026-06-10 from web research (sources linked inline).
+> §3 updated later the same day with the current VLM landscape and first
+> empirical results from real footage (see docs 04 and 05).
 
 ---
 
@@ -59,6 +61,48 @@ Practical takeaway: Grounding DINO + SAM2 is the permissively-licensed accuracy 
 ## 3. VLMs for Item Description and Condition Assessment
 
 - **Open VLMs**: [Qwen2.5-VL](https://arxiv.org/pdf/2502.13923) (3B/7B/72B, [HF](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct)) is the strongest open option for this use case: native-resolution dynamic ViT enables **fine-grained recognition, OCR (brand/model labels, serial plates), grounding (it outputs bounding boxes), and structured JSON output**. LLaVA and InternVL are alternatives; LLaVA-1.5-7B has been studied for damage assessment under quantization for edge deployment ([arXiv:2603.26770](https://arxiv.org/html/2603.26770v1)).
+
+### June 2026 update — local VLM landscape (what the `local` backend targets)
+
+The Qwen2.5-VL recommendation above is superseded. Current open multimodal
+models on [Ollama](https://ollama.com/search?c=vision), sized for consumer
+GPUs (our reference machine: RTX 4070 Laptop, 8 GB VRAM):
+
+| Model | Q4 size | Notes |
+|---|---|---|
+| **qwen3.5:9b** | 6.6 GB | Current Qwen generation, natively multimodal; fits 8 GB VRAM with KV-cache headroom — **our `local` backend default** |
+| [minicpm-v4.5:8b](https://ollama.com/library/minicpm-v4.5) | 6.1 GB | Vision specialist; OpenCompass 77.2, claims parity with Qwen2.5-VL-72B; strong OCR |
+| gemma-4-12b (Q4) | 6.7 GB | Credible rival; borderline fit once vision overhead + context are loaded |
+| qwen3-vl 2B–235B | varies | Previous Qwen VL line, superseded by qwen3.5 |
+
+Delivery notes: Ollama's structured-output mode enforces the JSON schema via
+llama.cpp grammar (validity guaranteed, unlike prompt-begging); on 8 GB cards
+photos must go in small batches (≈6) to keep the KV cache resident — the
+pipeline's merge pass de-duplicates across batches.
+
+### June 2026 update — cheap closed VLMs and first empirical results
+
+Pricing per 1M tokens in/out ([OpenAI](https://openai.com/api/pricing/),
+[Gemini](https://ai.google.dev/gemini-api/docs/pricing)); a 19-frame room is
+~25K input + 3–4K output tokens, so all of these cost pennies per property:
+
+| Model | Price | First-footage result (docs/04) |
+|---|---|---|
+| gemini-3.1-flash-lite | $0.25/$1.50 | 10 items; differentiated grades; **its one defect claim was a hallucination** (sticker read as a scratch) |
+| gpt-4.1-mini | $0.40/$1.60 | 17 items; flat grading — all "good", zero defects |
+| gpt-5.4-mini | $0.75/$4.50 | 28 items; structural coverage, clerk register, real localized defect — **provisional pick** |
+| claude-haiku-4-5 | $1.00/$5.00 | not yet run on this footage |
+
+Empirical confirmations of this brief's predictions (single room, informal —
+see docs/04 for caveats): **recall and grading discipline are independent
+skills** (a model can list well and grade lazily); **defect hallucination is
+real and the worst failure mode** for documents-only adjudication where the
+landlord bears the burden of proof — confirming the "never let it invent
+defects" design rule and motivating the claim-next-to-evidence review UX
+(docs/05). One protocol covers all closed providers: the OpenAI-compatible
+chat-completions API (OpenAI native, Gemini via its
+[compatibility endpoint](https://ai.google.dev/gemini-api/docs/openai), and
+Ollama locally), which is how the `openai` backend reaches them all.
 - **Condition-assessment literature**: most academic work is infrastructure-flavoured but directly analogous — benchmarking VLMs on **distress identification, severity grading, and maintenance estimation** for pavements ([PLOS One benchmark](https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0340380), [arXiv:2604.08212](https://arxiv.org/html/2604.08212)) and road damage ([RoadBench, arXiv:2507.17353](https://arxiv.org/pdf/2507.17353)). Consistent findings: VLMs describe visible defects and rank severity coarsely well, are weaker at calibrated fine-grained grading; explicit rubrics/few-shot exemplars materially help; hallucination of absent defects is a known risk.
 - **Industry practice**: insurance claims is the mature commercial domain — CV/VLM damage triage from photos and walkaround videos ([Clarifai](https://www.clarifai.com/solutions/ai-in-insurance), [SOSA](https://www.sosa.co/blog/why-damage-assessment-is-the-choke-point-in-claims), vehicle grading e.g. Ravin AI ([overview](https://binariks.com/blog/ai-car-damage-detection/))). For general household goods there is **no dominant product** — a gap.
 - **Design implication**: detector (crop/ground) → VLM (name, attributes, condition against an explicit written rubric) → constrained output in the UK grading vocabulary is the state of practice. Force the VLM to grade against the rubric; never let it invent defects.
@@ -100,3 +144,10 @@ Practical takeaway: Grounding DINO + SAM2 is the permissively-licensed accuracy 
 ### Key product implications
 
 Build the report to the TDS/AIIC template: room-by-room schedule, per-item description + condition (with factual qualifiers) + separate cleanliness grade, embedded date-stamped photos, sign-off flow with a 7-day amendment window, and a comparative check-out mode. Technically: open-vocab detector (YOLOE for speed — mind the AGPL licence — or Apache-2.0 Grounding DINO + SAM2) for item proposals, then a VLM prompted with the UK grading rubric for naming and condition, with human confirmation per item. Differentiate on what nobody does: calibrated condition grading, hash+timestamp evidential integrity, and automated check-in/check-out comparison.
+
+*June 2026 addendum*: the describe step is now provider-agnostic (claude /
+openai-compat / local Ollama behind one interface), with gpt-5.4-mini the
+provisional cheap default pending eval-fixture numbers (docs/04). The first
+verified hallucinated defect (sticker → "scratch") moved review UX from
+nice-to-have to core evidential machinery (docs/05): human confirmation per
+item is what converts AI drafts into adjudication-grade evidence.
