@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.venv/
+
+# model weights
+*.pt
+
+# local runs (committed example lives in examples/)
+report/
+capture/
+/tmp-*

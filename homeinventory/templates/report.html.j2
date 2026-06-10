@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ inv.report_type }} — {{ inv.property_address or "Property" }}</title>
+<style>
+  :root {
+    --ink: #1a1a1a; --muted: #5a5f6a; --rule: #d8dbe0; --accent: #15406b;
+    --band: #f3f5f8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--ink); margin: 0; font-size: 11pt; line-height: 1.45;
+  }
+  main { max-width: 820px; margin: 0 auto; padding: 24px; }
+  h1, h2, h3 { font-weight: 600; color: var(--accent); }
+  .cover {
+    text-align: center; padding: 120px 24px 60px; page-break-after: always;
+  }
+  .cover h1 { font-size: 26pt; margin-bottom: 4px; }
+  .cover .addr { font-size: 16pt; margin: 18px 0 40px; }
+  .cover table { margin: 0 auto; border-collapse: collapse; font-size: 11pt; }
+  .cover td { padding: 5px 14px; text-align: left; }
+  .cover td:first-child { color: var(--muted); }
+  .kicker { letter-spacing: .22em; text-transform: uppercase; font-size: 9pt;
+            color: var(--muted); }
+  section.room { page-break-before: always; }
+  h2 { font-size: 15pt; border-bottom: 2px solid var(--accent);
+       padding-bottom: 4px; margin-top: 28px; }
+  .summary { background: var(--band); padding: 10px 14px; border-left: 3px solid
+             var(--accent); margin: 12px 0 18px; }
+  table.items { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+  table.items th {
+    text-align: left; background: var(--accent); color: #fff; padding: 6px 8px;
+    font-weight: 600;
+  }
+  table.items td { border-bottom: 1px solid var(--rule); padding: 6px 8px;
+                   vertical-align: top; }
+  table.items tr { page-break-inside: avoid; }
+  .grade { white-space: nowrap; font-variant: small-caps; }
+  .grade.poor { color: #a3231f; font-weight: 700; }
+  .grade.fair { color: #9a6200; }
+  .defects { color: #a3231f; }
+  .defects li { margin: 0; }
+  ul { margin: 2px 0 2px 16px; padding: 0; }
+  .photos { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .photos figure { margin: 0; width: 31%; page-break-inside: avoid; }
+  .photos img { width: 100%; height: 150px; object-fit: cover;
+                border: 1px solid var(--rule); }
+  .photos figcaption { font-size: 8pt; color: var(--muted); }
+  .meta { color: var(--muted); font-size: 9pt; }
+  .appendix table { width: 100%; border-collapse: collapse; font-size: 8pt;
+                    font-family: "Courier New", monospace; }
+  .appendix td, .appendix th { border-bottom: 1px solid var(--rule);
+                               padding: 3px 6px; text-align: left; }
+  .declaration { border: 1px solid var(--rule); padding: 16px; margin-top: 24px; }
+  .sigline { display: inline-block; width: 250px; border-bottom: 1px solid
+             var(--ink); margin: 28px 16px 4px 0; }
+  footer { color: var(--muted); font-size: 8pt; text-align: center;
+           margin-top: 40px; }
+  @media print { .photos img { height: 130px; } }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="kicker">Property Inventory</div>
+  <h1>{{ inv.report_type }}</h1>
+  <div class="addr">{{ inv.property_address or "Address not specified" }}</div>
+  <table>
+    <tr><td>Date of inspection</td><td><strong>{{ inv.inspected_at }}</strong></td></tr>
+    <tr><td>Prepared by</td><td><strong>{{ inv.inspected_by or "—" }}</strong></td></tr>
+    <tr><td>Rooms inspected</td><td><strong>{{ inv.rooms | length }}</strong></td></tr>
+    <tr><td>Items recorded</td><td><strong>{{ total_items }}</strong></td></tr>
+    <tr><td>Photographs</td><td><strong>{{ total_photos }}</strong></td></tr>
+  </table>
+</div>
+
+<main>
+<h2>Contents &amp; condition key</h2>
+<p><strong>Condition:</strong> New &middot; Excellent &middot; Good (sound, light wear)
+&middot; Fair (visible wear or marks) &middot; Poor (damaged or heavily worn).<br>
+<strong>Cleanliness:</strong> Professionally cleaned &middot; Cleaned to domestic
+standard &middot; Requires cleaning.</p>
+<p>This report records the contents and internal condition of the property at the
+date of inspection, supported by the embedded photographs. Original image files are
+identified by SHA-256 checksum in Appendix A; any party holding the original files
+can re-compute the checksums to confirm the photographic record is unaltered.</p>
+{% if inv.notes %}<p class="summary">{{ inv.notes }}</p>{% endif %}
+
+{% for room in inv.rooms %}
+<section class="room">
+  <h2>{{ loop.index }}. {{ room.name }}</h2>
+  {% if room.summary %}<div class="summary">{{ room.summary }}</div>{% endif %}
+
+  <table class="items">
+    <thead>
+      <tr><th style="width:9%">Ref</th><th style="width:18%">Item</th>
+          <th>Description</th><th style="width:10%">Condition</th>
+          <th style="width:13%">Cleanliness</th><th style="width:22%">Defects noted</th>
+          <th style="width:8%">Photos</th></tr>
+    </thead>
+    <tbody>
+    {% for item in room.items %}
+      <tr>
+        <td>{{ item.id }}</td>
+        <td><strong>{{ item.name }}</strong>{% if item.quantity > 1 %} &times;{{ item.quantity }}{% endif %}</td>
+        <td>{{ item.description }}</td>
+        <td class="grade {{ item.condition or '' }}">{{ item.condition or "—" }}</td>
+        <td class="grade">{{ item.cleanliness or "—" }}</td>
+        <td>{% if item.defects %}<ul class="defects">{% for d in item.defects %}<li>{{ d }}</li>{% endfor %}</ul>{% else %}<span class="meta">None noted</span>{% endif %}</td>
+        <td class="meta">{{ item.photo_ids | join(", ") }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  {% if room.photos %}
+  <h3>Photographs — {{ room.name }}</h3>
+  <div class="photos">
+    {% for photo in room.photos %}
+    <figure>
+      <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}">
+      <figcaption>{{ photo.id }}{% if photo.captured_at %} &middot; {{ photo.captured_at }}{% endif %}
+        {% if photo.source_video %}&middot; frame of {{ photo.source_video }}{% endif %}</figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+{% endfor %}
+
+<section class="room appendix">
+  <h2>Appendix A — Photographic evidence manifest (SHA-256)</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Room</th><th>File</th><th>Captured</th><th>SHA-256</th></tr></thead>
+    <tbody>
+    {% for room in inv.rooms %}{% for photo in room.photos %}
+      <tr><td>{{ photo.id }}</td><td>{{ room.name }}</td><td>{{ photo.path }}</td>
+          <td>{{ photo.captured_at or "—" }}</td><td>{{ photo.sha256[:32] }}&hellip;</td></tr>
+    {% endfor %}{% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="declaration">
+  <h3>Declaration</h3>
+  <p>This inventory was prepared with AI assistance and has been reviewed for
+  accuracy by the undersigned. It provides a fair and accurate record of the
+  contents and internal condition of the property on the date stated. Unless
+  amendments are notified in writing within 7 days of receipt, this inventory
+  will be deemed accepted by all parties.</p>
+  <div>
+    <span class="sigline"></span><span class="sigline"></span><br>
+    <span class="meta">Landlord / Agent &nbsp; — date</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="meta">Tenant &nbsp; — date</span>
+  </div>
+</section>
+
+<footer>
+  Generated by homeinventory v{{ inv.tool_version }}
+  ({{ inv.describe_backend }} backend) &middot; {{ inv.inspected_at }}
+</footer>
+</main>
+</body>
+</html>

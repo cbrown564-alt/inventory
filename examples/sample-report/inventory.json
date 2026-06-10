@@ -1,0 +1,233 @@
+{
+  "property_address": "Test Flat, 1 Example Street",
+  "inspected_by": "C. Brown",
+  "inspected_at": "2026-06-10",
+  "report_type": "Inventory & Schedule of Condition",
+  "rooms": [
+    {
+      "name": "Kitchen",
+      "summary": "1 item type(s) auto-detected in Kitchen. Offline mode: condition grades require manual review or a VLM backend (--backend claude).",
+      "items": [
+        {
+          "id": "KIT-001",
+          "name": "Window",
+          "category": "other",
+          "description": "Detected automatically (30% confidence). Review and add material/colour details.",
+          "condition": null,
+          "cleanliness": null,
+          "defects": [],
+          "quantity": 1,
+          "est_value_band": null,
+          "photo_ids": [
+            "P001"
+          ],
+          "crop_path": "report/work/crops/kitchen_a_d00_window.jpg",
+          "detector_label": "window",
+          "confidence": 0.2976096570491791
+        }
+      ],
+      "photos": [
+        {
+          "id": "P001",
+          "path": "Kitchen/kitchen_a.jpg",
+          "room": "Kitchen",
+          "sha256": "a4c17108a57f0fb229bf28c6c2a6b04e1625a4ea5cc66824b707232c1caf2881",
+          "captured_at": null,
+          "source_video": null,
+          "note": null
+        },
+        {
+          "id": "P002",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000001.jpg",
+          "room": "Kitchen",
+          "sha256": "427cd62db586705e0bd3c91ce1414a0887cf35ff651512a502a96dfbaa523520",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P003",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000011.jpg",
+          "room": "Kitchen",
+          "sha256": "88a77141c05927cc15f4af5b4d313c55e3560dcda2c05b27f0740d84a135d887",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P004",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000026.jpg",
+          "room": "Kitchen",
+          "sha256": "24a7252ff7c6d1420d997efe53f49e3cb60a3cb9fc349a22e12bce4cb6f823c6",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P005",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000036.jpg",
+          "room": "Kitchen",
+          "sha256": "de11b9ce524dce23348a00814ec2c794b9fd99fcc83d3382a5e6eda9a1268e76",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P006",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000041.jpg",
+          "room": "Kitchen",
+          "sha256": "69210b3f37a890d5ada3188be66f7cb5e03072998b90d525854fb057e57d6ff6",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P007",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000046.jpg",
+          "room": "Kitchen",
+          "sha256": "0c1bd9dd2eaf6dd1b5fc74ed24b5e821c7096c52211481193288e07bfb99567e",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P008",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000051.jpg",
+          "room": "Kitchen",
+          "sha256": "013fc2f844fb120c16ec5ba9d88f3a7300c3f85642b4914d2d0373c4af0bc694",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P009",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000056.jpg",
+          "room": "Kitchen",
+          "sha256": "b945eb54d25db09698d8af6ce1284a4809d3c7aed23b8399976632a222648c3f",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P010",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000061.jpg",
+          "room": "Kitchen",
+          "sha256": "118715f234e62be99b154adad19d1dbde3e7991dee1c306bbb6d026291dfb25a",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P011",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000066.jpg",
+          "room": "Kitchen",
+          "sha256": "dbcbdbb68140e64b0116d26f1e0e5505bdc523da94821917f7a65439f6200297",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P012",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000071.jpg",
+          "room": "Kitchen",
+          "sha256": "e1ad424ed78db25ae4c5e233cf6f084b2c16377dd1ddd2fdc88493288eb90e07",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P013",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000076.jpg",
+          "room": "Kitchen",
+          "sha256": "36b41e87b0565349496295acfe35e99fe01b1ed545f4b86511217a08bc9d6f5b",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P014",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000081.jpg",
+          "room": "Kitchen",
+          "sha256": "f3cd30e754b749d1e1a5d8ea7ab9dab1d93c640563a6357c25de9d8ac096ffa9",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        },
+        {
+          "id": "P015",
+          "path": "/tmp/fixture/report/work/frames/Kitchen/pan_f000086.jpg",
+          "room": "Kitchen",
+          "sha256": "f2fcef1efa58b368be3d97d4f414c0e242cdbb7f14f6f83014a0340f70324de6",
+          "captured_at": null,
+          "source_video": "pan.mp4",
+          "note": null
+        }
+      ]
+    },
+    {
+      "name": "Living Room",
+      "summary": "Room in good decorative order. Emulsioned off-white walls, oak-effect laminate flooring. Cleaned to a good domestic standard.",
+      "items": [
+        {
+          "id": "LIV-001",
+          "name": "Walls",
+          "category": "structure",
+          "description": "Emulsioned off-white walls.",
+          "condition": "good",
+          "cleanliness": "cleaned to domestic standard",
+          "defects": [
+            "scuff mark above skirting, left of window"
+          ],
+          "quantity": 1,
+          "est_value_band": null,
+          "photo_ids": [
+            "P001"
+          ],
+          "crop_path": null,
+          "detector_label": null,
+          "confidence": null
+        },
+        {
+          "id": "LIV-002",
+          "name": "Three-seat sofa",
+          "category": "furniture",
+          "description": "Blue fabric three-seat sofa.",
+          "condition": "good",
+          "cleanliness": "cleaned to domestic standard",
+          "defects": [],
+          "quantity": 1,
+          "est_value_band": "£250-1000",
+          "photo_ids": [
+            "P001"
+          ],
+          "crop_path": null,
+          "detector_label": "sofa",
+          "confidence": 0.9
+        }
+      ],
+      "photos": [
+        {
+          "id": "P016",
+          "path": "Living Room/wall_a.jpg",
+          "room": "Living Room",
+          "sha256": "7cd273b17a1e842ea82d468ab5f77a1520f0fb053b86c5f4b08cbde943d11e82",
+          "captured_at": null,
+          "source_video": null,
+          "note": null
+        },
+        {
+          "id": "P017",
+          "path": "Living Room/wall_b.jpg",
+          "room": "Living Room",
+          "sha256": "3348c89bc65e538867b588c23a89a15fe18e390686081749fcb7aa4a21bf2470",
+          "captured_at": null,
+          "source_video": null,
+          "note": null
+        }
+      ]
+    }
+  ],
+  "notes": "",
+  "tool_version": "0.1.0",
+  "describe_backend": "offline"
+}

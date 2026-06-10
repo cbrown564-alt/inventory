@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inventory & Schedule of Condition — Test Flat, 1 Example Street</title>
+<style>
+  :root {
+    --ink: #1a1a1a; --muted: #5a5f6a; --rule: #d8dbe0; --accent: #15406b;
+    --band: #f3f5f8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--ink); margin: 0; font-size: 11pt; line-height: 1.45;
+  }
+  main { max-width: 820px; margin: 0 auto; padding: 24px; }
+  h1, h2, h3 { font-weight: 600; color: var(--accent); }
+  .cover {
+    text-align: center; padding: 120px 24px 60px; page-break-after: always;
+  }
+  .cover h1 { font-size: 26pt; margin-bottom: 4px; }
+  .cover .addr { font-size: 16pt; margin: 18px 0 40px; }
+  .cover table { margin: 0 auto; border-collapse: collapse; font-size: 11pt; }
+  .cover td { padding: 5px 14px; text-align: left; }
+  .cover td:first-child { color: var(--muted); }
+  .kicker { letter-spacing: .22em; text-transform: uppercase; font-size: 9pt;
+            color: var(--muted); }
+  section.room { page-break-before: always; }
+  h2 { font-size: 15pt; border-bottom: 2px solid var(--accent);
+       padding-bottom: 4px; margin-top: 28px; }
+  .summary { background: var(--band); padding: 10px 14px; border-left: 3px solid
+             var(--accent); margin: 12px 0 18px; }
+  table.items { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+  table.items th {
+    text-align: left; background: var(--accent); color: #fff; padding: 6px 8px;
+    font-weight: 600;
+  }
+  table.items td { border-bottom: 1px solid var(--rule); padding: 6px 8px;
+                   vertical-align: top; }
+  table.items tr { page-break-inside: avoid; }
+  .grade { white-space: nowrap; font-variant: small-caps; }
+  .grade.poor { color: #a3231f; font-weight: 700; }
+  .grade.fair { color: #9a6200; }
+  .defects { color: #a3231f; }
+  .defects li { margin: 0; }
+  ul { margin: 2px 0 2px 16px; padding: 0; }
+  .photos { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .photos figure { margin: 0; width: 31%; page-break-inside: avoid; }
+  .photos img { width: 100%; height: 150px; object-fit: cover;
+                border: 1px solid var(--rule); }
+  .photos figcaption { font-size: 8pt; color: var(--muted); }
+  .meta { color: var(--muted); font-size: 9pt; }
+  .appendix table { width: 100%; border-collapse: collapse; font-size: 8pt;
+                    font-family: "Courier New", monospace; }
+  .appendix td, .appendix th { border-bottom: 1px solid var(--rule);
+                               padding: 3px 6px; text-align: left; }
+  .declaration { border: 1px solid var(--rule); padding: 16px; margin-top: 24px; }
+  .sigline { display: inline-block; width: 250px; border-bottom: 1px solid
+             var(--ink); margin: 28px 16px 4px 0; }
+  footer { color: var(--muted); font-size: 8pt; text-align: center;
+           margin-top: 40px; }
+  @media print { .photos img { height: 130px; } }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="kicker">Property Inventory</div>
+  <h1>Inventory & Schedule of Condition</h1>
+  <div class="addr">Test Flat, 1 Example Street</div>
+  <table>
+    <tr><td>Date of inspection</td><td><strong>2026-06-10</strong></td></tr>
+    <tr><td>Prepared by</td><td><strong>C. Brown</strong></td></tr>
+    <tr><td>Rooms inspected</td><td><strong>2</strong></td></tr>
+    <tr><td>Items recorded</td><td><strong>3</strong></td></tr>
+    <tr><td>Photographs</td><td><strong>17</strong></td></tr>
+  </table>
+</div>
+
+<main>
+<h2>Contents &amp; condition key</h2>
+<p><strong>Condition:</strong> New &middot; Excellent &middot; Good (sound, light wear)
+&middot; Fair (visible wear or marks) &middot; Poor (damaged or heavily worn).<br>
+<strong>Cleanliness:</strong> Professionally cleaned &middot; Cleaned to domestic
+standard &middot; Requires cleaning.</p>
+<p>This report records the contents and internal condition of the property at the
+date of inspection, supported by the embedded photographs. Original image files are
+identified by SHA-256 checksum in Appendix A; any party holding the original files
+can re-compute the checksums to confirm the photographic record is unaltered.</p>
+
+
+
+<section class="room">
+  <h2>1. Kitchen</h2>
+  <div class="summary">1 item type(s) auto-detected in Kitchen. Offline mode: condition grades require manual review or a VLM backend (--backend claude).</div>
+
+  <table class="items">
+    <thead>
+      <tr><th style="width:9%">Ref</th><th style="width:18%">Item</th>
+          <th>Description</th><th style="width:10%">Condition</th>
+          <th style="width:13%">Cleanliness</th><th style="width:22%">Defects noted</th>
+          <th style="width:8%">Photos</th></tr>
+    </thead>
+    <tbody>
+    
+      <tr>
+        <td>KIT-001</td>
+        <td><strong>Window</strong></td>
+        <td>Detected automatically (30% confidence). Review and add material/colour details.</td>
+        <td class="grade ">—</td>
+        <td class="grade">—</td>
+        <td><span class="meta">None noted</span></td>
+        <td class="meta">P001</td>
+      </tr>
+    
+    </tbody>
+  </table>
+
+  
+  <h3>Photographs — Kitchen</h3>
+  <div class="photos">
+    
+    <figure>
+      <img src="photos/P001.jpg" alt="P001">
+      <figcaption>P001
+        </figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P002.jpg" alt="P002">
+      <figcaption>P002
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P003.jpg" alt="P003">
+      <figcaption>P003
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P004.jpg" alt="P004">
+      <figcaption>P004
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P005.jpg" alt="P005">
+      <figcaption>P005
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P006.jpg" alt="P006">
+      <figcaption>P006
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P007.jpg" alt="P007">
+      <figcaption>P007
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P008.jpg" alt="P008">
+      <figcaption>P008
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P009.jpg" alt="P009">
+      <figcaption>P009
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P010.jpg" alt="P010">
+      <figcaption>P010
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P011.jpg" alt="P011">
+      <figcaption>P011
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P012.jpg" alt="P012">
+      <figcaption>P012
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P013.jpg" alt="P013">
+      <figcaption>P013
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P014.jpg" alt="P014">
+      <figcaption>P014
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P015.jpg" alt="P015">
+      <figcaption>P015
+        &middot; frame of pan.mp4</figcaption>
+    </figure>
+    
+  </div>
+  
+</section>
+
+<section class="room">
+  <h2>2. Living Room</h2>
+  <div class="summary">Room in good decorative order. Emulsioned off-white walls, oak-effect laminate flooring. Cleaned to a good domestic standard.</div>
+
+  <table class="items">
+    <thead>
+      <tr><th style="width:9%">Ref</th><th style="width:18%">Item</th>
+          <th>Description</th><th style="width:10%">Condition</th>
+          <th style="width:13%">Cleanliness</th><th style="width:22%">Defects noted</th>
+          <th style="width:8%">Photos</th></tr>
+    </thead>
+    <tbody>
+    
+      <tr>
+        <td>LIV-001</td>
+        <td><strong>Walls</strong></td>
+        <td>Emulsioned off-white walls.</td>
+        <td class="grade good">good</td>
+        <td class="grade">cleaned to domestic standard</td>
+        <td><ul class="defects"><li>scuff mark above skirting, left of window</li></ul></td>
+        <td class="meta">P001</td>
+      </tr>
+    
+      <tr>
+        <td>LIV-002</td>
+        <td><strong>Three-seat sofa</strong></td>
+        <td>Blue fabric three-seat sofa.</td>
+        <td class="grade good">good</td>
+        <td class="grade">cleaned to domestic standard</td>
+        <td><span class="meta">None noted</span></td>
+        <td class="meta">P001</td>
+      </tr>
+    
+    </tbody>
+  </table>
+
+  
+  <h3>Photographs — Living Room</h3>
+  <div class="photos">
+    
+    <figure>
+      <img src="photos/P016.jpg" alt="P016">
+      <figcaption>P016
+        </figcaption>
+    </figure>
+    
+    <figure>
+      <img src="photos/P017.jpg" alt="P017">
+      <figcaption>P017
+        </figcaption>
+    </figure>
+    
+  </div>
+  
+</section>
+
+
+<section class="room appendix">
+  <h2>Appendix A — Photographic evidence manifest (SHA-256)</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Room</th><th>File</th><th>Captured</th><th>SHA-256</th></tr></thead>
+    <tbody>
+    
+      <tr><td>P001</td><td>Kitchen</td><td>Kitchen/kitchen_a.jpg</td>
+          <td>—</td><td>a4c17108a57f0fb229bf28c6c2a6b04e&hellip;</td></tr>
+    
+      <tr><td>P002</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000001.jpg</td>
+          <td>—</td><td>427cd62db586705e0bd3c91ce1414a08&hellip;</td></tr>
+    
+      <tr><td>P003</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000011.jpg</td>
+          <td>—</td><td>88a77141c05927cc15f4af5b4d313c55&hellip;</td></tr>
+    
+      <tr><td>P004</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000026.jpg</td>
+          <td>—</td><td>24a7252ff7c6d1420d997efe53f49e3c&hellip;</td></tr>
+    
+      <tr><td>P005</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000036.jpg</td>
+          <td>—</td><td>de11b9ce524dce23348a00814ec2c794&hellip;</td></tr>
+    
+      <tr><td>P006</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000041.jpg</td>
+          <td>—</td><td>69210b3f37a890d5ada3188be66f7cb5&hellip;</td></tr>
+    
+      <tr><td>P007</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000046.jpg</td>
+          <td>—</td><td>0c1bd9dd2eaf6dd1b5fc74ed24b5e821&hellip;</td></tr>
+    
+      <tr><td>P008</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000051.jpg</td>
+          <td>—</td><td>013fc2f844fb120c16ec5ba9d88f3a73&hellip;</td></tr>
+    
+      <tr><td>P009</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000056.jpg</td>
+          <td>—</td><td>b945eb54d25db09698d8af6ce1284a48&hellip;</td></tr>
+    
+      <tr><td>P010</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000061.jpg</td>
+          <td>—</td><td>118715f234e62be99b154adad19d1dbd&hellip;</td></tr>
+    
+      <tr><td>P011</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000066.jpg</td>
+          <td>—</td><td>dbcbdbb68140e64b0116d26f1e0e5505&hellip;</td></tr>
+    
+      <tr><td>P012</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000071.jpg</td>
+          <td>—</td><td>e1ad424ed78db25ae4c5e233cf6f084b&hellip;</td></tr>
+    
+      <tr><td>P013</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000076.jpg</td>
+          <td>—</td><td>36b41e87b0565349496295acfe35e99f&hellip;</td></tr>
+    
+      <tr><td>P014</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000081.jpg</td>
+          <td>—</td><td>f3cd30e754b749d1e1a5d8ea7ab9dab1&hellip;</td></tr>
+    
+      <tr><td>P015</td><td>Kitchen</td><td>/tmp/fixture/report/work/frames/Kitchen/pan_f000086.jpg</td>
+          <td>—</td><td>f2fcef1efa58b368be3d97d4f414c0e2&hellip;</td></tr>
+    
+      <tr><td>P016</td><td>Living Room</td><td>Living Room/wall_a.jpg</td>
+          <td>—</td><td>7cd273b17a1e842ea82d468ab5f77a15&hellip;</td></tr>
+    
+      <tr><td>P017</td><td>Living Room</td><td>Living Room/wall_b.jpg</td>
+          <td>—</td><td>3348c89bc65e538867b588c23a89a15f&hellip;</td></tr>
+    
+    </tbody>
+  </table>
+</section>
+
+<section class="declaration">
+  <h3>Declaration</h3>
+  <p>This inventory was prepared with AI assistance and has been reviewed for
+  accuracy by the undersigned. It provides a fair and accurate record of the
+  contents and internal condition of the property on the date stated. Unless
+  amendments are notified in writing within 7 days of receipt, this inventory
+  will be deemed accepted by all parties.</p>
+  <div>
+    <span class="sigline"></span><span class="sigline"></span><br>
+    <span class="meta">Landlord / Agent &nbsp; — date</span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="meta">Tenant &nbsp; — date</span>
+  </div>
+</section>
+
+<footer>
+  Generated by homeinventory v0.1.0
+  (offline backend) &middot; 2026-06-10
+</footer>
+</main>
+</body>
+</html>
