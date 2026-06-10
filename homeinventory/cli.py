@@ -67,7 +67,7 @@ def _checkpoint_name(room_name: str) -> str:
 
 
 def cmd_build(args) -> int:
-    from .describe import DescribeAuthError, get_backend
+    from .describe import FatalBackendError, get_backend
     from .detect import Detector
     from .ingest import ingest
     from .integrity import build_manifest
@@ -120,12 +120,18 @@ def cmd_build(args) -> int:
         prior = Inventory.from_json(inv_path.read_text(encoding="utf-8"))
 
     # 4-5. describe + merge, room by room, checkpointing as we go
-    backend = get_backend(args.backend, model=args.model)
+    try:
+        backend = get_backend(args.backend, model=args.model,
+                              base_url=args.base_url)
+    except FatalBackendError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
     inv = Inventory(
         property_address=args.address or (prior.property_address if prior else ""),
         inspected_by=args.inspector or (prior.inspected_by if prior else ""),
         describe_backend=f"{backend.name}"
-                         + (f" ({args.model})" if args.backend == "claude" and args.model else ""),
+                         + (f" ({getattr(backend, 'model', None)})"
+                            if getattr(backend, "model", None) else ""),
         notes=args.notes or (prior.notes if prior else ""),
     )
     used_codes: set[str] = set()
@@ -160,7 +166,7 @@ def cmd_build(args) -> int:
             try:
                 summary, items = backend.describe_room(room_name, photos, paths,
                                                        detections)
-            except DescribeAuthError as e:
+            except FatalBackendError as e:
                 print(f"error: {e}", file=sys.stderr)
                 return 2
             except Exception as e:
@@ -234,10 +240,17 @@ def main(argv: list[str] | None = None) -> int:
     b = sub.add_parser("build", help="build a report from a capture folder")
     b.add_argument("capture_dir")
     b.add_argument("-o", "--out", default="report")
-    b.add_argument("--backend", choices=["claude", "offline"], default="claude")
+    b.add_argument("--backend", choices=["claude", "openai", "local", "offline"],
+                   default="claude")
     b.add_argument("--model", default=None,
-                   help="claude model id (default claude-opus-4-8; "
-                        "claude-haiku-4-5 is the budget option)")
+                   help="model id for the backend: claude default "
+                        "claude-opus-4-8 (claude-haiku-4-5 is the budget "
+                        "option); openai default gpt-4.1-mini (gemini-* "
+                        "models route to Google automatically); local "
+                        "default qwen3.5:9b (any Ollama vision model)")
+    b.add_argument("--base-url", default=None,
+                   help="override the API base URL for --backend openai "
+                        "(any OpenAI-compatible server)")
     b.add_argument("--address", help="property address for the cover page")
     b.add_argument("--inspector", help="name of the person attesting the report")
     b.add_argument("--notes", help="general notes for the report front matter")

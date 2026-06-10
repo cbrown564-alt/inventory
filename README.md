@@ -26,9 +26,10 @@ homeinventory build capture/ -o report/ \
 open report/inventory.html        # or inventory.pdf
 ```
 
-No API key? `--backend offline` runs fully locally (YOLOE detection only):
-structurally complete report, but descriptions and grades need manual review.
-Cheaper API runs: `--model claude-haiku-4-5`.
+No API key? `--backend local` runs an open-weight VLM through Ollama
+(`ollama pull qwen3.5:9b`), or `--backend offline` skips AI description
+entirely (YOLOE detection only). Cheaper API runs: `--model claude-haiku-4-5`,
+or `--backend openai` with `gpt-4.1-mini` / `gemini-3.1-flash-lite`.
 
 After reviewing, edit `report/inventory.json` (fix names, grades, add notes) and
 re-render without re-running the AI:
@@ -50,8 +51,10 @@ photos / video → keyframes → SHA-256 manifest → YOLOE open-vocab detection
   hints. Optional — the pipeline degrades gracefully without it. (Note: Ultralytics
   is AGPL-3.0 — fine for personal use; needs a licence if commercialised.)
 - **Description** (pluggable): `claude` (Claude vision, structured JSON output,
-  well under £1 per property with Haiku) or `offline`. A fully-open-source `local`
-  backend (Qwen2.5-VL via Ollama) is planned — see the implementation plan.
+  well under £1 per property with Haiku), `openai` (OpenAI or any
+  OpenAI-compatible API — `--model gemini-3.1-flash-lite` routes to Google
+  automatically), `local` (open-weight VLM via Ollama, default qwen3.5:9b,
+  £0 per run), or `offline` (detector only).
 - **Evidence**: EXIF capture times + SHA-256 of every original in
   `manifest.json` and the report appendix, so the photo set is tamper-evident.
 

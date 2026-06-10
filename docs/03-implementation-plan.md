@@ -34,7 +34,10 @@ manifest.
 
 ## Milestone 2 — Open-source-only parity
 
-- [ ] `local` describe backend via Ollama (Qwen2.5-VL or best current open VLM)
+- [x] `local` describe backend via Ollama (qwen3.5:9b default; batched calls
+      sized for consumer GPUs) — live validation on real footage pending
+- [x] `openai` backend: any OpenAI-compatible API (OpenAI, Gemini via compat
+      endpoint, custom --base-url) for cheap cross-provider comparison
 - [ ] Eval: quantify gap vs `claude` backend on fixtures; document in README
 - [ ] Optional GPU path; YOLOE prompt-free mode evaluation vs text-prompt vocabulary
 

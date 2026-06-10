@@ -1,15 +1,20 @@
 """Describe backends: turn a room's photos into a structured item schedule.
 
-Two backends ship in the prototype:
+Four backends:
 
 * ``claude``  — Claude vision with a JSON-schema-constrained output. Highest
   quality; costs pennies per property. Default model is claude-opus-4-8;
   pass --model claude-haiku-4-5 / claude-sonnet-4-6 to trade quality for cost.
+* ``openai``  — any provider speaking the OpenAI chat-completions protocol:
+  OpenAI itself (default gpt-4.1-mini), Google Gemini via its
+  OpenAI-compatibility endpoint (--model gemini-3.1-flash-lite picks the
+  right base URL automatically), or a custom --base-url.
+* ``local``   — open-weight VLM via a local Ollama server (default
+  qwen3.5:9b). Fully offline, £0 per run. Photos are sent in small batches so
+  the KV cache fits consumer GPUs; the merge pass de-duplicates across
+  batches. Ollama's structured-output grammar guarantees valid JSON.
 * ``offline`` — no network, no model: items come straight from the detector
   (or a bare placeholder). Used for tests/evals and as a graceful fallback.
-
-A ``local`` backend (open-weight VLM via Ollama, same prompt contract) is the
-planned fully-open-source path — see docs/03-implementation-plan.md M2.
 """
 
 from __future__ import annotations
@@ -17,6 +22,9 @@ from __future__ import annotations
 import base64
 import json
 import logging
+import os
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Optional, Protocol
 
@@ -147,8 +155,41 @@ def _encode_image(path: Path, max_dim: int = 1568) -> tuple[str, str]:
     return "image/jpeg", base64.standard_b64encode(buf.getvalue()).decode()
 
 
-class DescribeAuthError(RuntimeError):
-    """Credentials missing or rejected — fatal for the whole build, not one room."""
+class FatalBackendError(RuntimeError):
+    """Backend cannot work at all (no credentials, server down, model missing).
+
+    Aborts the whole build immediately instead of failing room by room."""
+
+
+class DescribeAuthError(FatalBackendError):
+    """Credentials missing or rejected."""
+
+
+def _parse_items(data: dict, photos: list[Photo]) -> tuple[str, list[Item]]:
+    """Convert a schema-shaped payload into normalised Items.
+
+    photo_ids are validated against the photos actually sent; hallucinated or
+    missing ids fall back to attributing the item to the whole photo set.
+    """
+    valid_ids = {p.id for p in photos}
+    all_ids = [p.id for p in photos]
+    items = []
+    for raw in data.get("items", []):
+        ids = [i for i in (raw.get("photo_ids") or []) if i in valid_ids] or all_ids
+        items.append(Item(
+            id="",  # assigned during merge
+            name=raw.get("name", "Unidentified item"),
+            category=raw.get("category", "other"),
+            description=raw.get("description", ""),
+            condition=raw.get("condition"),
+            cleanliness=raw.get("cleanliness"),
+            defects=list(raw.get("defects") or []),
+            quantity=int(raw.get("quantity") or 1),
+            est_value_band=raw.get("est_value_band"),
+            photo_ids=ids,
+            confidence=raw.get("confidence"),
+        ).normalise())
+    return data.get("room_summary", ""), items
 
 
 class ClaudeBackend:
@@ -205,25 +246,183 @@ class ClaudeBackend:
                 "token limit — split the room into fewer photos per folder"
             )
         text = next(b.text for b in response.content if b.type == "text")
-        data = json.loads(text)
+        return _parse_items(json.loads(text), photos)
 
-        items = []
-        for i, raw in enumerate(data.get("items", []), start=1):
-            raw.setdefault("photo_ids", [p.id for p in photos])
-            items.append(Item(
-                id="",  # assigned during merge
-                name=raw.get("name", "Unidentified item"),
-                category=raw.get("category", "other"),
-                description=raw.get("description", ""),
-                condition=raw.get("condition"),
-                cleanliness=raw.get("cleanliness"),
-                defects=list(raw.get("defects") or []),
-                quantity=int(raw.get("quantity") or 1),
-                est_value_band=raw.get("est_value_band"),
-                photo_ids=list(raw.get("photo_ids") or []),
-                confidence=raw.get("confidence"),
-            ).normalise())
-        return data.get("room_summary", ""), items
+
+class LocalBackend:
+    """Open-weight VLM via a local Ollama server. Fully offline, £0 per run."""
+    name = "local"
+
+    DEFAULT_MODEL = "qwen3.5:9b"
+
+    def __init__(self, model: Optional[str] = None, host: Optional[str] = None,
+                 batch_size: int = 6, max_dim: int = 1120, num_ctx: int = 16384,
+                 timeout: float = 900.0):
+        self.model = model or self.DEFAULT_MODEL
+        self.host = (host or os.environ.get("OLLAMA_HOST")
+                     or "http://localhost:11434").rstrip("/")
+        # consumer-GPU constraints: few images per call keeps the KV cache on
+        # the card; smaller encode dim cuts vision tokens with no real loss
+        # for inventory work. merge_items() de-duplicates across batches.
+        self.batch_size = batch_size
+        self.max_dim = max_dim
+        self.num_ctx = num_ctx
+        self.timeout = timeout
+
+    def _chat(self, messages: list[dict]) -> dict:
+        body = json.dumps({
+            "model": self.model,
+            "messages": messages,
+            "stream": False,
+            "format": ITEM_SCHEMA,
+            "options": {"num_ctx": self.num_ctx, "temperature": 0},
+        }).encode()
+        req = urllib.request.Request(
+            f"{self.host}/api/chat", data=body,
+            headers={"Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode("utf-8", errors="replace")
+            try:
+                detail = json.loads(detail).get("error", detail)
+            except ValueError:
+                pass
+            if "not found" in detail.lower():
+                raise FatalBackendError(
+                    f"Ollama model not available: {detail!r} — run: "
+                    f"ollama pull {self.model}") from e
+            raise RuntimeError(f"Ollama error: {detail}") from e
+        except urllib.error.URLError as e:
+            raise FatalBackendError(
+                f"Cannot reach Ollama at {self.host} ({e.reason}) — is it "
+                "running? Start it with `ollama serve` or install from "
+                "https://ollama.com") from e
+
+    def describe_room(self, room_name, photos, photo_paths, detections):
+        batches = [list(range(i, min(i + self.batch_size, len(photos))))
+                   for i in range(0, len(photos), self.batch_size)]
+        summaries: list[str] = []
+        items: list[Item] = []
+        for b, idxs in enumerate(batches, start=1):
+            batch_photos = [photos[i] for i in idxs]
+            images = [_encode_image(photo_paths[i], max_dim=self.max_dim)[1]
+                      for i in idxs]
+            id_list = ", ".join(p.id for p in batch_photos)
+            prompt = (
+                f"These photos all show the room: \"{room_name}\".\n"
+                f"The {len(batch_photos)} attached photos are, in order: {id_list}.\n"
+                f"(Batch {b} of {len(batches)} for this room.) Produce the complete "
+                "item schedule for everything visible in THESE photos."
+                + _detection_hints(batch_photos, detections)
+            )
+            log.info("  local batch %d/%d (%d photos)…", b, len(batches),
+                     len(batch_photos))
+            resp = self._chat([
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt, "images": images},
+            ])
+            data = json.loads(resp["message"]["content"])
+            summary, batch_items = _parse_items(data, batch_photos)
+            summaries.append(summary)
+            items.extend(batch_items)
+        # keep the most complete narrative rather than concatenating near-dupes
+        best_summary = max(summaries, key=len, default="")
+        return best_summary, items
+
+
+class OpenAICompatBackend:
+    """Any provider speaking the OpenAI chat-completions protocol.
+
+    Covers OpenAI itself, Google Gemini (whose OpenAI-compatibility endpoint
+    is selected automatically for gemini-* models), and any other compatible
+    server via --base-url. One whole-room call, like the claude backend.
+    """
+    name = "openai"
+
+    DEFAULT_MODEL = "gpt-4.1-mini"
+    GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai"
+
+    def __init__(self, model: Optional[str] = None, base_url: Optional[str] = None,
+                 api_key: Optional[str] = None, timeout: float = 300.0):
+        self.model = model or self.DEFAULT_MODEL
+        if base_url is None and self.model.startswith("gemini"):
+            base_url = self.GEMINI_BASE
+        base_url = (base_url or os.environ.get("OPENAI_BASE_URL")
+                    or "https://api.openai.com/v1")
+        self.base_url = base_url.rstrip("/")
+        self.api_key = api_key or self._resolve_key(self.base_url)
+        self.timeout = timeout
+        if not self.api_key:
+            raise DescribeAuthError(
+                "No API key found. Set OPENAI_API_KEY (or GEMINI_API_KEY for "
+                "gemini-* models), or use another --backend."
+            )
+
+    @staticmethod
+    def _resolve_key(base_url: str) -> Optional[str]:
+        if "googleapis.com" in base_url:
+            return (os.environ.get("GEMINI_API_KEY")
+                    or os.environ.get("GOOGLE_API_KEY"))
+        return os.environ.get("OPENAI_API_KEY")
+
+    def _post(self, payload: dict) -> dict:
+        req = urllib.request.Request(
+            f"{self.base_url}/chat/completions",
+            data=json.dumps(payload).encode(),
+            headers={"Content-Type": "application/json",
+                     "Authorization": f"Bearer {self.api_key}"})
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode("utf-8", errors="replace")
+            try:
+                detail = json.loads(detail).get("error", {}).get("message", detail)
+            except (ValueError, AttributeError):
+                pass
+            if e.code in (401, 403):
+                raise DescribeAuthError(
+                    f"API key rejected by {self.base_url}: {detail}") from e
+            if e.code == 404:
+                raise FatalBackendError(
+                    f"Model or endpoint not found at {self.base_url}: {detail}") from e
+            raise RuntimeError(f"API error {e.code}: {detail}") from e
+        except urllib.error.URLError as e:
+            raise FatalBackendError(
+                f"Cannot reach {self.base_url} ({e.reason})") from e
+
+    def describe_room(self, room_name, photos, photo_paths, detections):
+        content = []
+        for photo, path in zip(photos, photo_paths):
+            media_type, data = _encode_image(path)
+            content.append({"type": "text", "text": f"Photo {photo.id}:"})
+            content.append({"type": "image_url",
+                            "image_url": {"url": f"data:{media_type};base64,{data}"}})
+        content.append({
+            "type": "text",
+            "text": (
+                f"These photos all show the room: \"{room_name}\".\n"
+                "Produce the complete item schedule for this room."
+                + _detection_hints(photos, detections)
+            ),
+        })
+        resp = self._post({
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": content},
+            ],
+            "response_format": {"type": "json_schema", "json_schema": {
+                "name": "inventory_room", "strict": True, "schema": ITEM_SCHEMA}},
+        })
+        choice = resp["choices"][0]
+        if choice.get("finish_reason") == "length":
+            raise RuntimeError(
+                f"item schedule for '{room_name}' was truncated at the output "
+                "token limit — split the room into fewer photos per folder")
+        return _parse_items(json.loads(choice["message"]["content"]), photos)
 
 
 class OfflineBackend:
@@ -266,9 +465,15 @@ class OfflineBackend:
         return summary, items
 
 
-def get_backend(name: str, model: Optional[str] = None) -> DescribeBackend:
+def get_backend(name: str, model: Optional[str] = None,
+                base_url: Optional[str] = None) -> DescribeBackend:
     if name == "claude":
         return ClaudeBackend(model=model or "claude-opus-4-8")
+    if name == "openai":
+        return OpenAICompatBackend(model=model, base_url=base_url)
+    if name == "local":
+        return LocalBackend(model=model)
     if name == "offline":
         return OfflineBackend()
-    raise ValueError(f"unknown describe backend: {name!r} (expected claude|offline)")
+    raise ValueError(f"unknown describe backend: {name!r} "
+                     "(expected claude|openai|local|offline)")
