@@ -60,13 +60,18 @@ def exif_capture_time(path: Path) -> Optional[str]:
 
 
 def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
-                      min_sharpness: float = 60.0) -> list[Path]:
-    """Sample a video into at most `max_frames` sharp, mutually distinct frames.
+                      min_window_s: float = 0.75,
+                      min_diff: float = 12.0) -> list[Path]:
+    """Keep the sharpest frame from each time window of the video.
 
-    Strategy: sample ~3 candidate frames per second, score sharpness (variance of
-    Laplacian), drop blurry frames, then greedily keep frames that differ enough
-    from the last kept frame (mean absolute grey difference). This favours the
-    moments the camera lingers, which is where users frame items deliberately.
+    An absolute sharpness threshold doesn't transfer across devices, codecs
+    and lighting, and rejects entire spans of hand-held footage while the
+    camera pans — leaving coverage holes where items are never seen by the
+    describe backend. Instead: split the video into equal time windows and
+    keep the sharpest candidate (~3 sampled per second) from each window, so
+    every part of the walkthrough is represented by its best available frame.
+    Windows where the camera barely moved since the last kept frame are
+    dropped via mean absolute grey difference.
     """
     import cv2
     import numpy as np
@@ -75,11 +80,31 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
     if not cap.isOpened():
         raise RuntimeError(f"cannot open video: {video}")
     fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
-    step = max(1, int(fps / 3))
+    n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
+    duration = n_frames / fps if n_frames else 0.0
+    window_s = max(duration / max_frames, min_window_s) if duration else min_window_s
+    step = max(1, int(fps / 3))  # ~3 candidate frames per second
     out_dir.mkdir(parents=True, exist_ok=True)
 
     kept: list[Path] = []
-    last_kept_grey = None
+    last_kept_small = None
+    best: Optional[tuple[float, int, "np.ndarray"]] = None  # current window's best
+    window = 0
+
+    def flush():
+        nonlocal last_kept_small
+        if best is None or len(kept) >= max_frames:
+            return
+        _sharp, fidx, frame = best
+        small = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY), (160, 90))
+        if last_kept_small is not None and \
+                float(np.mean(cv2.absdiff(small, last_kept_small))) < min_diff:
+            return  # camera didn't move since the last kept frame
+        out = out_dir / f"{video.stem}_f{fidx:06d}.jpg"
+        cv2.imwrite(str(out), frame, [cv2.IMWRITE_JPEG_QUALITY, 92])
+        kept.append(out)
+        last_kept_small = small
+
     idx = 0
     while True:
         ok = cap.grab()
@@ -89,24 +114,21 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
             idx += 1
             continue
         ok, frame = cap.retrieve()
-        idx += 1
         if not ok:
+            idx += 1
             continue
+        w = int((idx / fps) / window_s)
+        if w != window:
+            flush()
+            best, window = None, w
         grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        sharpness = cv2.Laplacian(grey, cv2.CV_64F).var()
-        if sharpness < min_sharpness:
-            continue
-        small = cv2.resize(grey, (160, 90))
-        if last_kept_grey is not None:
-            diff = float(np.mean(cv2.absdiff(small, last_kept_grey)))
-            if diff < 12.0:  # too similar to the previous keyframe
-                continue
-        out = out_dir / f"{video.stem}_f{idx:06d}.jpg"
-        cv2.imwrite(str(out), frame, [cv2.IMWRITE_JPEG_QUALITY, 92])
-        kept.append(out)
-        last_kept_grey = small
+        sharpness = float(cv2.Laplacian(grey, cv2.CV_64F).var())
+        if best is None or sharpness > best[0]:
+            best = (sharpness, idx, frame.copy())
+        idx += 1
         if len(kept) >= max_frames:
             break
+    flush()
     cap.release()
     return kept
 
