@@ -31,12 +31,48 @@ No API key? `--backend local` runs an open-weight VLM through Ollama
 entirely (YOLOE detection only). Cheaper API runs: `--model claude-haiku-4-5`,
 or `--backend openai` with `gpt-4.1-mini` / `gemini-3.1-flash-lite`.
 
-After reviewing, edit `report/inventory.json` (fix names, grades, add notes) and
-re-render without re-running the AI:
+## Reviewing — where the report earns its evidential weight
+
+The AI drafts; a human confirms and signs. Three ways in, lightest first
+(design rationale in [`docs/05-review-experience.md`](docs/05-review-experience.md)):
+
+1. **The report reviews itself.** `inventory.html` carries a built-in review
+   mode: toggle it, click any item to see its claims next to the evidence
+   photos, fix grades from dropdowns, strike false defects (kept as
+   "reviewer rejected", never silently deleted), confirm items with the
+   keyboard (`j`/`k`/`space`/`1–5`), sign, then *Download reviewed
+   inventory.json* and drop it in the report folder. Works from a file share
+   or phone browser, no server.
+
+2. **The local review app.** Saves straight back to `inventory.json` —
+   no download/move loop — and adds what a static page can't:
+
+   ```sh
+   homeinventory review capture/ -o report/
+   ```
+
+   Confidence-sorted queue with bulk-accept, drag-a-box defect annotation on
+   photos, per-room coverage panel (photos no item cites), add-missed-item
+   with photo upload, and a *Re-describe room* button for after you fix a
+   capture problem.
+
+3. **The tenant countersigns** (`--share`): prints a token-protected link to
+   open on the tenant's phone — they walk the rooms, comment per item
+   ("the carpet stain was already there"), and countersign. Comments,
+   signatures (each pinning a SHA-256 of the content signed) and a
+   hash-chained `acknowledgements.jsonl` trail are stored with the report.
+   An inventory signed by both parties carries maximum adjudication weight.
+
+Prefer raw JSON? Edit `report/inventory.json` directly and re-render without
+re-running the AI:
 
 ```sh
 homeinventory render capture/ -o report/
 ```
+
+Before spending API money, `homeinventory check capture/` runs the free local
+detector against a per-room checklist ("no radiator seen in Bedroom 2") to
+catch coverage gaps while you're still at the property.
 
 ## How it works
 
@@ -70,6 +106,7 @@ photos / video → keyframes → SHA-256 manifest → YOLOE open-vocab detection
 - [`docs/01-scope-and-architecture.md`](docs/01-scope-and-architecture.md) — scope, architecture, UX, evals
 - [`docs/02-research.md`](docs/02-research.md) — TDS/AIIC standards, YOLOE, VLM condition-grading, competitor gaps
 - [`docs/03-implementation-plan.md`](docs/03-implementation-plan.md) — milestones M0 (this prototype) → M4
+- [`docs/05-review-experience.md`](docs/05-review-experience.md) — review UX design space (Levels 0–4) and what's built
 - [`evals/README.md`](evals/README.md) — fixture format and quality metrics
 
 ## Status

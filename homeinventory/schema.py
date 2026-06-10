@@ -6,6 +6,7 @@ consumes the JSON form of `Inventory`, so this module is the contract.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
@@ -75,6 +76,21 @@ class Item:
     detector_label: Optional[str] = None
     confidence: Optional[float] = None   # describe-backend confidence 0..1
 
+    # --- review & attestation state (docs/05-review-experience.md) ---
+    # Rejected claims are struck through, never silently deleted, so the report
+    # can honestly say "AI suggested, reviewer rejected".
+    reviewed: bool = False               # a human confirmed this item
+    rejected: bool = False               # whole item struck by the reviewer
+    rejected_defects: list[str] = field(default_factory=list)
+    not_inspected: Optional[str] = None  # "not tested" | "not visible"
+    added_by: Optional[str] = None       # "reviewer" when human-added; None = AI
+    # Defect photo regions, normalised 0..1:
+    #   {"defect": str, "photo_id": str, "x": f, "y": f, "w": f, "h": f}
+    defect_regions: list[dict] = field(default_factory=list)
+    # Per-item comments from any party:
+    #   {"author": str, "role": "landlord"|"agent"|"tenant", "text": str, "at": iso}
+    comments: list[dict] = field(default_factory=list)
+
     def normalise(self) -> "Item":
         self.condition = _norm_grade(self.condition, CONDITION_GRADES)
         self.cleanliness = _norm_grade(self.cleanliness, CLEANLINESS_GRADES)
@@ -104,6 +120,10 @@ class Inventory:
     notes: str = ""
     tool_version: str = "0.1.0"
     describe_backend: str = ""
+    # Signature blocks, appended at signing time (Level 1/3 review):
+    #   {"role": "landlord"|"agent"|"tenant", "name": str, "signed_at": iso,
+    #    "inventory_sha256": hash of the content signed, "via": str}
+    signatures: list[dict] = field(default_factory=list)
 
     def to_json(self) -> str:
         return json.dumps(asdict(self), indent=2, ensure_ascii=False)
@@ -111,15 +131,18 @@ class Inventory:
     @staticmethod
     def from_json(text: str) -> "Inventory":
         raw = json.loads(text)
+
+        def known(cls, d):  # tolerate fields written by newer versions
+            return {k: v for k, v in d.items() if k in cls.__dataclass_fields__}
+
         rooms = []
         for r in raw.get("rooms", []):
-            items = [Item(**i).normalise() for i in r.get("items", [])]
-            photos = [Photo(**p) for p in r.get("photos", [])]
+            items = [Item(**known(Item, i)).normalise() for i in r.get("items", [])]
+            photos = [Photo(**known(Photo, p)) for p in r.get("photos", [])]
             rooms.append(Room(name=r["name"], summary=r.get("summary", ""),
                               items=items, photos=photos))
         keep = {k: v for k, v in raw.items() if k != "rooms"}
-        inv = Inventory(**{k: v for k, v in keep.items()
-                           if k in Inventory.__dataclass_fields__})
+        inv = Inventory(**known(Inventory, keep))
         inv.rooms = rooms
         return inv
 
@@ -128,3 +151,16 @@ class Inventory:
 
     def photo_count(self) -> int:
         return sum(len(r.photos) for r in self.rooms)
+
+    def reviewed_count(self) -> int:
+        return sum(1 for r in self.rooms for i in r.items
+                   if i.reviewed or i.rejected)
+
+    def content_sha256(self) -> str:
+        """Hash of everything a signature attests to (the signatures themselves
+        are excluded so countersigning doesn't invalidate the first party)."""
+        body = asdict(self)
+        body.pop("signatures", None)
+        canon = json.dumps(body, sort_keys=True, ensure_ascii=False,
+                           separators=(",", ":"))
+        return hashlib.sha256(canon.encode("utf-8")).hexdigest()

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inventory review — {{ inv.property_address or "Property" }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f6f3; --panel: #ffffff; --ink: #1d2126; --muted: #6a7077;
+    --line: #e2e3df; --line-strong: #c9cbc4;
+    --accent: #0f6b4a; --accent-ink: #0a4a33; --accent-soft: #e6f2ec;
+    --danger: #a3231f; --danger-soft: #f7eceb;
+    --tenant: #7a3e8f;
+    --ui: "Outfit", "Segoe UI Variable Text", "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.55 var(--ui); color: var(--ink);
+         background: var(--paper); }
+  main { max-width: 760px; margin: 0 auto; padding: 40px 22px 180px; }
+
+  .masthead { padding: 30px 0 26px; border-bottom: 2px solid var(--ink); }
+  .masthead .kicker { font-size: 11px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--accent-ink); }
+  .masthead h1 { font-size: 30px; font-weight: 700; letter-spacing: -.02em;
+    margin: 8px 0 4px; line-height: 1.15; }
+  .masthead .meta { color: var(--muted); font-size: 13px; }
+  .howto { margin: 22px 0 6px; padding: 14px 18px; background: var(--panel);
+    border-left: 3px solid var(--accent); font-size: 14px; }
+
+  h2.room { font-size: 13px; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--muted); margin: 44px 0 6px;
+    display: flex; align-items: baseline; gap: 12px; }
+  h2.room::after { content: ""; flex: 1; border-top: 1px solid var(--line-strong); }
+  .room-summary { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
+
+  .item { padding: 20px 0; border-top: 1px solid var(--line); }
+  .item .head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .item .ref { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .item .name { font-size: 17px; font-weight: 600; }
+  .item.rejected .name { text-decoration: line-through; color: var(--muted); }
+  .item .grade { font-size: 12px; color: var(--accent-ink);
+    background: var(--accent-soft); border-radius: 3px; padding: 2px 8px; }
+  .item .grade.poor, .item .grade.fair { color: var(--danger);
+    background: var(--danger-soft); }
+  .item .desc { color: var(--ink); margin: 6px 0 0; font-size: 14px; }
+  .item .note { color: var(--muted); font-size: 12px; font-style: italic; }
+  .defects { margin: 8px 0 0; padding: 0 0 0 18px; color: var(--danger);
+             font-size: 14px; }
+  .defects li.struck { color: var(--muted); text-decoration: line-through; }
+  .defects li.struck::after { content: " — withdrawn by reviewer";
+    font-size: 11px; font-style: italic; text-decoration: none; }
+
+  .ev { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .ev .ph { position: relative; }
+  .ev img { height: 110px; display: block; border: 1px solid var(--line); }
+  .ev .pid { position: absolute; left: 0; bottom: 0;
+    background: rgba(29,33,38,.78); color: #fff; font: 9px var(--mono);
+    padding: 1px 5px; }
+  .ev .box { position: absolute; border: 1.5px solid var(--danger);
+    background: rgba(163,35,31,.12); }
+
+  .c-thread { margin-top: 12px; }
+  .c-line { padding: 6px 0 0; font-size: 13px; }
+  .c-line .who { font-weight: 600; font-size: 12px; color: var(--accent-ink); }
+  .c-line .who.tenant { color: var(--tenant); }
+  .c-line .at { font-family: var(--mono); font-size: 10px; color: var(--muted);
+                margin-left: 8px; }
+  .c-add { display: flex; gap: 8px; margin-top: 10px; }
+  .c-add input { flex: 1; font: 14px var(--ui); padding: 9px 12px;
+    border: 1px solid var(--line-strong); border-radius: 4px; background: #fff; }
+  .c-add button { font: 600 13px var(--ui); padding: 9px 16px; cursor: pointer;
+    border: 1px solid var(--line-strong); background: var(--panel);
+    border-radius: 4px; }
+  .c-add button:hover { border-color: var(--tenant); color: var(--tenant); }
+  .c-add button:active { transform: translateY(1px); }
+
+  .sigblock { margin-top: 54px; border-top: 2px solid var(--ink);
+              padding-top: 18px; }
+  .sigblock h2 { font-size: 18px; margin: 0 0 8px; }
+  .sigcard { border-left: 3px solid var(--accent); background: var(--panel);
+             padding: 10px 14px; margin: 10px 0; font-size: 14px; }
+  .sigcard .hash { font-family: var(--mono); font-size: 10px;
+                   color: var(--muted); word-break: break-all; }
+
+  #signbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    background: var(--panel); border-top: 1px solid var(--line-strong);
+    box-shadow: 0 -10px 30px -20px rgba(29,33,38,.5); }
+  #signbar .inner { max-width: 760px; margin: 0 auto; padding: 14px 22px;
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  #signbar .lead { font-size: 13px; color: var(--muted); flex: 1 1 240px; }
+  #signbar input { font: 14px var(--ui); padding: 10px 12px; min-width: 200px;
+    border: 1px solid var(--line-strong); border-radius: 4px; }
+  #signbar button { font: 600 14px var(--ui); padding: 10px 20px;
+    background: var(--accent); color: #fff; border: none; border-radius: 4px;
+    cursor: pointer; }
+  #signbar button:hover { background: var(--accent-ink); }
+  #signbar button:active { transform: translateY(1px); }
+  #signbar.done { background: var(--accent-soft); }
+  #signbar.done .inner { color: var(--accent-ink); font-weight: 500; }
+
+  #toast { position: fixed; bottom: 92px; left: 50%; z-index: 40;
+    transform: translateX(-50%) translateY(8px); background: var(--ink);
+    color: #fff; font-size: 13px; padding: 9px 18px; border-radius: 5px;
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; }
+  #toast.show { opacity: .97; transform: translateX(-50%); }
+</style>
+</head>
+<body>
+<main id="main"></main>
+
+<div id="signbar">
+  <div class="inner" id="signbar-inner">
+    <span class="lead">Walked the property and checked this inventory?
+      Countersigning records your acknowledgement next to the landlord's
+      signature.</span>
+    <input id="sign-name" type="text" placeholder="Your full name">
+    <button id="sign-btn">Acknowledge &amp; countersign</button>
+  </div>
+</div>
+<div id="toast" role="status"></div>
+
+<script type="application/json" id="hi-data">{{ payload | tojson }}</script>
+<script>
+"use strict";
+(function () {
+  var payload = JSON.parse(document.getElementById("hi-data").textContent);
+  var inv = payload.inventory;
+  var photoSrc = payload.photo_src || {};
+  var token = payload.token;
+  var api = function (method, path, body) {
+    return fetch("/api/t/" + token + path, {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().then(function (j) {
+        if (!r.ok) throw new Error(j.error || r.statusText);
+        return j;
+      });
+    });
+  };
+
+  function el(tag, attrs, children) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === "text") n.textContent = attrs[k];
+      else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { n.appendChild(c); });
+    return n;
+  }
+  function toast(msg) {
+    var t = document.getElementById("toast");
+    t.textContent = msg; t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2600);
+  }
+  var savedName = "";
+  try { savedName = localStorage.getItem("hi-tenant-name") || ""; } catch (e) {}
+
+  function render() {
+    var m = document.getElementById("main");
+    m.innerHTML = "";
+
+    var head = el("div", { "class": "masthead" });
+    head.appendChild(el("div", { "class": "kicker",
+      text: "Inventory & schedule of condition — tenant review" }));
+    head.appendChild(el("h1", { text: inv.property_address || "Property" }));
+    head.appendChild(el("div", { "class": "meta",
+      text: "Inspected " + (inv.inspected_at || "") +
+            (inv.inspected_by ? " by " + inv.inspected_by : "") + " · " +
+            inv.rooms.length + " rooms" }));
+    m.appendChild(head);
+    m.appendChild(el("div", { "class": "howto",
+      text: "Walk each room with this page open. If something was already " +
+            "marked, scuffed or missing before you moved in, say so in a " +
+            "comment on that item — your comments are stored with the " +
+            "inventory and protect your deposit. When you're done, " +
+            "countersign at the bottom." }));
+
+    inv.rooms.forEach(function (room, ri) {
+      m.appendChild(el("h2", { "class": "room",
+        text: (ri + 1) + ". " + room.name }));
+      if (room.summary) m.appendChild(el("p", { "class": "room-summary",
+        text: room.summary }));
+      (room.items || []).forEach(function (it) {
+        m.appendChild(itemCard(it));
+      });
+    });
+
+    var sig = el("div", { "class": "sigblock" });
+    sig.appendChild(el("h2", { text: "Signatures" }));
+    if ((inv.signatures || []).length) {
+      inv.signatures.forEach(function (s) {
+        var card = el("div", { "class": "sigcard" });
+        card.appendChild(el("strong", { text: s.name }));
+        card.appendChild(document.createTextNode(
+          " — " + s.role + " — signed " + s.signed_at));
+        if (s.inventory_sha256) card.appendChild(el("div", { "class": "hash",
+          text: "attests content sha256 " + s.inventory_sha256 }));
+        sig.appendChild(card);
+      });
+    } else {
+      sig.appendChild(el("p", { "class": "room-summary",
+        text: "No signatures recorded yet." }));
+    }
+    m.appendChild(sig);
+
+    var mine = (inv.signatures || []).some(function (s) {
+      return s.role === "tenant";
+    });
+    if (mine) {
+      var bar = document.getElementById("signbar");
+      bar.classList.add("done");
+      document.getElementById("signbar-inner").innerHTML =
+        "Countersigned — thank you. Your comments and signature are on record.";
+    }
+  }
+
+  function itemCard(it) {
+    var card = el("div", { "class": "item" + (it.rejected ? " rejected" : "") });
+    var head = el("div", { "class": "head" });
+    head.appendChild(el("span", { "class": "ref", text: it.id }));
+    head.appendChild(el("span", { "class": "name",
+      text: (it.name || "") + ((it.quantity || 1) > 1 ? " ×" + it.quantity : "") }));
+    var grade = it.not_inspected || it.condition;
+    if (grade) head.appendChild(el("span", {
+      "class": "grade " + (it.condition || ""), text: grade }));
+    if (it.cleanliness) head.appendChild(el("span", { "class": "grade",
+      text: it.cleanliness }));
+    card.appendChild(head);
+    if (it.rejected) card.appendChild(el("div", { "class": "note",
+      text: "AI suggested this item; the reviewer rejected it." }));
+    if (it.description) card.appendChild(el("p", { "class": "desc",
+      text: it.description }));
+
+    var live = it.defects || [], dead = it.rejected_defects || [];
+    if (live.length || dead.length) {
+      var ul = el("ul", { "class": "defects" });
+      live.forEach(function (d) { ul.appendChild(el("li", { text: d })); });
+      dead.forEach(function (d) {
+        ul.appendChild(el("li", { "class": "struck", text: d }));
+      });
+      card.appendChild(ul);
+    }
+
+    var ev = el("div", { "class": "ev" });
+    var any = false;
+    (it.photo_ids || []).forEach(function (pid) {
+      if (!photoSrc[pid]) return;
+      any = true;
+      var ph = el("span", { "class": "ph" });
+      var a = el("a", { href: photoSrc[pid], target: "_blank" });
+      a.appendChild(el("img", { src: photoSrc[pid], alt: pid,
+        loading: "lazy" }));
+      ph.appendChild(a);
+      ph.appendChild(el("span", { "class": "pid", text: pid }));
+      (it.defect_regions || []).forEach(function (reg) {
+        if (reg.photo_id !== pid) return;
+        var b = el("span", { "class": "box", title: reg.defect });
+        b.style.left = (reg.x * 100) + "%";
+        b.style.top = (reg.y * 100) + "%";
+        b.style.width = (reg.w * 100) + "%";
+        b.style.height = (reg.h * 100) + "%";
+        ph.appendChild(b);
+      });
+      ev.appendChild(ph);
+    });
+    if (any) card.appendChild(ev);
+
+    var thread = el("div", { "class": "c-thread" });
+    (it.comments || []).forEach(function (c) {
+      var line = el("div", { "class": "c-line" });
+      line.appendChild(el("span", {
+        "class": "who " + (c.role || ""),
+        text: (c.author || "?") + " (" + (c.role || "reviewer") + ")" }));
+      if (c.at) line.appendChild(el("span", { "class": "at",
+        text: (c.at + "").slice(0, 16).replace("T", " ") }));
+      line.appendChild(el("div", { text: c.text || "" }));
+      thread.appendChild(line);
+    });
+    var add = el("div", { "class": "c-add" });
+    var input = el("input", { type: "text",
+      placeholder: "Anything to flag on this item? e.g. “stain was already here”" });
+    var btn = el("button", { text: "Comment" });
+    function send() {
+      var text = input.value.trim();
+      if (!text) return;
+      var name = savedName;
+      if (!name) {
+        name = (prompt("Your name (shown next to your comments):") || "").trim();
+        if (!name) return;
+        savedName = name;
+        try { localStorage.setItem("hi-tenant-name", name); } catch (e) {}
+        var sn = document.getElementById("sign-name");
+        if (sn && !sn.value) sn.value = name;
+      }
+      btn.disabled = true;
+      api("POST", "/comments", { item_id: it.id, text: text, author: name })
+        .then(function () {
+          var line = el("div", { "class": "c-line" });
+          line.appendChild(el("span", { "class": "who tenant",
+            text: name + " (tenant)" }));
+          line.appendChild(el("div", { text: text }));
+          thread.appendChild(line);
+          input.value = "";
+          btn.disabled = false;
+          toast("Comment recorded on " + it.id);
+        }).catch(function (e) {
+          btn.disabled = false;
+          toast("Could not save: " + e.message);
+        });
+    }
+    btn.addEventListener("click", send);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") send();
+    });
+    add.appendChild(input);
+    add.appendChild(btn);
+    thread.appendChild(add);
+    card.appendChild(thread);
+    return card;
+  }
+
+  document.getElementById("sign-btn").addEventListener("click", function () {
+    var name = document.getElementById("sign-name").value.trim();
+    if (!name) { toast("Type your full name first"); return; }
+    if (!confirm("Sign as " + name + "? This records that you have received " +
+                 "and reviewed the inventory, alongside any comments you " +
+                 "made.")) return;
+    api("POST", "/sign", { name: name }).then(function () {
+      return api("GET", "/inventory");
+    }).then(function (p) {
+      inv = p.inventory; photoSrc = p.photo_src || {};
+      render();
+      toast("Countersigned — thank you");
+    }).catch(function (e) { toast(e.message); });
+  });
+  if (savedName) document.getElementById("sign-name").value = savedName;
+
+  render();
+})();
+</script>
+</body>
+</html>

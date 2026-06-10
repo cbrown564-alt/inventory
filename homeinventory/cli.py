@@ -2,6 +2,9 @@
 
   homeinventory guide                          # print the photo capture checklist
   homeinventory build CAPTURE_DIR -o OUT_DIR   # run the full pipeline
+  homeinventory review CAPTURE_DIR -o OUT_DIR  # local review web app (--share
+                                               # adds a tenant link)
+  homeinventory check CAPTURE_DIR              # detector-only coverage check
   homeinventory compare CHECKIN CHECKOUT       # v2 (stub)
 """
 
@@ -222,6 +225,74 @@ def cmd_render(args) -> int:
     return 0
 
 
+def cmd_review(args) -> int:
+    """Serve the local review app (Level 2); --share adds the tenant link
+    (Level 3). See docs/05-review-experience.md."""
+    from .review import serve
+
+    try:
+        httpd = serve(Path(args.capture_dir), Path(args.out), port=args.port,
+                      share=args.share, backend=args.backend, model=args.model,
+                      base_url=args.base_url, open_browser=not args.no_open)
+    except FileNotFoundError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+    except OSError as e:
+        print(f"error: could not bind port {args.port}: {e}", file=sys.stderr)
+        return 2
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nstopped — edits are already saved in inventory.json")
+    finally:
+        httpd.server_close()
+    return 0
+
+
+def cmd_check(args) -> int:
+    """Detector-only capture coverage check — flags per-room gaps before the
+    (paid) describe step. Cannot hallucinate items; only prompts a second look."""
+    from .coverage import check_capture
+    from .ingest import ingest
+
+    capture_dir = Path(args.capture_dir)
+    if not capture_dir.is_dir():
+        print(f"error: capture dir not found: {capture_dir}", file=sys.stderr)
+        return 2
+    work_dir = Path(args.out) / "work" if args.out else capture_dir / ".check-work"
+    rooms = ingest(capture_dir, work_dir)
+    if not rooms:
+        print("error: no photos or videos found (see `homeinventory guide`)",
+              file=sys.stderr)
+        return 2
+    if args.room:
+        only = {r.strip().lower() for r in args.room.split(",")}
+        rooms = {k: v for k, v in rooms.items() if k.lower() in only}
+        if not rooms:
+            print("error: --room matched nothing", file=sys.stderr)
+            return 2
+
+    report = check_capture(capture_dir, rooms, conf=args.det_conf)
+    if report is None:
+        print("error: detector unavailable — install the detect extra:\n"
+              "  pip install homeinventory[detect]", file=sys.stderr)
+        return 2
+    gaps_total = 0
+    for room, gaps in report.items():
+        if gaps:
+            gaps_total += len(gaps)
+            for g in gaps:
+                print(f"  GAP  {room}: no {g} seen — photograph it or mark N/A")
+        else:
+            print(f"  ok   {room}: expected items all covered")
+    if gaps_total:
+        print(f"\n{gaps_total} coverage gap(s). The detector only checks "
+              "presence — it cannot judge photo quality.")
+        return 1
+    print("\nNo coverage gaps against the per-room checklist.")
+    return 0
+
+
 def cmd_compare(_args) -> int:
     print("compare (check-in vs check-out) is the v2 feature — see "
           "docs/03-implementation-plan.md milestone 3.", file=sys.stderr)
@@ -270,6 +341,32 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("-o", "--out", default="report")
     r.add_argument("--no-pdf", action="store_true")
     r.set_defaults(func=cmd_render)
+
+    rv = sub.add_parser("review",
+                        help="serve the local review web app (edit, annotate, "
+                             "sign; --share adds a tenant link)")
+    rv.add_argument("capture_dir")
+    rv.add_argument("-o", "--out", default="report")
+    rv.add_argument("--port", type=int, default=8484)
+    rv.add_argument("--share", action="store_true",
+                    help="also serve a token-protected tenant link on the LAN "
+                         "(comments + countersignature)")
+    rv.add_argument("--backend", choices=["claude", "openai", "local", "offline"],
+                    default="claude", help="backend used by 'Re-describe room'")
+    rv.add_argument("--model", default=None)
+    rv.add_argument("--base-url", default=None)
+    rv.add_argument("--no-open", action="store_true",
+                    help="don't open the browser automatically")
+    rv.set_defaults(func=cmd_review)
+
+    ck = sub.add_parser("check",
+                        help="detector-only coverage check of a capture folder")
+    ck.add_argument("capture_dir")
+    ck.add_argument("-o", "--out", default=None,
+                    help="reuse a report dir's work folder for video keyframes")
+    ck.add_argument("--room", help="only check these rooms, comma-separated")
+    ck.add_argument("--det-conf", type=float, default=0.25)
+    ck.set_defaults(func=cmd_check)
 
     c = sub.add_parser("compare", help="check-in vs check-out comparison (v2)")
     c.add_argument("checkin_dir", nargs="?")

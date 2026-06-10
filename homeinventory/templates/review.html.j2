@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review — {{ inv.property_address or "Property inventory" }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f6f3; --panel: #ffffff; --ink: #1d2126; --muted: #6a7077;
+    --line: #e2e3df; --line-strong: #c9cbc4;
+    --accent: #0f6b4a; --accent-ink: #0a4a33; --accent-soft: #e6f2ec;
+    --danger: #a3231f; --danger-soft: #f7eceb;
+    --amber: #8a6d1f; --amber-soft: #f7f1df;
+    --ui: "Outfit", "Segoe UI Variable Text", "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; font: 14px/1.5 var(--ui); color: var(--ink);
+    background: var(--paper); display: flex; flex-direction: column;
+  }
+  button { font-family: var(--ui); }
+  .mono { font-family: var(--mono); }
+
+  /* ---------- header ---------- */
+  header {
+    display: flex; align-items: center; gap: 18px; padding: 10px 20px;
+    background: var(--panel); border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 30; flex-wrap: wrap;
+  }
+  .wordmark { font-weight: 700; letter-spacing: .14em; font-size: 11px;
+              text-transform: uppercase; color: var(--accent-ink); }
+  .addr { font-weight: 500; color: var(--muted); font-size: 13px;
+          max-width: 320px; overflow: hidden; text-overflow: ellipsis;
+          white-space: nowrap; }
+  #progress { flex: 1 1 200px; min-width: 160px; }
+  #progress .label { font-size: 12px; color: var(--muted);
+                     font-variant-numeric: tabular-nums; }
+  #progress .track { height: 4px; background: var(--line); border-radius: 2px;
+                     overflow: hidden; margin-top: 3px; }
+  #progress .fill { height: 100%; width: 0; background: var(--accent);
+                    transition: width .35s cubic-bezier(.16,1,.3,1); }
+  .btn {
+    border: 1px solid var(--line-strong); background: var(--panel);
+    color: var(--ink); border-radius: 4px; padding: 7px 14px; font-size: 13px;
+    font-weight: 500; cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary { background: var(--accent); border-color: var(--accent);
+                 color: #fff; }
+  .btn.primary:hover { background: var(--accent-ink); }
+  .btn.danger { color: var(--danger); border-color: #ddbdbc; }
+  .btn.danger:hover { border-color: var(--danger); background: var(--danger-soft); }
+  .btn.ghost { border-color: transparent; color: var(--muted); }
+  .btn.ghost:hover { color: var(--ink); border-color: var(--line-strong); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  #dirty { width: 8px; height: 8px; border-radius: 50%; }
+  #dirty.on { background: var(--amber); }
+  .share { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .share a { color: var(--accent-ink); }
+
+  /* ---------- layout ---------- */
+  #app { flex: 1; display: grid; grid-template-columns: 360px 1fr;
+         min-height: 0; }
+  @media (max-width: 900px) { #app { grid-template-columns: 1fr; }
+    #rail { max-height: 40vh; } }
+
+  /* ---------- queue rail ---------- */
+  #rail { border-right: 1px solid var(--line); background: var(--panel);
+          overflow-y: auto; }
+  #rail .tools { position: sticky; top: 0; background: var(--panel);
+                 padding: 12px 16px 8px; border-bottom: 1px solid var(--line);
+                 z-index: 5; }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filters button {
+    border: 1px solid var(--line); background: transparent; color: var(--muted);
+    border-radius: 999px; font-size: 12px; padding: 3px 11px; cursor: pointer;
+  }
+  .filters button[aria-pressed="true"] { background: var(--ink);
+    border-color: var(--ink); color: #fff; }
+  .tools .row2 { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
+  .tools select { font: 12px var(--ui); border: 1px solid var(--line);
+                  border-radius: 4px; padding: 3px 6px; background: #fff;
+                  color: var(--muted); }
+  #bulk { font-size: 12px; padding: 4px 10px; }
+
+  .room-head {
+    padding: 14px 16px 4px; font-size: 11px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+    display: flex; justify-content: space-between; align-items: baseline;
+    cursor: pointer;
+  }
+  .room-head:hover { color: var(--accent-ink); }
+  .room-head .n { font-family: var(--mono); font-size: 10px; }
+  .q-item {
+    display: grid; grid-template-columns: 14px 1fr auto; gap: 10px;
+    align-items: center; padding: 8px 16px; cursor: pointer;
+    border-top: 1px solid var(--line);
+  }
+  .q-item:hover { background: var(--paper); }
+  .q-item.active { background: var(--accent-soft); }
+  .q-item .dot { width: 8px; height: 8px; border-radius: 50%;
+                 border: 1.5px solid var(--line-strong); }
+  .q-item.done .dot { background: var(--accent); border-color: var(--accent); }
+  .q-item.bad .dot { background: var(--danger); border-color: var(--danger); }
+  .q-item .name { font-weight: 500; font-size: 13px; overflow: hidden;
+                  text-overflow: ellipsis; white-space: nowrap; }
+  .q-item .name .ref { font-family: var(--mono); font-size: 10px;
+                       color: var(--muted); margin-right: 6px; }
+  .q-item .name .sub { display: block; font-size: 11px; color: var(--muted);
+                       font-weight: 400; }
+  .q-item.bad .name { text-decoration: line-through; color: var(--muted); }
+  .conf { width: 44px; }
+  .conf .t { height: 3px; background: var(--line); border-radius: 2px;
+             overflow: hidden; }
+  .conf .f { height: 100%; background: var(--amber); }
+  .conf .v { font-family: var(--mono); font-size: 9px; color: var(--muted);
+             text-align: right; display: block; }
+  .empty-queue { padding: 28px 16px; color: var(--muted); font-size: 13px;
+                 text-align: center; }
+
+  /* ---------- detail pane ---------- */
+  #detail { overflow-y: auto; padding: 26px 34px 120px; min-width: 0; }
+  .crumb { font-family: var(--mono); font-size: 11px; color: var(--muted);
+           display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .badge { font-size: 10px; font-weight: 600; letter-spacing: .08em;
+           text-transform: uppercase; border-radius: 3px; padding: 2px 7px; }
+  .badge.ok { color: var(--accent-ink); background: var(--accent-soft); }
+  .badge.no { color: var(--danger); background: var(--danger-soft); }
+  .badge.pend { color: var(--amber); background: var(--amber-soft); }
+  .badge.prov { color: var(--muted); background: var(--paper);
+                border: 1px solid var(--line); text-transform: none;
+                letter-spacing: 0; font-weight: 500; }
+  #d-name {
+    font: 600 26px/1.2 var(--ui); letter-spacing: -.02em; color: var(--ink);
+    border: none; background: transparent; width: 100%; margin: 10px 0 2px;
+    padding: 2px 0; border-bottom: 1px dashed transparent;
+  }
+  #d-name:hover, #d-name:focus { border-bottom-color: var(--line-strong);
+                                 outline: none; }
+  #d-desc {
+    font: 14px/1.5 var(--ui); color: var(--ink); width: 100%; min-height: 54px;
+    border: 1px solid transparent; background: transparent; resize: vertical;
+    padding: 4px 0; border-radius: 3px;
+  }
+  #d-desc:hover { border-color: var(--line); }
+  #d-desc:focus { border-color: var(--accent); outline: none; background: #fff;
+                  padding: 4px 8px; }
+  .grades { display: flex; gap: 26px; margin: 16px 0; flex-wrap: wrap; }
+  .grades label { display: block; font-size: 11px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px; }
+  .grades select { font: 13px var(--ui); padding: 6px 10px; min-width: 180px;
+    border: 1px solid var(--line-strong); border-radius: 4px; background: #fff; }
+  .sec { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .sec > h3 { margin: 0 0 8px; font-size: 11px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; margin: 2px 6px 2px 0;
+    font-size: 13px; color: var(--danger); background: var(--danger-soft);
+    border: 1px solid #e6c8c7; border-radius: 999px; padding: 3px 12px;
+    cursor: pointer; user-select: none;
+  }
+  .chip:active { transform: scale(.97); }
+  .chip.struck { color: var(--muted); background: var(--paper);
+                 border-color: var(--line); text-decoration: line-through; }
+  .chip .x { font-size: 11px; opacity: .6; }
+  .def-add { display: flex; gap: 6px; margin-top: 8px; max-width: 460px; }
+  .def-add input { flex: 1; font: 13px var(--ui); padding: 6px 10px;
+    border: 1px solid var(--line-strong); border-radius: 4px; }
+
+  /* evidence + annotation */
+  .ev-grid { display: grid; grid-template-columns: repeat(auto-fill,
+             minmax(260px, 1fr)); gap: 14px; }
+  .anno { position: relative; user-select: none; touch-action: none;
+          border: 1px solid var(--line); background: #111; }
+  .anno img { width: 100%; display: block; pointer-events: none; }
+  .anno .pid { position: absolute; left: 0; top: 0; z-index: 3;
+    background: rgba(29,33,38,.82); color: #fff; font: 10px var(--mono);
+    padding: 2px 7px; }
+  .anno .hint { position: absolute; right: 0; bottom: 0; z-index: 3;
+    background: rgba(29,33,38,.65); color: #fff; font: 10px var(--ui);
+    padding: 2px 7px; opacity: 0; transition: opacity .2s; }
+  .anno:hover .hint { opacity: 1; }
+  .anno .box { position: absolute; border: 2px solid var(--danger);
+    background: rgba(163,35,31,.12); z-index: 2; cursor: pointer; }
+  .anno .box .lbl { position: absolute; left: -2px; bottom: 100%;
+    background: var(--danger); color: #fff; font: 10px var(--ui);
+    padding: 1px 6px; white-space: nowrap; max-width: 240px; overflow: hidden;
+    text-overflow: ellipsis; }
+  .anno .draft { border-style: dashed; background: rgba(163,35,31,.07); }
+  .ev-missing { color: var(--amber); background: var(--amber-soft);
+    border: 1px solid #e8dcb2; border-radius: 4px; padding: 10px 14px;
+    font-size: 13px; }
+  #anno-form { position: fixed; z-index: 60; background: var(--panel);
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 10px;
+    box-shadow: 0 12px 32px -12px rgba(29,33,38,.4); display: none;
+    width: 280px; }
+  #anno-form select, #anno-form input { width: 100%; font: 13px var(--ui);
+    padding: 6px 8px; margin-bottom: 6px; border: 1px solid var(--line-strong);
+    border-radius: 4px; }
+  #anno-form .row { display: flex; gap: 6px; justify-content: flex-end; }
+
+  /* comments */
+  .c-line { padding: 7px 0; border-top: 1px dotted var(--line); font-size: 13px; }
+  .c-line .who { font-weight: 600; font-size: 12px; }
+  .c-line .who.tenant { color: #7a3e8f; }
+  .c-line .who.landlord, .c-line .who.agent { color: var(--accent-ink); }
+  .c-line .at { font-family: var(--mono); font-size: 10px; color: var(--muted);
+                margin-left: 8px; }
+  .c-add { display: flex; gap: 6px; margin-top: 8px; max-width: 560px; }
+  .c-add input { flex: 1; font: 13px var(--ui); padding: 7px 10px;
+    border: 1px solid var(--line-strong); border-radius: 4px; }
+
+  /* sticky item actions */
+  #actions {
+    position: sticky; bottom: 0; margin: 30px -34px -120px; padding: 12px 34px;
+    background: linear-gradient(to top, var(--paper) 70%, transparent);
+    display: flex; gap: 10px; align-items: center;
+  }
+  .kbd { font-family: var(--mono); font-size: 10px; color: var(--muted);
+         background: var(--panel); border: 1px solid var(--line);
+         border-radius: 3px; padding: 0 5px; }
+
+  /* room view */
+  .room-summary { width: 100%; min-height: 70px; font: 14px/1.5 var(--ui);
+    border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px;
+    background: #fff; resize: vertical; }
+  .add-form { display: grid; gap: 8px; max-width: 460px; }
+  .add-form input, .add-form select { font: 13px var(--ui); padding: 7px 10px;
+    border: 1px solid var(--line-strong); border-radius: 4px; }
+  .add-form label { font-size: 11px; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); }
+  .uncited { display: flex; gap: 8px; flex-wrap: wrap; }
+  .uncited img { height: 72px; border: 1px solid var(--line); display: block; }
+  .uncited figure { margin: 0; }
+  .uncited figcaption { font: 9px var(--mono); color: var(--muted); }
+  #redesc-status { font-size: 12px; color: var(--muted); margin-top: 8px;
+                   white-space: pre-wrap; font-family: var(--mono); }
+
+  #toast { position: fixed; bottom: 18px; left: 50%; z-index: 80;
+    transform: translateX(-50%) translateY(8px); background: var(--ink);
+    color: #fff; font-size: 13px; padding: 9px 18px; border-radius: 5px;
+    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; }
+  #toast.show { opacity: .97; transform: translateX(-50%); }
+</style>
+</head>
+<body>
+<header>
+  <span class="wordmark">Homeinventory · Review</span>
+  <span class="addr">{{ inv.property_address or "Property" }}</span>
+  <div id="progress">
+    <div class="label"><span id="prog-n">0</span> of <span id="prog-d">0</span>
+      items confirmed</div>
+    <div class="track"><div class="fill" id="prog-fill"></div></div>
+  </div>
+  {% if share_url %}<span class="share">tenant link:
+    <a href="{{ share_url }}" target="_blank">{{ share_url }}</a></span>{% endif %}
+  <span id="dirty" title="Unsaved changes"></span>
+  <button class="btn" id="btn-sign">Sign</button>
+  <button class="btn" id="btn-save">Save</button>
+  <button class="btn primary" id="btn-save-render">Save &amp; re-render</button>
+</header>
+
+<div id="app">
+  <nav id="rail">
+    <div class="tools">
+      <div class="filters" id="filters">
+        <button data-f="all" aria-pressed="true">All</button>
+        <button data-f="pending" aria-pressed="false">Unreviewed</button>
+        <button data-f="defects" aria-pressed="false">Defects</button>
+        <button data-f="noev" aria-pressed="false">No evidence</button>
+      </div>
+      <div class="row2">
+        <select id="sort">
+          <option value="room">By room</option>
+          <option value="conf">Least confident first</option>
+        </select>
+        <button class="btn" id="bulk">Accept remaining</button>
+      </div>
+    </div>
+    <div id="queue"></div>
+  </nav>
+  <section id="detail"></section>
+</div>
+
+<div id="anno-form">
+  <select id="anno-pick"></select>
+  <input id="anno-new" type="text" placeholder="…or describe a new defect">
+  <div class="row">
+    <button class="btn ghost" id="anno-cancel">Cancel</button>
+    <button class="btn primary" id="anno-ok">Pin defect</button>
+  </div>
+</div>
+<div id="toast" role="status"></div>
+
+<script type="application/json" id="hi-data">{{ payload | tojson }}</script>
+<script>
+"use strict";
+(function () {
+  var payload = JSON.parse(document.getElementById("hi-data").textContent);
+  var inv = payload.inventory;
+  var photoSrc = payload.photo_src || {};
+  var cropSrc = payload.crop_src || {};
+
+  var CONDITIONS = ["new", "excellent", "good", "fair", "poor"];
+  var NOT_INSPECTED = ["not tested", "not visible"];
+  var CLEANS = ["professionally cleaned", "cleaned to domestic standard",
+                "requires cleaning"];
+
+  var dirty = false;
+  var filter = "all";
+  var sortMode = "room";
+  var sel = null;            // {type:"item", id} | {type:"room", name}
+  var pendingRegion = null;  // staged annotation awaiting defect label
+
+  function index() {
+    var items = [], byId = {}, roomOf = {}, photoById = {};
+    inv.rooms.forEach(function (room) {
+      (room.photos || []).forEach(function (p) { photoById[p.id] = p; });
+      (room.items || []).forEach(function (it) {
+        items.push(it); byId[it.id] = it; roomOf[it.id] = room;
+      });
+    });
+    return { items: items, byId: byId, roomOf: roomOf, photoById: photoById };
+  }
+  var ix = index();
+
+  /* ---------- helpers ---------- */
+  function el(tag, attrs, children) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === "text") n.textContent = attrs[k];
+      else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { n.appendChild(c); });
+    return n;
+  }
+  function toast(msg) {
+    var t = document.getElementById("toast");
+    t.textContent = msg; t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2400);
+  }
+  function markDirty() {
+    dirty = true;
+    document.getElementById("dirty").classList.add("on");
+    renderProgress();
+  }
+  function api(method, url, body) {
+    return fetch(url, {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().then(function (j) {
+        if (!r.ok) throw new Error(j.error || r.statusText);
+        return j;
+      });
+    });
+  }
+  function isDone(it) { return it.reviewed || it.rejected; }
+  function hasEvidence(it) {
+    return (it.photo_ids || []).some(function (p) { return photoSrc[p]; });
+  }
+
+  /* ---------- progress ---------- */
+  function renderProgress() {
+    var done = ix.items.filter(isDone).length;
+    document.getElementById("prog-n").textContent = done;
+    document.getElementById("prog-d").textContent = ix.items.length;
+    document.getElementById("prog-fill").style.width =
+      ix.items.length ? (100 * done / ix.items.length) + "%" : "0";
+  }
+
+  /* ---------- queue rail ---------- */
+  function visible(it) {
+    if (filter === "pending") return !isDone(it);
+    if (filter === "defects") {
+      return (it.defects || []).length || (it.rejected_defects || []).length;
+    }
+    if (filter === "noev") return !hasEvidence(it);
+    return true;
+  }
+  function queueEntries() {
+    var entries = ix.items.filter(visible);
+    if (sortMode === "conf") {
+      entries = entries.slice().sort(function (a, b) {
+        return (a.confidence == null ? 1.01 : a.confidence) -
+               (b.confidence == null ? 1.01 : b.confidence);
+      });
+    }
+    return entries;
+  }
+  function renderQueue() {
+    var q = document.getElementById("queue");
+    q.innerHTML = "";
+    var entries = queueEntries();
+    if (!entries.length) {
+      q.appendChild(el("div", { "class": "empty-queue",
+        text: filter === "pending"
+          ? "Nothing left to review here — every item is confirmed."
+          : "No items match this filter." }));
+      return;
+    }
+    var lastRoom = null;
+    entries.forEach(function (it) {
+      var room = ix.roomOf[it.id];
+      if (sortMode === "room" && room.name !== lastRoom) {
+        lastRoom = room.name;
+        var pend = room.items.filter(function (i) { return !isDone(i); }).length;
+        q.appendChild(el("div", {
+          "class": "room-head",
+          onclick: function () { select({ type: "room", name: room.name }); }
+        }, [
+          el("span", { text: room.name }),
+          el("span", { "class": "n",
+            text: pend ? pend + " open" : "done" })
+        ]));
+      }
+      var row = el("div", { "class": "q-item" +
+        (it.rejected ? " bad" : it.reviewed ? " done" : "") +
+        (sel && sel.type === "item" && sel.id === it.id ? " active" : ""),
+        onclick: function () { select({ type: "item", id: it.id }); } });
+      row.setAttribute("data-qid", it.id);
+      row.appendChild(el("span", { "class": "dot" }));
+      var name = el("span", { "class": "name" });
+      name.appendChild(el("span", { "class": "ref", text: it.id }));
+      name.appendChild(document.createTextNode(it.name || "(unnamed)"));
+      var bits = [];
+      if ((it.defects || []).length) bits.push((it.defects.length) + " defect" +
+        (it.defects.length > 1 ? "s" : ""));
+      if (!hasEvidence(it)) bits.push("no evidence");
+      if (sortMode === "conf") bits.unshift(room.name);
+      if (bits.length) name.appendChild(el("span", { "class": "sub",
+        text: bits.join(" · ") }));
+      row.appendChild(name);
+      var conf = el("span", { "class": "conf" });
+      if (typeof it.confidence === "number") {
+        var pct = Math.round(it.confidence * 100);
+        conf.appendChild(el("span", { "class": "v", text: pct + "%" }));
+        var t = el("span", { "class": "t" });
+        var f = el("span", { "class": "f" });
+        f.style.display = "block"; f.style.width = pct + "%";
+        t.appendChild(f); conf.appendChild(t);
+      }
+      row.appendChild(conf);
+      q.appendChild(row);
+    });
+  }
+
+  /* ---------- selection ---------- */
+  function select(s) {
+    sel = s;
+    closeAnnoForm();
+    renderQueue();
+    if (s.type === "item") renderItem(ix.byId[s.id]);
+    else renderRoom(inv.rooms.find(function (r) { return r.name === s.name; }));
+    var row = document.querySelector('[data-qid="' + (s.id || "") + '"]');
+    if (row) row.scrollIntoView({ block: "nearest" });
+  }
+  function step(delta) {
+    var entries = queueEntries();
+    if (!entries.length) return;
+    var i = entries.findIndex(function (e) {
+      return sel && sel.type === "item" && e.id === sel.id; });
+    var next = entries[Math.max(0, Math.min(entries.length - 1,
+      (i === -1 ? 0 : i + delta)))];
+    select({ type: "item", id: next.id });
+  }
+
+  /* ---------- item detail ---------- */
+  function badge(cls, text) { return el("span", { "class": "badge " + cls,
+    text: text }); }
+  function renderItem(it) {
+    var room = ix.roomOf[it.id];
+    var d = document.getElementById("detail");
+    d.innerHTML = "";
+
+    var crumb = el("div", { "class": "crumb" });
+    crumb.appendChild(el("span", { text: room.name + " · " + it.id }));
+    crumb.appendChild(it.rejected ? badge("no", "rejected") :
+      it.reviewed ? badge("ok", "reviewed") : badge("pend", "unreviewed"));
+    var prov = it.added_by ? "added by " + it.added_by
+                           : (inv.describe_backend || "AI") + " draft";
+    crumb.appendChild(badge("prov", prov));
+    if (typeof it.confidence === "number") {
+      crumb.appendChild(el("span", { text:
+        "confidence " + Math.round(it.confidence * 100) + "%" }));
+    }
+    d.appendChild(crumb);
+
+    var name = el("input", { id: "d-name", value: it.name || "",
+      oninput: function () { it.name = name.value; markDirty(); },
+      onchange: renderQueue });
+    d.appendChild(name);
+    var desc = el("textarea", { id: "d-desc",
+      placeholder: "Material, colour, brand…",
+      oninput: function () { it.description = desc.value; markDirty(); } });
+    desc.value = it.description || "";
+    d.appendChild(desc);
+
+    var grades = el("div", { "class": "grades" });
+    grades.appendChild(gradeBlock("Condition", CONDITIONS.concat(NOT_INSPECTED),
+      it.not_inspected || it.condition || "",
+      function (v) {
+        if (NOT_INSPECTED.indexOf(v) >= 0) {
+          it.not_inspected = v; it.condition = null;
+        } else { it.condition = v || null; it.not_inspected = null; }
+        markDirty();
+      }));
+    grades.appendChild(gradeBlock("Cleanliness", CLEANS, it.cleanliness || "",
+      function (v) { it.cleanliness = v || null; markDirty(); }));
+    d.appendChild(grades);
+
+    // defects
+    var secD = el("div", { "class": "sec" });
+    secD.appendChild(el("h3", { text: "Defects" }));
+    var chipWrap = el("div", {});
+    function drawChips() {
+      chipWrap.innerHTML = "";
+      (it.defects || []).forEach(function (t) {
+        chipWrap.appendChild(defChip(t, false));
+      });
+      (it.rejected_defects || []).forEach(function (t) {
+        chipWrap.appendChild(defChip(t, true));
+      });
+      if (!(it.defects || []).length && !(it.rejected_defects || []).length) {
+        chipWrap.appendChild(el("span", { "class": "c-line",
+          text: "None noted." }));
+      }
+    }
+    function defChip(text, struck) {
+      var c = el("span", { "class": "chip" + (struck ? " struck" : ""),
+        title: struck ? "Restore this defect"
+                      : "Strike — kept in the report as “reviewer rejected”",
+        onclick: function () {
+          it.defects = it.defects || []; it.rejected_defects = it.rejected_defects || [];
+          var from = struck ? it.rejected_defects : it.defects;
+          var to = struck ? it.defects : it.rejected_defects;
+          var i = from.indexOf(text);
+          if (i >= 0) { from.splice(i, 1); to.push(text); }
+          markDirty(); drawChips(); drawEvidence();
+        } });
+      c.appendChild(el("span", { text: text }));
+      c.appendChild(el("span", { "class": "x", text: struck ? "↩" : "✕" }));
+      return c;
+    }
+    drawChips();
+    secD.appendChild(chipWrap);
+    var addBox = el("div", { "class": "def-add" });
+    var addIn = el("input", { type: "text",
+      placeholder: "Add a defect (press Enter)…" });
+    addIn.addEventListener("keydown", function (e) {
+      e.stopPropagation();
+      if (e.key === "Enter" && addIn.value.trim()) {
+        (it.defects = it.defects || []).push(addIn.value.trim());
+        addIn.value = ""; markDirty(); drawChips();
+      }
+    });
+    addBox.appendChild(addIn);
+    secD.appendChild(addBox);
+    d.appendChild(secD);
+
+    // evidence with annotation
+    var secE = el("div", { "class": "sec" });
+    secE.appendChild(el("h3", { text: "Evidence — drag on a photo to pin a defect" }));
+    var evGrid = el("div", { "class": "ev-grid" });
+    function drawEvidence() {
+      evGrid.innerHTML = "";
+      var any = false;
+      if (cropSrc[it.id]) {
+        any = true;
+        var cwrap = el("div", { "class": "anno" });
+        cwrap.appendChild(el("img", { src: cropSrc[it.id], alt: "crop" }));
+        cwrap.appendChild(el("span", { "class": "pid", text: "detector crop" }));
+        evGrid.appendChild(cwrap);
+      }
+      (it.photo_ids || []).forEach(function (pid) {
+        if (!photoSrc[pid]) return;
+        any = true;
+        evGrid.appendChild(annoPhoto(it, pid, drawEvidence));
+      });
+      if (!any) {
+        evGrid.appendChild(el("div", { "class": "ev-missing",
+          text: "No evidence photos cited for this item. Confirm it only if " +
+                "you can vouch for it yourself, or reject it." }));
+      }
+    }
+    drawEvidence();
+    secE.appendChild(evGrid);
+    d.appendChild(secE);
+
+    // comments
+    var secC = el("div", { "class": "sec" });
+    secC.appendChild(el("h3", { text: "Comments" }));
+    var cwrap2 = el("div", {});
+    function drawComments() {
+      cwrap2.innerHTML = "";
+      (it.comments || []).forEach(function (c) {
+        var line = el("div", { "class": "c-line" });
+        line.appendChild(el("span", {
+          "class": "who " + (c.role || "landlord"),
+          text: (c.author || "?") + " (" + (c.role || "reviewer") + ")" }));
+        if (c.at) line.appendChild(el("span", { "class": "at",
+          text: (c.at + "").slice(0, 16).replace("T", " ") }));
+        line.appendChild(el("div", { text: c.text || "" }));
+        cwrap2.appendChild(line);
+      });
+    }
+    drawComments();
+    secC.appendChild(cwrap2);
+    var cBox = el("div", { "class": "c-add" });
+    var cIn = el("input", { type: "text", placeholder: "Add a comment…" });
+    cIn.addEventListener("keydown", function (e) {
+      e.stopPropagation();
+      if (e.key === "Enter" && cIn.value.trim()) {
+        (it.comments = it.comments || []).push({
+          author: inv.inspected_by || "reviewer", role: "landlord",
+          text: cIn.value.trim(), at: new Date().toISOString() });
+        cIn.value = ""; markDirty(); drawComments();
+      }
+    });
+    cBox.appendChild(cIn);
+    secC.appendChild(cBox);
+    d.appendChild(secC);
+
+    // actions
+    var act = el("div", { id: "actions" });
+    act.appendChild(el("button", {
+      "class": "btn primary", text: it.reviewed ? "✓ Confirmed" : "✓ Confirm",
+      onclick: function () {
+        it.reviewed = true; it.rejected = false;
+        markDirty(); renderQueue(); step(1);
+      } }));
+    act.appendChild(el("button", {
+      "class": "btn danger",
+      text: it.rejected ? "Restore item" : "✕ Reject item",
+      onclick: function () {
+        it.rejected = !it.rejected;
+        if (it.rejected) it.reviewed = false;
+        markDirty(); renderQueue(); renderItem(it);
+      } }));
+    act.appendChild(el("span", { "class": "kbd", text: "space" }));
+    act.appendChild(el("span", { text: "confirm + next" }));
+    act.appendChild(el("span", { "class": "kbd", text: "x" }));
+    act.appendChild(el("span", { text: "reject" }));
+    act.appendChild(el("span", { "class": "kbd", text: "j / k" }));
+    act.appendChild(el("span", { text: "move" }));
+    d.appendChild(act);
+  }
+  function gradeBlock(label, opts, current, onset) {
+    var wrap = el("div", {});
+    wrap.appendChild(el("label", { text: label }));
+    var s = el("select", {});
+    s.appendChild(el("option", { value: "", text: "—" }));
+    opts.forEach(function (o) {
+      var op = el("option", { value: o, text: o });
+      if (o === current) op.setAttribute("selected", "");
+      s.appendChild(op);
+    });
+    s.addEventListener("change", function () { onset(s.value); });
+    wrap.appendChild(s);
+    return wrap;
+  }
+
+  /* ---------- defect-region annotation ---------- */
+  function annoPhoto(it, pid, redraw) {
+    var wrap = el("div", { "class": "anno" });
+    wrap.appendChild(el("img", { src: photoSrc[pid], alt: pid }));
+    wrap.appendChild(el("span", { "class": "pid", text: pid }));
+    wrap.appendChild(el("span", { "class": "hint", text: "drag to pin a defect" }));
+    (it.defect_regions || []).forEach(function (reg, ri) {
+      if (reg.photo_id !== pid) return;
+      var b = el("div", { "class": "box",
+        title: "Double-click to remove this pin",
+        ondblclick: function () {
+          it.defect_regions.splice(ri, 1);
+          markDirty(); redraw();
+        } });
+      b.style.left = (reg.x * 100) + "%";
+      b.style.top = (reg.y * 100) + "%";
+      b.style.width = (reg.w * 100) + "%";
+      b.style.height = (reg.h * 100) + "%";
+      b.appendChild(el("span", { "class": "lbl", text: reg.defect }));
+      wrap.appendChild(b);
+    });
+
+    var start = null, draft = null;
+    wrap.addEventListener("pointerdown", function (e) {
+      if (e.target.closest(".box")) return;
+      var r = wrap.getBoundingClientRect();
+      start = { x: (e.clientX - r.left) / r.width,
+                y: (e.clientY - r.top) / r.height };
+      draft = el("div", { "class": "box draft" });
+      wrap.appendChild(draft);
+      wrap.setPointerCapture(e.pointerId);
+    });
+    wrap.addEventListener("pointermove", function (e) {
+      if (!start || !draft) return;
+      var r = wrap.getBoundingClientRect();
+      var cur = { x: (e.clientX - r.left) / r.width,
+                  y: (e.clientY - r.top) / r.height };
+      var box = norm(start, cur);
+      draft.style.left = (box.x * 100) + "%";
+      draft.style.top = (box.y * 100) + "%";
+      draft.style.width = (box.w * 100) + "%";
+      draft.style.height = (box.h * 100) + "%";
+    });
+    wrap.addEventListener("pointerup", function (e) {
+      if (!start || !draft) return;
+      var r = wrap.getBoundingClientRect();
+      var cur = { x: (e.clientX - r.left) / r.width,
+                  y: (e.clientY - r.top) / r.height };
+      var box = norm(start, cur);
+      start = null;
+      if (box.w < 0.02 || box.h < 0.02) {  // a click, not a drag
+        draft.remove(); draft = null;
+        return;
+      }
+      pendingRegion = { item: it, photo_id: pid, box: box,
+                        draftEl: draft, redraw: redraw };
+      draft = null;
+      openAnnoForm(e.clientX, e.clientY);
+    });
+    return wrap;
+  }
+  function norm(a, b) {
+    function clamp(v) { return Math.max(0, Math.min(1, v)); }
+    var x1 = clamp(Math.min(a.x, b.x)), y1 = clamp(Math.min(a.y, b.y));
+    var x2 = clamp(Math.max(a.x, b.x)), y2 = clamp(Math.max(a.y, b.y));
+    return { x: x1, y: y1, w: x2 - x1, h: y2 - y1 };
+  }
+  function openAnnoForm(px, py) {
+    var f = document.getElementById("anno-form");
+    var pick = document.getElementById("anno-pick");
+    pick.innerHTML = "";
+    pick.appendChild(el("option", { value: "", text: "Pin which defect?" }));
+    (pendingRegion.item.defects || []).forEach(function (t) {
+      pick.appendChild(el("option", { value: t, text: t }));
+    });
+    document.getElementById("anno-new").value = "";
+    f.style.display = "block";
+    f.style.left = Math.min(px, window.innerWidth - 300) + "px";
+    f.style.top = Math.min(py + 8, window.innerHeight - 170) + "px";
+  }
+  function closeAnnoForm() {
+    document.getElementById("anno-form").style.display = "none";
+    if (pendingRegion && pendingRegion.draftEl) pendingRegion.draftEl.remove();
+    pendingRegion = null;
+  }
+  document.getElementById("anno-cancel").addEventListener("click", closeAnnoForm);
+  document.getElementById("anno-ok").addEventListener("click", function () {
+    if (!pendingRegion) return;
+    var label = document.getElementById("anno-new").value.trim() ||
+                document.getElementById("anno-pick").value;
+    if (!label) { toast("Pick or describe the defect first"); return; }
+    var it = pendingRegion.item;
+    if ((it.defects || []).indexOf(label) === -1 &&
+        (it.rejected_defects || []).indexOf(label) === -1) {
+      (it.defects = it.defects || []).push(label);
+    }
+    (it.defect_regions = it.defect_regions || []).push({
+      defect: label, photo_id: pendingRegion.photo_id,
+      x: pendingRegion.box.x, y: pendingRegion.box.y,
+      w: pendingRegion.box.w, h: pendingRegion.box.h });
+    var redraw = pendingRegion.redraw;
+    if (pendingRegion.draftEl) pendingRegion.draftEl.remove();
+    pendingRegion = null;
+    document.getElementById("anno-form").style.display = "none";
+    markDirty();
+    if (sel && sel.type === "item") renderItem(ix.byId[sel.id]);
+    else redraw();
+  });
+
+  /* ---------- room view ---------- */
+  function renderRoom(room) {
+    var d = document.getElementById("detail");
+    d.innerHTML = "";
+    d.appendChild(el("div", { "class": "crumb", text: "Room" }));
+    d.appendChild(el("h2", { id: "d-name", text: room.name }));
+
+    var secS = el("div", { "class": "sec" });
+    secS.appendChild(el("h3", { text: "Room summary" }));
+    var ta = el("textarea", { "class": "room-summary" });
+    ta.value = room.summary || "";
+    ta.addEventListener("input", function () {
+      room.summary = ta.value; markDirty();
+    });
+    secS.appendChild(ta);
+    d.appendChild(secS);
+
+    // coverage: photos no item cites
+    var cited = {};
+    room.items.forEach(function (it) {
+      (it.photo_ids || []).forEach(function (p) { cited[p] = true; });
+    });
+    var orphans = (room.photos || []).filter(function (p) {
+      return !cited[p.id] && photoSrc[p.id];
+    });
+    var secO = el("div", { "class": "sec" });
+    secO.appendChild(el("h3", {
+      text: "Coverage — photos no item cites (" + orphans.length + ")" }));
+    if (orphans.length) {
+      var strip = el("div", { "class": "uncited" });
+      orphans.forEach(function (p) {
+        var fig = el("figure", {});
+        fig.appendChild(el("img", { src: photoSrc[p.id], alt: p.id }));
+        fig.appendChild(el("figcaption", { text: p.id }));
+        strip.appendChild(fig);
+      });
+      secO.appendChild(strip);
+      secO.appendChild(el("p", { "class": "c-line",
+        text: "Wasted shots, or items the AI missed — check before signing." }));
+    } else {
+      secO.appendChild(el("p", { "class": "c-line",
+        text: "Every embedded photo in this room is cited by at least one item." }));
+    }
+    d.appendChild(secO);
+
+    // add missing item
+    var secA = el("div", { "class": "sec" });
+    secA.appendChild(el("h3", { text: "Add a missed item" }));
+    var form = el("div", { "class": "add-form" });
+    var fName = el("input", { type: "text", placeholder: "Item name *" });
+    var fDesc = el("input", { type: "text",
+      placeholder: "Description (material, colour, brand)" });
+    var fCond = el("select", {});
+    fCond.appendChild(el("option", { value: "", text: "Condition —" }));
+    CONDITIONS.forEach(function (c) {
+      fCond.appendChild(el("option", { value: c, text: c }));
+    });
+    var fPhoto = el("input", { type: "file", accept: "image/*",
+      capture: "environment" });
+    var fBtn = el("button", { "class": "btn primary", text: "Add item" });
+    fBtn.addEventListener("click", function () {
+      if (!fName.value.trim()) { toast("Name the item first"); return; }
+      fBtn.disabled = true;
+      var send = function (b64) {
+        api("POST", "/api/items", {
+          room: room.name, name: fName.value.trim(),
+          description: fDesc.value.trim(), condition: fCond.value || null,
+          photo_b64: b64, author: inv.inspected_by || "reviewer"
+        }).then(function () {
+          toast("Item added — reloading");
+          return reload();
+        }).catch(function (e) {
+          fBtn.disabled = false; toast("Add failed: " + e.message);
+        });
+      };
+      var file = fPhoto.files && fPhoto.files[0];
+      if (!file) { send(null); return; }
+      var rd = new FileReader();
+      rd.onload = function () { send(rd.result.split(",", 2)[1]); };
+      rd.readAsDataURL(file);
+    });
+    [fName, fDesc, fCond, fPhoto, fBtn].forEach(function (n) {
+      form.appendChild(n);
+    });
+    secA.appendChild(form);
+    d.appendChild(secA);
+
+    // re-describe
+    var secR = el("div", { "class": "sec" });
+    secR.appendChild(el("h3", { text: "Re-describe this room" }));
+    secR.appendChild(el("p", { "class": "c-line",
+      text: "Re-runs the AI on this room's photos (after fixing capture " +
+            "problems). Review state for this room is replaced." }));
+    var rBtn = el("button", { "class": "btn", text: "Re-describe " + room.name });
+    var rStatus = el("div", { id: "redesc-status" });
+    rBtn.addEventListener("click", function () {
+      if (dirty && !confirm("Unsaved edits will be lost for this room. Continue?"))
+        return;
+      rBtn.disabled = true;
+      api("POST", "/api/redescribe", { room: room.name }).then(function () {
+        rStatus.textContent = "running…";
+        var t = setInterval(function () {
+          api("GET", "/api/redescribe").then(function (s) {
+            rStatus.textContent = s.status +
+              (s.detail ? "\n" + s.detail : "");
+            if (s.status === "done" || s.status === "failed") {
+              clearInterval(t);
+              rBtn.disabled = false;
+              if (s.status === "done") reload();
+            }
+          });
+        }, 2500);
+      }).catch(function (e) {
+        rBtn.disabled = false; toast(e.message);
+      });
+    });
+    secR.appendChild(rBtn);
+    secR.appendChild(rStatus);
+    d.appendChild(secR);
+  }
+
+  /* ---------- save / sign / reload ---------- */
+  function save(render) {
+    return api("PUT", "/api/inventory" + (render ? "?render=1" : ""), inv)
+      .then(function (r) {
+        dirty = false;
+        document.getElementById("dirty").classList.remove("on");
+        toast(render ? "Saved and re-rendered inventory.html"
+                     : "Saved to inventory.json");
+        return r;
+      }).catch(function (e) { toast("Save failed: " + e.message); });
+  }
+  function reload() {
+    return api("GET", "/api/inventory").then(function (p) {
+      inv = p.inventory; photoSrc = p.photo_src || {};
+      cropSrc = p.crop_src || {};
+      ix = index();
+      dirty = false;
+      document.getElementById("dirty").classList.remove("on");
+      renderProgress(); renderQueue();
+      if (sel && sel.type === "item" && ix.byId[sel.id]) {
+        renderItem(ix.byId[sel.id]);
+      } else if (sel && sel.type === "room") {
+        var room = inv.rooms.find(function (r) { return r.name === sel.name; });
+        if (room) renderRoom(room);
+      } else if (ix.items.length) {
+        select({ type: "item", id: ix.items[0].id });
+      }
+    });
+  }
+  document.getElementById("btn-save").addEventListener("click", function () {
+    save(false);
+  });
+  document.getElementById("btn-save-render").addEventListener("click",
+    function () { save(true); });
+  document.getElementById("btn-sign").addEventListener("click", function () {
+    var pend = ix.items.filter(function (i) { return !isDone(i); }).length;
+    if (pend && !confirm(pend + " items are still unreviewed. Sign anyway?"))
+      return;
+    var name = prompt("Sign as (full name):", inv.inspected_by || "");
+    if (!name || !name.trim()) return;
+    var role = prompt('Role — "landlord" or "agent":', "landlord");
+    if (!role) return;
+    var doSign = function () {
+      api("POST", "/api/sign", { name: name.trim(), role: role.trim() })
+        .then(function () {
+          toast("Signed — the signature pins the saved inventory hash");
+          return reload();
+        }).catch(function (e) { toast(e.message); });
+    };
+    if (dirty) save(false).then(doSign); else doSign();
+  });
+
+  /* ---------- filters / sort / bulk ---------- */
+  document.getElementById("filters").addEventListener("click", function (e) {
+    var b = e.target.closest("button");
+    if (!b) return;
+    filter = b.getAttribute("data-f");
+    this.querySelectorAll("button").forEach(function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+    renderQueue();
+  });
+  document.getElementById("sort").addEventListener("change", function () {
+    sortMode = this.value; renderQueue();
+  });
+  document.getElementById("bulk").addEventListener("click", function () {
+    var open = queueEntries().filter(function (i) { return !isDone(i); });
+    if (!open.length) { toast("Nothing left to accept"); return; }
+    if (!confirm("Mark " + open.length + " visible unreviewed item" +
+                 (open.length > 1 ? "s" : "") + " as confirmed?")) return;
+    open.forEach(function (i) { i.reviewed = true; });
+    markDirty(); renderQueue();
+    if (sel && sel.type === "item") renderItem(ix.byId[sel.id]);
+  });
+
+  /* ---------- keyboard ---------- */
+  document.addEventListener("keydown", function (e) {
+    var t = e.target;
+    if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" ||
+              t.tagName === "SELECT" || t.isContentEditable)) return;
+    var it = sel && sel.type === "item" ? ix.byId[sel.id] : null;
+    if (e.key === "j") { e.preventDefault(); step(1); }
+    else if (e.key === "k") { e.preventDefault(); step(-1); }
+    else if (e.key === " " && it) {
+      e.preventDefault();
+      it.reviewed = true; it.rejected = false;
+      markDirty(); renderQueue(); step(1);
+    } else if (e.key === "x" && it) {
+      e.preventDefault();
+      it.rejected = !it.rejected;
+      if (it.rejected) it.reviewed = false;
+      markDirty(); renderQueue(); renderItem(it);
+    } else if (it && "12345".indexOf(e.key) >= 0) {
+      e.preventDefault();
+      it.condition = CONDITIONS[Number(e.key) - 1];
+      it.not_inspected = null;
+      markDirty(); renderItem(it);
+    } else if (e.key === "Escape") closeAnnoForm();
+  });
+  window.addEventListener("beforeunload", function (e) {
+    if (dirty) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+  /* ---------- boot ---------- */
+  renderProgress();
+  renderQueue();
+  if (ix.items.length) {
+    // start on the least confident unreviewed item: the queue's whole point
+    var first = ix.items.filter(function (i) { return !isDone(i); })
+      .sort(function (a, b) {
+        return (a.confidence == null ? 1.01 : a.confidence) -
+               (b.confidence == null ? 1.01 : b.confidence);
+      })[0] || ix.items[0];
+    select({ type: "item", id: first.id });
+  } else {
+    document.getElementById("detail").appendChild(el("div", {
+      "class": "ev-missing",
+      text: "No items in this inventory yet — run a build first." }));
+  }
+})();
+</script>
+</body>
+</html>

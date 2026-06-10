@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import shutil
+from dataclasses import asdict
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -54,6 +55,9 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
         photo_src=photo_src,
         total_items=inv.item_count(),
         total_photos=inv.photo_count(),
+        reviewed_items=inv.reviewed_count(),
+        # embedded for the in-report review layer (Level 1)
+        payload={"inventory": asdict(inv), "photo_src": photo_src},
     )
 
     outputs: dict[str, Path] = {}

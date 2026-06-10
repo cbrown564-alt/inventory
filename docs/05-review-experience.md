@@ -1,8 +1,9 @@
 # The Review Experience — Design Space
 
 *10 June 2026. Exploration doc: how interactive should this tool be, where,
-and at what cost? Nothing here is committed work; see Recommendation at the
-end for the suggested sequence.*
+and at what cost? See Recommendation at the end for the suggested sequence,
+and "Implementation status" below it for what got built (Levels 1–3 landed
+the same day; Level 4 stays parked).*
 
 ## Why review is the stage worth investing in
 
@@ -122,3 +123,56 @@ equally well.
 4. **Keep Level 4 parked** until on-device VLMs clear the quality bar batch
    models set in 04-backend-comparison.md — revisit when the local backend
    eval numbers stop embarrassing the idea.
+
+## Implementation status (10 June 2026)
+
+Levels 1–3 plus the detector-only coverage check are implemented; Level 4
+remains parked per the recommendation.
+
+**Shared data model** (`schema.py`). Items carry `reviewed`, `rejected`,
+`rejected_defects`, `not_inspected` ("not tested"/"not visible"),
+`added_by`, `defect_regions` (normalised photo boxes) and `comments`
+(author/role/text/at); the inventory carries `signatures`, each pinning
+`Inventory.content_sha256()` — a canonical hash that excludes the signatures
+themselves so countersigning doesn't invalidate the first party. Parsing
+ignores unknown keys, so older code reads newer files. Rejected claims are
+struck through in every surface, never silently deleted — the report says
+"AI suggested, reviewer rejected", the stronger attestation story.
+
+**Level 1** — `report.html.j2` now embeds the inventory JSON and a
+vanilla-JS "review docket" (zero dependencies, degrades to a plain document
+with JS off, hidden in print). Review mode turns grades into dropdowns,
+defects into strike/restore chips, names/descriptions inline-editable;
+clicking an item opens an evidence drawer with its cited photos (the
+TV-sticker test: one glance, one click). Progress bar, j/k/space/x/1–5
+keyboard flow, localStorage persistence across accidental closes, signing,
+and a Blob download of the reviewed `inventory.json` for
+`homeinventory render`. Defect regions render as labelled overlays on the
+photographs — including in print.
+
+**Level 2** — `homeinventory review CAPTURE -o REPORT` (`review.py`,
+stdlib http.server, no new dependencies; owner routes answer loopback
+only). The owner app adds write-back-on-save (plus save-and-re-render),
+a confidence-sorted queue with filters and bulk-accept, drag-a-box defect
+annotation stored as `defect_regions` (the M3 alignment anchor), a per-room
+coverage panel of photos no item cites, add-missed-item with photo upload
+(saved into the capture folder, hashed, appended to the manifest), and a
+re-describe-room button that shells out to `build --room`.
+
+**Level 3** — `--share` mints a token and serves a tenant walk-through at
+`/t/<token>`: per-item comments stored on the items (`role: "tenant"`),
+acknowledge-and-countersign appending a tenant signature over the content
+hash (which now includes their own comments). Every mutation — saves,
+comments, signatures, added items — is appended to a hash-chained
+`acknowledgements.jsonl`, tamper-evident in the same spirit as the photo
+manifest. This is multi-party-on-LAN, not hosting: no accounts, no
+retention, the link dies with the process. The data structures (comments,
+signature blocks, ack trail) are what an eventual hosted M4 would
+serialise.
+
+**Coverage check** — `homeinventory check CAPTURE` runs YOLOE against a
+per-room expectation list ("no radiator seen in Bedroom 2 — photograph it
+or mark N/A"); exits 1 on gaps so it can gate a build script.
+
+Not yet built: tenant-side photo upload, region annotation in Level 1
+(view-only there; drawing is Level 2), and any hosted deployment story.
