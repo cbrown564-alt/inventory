@@ -8,14 +8,36 @@ a room called "General".
 
 from __future__ import annotations
 
+import logging
 import os
 from pathlib import Path
 from typing import Optional
 
 from .schema import Photo
 
-IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".bmp", ".tif", ".tiff"}
+log = logging.getLogger(__name__)
+
+# iPhones shoot HEIC by default; Pillow needs the pillow-heif plugin to decode
+# it. Registering the opener here makes HEIC work everywhere PIL is used
+# (EXIF, describe encoding, report export).
+try:
+    from pillow_heif import register_heif_opener
+    register_heif_opener()
+    _HEIF_OK = True
+except ImportError:
+    _HEIF_OK = False
+
+IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif", ".bmp", ".tif", ".tiff"}
+HEIF_EXTS = {".heic", ".heif"}
 VIDEO_EXTS = {".mp4", ".mov", ".avi", ".mkv", ".webm", ".m4v"}
+
+
+def _decodable(path: Path) -> bool:
+    if path.suffix.lower() in HEIF_EXTS and not _HEIF_OK:
+        log.warning("skipping %s: install pillow-heif to ingest HEIC/HEIF photos "
+                    "(or export as JPEG)", path)
+        return False
+    return True
 
 
 def exif_capture_time(path: Path) -> Optional[str]:
@@ -121,13 +143,15 @@ def ingest(capture_dir: Path, work_dir: Path) -> dict[str, list[Photo]]:
                     continue
                 ext = f.suffix.lower()
                 if ext in IMAGE_EXTS:
-                    add(room, f)
+                    if _decodable(f):
+                        add(room, f)
                 elif ext in VIDEO_EXTS:
                     frames = extract_keyframes(f, work_dir / "frames" / room)
                     for fr in frames:
                         add(room, fr, source_video=f.name)
         elif entry.is_file() and entry.suffix.lower() in IMAGE_EXTS:
-            add("General", entry)
+            if _decodable(entry):
+                add("General", entry)
         elif entry.is_file() and entry.suffix.lower() in VIDEO_EXTS:
             for fr in extract_keyframes(entry, work_dir / "frames" / "General"):
                 add("General", fr, source_video=entry.name)

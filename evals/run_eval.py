@@ -126,8 +126,8 @@ def main() -> int:
                     help="fuzzy name-match threshold for item matching")
     args = ap.parse_args()
 
-    inv = Inventory.from_json(Path(args.inventory_json).read_text())
-    labels = json.loads(Path(args.labels_json).read_text())
+    inv = Inventory.from_json(Path(args.inventory_json).read_text(encoding="utf-8"))
+    labels = json.loads(Path(args.labels_json).read_text(encoding="utf-8"))
     results = evaluate(inv, labels, args.threshold)
     print(json.dumps(results, indent=2))
     return 0

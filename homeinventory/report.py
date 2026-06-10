@@ -34,7 +34,9 @@ def _export_photos(inv: Inventory, capture_dir: Path, out_dir: Path,
                     if max(im.size) > max_dim:
                         im.thumbnail((max_dim, max_dim))
                     im.save(dest, quality=88)
-            except Exception:
+            except Exception as e:
+                log.warning("could not re-encode %s (%s); copying as-is — the "
+                            "report image may not render", src, e)
                 shutil.copyfile(src, dest)
             src_map[p.id] = f"photos/{p.id}.jpg"
     return src_map
@@ -56,11 +58,11 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
 
     outputs: dict[str, Path] = {}
     html_path = out_dir / "inventory.html"
-    html_path.write_text(html)
+    html_path.write_text(html, encoding="utf-8")
     outputs["html"] = html_path
 
     json_path = out_dir / "inventory.json"
-    json_path.write_text(inv.to_json())
+    json_path.write_text(inv.to_json(), encoding="utf-8")
     outputs["json"] = json_path
 
     if pdf:

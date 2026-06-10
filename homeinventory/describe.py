@@ -17,7 +17,6 @@ from __future__ import annotations
 import base64
 import json
 import logging
-import os
 from pathlib import Path
 from typing import Optional, Protocol
 
@@ -148,15 +147,18 @@ def _encode_image(path: Path, max_dim: int = 1568) -> tuple[str, str]:
     return "image/jpeg", base64.standard_b64encode(buf.getvalue()).decode()
 
 
+class DescribeAuthError(RuntimeError):
+    """Credentials missing or rejected — fatal for the whole build, not one room."""
+
+
 class ClaudeBackend:
     name = "claude"
 
     def __init__(self, model: str = "claude-opus-4-8"):
         import anthropic
-        if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")):
-            raise RuntimeError(
-                "ANTHROPIC_API_KEY is not set. Export it, or use --backend offline."
-            )
+        self._anthropic = anthropic
+        # Credential resolution is delegated to the SDK: ANTHROPIC_API_KEY,
+        # ANTHROPIC_AUTH_TOKEN, or an `ant auth login` profile all work.
         self.client = anthropic.Anthropic()
         self.model = model
 
@@ -177,13 +179,31 @@ class ClaudeBackend:
             ),
         })
 
-        response = self.client.messages.create(
-            model=self.model,
-            max_tokens=8000,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": content}],
-            output_config={"format": {"type": "json_schema", "schema": ITEM_SCHEMA}},
-        )
+        try:
+            response = self.client.messages.create(
+                model=self.model,
+                max_tokens=16000,
+                system=SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": content}],
+                output_config={"format": {"type": "json_schema", "schema": ITEM_SCHEMA}},
+            )
+        except self._anthropic.AuthenticationError as e:
+            raise DescribeAuthError(
+                "Anthropic rejected the credentials. Set a valid ANTHROPIC_API_KEY, "
+                "run `ant auth login`, or use --backend offline."
+            ) from e
+        except TypeError as e:
+            if "authentication" in str(e).lower():
+                raise DescribeAuthError(
+                    "No Anthropic credentials found. Set ANTHROPIC_API_KEY, run "
+                    "`ant auth login`, or use --backend offline."
+                ) from e
+            raise
+        if response.stop_reason == "max_tokens":
+            raise RuntimeError(
+                f"item schedule for '{room_name}' was truncated at the output "
+                "token limit — split the room into fewer photos per folder"
+            )
         text = next(b.text for b in response.content if b.type == "text")
         data = json.loads(text)
 
