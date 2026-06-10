@@ -20,7 +20,7 @@
 | Backend / model | Items | Structural items | Grading | Defects found | Approx cost |
 |---|---|---|---|---|---|
 | `openai` gpt-4.1-mini | 17 | walls, flooring | flat — all "good" | 0 | ~1.5¢ |
-| `openai` gemini-3.1-flash-lite | 10 | walls, flooring, ceiling | differentiated (exc/good/fair) | 1, localized ("surface scratch to top right corner" of TV unit — **unverified**) | ~0.4¢ |
+| `openai` gemini-3.1-flash-lite | 10 | walls, flooring, ceiling | differentiated (exc/good/fair) | 1, localized — **verified false**: the "surface scratch" on the TV unit is a "2021 new" sticker | ~0.4¢ |
 | `openai` gpt-5.4-mini | 28 | ceiling, walls, skirting, flooring | differentiated | 1, localized (wall-decal sections detached) | ~4¢ |
 | `local` qwen3.5:9b | — | *pending: GPU shared with another workload* | | | £0 |
 | `claude` (any) | — | *not yet run on this footage* | | | — |
@@ -44,9 +44,13 @@ gpt-5.4-mini does.
 - *Hedge items*: gpt-5.4-mini emitted "Cylindrical floor object" and "Portable
   lamp or light source reflection" despite the omit-rather-than-guess rule.
   These should count against it as hallucination-adjacent.
-- *Unverified defect claims*: gemini's TV-unit scratch must be checked against
-  the actual furniture. A hallucinated defect is worse than a missed item in a
-  deposit dispute (it's the landlord's burden of proof).
+- *Hallucinated defects are real, not hypothetical*: gemini's sole defect
+  claim — a "surface scratch to top right corner" of the TV unit — turned out
+  to be a "2021 new" sticker. One human glance at the evidence photo dismissed
+  it; an unreviewed report would have carried a false damage claim into a
+  dispute where the landlord bears the burden of proof. This is the strongest
+  argument yet for a review experience that puts each claim next to its
+  evidence crop (see 05-review-experience.md).
 - *Dedup misses across names*: "Children's bicycle" + "Bicycle" survived the
   string-key merge as two items. Fuzzy/embedding matching is the fix and is
   needed for M3 `compare` anyway.
@@ -65,8 +69,9 @@ A 19-frame room ≈ 25K input + 3–4K output tokens; one property ≈ 8–10× 
 
 ## Next steps
 
-1. Label this room as the first eval fixture (`evals/README.md` format),
-   including verifying the TV-unit scratch claim.
+1. Label this room as the first eval fixture (`evals/README.md` format).
+   The TV-unit "scratch" is verified false (sticker) — record it as a
+   negative label so the eval penalises any backend that reports it.
 2. Run `evals/run_eval.py` across all backends → recall / hallucination /
    naming / condition-agreement table; pick the default backend on numbers.
 3. Run `local` qwen3.5:9b when the GPU is free (and optionally
