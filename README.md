@@ -80,6 +80,8 @@ catch coverage gaps while you're still at the property.
 photos / video → keyframes → SHA-256 manifest → YOLOE open-vocab detection
               → VLM schedule (items, condition, cleanliness, defects, per room)
               → de-dup merge → inventory.json → HTML/PDF report
+              → human review (in-report or `homeinventory review`)
+              → signatures + acknowledgement trail → attested report
 ```
 
 - **Detection** (open source, local): [YOLOE](https://docs.ultralytics.com/models/yoloe/)
@@ -106,13 +108,20 @@ photos / video → keyframes → SHA-256 manifest → YOLOE open-vocab detection
 - [`docs/01-scope-and-architecture.md`](docs/01-scope-and-architecture.md) — scope, architecture, UX, evals
 - [`docs/02-research.md`](docs/02-research.md) — TDS/AIIC standards, YOLOE, VLM condition-grading, competitor gaps
 - [`docs/03-implementation-plan.md`](docs/03-implementation-plan.md) — milestones M0 (this prototype) → M4
+- [`docs/04-backend-comparison.md`](docs/04-backend-comparison.md) — describe backends on first real footage
 - [`docs/05-review-experience.md`](docs/05-review-experience.md) — review UX design space (Levels 0–4) and what's built
 - [`evals/README.md`](evals/README.md) — fixture format and quality metrics
 
 ## Status
 
-M0 prototype. The v2 feature — check-in vs check-out **comparison reports**
-(`homeinventory compare`) — is scoped in the implementation plan, milestone 3.
+M0 prototype, plus the full review stack from
+[`docs/05`](docs/05-review-experience.md): in-report review mode, local
+review server (`homeinventory review`), tenant comment-and-countersign
+(`--share`), and the pre-build coverage check (`homeinventory check`).
+The v2 feature — check-in vs check-out **comparison reports**
+(`homeinventory compare`) — is scoped in the implementation plan,
+milestone 3; the defect-region annotations captured at review are its
+alignment anchors.
 
 ## Disclaimer
 
