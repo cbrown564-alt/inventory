@@ -13,3 +13,8 @@ dist/
 report/
 capture/
 /tmp-*
+
+# benchmark run outputs: keep the scored json/html, not the copied photos
+# (capture/ above already excludes the extracted benchmark photos — regenerate
+# both with benchmarks/extract_inventoryflex.py + a build)
+benchmarks/*/report-*/photos/

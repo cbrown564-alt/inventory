@@ -107,9 +107,10 @@ photos / video → keyframes → SHA-256 manifest → YOLOE open-vocab detection
 
 - [`docs/01-scope-and-architecture.md`](docs/01-scope-and-architecture.md) — scope, architecture, UX, evals
 - [`docs/02-research.md`](docs/02-research.md) — TDS/AIIC standards, YOLOE, VLM condition-grading, competitor gaps
-- [`docs/03-implementation-plan.md`](docs/03-implementation-plan.md) — milestones M0 (this prototype) → M4
+- [`docs/03-implementation-plan.md`](docs/03-implementation-plan.md) — milestones M0 (this prototype) → M5
 - [`docs/04-backend-comparison.md`](docs/04-backend-comparison.md) — describe backends on first real footage
 - [`docs/05-review-experience.md`](docs/05-review-experience.md) — review UX design space (Levels 0–4) and what's built
+- [`docs/06-professional-report-benchmark.md`](docs/06-professional-report-benchmark.md) — pipeline vs a professional clerk's published report (M1)
 - [`evals/README.md`](evals/README.md) — fixture format and quality metrics
 
 ## Status
@@ -118,9 +119,11 @@ M0 prototype, plus the full review stack from
 [`docs/05`](docs/05-review-experience.md): in-report review mode, local
 review server (`homeinventory review`), tenant comment-and-countersign
 (`--share`), and the pre-build coverage check (`homeinventory check`).
+M1 (benchmark against a professional clerk's published report) is done —
+see [`docs/06`](docs/06-professional-report-benchmark.md).
 The v2 feature — check-in vs check-out **comparison reports**
 (`homeinventory compare`) — is scoped in the implementation plan,
-milestone 3; the defect-region annotations captured at review are its
+milestone 4; the defect-region annotations captured at review are its
 alignment anchors.
 
 ## Disclaimer

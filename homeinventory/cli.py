@@ -295,7 +295,7 @@ def cmd_check(args) -> int:
 
 def cmd_compare(_args) -> int:
     print("compare (check-in vs check-out) is the v2 feature — see "
-          "docs/03-implementation-plan.md milestone 3.", file=sys.stderr)
+          "docs/03-implementation-plan.md milestone 4.", file=sys.stderr)
     return 1
 
 
