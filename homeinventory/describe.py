@@ -291,7 +291,7 @@ class LocalBackend:
     DEFAULT_MODEL = "qwen3.5:9b"
 
     def __init__(self, model: Optional[str] = None, host: Optional[str] = None,
-                 batch_size: int = 6, max_dim: int = 1120, num_ctx: int = 16384,
+                 batch_size: int = 6, max_dim: int = 1120, num_ctx: int = 24576,
                  timeout: float = 900.0):
         self.model = model or self.DEFAULT_MODEL
         self.host = (host or os.environ.get("OLLAMA_HOST")
@@ -304,14 +304,23 @@ class LocalBackend:
         self.num_ctx = num_ctx
         self.timeout = timeout
 
-    def _chat(self, messages: list[dict]) -> dict:
-        body = json.dumps({
+    def _chat(self, messages: list[dict], temperature: float = 0.0) -> dict:
+        # Budget note for thinking models (qwen3.5+): they emit a `thinking`
+        # field (observed 13K-26K chars) before the JSON `content`, and
+        # everything generated competes for num_ctx with the ~7K-token prompt
+        # of a 6-photo batch. Without explicit num_predict, content is often
+        # empty or cut mid-string. `think: false` is NOT the fix on Ollama
+        # 0.30: it silently drops the `format` schema and the model returns
+        # free-form markdown.
+        payload = {
             "model": self.model,
             "messages": messages,
             "stream": False,
             "format": ITEM_SCHEMA,
-            "options": {"num_ctx": self.num_ctx, "temperature": 0},
-        }).encode()
+            "options": {"num_ctx": self.num_ctx, "temperature": temperature,
+                        "num_predict": 12288},
+        }
+        body = json.dumps(payload).encode()
         req = urllib.request.Request(
             f"{self.host}/api/chat", data=body,
             headers={"Content-Type": "application/json"})
@@ -354,11 +363,18 @@ class LocalBackend:
             )
             log.info("  local batch %d/%d (%d photos)…", b, len(batches),
                      len(batch_photos))
-            resp = self._chat([
+            msgs = [
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt, "images": images},
-            ])
-            data = json.loads(resp["message"]["content"])
+            ]
+            try:
+                data = json.loads(self._chat(msgs)["message"]["content"])
+            except ValueError:
+                # malformed/empty JSON: one retry, jittered off the greedy
+                # path that produced it (temperature 0 would fail identically)
+                log.warning("  batch %d returned malformed JSON — retrying", b)
+                data = json.loads(
+                    self._chat(msgs, temperature=0.3)["message"]["content"])
             summary, batch_items = _parse_items(data, batch_photos)
             summaries.append(summary)
             items.extend(batch_items)
