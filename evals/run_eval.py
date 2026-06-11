@@ -45,9 +45,34 @@ def name_match(pred: str, gold: dict) -> float:
     for c in candidates:
         c_n = _norm(c)
         if c_n in pred_n or pred_n in c_n:
-            return 1.0
-        best = max(best, difflib.SequenceMatcher(None, pred_n, c_n).ratio())
+            # graded by length ratio so a closer-length substring match
+            # outranks a token buried in a longer name: gold "bed" must not
+            # tie pred "Bedside table" with pred "Double bed base"
+            shorter, longer = sorted((c_n, pred_n), key=len)
+            best = max(best, 0.9 + 0.1 * (len(shorter) / len(longer)))
+        else:
+            best = max(best, difflib.SequenceMatcher(None, pred_n, c_n).ratio())
     return best
+
+
+def assign_matches(preds: list, gold_items: list[dict],
+                   threshold: float = 0.6) -> dict[int, tuple[float, object]]:
+    """Score-ordered one-to-one assignment of predictions to gold items."""
+    pairs = []
+    for gi, gold in enumerate(gold_items):
+        for p in preds:
+            s = name_match(p.name, gold)
+            if s >= threshold:
+                pairs.append((s, gi, p))
+    pairs.sort(key=lambda t: -t[0])
+    out: dict[int, tuple[float, object]] = {}
+    used: set[str] = set()
+    for s, gi, p in pairs:
+        if gi in out or p.id in used:
+            continue
+        out[gi] = (s, p)
+        used.add(p.id)
+    return out
 
 
 def evaluate(inv: Inventory, labels: dict, match_threshold: float = 0.6) -> dict:
@@ -66,22 +91,22 @@ def evaluate(inv: Inventory, labels: dict, match_threshold: float = 0.6) -> dict
         stats["pred_items"] += len(preds)
         matched_pred_ids: set[str] = set()
 
-        for gold in gold_room["items"]:
+        # Globally score-ordered assignment: every (gold, pred) pair above the
+        # threshold competes at once, best score wins. A per-gold greedy pass
+        # let an early gold item steal a later item's natural partner ("front
+        # door" matched to "Door frame and architrave"), inflating
+        # hallucinations and burying defect credit.
+        match_for_gold = assign_matches(preds, gold_room["items"], match_threshold)
+        matched_pred_ids.update(p.id for _, p in match_for_gold.values())
+
+        for gi, gold in enumerate(gold_room["items"]):
             stats["gold_items"] += 1
             notable = gold.get("notable", True)
             if notable:
                 stats["gold_notable"] += 1
-            # best unmatched prediction
-            best, best_score = None, 0.0
-            for p in preds:
-                if p.id in matched_pred_ids:
-                    continue
-                s = name_match(p.name, gold)
-                if s > best_score:
-                    best, best_score = p, s
-            if best is None or best_score < match_threshold:
+            if gi not in match_for_gold:
                 continue
-            matched_pred_ids.add(best.id)
+            best_score, best = match_for_gold[gi]
             stats["found"] += 1
             if notable:
                 stats["found_notable"] += 1
@@ -98,7 +123,25 @@ def evaluate(inv: Inventory, labels: dict, match_threshold: float = 0.6) -> dict
             for gd in gold.get("defects", []):
                 stats["gold_defects"] += 1
                 blob = _norm(" ".join(best.defects) + " " + best.description)
-                if any(w in blob for w in _norm(gd).split() if len(w) > 3):
+                gd_words = [w for w in _norm(gd).split() if len(w) > 3]
+                hit = any(w in blob for w in gd_words)
+                if not hit:
+                    # part-split credit: the clerk merges (one "Bed & Mattress"
+                    # entry), the model splits (bed base / headboard / mattress).
+                    # If the gold defect names the part ("hole to edge of
+                    # mattress"), look for it on unmatched preds carrying that
+                    # part's name.
+                    for p in preds:
+                        if p.id in matched_pred_ids:
+                            continue
+                        p_words = [w for w in _norm(p.name).split() if len(w) > 3]
+                        if not any(w in _norm(gd) for w in p_words):
+                            continue
+                        part_blob = _norm(" ".join(p.defects) + " " + p.description)
+                        if any(w in part_blob for w in gd_words):
+                            hit = True
+                            break
+                if hit:
                     stats["defects_found"] += 1
 
         stats["hallucinated"] += sum(1 for p in preds if p.id not in matched_pred_ids)

@@ -8,9 +8,21 @@ from homeinventory.schema import Inventory, Item, Room  # noqa: E402
 
 
 def test_name_match_substring_and_aliases():
-    assert run_eval.name_match("Three-seat sofa", {"name": "sofa"}) == 1.0
+    # exact (after normalisation) scores 1.0; substring scores 0.9-1.0 graded
+    # by length ratio so closer-length matches win ties
+    assert run_eval.name_match("Sofa", {"name": "sofa"}) == 1.0
+    assert run_eval.name_match("Three-seat sofa", {"name": "sofa"}) >= 0.9
     assert run_eval.name_match("TV", {"name": "television", "aliases": ["tv"]}) == 1.0
     assert run_eval.name_match("Disco ball", {"name": "television"}) < 0.6
+
+
+def test_name_match_tiebreak_prefers_closer_length():
+    # regression: gold "double bed" (alias "bed") must rank "Double bed base"
+    # above "Bedside table" — the flat substring score tied them at 1.0 and
+    # let list order decide
+    gold = {"name": "double bed", "aliases": ["bed"]}
+    assert (run_eval.name_match("Double bed base", gold)
+            > run_eval.name_match("Bedside table", gold))
 
 
 def test_evaluate_recall_hallucination_condition_defects():

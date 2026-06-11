@@ -137,11 +137,54 @@ candidates and produce final reports on opus.
    actual appliance types). These are complementary — the review loop (docs/05) is
    where a human adds the former.
 
+## Prompt iteration + scorer fixes (11 Jun 2026, same day)
+
+Acting on conclusions 2–4: the eval matcher was fixed first (score-ordered
+one-to-one assignment instead of gold-order greedy; substring matches graded by
+length ratio so "bed" can't steal "Bedside table"; part-split defect credit when
+the model splits an item the clerk merged, e.g. mattress out of "Bed & Mattress").
+Re-scoring under the fixed scorer showed the opus baseline defect recall was
+actually **67.9**, not 55.1 — about a third of the reported gap was metric error.
+
+Then the system prompt was iterated on gpt-5.4-mini (~$0.14/run), one change per run:
+
+| Run (fixed scorer) | defect recall | notable recall | cond. exact | naming | halluc.* |
+|---|---|---|---|---|---|
+| opus, v1 prompt | 67.9 | 86.3 | 84.2 | 95.1 | 38.2 |
+| mini, v1 prompt | 46.9 | 84.9 | 41.3 | 92.3 | 37.1 |
+| mini, v2: + standard-items checklist, clerk localisation vocabulary, close-up-shot instruction, good-vs-excellent calibration | 55.7 | 86.3 | 89.3 | 97.8 | 40.7 |
+| mini, v3: + cleanliness findings recorded as defects | 58.1 | **90.4** | 68.7 ⚠ | 95.3 | 39.7 |
+| mini, v4: + condition measures wear not dirt | **64.8** | **90.4** | 83.7 | 96.7 | 40.0 |
+| **opus, v4 prompt** | 67.8 | 87.7 | **92.7** | 94.4 | 37.3 |
+
+\* still granularity-dominated; stable across runs.
+
+Findings:
+
+1. **The prompt closed mini's gap, not opus's ceiling.** Mini gained +18 points
+   of defect recall and hit the ≥90 notable-recall target; opus was flat on
+   defects (67.9 → 67.8) — it already did the prompted behaviours. Opus still
+   leads where it always led: grading agreement (92.7 exact).
+2. **The v3 lesson:** asking for cleanliness findings as defects dragged grades
+   down ("good" → "fair" for dirty-but-sound items) until v4 stated explicitly
+   that condition measures wear, not dirt. Rubric clauses interact; change one
+   thing per run.
+3. **~68% defect recall looks resolution-bound on this fixture.** The photos are
+   800×600 PDF extractions; the clerk worked from life and full-res originals.
+   The misses that remain (faint scuffs on white walls, grout discolouration,
+   hairline cracks) are at or below what 800×600 resolves. Expect this ceiling
+   to lift on M2's own-property capture at native resolution — measure there
+   before more prompt surgery.
+4. **Mini v4 ≈ opus v1 on defects at 8× less.** The iterate-on-mini /
+   validate-on-opus split is confirmed working practice.
+
 ## Artefacts
 
 - `benchmarks/samples/` — downloaded sample PDFs (4)
 - `benchmarks/extract_inventoryflex.py` — photo/ground-truth extraction
 - `benchmarks/inventoryflex/capture/` — 192 photos in 6 rooms
 - `benchmarks/inventoryflex/labels.json` — 112-item gold fixture (eval-schema)
-- `benchmarks/inventoryflex/report-claude/`, `report-gpt54mini/` — pipeline outputs
+- `benchmarks/inventoryflex/report-claude/`, `report-gpt54mini/` — v1-prompt outputs;
+  `report-gpt54mini-v2/…-v4/`, `report-claude-v4/` — prompt-iteration outputs
 - `benchmarks/audit_matches.py` — per-room missed/unmatched audit
+- `benchmarks/audit_defects.py` — per-item missed-defect audit

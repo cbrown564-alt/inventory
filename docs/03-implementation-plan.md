@@ -49,8 +49,10 @@ and compare our output against the human-written report.
 - [ ] Review-loop ergonomics: `--room` partial rebuild, `inventory.json` hand-edits
       preserved on rebuild (`--from-json`)
 - [ ] Tune the describe prompt on real failures (materials, defect localisation) —
-      target: substantially lift defect recall (55% on the docs/06 benchmark);
-      iterate on gpt-5.4-mini, validate on opus (decision in docs/06 §Cost)
+      first pass done on the docs/06 benchmark: mini defect recall 46.9→64.8,
+      notable recall 90.4 (target met); opus defect recall plateaus ~68% on the
+      800×600 fixture (resolution-bound) — re-measure on own-property native-res
+      capture before further prompt surgery
 - [ ] Build first real eval fixture from this property (label 3 rooms by hand)
 - [ ] PDF polish: cover page, page numbers, agent-style layout parity check against a
       sample £165 report

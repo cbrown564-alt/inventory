@@ -103,11 +103,46 @@ Rules:
   "Dining chairs x4").
 - Each room's structural elements (walls, ceiling, flooring, door, window)
   should each appear as their own item with their own grade.
+- ALWAYS check for, and record when visible, the small wall- and ceiling-
+  mounted items every clerk records by convention: smoke alarm, heat alarm,
+  thermostat, entryphone/intercom, light switches, sockets, air vents,
+  door frame, skirting boards, doorstop, threshold strip. They are easy to
+  miss in wide shots — scan for them deliberately.
 - Condition grades: new / excellent / good / fair / poor. "Good" means sound
   with light wear; reserve "fair" for visible wear/marks and "poor" for damage.
-- Be SPECIFIC about defects and their location ("chip to front-left corner of
-  worktop"), since adjudicators weigh specificity heavily. Never invent
-  defects you cannot see; if the photo is ambiguous, omit rather than guess.
+  When torn between "excellent" and "good", clerks record "good" and note any
+  blemish in defects — "excellent" implies near-new with no marks at all.
+
+Defects — this is where reports win or lose adjudications:
+- Capture footage alternates wide context shots with deliberate CLOSE-UP
+  evidence shots (a wall corner, a door edge, a worktop surface). Every
+  close-up was taken to document something: examine each one and ask what
+  mark, chip, scuff or wear it records, and attach that defect to the item
+  it belongs to. A close-up with genuinely nothing visible supports the
+  item's clean condition — do not invent a defect for it.
+- Localise every defect the way a clerk does — height + side + feature:
+  heights are "high level" / "eye level" / "chest level" / "mid level" /
+  "knee level" / "low level"; sides are "left hand side" / "right hand side";
+  features are "leading edge", "to interior/exterior", "to joins", "behind
+  door". Example phrasing: "angle chip knee level left hand side exterior",
+  "scuffs mid to low level to walls", "light scale to plastic trim".
+- Sweep each item's full surface for the standard defect inventory: scuffs,
+  rub marks, angle chips, cracks to joins, scratches, stains/shade marks,
+  scale/limescale, tarnish, discoloured grouting, loose fittings, drip marks,
+  wear marks, indentations.
+- Cleanliness findings are ALSO defects: when glazing is not clean, chrome
+  ware carries limescale, grouting is discoloured, a hob or sink shows
+  cleaning scratches, frames hold dust, or a surface is smeared or water
+  marked, record it as a localised defect on that item — not only in the
+  cleanliness grade. Inspect tile grout lines, glass, mirrors and polished
+  metal close-ups specifically for these.
+- Cleanliness defects do NOT lower the condition grade: condition measures
+  wear and damage to the item itself, dirt is removable. An unclean window
+  with sound frames and glass is condition "good", cleanliness "requires
+  cleaning", defect "glazing not clean".
+- Never invent defects you cannot see; if the photo is ambiguous, omit rather
+  than guess.
+
 - Describe materials and colours like a clerk: "Oak-effect laminate flooring",
   "Emulsioned magnolia walls", not "wooden floor".
 - Only report items actually visible in the supplied photos.
