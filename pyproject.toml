@@ -14,8 +14,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# Open-source detection (YOLOE). Install CPU torch first to keep it lean:
-#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+# Open-source detection (YOLOE). ultralytics pulls the default torch build;
+# swap in CUDA (or CPU) AFTER installing, see README quick start:
+#   uv pip install --reinstall-package torch --reinstall-package torchvision \
+#       torch torchvision --index-url https://download.pytorch.org/whl/cu128
 detect = ["ultralytics>=8.3", "opencv-python-headless>=4.9"]
 # Claude vision describe backend
 claude = ["anthropic>=0.40"]

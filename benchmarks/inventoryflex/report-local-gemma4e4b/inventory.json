@@ -1,0 +1,106 @@
+{
+  "property_address": "Flat 123, Sample street, Sample city, AB1 CD3",
+  "inspected_by": "Benchmark run",
+  "inspected_at": "2026-06-11",
+  "report_type": "Inventory & Schedule of Condition",
+  "rooms": [
+    {
+      "name": "Balcony",
+      "summary": "Balcony",
+      "items": [
+        {
+          "id": "BAL-001",
+          "name": "Flooring (Outdoor)",
+          "category": "structure",
+          "description": "Concrete/Paving slabs.",
+          "condition": "good",
+          "cleanliness": "requires cleaning",
+          "defects": [
+            "Scuff marks visible across the surface, particularly near the railing base (low level).",
+            "Some minor dirt accumulation in grout lines between paving slabs."
+          ],
+          "quantity": 1,
+          "est_value_band": "£50-250",
+          "photo_ids": [
+            "P001",
+            "P002",
+            "P003",
+            "P004",
+            "P005",
+            "P006"
+          ],
+          "crop_path": null,
+          "detector_label": null,
+          "confidence": 1.0,
+          "reviewed": false,
+          "rejected": false,
+          "rejected_defects": [],
+          "not_inspected": null,
+          "added_by": null,
+          "defect_regions": [],
+          "comments": []
+        }
+      ],
+      "photos": [
+        {
+          "id": "P001",
+          "path": "Balcony\\p33_i00.jpg",
+          "room": "Balcony",
+          "sha256": "135fcdbd152e7b066c04f0571a52f23bdf9c68fc78e23f52db8fe8352efb55d6",
+          "captured_at": null,
+          "source_video": null,
+          "note": null
+        },
+        {
+          "id": "P002",
+          "path": "Balcony\\p33_i01.jpg",
+          "room": "Balcony",
+          "sha256": "be12afd8598da47501e6e9caf93c2c20c6c1e619548bd03935a56f7e47509931",
+          "captured_at": null,
+          "source_video": null,
+          "note": null
+        },
+        {
+          "id": "P003",
+          "path": "Balcony\\p33_i02.jpg",
+          "room": "Balcony",
+          "sha256": "878a29c0f25abcb7d00133c17ee2e7bfb20daf2945d828cc2c29b6a5b30b5660",
+          "captured_at": null,
+          "source_video": null,
+          "note": null
+        },
+        {
+          "id": "P004",
+          "path": "Balcony\\p33_i03.jpg",
+          "room": "Balcony",
+          "sha256": "9f0ef03ad49863bd2cfade885c6a8fb390bc74b9746178721568be1b4acc6265",
+          "captured_at": null,
+          "source_video": null,
+          "note": null
+        },
+        {
+          "id": "P005",
+          "path": "Balcony\\p33_i04.jpg",
+          "room": "Balcony",
+          "sha256": "cd7dcc472d143f504d32f79165ed7f2f4eb16baafccf22e7c39b48a1f381b0bf",
+          "captured_at": null,
+          "source_video": null,
+          "note": null
+        },
+        {
+          "id": "P006",
+          "path": "Balcony\\p33_i05.jpg",
+          "room": "Balcony",
+          "sha256": "0a8fc81d05da1ece47e1092eb05ccb676ee47f1b29a7113842e6f0092a45bb2f",
+          "captured_at": null,
+          "source_video": null,
+          "note": null
+        }
+      ]
+    }
+  ],
+  "notes": "",
+  "tool_version": "0.1.0",
+  "describe_backend": "local (gemma4:e4b)",
+  "signatures": []
+}

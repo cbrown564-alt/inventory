@@ -13,7 +13,14 @@ the AI does the looking and writing, a human signs.
 ## Quick start
 
 ```sh
-pip install -e ".[all]"           # or pick extras: [claude], [detect], [pdf]
+uv venv
+uv pip install -e ".[all,dev]"    # or pick extras: [claude], [detect], [pdf]
+# then swap in the right torch build — AFTER the project install, which pulls
+# the default build via ultralytics. CUDA on NVIDIA boxes:
+uv pip install --reinstall-package torch --reinstall-package torchvision \
+    torch torchvision --index-url https://download.pytorch.org/whl/cu128
+# CPU-only machines: same command with .../whl/cpu
+.venv\Scripts\activate            # source .venv/bin/activate on macOS/Linux
 homeinventory guide               # what to photograph, room by room
 
 # capture/  Living Room/  Kitchen/  Bedroom 1/ ...   (photos and/or videos)
