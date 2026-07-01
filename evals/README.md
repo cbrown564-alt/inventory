@@ -67,6 +67,26 @@ To score every InventoryFlex benchmark output locally:
 python evals/score_benchmarks.py
 ```
 
+### Detector mode comparison (YOLOE text vs prompt-free)
+
+Compare how well each YOLOE mode finds gold inventory items before spending
+API credits on describe:
+
+```sh
+python evals/eval_detect.py CAPTURE_DIR evals/fixtures/<case>/labels.json
+python evals/eval_detect.py CAPTURE_DIR labels.json -o detect-eval.json --device cuda
+```
+
+Metrics: **gold recall** (notable / all items matched by at least one detection
+label in the room), **unmatched label rate** (detector noise), and **coverage
+gap rate** (per-room checklist misses). Default runs both `text`
+(household vocabulary) and `prompt_free` (LVIS/Objects365) and prints a
+recommendation. Use `--detect-mode prompt_free` on `homeinventory build` to
+try prompt-free in the full pipeline.
+
+Reference run on the InventoryFlex fixture is at
+`evals/fixtures/inventoryflex/detect-comparison.json`.
+
 ## Metrics & targets
 
 | Metric | Target (v1) |

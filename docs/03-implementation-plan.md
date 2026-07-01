@@ -64,7 +64,8 @@ and compare our output against the human-written report.
 - [x] `openai` backend: any OpenAI-compatible API (OpenAI, Gemini via compat
       endpoint, custom --base-url) for cheap cross-provider comparison
 - [ ] Eval: quantify gap vs `claude` backend on fixtures; document in README
-- [ ] Optional GPU path; YOLOE prompt-free mode evaluation vs text-prompt vocabulary
+- [x] Optional GPU path; YOLOE prompt-free mode evaluation vs text-prompt vocabulary
+      (`evals/eval_detect.py`, `--detect-mode`, `--device`; see `evals/README.md`)
 
 ## Milestone 4 — Comparison reports (v2 feature)
 

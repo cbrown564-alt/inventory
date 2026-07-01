@@ -6,6 +6,15 @@ The detector's job in this pipeline is grounding, not description:
     the VLM doesn't silently skip visible items,
   * in the fully-offline configuration it is the only source of item names.
 
+Two inference modes are supported:
+
+* ``text`` (default) — ``yoloe-*-seg.pt`` with ``HOUSEHOLD_VOCAB`` baked in via
+  ``set_classes``. Only the ~40 household classes are searched; fast and tuned
+  for inventory coverage checks.
+* ``prompt_free`` — ``yoloe-*-seg-pf.pt`` with Ultralytics' built-in LVIS +
+  Objects365 vocabulary (~1,200 categories). Broader recall on generic objects
+  but noisier labels and no inventory-specific terms (e.g. "towel rail").
+
 If torch/ultralytics or the model weights are unavailable the pipeline degrades
 gracefully to whole-image mode (no crops, no hints) rather than failing.
 """
@@ -15,9 +24,11 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Literal, Optional
 
 log = logging.getLogger(__name__)
+
+DetectMode = Literal["text", "prompt_free"]
 
 # Text-prompt vocabulary for household items of worth. YOLOE's text-prompted
 # mode detects exactly these classes; tune freely — it needs no retraining.
@@ -32,7 +43,14 @@ HOUSEHOLD_VOCAB = [
     "plant pot", "bicycle", "smoke alarm", "door", "window",
 ]
 
-DEFAULT_MODEL = "yoloe-11s-seg.pt"  # smallest YOLOE; fine on CPU
+DEFAULT_MODEL_TEXT = "yoloe-11s-seg.pt"       # smallest text-prompt YOLOE; fine on CPU
+DEFAULT_MODEL_PROMPT_FREE = "yoloe-11s-seg-pf.pt"
+DEFAULT_MODEL = DEFAULT_MODEL_TEXT
+
+
+def default_model(mode: DetectMode = "text") -> str:
+    """Return the default weight file for a detection mode."""
+    return DEFAULT_MODEL_PROMPT_FREE if mode == "prompt_free" else DEFAULT_MODEL_TEXT
 
 
 @dataclass
@@ -46,11 +64,14 @@ class Detection:
 class Detector:
     """Lazy-loading YOLOE wrapper; `available` is False if the stack is missing."""
 
-    def __init__(self, model_name: str = DEFAULT_MODEL,
-                 vocab: Optional[list[str]] = None, conf: float = 0.25):
-        self.model_name = model_name
+    def __init__(self, model_name: str | None = None,
+                 vocab: Optional[list[str]] = None, conf: float = 0.25,
+                 mode: DetectMode = "text", device: str | None = None):
+        self.mode = mode
+        self.model_name = model_name or default_model(mode)
         self.vocab = vocab or HOUSEHOLD_VOCAB
         self.conf = conf
+        self.device = device
         self._model = None
         self.available = True
         self._load_error: Optional[str] = None
@@ -61,7 +82,17 @@ class Detector:
         try:
             from ultralytics import YOLOE
             self._model = YOLOE(self.model_name)
-            self._model.set_classes(self.vocab, self._model.get_text_pe(self.vocab))
+            if self.mode == "text":
+                self._model.set_classes(self.vocab, self._model.get_text_pe(self.vocab))
+            elif hasattr(self._model.model.model[-1], "lrpc"):
+                log.debug("YOLOE prompt-free model loaded (%s)", self.model_name)
+            else:
+                log.warning(
+                    "model %s looks like a text-prompt weight but mode=prompt_free; "
+                    "switching to text mode", self.model_name,
+                )
+                self.mode = "text"
+                self._model.set_classes(self.vocab, self._model.get_text_pe(self.vocab))
         except Exception as e:  # missing torch, no weights, no network...
             self.available = False
             self._load_error = str(e)
@@ -71,7 +102,10 @@ class Detector:
         self._load()
         if not self.available:
             return []
-        results = self._model.predict(str(image_path), conf=self.conf, verbose=False)
+        kwargs = {"conf": self.conf, "verbose": False}
+        if self.device:
+            kwargs["device"] = self.device
+        results = self._model.predict(str(image_path), **kwargs)
         dets: list[Detection] = []
         r = results[0]
         names = r.names
