@@ -46,7 +46,7 @@ and compare our output against the human-written report.
 ## Milestone 2 — First real property run (the user's own tenancy)
 
 - [ ] Run `guide`, capture own property (~15–25 photos/room), run `build --backend claude`
-- [ ] Review-loop ergonomics: `--room` partial rebuild, `inventory.json` hand-edits
+- [x] Review-loop ergonomics: `--room` partial rebuild, `inventory.json` hand-edits
       preserved on rebuild (`--from-json`)
 - [ ] Tune the describe prompt on real failures (materials, defect localisation) —
       first pass done on the docs/06 benchmark: mini defect recall 46.9→64.8,
