@@ -23,6 +23,7 @@ import base64
 import json
 import logging
 import os
+import re
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -200,6 +201,34 @@ class DescribeAuthError(FatalBackendError):
     """Credentials missing or rejected."""
 
 
+def _extract_json(content: str) -> dict:
+    """Parse a model's text response into a JSON object.
+
+    Tolerates the common open-weight VLM quirks of wrapping JSON in markdown
+    code fences or surrounding it with prose: strip a fenced block if present,
+    then take the outermost balanced ``{ ... }``. Raises ``ValueError`` when no
+    complete object can be recovered, so callers retry or skip the batch
+    (truncated output is handled there, not by guessing at a repair).
+    """
+    text = content or ""
+    fence = re.search(r"```(?:json)?\s*(.*?)```", text, re.DOTALL)
+    if fence:
+        text = fence.group(1)
+    start = text.find("{")
+    if start == -1:
+        raise ValueError("no JSON object in response")
+    depth = 0
+    for end in range(start, len(text)):
+        c = text[end]
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                return json.loads(text[start:end + 1])
+    raise ValueError("unterminated JSON object")
+
+
 def _parse_items(data: dict, photos: list[Photo]) -> tuple[str, list[Item]]:
     """Convert a schema-shaped payload into normalised Items.
 
@@ -368,13 +397,23 @@ class LocalBackend:
                 {"role": "user", "content": prompt, "images": images},
             ]
             try:
-                data = json.loads(self._chat(msgs)["message"]["content"])
-            except ValueError:
-                # malformed/empty JSON: one retry, jittered off the greedy
-                # path that produced it (temperature 0 would fail identically)
-                log.warning("  batch %d returned malformed JSON — retrying", b)
-                data = json.loads(
-                    self._chat(msgs, temperature=0.3)["message"]["content"])
+                data = _extract_json(self._chat(msgs)["message"]["content"])
+            except (ValueError, RuntimeError) as e:
+                # malformed/empty JSON, or a transient Ollama error: one retry,
+                # jittered off the greedy path that produced it (temperature 0
+                # would reproduce a parse failure identically).
+                log.warning("  batch %d failed (%s) — retrying", b, e)
+                try:
+                    data = _extract_json(
+                        self._chat(msgs, temperature=0.3)["message"]["content"])
+                except (ValueError, RuntimeError) as e:
+                    # A single unrecoverable batch must not kill the whole
+                    # room: a prior run lost 2 of 6 rooms entirely because one
+                    # bad batch propagated up and zeroed 27 photos' worth of
+                    # items. Skip the batch, keep what the others produced.
+                    log.error("  batch %d failed after retry (%s) — skipping, "
+                              "keeping %d items so far", b, e, len(items))
+                    continue
             summary, batch_items = _parse_items(data, batch_photos)
             summaries.append(summary)
             items.extend(batch_items)
