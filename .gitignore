@@ -8,6 +8,7 @@ dist/
 
 # model weights
 *.pt
+mobileclip_blt.ts
 
 # local runs (committed example lives in examples/)
 report/

@@ -53,12 +53,12 @@ def coverage_gaps(seen_labels: set[str], room_name: str) -> list[str]:
 
 
 def check_capture(capture_dir: Path, rooms: dict[str, list[Photo]],
-                  conf: float = 0.25) -> dict[str, list[str]] | None:
+                  conf: float = 0.25, device: str | None = None) -> dict[str, list[str]] | None:
     """Detect across every room's photos; return {room: [missing, …]}.
     None means the detector stack is unavailable (no verdict, not a pass)."""
     from .detect import Detector
 
-    detector = Detector(conf=conf)
+    detector = Detector(conf=conf, device=device)
     report: dict[str, list[str]] = {}
     for room_name, photos in sorted(rooms.items()):
         seen: set[str] = set()

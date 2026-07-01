@@ -23,6 +23,34 @@ from .schema import Inventory, Item, Room
 
 log = logging.getLogger("homeinventory")
 
+DETECT_MODE_CHOICES = ("text", "prompt_free")
+
+
+def _detector_from_args(args) -> "Detector | None":
+    from .detect import Detector, default_model
+
+    if getattr(args, "no_detect", False):
+        return None
+    mode = getattr(args, "detect_mode", "text")
+    model = getattr(args, "detect_model", None) or default_model(mode)
+    return Detector(
+        model_name=model,
+        mode=mode,
+        conf=args.det_conf,
+        device=getattr(args, "device", None),
+    )
+
+
+def _add_detect_args(p):
+    p.add_argument("--detect-mode", choices=DETECT_MODE_CHOICES, default="text",
+                   help="YOLOE mode: text (household vocabulary) or prompt_free "
+                        "(built-in LVIS/Objects365 vocab)")
+    p.add_argument("--detect-model", default=None,
+                   help="override YOLOE weights (default follows --detect-mode)")
+    p.add_argument("--device", default=None,
+                   help="torch device for YOLOE (cpu, cuda, 0, …)")
+
+
 GUIDE = """\
 HOMEINVENTORY CAPTURE GUIDE
 ===========================
@@ -87,7 +115,6 @@ def _load_prior(args, out_dir: Path) -> tuple[Inventory | None, bool]:
 
 def cmd_build(args) -> int:
     from .describe import FatalBackendError, get_backend
-    from .detect import Detector
     from .ingest import ingest
     from .integrity import build_manifest
     from .merge import merge_items, merge_room_with_prior, room_code
@@ -126,7 +153,7 @@ def cmd_build(args) -> int:
         return 2
 
     # 3. detect (only the rooms being built)
-    detector = Detector(conf=args.det_conf) if not args.no_detect else None
+    detector = _detector_from_args(args)
     detections: dict[str, list] = {}
     if detector:
         for photos in selected.values():
@@ -304,7 +331,8 @@ def cmd_check(args) -> int:
             print("error: --room matched nothing", file=sys.stderr)
             return 2
 
-    report = check_capture(capture_dir, rooms, conf=args.det_conf)
+    report = check_capture(capture_dir, rooms, conf=args.det_conf,
+                           device=getattr(args, "device", None))
     if report is None:
         print("error: detector unavailable — install the detect extra:\n"
               "  pip install homeinventory[detect]", file=sys.stderr)
@@ -367,6 +395,7 @@ def main(argv: list[str] | None = None) -> int:
                         "(retries only rooms that failed or were not described)")
     b.add_argument("--no-detect", action="store_true",
                    help="skip YOLOE detection (no crops / hints)")
+    _add_detect_args(b)
     b.add_argument("--det-conf", type=float, default=0.25)
     b.add_argument("--no-pdf", action="store_true")
     b.set_defaults(func=cmd_build)
@@ -400,6 +429,7 @@ def main(argv: list[str] | None = None) -> int:
     ck.add_argument("-o", "--out", default=None,
                     help="reuse a report dir's work folder for video keyframes")
     ck.add_argument("--room", help="only check these rooms, comma-separated")
+    _add_detect_args(ck)
     ck.add_argument("--det-conf", type=float, default=0.25)
     ck.set_defaults(func=cmd_check)
 

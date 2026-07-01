@@ -1,0 +1,40 @@
+{
+  "_doc": "Regression floors for committed reference runs scored in CI. Metrics omitted here are not gated. hallucination_rate uses a ceiling (max), all others use a floor (min).",
+  "references": [
+    {
+      "name": "sample-report",
+      "inventory": "examples/sample-report/inventory.json",
+      "labels": "evals/fixtures/sample/labels.json",
+      "floors": {
+        "item_recall_notable": 66.0,
+        "naming_accuracy": 100.0,
+        "condition_within_one": 100.0
+      },
+      "ceilings": {
+        "hallucination_rate": 0.0
+      }
+    },
+    {
+      "name": "inventoryflex-claude-v4",
+      "inventory": "benchmarks/inventoryflex/report-claude-v4/inventory.json",
+      "labels": "evals/fixtures/inventoryflex/labels.json",
+      "floors": {
+        "item_recall_notable": 85.0,
+        "naming_accuracy": 90.0,
+        "condition_within_one": 95.0,
+        "defect_recall": 60.0
+      }
+    },
+    {
+      "name": "inventoryflex-gpt54mini-v4",
+      "inventory": "benchmarks/inventoryflex/report-gpt54mini-v4/inventory.json",
+      "labels": "evals/fixtures/inventoryflex/labels.json",
+      "floors": {
+        "item_recall_notable": 88.0,
+        "naming_accuracy": 90.0,
+        "condition_within_one": 95.0,
+        "defect_recall": 60.0
+      }
+    }
+  ]
+}
