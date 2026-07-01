@@ -49,6 +49,24 @@ python evals/run_eval.py /tmp/eval-out/inventory.json evals/fixtures/<case>/labe
 Run the same case against `--backend offline` (and later `local`) to quantify the
 open-source-only quality gap instead of guessing at it.
 
+### CI regression gate
+
+Committed reference runs are scored on every push/PR:
+
+```sh
+python evals/ci_gate.py
+```
+
+Floors live in `evals/fixtures/thresholds.json`. The gate also smoke-tests
+`homeinventory build --backend offline --no-detect` on a synthetic capture so
+the eval harness stays wired to the pipeline.
+
+To score every InventoryFlex benchmark output locally:
+
+```sh
+python evals/score_benchmarks.py
+```
+
 ## Metrics & targets
 
 | Metric | Target (v1) |

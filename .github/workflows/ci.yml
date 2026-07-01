@@ -18,3 +18,4 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: pytest -q
+      - run: python evals/ci_gate.py
