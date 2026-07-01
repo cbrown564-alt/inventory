@@ -149,6 +149,12 @@ def cmd_build(args) -> int:
     inv = Inventory(
         property_address=args.address or (prior.property_address if prior else ""),
         inspected_by=args.inspector or (prior.inspected_by if prior else ""),
+        agent_name=args.agent_name or (prior.agent_name if prior else ""),
+        agent_phone=args.agent_phone or (prior.agent_phone if prior else ""),
+        property_type=args.property_type or (prior.property_type if prior else ""),
+        tenant_name=args.tenant or (prior.tenant_name if prior else ""),
+        landlord_name=args.landlord or (prior.landlord_name if prior else ""),
+        report_ref=args.report_ref or (prior.report_ref if prior else ""),
         describe_backend=f"{backend.name}"
                          + (f" ({getattr(backend, 'model', None)})"
                             if getattr(backend, "model", None) else ""),
@@ -157,6 +163,8 @@ def cmd_build(args) -> int:
     if prior and preserve_edits:
         inv.inspected_at = prior.inspected_at
         inv.signatures = list(prior.signatures)
+        if prior.schedule_summary:
+            inv.schedule_summary = list(prior.schedule_summary)
     used_codes: set[str] = set()
     if prior:  # reserve item-id prefixes we are keeping
         for r in prior.rooms:
@@ -356,6 +364,13 @@ def main(argv: list[str] | None = None) -> int:
                         "(any OpenAI-compatible server)")
     b.add_argument("--address", help="property address for the cover page")
     b.add_argument("--inspector", help="name of the person attesting the report")
+    b.add_argument("--agent-name", help="clerk / letting agent company name for the cover")
+    b.add_argument("--agent-phone", help="agent contact phone for the PDF footer")
+    b.add_argument("--property-type",
+                   help="e.g. '1 Bedroom furnished apartment' for Schedule of Condition")
+    b.add_argument("--tenant", help="tenant name(s) for the cover page")
+    b.add_argument("--landlord", help="landlord or agent name for the cover page")
+    b.add_argument("--report-ref", help="report reference number")
     b.add_argument("--notes", help="general notes for the report front matter")
     b.add_argument("--room", help="only (re)build these rooms, comma-separated; "
                                   "other rooms are kept from the existing inventory.json")

@@ -1,0 +1,6 @@
+{"rooms": {"Living Room": {"items": [
+  {"name": "sofa", "aliases": ["three-seat sofa", "settee"], "condition": "good",
+   "defects": ["scuff above skirting"], "notable": true},
+  {"name": "walls", "condition": "good", "notable": true},
+  {"name": "television", "aliases": ["tv"], "condition": "excellent", "notable": true}
+]}}}
