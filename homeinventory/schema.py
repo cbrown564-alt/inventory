@@ -116,6 +116,15 @@ class Inventory:
         default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d")
     )
     report_type: str = "Inventory & Schedule of Condition"
+    # Optional cover / clerk-style metadata (M2 PDF polish)
+    agent_name: str = ""
+    agent_phone: str = ""
+    property_type: str = ""          # e.g. "1 Bedroom furnished apartment"
+    tenant_name: str = ""
+    landlord_name: str = ""
+    report_ref: str = ""
+    # Section 1 Schedule of Condition rows: {"ref", "name", "condition"}
+    schedule_summary: list[dict] = field(default_factory=list)
     rooms: list[Room] = field(default_factory=list)
     notes: str = ""
     tool_version: str = "0.1.0"

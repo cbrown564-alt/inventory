@@ -54,8 +54,11 @@ and compare our output against the human-written report.
       800×600 fixture (resolution-bound) — re-measure on own-property native-res
       capture before further prompt surgery
 - [ ] Build first real eval fixture from this property (label 3 rooms by hand)
-- [ ] PDF polish: cover page, page numbers, agent-style layout parity check against a
-      sample £165 report
+- [x] PDF polish: cover page, page numbers, agent-style layout parity check against a
+      sample £165 report — clerk-style template landed (Schedule of Condition, hierarchical
+      refs, 4-column print layout, TOC, page numbers + tenant initials, Appendix B photo
+      grid); polished opus output at `benchmarks/inventoryflex/report-claude-v4-polished/`
+      (45pp PDF from existing `report-claude-v4` inventory.json, no re-run)
 
 ## Milestone 3 — Open-source-only parity
 
