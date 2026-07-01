@@ -78,3 +78,58 @@ def test_build_unknown_room_errors(tmp_path, capsys):
                "--room", "ballroom"])
     assert rc == 2
     assert "available rooms" in capsys.readouterr().err
+
+
+def test_build_from_json_preserves_reviewed_room(tmp_path):
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    _img(cap / "Living Room" / "l1.jpg")
+    out = tmp_path / "report"
+    base = ["build", str(cap), "-o", str(out),
+            "--backend", "offline", "--no-detect", "--no-pdf"]
+
+    assert main(base) == 0
+    inv = json.loads((out / "inventory.json").read_text(encoding="utf-8"))
+    kitchen = next(r for r in inv["rooms"] if r["name"] == "Kitchen")
+    pid = kitchen["photos"][0]["id"]
+    kitchen["items"] = [{
+        "id": "KIT-001", "name": "Window", "category": "other",
+        "description": "draft", "condition": "fair", "defects": [],
+        "quantity": 1, "photo_ids": [pid], "reviewed": False,
+        "rejected": False, "rejected_defects": [], "defect_regions": [],
+        "comments": [],
+    }]
+    kitchen["items"][0]["reviewed"] = True
+    kitchen["items"][0]["condition"] = "good"
+    kitchen["items"][0]["name"] = "Attested hob"
+    kitchen["items"].append({
+        "id": "KIT-099", "name": "Added pan", "added_by": "reviewer",
+        "reviewed": True, "condition": "good", "category": "other",
+        "description": "", "defects": [], "photo_ids": [], "quantity": 1,
+        "rejected": False, "rejected_defects": [], "defect_regions": [],
+        "comments": [],
+    })
+    edited = out / "reviewed.json"
+    inv["signatures"] = [{"role": "landlord", "name": "C. Brown",
+                          "signed_at": "2026-06-10", "inventory_sha256": "abc",
+                          "via": "test"}]
+    edited.write_text(json.dumps(inv), encoding="utf-8")
+
+    assert main(base + ["--room", "Kitchen", "--from-json", str(edited)]) == 0
+    rebuilt = json.loads((out / "inventory.json").read_text(encoding="utf-8"))
+    assert rebuilt["signatures"][0]["name"] == "C. Brown"
+    rk = next(r for r in rebuilt["rooms"] if r["name"] == "Kitchen")
+    attested = next(i for i in rk["items"] if i["name"] == "Attested hob")
+    assert attested["reviewed"] is True and attested["condition"] == "good"
+    assert any(i["name"] == "Added pan" for i in rk["items"])
+    assert {r["name"] for r in rebuilt["rooms"]} == {"Kitchen", "Living Room"}
+
+
+def test_build_from_json_missing_file_errors(tmp_path, capsys):
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    rc = main(["build", str(cap), "-o", str(tmp_path / "report"),
+               "--backend", "offline", "--no-detect", "--no-pdf",
+               "--from-json", str(tmp_path / "nope.json")])
+    assert rc == 2
+    assert "not found" in capsys.readouterr().err

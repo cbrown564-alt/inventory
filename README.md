@@ -61,7 +61,7 @@ The AI drafts; a human confirms and signs. Three ways in, lightest first
    Confidence-sorted queue with bulk-accept, drag-a-box defect annotation on
    photos, per-room coverage panel (photos no item cites), add-missed-item
    with photo upload, and a *Re-describe room* button for after you fix a
-   capture problem.
+   capture problem (hand-edits in that room are preserved via `--from-json`).
 
 3. **The tenant countersigns** (`--share`): prints a token-protected link to
    open on the tenant's phone — they walk the rooms, comment per item
@@ -75,6 +75,15 @@ re-running the AI:
 
 ```sh
 homeinventory render capture/ -o report/
+```
+
+Re-describe one room after fixing photos while keeping review work elsewhere
+(and attested items in the rebuilt room):
+
+```sh
+homeinventory build capture/ -o report/ --room "Kitchen" --from-json
+# or point at a downloaded reviewed copy:
+homeinventory build capture/ -o report/ --room "Kitchen" --from-json reviewed.json
 ```
 
 Before spending API money, `homeinventory check capture/` runs the free local
