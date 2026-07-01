@@ -40,3 +40,31 @@ def test_evaluate_recall_hallucination_condition_defects():
     assert r["hallucination_rate"] == 50.0
     assert r["condition_exact"] == 100.0
     assert r["defect_recall"] == 100.0
+
+
+def test_granularity_split_not_counted_as_hallucination():
+    inv = Inventory(rooms=[Room(name="Bathroom", items=[
+        Item(id="BTH-001", name="Bath", condition="good"),
+        Item(id="BTH-002", name="Bath/shower mixer controls", condition="good"),
+    ])])
+    labels = {"rooms": {"bathroom": {"items": [
+        {"name": "bath", "condition": "good",
+         "components": ["mixer controls"], "notable": True},
+    ]}}}
+    r = run_eval.evaluate(inv, labels)
+    assert r["item_recall_all"] == 100.0
+    assert r["hallucination_rate"] == 0.0
+    assert r["granularity_split_rate"] == 50.0
+
+
+def test_weak_fuzzy_match_does_not_absorb_unrelated_pred():
+    inv = Inventory(rooms=[Room(name="Living Room", items=[
+        Item(id="LIV-001", name="Coffee table", condition="good"),
+        Item(id="LIV-002", name="Coffee machine", condition="good"),
+    ])])
+    labels = {"rooms": {"living room": {"items": [
+        {"name": "coffee table", "condition": "good", "notable": True},
+    ]}}}
+    r = run_eval.evaluate(inv, labels)
+    assert r["hallucination_rate"] == 50.0
+    assert r["granularity_split_rate"] == 0.0

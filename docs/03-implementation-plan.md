@@ -40,8 +40,10 @@ and compare our output against the human-written report.
       (hallucinations, misses, grade consistency)
 - [x] Write up findings in `docs/06-professional-report-benchmark.md`; gold labels in
       `benchmarks/inventoryflex/labels.json` (first real-footage eval fixture)
-- [ ] Follow-ups surfaced: defect-depth prompt work, standard-items checklist,
-      eval matcher granularity fix (see docs/06 conclusions)
+- [ ] Follow-ups surfaced: defect-depth prompt work (partially addressed in
+      prompt v2–v4), standard-items checklist (landed in prompt v2)
+- [x] Eval matcher granularity fix — many-to-one coverage + gold `components`;
+      opus v4 hallucination 37.3% → 2.8% on InventoryFlex (see `evals/README.md`)
 
 ## Milestone 2 — First real property run (the user's own tenancy)
 

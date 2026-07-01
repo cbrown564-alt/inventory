@@ -9,15 +9,16 @@ labels.json format (one per fixture case — see evals/README.md):
   "rooms": {
     "Living Room": {
       "items": [
-        {"name": "three-seat sofa", "aliases": ["sofa", "settee"],
+         {"name": "three-seat sofa", "aliases": ["sofa", "settee"],
+         "components": ["left arm", "seat cushion"],
          "condition": "good", "defects": ["scuff on left arm"], "notable": true}
       ]
     }
   }
 }
 
-Metrics: item recall (notable / all), hallucination rate, naming accuracy,
-condition exact & within-one agreement, defect recall. See
+Metrics: item recall (notable / all), hallucination rate, granularity split rate,
+naming accuracy, condition exact & within-one agreement, defect recall. See
 docs/01-scope-and-architecture.md §5 for targets.
 """
 
@@ -37,22 +38,49 @@ def _norm(s: str) -> str:
     return " ".join(s.lower().replace("-", " ").split())
 
 
-def name_match(pred: str, gold: dict) -> float:
-    """Best fuzzy similarity between a predicted name and gold name/aliases."""
-    candidates = [gold["name"], *gold.get("aliases", [])]
+def _match_names(pred: str, candidates: list[str]) -> tuple[float, bool]:
+    """Return (best_score, used_substring_match)."""
     pred_n = _norm(pred)
     best = 0.0
+    substring = False
     for c in candidates:
         c_n = _norm(c)
         if c_n in pred_n or pred_n in c_n:
-            # graded by length ratio so a closer-length substring match
-            # outranks a token buried in a longer name: gold "bed" must not
-            # tie pred "Bedside table" with pred "Double bed base"
             shorter, longer = sorted((c_n, pred_n), key=len)
-            best = max(best, 0.9 + 0.1 * (len(shorter) / len(longer)))
+            score = 0.9 + 0.1 * (len(shorter) / len(longer))
+            if score > best:
+                best = score
+                substring = True
         else:
-            best = max(best, difflib.SequenceMatcher(None, pred_n, c_n).ratio())
-    return best
+            score = difflib.SequenceMatcher(None, pred_n, c_n).ratio()
+            if score > best:
+                best = score
+                substring = False
+    return best, substring
+
+
+def name_match(pred: str, gold: dict) -> float:
+    """Best fuzzy similarity between a predicted name and gold name/aliases."""
+    score, _ = _match_names(pred, [gold["name"], *gold.get("aliases", [])])
+    return score
+
+
+def pred_is_covered(pred_name: str, gold: dict, *,
+                    threshold: float = 0.6,
+                    fuzzy_threshold: float = 0.75) -> bool:
+    """Whether an unmatched pred is a finer split of a labelled gold item."""
+    comp_score, comp_sub = _match_names(pred_name, gold.get("components", []))
+    if comp_score >= threshold:
+        return True
+    name_score, name_sub = _match_names(
+        pred_name, [gold["name"], *gold.get("aliases", [])])
+    if name_sub and name_score >= threshold:
+        return True
+    return name_score >= fuzzy_threshold
+
+
+def pred_covers_any(pred, gold_items: list[dict], **kwargs) -> bool:
+    return any(pred_is_covered(pred.name, g, **kwargs) for g in gold_items)
 
 
 def assign_matches(preds: list, gold_items: list[dict],
@@ -79,7 +107,8 @@ def evaluate(inv: Inventory, labels: dict, match_threshold: float = 0.6) -> dict
     rooms_gold = labels["rooms"]
     stats = {
         "gold_items": 0, "gold_notable": 0, "found": 0, "found_notable": 0,
-        "pred_items": 0, "hallucinated": 0, "name_exactish": 0,
+        "pred_items": 0, "hallucinated": 0, "granularity_splits": 0,
+        "name_exactish": 0,
         "cond_pairs": 0, "cond_exact": 0, "cond_within1": 0,
         "gold_defects": 0, "defects_found": 0,
     }
@@ -144,7 +173,13 @@ def evaluate(inv: Inventory, labels: dict, match_threshold: float = 0.6) -> dict
                 if hit:
                     stats["defects_found"] += 1
 
-        stats["hallucinated"] += sum(1 for p in preds if p.id not in matched_pred_ids)
+        for p in preds:
+            if p.id in matched_pred_ids:
+                continue
+            if pred_covers_any(p, gold_room["items"], threshold=match_threshold):
+                stats["granularity_splits"] += 1
+            else:
+                stats["hallucinated"] += 1
 
     def pct(n, d):
         return round(100.0 * n / d, 1) if d else None
@@ -153,6 +188,7 @@ def evaluate(inv: Inventory, labels: dict, match_threshold: float = 0.6) -> dict
         "item_recall_all": pct(stats["found"], stats["gold_items"]),
         "item_recall_notable": pct(stats["found_notable"], stats["gold_notable"]),
         "hallucination_rate": pct(stats["hallucinated"], stats["pred_items"]),
+        "granularity_split_rate": pct(stats["granularity_splits"], stats["pred_items"]),
         "naming_accuracy": pct(stats["name_exactish"], stats["found"]),
         "condition_exact": pct(stats["cond_exact"], stats["cond_pairs"]),
         "condition_within_one": pct(stats["cond_within1"], stats["cond_pairs"]),

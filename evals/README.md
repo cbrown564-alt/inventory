@@ -34,6 +34,10 @@ evals/fixtures/<case>/
 ```
 
 - `aliases`: acceptable alternative names (fuzzy-matched).
+- `components`: optional finer-grained names the model may emit when it splits one
+  clerk entry into several items (e.g. `"bath"` with components `["mixer controls",
+  "shower handset"]`). Unmatched predictions that match a gold item's name, alias,
+  or component are counted as **granularity splits**, not hallucinations.
 - `notable: false` marks minor items whose omission shouldn't count against recall
   (e.g. a coaster); they still count if found.
 - `condition` / `defects` are optional — omit for items where the gold labeller
@@ -93,6 +97,7 @@ Reference run on the InventoryFlex fixture is at
 |---|---|
 | `item_recall_notable` | ≥ 90 |
 | `hallucination_rate` | ≤ 5 |
+| `granularity_split_rate` | informational — finer splits of labelled items |
 | `naming_accuracy` | ≥ 85 |
 | `condition_exact` | ≥ 70 |
 | `condition_within_one` | ≥ 95 |

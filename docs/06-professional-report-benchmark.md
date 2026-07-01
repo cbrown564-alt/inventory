@@ -157,7 +157,9 @@ Then the system prompt was iterated on gpt-5.4-mini (~$0.14/run), one change per
 | mini, v4: + condition measures wear not dirt | **64.8** | **90.4** | 83.7 | 96.7 | 40.0 |
 | **opus, v4 prompt** | 67.8 | 87.7 | **92.7** | 94.4 | 37.3 |
 
-\* still granularity-dominated; stable across runs.
+\* still granularity-dominated before the M1 matcher fix; re-scored with
+many-to-one coverage + gold `components` the opus v4 run reports **2.8%**
+hallucination (4 genuine unmatched items) and **29.6%** granularity splits.
 
 Findings:
 
