@@ -88,3 +88,26 @@ def test_local_backend_skips_transient_server_error(tmp_path, monkeypatch):
     monkeypatch.setattr(LocalBackend, "_chat", fake_chat)
     summary, items = backend.describe_room("r", photos, paths, {})
     assert [i.name for i in items] == ["Walls"]
+
+
+def test_local_backend_skips_socket_timeout(tmp_path, monkeypatch):
+    # A thinking model can hang on one batch until the 900s socket timeout
+    # fires; TimeoutError is an OSError (not a RuntimeError) so it must be
+    # caught here too, else the whole room dies as happened on Reception.
+    import socket
+    backend = LocalBackend(batch_size=6)
+    photos = _photos(12)
+    paths = _paths(tmp_path, 12)
+    calls = {"n": 0}
+    good = {"message": {"content": _json.dumps(
+        {"room_summary": "s", "items": [_GOOD_ITEM]})}}
+
+    def fake_chat(self, messages, temperature=0.0):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return good
+        raise socket.timeout("read timed out")
+
+    monkeypatch.setattr(LocalBackend, "_chat", fake_chat)
+    summary, items = backend.describe_room("r", photos, paths, {})
+    assert [i.name for i in items] == ["Walls"]

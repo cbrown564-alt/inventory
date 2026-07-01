@@ -398,15 +398,16 @@ class LocalBackend:
             ]
             try:
                 data = _extract_json(self._chat(msgs)["message"]["content"])
-            except (ValueError, RuntimeError) as e:
-                # malformed/empty JSON, or a transient Ollama error: one retry,
+            except (ValueError, RuntimeError, OSError) as e:
+                # malformed/empty JSON, a transient Ollama error, or a socket
+                # timeout (a thinking model can hang on one batch): one retry,
                 # jittered off the greedy path that produced it (temperature 0
                 # would reproduce a parse failure identically).
                 log.warning("  batch %d failed (%s) — retrying", b, e)
                 try:
                     data = _extract_json(
                         self._chat(msgs, temperature=0.3)["message"]["content"])
-                except (ValueError, RuntimeError) as e:
+                except (ValueError, RuntimeError, OSError) as e:
                     # A single unrecoverable batch must not kill the whole
                     # room: a prior run lost 2 of 6 rooms entirely because one
                     # bad batch propagated up and zeroed 27 photos' worth of
