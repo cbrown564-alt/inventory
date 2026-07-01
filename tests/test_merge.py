@@ -1,5 +1,5 @@
-from homeinventory.merge import merge_items, room_code
-from homeinventory.schema import Item
+from homeinventory.merge import merge_items, merge_room_with_prior, room_code
+from homeinventory.schema import Item, Photo, Room
 
 
 def make(name, **kw):
@@ -38,3 +38,44 @@ def test_room_code_collisions():
     assert room_code("Bedroom 2", used) == "BED2"
     assert room_code("Bedroom 3", used) == "BED3"
     assert room_code("公寓", used) == "RM"  # no latin letters -> fallback
+
+
+def test_merge_room_with_prior_keeps_reviewed_and_added_items():
+    prior = Room(name="Kitchen", items=[
+        Item(id="KIT-001", name="Sofa", reviewed=True, condition="good",
+             description="Human attested grey fabric"),
+        Item(id="KIT-002", name="Cast-iron skillet", added_by="C. Brown",
+             reviewed=True, condition="good"),
+        Item(id="KIT-003", name="Window", condition="fair"),
+    ], photos=[Photo(id="P001", path="Kitchen/a.jpg", room="Kitchen")])
+    fresh = Room(name="Kitchen", summary="new summary",
+                 items=[make("Sofa", condition="poor", description="AI draft"),
+                        make("Table")],
+                 photos=[Photo(id="P001", path="Kitchen/a.jpg", room="Kitchen"),
+                         Photo(id="P002", path="Kitchen/b.jpg", room="Kitchen")])
+    out = merge_room_with_prior(prior, fresh, "KIT")
+    by_name = {i.name: i for i in out.items}
+    assert by_name["Sofa"].condition == "good"
+    assert by_name["Sofa"].description == "Human attested grey fabric"
+    assert by_name["Cast-iron skillet"].added_by == "C. Brown"
+    assert by_name["Table"].condition is None
+    assert out.summary == "new summary"
+    assert {p.id for p in out.photos} == {"P001", "P002"}
+
+
+def test_merge_room_with_prior_applies_review_overlay():
+    prior = Room(name="Kitchen", items=[
+        Item(id="KIT-001", name="TV unit",
+             rejected_defects=["surface scratch to top right corner"],
+             comments=[{"author": "T", "role": "tenant", "text": "sticker",
+                        "at": "2026-06-10"}]),
+    ], photos=[])
+    fresh = Room(name="Kitchen", summary="s",
+                 items=[make("TV unit", defects=["surface scratch to top right corner",
+                                                  "chip to edge"])],
+                 photos=[])
+    out = merge_room_with_prior(prior, fresh, "KIT")
+    item = out.items[0]
+    assert item.rejected_defects == ["surface scratch to top right corner"]
+    assert item.comments[0]["text"] == "sticker"
+    assert "chip to edge" in item.defects

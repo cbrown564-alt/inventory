@@ -206,7 +206,7 @@ class ReviewState:
             self.redescribe = {"status": "running", "room": room, "detail": ""}
         cmd = [sys.executable, "-m", "homeinventory.cli", "build",
                str(self.capture_dir), "-o", str(self.out_dir),
-               "--room", room, "--backend", self.backend, "--no-pdf"]
+               "--room", room, "--from-json", "--backend", self.backend, "--no-pdf"]
         if self.model:
             cmd += ["--model", self.model]
         if self.base_url:

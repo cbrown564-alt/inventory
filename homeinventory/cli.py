@@ -69,12 +69,28 @@ def _checkpoint_name(room_name: str) -> str:
     return re.sub(r"[^\w\- ]+", "_", room_name) + ".json"
 
 
+def _load_prior(args, out_dir: Path) -> tuple[Inventory | None, bool]:
+    """Return (prior inventory, preserve_hand_edits) for a rebuild."""
+    inv_path = out_dir / "inventory.json"
+    only = {r.strip().lower() for r in args.room.split(",")} if args.room else None
+    preserve = args.from_json is not None
+    if preserve:
+        path = Path(args.from_json) if args.from_json else inv_path
+        if not path.is_file():
+            print(f"error: --from-json file not found: {path}", file=sys.stderr)
+            return None, True
+        return Inventory.from_json(path.read_text(encoding="utf-8")), True
+    if only and inv_path.exists():
+        return Inventory.from_json(inv_path.read_text(encoding="utf-8")), False
+    return None, False
+
+
 def cmd_build(args) -> int:
     from .describe import FatalBackendError, get_backend
     from .detect import Detector
     from .ingest import ingest
     from .integrity import build_manifest
-    from .merge import merge_items, room_code
+    from .merge import merge_items, merge_room_with_prior, room_code
     from .report import render
 
     capture_dir = Path(args.capture_dir)
@@ -105,6 +121,10 @@ def cmd_build(args) -> int:
               f"{', '.join(sorted(rooms_photos))}", file=sys.stderr)
         return 2
 
+    prior, preserve_edits = _load_prior(args, out_dir)
+    if prior is None and args.from_json is not None:
+        return 2
+
     # 3. detect (only the rooms being built)
     detector = Detector(conf=args.det_conf) if not args.no_detect else None
     detections: dict[str, list] = {}
@@ -116,11 +136,8 @@ def cmd_build(args) -> int:
         if not detector.available:
             log.warning("detector unavailable — continuing without crops/hints")
 
-    # partial rebuild keeps every room not named in --room
-    prior: Inventory | None = None
-    inv_path = out_dir / "inventory.json"
-    if only and inv_path.exists():
-        prior = Inventory.from_json(inv_path.read_text(encoding="utf-8"))
+    # partial rebuild keeps every room not named in --room; --from-json also
+    # preserves hand-edits inside rebuilt rooms
 
     # 4-5. describe + merge, room by room, checkpointing as we go
     try:
@@ -137,10 +154,13 @@ def cmd_build(args) -> int:
                             if getattr(backend, "model", None) else ""),
         notes=args.notes or (prior.notes if prior else ""),
     )
+    if prior and preserve_edits:
+        inv.inspected_at = prior.inspected_at
+        inv.signatures = list(prior.signatures)
     used_codes: set[str] = set()
-    if prior:  # reserve the item-id prefixes of rooms we are keeping
+    if prior:  # reserve item-id prefixes we are keeping
         for r in prior.rooms:
-            if r.name.lower() in only:
+            if only and r.name.lower() in only and not preserve_edits:
                 continue
             for it in r.items:
                 code = it.id.rsplit("-", 1)[0]
@@ -184,9 +204,21 @@ def cmd_build(args) -> int:
             ckpt.write_text(json.dumps(
                 {"summary": summary, "items": [asdict(i) for i in items]},
                 ensure_ascii=False), encoding="utf-8")
-        items = merge_items(items, room_code(room_name, used_codes))
-        built[room_name] = Room(name=room_name, summary=summary,
-                                items=items, photos=photos)
+        code = room_code(room_name, used_codes)
+        prior_room = None
+        if prior and preserve_edits:
+            for r in prior.rooms:
+                if r.name.lower() == room_name.lower():
+                    prior_room = r
+                    break
+        if prior_room:
+            new_room = Room(name=room_name, summary=summary,
+                            items=items, photos=photos)
+            built[room_name] = merge_room_with_prior(prior_room, new_room, code)
+        else:
+            items = merge_items(items, code)
+            built[room_name] = Room(name=room_name, summary=summary,
+                                    items=items, photos=photos)
 
     if prior:
         built_by_lower = {k.lower(): k for k in built}
@@ -327,6 +359,9 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--notes", help="general notes for the report front matter")
     b.add_argument("--room", help="only (re)build these rooms, comma-separated; "
                                   "other rooms are kept from the existing inventory.json")
+    b.add_argument("--from-json", nargs="?", const="", metavar="PATH",
+                   help="preserve hand-edits from inventory.json when rebuilding "
+                        "(default: OUT_DIR/inventory.json when the flag is given alone)")
     b.add_argument("--resume", action="store_true",
                    help="reuse per-room checkpoints from a previous run "
                         "(retries only rooms that failed or were not described)")
