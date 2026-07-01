@@ -1,11 +1,19 @@
 """De-duplicate items reported across multiple photos of the same room.
 
 The describe backend sees a whole room's photos in one call, so duplication is
-already rare with the claude backend; the offline backend and any per-photo
-mode need this pass. Strategy: within a room, items with the same normalised
-name (or same detector label) merge — keeping the longest description, the
-worst condition grade (conservative for deposit purposes), the union of
-defects and photo references.
+already rare with the claude backend; the offline backend and any per-photo or
+batched mode (the local Ollama backend sends photos in batches of six) need
+this pass. Strategy: within a room, items describing the same thing merge —
+keeping the longest description, the worst condition grade (conservative for
+deposit purposes), the union of defects and photo references.
+
+Two items are "the same thing" when their head nouns agree — i.e. one name
+adds only descriptor words (material, colour, finish, qualifier) to the other.
+"Walls (Cream Emulsion)" / "Walls" / "Walls painted white" all share the head
+noun "walls" and merge; "Door" never absorbs "Door Handle and Lockset" because
+that adds the new noun "handle". This is what collapses the cross-batch
+structural duplication the batched local backend produces (the same wall /
+floor / ceiling re-described per batch with different wording).
 """
 
 from __future__ import annotations
@@ -14,11 +22,52 @@ import re
 
 from .schema import CONDITION_GRADES, Item, Photo, Room
 
+# Descriptor / non-head tokens: materials, colours, finishes, qualifiers,
+# quantities and glue words. These are stripped before comparing names so that
+# "Walls (Cream Emulsion)" and "Walls" reduce to the same head noun "walls".
+_DESCRIPTOR_TOKENS = frozenset(
+    "white cream grey gray black brown beige taupe magnolia oak wood wooden "
+    "wood-effect woodeffect effect laminate vinyl engineered painted emulsion "
+    "finish finished colour color light dark upper lower left right interior "
+    "exterior internal external single double tall round large small mounted "
+    "wall-mounted wallmounted upvc metal silver stainless steel brushed gloss "
+    "matte fabric upholstered marble ceramic carpet section area side front "
+    "back main primary x x2 x3 x4 and the a an to of for with or "
+    "fitted built-in builtin built".split()
+)
+
 
 def _key(item: Item) -> str:
     base = item.detector_label or item.name
     base = re.sub(r"\bx\s*\d+$", "", base.strip().lower()).strip()
     return re.sub(r"[^a-z0-9 ]", "", base)
+
+
+def _tokens(name: str) -> list[str]:
+    """Lowercase content tokens of an item name, parentheticals flattened."""
+    s = re.sub(r"\bx\s*\d+$", "", name.strip().lower())
+    s = re.sub(r"\([^)]*\)", " ", s)            # flatten parentheticals
+    return [w for w in re.sub(r"[^a-z0-9 ]", " ", s).split() if w]
+
+
+def _head_nouns(name: str) -> set[str]:
+    """The discriminating noun tokens: everything that is not a descriptor."""
+    return {t for t in _tokens(name) if t not in _DESCRIPTOR_TOKENS}
+
+
+def _same_item(new_name: str, rep_name: str) -> bool:
+    """True when *new_name* describes the same item as *rep_name*.
+
+    Two names match when their head nouns are equal, or when the new name's
+    heads are a subset of the rep's heads (the new name only qualifies an
+    already-seen item with extra descriptors). A new name that introduces an
+    extra head noun is a different item and never merges here.
+    """
+    new_heads = _head_nouns(new_name)
+    rep_heads = _head_nouns(rep_name)
+    if not new_heads or not rep_heads:
+        return False                       # all-descriptor name: too generic
+    return new_heads == rep_heads or new_heads <= rep_heads
 
 
 def _worse(a: str | None, b: str | None) -> str | None:
@@ -28,32 +77,38 @@ def _worse(a: str | None, b: str | None) -> str | None:
     return max(grades, key=CONDITION_GRADES.index)
 
 
+def _combine(into: Item, src: Item) -> None:
+    """Fold *src* into *into* (deposit-conservative field union)."""
+    if len(src.description) > len(into.description):
+        into.description = src.description
+    into.condition = _worse(into.condition, src.condition)
+    into.cleanliness = into.cleanliness or src.cleanliness
+    for d in src.defects:
+        if d not in into.defects:
+            into.defects.append(d)
+    into.photo_ids = sorted(set(into.photo_ids) | set(src.photo_ids))
+    into.quantity = max(into.quantity, src.quantity)
+    into.crop_path = into.crop_path or src.crop_path
+    if src.confidence and (not into.confidence or src.confidence > into.confidence):
+        into.confidence = src.confidence
+
+
 def merge_items(items: list[Item], room_code: str) -> list[Item]:
-    merged: dict[str, Item] = {}
-    order: list[str] = []
+    # Greedy, non-transitive clustering: each item joins the first existing
+    # cluster whose representative is "the same item", else starts a new one.
+    # Non-transitivity is deliberate — A~B and B~C must not force A~C, which
+    # is what collapsed distinct furniture when a shared generic descriptor
+    # chained unrelated items together.
+    clusters: list[Item] = []
     for it in items:
-        k = _key(it)
-        if k in merged:
-            m = merged[k]
-            if len(it.description) > len(m.description):
-                m.description = it.description
-            m.condition = _worse(m.condition, it.condition)
-            m.cleanliness = m.cleanliness or it.cleanliness
-            for d in it.defects:
-                if d not in m.defects:
-                    m.defects.append(d)
-            m.photo_ids = sorted(set(m.photo_ids) | set(it.photo_ids))
-            m.quantity = max(m.quantity, it.quantity)
-            m.crop_path = m.crop_path or it.crop_path
-            if it.confidence and (not m.confidence or it.confidence > m.confidence):
-                m.confidence = it.confidence
+        target = next((c for c in clusters if _same_item(it.name, c.name)), None)
+        if target is None:
+            clusters.append(it)
         else:
-            merged[k] = it
-            order.append(k)
-    out = [merged[k] for k in order]
-    for i, it in enumerate(out, start=1):
+            _combine(target, it)
+    for i, it in enumerate(clusters, start=1):
         it.id = f"{room_code}-{i:03d}"
-    return out
+    return clusters
 
 
 def room_code(room_name: str, used: set[str]) -> str:

@@ -32,6 +32,36 @@ def test_merge_quantity_takes_max():
     assert out[0].quantity == 4
 
 
+def test_merge_collapses_descriptive_variants_of_same_item():
+    # the cross-batch duplication signature: the same structural element
+    # described with different descriptor words across batches must merge.
+    out = merge_items([
+        make("Walls (Cream Emulsion)", defects=["scuff lower left"]),
+        make("Walls (painted white/magnolia emulsion)", defects=["chip to join"]),
+        make("Walls"),
+        make("Flooring (Light Wood-effect Laminate/Vinyl)"),
+        make("Flooring (light oak effect laminate)"),
+    ], "LIV")
+    names = [i.name for i in out]
+    assert sum(n.lower().startswith("walls") for n in names) == 1
+    assert sum(n.lower().startswith("flooring") for n in names) == 1
+    wall = next(i for i in out if i.name.lower().startswith("walls"))
+    assert "scuff lower left" in wall.defects and "chip to join" in wall.defects
+
+
+def test_merge_does_not_collapse_items_with_different_head_nouns():
+    # "door" must NOT absorb "door handle and lockset": the longer name adds
+    # a new noun, so they are distinct items a clerk records separately.
+    out = merge_items([
+        make("Door"),
+        make("Door Handle and Lockset"),
+        make("Door Hinges"),
+    ], "HALL")
+    assert len(out) == 3
+    assert {i.name for i in out} == {"Door", "Door Handle and Lockset",
+                                     "Door Hinges"}
+
+
 def test_room_code_collisions():
     used = set()
     assert room_code("Bedroom 1", used) == "BED"
