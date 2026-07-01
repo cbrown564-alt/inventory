@@ -82,6 +82,69 @@
   footer { color: var(--muted); font-size: 8pt; text-align: center;
            margin-top: 40px; }
 
+  /* ---------- PDF / clerk layout (WeasyPrint) ---------- */
+  .print-only { display: none; }
+  .screen-only { }
+  .page-break { page-break-before: always; }
+  .cover-logo { max-height: 52px; margin: 0 auto 20px; display: block; }
+  .agent-name { font: 600 11pt var(--ui); letter-spacing: .08em;
+                text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .property-type { font-size: 12pt; color: var(--muted); margin: 8px 0 24px; }
+  .toc-list { list-style: none; padding: 0; margin: 16px 0; }
+  .toc-list li { display: flex; justify-content: space-between; gap: 12px;
+                 border-bottom: 1px dotted var(--rule); padding: 5px 0; font-size: 10pt; }
+  .toc-list a { color: var(--ink); text-decoration: none; flex: 1; }
+  .category-row td { background: var(--band); font: 600 9pt var(--ui);
+                     text-transform: uppercase; letter-spacing: .06em; padding: 7px 8px; }
+  .cond-merged { white-space: pre-line; line-height: 1.35; }
+  .photo-sheet { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; }
+  .photo-sheet figure { margin: 0; page-break-inside: avoid; }
+  .photo-sheet img { width: 100%; height: auto; max-height: 170px; object-fit: contain;
+                     border: 1px solid var(--rule); display: block; background: #fff; }
+  .photo-sheet figcaption { font: 8pt var(--ui); text-align: center; margin-top: 3px; }
+  .photo-sheet .ref-tag { font-weight: 600; }
+  .initials-note { font-size: 9pt; color: var(--muted); margin-top: 18px; }
+  .pdf-brand { font: 7.5pt var(--ui); color: var(--muted); text-align: center; }
+
+  @page {
+    size: A4;
+    margin: 16mm 14mm 22mm 14mm;
+    @bottom-center {
+      content: "Page " counter(page) " of " counter(pages);
+      font: 8pt var(--ui); color: #5a5f6a;
+    }
+    @bottom-right {
+      content: "Tenant initials: __________";
+      font: 8pt var(--ui); color: #5a5f6a;
+    }
+  }
+  @page :first {
+    margin: 0;
+    @bottom-center { content: none; }
+    @bottom-right { content: none; }
+  }
+
+  @media print {
+    body { font-size: 10pt; }
+    main { max-width: none; padding: 0; }
+    .cover { min-height: 297mm; padding: 90px 24px 60px; }
+    .screen-only, .review-flag, tr.comment-row, footer .tool-meta,
+    tr.item-rejected, #docket, #toast, tr.rv-evidence { display: none !important; }
+    .print-only { display: block !important; }
+    table.items { font-family: var(--ui); font-size: 9pt; }
+    table.items th { background: #e8ebf0; color: var(--ink); border: 1px solid var(--rule); }
+    table.items td { border: 1px solid var(--rule); }
+    h2 { font-family: var(--ui); font-size: 13pt; border-bottom: 1px solid var(--ink); }
+    .photos.screen-only { display: none !important; }
+    .photo-sheet { page-break-inside: auto; }
+    .photo-sheet .sheet-break { page-break-after: always; }
+    footer.doc-footer { margin-top: 24px; }
+    .toc-list a::after {
+      content: leader(".") target-counter(attr(href url), page);
+      color: var(--muted);
+    }
+  }
+
   /* ---------- static review-state rendering ---------- */
   tr.item-rejected td, tr.item-rejected .defects { color: var(--muted); }
   tr.item-rejected td.name-cell .item-name { text-decoration: line-through; }
@@ -210,20 +273,44 @@
 </head>
 <body>
 <div class="cover">
+  {% if inv.agent_name %}<div class="agent-name">{{ inv.agent_name }}</div>{% endif %}
   <div class="kicker">Property Inventory</div>
   <h1>{{ inv.report_type }}</h1>
   <div class="addr">{{ inv.property_address or "Address not specified" }}</div>
+  {% if inv.property_type %}<div class="property-type">{{ inv.property_type }}</div>{% endif %}
   <table>
     <tr><td>Date of inspection</td><td><strong>{{ inv.inspected_at }}</strong></td></tr>
     <tr><td>Prepared by</td><td><strong>{{ inv.inspected_by or "—" }}</strong></td></tr>
+    {% if inv.landlord_name %}
+    <tr><td>Landlord / agent</td><td><strong>{{ inv.landlord_name }}</strong></td></tr>
+    {% endif %}
+    {% if inv.tenant_name %}
+    <tr><td>Tenant</td><td><strong>{{ inv.tenant_name }}</strong></td></tr>
+    {% endif %}
+    {% if inv.report_ref %}
+    <tr><td>Report reference</td><td><strong>{{ inv.report_ref }}</strong></td></tr>
+    {% endif %}
     <tr><td>Rooms inspected</td><td><strong>{{ inv.rooms | length }}</strong></td></tr>
     <tr><td>Items recorded</td><td><strong>{{ total_items }}</strong></td></tr>
     <tr><td>Photographs</td><td><strong>{{ total_photos }}</strong></td></tr>
     {% if reviewed_items %}
-    <tr><td>Human-reviewed</td><td><strong>{{ reviewed_items }} of {{ total_items }} items</strong></td></tr>
+    <tr class="screen-only"><td>Human-reviewed</td><td><strong>{{ reviewed_items }} of {{ total_items }} items</strong></td></tr>
     {% endif %}
   </table>
 </div>
+
+<section class="toc page-break">
+  <h2>Contents</h2>
+  <ol class="toc-list">
+    <li><span>1. Schedule of Condition</span></li>
+    {% for section in room_sections %}
+    <li><a href="#room-{{ section.number }}">{{ section.number }}. {{ section.name }}</a></li>
+    {% endfor %}
+    <li><span>Appendix A — Photographic evidence manifest</span></li>
+    <li><span>Appendix B — Room photographs</span></li>
+    <li><span>Declaration</span></li>
+  </ol>
+</section>
 
 <main>
 <h2>Contents &amp; condition key</h2>
@@ -241,23 +328,43 @@ AI-drafted entries that the reviewer rejected remain visible, struck through,
 rather than silently deleted.</p>
 {% if inv.notes %}<p class="summary">{{ inv.notes }}</p>{% endif %}
 
-{% for room in inv.rooms %}
-<section class="room" data-room="{{ room.name }}">
-  <h2>{{ loop.index }}. {{ room.name }}</h2>
-  {% if room.summary %}<div class="summary">{{ room.summary }}</div>{% endif %}
+<section class="schedule-summary page-break" id="schedule">
+  <h2>1. Schedule of Condition</h2>
+  <table class="items">
+    <thead><tr><th style="width:9%">Ref</th><th style="width:28%">Name</th><th>Condition</th></tr></thead>
+    <tbody>
+    {% for row in schedule_summary %}
+      <tr><td class="ref-mono">{{ row.ref }}</td><td>{{ row.name }}</td>
+          <td class="cond-merged">{{ row.condition }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{% for section in room_sections %}
+<section class="room" id="room-{{ section.number }}" data-room="{{ section.name }}">
+  <h2>{{ section.number }}. {{ section.name }}</h2>
+  {% if section.summary %}<div class="summary">{{ section.summary }}</div>{% endif %}
 
   <table class="items">
     <thead>
       <tr><th style="width:9%">Ref</th><th style="width:18%">Item</th>
-          <th>Description</th><th style="width:10%">Condition</th>
-          <th style="width:13%">Cleanliness</th><th style="width:22%">Defects noted</th>
-          <th style="width:8%">Photos</th></tr>
+          <th>Description</th><th style="width:22%">Condition</th>
+          <th class="screen-only" style="width:13%">Cleanliness</th>
+          <th class="screen-only" style="width:18%">Defects noted</th>
+          <th class="screen-only" style="width:8%">Photos</th></tr>
     </thead>
     <tbody>
-    {% for item in room.items %}
+    {% for group in section.groups %}
+      {% if group.heading %}
+      <tr class="category-row"><td colspan="7"><strong>{{ group.heading }}</strong></td></tr>
+      {% endif %}
+      {% for row in group.rows %}
+      {% set item = row.item %}
       <tr class="item-row{% if item.rejected %} item-rejected{% endif %}"
-          data-item-id="{{ item.id }}" data-room="{{ room.name }}">
-        <td class="ref-cell"><span class="ref-mono">{{ item.id }}</span>
+          data-item-id="{{ item.id }}" data-ref="{{ row.ref }}" data-room="{{ section.name }}">
+        <td class="ref-cell"><span class="ref-mono">{{ row.ref }}</span>
+          <span class="screen-only ref-internal ref-mono">{{ item.id }}</span>
           {% if item.rejected %}<br><span class="review-flag no">rejected</span>
           {% elif item.reviewed %}<br><span class="review-flag ok">reviewed</span>
           {% elif reviewed_items %}<br><span class="review-flag pending">unreviewed</span>{% endif %}
@@ -267,40 +374,44 @@ rather than silently deleted.</p>
           {% if item.rejected %}<br><span class="meta">AI suggested — reviewer rejected</span>{% endif %}
         </td>
         <td class="desc-cell">{{ item.description }}</td>
-        <td class="cond-cell grade {{ item.condition or '' }}">{{ item.not_inspected or item.condition or "—" }}</td>
-        <td class="clean-cell grade">{{ item.cleanliness or "—" }}</td>
-        <td class="def-cell">
+        <td class="cond-cell grade {{ item.condition or '' }}">
+          <span class="screen-only">{{ item.not_inspected or item.condition or "—" }}</span>
+          <span class="print-only cond-merged">{{ row.condition_text }}</span>
+        </td>
+        <td class="clean-cell screen-only grade">{{ item.cleanliness or "—" }}</td>
+        <td class="def-cell screen-only">
           {% if item.defects or item.rejected_defects %}<ul class="defects">
             {% for d in item.defects %}<li>{{ d }}</li>{% endfor %}
             {% for d in item.rejected_defects %}<li class="struck">{{ d }}</li>{% endfor %}
           </ul>{% else %}<span class="meta">None noted</span>{% endif %}
         </td>
-        <td class="photo-cell meta ref-mono">{{ item.photo_ids | join(", ") }}</td>
+        <td class="photo-cell screen-only meta ref-mono">{{ item.photo_ids | join(", ") }}</td>
       </tr>
       {% for c in item.comments %}
-      <tr class="comment-row" data-for="{{ item.id }}">
+      <tr class="comment-row screen-only" data-for="{{ item.id }}">
         <td></td><td colspan="6"><span class="who">{{ c.author or "?" }}
           ({{ c.role or "reviewer" }}{% if c.at %}, {{ c.at[:10] }}{% endif %}):</span>
           {{ c.text }}</td>
       </tr>
       {% endfor %}
+      {% endfor %}
     {% endfor %}
     </tbody>
   </table>
 
-  {% if room.photos %}
-  <h3>Photographs — {{ room.name }}</h3>
-  <div class="photos">
-    {% for photo in room.photos %}
+  {% if section.photos %}
+  <h3 class="screen-only">Photographs — {{ section.name }}</h3>
+  <div class="photos screen-only">
+    {% for photo in section.photos %}
     <figure id="photo-{{ photo.id }}" data-photo-id="{{ photo.id }}">
       <div class="frame">
         <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}" loading="lazy">
-        {% for it in room.items %}{% for reg in it.defect_regions %}
+        {% for group in section.groups %}{% for row in group.rows %}{% set it = row.item %}{% for reg in it.defect_regions %}
           {% if reg.photo_id == photo.id %}
           <span class="region" data-label="{{ it.id }} · {{ reg.defect }}"
                 style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
           {% endif %}
-        {% endfor %}{% endfor %}
+        {% endfor %}{% endfor %}{% endfor %}
       </div>
       <figcaption>{{ photo.id }}{% if photo.captured_at %} &middot; {{ photo.captured_at }}{% endif %}
         {% if photo.source_video %}&middot; frame of {{ photo.source_video }}{% endif %}</figcaption>
@@ -311,7 +422,30 @@ rather than silently deleted.</p>
 </section>
 {% endfor %}
 
-<section class="room appendix">
+{% if total_photos %}
+<section class="room appendix-photos print-only page-break" id="appendix-photos">
+  <h2>Appendix B — Room photographs</h2>
+  {% for section in room_sections %}
+  {% if section.photos %}
+  <h3>{{ section.number }}. {{ section.name }}</h3>
+  <div class="photo-sheet">
+    {% for photo in section.photos %}
+    <figure id="pdf-photo-{{ photo.id }}" data-photo-id="{{ photo.id }}"
+            {% if loop.index % 12 == 0 %}class="sheet-break"{% endif %}>
+      <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}">
+      <figcaption>
+        <div class="ref-tag">Ref #{{ section.number }}</div>
+        <div>{{ photo.captured_at or inv.inspected_at }}</div>
+      </figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endfor %}
+</section>
+{% endif %}
+
+<section class="room appendix page-break">
   <h2>Appendix A — Photographic evidence manifest (SHA-256)</h2>
   <table>
     <thead><tr><th>ID</th><th>Room</th><th>File</th><th>Captured</th><th>SHA-256</th></tr></thead>
@@ -324,13 +458,14 @@ rather than silently deleted.</p>
   </table>
 </section>
 
-<section class="declaration">
+<section class="declaration page-break">
   <h3>Declaration</h3>
   <p>This inventory was prepared with AI assistance and has been reviewed for
   accuracy by the undersigned. It provides a fair and accurate record of the
   contents and internal condition of the property on the date stated. Unless
   amendments are notified in writing within 7 days of receipt, this inventory
   will be deemed accepted by all parties.</p>
+  <p class="initials-note print-only">Tenant: please initial each page to confirm you have read this report.</p>
   {% if inv.signatures %}
   <div id="signatures">
     {% for sig in inv.signatures %}
@@ -351,9 +486,10 @@ rather than silently deleted.</p>
   </div>
 </section>
 
-<footer>
-  Generated by homeinventory v{{ inv.tool_version }}
-  ({{ inv.describe_backend }} backend) &middot; {{ inv.inspected_at }}
+<footer class="doc-footer">
+  <div class="pdf-brand print-only">{{ agent_display }}{% if inv.agent_phone %} &middot; {{ inv.agent_phone }}{% endif %}</div>
+  <span class="tool-meta screen-only">Generated by homeinventory v{{ inv.tool_version }}
+  ({{ inv.describe_backend }} backend) &middot; {{ inv.inspected_at }}</span>
 </footer>
 </main>
 
@@ -479,7 +615,8 @@ rather than silently deleted.</p>
     tr.classList.toggle("item-rejected", !!it.rejected);
     var ref = tr.querySelector(".ref-cell");
     ref.innerHTML = "";
-    ref.appendChild(el("span", { "class": "ref-mono", text: it.id }));
+    var displayRef = tr.getAttribute("data-ref") || it.id;
+    ref.appendChild(el("span", { "class": "ref-mono", text: displayRef }));
     var flag = it.rejected ? ["no", "rejected"] :
                it.reviewed ? ["ok", "reviewed"] : null;
     if (flag) {
