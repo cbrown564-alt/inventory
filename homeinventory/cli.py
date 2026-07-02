@@ -237,7 +237,11 @@ def cmd_build(args) -> int:
                     items=[], photos=photos)
                 continue
             ckpt.write_text(json.dumps(
-                {"summary": summary, "items": [asdict(i) for i in items]},
+                {"summary": summary, "items": [asdict(i) for i in items],
+                 # LocalBackend records per-room Ollama timing (total wall
+                 # time, prompt/eval token counts + throughput). Absent on
+                 # other backends and on --resume (kept from the prior ckpt).
+                 "timing": getattr(backend, "last_room_timing", None)},
                 ensure_ascii=False), encoding="utf-8")
         code = room_code(room_name, used_codes)
         prior_room = None

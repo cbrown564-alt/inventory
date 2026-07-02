@@ -39,7 +39,13 @@ with urllib.request.urlopen(req, timeout=900) as resp:
 msg = r.get("message", {})
 content = msg.get("content") or ""
 print("done_reason:", r.get("done_reason"))
-print("prompt_eval_count:", r.get("prompt_eval_count"), " eval_count:", r.get("eval_count"))
+
+# Timing/throughput — the question this probe exists to answer. A steep
+# eval_tok_per_s drop vs a prior run means Ollama offloaded layers to CPU.
+from homeinventory.describe import _ollama_timing
+for k, v in _ollama_timing(r).items():
+    print(f"{k}: {v}")
+
 print("message keys:", list(msg.keys()))
 print("thinking len:", len(msg.get("thinking") or ""))
 print("content len:", len(content))

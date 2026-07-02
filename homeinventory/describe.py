@@ -191,6 +191,57 @@ def _encode_image(path: Path, max_dim: int = 1568) -> tuple[str, str]:
     return "image/jpeg", base64.standard_b64encode(buf.getvalue()).decode()
 
 
+# --- Ollama timing capture ------------------------------------------------
+# Ollama returns nanosecond durations and token counts per response. We pull
+# them out of the raw dict so describe_room can accumulate per-batch and cli
+# can persist a room total into the checkpoint. A drastic eval_count /
+# eval_duration drop is the tell-tale of CPU layer offload (the throughput
+# question we previously couldn't answer from committed artefacts).
+_OLLAMA_TIMING_FIELDS = (
+    "total_duration", "load_duration", "prompt_eval_count",
+    "prompt_eval_duration", "eval_count", "eval_duration",
+)
+
+
+def _ollama_timing(resp: dict) -> dict:
+    """Extract the timing/throughput fields from an Ollama /api/chat response.
+
+    Durations come back in nanoseconds; converted to seconds here. Missing or
+    zero fields are omitted (older Ollama builds omit some; a zero eval_count
+    means nothing was generated and would otherwise divide-by-zero downstream).
+    """
+    out: dict[str, float] = {}
+    for key in _OLLAMA_TIMING_FIELDS:
+        v = resp.get(key)
+        if isinstance(v, (int, float)) and v > 0:
+            if key.endswith("_duration"):
+                out[key] = round(v / 1e9, 3)          # ns -> seconds
+            elif key.endswith("_count"):
+                out[key] = int(v)
+    return out
+
+
+def _aggregate_timing(batch_timings: list[dict]) -> dict:
+    """Sum per-batch timing into a room total with a derived tok/s.
+
+    eval tok/s uses eval_duration (generation only); prompt tok/s uses
+    prompt_eval_duration (prefill). Either rate is None when the model emitted
+    no tokens of that kind or the duration was missing.
+    """
+    total: dict[str, float] = {}
+    for bt in batch_timings:
+        for k, v in bt.items():
+            total[k] = total.get(k, 0) + v
+    # throughput, derived
+    if total.get("eval_count") and total.get("eval_duration"):
+        total["eval_tok_per_s"] = round(
+            total["eval_count"] / total["eval_duration"], 1)
+    if total.get("prompt_eval_count") and total.get("prompt_eval_duration"):
+        total["prompt_tok_per_s"] = round(
+            total["prompt_eval_count"] / total["prompt_eval_duration"], 1)
+    return total
+
+
 class FatalBackendError(RuntimeError):
     """Backend cannot work at all (no credentials, server down, model missing).
 
@@ -378,6 +429,7 @@ class LocalBackend:
                    for i in range(0, len(photos), self.batch_size)]
         summaries: list[str] = []
         items: list[Item] = []
+        batch_timings: list[dict] = []
         for b, idxs in enumerate(batches, start=1):
             batch_photos = [photos[i] for i in idxs]
             images = [_encode_image(photo_paths[i], max_dim=self.max_dim)[1]
@@ -396,8 +448,10 @@ class LocalBackend:
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt, "images": images},
             ]
+            resp = None
             try:
-                data = _extract_json(self._chat(msgs)["message"]["content"])
+                resp = self._chat(msgs)
+                data = _extract_json(resp["message"]["content"])
             except (ValueError, RuntimeError, OSError) as e:
                 # malformed/empty JSON, a transient Ollama error, or a socket
                 # timeout (a thinking model can hang on one batch): one retry,
@@ -405,8 +459,8 @@ class LocalBackend:
                 # would reproduce a parse failure identically).
                 log.warning("  batch %d failed (%s) — retrying", b, e)
                 try:
-                    data = _extract_json(
-                        self._chat(msgs, temperature=0.3)["message"]["content"])
+                    resp = self._chat(msgs, temperature=0.3)
+                    data = _extract_json(resp["message"]["content"])
                 except (ValueError, RuntimeError, OSError) as e:
                     # A single unrecoverable batch must not kill the whole
                     # room: a prior run lost 2 of 6 rooms entirely because one
@@ -415,11 +469,26 @@ class LocalBackend:
                     log.error("  batch %d failed after retry (%s) — skipping, "
                               "keeping %d items so far", b, e, len(items))
                     continue
+            if resp is not None:
+                batch_timings.append(_ollama_timing(resp))
             summary, batch_items = _parse_items(data, batch_photos)
             summaries.append(summary)
             items.extend(batch_items)
         # keep the most complete narrative rather than concatenating near-dupes
         best_summary = max(summaries, key=len, default="")
+        # room-level timing for the checkpoint + a one-line throughput log.
+        # eval_tok_per_s is the headline: a steep drop vs a prior run means
+        # Ollama offloaded layers to CPU (VRAM pressure), which is the GPU-vs-
+        # CPU question we couldn't previously answer from committed artefacts.
+        self.last_room_timing = _aggregate_timing(batch_timings)
+        if batch_timings:
+            t = self.last_room_timing
+            tok_s = t.get("eval_tok_per_s")
+            secs = t.get("eval_duration")
+            n = t.get("eval_count")
+            if tok_s is not None:
+                log.info("  room timing: %d tok in %.1fs (%.1f tok/s gen)",
+                         n, secs, tok_s)
         return best_summary, items
 
 
