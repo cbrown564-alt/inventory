@@ -68,7 +68,17 @@ and compare our output against the human-written report.
       sized for consumer GPUs) — live validation on real footage pending
 - [x] `openai` backend: any OpenAI-compatible API (OpenAI, Gemini via compat
       endpoint, custom --base-url) for cheap cross-provider comparison
-- [ ] Eval: quantify gap vs `claude` backend on fixtures; document in README
+- [x] Eval: quantify gap vs `claude` backend on fixtures; document in README
+      — closed 2 Jul 2026. All three backends scored on the InventoryFlex
+      fixture (`evals/score_benchmarks.py`); write-up in
+      [`docs/04`](04-backend-comparison.md). Net: `claude` quality ceiling
+      (hallucination 2.8), `gpt-5.4-mini` cheap-iteration (recall 90.7 but
+      hallucination 14.7), `local` qwen9b the £0 path (naming/grading
+      competitive; recall −16 pts, hallucination +23 pts vs claude — a draft
+      for review, not an unreviewed report). Larger local models
+      (gemma-3-12b, qwen3.5:27b, gemma-3-4e4b) produced 0–1 items and are not
+      yet viable; their failed runs are kept under `benchmarks/inventoryflex/`
+      as evidence.
 - [x] Optional GPU path; YOLOE prompt-free mode evaluation vs text-prompt vocabulary
       (`evals/eval_detect.py`, `--detect-mode`, `--device`; see `evals/README.md`)
 

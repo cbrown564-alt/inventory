@@ -1,80 +1,115 @@
-# Describe-Backend Comparison — First Real Footage
+# Describe-Backend Comparison
 
-*10 June 2026. Status: informal single-room comparison; a labelled fixture and
-`evals/run_eval.py` are needed before any of this is treated as conclusive.*
+*Opened 10 June 2026 (informal single-room probe); closed 2 July 2026 against the
+full InventoryFlex fixture. All numbers below are scored by `evals/run_eval.py`
+against gold labels in `benchmarks/inventoryflex/labels.json` (6 rooms, 116 items,
+75 notable, 53 defect-bearing) and reproduced by `python evals/score_benchmarks.py`.*
 
-## Setup
+## What each backend is
 
-- **Footage**: `examples/videos/IMG_5278.mov` — hand-held iPhone walkthrough of
-  one living/dining room. HEVC, portrait 1080×1920, 30 fps, 14.3 s.
-- **Keyframes**: 19 frames via the best-frame-per-window extractor (see commit
-  `11f8c38` — the old absolute sharpness gate left a 4.5 s coverage hole on
-  this exact video; windowed selection closed it, max gap 1.2 s).
-- **Pipeline**: `build --backend openai --no-detect` (no YOLOE hints), one
-  whole-room call per backend, identical system prompt and JSON schema.
-- **Test hardware context**: RTX 4070 Laptop (8 GB VRAM), 31.5 GB RAM —
-  relevant to the still-pending local-model run, not the API ones.
+- **`claude`** — Anthropic vision, structured JSON output. Quality ceiling; the
+  pick for the signed report. Default `opus-4-8`, `claude-haiku-4-5` for cheaper runs.
+- **`openai`** — any OpenAI-compatible API: OpenAI (`gpt-5.4-mini`), Gemini via
+  the compat endpoint (`gemini-3.1-flash-lite`), or a custom `--base-url`.
+  Cheap cross-provider comparison tier.
+- **`local`** — open-weight VLM through Ollama (default `qwen3.5:9b`). £0/run,
+  runs offline. The open-source-only path this milestone was built to validate.
 
-## Results (same 19 frames, same prompt)
+## Scored results (InventoryFlex fixture, v4 prompt where it exists)
 
-| Backend / model | Items | Structural items | Grading | Defects found | Approx cost |
-|---|---|---|---|---|---|
-| `openai` gpt-4.1-mini | 17 | walls, flooring | flat — all "good" | 0 | ~1.5¢ |
-| `openai` gemini-3.1-flash-lite | 10 | walls, flooring, ceiling | differentiated (exc/good/fair) | 1, localized — **verified false**: the "surface scratch" on the TV unit is a "2021 new" sticker | ~0.4¢ |
-| `openai` gpt-5.4-mini | 28 | ceiling, walls, skirting, flooring | differentiated | 1, localized (wall-decal sections detached) | ~4¢ |
-| `local` qwen3.5:9b | — | *pending: GPU shared with another workload* | | | £0 |
-| `claude` (any) | — | *not yet run on this footage* | | | — |
+Higher is better for recall / naming / condition / defect; lower is better for
+hallucination. Targets from `evals/README.md`.
 
-## Observations
+| Backend (run) | notable recall ≥90 | halluc. ≤5 | naming ≥85 | cond-exact ≥70 | within-one ≥95 | defect ≥75 |
+|---|---|---|---|---|---|---|
+| **claude-v4** (quality ceiling) | 88.0 | **2.8** | 94.8 | **93.2** | 100 | **71.3** |
+| gpt54mini-v4 (best openai) | **90.7** | 14.7 | **96.8** | 83.1 | 100 | 64.8 |
+| local qwen9b-v2 (best local) | 72.0 | 25.7 | 96.3 | 75.0 | 98.7 | 60.8 |
+| local qwen9b (v1) | 65.3 | 19.4 | 91.0 | 71.9 | 95.3 | 62.1 |
+| local gemma12b / qwen27b / gemma4e4b | ~0 | — | — | — | — | — |
 
-**gpt-5.4-mini is the standout of the cheap tier.** Best recall (robot vacuum,
-TV remote, dining chairs ×4, skirting boards), proper structural coverage as
-separately graded items, grade differentiation, a real localized defect, and
-clerk-register language ("white emulsioned finish", "fair decorative order").
-At ~4¢/room (≈30–50p per property) it is the provisional best-value default.
+Reproduce: `python evals/score_benchmarks.py` (or `--json`). Per-run JSON in
+`benchmarks/inventoryflex/report-<run>/inventory.json`.
 
-**Recall and grading discipline are separate skills.** gpt-4.1-mini found 70%
-more items than gemini-3.1-flash-lite but graded everything "good" with zero
-defects — an inventory that can't support a deduction claim. Gemini found
-fewer items but behaved like a clerk. A model must do both; so far only
-gpt-5.4-mini does.
+## Reading the gap
 
-**Failure modes to score in evals, not just recall:**
+**`claude` vs `openai` (gpt-5.4-mini).** These are close enough that the
+choice is a cost/hallucination trade-off, not a quality cliff. gpt-5.4-mini
+edges claude on notable recall (90.7 vs 88.0) and naming (96.8 vs 94.8) but
+**hallucinates ~5× more** (14.7 vs 2.8) — and an unreviewed false item or
+defect is exactly the failure that loses an adjudication. gpt-5.4-mini is the
+cheap-iteration backend; claude produces the signed artefact. Confirmed by
+the cost data in `docs/06`: ~$0.14 vs ~$1.17 per property — both noise against
+the £165 professional fee, so the hallucination gap is worth paying to close.
 
-- *Hedge items*: gpt-5.4-mini emitted "Cylindrical floor object" and "Portable
-  lamp or light source reflection" despite the omit-rather-than-guess rule.
-  These should count against it as hallucination-adjacent.
-- *Hallucinated defects are real, not hypothetical*: gemini's sole defect
-  claim — a "surface scratch to top right corner" of the TV unit — turned out
-  to be a "2021 new" sticker. One human glance at the evidence photo dismissed
-  it; an unreviewed report would have carried a false damage claim into a
-  dispute where the landlord bears the burden of proof. This is the strongest
-  argument yet for a review experience that puts each claim next to its
-  evidence crop (see 05-review-experience.md).
-- *Dedup misses across names*: "Children's bicycle" + "Bicycle" survived the
-  string-key merge as two items. Fuzzy/embedding matching is the fix and is
-  needed for M3 `compare` anyway.
+**Open-source gap (the M3 question).** `local qwen3.5:9b` is the only viable
+local backend, and it is **not yet at parity**, but the gap is narrower than the
+headline recall number suggests:
 
-## Cost reference (June 2026, per 1M tokens in/out)
+- **Naming (96.3) and within-one grading (98.7) are competitive** with the API
+  tiers — qwen names and grades items almost as well as claude once it finds them.
+- **The real gap is recall** (notable 72.0 vs claude's 88.0; −16 pts): qwen
+  misses items, especially the small wall-mounted cluster (smoke alarms,
+  thermostats, doorstops) that all backends under-find. This is where an
+  open-source-only property loses coverage.
+- **Hallucination is the open-source weakness** (25.7 vs 2.8): qwen invents /
+  over-splits more, and its granularity-split rate (38.7 vs claude's 29.6)
+  shows it fragments clerk-merged items more aggressively. Every qwen output
+  needs the review loop more than a claude output does.
+- **Defect recall (60.8) is only ~10 pts off claude (71.3)** — surprising for a
+  9B local model, and within the same resolution-bound band that caps all
+  backends on this 800×600 fixture (see `docs/06`).
 
-| Model | Price | Note |
-|---|---|---|
-| gemini-3.1-flash-lite | $0.25 / $1.50 | cheapest credible VLM |
-| gpt-4.1-mini | $0.40 / $1.60 | flat grading as observed |
-| gpt-5.4-mini | $0.75 / $4.50 | provisional pick |
-| claude-haiku-4-5 | $1.00 / $5.00 | untested on this footage |
-| qwen3.5:9b via Ollama | £0 | pending local run |
+Net: **`local` is usable for a £0 draft that a reviewer then corrects**; it is
+not yet a drop-in replacement for `claude` for an unreviewed report. The review
+experience (`docs/05`) is what makes the open-source path viable, and it is
+also the place qwen's higher hallucination rate gets caught.
 
-A 19-frame room ≈ 25K input + 3–4K output tokens; one property ≈ 8–10× that.
+**The three failed local models.** `gemma-3-12b`, `qwen3.5:27b`, and
+`gemma-3-4e4b` were all tried via Ollama and produced **0–1 items per property**
+under this harness — effectively no usable inventory. Likely causes are the
+structured-JSON output contract and Ollama thinking-model handling (the
+qwen9b fixes in commits `930455d`/`59f3fde` were not enough for the larger
+models); not re-run before closing M3 because qwen9b already represents the
+local path and re-running needs GPU time the user is spending on M2 capture.
+Logged here so the record isn't lost; their `report-*` dirs are kept as
+evidence of "tried, failed."
 
-## Next steps
+## Historical note (the original 10 June probe)
 
-1. Label this room as the first eval fixture (`evals/README.md` format).
-   The TV-unit "scratch" is verified false (sticker) — record it as a
-   negative label so the eval penalises any backend that reports it.
-2. Run `evals/run_eval.py` across all backends → recall / hallucination /
-   naming / condition-agreement table; pick the default backend on numbers.
-3. Run `local` qwen3.5:9b when the GPU is free (and optionally
-  `gemma-4-12b:q4` as the local rival).
-4. Add a claude run (haiku + opus) as the quality ceiling reference.
-5. Consider a fuzzy-name merge pass to close the bicycle-style dedup gap.
+The first comparison was an informal single-room probe on
+`examples/videos/IMG_5278.mov` (one living/dining room, 19 keyframes, whole-room
+calls, no detector). Findings that still hold and shaped the v4 prompt:
+
+- **Recall and grading discipline are separate skills.** gpt-4.1-mini found 70%
+  more items than gemini-3.1-flash-lite but graded everything "good" with zero
+  defects — an inventory that can't support a deduction. A model must do both.
+- **Hallucinated defects are real, not hypothetical.** gemini's one defect claim
+  — a "surface scratch" on the TV unit — was a "2021 new" sticker. One human
+  glance at the evidence photo dismissed it; an unreviewed report would have
+  carried a false damage claim into a dispute where the landlord bears the burden
+  of proof. This was the strongest argument for the per-item review experience
+  (`docs/05`) and is why hallucination rate stays a primary metric.
+- **Dedup misses across names** ("Children's bicycle" + "Bicycle" surviving merge)
+  motivated the fuzzy/embedding merge that later landed (commit `fc5df67`).
+
+Cost reference (June 2026, per 1M tokens in/out): gemini-3.1-flash-lite
+$0.25/$1.50, gpt-4.1-mini $0.40/$1.60, gpt-5.4-mini $0.75/$4.50,
+claude-haiku-4-5 $1.00/$5.00, opus-4-8 $5/$25, qwen3.5:9b £0. A 19-frame room
+is ~25K input + 3–4K output tokens; one property ≈ 8–10× that.
+
+## Conclusion (M3 close, 2 July 2026)
+
+- **Quality ceiling:** `claude` (opus-4-8 on the v4 prompt). Best hallucination
+  and grading; the artefact to sign.
+- **Cheap iteration:** `openai` gpt-5.4-mini. Within reach on recall/naming at
+  ~8× lower cost; usable for prompt sweeps, higher hallucination for final use.
+- **Open-source-only:** `local` qwen3.5:9b. Naming and grading competitive;
+  recall −16 pts and hallucination +23 pts vs claude. Usable as a £0 draft
+  **with the review loop**, not as an unreviewed report. Larger local models
+  (gemma-3-12b, qwen3.5:27b) failed to produce output and are not yet viable.
+
+The backend interface, all three backends, and the detector-mode eval are
+landed; the quality gap is documented above. **Milestone 3 is closed.** The
+remaining quality work (defect depth at native resolution, recall of small
+wall-mounted items) is owned by M2's own-property capture, not the backend layer.

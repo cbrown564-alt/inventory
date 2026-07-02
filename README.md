@@ -136,7 +136,14 @@ M0 prototype, plus the full review stack from
 review server (`homeinventory review`), tenant comment-and-countersign
 (`--share`), and the pre-build coverage check (`homeinventory check`).
 M1 (benchmark against a professional clerk's published report) is done —
-see [`docs/06`](docs/06-professional-report-benchmark.md).
+see [`docs/06`](docs/06-professional-report-benchmark.md). **M3 (open-source
+parity) is closed** — all three backends are scored against the gold fixture
+in [`docs/04`](docs/04-backend-comparison.md): `claude` is the quality
+ceiling (hallucination 2.8%, condition-exact 93%), `openai` gpt-5.4-mini is
+the cheap-iteration pick (recall 90.7% but ~5× claude's hallucination), and
+`local` qwen3.5:9b is the £0 path — naming and grading competitive with the
+API tier but ~16 pts lower recall and ~23 pts higher hallucination, so it's a
+**draft for review**, not an unreviewed report.
 The v2 feature — check-in vs check-out **comparison reports**
 (`homeinventory compare`) — is scoped in the implementation plan,
 milestone 4; the defect-region annotations captured at review are its
