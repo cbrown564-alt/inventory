@@ -372,7 +372,8 @@ class LocalBackend:
 
     def __init__(self, model: Optional[str] = None, host: Optional[str] = None,
                  batch_size: int = 6, max_dim: int = 1120, num_ctx: int = 24576,
-                 timeout: float = 900.0):
+                 num_predict: int = 12288, repeat_penalty: float = 1.1,
+                 temperature: float = 0.0, timeout: float = 900.0):
         self.model = model or self.DEFAULT_MODEL
         self.host = (host or os.environ.get("OLLAMA_HOST")
                      or "http://localhost:11434").rstrip("/")
@@ -381,7 +382,50 @@ class LocalBackend:
         # for inventory work. merge_items() de-duplicates across batches.
         self.batch_size = batch_size
         self.max_dim = max_dim
+        # HI_NUM_CTX override (no CLI flag): the 24K default spills ~30% of
+        # qwen9b's weights to CPU on an 8 GB card (4.9/7.0 GB in VRAM ->
+        # ~15 tok/s, batches timing out at 900s). Dropping ctx shrinks the KV
+        # cache so the whole model fits on-GPU; this knob lets a benchmark
+        # sweep the ctx-vs-throughput trade-off without code changes.
+        if os.environ.get("HI_NUM_CTX"):
+            try:
+                num_ctx = int(os.environ["HI_NUM_CTX"])
+            except ValueError:
+                pass
         self.num_ctx = num_ctx
+        # HI_NUM_PREDICT override: 12288 fits qwen3.5's compact output but
+        # smaller models can need more (or less) room. The knob avoids code
+        # edits per model.
+        if os.environ.get("HI_NUM_PREDICT"):
+            try:
+                num_predict = int(os.environ["HI_NUM_PREDICT"])
+            except ValueError:
+                pass
+        self.num_predict = num_predict
+        # HI_REPEAT_PENALTY override: greedy decoding (temperature 0) makes
+        # small models fall into repetition loops — qwen2.5vl:3b emitted the
+        # same "ceiling" item 34 times until num_predict truncated it. A
+        # mild 1.1 penalty (Ollama's own default is 1.0) breaks the loop and
+        # yields 12 distinct items at done_reason=stop, with no truncation.
+        # Kept on at temp 0.3 (the retry path) too; harmless there.
+        if os.environ.get("HI_REPEAT_PENALTY"):
+            try:
+                repeat_penalty = float(os.environ["HI_REPEAT_PENALTY"])
+            except ValueError:
+                pass
+        self.repeat_penalty = repeat_penalty
+        # HI_TEMPERATURE override: the temp-0 greedy default is fine for
+        # qwen3.5 but unstable for smaller models — qwen2.5vl:3b falls into
+        # repetition loops or emits empty output at temp 0. A mild 0.3 is
+        # the smallest value that reliably stabilises it (validated: 6-12
+        # distinct items, done_reason=stop, ~11s/batch). Kept at 0 by default
+        # so stronger models stay reproducible.
+        if os.environ.get("HI_TEMPERATURE"):
+            try:
+                temperature = float(os.environ["HI_TEMPERATURE"])
+            except ValueError:
+                pass
+        self.temperature = temperature
         self.timeout = timeout
 
     def _chat(self, messages: list[dict], temperature: float = 0.0) -> dict:
@@ -398,7 +442,8 @@ class LocalBackend:
             "stream": False,
             "format": ITEM_SCHEMA,
             "options": {"num_ctx": self.num_ctx, "temperature": temperature,
-                        "num_predict": 12288},
+                        "num_predict": self.num_predict,
+                        "repeat_penalty": self.repeat_penalty},
         }
         body = json.dumps(payload).encode()
         req = urllib.request.Request(
@@ -450,13 +495,14 @@ class LocalBackend:
             ]
             resp = None
             try:
-                resp = self._chat(msgs)
+                resp = self._chat(msgs, temperature=self.temperature)
                 data = _extract_json(resp["message"]["content"])
             except (ValueError, RuntimeError, OSError) as e:
                 # malformed/empty JSON, a transient Ollama error, or a socket
-                # timeout (a thinking model can hang on one batch): one retry,
-                # jittered off the greedy path that produced it (temperature 0
-                # would reproduce a parse failure identically).
+                # timeout (a thinking model can hang on one batch): one retry
+                # at a different temperature, jittered off whatever path
+                # produced the failure. Even with a non-zero primary temp a
+                # single malformed batch is possible; the retry breaks it.
                 log.warning("  batch %d failed (%s) — retrying", b, e)
                 try:
                     resp = self._chat(msgs, temperature=0.3)

@@ -36,7 +36,7 @@ def test_local_backend_batches_and_collects(tmp_path, monkeypatch):
     backend = LocalBackend(batch_size=3)
     calls = []
 
-    def fake_chat(messages):
+    def fake_chat(messages, temperature=0.0):
         calls.append(messages)
         n = len(messages[-1]["images"])
         return {"message": {"content": json.dumps({
@@ -62,7 +62,7 @@ def test_local_backend_captures_room_timing(tmp_path, monkeypatch):
     photos, paths = _photos(tmp_path, 7)
     backend = LocalBackend(batch_size=3)
 
-    def fake_chat(messages):
+    def fake_chat(messages, temperature=0.0):
         return {
             "message": {"content": json.dumps(
                 {"room_summary": "s", "items": [{"name": "x"}]})},
