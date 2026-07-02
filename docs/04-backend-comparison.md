@@ -162,19 +162,29 @@ contract this pipeline requires):
   rebels under pressure: stably thin, weak schema adherence. (Note: the
   `gemma-4-12b` tags already on disk are the text-only Q4_0 build with no
   vision projectors — not a candidate without a different tag.)
+- **`gemma4:12b`** (official `gemma4:12b`, Q4_K_M, 7.56 GB — distinct from the
+  text-only `gemma-4-12b:*` tags) — this *is* the multimodal one: it accepted
+  images and generated (no "does not support multimodal" 400 that the text-only
+  build returns). Note gemma4's encoder-free design (a ~35M embedded module)
+  doesn't surface as `*.vision.*` model_info keys, so `/api/show` reports "no
+  vision keys" even though vision works. But at 7.56 GB it **spills worse than
+  qwen9b**: 62% on GPU (5.54/8.98 GB), ~3.4 GB on CPU, and a single 6-photo
+  Balcony batch did not finish within the 195s probe window. Same wall as the
+  9B, taller.
 - **Phi-3.5-vision / MiniCPM-V** (~4B tier) are the remaining untested
   candidates; not probed here.
 
-**Net:** across three model families (qwen, qwen-vl, gemma3), every vision
-model that fits an 8 GB card fails this pipeline in a different way — the 9B
-spills and is timeout-bound; qwen2.5vl:3b loops / empties; gemma3:4b
-under-produces and rebels against the strict schema. The binding constraints
-are the **8 GB VRAM ceiling** (forces a ≤4B model, which is too weak) and the
-**strict structured-output contract** (which weak models adhere to minimally
-or abandon under pressure). A clean, fast local run needs either ≥12 GB VRAM
-(fits qwen9b fully on-GPU) or a small VLM specifically tuned for structured
-inventory output. The qwen3.5:9b quality numbers above (from the v2 run) stand
-as the local baseline; they were generated before spillover fully crippled
+**Net:** across four models / three families (qwen 9B, qwen2.5vl 3B, gemma3 4B,
+gemma4 12B), every vision model fails this pipeline on an 8 GB card in a
+different way — the ≥9B models (qwen9b, gemma4:12b) spill and are timeout-bound;
+the ≤4B models that fit (qwen2.5vl:3b, gemma3:4b) are too weak (loops / empties
+/ under-produce / schema-rebel). The binding constraints are the **8 GB VRAM
+ceiling** (forces a ≤4B model, which is too weak) and the **strict
+structured-output contract** (which weak models adhere to minimally or abandon
+under pressure). A clean, fast local run needs either ≥12 GB VRAM (fits qwen9b
+fully on-GPU) or a small VLM specifically tuned for structured inventory
+output. The qwen3.5:9b quality numbers above (from the v2 run) stand as the
+local baseline; they were generated before spillover fully crippled
 throughput and are not invalidated by the timing findings here.
 
 **Knobs added for local experimentation** (env vars, no CLI flags): `HI_NUM_CTX`
