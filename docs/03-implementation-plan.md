@@ -117,7 +117,13 @@ and compare our output against the human-written report.
 > implementer/adversarial-reviewer debate); C2PA/e-signature and
 > multi-property management stay deferred — unchecked, reopenable on request.
 
-- [ ] Web UI (upload, review/edit items inline, export PDF)
+- [x] Web UI (upload, review/edit items inline, export PDF) — done 3 Jul 2026:
+      review/edit inline pre-existed (docs/05 Levels 1–3); M5a added upload
+      (`POST /api/photos`, magic-byte-sniffed extensions, 64 MiB cap),
+      build-from-browser (`POST /api/build`, `{"confirm": backend}` spend
+      guard), PDF export (`/api/pdf` + `/pdf`, 503 hint without WeasyPrint),
+      and the redescribe spend-guard retrofit — see
+      [`docs/09`](09-web-ui-and-capture.md)
 - [ ] Mobile guided capture (per-room shot list with live checklist)
 - [ ] C2PA / signed manifests; e-signature integration
 - [ ] Multi-property management, tenancy metadata, scheme-specific templates
