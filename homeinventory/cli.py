@@ -306,7 +306,8 @@ def cmd_review(args) -> int:
     try:
         httpd = serve(Path(args.capture_dir), Path(args.out), port=args.port,
                       share=args.share, backend=args.backend, model=args.model,
-                      base_url=args.base_url, open_browser=not args.no_open)
+                      base_url=args.base_url, open_browser=not args.no_open,
+                      no_detect=args.no_detect)
     except FileNotFoundError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
@@ -483,6 +484,9 @@ def main(argv: list[str] | None = None) -> int:
     rv.add_argument("--base-url", default=None)
     rv.add_argument("--no-open", action="store_true",
                     help="don't open the browser automatically")
+    rv.add_argument("--no-detect", action="store_true",
+                    help="server-spawned builds (start-page build, "
+                         "re-describe) skip YOLOE detection")
     rv.set_defaults(func=cmd_review)
 
     ck = sub.add_parser("check",

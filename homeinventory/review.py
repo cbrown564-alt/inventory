@@ -36,6 +36,7 @@ from typing import Optional
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from .ingest import IMAGE_EXTS, VIDEO_EXTS
 from .schema import Inventory, Item, Photo
 from .integrity import sha256_file
 
@@ -43,6 +44,38 @@ log = logging.getLogger(__name__)
 TEMPLATES = Path(__file__).parent / "templates"
 
 _LOOPBACK = {"127.0.0.1", "::1", "::ffff:127.0.0.1"}
+
+# Browser uploads (M5a): hard cap on one photo's decoded bytes; the request
+# body cap adds base64's 4/3 inflation plus JSON envelope slack.
+_UPLOAD_CAP = 64 * 1024 * 1024
+_UPLOAD_BODY_CAP = _UPLOAD_CAP * 4 // 3 + 1024 * 1024
+
+# Backend default models, mirrored from describe.get_backend so the UI can
+# name what a confirmed build/redescribe would actually run (spend guard:
+# no paid backend without a per-request confirm naming it).
+_BACKEND_DEFAULT_MODEL = {"claude": "claude-opus-4-8", "openai": "gpt-4.1-mini",
+                          "local": "qwen3.5:9b"}
+
+
+def sniff_extension(data: bytes) -> Optional[str]:
+    """File extension from magic bytes only — the client's filename extension
+    is never trusted. JPEG FF D8 -> .jpg; PNG 89 50 -> .png; ISO-BMFF
+    ftyp with a HEIC/HEIF brand -> .heic. Anything else: None (reject)."""
+    if data[:2] == b"\xff\xd8":
+        return ".jpg"
+    if data[:2] == b"\x89P":
+        return ".png"
+    if len(data) >= 12 and data[4:8] == b"ftyp":
+        brand = data[8:12]
+        if brand[:3] in (b"hei", b"hev") or brand in (b"mif1", b"msf1"):
+            return ".heic"
+    return None
+
+
+def _safe_component(name: str) -> bool:
+    """One plain path component: no separators, no '..', no hidden names."""
+    return bool(name) and not name.startswith(".") and ".." not in name \
+        and "/" not in name and "\\" not in name and "\x00" not in name
 
 
 def _now() -> str:
@@ -54,16 +87,49 @@ class ReviewState:
 
     def __init__(self, capture_dir: Path, out_dir: Path,
                  backend: str = "claude", model: Optional[str] = None,
-                 base_url: Optional[str] = None, share: bool = False):
+                 base_url: Optional[str] = None, share: bool = False,
+                 no_detect: bool = False):
         self.capture_dir = capture_dir
         self.out_dir = out_dir
         self.backend = backend
         self.model = model
         self.base_url = base_url
+        self.no_detect = no_detect
         self.lock = threading.Lock()
         self.tenant_token: Optional[str] = (
             secrets.token_urlsafe(16) if share else None)
         self.redescribe = {"status": "idle", "room": None, "detail": ""}
+        self.build = {"status": "idle", "detail": "", "cmd": None}
+
+    @property
+    def backend_label(self) -> str:
+        """Human-readable 'backend (model)' for spend-guard confirm UIs."""
+        if self.backend == "offline":
+            return "offline (no AI)"
+        model = self.model or _BACKEND_DEFAULT_MODEL.get(self.backend,
+                                                         "default model")
+        return f"{self.backend} ({model})"
+
+    def scan_capture(self) -> list[dict]:
+        """Room subfolders of the capture dir with photo/video counts —
+        the start page's view of the world before any build exists."""
+        rooms: list[dict] = []
+        if not self.capture_dir.is_dir():
+            return rooms
+        for d in sorted(self.capture_dir.iterdir()):
+            if not d.is_dir() or d.name.startswith("."):
+                continue
+            photos = videos = 0
+            for f in d.iterdir():
+                if not f.is_file():
+                    continue
+                ext = f.suffix.lower()
+                if ext in IMAGE_EXTS:
+                    photos += 1
+                elif ext in VIDEO_EXTS:
+                    videos += 1
+            rooms.append({"name": d.name, "photos": photos, "videos": videos})
+        return rooms
 
     # ---- inventory I/O -------------------------------------------------
     @property
@@ -98,7 +164,9 @@ class ReviewState:
             rec = {
                 "at": _now(), "actor": actor, "role": role, "action": action,
                 "detail": detail, "item_id": item_id,
-                "inventory_sha256": self.load().content_sha256(),
+                # empty before the first build: there is no inventory to pin
+                "inventory_sha256": (self.load().content_sha256()
+                                     if self.inv_path.exists() else ""),
                 "prev": prev,
             }
             canon = json.dumps(rec, sort_keys=True, ensure_ascii=False,
@@ -198,19 +266,21 @@ class ReviewState:
         mpath.write_text(json.dumps(manifest, indent=2, ensure_ascii=False),
                          encoding="utf-8")
 
-    # ---- re-describe one room (subprocess, background thread) ----------
+    # ---- background subprocess jobs (re-describe / full build) ---------
+    def _busy(self) -> bool:
+        """One backend job at a time — call with self.lock held."""
+        return (self.redescribe["status"] == "running"
+                or self.build["status"] == "running")
+
     def start_redescribe(self, room: str) -> bool:
         with self.lock:
-            if self.redescribe["status"] == "running":
+            if self._busy():
                 return False
             self.redescribe = {"status": "running", "room": room, "detail": ""}
         cmd = [sys.executable, "-m", "homeinventory.cli", "build",
                str(self.capture_dir), "-o", str(self.out_dir),
                "--room", room, "--from-json", "--backend", self.backend, "--no-pdf"]
-        if self.model:
-            cmd += ["--model", self.model]
-        if self.base_url:
-            cmd += ["--base-url", self.base_url]
+        cmd += self._build_flags()
 
         def run():
             try:
@@ -229,6 +299,52 @@ class ReviewState:
                                        "detail": str(e)}
         threading.Thread(target=run, daemon=True).start()
         self.ack("reviewer", "landlord", "redescribe", room)
+        return True
+
+    def _build_flags(self) -> list[str]:
+        flags: list[str] = []
+        if self.no_detect:
+            flags.append("--no-detect")
+        if self.model:
+            flags += ["--model", self.model]
+        if self.base_url:
+            flags += ["--base-url", self.base_url]
+        return flags
+
+    def start_build(self) -> bool:
+        """Full build from the browser (M5a). One job at a time; the caller
+        enforces the {"confirm": backend} spend guard before calling."""
+        with self.lock:
+            if self._busy():
+                return False
+            cmd = [sys.executable, "-m", "homeinventory.cli", "build",
+                   str(self.capture_dir), "-o", str(self.out_dir),
+                   "--backend", self.backend, "--no-pdf"]
+            # a rebuild over an existing inventory keeps review work
+            if self.inv_path.exists():
+                cmd.append("--from-json")
+            cmd += self._build_flags()
+            self.build = {"status": "running", "detail": "", "cmd": cmd}
+
+        def run():
+            try:
+                proc = subprocess.run(cmd, capture_output=True, text=True,
+                                      timeout=3600)
+                ok = proc.returncode == 0
+                with self.lock:
+                    self.build = {
+                        "status": "done" if ok else "failed",
+                        "detail": (proc.stdout if ok else
+                                   (proc.stderr or proc.stdout))[-2000:],
+                        "cmd": cmd,
+                    }
+            except Exception as e:
+                with self.lock:
+                    self.build = {"status": "failed", "detail": str(e),
+                                  "cmd": cmd}
+        threading.Thread(target=run, daemon=True).start()
+        self.ack("reviewer", "landlord", "build",
+                 f"backend={self.backend} no_detect={self.no_detect}")
         return True
 
 
@@ -290,11 +406,26 @@ class ReviewHandler(BaseHTTPRequestHandler):
                           autoescape=select_autoescape(["html"]))
         payload = {"inventory": asdict(inv),
                    "photo_src": st.photo_src(inv),
-                   "crop_src": st.crop_src(inv)}
+                   "crop_src": st.crop_src(inv),
+                   # spend guard: the UI names the backend+model that a
+                   # confirmed redescribe/build would run
+                   "backend": st.backend,
+                   "backend_label": st.backend_label}
         payload.update(extra)
         return env.get_template(template).render(
             inv=inv, payload=payload,
             share_url=extra.get("share_url", ""))
+
+    def _render_start(self) -> str:
+        """Start page: pre-build state of the capture folder (M5a)."""
+        st = self.state
+        env = Environment(loader=FileSystemLoader(TEMPLATES),
+                          autoescape=select_autoescape(["html"]))
+        return env.get_template("start.html.j2").render(
+            rooms=st.scan_capture(), backend=st.backend,
+            backend_label=st.backend_label,
+            capture_dir=str(st.capture_dir),
+            has_inventory=st.inv_path.exists())
 
     # ---- routing -------------------------------------------------------
     def do_GET(self):
@@ -351,14 +482,28 @@ class ReviewHandler(BaseHTTPRequestHandler):
             self._err(403, "owner routes are localhost-only")
             return
         if path == "/":
+            if not st.inv_path.exists():
+                # no build yet: the start page (upload + first build)
+                self._html(self._render_start())
+                return
             share_url = ""
             if st.tenant_token:
                 share_url = f"/t/{st.tenant_token}"
             self._html(self._render_app("review.html.j2", share_url=share_url))
             return
+        if path == "/start":
+            self._html(self._render_start())
+            return
+        if path == "/pdf":
+            self._file(st.out_dir / "inventory.pdf", "application/pdf")
+            return
         if path == "/report":
             self._file(st.out_dir / "inventory.html",
                        "text/html; charset=utf-8")
+            return
+        if path == "/api/build":
+            with st.lock:
+                self._json(dict(st.build))
             return
         if path == "/api/inventory":
             inv = st.load()
@@ -398,6 +543,39 @@ class ReviewHandler(BaseHTTPRequestHandler):
             if not self._is_local():
                 self._err(403, "owner routes are localhost-only")
                 return
+            if path == "/api/photos":
+                self._upload_photo()
+                return
+            if path == "/api/build":
+                b = self._body()
+                if (b.get("confirm") or "") != st.backend:
+                    self._err(400, "build must be confirmed with the "
+                                   f"configured backend name ({st.backend!r})"
+                                   " in {\"confirm\": ...}")
+                    return
+                if not st.start_build():
+                    self._err(409, "a build or re-describe is already running")
+                    return
+                self._json({"ok": True, "status": "running"})
+                return
+            if path == "/api/pdf":
+                try:
+                    import weasyprint  # noqa: F401
+                except Exception:
+                    # never a silent 200: PDF export is unavailable, say so
+                    self._err(503, "PDF export needs WeasyPrint — "
+                                   "pip install homeinventory[pdf]")
+                    return
+                from .report import render
+                with st.lock:
+                    outputs = render(st.load(), st.capture_dir, st.out_dir,
+                                     pdf=True)
+                if "pdf" not in outputs:
+                    self._err(500, "PDF generation failed — see server log")
+                    return
+                st.ack("reviewer", "landlord", "export_pdf")
+                self._json({"ok": True, "pdf": "/pdf"})
+                return
             if path == "/api/inventory":
                 body = self._body()
                 inv = Inventory.from_json(json.dumps(body))  # validates
@@ -434,8 +612,15 @@ class ReviewHandler(BaseHTTPRequestHandler):
                 if not b.get("room"):
                     self._err(400, "room is required")
                     return
+                # spend-guard retrofit (M5a): same contract as /api/build —
+                # a paid backend never runs without a request naming it
+                if (b.get("confirm") or "") != st.backend:
+                    self._err(400, "re-describe must be confirmed with the "
+                                   f"configured backend name ({st.backend!r})"
+                                   " in {\"confirm\": ...}")
+                    return
                 if not st.start_redescribe(b["room"]):
-                    self._err(409, "a re-describe is already running")
+                    self._err(409, "a build or re-describe is already running")
                     return
                 self._json({"ok": True})
                 return
@@ -465,6 +650,62 @@ class ReviewHandler(BaseHTTPRequestHandler):
                 self._err(500, str(e))
             except Exception:
                 pass
+
+    # ---- browser upload (M5a) ---------------------------------------------
+    def _upload_photo(self):
+        """POST /api/photos {room, filename, photo_b64} — bytes land
+        UNMODIFIED in capture/<Room>/; extension comes from magic-byte
+        sniffing only; oversize is 413; traversal attempts are 400."""
+        st = self.state
+        n = int(self.headers.get("Content-Length") or 0)
+        if n > _UPLOAD_BODY_CAP:
+            self.close_connection = True     # body is unread; don't reuse
+            self._err(413, "upload too large — photos are capped at 64 MiB")
+            return
+        try:
+            body = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+        except ValueError:
+            self._err(400, "invalid JSON body")
+            return
+        room = (body.get("room") or "").strip()
+        filename = (body.get("filename") or "").strip()
+        b64 = body.get("photo_b64") or ""
+        if not room or not filename or not b64:
+            self._err(400, "room, filename and photo_b64 are required")
+            return
+        if not (_safe_component(room) and _safe_component(filename)):
+            self._err(400, "room and filename must be plain names — no "
+                           "path separators, '..' or leading dots")
+            return
+        try:
+            data = base64.b64decode(b64, validate=True)
+        except Exception:
+            self._err(400, "photo_b64 is not valid base64")
+            return
+        if len(data) > _UPLOAD_CAP:
+            self._err(413, "photo exceeds the 64 MiB cap")
+            return
+        ext = sniff_extension(data)
+        if ext is None:
+            self._err(400, "unrecognised image bytes — JPEG, PNG or HEIC only")
+            return
+        room_dir = st.capture_dir / room
+        if room_dir.resolve().parent != st.capture_dir.resolve():
+            self._err(400, "room escapes the capture folder")  # belt-and-braces
+            return
+        with st.lock:
+            room_dir.mkdir(parents=True, exist_ok=True)
+            stem = Path(filename).stem or "photo"
+            dest, k = room_dir / f"{stem}{ext}", 1
+            while dest.exists():               # never clobber an existing file
+                dest = room_dir / f"{stem}-{k}{ext}"
+                k += 1
+            dest.write_bytes(data)             # stored byte-for-byte as sent
+        digest = hashlib.sha256(data).hexdigest()
+        st.ack("reviewer", "landlord", "upload_photo", f"{room}/{dest.name}")
+        self._json({"ok": True, "room": room, "stored_as": dest.name,
+                    "path": f"{room}/{dest.name}", "sha256": digest,
+                    "bytes": len(data)})
 
     # ---- tenant actions --------------------------------------------------
     def _tenant_comment(self, b: dict):
@@ -522,14 +763,17 @@ def _lan_ip() -> str:
 def serve(capture_dir: Path, out_dir: Path, port: int = 8484,
           share: bool = False, backend: str = "claude",
           model: Optional[str] = None, base_url: Optional[str] = None,
-          open_browser: bool = True) -> ThreadingHTTPServer:
+          open_browser: bool = True,
+          no_detect: bool = False) -> ThreadingHTTPServer:
     """Build the server (returned so tests can drive it); call
     .serve_forever() to block."""
     state = ReviewState(capture_dir, out_dir, backend=backend, model=model,
-                        base_url=base_url, share=share)
+                        base_url=base_url, share=share, no_detect=no_detect)
     if not state.inv_path.exists():
-        raise FileNotFoundError(
-            f"{state.inv_path} not found — run `homeinventory build` first")
+        # no build yet — the start page handles upload + the first build
+        print(f"\nNo {state.inv_path} yet — serving the start page "
+              "(upload photos, then run the first build from the browser).")
+        out_dir.mkdir(parents=True, exist_ok=True)
 
     handler = type("BoundHandler", (ReviewHandler,), {"state": state})
     host = "0.0.0.0" if share else "127.0.0.1"

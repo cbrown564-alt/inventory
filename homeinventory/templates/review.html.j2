@@ -873,13 +873,21 @@
     secR.appendChild(el("p", { "class": "c-line",
       text: "Re-runs the AI on this room's photos (after fixing capture " +
             "problems). Review state for this room is replaced." }));
+    // spend guard (M5a retrofit): name the backend+model beside the button
+    // and send the same {"confirm": backend} contract as /api/build
+    secR.appendChild(el("p", { "class": "c-line",
+      text: "Uses backend: " + (payload.backend_label || "not configured") }));
     var rBtn = el("button", { "class": "btn", text: "Re-describe " + room.name });
     var rStatus = el("div", { id: "redesc-status" });
     rBtn.addEventListener("click", function () {
       if (dirty && !confirm("Unsaved edits will be lost for this room. Continue?"))
         return;
+      if (!confirm("Re-describe " + room.name + " with backend " +
+                   (payload.backend_label || payload.backend) +
+                   "? Paid backends spend API money.")) return;
       rBtn.disabled = true;
-      api("POST", "/api/redescribe", { room: room.name }).then(function () {
+      api("POST", "/api/redescribe",
+          { room: room.name, confirm: payload.backend }).then(function () {
         rStatus.textContent = "running…";
         var t = setInterval(function () {
           api("GET", "/api/redescribe").then(function (s) {

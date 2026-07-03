@@ -319,3 +319,287 @@ def test_check_cli_without_detector(tmp_path, monkeypatch):
     cap = tmp_path / "capture"
     _img(cap / "Kitchen" / "k1.jpg")
     assert main(["check", str(cap)]) == 2
+
+
+# --------------------------------------------------------------------------
+# M5a web UI: start page, browser upload, build-from-browser, spend guards,
+# PDF export (docs/09-web-ui-and-capture.md)
+# --------------------------------------------------------------------------
+
+import base64      # noqa: E402
+import hashlib     # noqa: E402
+import time        # noqa: E402
+
+
+def _start_server(cap: Path, out: Path):
+    """Server exactly as `homeinventory review CAP -o OUT --backend offline
+    --no-detect --no-open` would configure it (the £0 pinned command) —
+    crucially WITHOUT a prior build."""
+    httpd = serve(cap, out, port=0, share=False, backend="offline",
+                  open_browser=False, no_detect=True)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    return f"http://127.0.0.1:{httpd.server_address[1]}", httpd
+
+
+@pytest.fixture()
+def fresh_server(tmp_path):
+    """No inventory.json yet: capture/ exists and is empty."""
+    cap = tmp_path / "capture"
+    cap.mkdir()
+    out = tmp_path / "report"
+    base, httpd = _start_server(cap, out)
+    yield base, httpd.review_state, out, cap
+    httpd.shutdown()
+    httpd.server_close()
+
+
+def _jpeg_bytes() -> bytes:
+    from io import BytesIO
+    buf = BytesIO()
+    Image.new("RGB", (64, 48), "white").save(buf, format="JPEG")
+    return buf.getvalue()
+
+
+def _heic_bytes() -> bytes:
+    # minimal ISO-BMFF header with a heic brand — enough for the sniffer;
+    # upload must store bytes unmodified, so no decodable body is needed
+    return b"\x00\x00\x00\x18ftypheic\x00\x00\x00\x00heicmif1" + b"\x00" * 64
+
+
+def _upload(base, room, filename, data: bytes):
+    return _req("POST", base + "/api/photos", {
+        "room": room, "filename": filename,
+        "photo_b64": base64.b64encode(data).decode()})
+
+
+# ---- start page: both states -----------------------------------------------
+
+def test_start_page_empty_capture(fresh_server):
+    base, _state, _out, _cap = fresh_server
+    status, html = _get_text(base + "/")
+    assert status == 200
+    assert 'id="empty-state"' in html          # empty-state instruction block
+    assert "one folder per" in html            # the instruction text itself
+    # build confirm control names backend+model (template assertion)
+    assert 'id="btn-build"' in html
+    assert 'id="build-backend"' in html
+    assert "offline (no AI)" in html
+
+
+def test_start_page_lists_rooms_with_counts(tmp_path):
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    _img(cap / "Kitchen" / "k2.jpg")
+    (cap / "Living Room").mkdir()
+    (cap / "Living Room" / "walk.mp4").write_bytes(b"\x00" * 32)
+    out = tmp_path / "report"
+    base, httpd = _start_server(cap, out)
+    try:
+        status, html = _get_text(base + "/")
+        assert status == 200
+        assert 'id="room-list"' in html and 'id="empty-state"' not in html
+        assert 'data-room="Kitchen"' in html
+        assert 'data-room="Living Room"' in html
+        assert '<td class="n-photos">2</td>' in html    # Kitchen photos
+        assert '<td class="n-videos">1</td>' in html    # Living Room video
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+# ---- upload: sha256 round-trip, sniffed extensions, caps, traversal --------
+
+def test_upload_roundtrip_sha256_and_sniffed_extension(fresh_server):
+    base, _state, _out, cap = fresh_server
+    data = _jpeg_bytes()
+    # filename lies about the extension; the JPEG magic bytes must win
+    status, resp = _upload(base, "Kitchen", "hob.png", data)
+    assert status == 200, resp
+    assert resp["stored_as"] == "hob.jpg"
+    on_disk = cap / "Kitchen" / "hob.jpg"
+    assert on_disk.is_file()
+    sent = hashlib.sha256(data).hexdigest()
+    assert resp["sha256"] == sent
+    assert hashlib.sha256(on_disk.read_bytes()).hexdigest() == sent  # unmodified
+
+
+def test_upload_heic_lands_as_heic(fresh_server):
+    base, _state, _out, cap = fresh_server
+    data = _heic_bytes()
+    status, resp = _upload(base, "Bedroom 1", "IMG_0001.jpeg", data)
+    assert status == 200, resp
+    assert resp["stored_as"] == "IMG_0001.heic"
+    on_disk = cap / "Bedroom 1" / "IMG_0001.heic"
+    assert hashlib.sha256(on_disk.read_bytes()).hexdigest() == \
+        hashlib.sha256(data).hexdigest()
+
+
+def test_upload_png_sniffed(fresh_server):
+    from io import BytesIO
+    base, _state, _out, cap = fresh_server
+    buf = BytesIO()
+    Image.new("RGB", (8, 8), "red").save(buf, format="PNG")
+    status, resp = _upload(base, "Kitchen", "wall", buf.getvalue())
+    assert status == 200 and resp["stored_as"] == "wall.png"
+    assert (cap / "Kitchen" / "wall.png").is_file()
+
+
+def test_upload_unsniffable_400(fresh_server):
+    base, _state, _out, cap = fresh_server
+    status, resp = _upload(base, "Kitchen", "notes.txt", b"just some text")
+    assert status == 400
+    assert "JPEG, PNG or HEIC" in resp["error"]
+    assert not list(cap.rglob("notes*"))       # nothing was written
+
+
+def test_upload_traversal_400(fresh_server, tmp_path):
+    base, _state, _out, cap = fresh_server
+    data = _jpeg_bytes()
+    for room, fname in [("../evil", "x.jpg"), ("Kitchen", "../../x.jpg"),
+                        ("a/b", "x.jpg"), ("Kitchen", "..\\x.jpg"),
+                        ("..", "x.jpg"), (".hidden", "x.jpg")]:
+        status, resp = _upload(base, room, fname, data)
+        assert status == 400, (room, fname, resp)
+    assert not (tmp_path / "evil").exists()
+    assert not (tmp_path / "x.jpg").exists()
+    assert not list(cap.rglob("x*"))           # nothing landed anywhere
+
+
+def test_upload_never_clobbers(fresh_server):
+    base, _state, _out, cap = fresh_server
+    first, second = _jpeg_bytes(), _jpeg_bytes() + b"\x00"
+    s1, r1 = _upload(base, "Kitchen", "wall.jpg", first)
+    s2, r2 = _upload(base, "Kitchen", "wall.jpg", second)
+    assert s1 == s2 == 200
+    assert r1["stored_as"] == "wall.jpg" and r2["stored_as"] == "wall-1.jpg"
+    assert (cap / "Kitchen" / "wall.jpg").read_bytes() == first   # untouched
+    assert (cap / "Kitchen" / "wall-1.jpg").read_bytes() == second
+
+
+def test_upload_413_over_64mib(fresh_server):
+    base, _state, _out, cap = fresh_server
+    # valid JPEG magic so the size cap — not the sniffer — must reject it
+    data = b"\xff\xd8" + b"\x00" * (64 * 1024 * 1024)
+    status, resp = _upload(base, "Kitchen", "huge.jpg", data)
+    assert status == 413, resp
+    assert not list(cap.rglob("huge*"))
+
+
+# ---- build-from-browser: confirm guard, progress, e2e ----------------------
+
+def test_build_e2e_offline(fresh_server):
+    """£0 end-to-end: server as `review CAP -o OUT --backend offline
+    --no-detect`; upload photos; confirmed build; poll to done; rooms
+    appear in /api/inventory."""
+    base, state, out, _cap = fresh_server
+    assert _upload(base, "Kitchen", "k1.jpg", _jpeg_bytes())[0] == 200
+    assert _upload(base, "Living Room", "l1.jpg", _jpeg_bytes())[0] == 200
+
+    # missing confirm -> 400; wrong backend named -> 400; nothing started
+    status, resp = _req("POST", base + "/api/build", {})
+    assert status == 400 and "confirm" in resp["error"]
+    status, resp = _req("POST", base + "/api/build", {"confirm": "claude"})
+    assert status == 400 and "offline" in resp["error"]
+    status, resp = _req("GET", base + "/api/build")
+    assert status == 200 and resp["status"] == "idle"
+
+    # correct confirm starts the pinned £0 command
+    status, resp = _req("POST", base + "/api/build", {"confirm": "offline"})
+    assert status == 200, resp
+    with state.lock:
+        cmd = state.build["cmd"]
+    assert "--backend" in cmd and cmd[cmd.index("--backend") + 1] == "offline"
+    assert "--no-detect" in cmd and "--no-pdf" in cmd
+
+    deadline = time.time() + 120
+    while time.time() < deadline:
+        status, resp = _req("GET", base + "/api/build")
+        if resp["status"] in ("done", "failed"):
+            break
+        time.sleep(0.2)
+    assert resp["status"] == "done", resp
+
+    status, body = _req("GET", base + "/api/inventory")
+    assert status == 200
+    assert {r["name"] for r in body["inventory"]["rooms"]} == \
+        {"Kitchen", "Living Room"}
+    # "/" now serves the review app instead of the start page
+    status, html = _get_text(base + "/")
+    assert status == 200 and 'id="hi-data"' in html
+
+
+def test_build_and_redescribe_concurrency_409(fresh_server):
+    base, state, _out, _cap = fresh_server
+    with state.lock:
+        state.build = {"status": "running", "detail": "", "cmd": None}
+    status, _ = _req("POST", base + "/api/build", {"confirm": "offline"})
+    assert status == 409
+    status, _ = _req("POST", base + "/api/redescribe",
+                     {"room": "Kitchen", "confirm": "offline"})
+    assert status == 409                        # build blocks redescribe
+    with state.lock:
+        state.build = {"status": "idle", "detail": "", "cmd": None}
+        state.redescribe = {"status": "running", "room": "X", "detail": ""}
+    status, _ = _req("POST", base + "/api/build", {"confirm": "offline"})
+    assert status == 409                        # redescribe blocks build
+    with state.lock:
+        state.redescribe = {"status": "idle", "room": None, "detail": ""}
+
+
+# ---- redescribe spend-guard retrofit ---------------------------------------
+
+def test_redescribe_requires_confirm(server):
+    base, _state, _out, _cap = server
+    status, resp = _req("POST", base + "/api/redescribe", {"room": "Kitchen"})
+    assert status == 400 and "confirm" in resp["error"]
+    status, resp = _req("POST", base + "/api/redescribe",
+                        {"room": "Kitchen", "confirm": "claude"})
+    assert status == 400 and "offline" in resp["error"]
+    # correct confirm still works end-to-end (offline, £0)
+    status, resp = _req("POST", base + "/api/redescribe",
+                        {"room": "Kitchen", "confirm": "offline"})
+    assert status == 200, resp
+    deadline = time.time() + 120
+    while time.time() < deadline:
+        _, s = _req("GET", base + "/api/redescribe")
+        if s["status"] in ("done", "failed"):
+            break
+        time.sleep(0.2)
+    assert s["status"] == "done", s
+
+
+def test_redescribe_ui_names_backend(server):
+    """Template assertion: the redescribe UI shows backend+model."""
+    base, _state, _out, _cap = server
+    status, html = _get_text(base + "/")
+    assert status == 200
+    assert "Uses backend:" in html              # label beside the button
+    assert "offline (no AI)" in html            # payload backend_label
+
+
+# ---- PDF export -------------------------------------------------------------
+
+def test_pdf_export_and_serve(server):
+    try:
+        import weasyprint  # noqa: F401
+    except Exception as e:
+        pytest.skip(f"WeasyPrint not importable in this environment: {e}")
+    base, _state, out, _cap = server
+    status, resp = _req("POST", base + "/api/pdf", {})
+    assert status == 200, resp
+    assert (out / "inventory.pdf").is_file()
+    req = urllib.request.Request(base + "/pdf")
+    with urllib.request.urlopen(req) as r:
+        assert r.status == 200
+        assert r.headers.get("Content-Type") == "application/pdf"
+        assert r.read(4) == b"%PDF"
+
+
+def test_pdf_503_when_weasyprint_missing(server, monkeypatch):
+    import sys as _sys
+    monkeypatch.setitem(_sys.modules, "weasyprint", None)  # import -> error
+    base, _state, out, _cap = server
+    status, resp = _req("POST", base + "/api/pdf", {})
+    assert status == 503                       # never a silent 200
+    assert "pip install homeinventory[pdf]" in resp["error"]
