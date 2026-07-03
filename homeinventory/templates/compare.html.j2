@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check-out Comparison — {{ result.checkin.address or "Property" }}</title>
+<style>
+  :root {
+    --ink: #1a1a1a; --muted: #5a5f6a; --rule: #d8dbe0; --accent: #15406b;
+    --band: #f3f5f8; --paper: #ffffff;
+    --confirm: #0e6b46; --reject: #a3231f; --pend: #8a6d1f;
+    --ui: "Segoe UI Variable Text", "Segoe UI", "Avenir Next", "Helvetica Neue", sans-serif;
+    --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, "Times New Roman", serif; color: var(--ink);
+         margin: 0; font-size: 11pt; line-height: 1.45; background: var(--paper); }
+  main { max-width: 900px; margin: 0 auto; padding: 24px; }
+  h1, h2, h3 { font-weight: 600; color: var(--accent); }
+  h1 { font-size: 20pt; margin-bottom: 2px; }
+  h2 { font-size: 14pt; border-bottom: 2px solid var(--accent);
+       padding-bottom: 4px; margin-top: 30px; }
+  .kicker { letter-spacing: .22em; text-transform: uppercase; font-size: 9pt;
+            color: var(--muted); }
+  .meta { color: var(--muted); font-size: 9pt; }
+  .note { background: var(--band); padding: 10px 14px; border-left: 3px solid
+          var(--accent); margin: 14px 0 18px; font-size: 10pt; }
+  table.delta { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+  table.delta th { text-align: left; background: var(--accent); color: #fff;
+                   padding: 6px 8px; font-weight: 600; }
+  table.delta td { border-bottom: 1px solid var(--rule); padding: 6px 8px;
+                   vertical-align: top; }
+  table.delta tr { page-break-inside: avoid; }
+  .grade { white-space: nowrap; font-variant: small-caps; }
+  .worse { color: var(--reject); font-weight: 700; }
+  .better { color: var(--confirm); }
+  .cls { font: 600 8.5pt var(--ui); text-transform: uppercase;
+         letter-spacing: .04em; white-space: nowrap; }
+  .cls.damage, .cls.cleaning { color: var(--reject); }
+  .cls.fair_wear_and_tear { color: var(--confirm); }
+  .cls.landlord_responsibility { color: var(--pend); }
+  .cls.unclassified { color: var(--muted); }
+  .pair { display: flex; gap: 14px; margin: 10px 0 22px; page-break-inside: avoid; }
+  .pair .side { flex: 1; border: 1px solid var(--rule); padding: 10px; }
+  .side h4 { margin: 0 0 6px; font: 600 9pt var(--ui); text-transform: uppercase;
+             letter-spacing: .08em; color: var(--muted); }
+  .side .photos { display: flex; flex-wrap: wrap; gap: 6px; }
+  .side figure { margin: 0; width: 47%; }
+  .side .frame { position: relative; }
+  .side img { width: 100%; display: block; border: 1px solid var(--rule); }
+  .side figcaption { font-size: 8pt; color: var(--muted); font-family: var(--mono); }
+  .missing { font-size: 8.5pt; color: var(--muted); border: 1px dashed var(--rule);
+             padding: 12px 8px; text-align: center; }
+  /* Defect-region overlays: same markup + styling as report.html.j2 (the
+     docs/05 Level 2 annotation boxes, reused as compare evidence anchors). */
+  .region { position: absolute; border: 2px solid var(--reject);
+            background: rgba(163,35,31,.08); pointer-events: none; }
+  .region::after {
+    content: attr(data-label); position: absolute; left: -2px; bottom: 100%;
+    background: var(--reject); color: #fff; font-family: var(--ui);
+    font-size: 7.5pt; padding: 1px 5px; white-space: nowrap; max-width: 220px;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  ul.defects { margin: 4px 0 4px 16px; padding: 0; color: var(--reject);
+               font-size: 9pt; }
+  .rationale { font-size: 9pt; margin: 6px 0 0; }
+  .rationale .who { font: 600 8pt var(--ui); color: var(--muted);
+                    text-transform: uppercase; letter-spacing: .06em; }
+  @page {
+    size: A4; margin: 16mm 14mm 20mm 14mm;
+    @bottom-center { content: "Page " counter(page) " of " counter(pages);
+                     font: 8pt sans-serif; color: #5a5f6a; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">Check-in vs check-out comparison</div>
+  <h1>{{ result.checkin.address or "Property" }}</h1>
+  <p class="meta">
+    Check-in: {{ result.checkin.inspected_at }} ({{ result.checkin.backend or "?" }})
+    &middot; Check-out: {{ result.checkout.inspected_at }} ({{ result.checkout.backend or "?" }})<br>
+    Tenancy length: {{ result.params.tenancy_months ~ " months" if result.params.tenancy_months else "not provided" }}
+    &middot; Occupancy: {{ result.params.occupancy or "not provided" }}
+    &middot; Classification: {{ result.params.backend }}{{ " (" ~ result.params.model ~ ")" if result.params.model else "" }}
+  </p>
+  <p class="note">This is a <strong>discussion sheet</strong>: it identifies,
+  evidences and classifies changes between the two reports. It does not price
+  anything — deduction amounts are for the parties (and, failing agreement,
+  the deposit scheme) to settle. Classifications marked
+  “fair wear and tear” are not chargeable to the tenant; “unclassified”
+  means no rubric ran (offline) or the rubric failed — review by hand.</p>
+
+  <h2>1. Grade-delta summary</h2>
+  <p class="meta">{{ result.totals.matched }} items matched
+    ({{ result.totals.changed }} changed, {{ result.totals.unchanged }} unchanged)
+    &middot; {{ result.totals.removed }} not located at check-out
+    &middot; {{ result.totals.added }} new at check-out</p>
+  <table class="delta">
+    <thead><tr>
+      <th>Item</th><th>Room</th><th>Check-in</th><th>Check-out</th>
+      <th>Δ</th><th>Classification</th><th>Evidence</th>
+    </tr></thead>
+    <tbody>
+    {% for room in rooms %}{% for c in room.changed %}
+      <tr>
+        <td>{{ c.name }}{% if c.checkin_name != c.name %}
+            <div class="meta">check-in: “{{ c.checkin_name }}”</div>{% endif %}
+          {% if c.new_defects %}<ul class="defects">
+            {% for d in c.new_defects %}<li>{{ d }}</li>{% endfor %}
+          </ul>{% endif %}
+        </td>
+        <td>{{ room.name }}</td>
+        <td class="grade">{{ c.checkin_condition or "—" }}</td>
+        <td class="grade">{{ c.checkout_condition or "—" }}</td>
+        <td class="{{ 'worse' if c.grade_delta and c.grade_delta > 0 else 'better' if c.grade_delta and c.grade_delta < 0 else '' }}">
+          {%- if c.grade_delta is none %}—
+          {%- elif c.grade_delta > 0 %}▼{{ c.grade_delta }}
+          {%- elif c.grade_delta < 0 %}▲{{ -c.grade_delta }}
+          {%- else %}0{% endif %}</td>
+        <td><span class="cls {{ c.classification or 'unclassified' }}">
+            {{ class_labels.get(c.classification or "unclassified") }}</span></td>
+        <td class="meta">in: {{ c.checkin_photo_ids | join(", ") or "—" }}<br>
+            out: {{ c.checkout_photo_ids | join(", ") or "—" }}</td>
+      </tr>
+    {% endfor %}{% endfor %}
+    {% if not result.totals.changed %}
+      <tr><td colspan="7" class="meta">No graded deterioration or new defects
+        found on matched items.</td></tr>
+    {% endif %}
+    </tbody>
+  </table>
+
+  <h2>2. Paired photo evidence</h2>
+  {% for room in rooms %}{% for c in room.changed %}
+  <h3>{{ room.name }} — {{ c.name }}
+    <span class="cls {{ c.classification or 'unclassified' }}">
+      {{ class_labels.get(c.classification or "unclassified") }}</span></h3>
+  <div class="pair">
+    {% for side, photos, cond, defects in [
+        ("Check-in", c.checkin_photos, c.checkin_condition, c.checkin_defects),
+        ("Check-out", c.checkout_photos, c.checkout_condition, c.checkout_defects)] %}
+    <div class="side">
+      <h4>{{ side }} — <span class="grade">{{ cond or "not graded" }}</span></h4>
+      {% if defects %}<ul class="defects">
+        {% for d in defects %}<li>{{ d }}</li>{% endfor %}</ul>{% endif %}
+      <div class="photos">
+        {% for p in photos %}
+        {% if p.src %}
+        <figure>
+          <div class="frame">
+            <img src="{{ p.src }}" alt="{{ p.id }}">
+            {% for reg in p.regions %}
+            <span class="region" data-label="{{ reg.defect }}"
+                  style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
+            {% endfor %}
+          </div>
+          <figcaption>{{ p.id }}{% if p.captured_at %} &middot; {{ p.captured_at }}{% endif %}</figcaption>
+        </figure>
+        {% else %}
+        <div class="missing">{{ p.id }}: photo file not available</div>
+        {% endif %}
+        {% endfor %}
+        {% if not photos %}<div class="missing">no photo evidence cited</div>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% if c.rationale %}
+  <p class="rationale"><span class="who">Rubric rationale</span> — {{ c.rationale }}</p>
+  {% endif %}
+  {% if c.resolved_defects %}
+  <p class="meta">Check-in defects not re-observed at check-out:
+    {{ c.resolved_defects | join("; ") }}</p>
+  {% endif %}
+  {% endfor %}{% endfor %}
+  {% if not result.totals.changed %}<p class="meta">Nothing to show.</p>{% endif %}
+
+  <h2>3. Items not located at check-out</h2>
+  {% if result.totals.removed %}
+  <table class="delta">
+    <thead><tr><th>Item</th><th>Room</th><th>Check-in condition</th>
+      <th>Check-in defects</th><th>Check-in evidence</th></tr></thead>
+    <tbody>
+    {% for room in rooms %}{% for it in room.removed %}
+      <tr><td>{{ it.name }}</td><td>{{ room.name }}</td>
+          <td class="grade">{{ it.condition or "—" }}</td>
+          <td>{{ it.defects | join("; ") or "—" }}</td>
+          <td class="meta">{{ it.photo_ids | join(", ") }}</td></tr>
+    {% endfor %}{% endfor %}
+    </tbody>
+  </table>
+  <p class="meta">“Not located” is an alignment verdict, not a liability
+  verdict: confirm each with the tenant before treating it as a loss.</p>
+  {% else %}<p class="meta">None — every check-in item was matched.</p>{% endif %}
+
+  <h2>4. Items new at check-out</h2>
+  {% if result.totals.added %}
+  <table class="delta">
+    <thead><tr><th>Item</th><th>Room</th><th>Check-out condition</th>
+      <th>Check-out defects</th><th>Check-out evidence</th></tr></thead>
+    <tbody>
+    {% for room in rooms %}{% for it in room.added %}
+      <tr><td>{{ it.name }}</td><td>{{ room.name }}</td>
+          <td class="grade">{{ it.condition or "—" }}</td>
+          <td>{{ it.defects | join("; ") or "—" }}</td>
+          <td class="meta">{{ it.photo_ids | join(", ") }}</td></tr>
+    {% endfor %}{% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="meta">None.</p>{% endif %}
+
+  <footer class="meta" style="margin-top:36px; text-align:center;">
+    homeinventory compare &middot; alignment is lexical (room + head-noun
+    match, no API calls) &middot; classifications are AI-suggested and
+    require human review before any deduction discussion.
+  </footer>
+</main>
+</body>
+</html>
