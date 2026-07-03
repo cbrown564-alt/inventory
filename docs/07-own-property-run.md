@@ -38,7 +38,7 @@ first). Per-item dispositions with keyframe evidence are recorded in
 | Room | Verdict | Bleed items (source) |
 |---|---|---|
 | Kitchen | **AFFECTED** | 5 hallway/stairs items — walkthrough started in the hallway (`kitchen_f000009` is the hallway) |
-| Living Room | **AFFECTED** | 6 kitchen items — lead frames + open-plan sight lines (`living_f000009` is the kitchen units) |
+| Living Room | **AFFECTED** | 6 kitchen items — lead frames + open-plan sight lines (`living_f000198` shows the open-plan kitchen-zone wall; `kitchen_f000495`/`f000954` cross-reference) |
 | Hallway | pass | — (its cupboard/console items are genuine) |
 | Bathroom | **AFFECTED** | 5 hallway coat/boiler-cupboard items (`bathroom_f000027/45/90` are all the cupboard) |
 | Bedroom 1 | **AFFECTED** | 8 en-suite items + 1 landing wallpaper (`bedroom1_b_f000000/27` are the en-suite) |
@@ -85,9 +85,13 @@ this figure is **reconstructed, not billed**:
 - **Price:** opus-4-8 $5/$25 per M in/out (June 2026, docs/06).
 
 Total ≈ **$3.32**; docs/06's identical reconstruction method undershot the
-actual bill by ~17% (schema injection + output estimate), so treat
-**~$3.30–3.90 (≈ £2.40–2.90)** as the range. Consistent with the £2–3/pass
-planning estimate; the next run records actuals.
+actual bill by ~17% (schema injection + output estimate). The undershoot is
+relative to the *billed* figure, so the corrected upper bound is
+$3.32 ÷ 0.83 ≈ $4.00: treat **~$3.30–4.00 (≈ £2.40–2.95)** as the range.
+Consistent with the £2–3/pass planning estimate; the next run records
+actuals (usage capture landed in `c2fdd7b`). This run's *billed* figure was
+not isolatable from the working session — reconstructed estimate stands
+until a console-billed number replaces it.
 
 ## Artefacts
 

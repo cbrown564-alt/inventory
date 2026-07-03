@@ -25,3 +25,7 @@ benchmarks/*/report-*/photos/
 
 # own-property eval fixture (personal data; local by default per docs/07)
 evals/fixtures/ownproperty/
+
+# own-property walkthrough source video (personal data, 1.3 GB) + Finder junk
+examples/videos/IMG_5512.MOV
+.DS_Store
