@@ -91,10 +91,23 @@ and compare our output against the human-written report.
 
 ## Milestone 4 — Comparison reports (v2 feature)
 
-- [ ] `compare`: align items across two `inventory.json` files (room + name embedding
-      match), produce paired-photo delta report
-- [ ] Wear-and-tear vs damage classification (prompted rubric, cites TDS guidance)
-- [ ] Grade-delta summary table → suggested deduction discussion sheet
+- [x] `compare`: align items across two `inventory.json` files (room + name embedding
+      match), produce paired-photo delta report — done 3 Jul 2026 with a deviation
+      from the plan's wording: alignment is room match + **lexical head-noun
+      matching** (reusing `merge.py`'s `_head_nouns`/containment, zero API calls);
+      the embedding match was **not built** — no fixture showed the synonym-rename
+      failure embeddings would solve, while descriptor renames are handled
+      lexically (see [`docs/08`](08-compare.md) §1). Numbering drift: docs/05
+      calls this comparison milestone "M3" — docs/05 "M3" = this docs/03 "M4".
+- [x] Wear-and-tear vs damage classification (prompted rubric, cites TDS guidance)
+      — text-only rubric (gpt-5.4-mini via the openai backend; offline →
+      `unclassified`), `--tenancy-months`/`--occupancy`/per-item age inputs;
+      per-class agreement vs the IMS sample clerk: cleaning 90.0, damage 100.0,
+      fair wear and tear 55.6, landlord 85.7 (overall 78.6, n=28, one rubric
+      iteration after v1's below-coin-flip FWT class — [`docs/08`](08-compare.md) §4)
+- [x] Grade-delta summary table → suggested deduction discussion sheet — item /
+      grades / Δ / classification / evidence refs; deliberately **no £ amounts**
+      (monetary valuation stays a non-goal; test-enforced — [`docs/08`](08-compare.md) §5)
 
 ## Milestone 5 — Productisation (only if wanted)
 

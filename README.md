@@ -90,6 +90,34 @@ Before spending API money, `homeinventory check capture/` runs the free local
 detector against a per-room checklist ("no radiator seen in Bedroom 2") to
 catch coverage gaps while you're still at the property.
 
+## Check-out comparison
+
+At the end of the tenancy, build a check-out report the same way, then
+compare it against the check-in:
+
+```sh
+homeinventory compare checkin-report/ checkout-report/ -o compare/ \
+    --tenancy-months 18 --occupancy "2 adults"
+```
+
+`compare/compare.html` (+ `.pdf`) is a **discussion sheet**: a grade-delta
+summary (item / check-in grade / check-out grade / Δ / classification /
+evidence refs), side-by-side check-in vs check-out photos per changed item
+(review-drawn defect boxes overlaid), and explicit "not located" / "new at
+check-out" tables. It deliberately contains **no £ amounts** — it frames the
+deduction conversation, it doesn't price it.
+
+Items are aligned lexically (room + head-noun match — zero API calls).
+Changed items are classified **fair wear and tear / damage / cleaning /
+landlord responsibility** by a text-only rubric grounded in TDS guidance
+(burden of proof on the landlord, damage must exceed fair wear and tear, no
+betterment, condition ≠ cleanliness). The rubric cites only the tenancy
+length / occupancy / item age you provide — anything else is "not provided".
+Costs well under 1p per compare with gpt-5.4-mini; `--backend offline` skips
+classification entirely (changes stay "unclassified"). Rubric agreement with
+a professional clerk's published check-out calls is measured per class in
+[`docs/08-compare.md`](docs/08-compare.md).
+
 ## How it works
 
 ```
@@ -127,6 +155,8 @@ photos / video → keyframes → SHA-256 manifest → YOLOE open-vocab detection
 - [`docs/04-backend-comparison.md`](docs/04-backend-comparison.md) — describe backends on first real footage
 - [`docs/05-review-experience.md`](docs/05-review-experience.md) — review UX design space (Levels 0–4) and what's built
 - [`docs/06-professional-report-benchmark.md`](docs/06-professional-report-benchmark.md) — pipeline vs a professional clerk's published report (M1)
+- [`docs/07-own-property-run.md`](docs/07-own-property-run.md) — first full own-property run (M2)
+- [`docs/08-compare.md`](docs/08-compare.md) — check-in vs check-out comparison: alignment, wear-vs-damage rubric, IMS agreement (M4)
 - [`evals/README.md`](evals/README.md) — fixture format and quality metrics
 
 ## Status
@@ -147,10 +177,12 @@ including claude), ~23 tok/s on an 8 GB GPU + 32 GB RAM box, a genuine
 **draft for review** rather than an unreviewed report. Dense models ≤4B fit
 the card but are too weak; MoE sidesteps that by riding system RAM for the
 weights.
-The v2 feature — check-in vs check-out **comparison reports**
-(`homeinventory compare`) — is scoped in the implementation plan,
-milestone 4; the defect-region annotations captured at review are its
-alignment anchors.
+**M4 (check-in vs check-out comparison) is shipped** — `homeinventory
+compare` aligns the two reports lexically, classifies deteriorations with a
+TDS-grounded wear-vs-damage rubric (per-class agreement vs a professional
+clerk's published check-out in [`docs/08`](docs/08-compare.md)), and renders
+a paired-photo grade-delta discussion sheet; the defect-region annotations
+captured at review are its evidence anchors.
 
 ## Disclaimer
 
