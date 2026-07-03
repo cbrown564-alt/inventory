@@ -79,6 +79,18 @@ and compare our output against the human-written report.
       (gemma-3-12b, qwen3.5:27b, gemma-3-4e4b) produced 0–1 items and are not
       yet viable; their failed runs are kept under `benchmarks/inventoryflex/`
       as evidence.
+- [x] Post-close follow-up (3 Jul 2026): **MoE breaks the dense-model
+      ceiling.** On the 8 GB reference card every *dense* local VLM fails
+      (≥9B spills and times out; ≤4B fits but is too weak), but the
+      Mixture-of-Experts `gemma4:26b` (25.8B, 8-of-128 experts active,
+      weights riding 32 GB system RAM) completes the full fixture at
+      ~23 tok/s and posts naming 97.4 / condition-exact 91.7 — best of any
+      backend including claude. Recall (72.0) and hallucination (23.8) remain
+      review-loop territory. New local recommendation:
+      `--backend local --model gemma4:26b` where system RAM allows;
+      `qwen3.5:9b` stays the lighter default. Run committed at
+      `benchmarks/inventoryflex/report-gemma4-26b/`; full analysis in
+      [`docs/04`](04-backend-comparison.md).
 - [x] Optional GPU path; YOLOE prompt-free mode evaluation vs text-prompt vocabulary
       (`evals/eval_detect.py`, `--detect-mode`, `--device`; see `evals/README.md`)
 

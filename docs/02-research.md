@@ -80,6 +80,19 @@ llama.cpp grammar (validity guaranteed, unlike prompt-begging); on 8 GB cards
 photos must go in small batches (≈6) to keep the KV cache resident — the
 pipeline's merge pass de-duplicates across batches.
 
+*July 2026 addendum*: empirical runs (docs/04) superseded the dense-model
+table above. On the 8 GB reference card every dense VLM fails this pipeline —
+the ≥9B models spill weights to system RAM and become timeout-bound
+(~15 tok/s), while the ≤4B models that fit are too weak for the strict
+structured-output contract (repetition loops, near-empty output, schema
+drift). **Mixture-of-Experts sidesteps the ceiling**: `gemma4:26b` (18 GB Q4,
+25.8B params, 8-of-128 experts active ≈ ~1.6B dense compute per token) keeps
+only the active-expert pathway + KV cache in VRAM, rides 32 GB system RAM for
+the weights, and at ~23 tok/s posts the best naming (97.4) and grading
+(91.7 exact) of any backend including claude — the recommended
+`--backend local` model where system RAM allows. `qwen3.5:9b` remains the
+lighter default where RAM is also constrained.
+
 ### June 2026 update — cheap closed VLMs and first empirical results
 
 Pricing per 1M tokens in/out ([OpenAI](https://openai.com/api/pricing/),

@@ -33,8 +33,10 @@ homeinventory build capture/ -o report/ \
 open report/inventory.html        # or inventory.pdf
 ```
 
-No API key? `--backend local` runs an open-weight VLM through Ollama
-(`ollama pull qwen3.5:9b`), or `--backend offline` skips AI description
+No API key? `--backend local` runs an open-weight VLM through Ollama —
+best quality: `--model gemma4:26b` (MoE; needs ~32 GB system RAM, see
+[`docs/04`](docs/04-backend-comparison.md)); lighter default:
+`ollama pull qwen3.5:9b`. Or `--backend offline` skips AI description
 entirely (YOLOE detection only). Cheaper API runs: `--model claude-haiku-4-5`,
 or `--backend openai` with `gpt-4.1-mini` / `gemini-3.1-flash-lite`.
 
@@ -107,8 +109,9 @@ photos / video → keyframes → SHA-256 manifest → YOLOE open-vocab detection
 - **Description** (pluggable): `claude` (Claude vision, structured JSON output,
   well under £1 per property with Haiku), `openai` (OpenAI or any
   OpenAI-compatible API — `--model gemini-3.1-flash-lite` routes to Google
-  automatically), `local` (open-weight VLM via Ollama, default qwen3.5:9b,
-  £0 per run), or `offline` (detector only).
+  automatically), `local` (open-weight VLM via Ollama, £0 per run — default
+  qwen3.5:9b, recommended gemma4:26b where system RAM allows), or `offline`
+  (detector only).
 - **Evidence**: EXIF capture times + SHA-256 of every original in
   `manifest.json` and the report appendix, so the photo set is tamper-evident.
 
