@@ -91,6 +91,15 @@ and compare our output against the human-written report.
       `qwen3.5:9b` stays the lighter default. Run committed at
       `benchmarks/inventoryflex/report-gemma4-26b/`; full analysis in
       [`docs/04`](04-backend-comparison.md).
+- [ ] gemma4:26b follow-up — recover defect recall lost to batch timeouts.
+      Defect recall (57.7 vs claude's 71.3) is gemma4's weakest metric and
+      the one most sensitive to the 5 timeout-skipped batches: defect detail
+      lives in the verbose tail of each batch, exactly what truncation cuts.
+      The 900s socket timeout is a hardcoded `LocalBackend` default
+      (`describe.py`, not passed by the CLI) — add an `HI_TIMEOUT` env knob
+      alongside the existing `HI_*` overrides, raise it, and re-run the
+      fixture; now that there's a local model worth waiting for, completing
+      those batches should be worth several points of defect recall.
 - [x] Optional GPU path; YOLOE prompt-free mode evaluation vs text-prompt vocabulary
       (`evals/eval_detect.py`, `--detect-mode`, `--device`; see `evals/README.md`)
 
