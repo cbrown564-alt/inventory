@@ -1,0 +1,53 @@
+{
+  "_source": "benchmarks/samples/ims-checkout.pdf — Inventory Management Solutions public sample check-out report (6pp; dilapidations table pp.4-5)",
+  "_method": "Hand-labelled 3 Jul 2026 from the clerk's own abbreviation calls (report p.3 abbreviations table). One entry per clerk call; multi-line table rows split into sub-entries (a/b/c). The 'observation' field is the clerk's comment with the liability codes STRIPPED and neutral abbreviations expanded, so the rubric never sees the answer. 'checkin' comes from the row's Description column ('as on inv').",
+  "_class_mapping": {
+    "fair_wear_and_tear": "FWT (fair wear and tear)",
+    "cleaning": "CC (cleaning charges — tenant cost), incl. NTC/NFC observations the clerk charged as CC",
+    "damage": "TC (tenant cost) / MI-TC (maintenance issue — tenant cost)",
+    "landlord_responsibility": "LL / MI-LC (maintenance issue — landlord cost) / LL-CC (pre-existing dirt recorded 'as inv', landlord's cleaning matter)"
+  },
+  "_exclusions": "Entries whose only call is '?' (confirmation required) or a neutral note carry clerk_class null with an exclude_reason and are not scored. Entries with a code AND a trailing '?' are scored with provisional=true.",
+  "_context": {
+    "tenancy_months": 8,
+    "tenancy_months_basis": "report p.3: tenancy from 03/01/2013; check-out photos (p.6) timestamped 11/09/2013",
+    "occupancy": null
+  },
+  "entries": [
+    {"id": "3", "room": "Front approach", "item": "Refuse — recycling boxes", "checkin": "Recycling boxes", "observation": "All recycling boxes full", "clerk_code": "CC", "clerk_class": "cleaning", "provisional": false},
+    {"id": "5", "room": "Front approach", "item": "Side garden", "checkin": "Laid to concrete and gravel", "observation": "Weeds and rubbish, recorded the same on the check-in inventory", "clerk_code": "MI-LC", "clerk_class": "landlord_responsibility", "provisional": false},
+    {"id": "7a", "room": "Front approach", "item": "Integral outbuilding — grey handle brush", "checkin": "Grey handle brush", "observation": "Not located at check-out", "clerk_code": "FWT", "clerk_class": "fair_wear_and_tear", "provisional": false},
+    {"id": "7b", "room": "Front approach", "item": "Integral outbuilding — swing bin", "checkin": "Swing bin", "observation": "Not located at check-out", "clerk_code": "FWT", "clerk_class": "fair_wear_and_tear", "provisional": false},
+    {"id": "8a", "room": "Front approach", "item": "Side outbuilding — toilet roll holder", "checkin": "1 blue metal toilet roll holder", "observation": "Not located at check-out", "clerk_code": "?", "clerk_class": null, "exclude_reason": "clerk made no call — confirmation required"},
+    {"id": "8b", "room": "Front approach", "item": "Side outbuilding — folding chairs", "checkin": "2 white metal folding chairs, below average (tired/worn/numerous marks) at check-in", "observation": "Not located at check-out", "clerk_code": "FWT", "clerk_class": "fair_wear_and_tear", "provisional": false},
+    {"id": "12", "room": "Rear garden", "item": "Refuse — wheelie bins", "checkin": "Green wheelie bin; grey wheelie bin", "observation": "Bins full", "clerk_code": "CC", "clerk_class": "cleaning", "provisional": false},
+    {"id": "19", "room": "Hall", "item": "Skirting", "checkin": "Cream gloss painted", "observation": "Dirty, recorded the same on the check-in inventory", "clerk_code": "LL-CC", "clerk_class": "landlord_responsibility", "provisional": false},
+    {"id": "20a", "room": "Hall", "item": "Flooring — carpet", "checkin": "Mottled beige carpet", "observation": "Cleaned by the tenant, remains greying", "clerk_code": "CC", "clerk_class": "cleaning", "provisional": false},
+    {"id": "20b", "room": "Hall", "item": "Coir doormat", "checkin": "Coir doormat", "observation": "Replaced with a ribbed doormat", "clerk_code": "FWT", "clerk_class": "fair_wear_and_tear", "provisional": false},
+    {"id": "28", "room": "Lounge", "item": "Skirting", "checkin": "Cream gloss painted", "observation": "Dirty in places, recorded the same on the check-in inventory", "clerk_code": "LL-CC", "clerk_class": "landlord_responsibility", "provisional": false},
+    {"id": "34", "room": "Lounge", "item": "Furniture — drop leaf dining table", "checkin": "1 mid wood effect veneered drop leaf dining table", "observation": "Noted as removed following check-in", "clerk_code": null, "clerk_class": null, "exclude_reason": "neutral note, no liability call"},
+    {"id": "36", "room": "Lounge", "item": "Miscellaneous — candle holder", "checkin": "1 white metal 4-candle holder; 4 glass candle votives on green base", "observation": "Not located at check-out", "clerk_code": "FWT", "clerk_class": "fair_wear_and_tear", "provisional": false},
+    {"id": "50", "room": "Kitchen", "item": "Skirting", "checkin": "White gloss painted", "observation": "Not thoroughly cleaned", "clerk_code": "CC", "clerk_class": "cleaning", "provisional": false},
+    {"id": "57", "room": "Kitchen", "item": "Kitchen units", "checkin": "1 unit with shelf and drawer over", "observation": "Chip to drawer veneer", "clerk_code": "FWT", "clerk_class": "fair_wear_and_tear", "provisional": false},
+    {"id": "58a", "room": "Kitchen", "item": "Fridge freezer", "checkin": "Fridge freezer", "observation": "Not thoroughly cleaned on top", "clerk_code": "CC", "clerk_class": "cleaning", "provisional": false},
+    {"id": "58b", "room": "Kitchen", "item": "Extractor hood", "checkin": "Extractor hood", "observation": "Outer casing not thoroughly cleaned", "clerk_code": "CC", "clerk_class": "cleaning", "provisional": false},
+    {"id": "58c", "room": "Kitchen", "item": "Oven", "checkin": "Oven", "observation": "Cleaned; a few burnt-on marks remain on the grill pan and oven bottom; appears better than at check-in", "clerk_code": "FWT", "clerk_class": "fair_wear_and_tear", "provisional": false},
+    {"id": "62a", "room": "Kitchen", "item": "Knife block", "checkin": "Wooden knife block with 5 knives", "observation": "Not located at check-out; tenant says possibly removed by accident", "clerk_code": "MI-TC", "clerk_class": "damage", "provisional": false},
+    {"id": "62b", "room": "Kitchen", "item": "Candelabra", "checkin": "1 white metal 4-point candelabra", "observation": "Not located at check-out; tenant does not recall it", "clerk_code": "?", "clerk_class": null, "exclude_reason": "clerk made no call — confirmation required"},
+    {"id": "66", "room": "Utility", "item": "Walls", "checkin": "Painted cream", "observation": "Door handle dent to left hand wall", "clerk_code": "FWT", "clerk_class": "fair_wear_and_tear", "provisional": false},
+    {"id": "67", "room": "Utility", "item": "Wall fixtures — shelf brackets", "checkin": "Shelves: 4 vertical brackets, 12 white metal brackets, 3 shelves", "observation": "6 white metal brackets not located, remainder as described; tenant does not recall the other brackets", "clerk_code": "?", "clerk_class": null, "exclude_reason": "clerk made no call — confirmation required"},
+    {"id": "68", "room": "Utility", "item": "Skirting", "checkin": "White gloss painted", "observation": "Dirty behind door", "clerk_code": "CC", "clerk_class": "cleaning", "provisional": false},
+    {"id": "71a", "room": "Utility", "item": "Washing machine — door seal", "checkin": "Washing machine; seal stained, recorded the same on the check-in inventory", "observation": "Seal stained, as at check-in", "clerk_code": "LL-CC", "clerk_class": "landlord_responsibility", "provisional": false},
+    {"id": "71b", "room": "Utility", "item": "Washing machine — detergent drawer", "checkin": "Washing machine", "observation": "Detergent drawer gunged with powder residue", "clerk_code": "CC", "clerk_class": "cleaning", "provisional": false},
+    {"id": "91", "room": "Bedroom 1", "item": "Flooring — carpet", "checkin": "Brown carpet", "observation": "Cleaned by the tenant; long grey line mark remains in doorway", "clerk_code": "CC", "clerk_class": "cleaning", "provisional": false},
+    {"id": "110", "room": "Landing cupboard", "item": "Miscellaneous — bedding left in cupboard", "checkin": "Not on the check-in inventory", "observation": "Selection of bedding left in cupboard, not on the inventory; tenant says it is not theirs", "clerk_code": "LL-CC?", "clerk_class": "landlord_responsibility", "provisional": true},
+    {"id": "111", "room": "Bedroom 2", "item": "Door", "checkin": "Cream gloss painted", "observation": "2 hooks added to reverse of door", "clerk_code": "FWT", "clerk_class": "fair_wear_and_tear", "provisional": false},
+    {"id": "114", "room": "Bedroom 2", "item": "Walls", "checkin": "Paper and painted cream", "observation": "Redecorated by the tenant (cream and one brown wall); receipt provided for reimbursement", "clerk_code": "MI-LC", "clerk_class": "landlord_responsibility", "provisional": false},
+    {"id": "118", "room": "Bedroom 2", "item": "Flooring — carpet", "checkin": "Brown carpet", "observation": "Rough patch/burn mark in doorway; tenant says it was existing", "clerk_code": "TC?", "clerk_class": "damage", "provisional": true},
+    {"id": "130", "room": "Bathroom", "item": "Ceiling light fitting", "checkin": "Lighting: rose, bulb, green/white shade", "observation": "Fitting replaced by electrician", "clerk_code": null, "clerk_class": null, "exclude_reason": "neutral note, no liability call"},
+    {"id": "131", "room": "Bathroom", "item": "Walls — tiling", "checkin": "Part painted cream, part beige tiled", "observation": "2 screws and 2 screw holes in tiles to left hand wall; tenant says pre-existing", "clerk_code": "?", "clerk_class": null, "exclude_reason": "clerk made no call — confirmation required"},
+    {"id": "133", "room": "Bathroom", "item": "Wall ornaments — framed mirror", "checkin": "Mosaic effect framed mirror", "observation": "Not located at check-out; tenant says it was never present; screws/holes left in tiles", "clerk_code": "?", "clerk_class": null, "exclude_reason": "clerk made no call — confirmation required (general condition note p.2 repeats the tenant's denial)"},
+    {"id": "139a", "room": "Bathroom", "item": "Toilet", "checkin": "Toilet", "observation": "Not thoroughly cleaned around rim", "clerk_code": "CC", "clerk_class": "cleaning", "provisional": false},
+    {"id": "139b", "room": "Bathroom", "item": "Toilet seat", "checkin": "Toilet", "observation": "Seat hinges loose", "clerk_code": "MI-LC", "clerk_class": "landlord_responsibility", "provisional": false}
+  ]
+}

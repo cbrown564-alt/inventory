@@ -202,12 +202,22 @@ repository: docs/02-research.md; docs/AI Dispute Evidence.pdf):
    at check-in: an item already old, worn or below average at check-in has
    little residual value, so further deterioration — or its loss — is
    usually fair wear and tear rather than a chargeable loss.
-3. Condition is not cleanliness (TDS): grade-relevant wear is physical;
+3. "Exceeds fair wear and tear" is a real threshold, not a label for any
+   deterioration (rubric v2 — added after the v1 IMS agreement run, see
+   docs/08-compare.md): minor localised marks of everyday use — small chips,
+   dents, scuffs, rub marks, screw/hook holes from ordinary picture- or
+   hook-hanging — that do not impair the item's function are fair wear and
+   tear, and the loss of low-value minor contents (brushes, bins, mats,
+   ornaments) with no meaningful residual value is likewise recorded as fair
+   wear and tear rather than a chargeable loss. Reserve "damage" for what
+   reasonable use cannot explain: breakage, burns, significant staining,
+   unauthorised alteration, or loss of items of real value.
+4. Condition is not cleanliness (TDS): grade-relevant wear is physical;
    removable dirt, limescale, grease or marks that cleaning would lift are
    "cleaning".
-4. Fair wear scales with tenancy length and occupancy: a longer tenancy and
+5. Fair wear scales with tenancy length and occupancy: a longer tenancy and
    heavier occupancy justify more wear as "fair".
-5. Use ONLY the tenancy length, occupancy and item age you are given. Where
+6. Use ONLY the tenancy length, occupancy and item age you are given. Where
    a value reads "not provided", you must not assume one and must not cite
    it in the rationale.
 
