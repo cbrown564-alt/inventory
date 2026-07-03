@@ -141,9 +141,12 @@ parity) is closed** — all three backends are scored against the gold fixture
 in [`docs/04`](docs/04-backend-comparison.md): `claude` is the quality
 ceiling (hallucination 2.8%, condition-exact 93%), `openai` gpt-5.4-mini is
 the cheap-iteration pick (recall 90.7% but ~5× claude's hallucination), and
-`local` qwen3.5:9b is the £0 path — naming and grading competitive with the
-API tier but ~16 pts lower recall and ~23 pts higher hallucination, so it's a
-**draft for review**, not an unreviewed report.
+the `local` backend has two viable £0 paths: `qwen3.5:9b` (lighter), or the
+**MoE `gemma4:26b`** — naming 97.4% and grading 91.7% (best of any backend
+including claude), ~23 tok/s on an 8 GB GPU + 32 GB RAM box, a genuine
+**draft for review** rather than an unreviewed report. Dense models ≤4B fit
+the card but are too weak; MoE sidesteps that by riding system RAM for the
+weights.
 The v2 feature — check-in vs check-out **comparison reports**
 (`homeinventory compare`) — is scoped in the implementation plan,
 milestone 4; the defect-region annotations captured at review are its

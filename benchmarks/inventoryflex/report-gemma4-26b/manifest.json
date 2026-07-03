@@ -1,0 +1,1734 @@
+{
+  "generated_at": "2026-07-02T18:04:28+00:00",
+  "algorithm": "sha256",
+  "files": [
+    {
+      "photo_id": "P001",
+      "room": "Balcony",
+      "file": "Balcony\\p33_i00.jpg",
+      "sha256": "135fcdbd152e7b066c04f0571a52f23bdf9c68fc78e23f52db8fe8352efb55d6",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 99990
+    },
+    {
+      "photo_id": "P002",
+      "room": "Balcony",
+      "file": "Balcony\\p33_i01.jpg",
+      "sha256": "be12afd8598da47501e6e9caf93c2c20c6c1e619548bd03935a56f7e47509931",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 128787
+    },
+    {
+      "photo_id": "P003",
+      "room": "Balcony",
+      "file": "Balcony\\p33_i02.jpg",
+      "sha256": "878a29c0f25abcb7d00133c17ee2e7bfb20daf2945d828cc2c29b6a5b30b5660",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 159216
+    },
+    {
+      "photo_id": "P004",
+      "room": "Balcony",
+      "file": "Balcony\\p33_i03.jpg",
+      "sha256": "9f0ef03ad49863bd2cfade885c6a8fb390bc74b9746178721568be1b4acc6265",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 162461
+    },
+    {
+      "photo_id": "P005",
+      "room": "Balcony",
+      "file": "Balcony\\p33_i04.jpg",
+      "sha256": "cd7dcc472d143f504d32f79165ed7f2f4eb16baafccf22e7c39b48a1f381b0bf",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 117089
+    },
+    {
+      "photo_id": "P006",
+      "room": "Balcony",
+      "file": "Balcony\\p33_i05.jpg",
+      "sha256": "0a8fc81d05da1ece47e1092eb05ccb676ee47f1b29a7113842e6f0092a45bb2f",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 163588
+    },
+    {
+      "photo_id": "P007",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i00.jpg",
+      "sha256": "8df198a9fdc1c75e97b9f362c3cfe115f8e47fea1b6d0ce2fe9ef2d4b702de2a",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 81773
+    },
+    {
+      "photo_id": "P008",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i01.jpg",
+      "sha256": "e3365c7773d48e2f267521322ddcc82763fa0a906933c05fc4c3ec963598f2e5",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 79042
+    },
+    {
+      "photo_id": "P009",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i02.jpg",
+      "sha256": "7effa65fe2c6751bd30e121bd93e80176dd08864c4e69b1273b2b6621a005f36",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 134215
+    },
+    {
+      "photo_id": "P010",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i03.jpg",
+      "sha256": "a94e64d694704199233bf986c48e6b6824b26b25ad5c3e93da43c475a6d4b2a8",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 48560
+    },
+    {
+      "photo_id": "P011",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i04.jpg",
+      "sha256": "8a5359b8e444e08da8cc8c6e4b6d93d9d5f65e7d1bf878ffdfb5dd154496a488",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 30418
+    },
+    {
+      "photo_id": "P012",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i05.jpg",
+      "sha256": "1ef57fe5f0624eeecb3603092a874dff0f87d491d38cbe1dbe79524ffd8f47e3",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 51016
+    },
+    {
+      "photo_id": "P013",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i06.jpg",
+      "sha256": "e542bcb5beeb8f569e453244e6ef1e22476c6ca8b659e8c1707d3a08c94aecb0",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 34381
+    },
+    {
+      "photo_id": "P014",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i07.jpg",
+      "sha256": "957e0762cabd0cad08a21322843a648a5150f4b23b7547e569a9576c22e2c439",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 78714
+    },
+    {
+      "photo_id": "P015",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i08.jpg",
+      "sha256": "d5063c139059b7aa3498489f58ac644def68d116d36b6437a76e09cbf169d13d",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 130522
+    },
+    {
+      "photo_id": "P016",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i09.jpg",
+      "sha256": "dc4453434a374e395eeda88a7e88533774a908a6cc61a61b5fcdd89364480f63",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 104540
+    },
+    {
+      "photo_id": "P017",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i10.jpg",
+      "sha256": "5a53114e168df43d6f15007863cd6f328bb9532506164c0edb3f8841cb1b36e2",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 57774
+    },
+    {
+      "photo_id": "P018",
+      "room": "Bathroom",
+      "file": "Bathroom\\p14_i11.jpg",
+      "sha256": "623ba0d1b5fddfc23311a6d9f2e17509f7dad8aa5f3ab0030d16eb3091547b60",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 53098
+    },
+    {
+      "photo_id": "P019",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i00.jpg",
+      "sha256": "7d3482e25b92e58dbc267eee386d4a0e8e6d4c9d8ee2e102fb0e5434de9d0218",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 42238
+    },
+    {
+      "photo_id": "P020",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i01.jpg",
+      "sha256": "9028752f1fecdd65d2fd93e9dc17a92244c54bb2d79056bb9d0890b0fffaf932",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 49446
+    },
+    {
+      "photo_id": "P021",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i02.jpg",
+      "sha256": "266cc82444bc3c9a2c394c7aa6580ac9755cf779201c2efe05934632985a74c9",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 44987
+    },
+    {
+      "photo_id": "P022",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i03.jpg",
+      "sha256": "4776d1466446392cb9d5d77222b73cafbb5511a87efa9cf808423da9a13c4362",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 41418
+    },
+    {
+      "photo_id": "P023",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i04.jpg",
+      "sha256": "df083f6fa02d700264885056bc19a5253584cce11824c49307369027a91f2205",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 32505
+    },
+    {
+      "photo_id": "P024",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i05.jpg",
+      "sha256": "4c85399e255b194a64ecb8756d3ac75d86f974d17fd8cf6995140615ef4724ba",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 40296
+    },
+    {
+      "photo_id": "P025",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i06.jpg",
+      "sha256": "eda6a8fa31fb7599bcaa64f68b012d58d014639cb193c38be3856b3c670d12a0",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 54522
+    },
+    {
+      "photo_id": "P026",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i07.jpg",
+      "sha256": "a65a372f7a22bec768c1c126423208b7ffa50ab2e1287bede45714a4cb9b9684",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 49318
+    },
+    {
+      "photo_id": "P027",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i08.jpg",
+      "sha256": "b7956e4846eac96679a1089d5823dab9d81e4287bce7dc2c7f41d92302554723",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 99712
+    },
+    {
+      "photo_id": "P028",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i09.jpg",
+      "sha256": "4ccc2946278bb5457d566a3fc8c6e23783a1835cd2e1447eb8cb22e797750a4a",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 91766
+    },
+    {
+      "photo_id": "P029",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i10.jpg",
+      "sha256": "deb890759d2369d5c9df24778c0c281eba297d8c524d13fe8687a1f46bb7dfa9",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 94101
+    },
+    {
+      "photo_id": "P030",
+      "room": "Bathroom",
+      "file": "Bathroom\\p15_i11.jpg",
+      "sha256": "d7b9a4e0121f02911ee381a0bdc00f68a168e34d213332ef7970b99af90f7a2b",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 81540
+    },
+    {
+      "photo_id": "P031",
+      "room": "Bathroom",
+      "file": "Bathroom\\p16_i00.jpg",
+      "sha256": "78963e74b7502802f4276de28c997b9ec98f246c96673c5341615fbd221c4ca0",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 51043
+    },
+    {
+      "photo_id": "P032",
+      "room": "Bathroom",
+      "file": "Bathroom\\p16_i01.jpg",
+      "sha256": "5074137d4ced9cba82df7979f1463ed458d1bf01fe7e9d2fdb9fca92fc69ef37",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 92326
+    },
+    {
+      "photo_id": "P033",
+      "room": "Bathroom",
+      "file": "Bathroom\\p16_i02.jpg",
+      "sha256": "629d13694da3aaa6c6b8effb5e8c1220adcb7139a0513ea724bfcb9cdc2eb4fe",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 94020
+    },
+    {
+      "photo_id": "P034",
+      "room": "Bedroom",
+      "file": "Bedroom\\p18_i00.jpg",
+      "sha256": "06067c9f4dd791dc2d431e530603a8f7f916e8fca598853b97e1f6b06cc36e95",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 60962
+    },
+    {
+      "photo_id": "P035",
+      "room": "Bedroom",
+      "file": "Bedroom\\p18_i01.jpg",
+      "sha256": "eb5b2da82c87903fcdaf4262ce0f4c7b7373d4ed76ba7a98b72307dcb6fc8998",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 50021
+    },
+    {
+      "photo_id": "P036",
+      "room": "Bedroom",
+      "file": "Bedroom\\p18_i02.jpg",
+      "sha256": "4ff9fe38d5943d079d85c1133c37f1964d01a19557b596d89dde587995aaad5b",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 41248
+    },
+    {
+      "photo_id": "P037",
+      "room": "Bedroom",
+      "file": "Bedroom\\p18_i03.jpg",
+      "sha256": "cb16b70480fc986dcb05c74a61b94a0ec3b2822ad72a6d11ddcce47ac5aa19a2",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 46777
+    },
+    {
+      "photo_id": "P038",
+      "room": "Bedroom",
+      "file": "Bedroom\\p18_i04.jpg",
+      "sha256": "27a591968d21f86c56e46da4aea30bc62bef5ab90589b0056e9fecb61f277c71",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 76163
+    },
+    {
+      "photo_id": "P039",
+      "room": "Bedroom",
+      "file": "Bedroom\\p18_i05.jpg",
+      "sha256": "e1fcfebe6e05c334eb353aedc062362707f8b4d6789fa2e1d22878108fb9b821",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 63503
+    },
+    {
+      "photo_id": "P040",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i00.jpg",
+      "sha256": "1154ff3ac21bbc46dd78f1133babe451fa8064328719dcfa14ecb2da2a982ee2",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 78153
+    },
+    {
+      "photo_id": "P041",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i01.jpg",
+      "sha256": "17072206abb766062cac27c998b56f0b653e8fdf57fefcc34f3b94236a7585da",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 79714
+    },
+    {
+      "photo_id": "P042",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i02.jpg",
+      "sha256": "feb254ac68e8d550fb954a075e48ddeec3da4827f694b811a37d9873324fbb2d",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 80729
+    },
+    {
+      "photo_id": "P043",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i03.jpg",
+      "sha256": "8b054b23cf5497f83dc8c4069a65e7fb0a605d5a7e6e0b601116ec9c3bc1e2a2",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 25293
+    },
+    {
+      "photo_id": "P044",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i04.jpg",
+      "sha256": "e66ded1d96ad19f6c637f543699f2f20e3c4428c343ae44b3956ec3abd20f240",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 69051
+    },
+    {
+      "photo_id": "P045",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i05.jpg",
+      "sha256": "d1def24664826edc81c9a202d2e8636185f848d273d684dfbda52271baf29703",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 22376
+    },
+    {
+      "photo_id": "P046",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i06.jpg",
+      "sha256": "94767cec4da28d7d9ad2d0b7145b2750623a4a27d751527e38c4a75097036b43",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 36333
+    },
+    {
+      "photo_id": "P047",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i07.jpg",
+      "sha256": "75f1e50f8be7d17ded32b46452c506a1ef3ae91918905b911d942e5a7dca9baf",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 77480
+    },
+    {
+      "photo_id": "P048",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i08.jpg",
+      "sha256": "06cbd2582b01b3e9e013fd26ee5d78440fb9d58bf8013d28fd0eaaaac7805f17",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 32919
+    },
+    {
+      "photo_id": "P049",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i09.jpg",
+      "sha256": "93ddaad61628169d37f2e9efd4ee34772408044eaaa7e48c51c15404a8e90555",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 34432
+    },
+    {
+      "photo_id": "P050",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i10.jpg",
+      "sha256": "9c087c14f042b4b533c57f1fa6653e5bf78d6498999bbfa1feee7f34d74dfd7f",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 31364
+    },
+    {
+      "photo_id": "P051",
+      "room": "Bedroom",
+      "file": "Bedroom\\p19_i11.jpg",
+      "sha256": "3bf4dc946c91aee393e8e4574bbab4d7331c75067564c058f903acfd5fa817ef",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 29784
+    },
+    {
+      "photo_id": "P052",
+      "room": "Bedroom",
+      "file": "Bedroom\\p20_i00.jpg",
+      "sha256": "01c5a7c72fc53c0d3be3b892448ce096f0a7fe9d80dfc907c6207e1c6fed75bd",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 19073
+    },
+    {
+      "photo_id": "P053",
+      "room": "Bedroom",
+      "file": "Bedroom\\p20_i01.jpg",
+      "sha256": "fa64376db38442d50d3cdc0f5291f4312037497a9fb4efafd8383827441da18a",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 47756
+    },
+    {
+      "photo_id": "P054",
+      "room": "Bedroom",
+      "file": "Bedroom\\p20_i02.jpg",
+      "sha256": "994b086a2a7f2ad608030379f89d9186d41e5e842756496cd36c9d0adcdbd2e4",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 110402
+    },
+    {
+      "photo_id": "P055",
+      "room": "Bedroom",
+      "file": "Bedroom\\p20_i03.jpg",
+      "sha256": "c0c4c9429052762a047c1e5843f7fea5fd2464ccdfbcd4ad25b553646e8863bc",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 128548
+    },
+    {
+      "photo_id": "P056",
+      "room": "Bedroom",
+      "file": "Bedroom\\p20_i04.jpg",
+      "sha256": "df55ae8f7cf323f9dcadd01294b530acd3ae78ae82b19eaa9957b49fb2d8e764",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 134746
+    },
+    {
+      "photo_id": "P057",
+      "room": "Bedroom",
+      "file": "Bedroom\\p20_i05.jpg",
+      "sha256": "d8cd842fd0545ca8b3af74b2ac76ab9c75f2ffd67acf4613e138a406b9e19a77",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 45061
+    },
+    {
+      "photo_id": "P058",
+      "room": "Bedroom",
+      "file": "Bedroom\\p20_i06.jpg",
+      "sha256": "db72393cfb76147f0cc583c7b30d992a2472bd12b6d4f3ca21e75074b65ba454",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 57954
+    },
+    {
+      "photo_id": "P059",
+      "room": "Bedroom",
+      "file": "Bedroom\\p20_i07.jpg",
+      "sha256": "2327b6e418a71f6959abeaa37d169477723a4972ae25f0794bf25883a5983142",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 61195
+    },
+    {
+      "photo_id": "P060",
+      "room": "Bedroom",
+      "file": "Bedroom\\p20_i08.jpg",
+      "sha256": "33733df4acb19ba294ea66c03708a25c41e3827cff00f7f5001a51c8615a3177",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 33201
+    },
+    {
+      "photo_id": "P061",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i00.jpg",
+      "sha256": "2b55e90f3840532fb684373c9c1b55afc0e1575d98ebaaf38c24ef7a61723a8d",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 29323
+    },
+    {
+      "photo_id": "P062",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i01.jpg",
+      "sha256": "10c959c518e90328288828848b8aa890ffa69d4b1dfe55b252064a8892493ab8",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 17647
+    },
+    {
+      "photo_id": "P063",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i02.jpg",
+      "sha256": "d14631af3b22792e5cbf4e88cd4a51d6f48dcd0854de58f6e8243b9ee72cd1ad",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 25040
+    },
+    {
+      "photo_id": "P064",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i03.jpg",
+      "sha256": "1bd85c11240e37960f0fdd5cf7a2f824c349444a92b1450b0ec2dc325b888fc3",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 31952
+    },
+    {
+      "photo_id": "P065",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i04.jpg",
+      "sha256": "6fa04ea2cd161a9eec8b5036f5881dcc155b13be14648159c12992935156fe26",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 70082
+    },
+    {
+      "photo_id": "P066",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i05.jpg",
+      "sha256": "539b28af0a71fafa65049b08d89e6660ac8d2d17af8ffa88e5b172cb28eab207",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 47642
+    },
+    {
+      "photo_id": "P067",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i06.jpg",
+      "sha256": "f6fd33be7b4240ffb57d5ab5e3a20a0097d4a1289d1ef42ab8b4b0b417d08653",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 46195
+    },
+    {
+      "photo_id": "P068",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i07.jpg",
+      "sha256": "1bda6c6244bbb93b0c9a3bbcaa360014a51116a0950851a248732b0e706f9ea3",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 28955
+    },
+    {
+      "photo_id": "P069",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i08.jpg",
+      "sha256": "f809a217708f55b57ed78ad80b6757ebdb6bca2f707471c20fa574b4c1a70d51",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 30575
+    },
+    {
+      "photo_id": "P070",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i09.jpg",
+      "sha256": "fb341f6633b43b2974c58dbacc5ca46de4b484c3cf93bc01b6bec8119b64e5f1",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 26427
+    },
+    {
+      "photo_id": "P071",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i10.jpg",
+      "sha256": "7f444d96156b8c74817690ef5b4b434803e135873a9e4044604d2cb0b2adb770",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 29384
+    },
+    {
+      "photo_id": "P072",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i11.jpg",
+      "sha256": "d6c090d23eea8e119e231d7f0e8d156a4870f3e5922a6572dd6074826941e3f8",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 49066
+    },
+    {
+      "photo_id": "P073",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i00.jpg",
+      "sha256": "fecb1003df7cb6cd96c3345baba9f6c580b0292a972593131ee798faed1ad50e",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 79366
+    },
+    {
+      "photo_id": "P074",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i01.jpg",
+      "sha256": "ae878b9f3cd23ff6d499d0d784e01b7a5a1d597273ea27d36803490f3143f451",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 91578
+    },
+    {
+      "photo_id": "P075",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i02.jpg",
+      "sha256": "88e8c566da3050e55b1bea8ec55b567c1330f9c505b9f5737026b363afea5444",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 62731
+    },
+    {
+      "photo_id": "P076",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i03.jpg",
+      "sha256": "893ef261c62fffc2b018276e83103f105f26573fa06bb6dfc4d120d4f2ea1489",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 92731
+    },
+    {
+      "photo_id": "P077",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i04.jpg",
+      "sha256": "7ec609dd7688812cb7591ed88b43c3b4f0a77b4e45c7334635b68fdb1ba6918a",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 68349
+    },
+    {
+      "photo_id": "P078",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i05.jpg",
+      "sha256": "8e7bb8c6eba5f8b8117ea0e9e25b20619e8e848e643f67d0c9cf3ba30217ad56",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 57439
+    },
+    {
+      "photo_id": "P079",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i06.jpg",
+      "sha256": "dad0c3ec538512790090dcf2f84e7dc8ca99d289b380bf677f5b0edeeba7fe12",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 72317
+    },
+    {
+      "photo_id": "P080",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i07.jpg",
+      "sha256": "d23471cb4b23d6b626c8df498ebdf5c35375fb7ce90105a30e6ddc3a21dee4f3",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 158970
+    },
+    {
+      "photo_id": "P081",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i08.jpg",
+      "sha256": "d660a315ced1f057da7325712e1a97694e40175dfc93dee8bc6a81d2d47d1c4c",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 35134
+    },
+    {
+      "photo_id": "P082",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i09.jpg",
+      "sha256": "dfcb9ebfb820167ff4b559c57bf56d02bac5c519016aa621e31771bef32fc74c",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 69756
+    },
+    {
+      "photo_id": "P083",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i10.jpg",
+      "sha256": "4521fa6196e901077119ea02136f1dafcad5b9af1e93afe6e2ef5353565b2b2b",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 32291
+    },
+    {
+      "photo_id": "P084",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p07_i11.jpg",
+      "sha256": "056f0ffe975f229e3051ac9f0764da67b2c72ddbbd4bc1f93b93bedc7673902e",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 40691
+    },
+    {
+      "photo_id": "P085",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p08_i00.jpg",
+      "sha256": "f80190badf5dd2ae65be505c05532fe0694ecca65159369d29aa38639e37a1e4",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 41236
+    },
+    {
+      "photo_id": "P086",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p08_i01.jpg",
+      "sha256": "9c59308cdc6c487844cb38abc8053384c7539dd89b671998fc56d82a770311a4",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 46921
+    },
+    {
+      "photo_id": "P087",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p08_i02.jpg",
+      "sha256": "e53f98ce9f5d32cfea3eeabc7f9b50c2f20a5c4e7ca89ad74091335c8cfc18dc",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 32071
+    },
+    {
+      "photo_id": "P088",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i00.jpg",
+      "sha256": "4762e618f7617268712825c6ce5aa63505a16a1be44a344d2628cb856eda143d",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 89507
+    },
+    {
+      "photo_id": "P089",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i01.jpg",
+      "sha256": "d4b0644291c940d762beb3e8c05fb0855ccc739a8dcd872b84973e9d412bca77",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 85933
+    },
+    {
+      "photo_id": "P090",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i02.jpg",
+      "sha256": "de3240f7529089a3af6e0e8669c575a1e3b92a739b117e33e7efdff0ce178965",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 59511
+    },
+    {
+      "photo_id": "P091",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i03.jpg",
+      "sha256": "789b901690059f408ce82fb09d95c708d4bb7ee86991b77774e86a1f228133be",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 73390
+    },
+    {
+      "photo_id": "P092",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i04.jpg",
+      "sha256": "6aa8daacd81434e502c09004a754d12cc7381c63d722194a6e471aaf1acea317",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 76610
+    },
+    {
+      "photo_id": "P093",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i05.jpg",
+      "sha256": "a815d506d0040a7e1ef187ab47baa630fc738d09768b212bf0b501d352a2aacc",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 77084
+    },
+    {
+      "photo_id": "P094",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i06.jpg",
+      "sha256": "7d51b79e00926e0147a99ac99b36148b83b806bf0ad99294da763ff5b2447647",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 65064
+    },
+    {
+      "photo_id": "P095",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i07.jpg",
+      "sha256": "e222249763ded6833a0c2145b606442b2baed25dfff8de0b897196d429ac5ce7",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 77175
+    },
+    {
+      "photo_id": "P096",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i08.jpg",
+      "sha256": "bea30076264b89bb9debc9edfffd200848d40a309de68fc85824a64968417aa7",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 113178
+    },
+    {
+      "photo_id": "P097",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i09.jpg",
+      "sha256": "d188cda2bc4c0b8ffa7ba2baebb78971b4afd571bec45080a69f2767e81530c6",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 126503
+    },
+    {
+      "photo_id": "P098",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i10.jpg",
+      "sha256": "2bf0f77a1b3d714325462bd71bb39d4d905315fe0f4a3605988a0fe31bcd55c9",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 136647
+    },
+    {
+      "photo_id": "P099",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p25_i11.jpg",
+      "sha256": "52991c18f66146d6025b3d4d6f80e76061c62c4de1e0e253efb386142d504573",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 68328
+    },
+    {
+      "photo_id": "P100",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i00.jpg",
+      "sha256": "a08d9a63a9bc59fc1c21eb3ce89bf6c9ceb0e6f22f0245a73dcff3b86f5b6302",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 72470
+    },
+    {
+      "photo_id": "P101",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i01.jpg",
+      "sha256": "747e4d1f2ed9cb5eb593402a4c5ff52a59f771e83d7581c12381442f14ea35b2",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 90095
+    },
+    {
+      "photo_id": "P102",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i02.jpg",
+      "sha256": "8069657033c1af953a0e0cf901b74c737bd2096874a4e9fde0d351787ff264aa",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 80549
+    },
+    {
+      "photo_id": "P103",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i03.jpg",
+      "sha256": "971b7018e7fe1d7d14886aeb0f679771dd34b8685cca871fe50c921588fef583",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 91775
+    },
+    {
+      "photo_id": "P104",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i04.jpg",
+      "sha256": "8025dafbdb9f5a7401ace31f6d908e9b839bf76063f52559b0f4b334ec1321b1",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 103944
+    },
+    {
+      "photo_id": "P105",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i05.jpg",
+      "sha256": "112deb819b2abe889f7e1b6b349be4544dcb56704bfaa8a4a283a172c840d41f",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 98162
+    },
+    {
+      "photo_id": "P106",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i06.jpg",
+      "sha256": "98615ee2110e908b59e47e89b3f480f67dfa49741731d2ff03b8baea12ab8acf",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 54448
+    },
+    {
+      "photo_id": "P107",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i07.jpg",
+      "sha256": "04b54862ae3418fd391959cd025f91b3c85a0c07622287a0c5f1b02e2ccbb5d8",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 79042
+    },
+    {
+      "photo_id": "P108",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i08.jpg",
+      "sha256": "b5a706a70bf0707dbe5fbda4832353fa7c414d346374b603c1d2e15362674a6c",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 44520
+    },
+    {
+      "photo_id": "P109",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i09.jpg",
+      "sha256": "3b175b9211fdc614f049fef057a7536fdbe5d1c7e9f788861e64e0f4eec9ed7f",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 72461
+    },
+    {
+      "photo_id": "P110",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i10.jpg",
+      "sha256": "601a3615b40a4cb586d01746fe3c8a328dbc3328fa5b4e9620f4c54799fda6c9",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 119568
+    },
+    {
+      "photo_id": "P111",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p26_i11.jpg",
+      "sha256": "11fa91abfba2606d593a42ea95694465e959d2d61248f49bf96eb3cb4cd48f7c",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 74578
+    },
+    {
+      "photo_id": "P112",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i00.jpg",
+      "sha256": "73958cf1d278404b4a00a89abb8bd2acc8ec33308106f9906b3dfed5de14e15a",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 59265
+    },
+    {
+      "photo_id": "P113",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i01.jpg",
+      "sha256": "bd8ef21d0cdbf6153299a53c68b7ee770ff3f5d5099d8033095e86cfc5b36eb3",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 61665
+    },
+    {
+      "photo_id": "P114",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i02.jpg",
+      "sha256": "262d12ef8e21c6ac19b2ccd0cee34349571248b2cd06328c890f231688aa27d4",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 48943
+    },
+    {
+      "photo_id": "P115",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i03.jpg",
+      "sha256": "3d476230aa8997e6dbc6d6c1b741bcc88169e2180592b9615ea8b06eea30ebf0",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 66200
+    },
+    {
+      "photo_id": "P116",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i04.jpg",
+      "sha256": "7cb423371f0d0d872c816e13f6078e5b36f817972a3742b55f5fb0624d1fdcbd",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 75343
+    },
+    {
+      "photo_id": "P117",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i05.jpg",
+      "sha256": "7639fd0d69f43e61e4893595c212cfdc7c33821f80792ad937870dc0870ac143",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 133219
+    },
+    {
+      "photo_id": "P118",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i06.jpg",
+      "sha256": "c523c8d4bd4bd0c3d14eb92040881d4bc99770d273a9580b3346a628c787b5a1",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 61691
+    },
+    {
+      "photo_id": "P119",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i07.jpg",
+      "sha256": "02600ca51582e603c96b65d9ed7b7e5db5942ca869e19b11b710a936dd0bc42d",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 45987
+    },
+    {
+      "photo_id": "P120",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i08.jpg",
+      "sha256": "51517412d5ba3b52c27fc5b6d469f4ce62e4aabf0e8edb8d698cca0b78a22f3b",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 33842
+    },
+    {
+      "photo_id": "P121",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i09.jpg",
+      "sha256": "b80d5f0641fa8647aa3561082c9b6d45e4b2ab09121c4e43f81c7ba0d6908621",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 93529
+    },
+    {
+      "photo_id": "P122",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i10.jpg",
+      "sha256": "2725f6353891ffc9f5cb16df01949d42898bad2e167f8ed30107a02ba497f9de",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 111438
+    },
+    {
+      "photo_id": "P123",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p27_i11.jpg",
+      "sha256": "6ce1f8ef03342e0f8307615e41c199db6a60b1363fd5493015cee80c3906762a",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 121860
+    },
+    {
+      "photo_id": "P124",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i00.jpg",
+      "sha256": "983cb19e2946f916f4c0d5ee3c5ba7d6a601d2587ef8047ee0c0e5750fde0809",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 109201
+    },
+    {
+      "photo_id": "P125",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i01.jpg",
+      "sha256": "8f248b7aa6a2d09b3ab11b2fd68301cf69c5ab90fac6e27421dc1b2e4fd44fcd",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 104687
+    },
+    {
+      "photo_id": "P126",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i02.jpg",
+      "sha256": "4042b2afa89cffa840554c22a314ff2045ce8e1068f419b385bac826091aad6e",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 50865
+    },
+    {
+      "photo_id": "P127",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i03.jpg",
+      "sha256": "d76b52f232c256532dda74dd379a0d44bde2119271120306a422ff9009ed70e2",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 55975
+    },
+    {
+      "photo_id": "P128",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i04.jpg",
+      "sha256": "ce9d1370dc215e5a20d080674c16041522bd3e0405b4152de44c85165df27685",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 46105
+    },
+    {
+      "photo_id": "P129",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i05.jpg",
+      "sha256": "65e280a226f4f60d2688c0e18efae799228fecd51b4b818622f669d7958dbab3",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 50130
+    },
+    {
+      "photo_id": "P130",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i06.jpg",
+      "sha256": "83b468fc80c1fe4bc403bb6ea585f6887bd9ebc1da9a689648af35b264b2f7bc",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 33832
+    },
+    {
+      "photo_id": "P131",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i07.jpg",
+      "sha256": "014d21b65e9d07c7979a8802f45a610db1c1a385fba5caf17ddaba4fa783c03f",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 48069
+    },
+    {
+      "photo_id": "P132",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i08.jpg",
+      "sha256": "e931a9542082bc93cfde5b14a6b51791224b92d24c7a187d73bedc7a7da95bd6",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 59005
+    },
+    {
+      "photo_id": "P133",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i09.jpg",
+      "sha256": "11d9e356fdc6220dd6ff690dd76433c1392d686815f56efd4fb0cc71846bdcc4",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 37653
+    },
+    {
+      "photo_id": "P134",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i10.jpg",
+      "sha256": "cdc8a52b07e6e58945912219e776e3f5e6e9d7b0c8e3c95c33b62fb4bde7d900",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 135848
+    },
+    {
+      "photo_id": "P135",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p28_i11.jpg",
+      "sha256": "483dafc1bbeb7fefdc0f6c90120aa0388628f6f3846b20b1827bed6558d47428",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 62781
+    },
+    {
+      "photo_id": "P136",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i00.jpg",
+      "sha256": "2271a2e9bf1c464162e470d64e0fb63b6a6b6b7e7aef887fd1ee9b73c6d598e0",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 51836
+    },
+    {
+      "photo_id": "P137",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i01.jpg",
+      "sha256": "0c1208bb1016846f55b9024739887db03d030f66acacbd2428ecc60029a334ff",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 38826
+    },
+    {
+      "photo_id": "P138",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i02.jpg",
+      "sha256": "149664e6ca8de848b9cdeb112e806543e90267fc307e35e1cc7871dbd2e86e11",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 19098
+    },
+    {
+      "photo_id": "P139",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i03.jpg",
+      "sha256": "07f377427bb78e607114a470c143efbdf62ad7bca96940b92a11a3465ade6bf4",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 40685
+    },
+    {
+      "photo_id": "P140",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i04.jpg",
+      "sha256": "4a135969d71948089c4483272c44b5dae93430403427f4df4ade716c9b66f8d3",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 22254
+    },
+    {
+      "photo_id": "P141",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i05.jpg",
+      "sha256": "28672e0b17bc73a5afed07c8d629feb4d16a1201e4e42872864bd50f707a4eea",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 70198
+    },
+    {
+      "photo_id": "P142",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i06.jpg",
+      "sha256": "ba83217bf72e4ef04a8038ea60a77d5f1723dc9629d9df051b1d0c14609f8684",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 70485
+    },
+    {
+      "photo_id": "P143",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i07.jpg",
+      "sha256": "2fd75bee714c1a8d6c79cb2cfcd8cc66a0979b6b56ee61a43c034211a89e9bf4",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 56004
+    },
+    {
+      "photo_id": "P144",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i08.jpg",
+      "sha256": "d79b24d8d873223a5b263846f03e82e08fe7cb369436251624b674ada9f66a9a",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 71860
+    },
+    {
+      "photo_id": "P145",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i09.jpg",
+      "sha256": "efc08df6c1c23f7389751c2b11ab667f13240d34cc402152edf43e40b07621ff",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 43413
+    },
+    {
+      "photo_id": "P146",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i10.jpg",
+      "sha256": "d7f6a3a7364f49bd056683232db796e7e851ac3d5de1bc85d27d750c69da3589",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 69749
+    },
+    {
+      "photo_id": "P147",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p29_i11.jpg",
+      "sha256": "429868806df6f3e3d44b8228db67e6b964505b2cd966ed02322021f64d1aed50",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 95631
+    },
+    {
+      "photo_id": "P148",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i00.jpg",
+      "sha256": "5db90cde8b1e11f90956e260100697cd290f67dce1b08b285aca1022d6a03f38",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 132416
+    },
+    {
+      "photo_id": "P149",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i01.jpg",
+      "sha256": "b405bcaf9490e259e90097fc95eadfca16f5dd5c9d38eab162c5ecd5346ea275",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 63231
+    },
+    {
+      "photo_id": "P150",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i02.jpg",
+      "sha256": "84cfb528bf2bee13e2332d094d8998135e3706b3dabe6a9ef3077b3cd36636e9",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 77155
+    },
+    {
+      "photo_id": "P151",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i03.jpg",
+      "sha256": "48d880494f1817950d2ea9ae278e20b8f1a39c953851ac6e4bc43636bd633f81",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 114990
+    },
+    {
+      "photo_id": "P152",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i04.jpg",
+      "sha256": "dfe04aa0a6b408c62fde717b0fd39957c93f9f74855029f5c3b28ecff61aa428",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 75738
+    },
+    {
+      "photo_id": "P153",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i05.jpg",
+      "sha256": "a201a9ceb1d9c8448ea2ab12437dccf14fabdaee0842e1ef0d18b5c25cba21ee",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 103336
+    },
+    {
+      "photo_id": "P154",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i06.jpg",
+      "sha256": "c2b5a5e51fc5925eac71dc44c2a685c26d33de7c371dbb7904081aa8db031784",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 93612
+    },
+    {
+      "photo_id": "P155",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i07.jpg",
+      "sha256": "3cef3c1ac1107bd3f591198a19d9ba13111217045af9b1c7b7e46b92c0086207",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 100873
+    },
+    {
+      "photo_id": "P156",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i08.jpg",
+      "sha256": "60fcd6cf3e3c04603c5c83b3027f1cdff44919b4feda2d0cf7ab8615790ef87c",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 74222
+    },
+    {
+      "photo_id": "P157",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i09.jpg",
+      "sha256": "9cabd75ae476ef7e7a95a2c8b3a54eea8b854d7d6319d9a8ff9e75bfea0b5ab5",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 55440
+    },
+    {
+      "photo_id": "P158",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i10.jpg",
+      "sha256": "04de0bb850178e6764b1ee00cb28fdeb46e8e0c07022315ad6f8d9cea0ac1256",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 59430
+    },
+    {
+      "photo_id": "P159",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p30_i11.jpg",
+      "sha256": "d9151e0e9fcf1248ccf62bfce12b5768ccec7d613a2d98468ae8736d2e6a7af1",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 65152
+    },
+    {
+      "photo_id": "P160",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i00.jpg",
+      "sha256": "e7132de9aaeeb00e67c0d56b651eb3d05a89d7f688af236f8d158bfbe7a1cc5d",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 45542
+    },
+    {
+      "photo_id": "P161",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i01.jpg",
+      "sha256": "d9ee132409ff9a98d74f780bae2d42729db5adf71da62950143e49f0921beee7",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 82466
+    },
+    {
+      "photo_id": "P162",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i02.jpg",
+      "sha256": "e1bc5408bfc8b64d0725f085de41c6997368354091e3b2c00e1e8276cebba98b",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 52442
+    },
+    {
+      "photo_id": "P163",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i03.jpg",
+      "sha256": "8b170e0b36eb7fd939e6cddfc88db9a7f3720fd5a3751686326c880513b97a64",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 75201
+    },
+    {
+      "photo_id": "P164",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i04.jpg",
+      "sha256": "884ac1a2e20d25b9fd289ebfcacf9ae235ffefee6d9df811159bf3270fa1b5bd",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 40924
+    },
+    {
+      "photo_id": "P165",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i05.jpg",
+      "sha256": "689b4623158dee85287f4509cf5af99e325dc421b54f06775bccd929570fe297",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 64836
+    },
+    {
+      "photo_id": "P166",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i06.jpg",
+      "sha256": "89ab5f7dde148989791aecfb5055141654c7008de1c3121b09763a66fbc5cbbd",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 75230
+    },
+    {
+      "photo_id": "P167",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i07.jpg",
+      "sha256": "ec64ce388b283517e786ce06f789ea20de81031a8488c843b98e810537a55bb2",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 36050
+    },
+    {
+      "photo_id": "P168",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i08.jpg",
+      "sha256": "bfe6ca93a6d46b577fe91e2fc17357ae6d7e103f6e946173b9efc30be6eda3b9",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 55083
+    },
+    {
+      "photo_id": "P169",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i09.jpg",
+      "sha256": "aa21762724a8f2fd065de200734f19830bd169285b68fb1c0aac19c30a36e8c6",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 49942
+    },
+    {
+      "photo_id": "P170",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i10.jpg",
+      "sha256": "64f519576607c5fbc8b7e52bdeb154f23fff1f116c7fdb3d47d77a5ef1409995",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 96141
+    },
+    {
+      "photo_id": "P171",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p31_i11.jpg",
+      "sha256": "741aab48a66882cf844bfe4f4d47fa05cb90dc860763a7ffd6a0b9c2edda4c5b",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 50296
+    },
+    {
+      "photo_id": "P172",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p32_i00.jpg",
+      "sha256": "977e9b26d7410e1d45bb6a3116822d5e4c60e2e959aa4effc1aec3aa40fe907b",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 57307
+    },
+    {
+      "photo_id": "P173",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p32_i01.jpg",
+      "sha256": "c4dc6209cfc3972ab8362a046c81288848e174726711ada46dec9d887b82f9da",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 70147
+    },
+    {
+      "photo_id": "P174",
+      "room": "Reception & Open Plan Kitchen",
+      "file": "Reception & Open Plan Kitchen\\p32_i02.jpg",
+      "sha256": "9004e9d4ac56f7cc298c8947583a80a13f3944dfbf9230a348a37495da60c706",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 50682
+    },
+    {
+      "photo_id": "P175",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i00.jpg",
+      "sha256": "b08953c2e7af48d44ace5723f00bb4f09500420bd8ecbd3b54d55c1fc555d9da",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 40717
+    },
+    {
+      "photo_id": "P176",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i01.jpg",
+      "sha256": "83f5ecf077ae4f1f107d1df796348f3f052a53eb67f1673bdd758e5030e0f3a4",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 31595
+    },
+    {
+      "photo_id": "P177",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i02.jpg",
+      "sha256": "152a0842a538c803d223446b76c28f88317198efb0197e8d571f1c7799469bbc",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 45170
+    },
+    {
+      "photo_id": "P178",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i03.jpg",
+      "sha256": "6c308ddd26f2a9f610d5d91e48191804d83abfd6c1538b04c131200d7f4bc171",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 58373
+    },
+    {
+      "photo_id": "P179",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i04.jpg",
+      "sha256": "f5620b4ff465e799cf7dd7e0e1f0465819811b84cd0160d8fa22fb2d35a32ae5",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 41273
+    },
+    {
+      "photo_id": "P180",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i05.jpg",
+      "sha256": "d795c0610fbaf35864488b7194b460a2a78e6705d1847370d2f2d5b8d5bd6cab",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 29495
+    },
+    {
+      "photo_id": "P181",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i06.jpg",
+      "sha256": "b58db3151c97cfa581bb330da1ba9354b66d48bd84b2fda1d5d69d017f025fcf",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 39391
+    },
+    {
+      "photo_id": "P182",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i07.jpg",
+      "sha256": "40d09ab272763bb4ae1eac368686d043460851554bf2ad1d5f9a8f8241e2b9b1",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 57174
+    },
+    {
+      "photo_id": "P183",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i08.jpg",
+      "sha256": "da6d8d079c291aa77c34fc7704984a1b2d995cc317bcb76d237bf9c6e752c389",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 42959
+    },
+    {
+      "photo_id": "P184",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i09.jpg",
+      "sha256": "3ea2092ca12205dd6a596d49dc716b2d0e0aea04a749e5fb25d9e9b9b5708bff",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 63013
+    },
+    {
+      "photo_id": "P185",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i10.jpg",
+      "sha256": "b1d9c68a3c02dc2589233e4ddb012c60a11a5974cef3e71fe0eab9dc36f6ff45",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 95797
+    },
+    {
+      "photo_id": "P186",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p10_i11.jpg",
+      "sha256": "6d1e8d46ba2e3e1ce132017e645a9eb02cb11950d7137d4f99af327298f79412",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 156183
+    },
+    {
+      "photo_id": "P187",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p11_i00.jpg",
+      "sha256": "d2ed3e45bc1ce2b809e6b6d7c855fea65e805589a60f5e33bb30da7aa3457c4c",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 67150
+    },
+    {
+      "photo_id": "P188",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p11_i01.jpg",
+      "sha256": "6f038158269e357ac21607b3e51f4ee9367ee473f348f2ea1eae6cc9ee57c933",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 59857
+    },
+    {
+      "photo_id": "P189",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p11_i02.jpg",
+      "sha256": "78611529a98274e1873a6e8a968847db9331141ee8a2a2c284717101523567eb",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 40085
+    },
+    {
+      "photo_id": "P190",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p11_i03.jpg",
+      "sha256": "a05d1752a803044195aed56b40d8f5bc24468c510449439d961e3d333075ea45",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 36668
+    },
+    {
+      "photo_id": "P191",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p11_i04.jpg",
+      "sha256": "cec76455e1c8ebb1dcb2d47e23ec928ff5c620dc36fad18e9ea6dd13eb360dca",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 49494
+    },
+    {
+      "photo_id": "P192",
+      "room": "Walk In Wardrobe",
+      "file": "Walk In Wardrobe\\p11_i05.jpg",
+      "sha256": "e1b5752dd6cf472b91f0055d87bb6377d911edfe3127af8dd3d0447487705b0f",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 54286
+    }
+  ]
+}

@@ -174,18 +174,52 @@ contract this pipeline requires):
 - **Phi-3.5-vision / MiniCPM-V** (~4B tier) are the remaining untested
   candidates; not probed here.
 
-**Net:** across four models / three families (qwen 9B, qwen2.5vl 3B, gemma3 4B,
-gemma4 12B), every vision model fails this pipeline on an 8 GB card in a
-different way — the ≥9B models (qwen9b, gemma4:12b) spill and are timeout-bound;
-the ≤4B models that fit (qwen2.5vl:3b, gemma3:4b) are too weak (loops / empties
-/ under-produce / schema-rebel). The binding constraints are the **8 GB VRAM
-ceiling** (forces a ≤4B model, which is too weak) and the **strict
-structured-output contract** (which weak models adhere to minimally or abandon
-under pressure). A clean, fast local run needs either ≥12 GB VRAM (fits qwen9b
-fully on-GPU) or a small VLM specifically tuned for structured inventory
-output. The qwen3.5:9b quality numbers above (from the v2 run) stand as the
-local baseline; they were generated before spillover fully crippled
-throughput and are not invalidated by the timing findings here.
+**Net (dense models):** across four dense vision models / three families (qwen
+9B, qwen2.5vl 3B, gemma3 4B, gemma4 12B), every one fails this pipeline on an 8
+GB card — the ≥9B models spill and are timeout-bound; the ≤4B models that fit
+are too weak (loops / empties / under-produce / schema-rebel). The binding
+constraints are the **8 GB VRAM ceiling** (forces a small dense model, which is
+too weak) and the **strict structured-output contract** (which weak models
+adhere to minimally or abandon under pressure). *This conclusion is dense-only
+— see the MoE finding below, which breaks it.*
+
+**Mixture-of-Experts breaks the deadlock (3 July 2026).** The dense-model
+survey overlooked MoE: a model with huge total weights but few active experts
+per token. With 32 GB system RAM absorbing the weights and the 8 GB GPU holding
+only the active-expert pathway + KV cache, an MoE model can be large *and*
+fast. **`gemma4:26b`** (Q4_K_M, 18 GB, 25.8B params, **8 of 128 experts
+active** ≈ a ~1.6B dense model's compute per token) is the result:
+
+| Metric (target) | claude-v4 | qwen9b-v2 | **gemma4:26b** |
+|---|---|---|---|
+| item_recall_notable (≥90) | 88.0 | 72.0 | 72.0 |
+| hallucination_rate (≤5) | **2.8** | 25.7 | 23.8 |
+| naming_accuracy (≥85) | 94.8 | 96.3 | **97.4** |
+| condition_exact (≥70) | 93.2 | 75.0 | **91.7** |
+| condition_within_one (≥95) | 100 | 98.7 | **100** |
+| defect_recall (≥75) | 71.3 | 60.8 | 57.7 |
+
+Reproduce: `python evals/score_benchmarks.py`. gemma4:26b ran at a steady
+**23.4 tok/s** (faster than the spilling dense qwen9b's 15), 24% in VRAM
+(4.4/18.4 GB — the rest rides system RAM), completing all 6 rooms in ~26 min
+of generation. Its **naming (97.4) and grading (91.7 exact / 100 within-one)
+are the best of any backend including claude** — a genuine step up over qwen9b
+on the local tier. The gaps vs claude are recall (72 vs 88) and hallucination
+(23.8 vs 2.8): partly the 5 batches the 900s timeout skipped on complex rooms,
+partly gemma4's tendency to over-split items (134 predicted in Reception vs the
+clerk's 43). The merge pass tames but doesn't eliminate that, and the review
+loop (`docs/05`) is where the recall gap and higher hallucination get caught.
+
+`qwen3.6:35b` (36B, 8-of-256 active, 24 GB) was also probed but is too slow
+here: a thinking model under heavy spillover (20% VRAM), a single batch
+exceeded the 290s probe window. It would likely score higher than gemma4:26b
+but needs a ~3–4 hr overnight run.
+
+**Revised local recommendation:** `--backend local --model gemma4:26b` is the
+first local model that produces a full, clerk-quality £0 draft worth reviewing.
+The dense-model ceiling is real, but MoE sidesteps it on hardware with enough
+system RAM to hold the weights. qwen3.5:9b remains the lighter fallback where
+system RAM is also constrained.
 
 **Knobs added for local experimentation** (env vars, no CLI flags): `HI_NUM_CTX`
 (context window), `HI_NUM_PREDICT` (output token ceiling), `HI_REPEAT_PENALTY`,
