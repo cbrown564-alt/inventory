@@ -494,16 +494,22 @@ def test_upload_header_level_413_without_reading_body(fresh_server):
     host, port = base.replace("http://", "").split(":")
     s = sock.create_connection((host, int(port)), timeout=15)
     try:
+        # headers only, no body bytes: an implementation that tried to read
+        # the declared 200 MiB would block and time this test out; the
+        # early-return branch answers from the header alone. (No body is
+        # sent so the server's close is a clean FIN, not a RST.)
         s.sendall((
             "POST /api/photos HTTP/1.1\r\n"
             "Host: test\r\n"
             "Content-Type: application/json\r\n"
             f"Content-Length: {200 * 1024 * 1024}\r\n\r\n"
         ).encode())
-        s.sendall(b"{")            # a token byte; the server must not wait
         data = b""
         while True:                # server must CLOSE the connection …
-            chunk = s.recv(65536)
+            try:
+                chunk = s.recv(65536)
+            except ConnectionResetError:
+                break              # a reset also proves the close
             if not chunk:
                 break
             data += chunk
