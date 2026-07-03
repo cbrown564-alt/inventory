@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homeinventory · Capture</title>
+<style>
+  :root {
+    --ink: #1a1a1a; --muted: #5a5f6a; --rule: #d8dbe0; --accent: #15406b;
+    --band: #f3f5f8; --paper: #fff; --confirm: #0e6b46; --reject: #a3231f;
+    --ui: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono: ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: var(--ui); margin: 0; background: var(--band);
+         color: var(--ink); font-size: 16px; line-height: 1.45; }
+  header { background: var(--accent); color: #fff; padding: 12px 16px;
+           position: sticky; top: 0; z-index: 5; display: flex;
+           justify-content: space-between; align-items: baseline; }
+  .wordmark { font-weight: 700; }
+  #total { font-size: 13px; opacity: .85; }
+  main { max-width: 560px; margin: 0 auto; padding: 14px; }
+  section { background: var(--paper); border: 1px solid var(--rule);
+            border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
+  h2 { margin: 0 0 8px; font-size: 16px; color: var(--accent); }
+  .muted { color: var(--muted); font-size: 13px; }
+  .rooms { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+  .room-btn { font: 600 14px var(--ui); padding: 8px 12px; border-radius: 8px;
+              border: 1px solid var(--rule); background: var(--band);
+              cursor: pointer; }
+  .room-btn[aria-pressed="true"] { background: var(--accent); color: #fff;
+                                   border-color: var(--accent); }
+  .room-btn .n { font-weight: 400; opacity: .75; }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+         margin: 8px 0; }
+  input[type=text] { flex: 1; min-width: 140px; padding: 9px 10px;
+                     border: 1px solid var(--rule); border-radius: 8px;
+                     font: inherit; }
+  .btn { font: 600 15px var(--ui); padding: 10px 16px; border-radius: 8px;
+         border: 1px solid var(--accent); background: #fff;
+         color: var(--accent); cursor: pointer; }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn.big { width: 100%; padding: 14px; font-size: 16px; }
+  .btn[disabled] { opacity: .5; }
+  ul.shots { list-style: none; margin: 8px 0 0; padding: 0; }
+  ul.shots li { display: flex; gap: 10px; align-items: baseline;
+                padding: 7px 0; border-bottom: 1px solid var(--band); }
+  ul.shots input.tick { width: 20px; height: 20px; flex: none; }
+  ul.shots .count { margin-left: auto; color: var(--muted); font-size: 12.5px;
+                    white-space: nowrap; }
+  #tally { font-size: 13px; color: var(--confirm); font-weight: 600; }
+  #up-status, #check-result { font-family: var(--mono); font-size: 12.5px;
+    white-space: pre-wrap; margin-top: 8px; }
+  .gaps { color: var(--reject); } .ok { color: var(--confirm); }
+  .warn { color: #8a6d1f; }
+</style>
+</head>
+<body>
+<header>
+  <span class="wordmark">Homeinventory · Capture</span>
+  <span id="total">{{ rooms | sum(attribute="photos") }} photos</span>
+</header>
+<main>
+
+<section>
+  <h2>Room</h2>
+  <p class="muted">Pick the room you are standing in — photos upload into
+  its folder. Whole-property shots (meters, alarms, keys, boiler) go in
+  <strong>General</strong>.</p>
+  <div class="rooms" id="room-list">
+    {% for r in rooms %}
+    <button class="room-btn" data-room="{{ r.name }}" aria-pressed="false">
+      {{ r.name }} <span class="n">({{ r.photos }})</span></button>
+    {% endfor %}
+  </div>
+  <div class="row">
+    <input type="text" id="new-room" placeholder="New room name…">
+    <button class="btn" id="btn-new-room">Add room</button>
+  </div>
+</section>
+
+<section>
+  <h2>Shot list — <span id="cur-room">no room selected</span></h2>
+  <p class="muted">Tick off each category as you shoot it (saved on this
+  phone per room). <span id="tally"></span></p>
+  <ul class="shots" id="shots">
+    {% for s in per_room_shots %}
+    <li>
+      <input type="checkbox" class="tick" id="tick-{{ loop.index0 }}"
+             data-cat="{{ s.label }}">
+      <label for="tick-{{ loop.index0 }}">{{ s.label }}</label>
+      <span class="count">{{ s.count }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="muted" style="margin-top:10px">Whole property (in "General"):</p>
+  <ul class="shots">
+    {% for s in whole_property_shots %}<li>{{ s }}</li>{% endfor %}
+  </ul>
+  <p class="muted">TIPS: {{ tips }}</p>
+</section>
+
+<section>
+  <h2>Camera</h2>
+  <!-- deliberate: plain file input with capture=environment — no camera
+       stream API, no PWA: both need a TLS secure context this LAN token
+       server does not have (docs/09) -->
+  <input type="file" id="cam" accept="image/*" capture="environment"
+         multiple style="display:none">
+  <button class="btn primary big" id="btn-shoot">Take / add photos</button>
+  <div id="up-status"></div>
+</section>
+
+<section>
+  <h2>Coverage check</h2>
+  <p class="muted">Free local detector pass over this room's photos —
+  flags expected items with no shot yet ("no radiator seen"). It cannot
+  judge photo quality, only presence.</p>
+  <button class="btn" id="btn-check">Check this room</button>
+  <div id="check-result"></div>
+</section>
+
+<script>
+"use strict";
+(function () {
+  var TOKEN = {{ token | tojson }};
+  var API = "/api/c/" + TOKEN;
+  var room = null;
+
+  function api(method, url, body) {
+    return fetch(url, {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) throw new Error(j.error || (r.status + ""));
+        return j;
+      });
+    });
+  }
+
+  /* ---------- room selection + creation ---------- */
+  var list = document.getElementById("room-list");
+  function selectRoom(name) {
+    room = name;
+    document.getElementById("cur-room").textContent = name;
+    Array.prototype.forEach.call(list.children, function (b) {
+      b.setAttribute("aria-pressed", b.dataset.room === name ? "true" : "false");
+    });
+    loadTicks();
+  }
+  list.addEventListener("click", function (e) {
+    var b = e.target.closest(".room-btn");
+    if (b) selectRoom(b.dataset.room);
+  });
+  document.getElementById("btn-new-room").addEventListener("click", function () {
+    var name = document.getElementById("new-room").value.trim();
+    if (!name) return;
+    api("POST", API + "/rooms", { name: name }).then(function (r) {
+      var b = document.createElement("button");
+      b.className = "room-btn"; b.dataset.room = r.room;
+      b.innerHTML = r.room + ' <span class="n">(0)</span>';
+      list.appendChild(b);
+      document.getElementById("new-room").value = "";
+      selectRoom(r.room);
+    }).catch(function (e) { alert(e.message); });
+  });
+
+  /* ---------- shot-list tick-off (localStorage, per room) ---------- */
+  var ticks = Array.prototype.slice.call(document.querySelectorAll(".tick"));
+  function tickKey() { return "hi-ticks::" + (room || ""); }
+  function loadTicks() {
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(tickKey()) || "{}"); }
+    catch (e) { saved = {}; }
+    ticks.forEach(function (t) { t.checked = !!saved[t.dataset.cat]; });
+    tally();
+  }
+  function tally() {
+    var n = ticks.filter(function (t) { return t.checked; }).length;
+    document.getElementById("tally").textContent =
+      n + " of " + ticks.length + " categories ticked";
+  }
+  ticks.forEach(function (t) {
+    t.addEventListener("change", function () {
+      if (!room) { t.checked = false; alert("Pick a room first."); return; }
+      var saved = {};
+      try { saved = JSON.parse(localStorage.getItem(tickKey()) || "{}"); }
+      catch (e) { saved = {}; }
+      saved[t.dataset.cat] = t.checked;
+      localStorage.setItem(tickKey(), JSON.stringify(saved));
+      tally();
+    });
+  });
+  tally();
+
+  /* ---------- camera + upload ---------- */
+  var cam = document.getElementById("cam");
+  var upStatus = document.getElementById("up-status");
+  document.getElementById("btn-shoot").addEventListener("click", function () {
+    if (!room) { alert("Pick a room first."); return; }
+    cam.click();
+  });
+  cam.addEventListener("change", function () {
+    var files = Array.prototype.slice.call(cam.files);
+    var i = 0;
+    (function next() {
+      if (i >= files.length) { cam.value = ""; refresh(); return; }
+      var f = files[i++];
+      var rd = new FileReader();
+      rd.onload = function () {
+        api("POST", API + "/photos", {
+          room: room, filename: f.name || "photo.jpg",
+          photo_b64: rd.result.split(",", 2)[1]
+        }).then(function (r) {
+          upStatus.textContent = "ok " + r.path + " (" + r.room_photos +
+            " in this room)\n" + upStatus.textContent;
+          next();
+        }).catch(function (e) {
+          upStatus.textContent = "ERR " + f.name + ": " + e.message + "\n" +
+            upStatus.textContent;
+          next();
+        });
+      };
+      rd.readAsDataURL(f);
+    })();
+  });
+
+  /* ---------- progress ---------- */
+  function refresh() {
+    api("GET", API + "/progress").then(function (p) {
+      document.getElementById("total").textContent =
+        p.total_photos + " photos";
+      p.rooms.forEach(function (r) {
+        Array.prototype.forEach.call(list.children, function (b) {
+          if (b.dataset.room === r.name)
+            b.querySelector(".n").textContent = "(" + r.photos + ")";
+        });
+      });
+    });
+  }
+
+  /* ---------- coverage check ---------- */
+  var checkBtn = document.getElementById("btn-check");
+  var checkOut = document.getElementById("check-result");
+  checkBtn.addEventListener("click", function () {
+    if (!room) { alert("Pick a room first."); return; }
+    checkBtn.disabled = true;
+    checkOut.textContent = "checking " + room + "… (first run loads the model)";
+    checkOut.className = "";
+    api("POST", API + "/check", { room: room }).then(function (r) {
+      checkBtn.disabled = false;
+      if (r.status === "unavailable") {
+        checkOut.textContent = r.detail;
+        checkOut.className = "warn";
+      } else if (r.status === "no_photos") {
+        checkOut.textContent = "no photos in " + room + " yet";
+        checkOut.className = "warn";
+      } else if (r.gaps.length) {
+        checkOut.textContent = r.gaps.map(function (g) {
+          return "GAP  no " + g + " seen — photograph it or mark N/A";
+        }).join("\n");
+        checkOut.className = "gaps";
+      } else {
+        checkOut.textContent = "expected items all covered (" + r.photos +
+          " photos checked)";
+        checkOut.className = "ok";
+      }
+    }).catch(function (e) {
+      checkBtn.disabled = false;
+      checkOut.textContent = "check failed: " + e.message;
+      checkOut.className = "gaps";
+    });
+  });
+})();
+</script>
+</main>
+</body>
+</html>

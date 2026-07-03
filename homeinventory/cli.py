@@ -4,6 +4,8 @@
   homeinventory build CAPTURE_DIR -o OUT_DIR   # run the full pipeline
   homeinventory review CAPTURE_DIR -o OUT_DIR  # local review web app (--share
                                                # adds a tenant link)
+  homeinventory capture CAPTURE_DIR            # phone capture page on the LAN
+                                               # (token link, guided shot list)
   homeinventory check CAPTURE_DIR              # detector-only coverage check
   homeinventory compare CHECKIN CHECKOUT -o DIR  # check-in vs check-out
                                                # delta report (docs/08)
@@ -52,40 +54,9 @@ def _add_detect_args(p):
                    help="torch device for YOLOE (cpu, cuda, 0, …)")
 
 
-GUIDE = """\
-HOMEINVENTORY CAPTURE GUIDE
-===========================
-Folder layout: one folder per room inside your capture folder, e.g.
-
-  capture/
-    Living Room/   Kitchen/   Bedroom 1/   Bathroom/   Hallway/
-
-Photos beat video for quality; a steady, slow video per room also works
-(sharp keyframes are extracted automatically). Keep your phone's date/time
-correct — EXIF timestamps go into the evidence manifest.
-
-PER ROOM (~15-25 photos):
-  1. Wide shot of each wall, floor-to-ceiling           (4 photos)
-  2. Floor coverage + close-up of any marks             (2-3)
-  3. Ceiling and light fittings                         (1-2)
-  4. Door (both sides), window(s) incl. frames/sills    (2-4)
-  5. Each appliance: front + inside + behind if movable (2-3 each)
-  6. Each large furniture item: front + wear points     (1-2 each)
-  7. EVERY existing defect close-up, with context shot  (as needed)
-
-WHOLE PROPERTY (put in a "General" folder):
-  - All meters (close enough to read the numbers)
-  - Smoke / CO alarms (one photo each, press test button)
-  - Keys handed over, laid out on a plain surface
-  - Boiler, stopcock, fuse box
-
-TIPS: turn all lights on, open curtains, shoot landscape, hold still a
-beat before each shot, avoid your reflection in mirrors/windows.
-"""
-
-
 def cmd_guide(_args) -> int:
-    print(GUIDE)
+    from .guide import guide_text
+    print(guide_text())
     return 0
 
 
@@ -323,6 +294,29 @@ def cmd_review(args) -> int:
     return 0
 
 
+def cmd_capture(args) -> int:
+    """Serve the phone guided-capture page (M5b): token-gated LAN page with
+    the shot-list checklist, camera upload into capture/<Room>/, and the
+    free detector coverage check. See docs/09-web-ui-and-capture.md."""
+    from .capture import serve_capture
+
+    try:
+        httpd = serve_capture(Path(args.capture_dir), port=args.port,
+                              detect_mode=args.detect_mode,
+                              det_conf=args.det_conf,
+                              device=getattr(args, "device", None))
+    except OSError as e:
+        print(f"error: could not bind port {args.port}: {e}", file=sys.stderr)
+        return 2
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nstopped — photos are already in the capture folder")
+    finally:
+        httpd.server_close()
+    return 0
+
+
 def cmd_check(args) -> int:
     """Detector-only capture coverage check — flags per-room gaps before the
     (paid) describe step. Cannot hallucinate items; only prompts a second look."""
@@ -488,6 +482,22 @@ def main(argv: list[str] | None = None) -> int:
                     help="server-spawned builds (start-page build, "
                          "re-describe) skip YOLOE detection")
     rv.set_defaults(func=cmd_review)
+
+    cp = sub.add_parser("capture",
+                        help="phone guided-capture page on the LAN "
+                             "(token link, shot-list checklist, camera "
+                             "upload, coverage check)")
+    cp.add_argument("capture_dir")
+    cp.add_argument("--port", type=int, default=8485)
+    cp.add_argument("--detect-mode", choices=DETECT_MODE_CHOICES,
+                    default="text",
+                    help="YOLOE mode for the room coverage check "
+                         "(prompt_free where CLIP text-mode is blocked, "
+                         "see docs/07)")
+    cp.add_argument("--det-conf", type=float, default=0.25)
+    cp.add_argument("--device", default=None,
+                    help="torch device for the coverage check")
+    cp.set_defaults(func=cmd_capture)
 
     ck = sub.add_parser("check",
                         help="detector-only coverage check of a capture folder")

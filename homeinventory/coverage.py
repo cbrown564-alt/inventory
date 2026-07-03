@@ -53,12 +53,15 @@ def coverage_gaps(seen_labels: set[str], room_name: str) -> list[str]:
 
 
 def check_capture(capture_dir: Path, rooms: dict[str, list[Photo]],
-                  conf: float = 0.25, device: str | None = None) -> dict[str, list[str]] | None:
+                  conf: float = 0.25, device: str | None = None,
+                  mode: str = "text") -> dict[str, list[str]] | None:
     """Detect across every room's photos; return {room: [missing, …]}.
-    None means the detector stack is unavailable (no verdict, not a pass)."""
+    None means the detector stack is unavailable (no verdict, not a pass).
+    ``mode`` follows detect.DetectMode ("text" | "prompt_free") — machines
+    where the CLIP text-mode is blocked (docs/07) need prompt_free."""
     from .detect import Detector
 
-    detector = Detector(conf=conf, device=device)
+    detector = Detector(conf=conf, device=device, mode=mode)
     report: dict[str, list[str]] = {}
     for room_name, photos in sorted(rooms.items()):
         seen: set[str] = set()

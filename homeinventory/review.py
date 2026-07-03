@@ -24,58 +24,32 @@ import json
 import logging
 import re
 import secrets
-import socket
 import subprocess
 import sys
 import threading
 from dataclasses import asdict
 from datetime import datetime, timezone
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import ThreadingHTTPServer
 from pathlib import Path
 from typing import Optional
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from .ingest import IMAGE_EXTS, VIDEO_EXTS
+# Server plumbing + the single copy of the browser-upload contract live in
+# webbase (extracted for M5b so the phone capture server reuses them
+# verbatim). sniff_extension/_safe_component stay importable from here.
+from .webbase import (TEMPLATES, BaseHandler, _safe_component,  # noqa: F401
+                      lan_ip as _lan_ip, scan_rooms, sniff_extension)
 from .schema import Inventory, Item, Photo
 from .integrity import sha256_file
 
 log = logging.getLogger(__name__)
-TEMPLATES = Path(__file__).parent / "templates"
-
-_LOOPBACK = {"127.0.0.1", "::1", "::ffff:127.0.0.1"}
-
-# Browser uploads (M5a): hard cap on one photo's decoded bytes; the request
-# body cap adds base64's 4/3 inflation plus JSON envelope slack.
-_UPLOAD_CAP = 64 * 1024 * 1024
-_UPLOAD_BODY_CAP = _UPLOAD_CAP * 4 // 3 + 1024 * 1024
 
 # Backend default models, mirrored from describe.get_backend so the UI can
 # name what a confirmed build/redescribe would actually run (spend guard:
 # no paid backend without a per-request confirm naming it).
 _BACKEND_DEFAULT_MODEL = {"claude": "claude-opus-4-8", "openai": "gpt-4.1-mini",
                           "local": "qwen3.5:9b"}
-
-
-def sniff_extension(data: bytes) -> Optional[str]:
-    """File extension from magic bytes only — the client's filename extension
-    is never trusted. JPEG FF D8 -> .jpg; PNG 89 50 -> .png; ISO-BMFF
-    ftyp with a HEIC/HEIF brand -> .heic. Anything else: None (reject)."""
-    if data[:2] == b"\xff\xd8":
-        return ".jpg"
-    if data[:2] == b"\x89P":
-        return ".png"
-    if len(data) >= 12 and data[4:8] == b"ftyp":
-        brand = data[8:12]
-        if brand[:3] in (b"hei", b"hev") or brand in (b"mif1", b"msf1"):
-            return ".heic"
-    return None
-
-
-def _safe_component(name: str) -> bool:
-    """One plain path component: no separators, no '..', no hidden names."""
-    return bool(name) and not name.startswith(".") and ".." not in name \
-        and "/" not in name and "\\" not in name and "\x00" not in name
 
 
 def _now() -> str:
@@ -113,23 +87,7 @@ class ReviewState:
     def scan_capture(self) -> list[dict]:
         """Room subfolders of the capture dir with photo/video counts —
         the start page's view of the world before any build exists."""
-        rooms: list[dict] = []
-        if not self.capture_dir.is_dir():
-            return rooms
-        for d in sorted(self.capture_dir.iterdir()):
-            if not d.is_dir() or d.name.startswith("."):
-                continue
-            photos = videos = 0
-            for f in d.iterdir():
-                if not f.is_file():
-                    continue
-                ext = f.suffix.lower()
-                if ext in IMAGE_EXTS:
-                    photos += 1
-                elif ext in VIDEO_EXTS:
-                    videos += 1
-            rooms.append({"name": d.name, "photos": photos, "videos": videos})
-        return rooms
+        return scan_rooms(self.capture_dir)
 
     # ---- inventory I/O -------------------------------------------------
     @property
@@ -353,47 +311,10 @@ def _signature(inv: Inventory, name: str, role: str, via: str) -> dict:
             "inventory_sha256": inv.content_sha256(), "via": via}
 
 
-class ReviewHandler(BaseHTTPRequestHandler):
+class ReviewHandler(BaseHandler):
+    """Review/tenant routes; request plumbing inherited from webbase."""
+
     state: ReviewState  # set by serve()
-    protocol_version = "HTTP/1.1"
-
-    # ---- plumbing ------------------------------------------------------
-    def log_message(self, fmt, *args):
-        log.debug("%s %s", self.address_string(), fmt % args)
-
-    def _is_local(self) -> bool:
-        return self.client_address[0] in _LOOPBACK
-
-    def _send(self, code: int, body: bytes, ctype: str) -> None:
-        self.send_response(code)
-        self.send_header("Content-Type", ctype)
-        self.send_header("Content-Length", str(len(body)))
-        self.send_header("Cache-Control", "no-store")
-        self.end_headers()
-        self.wfile.write(body)
-
-    def _json(self, obj, code: int = 200) -> None:
-        self._send(code, json.dumps(obj, ensure_ascii=False).encode("utf-8"),
-                   "application/json; charset=utf-8")
-
-    def _err(self, code: int, msg: str) -> None:
-        self._json({"error": msg}, code)
-
-    def _html(self, text: str) -> None:
-        self._send(200, text.encode("utf-8"), "text/html; charset=utf-8")
-
-    def _file(self, path: Path, ctype: str = "image/jpeg") -> None:
-        if not path.is_file():
-            self._err(404, "not found")
-            return
-        self._send(200, path.read_bytes(), ctype)
-
-    def _body(self) -> dict:
-        n = int(self.headers.get("Content-Length") or 0)
-        if n > 64 * 1024 * 1024:
-            raise ValueError("request too large")
-        raw = self.rfile.read(n) if n else b"{}"
-        return json.loads(raw.decode("utf-8"))
 
     def _tenant_token_ok(self, token: str) -> bool:
         expected = self.state.tenant_token
@@ -651,61 +572,17 @@ class ReviewHandler(BaseHTTPRequestHandler):
             except Exception:
                 pass
 
-    # ---- browser upload (M5a) ---------------------------------------------
+    # ---- browser upload (M5a; contract shared with the capture server) ----
     def _upload_photo(self):
-        """POST /api/photos {room, filename, photo_b64} — bytes land
-        UNMODIFIED in capture/<Room>/; extension comes from magic-byte
-        sniffing only; oversize is 413; traversal attempts are 400."""
+        """POST /api/photos {room, filename, photo_b64} — the webbase
+        upload contract: bytes land UNMODIFIED in capture/<Room>/, extension
+        by magic-byte sniff only, oversize 413, traversal 400, no clobber."""
         st = self.state
-        n = int(self.headers.get("Content-Length") or 0)
-        if n > _UPLOAD_BODY_CAP:
-            self.close_connection = True     # body is unread; don't reuse
-            self._err(413, "upload too large — photos are capped at 64 MiB")
+        payload = self._upload_photo_common(st.capture_dir, st.lock)
+        if payload is None:
             return
-        try:
-            body = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
-        except ValueError:
-            self._err(400, "invalid JSON body")
-            return
-        room = (body.get("room") or "").strip()
-        filename = (body.get("filename") or "").strip()
-        b64 = body.get("photo_b64") or ""
-        if not room or not filename or not b64:
-            self._err(400, "room, filename and photo_b64 are required")
-            return
-        if not (_safe_component(room) and _safe_component(filename)):
-            self._err(400, "room and filename must be plain names — no "
-                           "path separators, '..' or leading dots")
-            return
-        try:
-            data = base64.b64decode(b64, validate=True)
-        except Exception:
-            self._err(400, "photo_b64 is not valid base64")
-            return
-        if len(data) > _UPLOAD_CAP:
-            self._err(413, "photo exceeds the 64 MiB cap")
-            return
-        ext = sniff_extension(data)
-        if ext is None:
-            self._err(400, "unrecognised image bytes — JPEG, PNG or HEIC only")
-            return
-        room_dir = st.capture_dir / room
-        if room_dir.resolve().parent != st.capture_dir.resolve():
-            self._err(400, "room escapes the capture folder")  # belt-and-braces
-            return
-        with st.lock:
-            room_dir.mkdir(parents=True, exist_ok=True)
-            stem = Path(filename).stem or "photo"
-            dest, k = room_dir / f"{stem}{ext}", 1
-            while dest.exists():               # never clobber an existing file
-                dest = room_dir / f"{stem}-{k}{ext}"
-                k += 1
-            dest.write_bytes(data)             # stored byte-for-byte as sent
-        digest = hashlib.sha256(data).hexdigest()
-        st.ack("reviewer", "landlord", "upload_photo", f"{room}/{dest.name}")
-        self._json({"ok": True, "room": room, "stored_as": dest.name,
-                    "path": f"{room}/{dest.name}", "sha256": digest,
-                    "bytes": len(data)})
+        st.ack("reviewer", "landlord", "upload_photo", payload["path"])
+        self._json(payload)
 
     # ---- tenant actions --------------------------------------------------
     def _tenant_comment(self, b: dict):
@@ -747,17 +624,6 @@ class ReviewHandler(BaseHTTPRequestHandler):
             st.save(inv)
         st.ack(name, "tenant", "sign", "acknowledged receipt and countersigned")
         self._json({"ok": True})
-
-
-def _lan_ip() -> str:
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        s.connect(("10.255.255.255", 1))   # no traffic actually sent
-        return s.getsockname()[0]
-    except Exception:
-        return "127.0.0.1"
-    finally:
-        s.close()
 
 
 def serve(capture_dir: Path, out_dir: Path, port: int = 8484,

@@ -486,6 +486,35 @@ def test_upload_413_over_64mib(fresh_server):
     assert not list(cap.rglob("huge*"))
 
 
+def test_upload_header_level_413_without_reading_body(fresh_server):
+    """M5a audit nit: a Content-Length over the body cap must 413 on the
+    header alone (early return) and close the connection unread."""
+    import socket as sock
+    base, _state, _out, cap = fresh_server
+    host, port = base.replace("http://", "").split(":")
+    s = sock.create_connection((host, int(port)), timeout=15)
+    try:
+        s.sendall((
+            "POST /api/photos HTTP/1.1\r\n"
+            "Host: test\r\n"
+            "Content-Type: application/json\r\n"
+            f"Content-Length: {200 * 1024 * 1024}\r\n\r\n"
+        ).encode())
+        s.sendall(b"{")            # a token byte; the server must not wait
+        data = b""
+        while True:                # server must CLOSE the connection …
+            chunk = s.recv(65536)
+            if not chunk:
+                break
+            data += chunk
+    finally:
+        s.close()
+    status_line = data.split(b"\r\n", 1)[0]
+    assert b" 413 " in status_line + b" "      # … after answering 413
+    assert b"64 MiB" in data
+    assert not list(cap.rglob("*.jpg"))        # nothing was written
+
+
 # ---- build-from-browser: confirm guard, progress, e2e ----------------------
 
 def test_build_e2e_offline(fresh_server):
@@ -504,13 +533,16 @@ def test_build_e2e_offline(fresh_server):
     status, resp = _req("GET", base + "/api/build")
     assert status == 200 and resp["status"] == "idle"
 
-    # correct confirm starts the pinned £0 command
+    # correct confirm starts the pinned £0 command — asserted as the FULL
+    # spawned argument list, not just flag membership (M5a audit nit)
     status, resp = _req("POST", base + "/api/build", {"confirm": "offline"})
     assert status == 200, resp
+    import sys as _sys
     with state.lock:
         cmd = state.build["cmd"]
-    assert "--backend" in cmd and cmd[cmd.index("--backend") + 1] == "offline"
-    assert "--no-detect" in cmd and "--no-pdf" in cmd
+    assert cmd == [_sys.executable, "-m", "homeinventory.cli", "build",
+                   str(_cap), "-o", str(out),
+                   "--backend", "offline", "--no-pdf", "--no-detect"]
 
     deadline = time.time() + 120
     while time.time() < deadline:
