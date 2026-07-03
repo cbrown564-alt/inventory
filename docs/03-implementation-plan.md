@@ -124,7 +124,13 @@ and compare our output against the human-written report.
       guard), PDF export (`/api/pdf` + `/pdf`, 503 hint without WeasyPrint),
       and the redescribe spend-guard retrofit — see
       [`docs/09`](09-web-ui-and-capture.md)
-- [ ] Mobile guided capture (per-room shot list with live checklist)
+- [x] Mobile guided capture (per-room shot list with live checklist) — done
+      3 Jul 2026 (`homeinventory capture`: token-gated LAN page, camera via
+      plain file input, shot list from `guide.py`, uploads into
+      `capture/<Room>/`); **live checklist = shot-list tally + local
+      detector coverage check; live AI capture guidance remains parked
+      (docs/05 Level 4)**. Real-device smoke pending — checklist in
+      [`docs/09`](09-web-ui-and-capture.md) §M5b
 - [ ] C2PA / signed manifests; e-signature integration
 - [ ] Multi-property management, tenancy metadata, scheme-specific templates
 
