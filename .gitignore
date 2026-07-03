@@ -22,3 +22,6 @@ benchmarks/*/report-*/photos/
 
 # build/run logs (stdout captures from background builds)
 *.log
+
+# own-property eval fixture (personal data; local by default per docs/07)
+evals/fixtures/ownproperty/
