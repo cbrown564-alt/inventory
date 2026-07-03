@@ -206,8 +206,11 @@ def serve_capture(capture_dir: Path, port: int = 8485,
     httpd.capture_state = state  # type: ignore[attr-defined]
 
     actual_port = httpd.server_address[1]
-    print(f"\nPhone capture link: http://{lan_ip()}:{actual_port}/c/{state.token}")
+    # flush: the link is the product — it must appear even when stdout is
+    # redirected (block-buffered) rather than a TTY
+    print(f"\nPhone capture link: http://{lan_ip()}:{actual_port}/c/{state.token}",
+          flush=True)
     print("  Open it on your phone (same Wi-Fi). Anyone with the link can "
           "add photos to the\n  capture folder; it dies with this process — "
-          "restart for a new link.")
+          "restart for a new link.", flush=True)
     return httpd

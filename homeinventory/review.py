@@ -647,9 +647,12 @@ def serve(capture_dir: Path, out_dir: Path, port: int = 8484,
     httpd.review_state = state  # type: ignore[attr-defined]
 
     actual_port = httpd.server_address[1]
-    print(f"\nReview app:  http://127.0.0.1:{actual_port}/")
+    # flush: the links are the product — they must appear even when stdout
+    # is redirected (block-buffered) rather than a TTY
+    print(f"\nReview app:  http://127.0.0.1:{actual_port}/", flush=True)
     if share:
-        print(f"Tenant link: http://{_lan_ip()}:{actual_port}/t/{state.tenant_token}")
+        print(f"Tenant link: http://{_lan_ip()}:{actual_port}/t/{state.tenant_token}",
+              flush=True)
         print("  Anyone with this link can read the inventory, comment and "
               "countersign.\n  It dies with this process; restart for a new link.")
     if open_browser:
