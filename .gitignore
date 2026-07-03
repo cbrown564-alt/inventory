@@ -19,3 +19,6 @@ capture/
 # (capture/ above already excludes the extracted benchmark photos — regenerate
 # both with benchmarks/extract_inventoryflex.py + a build)
 benchmarks/*/report-*/photos/
+
+# build/run logs (stdout captures from background builds)
+*.log
