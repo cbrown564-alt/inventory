@@ -61,7 +61,8 @@ def exif_capture_time(path: Path) -> Optional[str]:
 
 def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
                       min_window_s: float = 0.75,
-                      min_diff: float = 12.0) -> list[Path]:
+                      min_diff: float = 12.0,
+                      lead_trim_s: float = 0.0) -> list[Path]:
     """Keep the sharpest frame from each time window of the video.
 
     An absolute sharpness threshold doesn't transfer across devices, codecs
@@ -72,6 +73,13 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
     every part of the walkthrough is represented by its best available frame.
     Windows where the camera barely moved since the last kept frame are
     dropped via mean absolute grey difference.
+
+    ``lead_trim_s`` skips the first N seconds of the video. Room segments cut
+    from one continuous walkthrough with stream copy start on the previous
+    keyframe, i.e. up to ~2s inside the *previous* room — those lead frames
+    put the neighbouring room's items into this room's schedule (the M2
+    boundary-bleed failure mode, docs/07). Trimming the lead removes the
+    bleed at the source; default 0.0 leaves single-room videos untouched.
     """
     import cv2
     import numpy as np
@@ -113,6 +121,9 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
         if idx % step:
             idx += 1
             continue
+        if lead_trim_s and (idx / fps) < lead_trim_s:
+            idx += 1
+            continue
         ok, frame = cap.retrieve()
         if not ok:
             idx += 1
@@ -133,8 +144,12 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
     return kept
 
 
-def ingest(capture_dir: Path, work_dir: Path) -> dict[str, list[Photo]]:
-    """Return {room_name: [Photo, ...]}. Video keyframes land in work_dir/frames."""
+def ingest(capture_dir: Path, work_dir: Path,
+           lead_trim_s: float = 0.0) -> dict[str, list[Photo]]:
+    """Return {room_name: [Photo, ...]}. Video keyframes land in work_dir/frames.
+
+    ``lead_trim_s`` is forwarded to keyframe extraction — use it when per-room
+    videos were cut from one continuous walkthrough (see extract_keyframes)."""
     capture_dir = capture_dir.resolve()
     rooms: dict[str, list[Photo]] = {}
     counter = 0
@@ -168,13 +183,15 @@ def ingest(capture_dir: Path, work_dir: Path) -> dict[str, list[Photo]]:
                     if _decodable(f):
                         add(room, f)
                 elif ext in VIDEO_EXTS:
-                    frames = extract_keyframes(f, work_dir / "frames" / room)
+                    frames = extract_keyframes(f, work_dir / "frames" / room,
+                                               lead_trim_s=lead_trim_s)
                     for fr in frames:
                         add(room, fr, source_video=f.name)
         elif entry.is_file() and entry.suffix.lower() in IMAGE_EXTS:
             if _decodable(entry):
                 add("General", entry)
         elif entry.is_file() and entry.suffix.lower() in VIDEO_EXTS:
-            for fr in extract_keyframes(entry, work_dir / "frames" / "General"):
+            for fr in extract_keyframes(entry, work_dir / "frames" / "General",
+                                        lead_trim_s=lead_trim_s):
                 add("General", fr, source_video=entry.name)
     return rooms

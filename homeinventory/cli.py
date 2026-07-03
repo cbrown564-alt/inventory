@@ -129,7 +129,8 @@ def cmd_build(args) -> int:
     work_dir = out_dir / "work"
 
     # 1. ingest
-    rooms_photos = ingest(capture_dir, work_dir)
+    rooms_photos = ingest(capture_dir, work_dir,
+                          lead_trim_s=getattr(args, "trim_lead", 0.0))
     if not rooms_photos:
         print("error: no photos or videos found (see `homeinventory guide`)",
               file=sys.stderr)
@@ -412,6 +413,11 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--resume", action="store_true",
                    help="reuse per-room checkpoints from a previous run "
                         "(retries only rooms that failed or were not described)")
+    b.add_argument("--trim-lead", type=float, default=0.0, metavar="SECONDS",
+                   help="skip the first SECONDS of each room video — use ~2.0 "
+                        "when room segments were cut from one continuous "
+                        "walkthrough, so the previous room's tail frames don't "
+                        "bleed into this room's schedule")
     b.add_argument("--no-detect", action="store_true",
                    help="skip YOLOE detection (no crops / hints)")
     _add_detect_args(b)

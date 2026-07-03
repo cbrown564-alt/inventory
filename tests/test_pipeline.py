@@ -133,3 +133,33 @@ def test_build_from_json_missing_file_errors(tmp_path, capsys):
                "--from-json", str(tmp_path / "nope.json")])
     assert rc == 2
     assert "not found" in capsys.readouterr().err
+
+
+def test_extract_keyframes_lead_trim(tmp_path):
+    """Room videos cut from one continuous walkthrough with stream copy start
+    up to ~2s inside the previous room; lead_trim_s drops those bleed frames
+    at the source (the M2 boundary-bleed failure mode, docs/07)."""
+    import pytest
+    cv2 = pytest.importorskip("cv2")
+    np = pytest.importorskip("numpy")
+
+    from homeinventory.ingest import extract_keyframes
+
+    fps, seconds, size = 10, 6, (64, 48)
+    video = tmp_path / "room.avi"
+    vw = cv2.VideoWriter(str(video), cv2.VideoWriter_fourcc(*"MJPG"), fps, size)
+    assert vw.isOpened()
+    rng = np.random.default_rng(0)  # noise: every frame sharp and distinct
+    for _ in range(seconds * fps):
+        vw.write(rng.integers(0, 255, (size[1], size[0], 3), dtype=np.uint8))
+    vw.release()
+
+    def kept_indices(sub, trim):
+        frames = extract_keyframes(video, tmp_path / sub, lead_trim_s=trim)
+        assert frames, "expected keyframes"
+        return [int(f.stem.rsplit("_f", 1)[1]) for f in frames]
+
+    # default keeps the bleed window; trimming 2.0s removes every frame
+    # before 2.0s * 10fps = frame 20
+    assert min(kept_indices("untrimmed", 0.0)) < 2.0 * fps
+    assert min(kept_indices("trimmed", 2.0)) >= 2.0 * fps
