@@ -319,6 +319,9 @@ class ClaudeBackend:
         self.model = model
 
     def describe_room(self, room_name, photos, photo_paths, detections):
+        # Reset per room so a failed call can't inherit the previous room's
+        # numbers when cli persists it into the checkpoint's "timing" field.
+        self.last_room_timing = None
         content = []
         for photo, path in zip(photos, photo_paths):
             media_type, data = _encode_image(path)
@@ -360,6 +363,15 @@ class ClaudeBackend:
                 f"item schedule for '{room_name}' was truncated at the output "
                 "token limit — split the room into fewer photos per folder"
             )
+        # Mirror LocalBackend's last_room_timing: cli persists this into the
+        # room checkpoint so a run records its own actual token spend instead
+        # of being reconstructed after the fact (docs/06 cost method).
+        usage = getattr(response, "usage", None)
+        if usage is not None:
+            self.last_room_timing = {
+                "input_tokens": int(getattr(usage, "input_tokens", 0) or 0),
+                "output_tokens": int(getattr(usage, "output_tokens", 0) or 0),
+            }
         text = next(b.text for b in response.content if b.type == "text")
         return _parse_items(json.loads(text), photos)
 
