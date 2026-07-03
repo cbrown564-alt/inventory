@@ -111,6 +111,12 @@ and compare our output against the human-written report.
 
 ## Milestone 5 — Productisation (only if wanted)
 
+> **Scope decision, recorded 3 Jul 2026** — user's answer: *"yes you should
+> build the web UI and mobile guided capture for now."* Web UI and mobile
+> guided capture enter planning (acceptance criteria settled the same day,
+> implementer/adversarial-reviewer debate); C2PA/e-signature and
+> multi-property management stay deferred — unchecked, reopenable on request.
+
 - [ ] Web UI (upload, review/edit items inline, export PDF)
 - [ ] Mobile guided capture (per-room shot list with live checklist)
 - [ ] C2PA / signed manifests; e-signature integration

@@ -112,12 +112,15 @@ def test_diff_pair_grade_delta_and_new_defects():
     assert needs_classification(change)
 
 
-def test_needs_classification_only_on_delta_or_new_defect():
+def test_needs_classification_only_on_deterioration():
     same = diff_pair(_item("A-001", "Walls"), _item("B-001", "Walls"))
     assert not needs_classification(same)
     better = diff_pair(_item("A-001", "Walls", "fair"),
                        _item("B-001", "Walls", "good"))
-    assert needs_classification(better)          # any grade delta classifies
+    assert not needs_classification(better)      # improvement: nothing to attribute
+    worse = diff_pair(_item("A-001", "Walls", "good"),
+                      _item("B-001", "Walls", "fair"))
+    assert needs_classification(worse)
 
 
 # --------------------------------------------------------------------------

@@ -40,7 +40,11 @@ classes — `grade_drop`, `new_defect`, `item_removed`, `item_added`,
 `alias_rename` (descriptor-only tokens from `merge._DESCRIPTOR_TOKENS`, so
 the matcher *must* survive it). Deterministic per `(--seed, --per-class,
 input)`; writes a `mutations.json` ground-truth manifest; check-out item
-ids are renumbered so alignment cannot lean on ids.
+ids are renumbered so alignment cannot lean on ids. The input inventory
+needs enough eligible items to host every mutation class (≥4 unique
+non-structural items at the default `--per-class 1`); undersized inputs —
+including `examples/sample-report` (3 eligible) — are refused loudly
+rather than silently under-mutated.
 
 `tests/test_compare.py` (20 tests) asserts: unmutated pairings align 100%
 (identity, top score); each mutation class's outcome **individually**

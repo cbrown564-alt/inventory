@@ -143,8 +143,10 @@ def diff_pair(checkin: Item, checkout: Item) -> dict:
 
 
 def needs_classification(change: dict) -> bool:
-    """Rubric runs only for a condition-grade delta or a new defect."""
-    return bool(change["grade_delta"]) or bool(change["new_defects"])
+    """Rubric runs only for a deterioration: a worse condition grade or a
+    new defect. Improvements need no wear-vs-damage call — there is nothing
+    to attribute, and classifying them would be unmetered spend."""
+    return change["grade_delta"] > 0 or bool(change["new_defects"])
 
 
 # --------------------------------------------------------------------------
