@@ -12,8 +12,8 @@
     --confirm: #0e6b46; --confirm-soft: #e7f3ed;
     --reject: #a3231f; --reject-soft: #f9ecec;
     --pend: #8a6d1f; --pend-soft: #faf4e3;
-    --ui: "Segoe UI Variable Text", "Segoe UI", "Avenir Next", "Helvetica Neue", sans-serif;
-    --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+    --ui: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
   }
   * { box-sizing: border-box; }
   body {
@@ -46,11 +46,16 @@
   table.items td { border-bottom: 1px solid var(--rule); padding: 6px 8px;
                    vertical-align: top; }
   table.items tr { page-break-inside: avoid; }
-  .grade { white-space: nowrap; font-variant: small-caps; }
-  .grade.poor { color: #a3231f; font-weight: 700; }
-  .grade.fair { color: #9a6200; }
+  /* grades wear small-caps; defect text stays sentence case */
+  .grade-word { white-space: nowrap; font-variant: small-caps; }
+  .grade-word.poor { color: #a3231f; font-weight: 700; }
+  .grade-word.fair { color: #9a6200; }
   .defects { color: var(--reject); }
   .defects li { margin: 0; }
+  .cond-cell .defects { margin-top: 3px; font-size: 8.5pt; }
+  .ev-refs { font-family: var(--mono); font-size: 7.5pt; color: var(--muted);
+             margin-top: 4px; }
+  .addr-missing { color: var(--muted); font-style: italic; }
   ul { margin: 2px 0 2px 16px; padding: 0; }
   .photos { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
   .photos figure { margin: 0; width: 31%; page-break-inside: avoid; }
@@ -86,7 +91,6 @@
   .print-only { display: none; }
   .screen-only { }
   .page-break { page-break-before: always; }
-  .cover-logo { max-height: 52px; margin: 0 auto 20px; display: block; }
   .agent-name { font: 600 11pt var(--ui); letter-spacing: .08em;
                 text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
   .property-type { font-size: 12pt; color: var(--muted); margin: 8px 0 24px; }
@@ -99,10 +103,15 @@
   .cond-merged { white-space: pre-line; line-height: 1.35; }
   .photo-sheet { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; }
   .photo-sheet figure { margin: 0; page-break-inside: avoid; }
+  .photo-sheet .frame { position: relative; display: block; }
   .photo-sheet img { width: 100%; height: auto; max-height: 170px; object-fit: contain;
                      border: 1px solid var(--rule); display: block; background: #fff; }
+  /* annotated photos keep their natural aspect so the normalised defect
+     regions land exactly on the image, not on letterbox padding */
+  .photo-sheet figure.annotated img { max-height: none; }
   .photo-sheet figcaption { font: 8pt var(--ui); text-align: center; margin-top: 3px; }
-  .photo-sheet .ref-tag { font-weight: 600; }
+  .photo-sheet .ref-tag { font-weight: 600; font-family: var(--mono); }
+  .appendix td.hash { word-break: break-all; font-size: 6.5pt; }
   .initials-note { font-size: 9pt; color: var(--muted); margin-top: 18px; }
   .pdf-brand { font: 7.5pt var(--ui); color: var(--muted); text-align: center; }
 
@@ -135,6 +144,7 @@
     table.items th { background: #e8ebf0; color: var(--ink); border: 1px solid var(--rule); }
     table.items td { border: 1px solid var(--rule); }
     h2 { font-family: var(--ui); font-size: 13pt; border-bottom: 1px solid var(--ink); }
+    h3 { font-family: var(--ui); }
     .photos.screen-only { display: none !important; }
     .photo-sheet { page-break-inside: auto; }
     .photo-sheet .sheet-break { page-break-after: always; }
@@ -264,23 +274,58 @@
   }
   #toast.show { opacity: .96; transform: translateX(-50%) translateY(0); }
 
+  /* ---------- shared modal styles (screen-only instrument chrome) ------- */
+  .btn { border: 1px solid #c9cdd4; background: #fff; color: #20242b;
+         border-radius: 6px; padding: 7px 14px; font: 500 13px var(--ui);
+         cursor: pointer; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent);
+                 color: #fff; }
+  .btn.ghost { border-color: transparent; color: var(--muted); }
+  .btn.ghost:hover { border-color: #c9cdd4; color: #20242b; }
+  .ui-modal-backdrop { position: fixed; inset: 0; z-index: 90;
+    background: rgba(28,36,48,.45); display: flex; align-items: center;
+    justify-content: center; padding: 16px; font-family: var(--ui); }
+  .ui-modal { background: #fff; border: 1px solid #d8dbe0;
+    border-radius: 10px; width: 460px; max-width: 100%; max-height: 90vh;
+    overflow: auto; box-shadow: 0 24px 60px -20px rgba(15,29,46,.5); }
+  .ui-modal .ui-title { padding: 18px 20px 0; font: 600 15px var(--ui); }
+  .ui-modal .ui-body { padding: 10px 20px 4px; font: 14px/1.5 var(--ui); }
+  .ui-modal .ui-body .note { color: var(--muted); font-size: 13px; }
+  .ui-modal .ui-actions { display: flex; justify-content: flex-end; gap: 8px;
+                          padding: 12px 20px 16px; }
+  .ui-field { margin: 10px 0; }
+  .ui-field label { display: block; font: 600 11px var(--ui);
+    letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px; }
+  .ui-field input, .ui-field select { width: 100%; font: 14px var(--ui);
+    padding: 8px 10px; border: 1px solid #c9cdd4; border-radius: 6px; }
+
   @media print {
     .photos img { height: 130px; }
-    #docket, #toast, tr.rv-evidence { display: none !important; }
+    #docket, #toast, tr.rv-evidence, .ui-modal-backdrop { display: none !important; }
     body.reviewing main { padding-bottom: 0; }
   }
 </style>
 </head>
 <body>
+<main>
 <div class="cover">
   {% if inv.agent_name %}<div class="agent-name">{{ inv.agent_name }}</div>{% endif %}
   <div class="kicker">Property Inventory</div>
   <h1>{{ inv.report_type }}</h1>
-  <div class="addr">{{ inv.property_address or "Address not specified" }}</div>
+  {% if inv.property_address %}
+  <div class="addr">{{ inv.property_address }}</div>
+  {% else %}
+  <div class="addr addr-missing">Address not yet specified</div>
+  <div class="meta screen-only">Add it in the review app — Details.</div>
+  {% endif %}
   {% if inv.property_type %}<div class="property-type">{{ inv.property_type }}</div>{% endif %}
   <table>
-    <tr><td>Date of inspection</td><td><strong>{{ inv.inspected_at }}</strong></td></tr>
-    <tr><td>Prepared by</td><td><strong>{{ inv.inspected_by or "—" }}</strong></td></tr>
+    <tr><td>Date of inspection</td><td><strong>{{ inv.inspected_at | human_date }}</strong></td></tr>
+    {% if inv.inspected_by %}
+    <tr><td>Prepared by</td><td><strong>{{ inv.inspected_by }}</strong></td></tr>
+    {% endif %}
     {% if inv.landlord_name %}
     <tr><td>Landlord / agent</td><td><strong>{{ inv.landlord_name }}</strong></td></tr>
     {% endif %}
@@ -302,18 +347,19 @@
 <section class="toc page-break">
   <h2>Contents</h2>
   <ol class="toc-list">
-    <li><span>1. Schedule of Condition</span></li>
+    <li><a href="#schedule">1. Schedule of Condition</a></li>
     {% for section in room_sections %}
     <li><a href="#room-{{ section.number }}">{{ section.number }}. {{ section.name }}</a></li>
     {% endfor %}
-    <li><span>Appendix A — Photographic evidence manifest</span></li>
-    <li><span>Appendix B — Room photographs</span></li>
-    <li><span>Declaration</span></li>
+    <li><a href="#appendix-manifest">Appendix A — Photographic evidence manifest</a></li>
+    {% if total_photos %}
+    <li><a href="#appendix-photos">Appendix B — Room photographs</a></li>
+    {% endif %}
+    <li><a href="#declaration">Declaration</a></li>
   </ol>
 </section>
 
-<main>
-<h2>Contents &amp; condition key</h2>
+<h2>Condition key &amp; basis of this report</h2>
 <p><strong>Condition:</strong> New &middot; Excellent &middot; Good (sound, light wear)
 &middot; Fair (visible wear or marks) &middot; Poor (damaged or heavily worn).
 Items the inspection could not assess are marked <em>not tested</em> or
@@ -373,12 +419,24 @@ rather than silently deleted.</p>
         <td class="name-cell"><strong class="item-name">{{ item.name }}</strong>{% if item.quantity > 1 %} &times;{{ item.quantity }}{% endif %}
           {% if item.rejected %}<br><span class="meta">AI suggested — reviewer rejected</span>{% endif %}
         </td>
-        <td class="desc-cell">{{ item.description }}</td>
-        <td class="cond-cell grade {{ item.condition or '' }}">
-          <span class="screen-only">{{ item.not_inspected or item.condition or "—" }}</span>
-          <span class="print-only cond-merged">{{ row.condition_text }}</span>
+        <td class="desc-cell"><span class="desc-text">{{ item.description }}</span>
+          {%- if item.photo_ids %}
+          <div class="ev-refs print-only">Evidence: {{ item.photo_ids | join(", ") }}</div>
+          {%- endif %}
         </td>
-        <td class="clean-cell screen-only grade">{{ item.cleanliness or "—" }}</td>
+        <td class="cond-cell">
+          <span class="screen-only grade-word {{ item.condition or '' }}">{{ item.not_inspected or item.condition or "—" }}</span>
+          <div class="print-only">
+            <span class="grade-word {{ item.condition or '' }}">{{ row.grades_line }}</span>
+            {%- if item.defects or item.rejected_defects %}
+            <ul class="defects">
+              {% for d in item.defects %}<li>{{ d }}</li>{% endfor %}
+              {% for d in item.rejected_defects %}<li class="struck">{{ d }}</li>{% endfor %}
+            </ul>
+            {%- endif %}
+          </div>
+        </td>
+        <td class="clean-cell screen-only">{{ item.cleanliness or "—" }}</td>
         <td class="def-cell screen-only">
           {% if item.defects or item.rejected_defects %}<ul class="defects">
             {% for d in item.defects %}<li>{{ d }}</li>{% endfor %}
@@ -406,21 +464,38 @@ rather than silently deleted.</p>
     <figure id="photo-{{ photo.id }}" data-photo-id="{{ photo.id }}">
       <div class="frame">
         <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}" loading="lazy">
-        {% for group in section.groups %}{% for row in group.rows %}{% set it = row.item %}{% for reg in it.defect_regions %}
-          {% if reg.photo_id == photo.id %}
-          <span class="region" data-label="{{ it.id }} · {{ reg.defect }}"
+        {% for reg in regions_by_photo.get(photo.id, []) %}
+          <span class="region" data-label="{{ reg.item_id }} · {{ reg.defect }}"
                 style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
-          {% endif %}
-        {% endfor %}{% endfor %}{% endfor %}
+        {% endfor %}
       </div>
       <figcaption>{{ photo.id }}{% if photo.captured_at %} &middot; {{ photo.captured_at }}{% endif %}
-        {% if photo.source_video %}&middot; frame of {{ photo.source_video }}{% endif %}</figcaption>
+        {% if photo.source_video %}&middot; frame of {{ photo.source_video | basename }}{% endif %}</figcaption>
     </figure>
     {% endfor %}
   </div>
   {% endif %}
 </section>
 {% endfor %}
+
+<section class="room appendix page-break" id="appendix-manifest">
+  <h2>Appendix A — Photographic evidence manifest (SHA-256)</h2>
+  <p class="meta">Paths are relative to the capture folder. Frames extracted
+  from a walkthrough video are hashed as extracted and name their source
+  video; the original video files are hashed in <code>manifest.json</code>.</p>
+  <table>
+    <thead><tr><th>ID</th><th>Room</th><th>File</th><th>Captured</th><th>SHA-256</th></tr></thead>
+    <tbody>
+    {% for room in inv.rooms %}{% for photo in room.photos %}
+      <tr><td>{{ photo.id }}</td><td>{{ room.name }}</td>
+          <td>{{ photo_display_path[photo.id] }}{% if photo.source_video %}<br>
+            <span class="meta">frame of {{ photo.source_video | basename }}</span>{% endif %}</td>
+          <td>{{ photo.captured_at or "—" }}</td>
+          <td class="hash">{{ photo.sha256 or "—" }}</td></tr>
+    {% endfor %}{% endfor %}
+    </tbody>
+  </table>
+</section>
 
 {% if total_photos %}
 <section class="room appendix-photos print-only page-break" id="appendix-photos">
@@ -431,11 +506,19 @@ rather than silently deleted.</p>
   <div class="photo-sheet">
     {% for photo in section.photos %}
     <figure id="pdf-photo-{{ photo.id }}" data-photo-id="{{ photo.id }}"
-            {% if loop.index % 12 == 0 %}class="sheet-break"{% endif %}>
-      <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}">
+            class="{% if regions_by_photo.get(photo.id) %}annotated {% endif %}{% if loop.index % 12 == 0 %}sheet-break{% endif %}">
+      <span class="frame">
+        <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}">
+        {% for reg in regions_by_photo.get(photo.id, []) %}
+          <span class="region" data-label="{{ reg.item_id }} · {{ reg.defect }}"
+                style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
+        {% endfor %}
+      </span>
       <figcaption>
-        <div class="ref-tag">Ref #{{ section.number }}</div>
-        <div>{{ photo.captured_at or inv.inspected_at }}</div>
+        <div class="ref-tag">{{ photo.id }} — Ref {{ section.number }}</div>
+        <div>{% if photo.captured_at %}{{ photo.captured_at | human_date }}
+          {%- elif photo.source_video %}frame of {{ photo.source_video | basename }}
+          {%- else %}{{ inv.inspected_at | human_date }}{% endif %}</div>
       </figcaption>
     </figure>
     {% endfor %}
@@ -445,20 +528,7 @@ rather than silently deleted.</p>
 </section>
 {% endif %}
 
-<section class="room appendix page-break">
-  <h2>Appendix A — Photographic evidence manifest (SHA-256)</h2>
-  <table>
-    <thead><tr><th>ID</th><th>Room</th><th>File</th><th>Captured</th><th>SHA-256</th></tr></thead>
-    <tbody>
-    {% for room in inv.rooms %}{% for photo in room.photos %}
-      <tr><td>{{ photo.id }}</td><td>{{ room.name }}</td><td>{{ photo.path }}</td>
-          <td>{{ photo.captured_at or "—" }}</td><td>{{ photo.sha256[:32] }}&hellip;</td></tr>
-    {% endfor %}{% endfor %}
-    </tbody>
-  </table>
-</section>
-
-<section class="declaration page-break">
+<section class="declaration page-break" id="declaration">
   <h3>Declaration</h3>
   <p>This inventory was prepared with AI assistance and has been reviewed for
   accuracy by the undersigned. It provides a fair and accurate record of the
@@ -489,7 +559,8 @@ rather than silently deleted.</p>
 <footer class="doc-footer">
   <div class="pdf-brand print-only">{{ agent_display }}{% if inv.agent_phone %} &middot; {{ inv.agent_phone }}{% endif %}</div>
   <span class="tool-meta screen-only">Generated by homeinventory v{{ inv.tool_version }}
-  ({{ inv.describe_backend }} backend) &middot; {{ inv.inspected_at }}</span>
+  &middot; AI drafting: {{ inv.describe_backend or "none" }}
+  &middot; {{ inv.inspected_at | human_date }}</span>
 </footer>
 </main>
 
@@ -505,12 +576,15 @@ rather than silently deleted.</p>
       &nbsp;<kbd>x</kbd> reject &nbsp;<kbd>1–5</kbd> grade</span>
     <span id="dirty-dot" title="Unsaved review changes"></span>
     <button class="dk-btn" id="btn-sign">Sign</button>
-    <button class="dk-btn primary" id="btn-export">Download reviewed inventory.json</button>
+    <button class="dk-btn primary" id="btn-export">Download review file</button>
   </div>
 </div>
 <div id="toast" role="status"></div>
 
 <script type="application/json" id="hi-data">{{ payload | tojson }}</script>
+<script>
+{% include "_ui.js.j2" %}
+</script>
 <script>
 "use strict";
 /* Level 1 review layer (docs/05-review-experience.md).
@@ -638,13 +712,46 @@ rather than silently deleted.</p>
       name.appendChild(el("span", { "class": "meta",
         text: "AI suggested — reviewer rejected" }));
     }
-    tr.querySelector(".desc-cell").textContent = it.description || "";
-    var cond = tr.querySelector(".cond-cell");
-    cond.textContent = it.not_inspected || it.condition || "—";
-    cond.className = "cond-cell grade " + (it.condition || "");
+    var desc = tr.querySelector(".desc-cell");
+    desc.innerHTML = "";
+    desc.appendChild(el("span", { "class": "desc-text",
+      text: it.description || "" }));
+    if ((it.photo_ids || []).length) {
+      desc.appendChild(el("div", { "class": "ev-refs print-only",
+        text: "Evidence: " + it.photo_ids.join(", ") }));
+    }
+    renderCondStatic(tr.querySelector(".cond-cell"), it);
     tr.querySelector(".clean-cell").textContent = it.cleanliness || "—";
     renderDefectsStatic(tr.querySelector(".def-cell"), it);
     tr.querySelector(".photo-cell").textContent = (it.photo_ids || []).join(", ");
+  }
+  function gradesLine(it) {
+    var parts = [];
+    function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+    if (it.not_inspected) parts.push(cap(it.not_inspected));
+    if (it.condition) parts.push(cap(it.condition));
+    if (it.cleanliness && it.cleanliness !== it.condition) {
+      parts.push(cap(it.cleanliness));
+    }
+    return parts.length ? parts.join(" · ") : "—";
+  }
+  function renderCondStatic(td, it) {
+    td.innerHTML = "";
+    td.appendChild(el("span", {
+      "class": "screen-only grade-word " + (it.condition || ""),
+      text: it.not_inspected || it.condition || "—" }));
+    var pr = el("div", { "class": "print-only" });
+    pr.appendChild(el("span", {
+      "class": "grade-word " + (it.condition || ""), text: gradesLine(it) }));
+    var live = it.defects || [], dead = it.rejected_defects || [];
+    if (live.length || dead.length) {
+      var ul = el("ul", { "class": "defects" });
+      live.forEach(function (d) { ul.appendChild(el("li", { text: d })); });
+      dead.forEach(function (d) {
+        ul.appendChild(el("li", { "class": "struck", text: d })); });
+      pr.appendChild(ul);
+    }
+    td.appendChild(pr);
   }
   function renderDefectsStatic(td, it) {
     td.innerHTML = "";
@@ -736,7 +843,7 @@ rather than silently deleted.</p>
     var name = tr.querySelector(".item-name");
     editable(name, function () { return it.name; },
              function (v) { it.name = v; });
-    var desc = tr.querySelector(".desc-cell");
+    var desc = tr.querySelector(".desc-text");
     editable(desc, function () { return it.description || ""; },
              function (v) { it.description = v; });
     var cond = tr.querySelector(".cond-cell");
@@ -915,7 +1022,8 @@ rather than silently deleted.</p>
     document.getElementById("dirty-dot").classList.remove("dirty");
     try { localStorage.removeItem(storeKey); } catch (e) {}
     var c = counts();
-    toast("Saved — drop it in the report folder and run: homeinventory render" +
+    toast("Downloaded inventory.json — replace the copy in the report " +
+          "folder and re-render to publish your review" +
           (c.done < c.total ? " (" + (c.total - c.done) + " items unreviewed)" : ""));
   }
 
@@ -947,34 +1055,42 @@ rather than silently deleted.</p>
   }
   function sign() {
     var c = counts();
-    if (c.done < c.total &&
-        !confirm(c.total - c.done + " items are still unreviewed. Sign anyway?")) {
-      return;
-    }
-    var name = prompt("Sign as (full name):", inv.inspected_by || "");
-    if (!name || !name.trim()) return;
-    var role = prompt('Role — "landlord" or "agent":', "landlord");
-    if (!role || !role.trim()) return;
-    canonicalHash(inv).then(function (hash) {
-      inv.signatures = inv.signatures || [];
-      inv.signatures.push({
-        role: role.trim().toLowerCase(), name: name.trim(),
-        signed_at: new Date().toISOString(),
-        inventory_sha256: hash, via: "interactive report (level 1)"
+    ui.form({
+      title: "Sign this inventory",
+      note: (c.done < c.total
+              ? (c.total - c.done) + " items are still unreviewed. "
+              : "") +
+            "Signing pins the current content hash to your name.",
+      submitLabel: "Sign",
+      fields: [
+        { name: "name", label: "Full name", value: inv.inspected_by || "",
+          required: true },
+        { name: "role", label: "Role", type: "select", value: "landlord",
+          options: ["landlord", "agent"] }
+      ]
+    }).then(function (values) {
+      if (!values) return;
+      canonicalHash(inv).then(function (hash) {
+        inv.signatures = inv.signatures || [];
+        inv.signatures.push({
+          role: values.role.toLowerCase(), name: values.name,
+          signed_at: new Date().toISOString(),
+          inventory_sha256: hash, via: "interactive report (level 1)"
+        });
+        markDirty();
+        var holder = document.getElementById("signatures");
+        var s = inv.signatures[inv.signatures.length - 1];
+        var card = el("div", { "class": "sigcard" });
+        card.appendChild(el("strong", { text: s.name }));
+        card.appendChild(document.createTextNode(
+          " — " + s.role + " — signed " + s.signed_at + " "));
+        if (s.inventory_sha256) {
+          card.appendChild(el("div", { "class": "hash",
+            text: "attests content sha256 " + s.inventory_sha256 }));
+        }
+        holder.appendChild(card);
+        toast("Signed — download the review file to make it permanent.");
       });
-      markDirty();
-      var holder = document.getElementById("signatures");
-      var s = inv.signatures[inv.signatures.length - 1];
-      var card = el("div", { "class": "sigcard" });
-      card.appendChild(el("strong", { text: s.name }));
-      card.appendChild(document.createTextNode(
-        " — " + s.role + " — signed " + s.signed_at + " "));
-      if (s.inventory_sha256) {
-        card.appendChild(el("div", { "class": "hash",
-          text: "attests content sha256 " + s.inventory_sha256 }));
-      }
-      holder.appendChild(card);
-      toast("Signed. Export the reviewed JSON to make it permanent.");
     });
   }
 

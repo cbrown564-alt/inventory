@@ -31,7 +31,7 @@ from http.server import ThreadingHTTPServer
 from pathlib import Path
 from typing import Optional
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader
 
 from .ingest import IMAGE_EXTS
 from .schema import Photo
@@ -115,7 +115,7 @@ class CaptureHandler(BaseHandler):
         from .guide import PER_ROOM_SHOTS, TIPS, WHOLE_PROPERTY_SHOTS
         st = self.state
         env = Environment(loader=FileSystemLoader(TEMPLATES),
-                          autoescape=select_autoescape(["html"]))
+                          autoescape=True)
         return env.get_template("capture.html.j2").render(
             token=st.token, rooms=st.scan(),
             per_room_shots=PER_ROOM_SHOTS,

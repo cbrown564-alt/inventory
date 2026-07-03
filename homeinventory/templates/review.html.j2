@@ -4,71 +4,33 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Review — {{ inv.property_address or "Property inventory" }}</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --paper: #f6f6f3; --panel: #ffffff; --ink: #1d2126; --muted: #6a7077;
-    --line: #e2e3df; --line-strong: #c9cbc4;
-    --accent: #0f6b4a; --accent-ink: #0a4a33; --accent-soft: #e6f2ec;
-    --danger: #a3231f; --danger-soft: #f7eceb;
-    --amber: #8a6d1f; --amber-soft: #f7f1df;
-    --ui: "Outfit", "Segoe UI Variable Text", "Segoe UI", sans-serif;
-    --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
-  }
-  * { box-sizing: border-box; }
+{% include "_theme.css.j2" %}
+
   html, body { height: 100%; }
-  body {
-    margin: 0; font: 14px/1.5 var(--ui); color: var(--ink);
-    background: var(--paper); display: flex; flex-direction: column;
-  }
-  button { font-family: var(--ui); }
-  .mono { font-family: var(--mono); }
+  body { display: flex; flex-direction: column; }
 
   /* ---------- header ---------- */
-  header {
-    display: flex; align-items: center; gap: 18px; padding: 10px 20px;
-    background: var(--panel); border-bottom: 1px solid var(--line);
-    position: sticky; top: 0; z-index: 30; flex-wrap: wrap;
-  }
-  .wordmark { font-weight: 700; letter-spacing: .14em; font-size: 11px;
-              text-transform: uppercase; color: var(--accent-ink); }
   .addr { font-weight: 500; color: var(--muted); font-size: 13px;
-          max-width: 320px; overflow: hidden; text-overflow: ellipsis;
+          max-width: 300px; overflow: hidden; text-overflow: ellipsis;
           white-space: nowrap; }
-  #progress { flex: 1 1 200px; min-width: 160px; }
+  #progress { flex: 1 1 170px; min-width: 140px; }
   #progress .label { font-size: 12px; color: var(--muted);
                      font-variant-numeric: tabular-nums; }
   #progress .track { height: 4px; background: var(--line); border-radius: 2px;
                      overflow: hidden; margin-top: 3px; }
-  #progress .fill { height: 100%; width: 0; background: var(--accent);
+  #progress .fill { height: 100%; width: 0; background: var(--confirm);
                     transition: width .35s cubic-bezier(.16,1,.3,1); }
-  .btn {
-    border: 1px solid var(--line-strong); background: var(--panel);
-    color: var(--ink); border-radius: 4px; padding: 7px 14px; font-size: 13px;
-    font-weight: 500; cursor: pointer;
-    transition: border-color .15s, background .15s;
-  }
-  .btn:hover { border-color: var(--accent); }
-  .btn:active { transform: translateY(1px); }
-  .btn.primary { background: var(--accent); border-color: var(--accent);
-                 color: #fff; }
-  .btn.primary:hover { background: var(--accent-ink); }
-  .btn.danger { color: var(--danger); border-color: #ddbdbc; }
-  .btn.danger:hover { border-color: var(--danger); background: var(--danger-soft); }
-  .btn.ghost { border-color: transparent; color: var(--muted); }
-  .btn.ghost:hover { color: var(--ink); border-color: var(--line-strong); }
-  .btn:disabled { opacity: .5; cursor: default; }
-  #dirty { width: 8px; height: 8px; border-radius: 50%; }
-  #dirty.on { background: var(--amber); }
+  #save-state { font-size: 12px; color: var(--muted); white-space: nowrap;
+                min-width: 88px; text-align: right; }
+  #save-state.err { color: var(--danger); }
   .share { font-family: var(--mono); font-size: 11px; color: var(--muted); }
   .share a { color: var(--accent-ink); }
+  #btn-queue { display: none; }
 
   /* ---------- layout ---------- */
   #app { flex: 1; display: grid; grid-template-columns: 360px 1fr;
          min-height: 0; }
-  @media (max-width: 900px) { #app { grid-template-columns: 1fr; }
-    #rail { max-height: 40vh; } }
 
   /* ---------- queue rail ---------- */
   #rail { border-right: 1px solid var(--line); background: var(--panel);
@@ -81,11 +43,11 @@
     border: 1px solid var(--line); background: transparent; color: var(--muted);
     border-radius: 999px; font-size: 12px; padding: 3px 11px; cursor: pointer;
   }
-  .filters button[aria-pressed="true"] { background: var(--ink);
-    border-color: var(--ink); color: #fff; }
+  .filters button[aria-pressed="true"] { background: var(--accent);
+    border-color: var(--accent); color: #fff; }
   .tools .row2 { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
   .tools select { font: 12px var(--ui); border: 1px solid var(--line);
-                  border-radius: 4px; padding: 3px 6px; background: #fff;
+                  border-radius: 5px; padding: 3px 6px; background: #fff;
                   color: var(--muted); }
   #bulk { font-size: 12px; padding: 4px 10px; }
 
@@ -106,7 +68,7 @@
   .q-item.active { background: var(--accent-soft); }
   .q-item .dot { width: 8px; height: 8px; border-radius: 50%;
                  border: 1.5px solid var(--line-strong); }
-  .q-item.done .dot { background: var(--accent); border-color: var(--accent); }
+  .q-item.done .dot { background: var(--confirm); border-color: var(--confirm); }
   .q-item.bad .dot { background: var(--danger); border-color: var(--danger); }
   .q-item .name { font-weight: 500; font-size: 13px; overflow: hidden;
                   text-overflow: ellipsis; white-space: nowrap; }
@@ -118,21 +80,22 @@
   .conf { width: 44px; }
   .conf .t { height: 3px; background: var(--line); border-radius: 2px;
              overflow: hidden; }
-  .conf .f { height: 100%; background: var(--amber); }
+  .conf .f { height: 100%; background: var(--pend); }
   .conf .v { font-family: var(--mono); font-size: 9px; color: var(--muted);
              text-align: right; display: block; }
   .empty-queue { padding: 28px 16px; color: var(--muted); font-size: 13px;
                  text-align: center; }
+  #rail-backdrop { display: none; }
 
   /* ---------- detail pane ---------- */
-  #detail { overflow-y: auto; padding: 26px 34px 120px; min-width: 0; }
+  #detail { overflow-y: auto; padding: 26px 34px 140px; min-width: 0; }
   .crumb { font-family: var(--mono); font-size: 11px; color: var(--muted);
            display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .badge { font-size: 10px; font-weight: 600; letter-spacing: .08em;
            text-transform: uppercase; border-radius: 3px; padding: 2px 7px; }
-  .badge.ok { color: var(--accent-ink); background: var(--accent-soft); }
+  .badge.ok { color: var(--confirm); background: var(--confirm-soft); }
   .badge.no { color: var(--danger); background: var(--danger-soft); }
-  .badge.pend { color: var(--amber); background: var(--amber-soft); }
+  .badge.pend { color: var(--pend); background: var(--pend-soft); }
   .badge.prov { color: var(--muted); background: var(--paper);
                 border: 1px solid var(--line); text-transform: none;
                 letter-spacing: 0; font-weight: 500; }
@@ -146,7 +109,7 @@
   #d-desc {
     font: 14px/1.5 var(--ui); color: var(--ink); width: 100%; min-height: 54px;
     border: 1px solid transparent; background: transparent; resize: vertical;
-    padding: 4px 0; border-radius: 3px;
+    padding: 4px 0; border-radius: 5px;
   }
   #d-desc:hover { border-color: var(--line); }
   #d-desc:focus { border-color: var(--accent); outline: none; background: #fff;
@@ -156,7 +119,7 @@
     letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
     margin-bottom: 4px; }
   .grades select { font: 13px var(--ui); padding: 6px 10px; min-width: 180px;
-    border: 1px solid var(--line-strong); border-radius: 4px; background: #fff; }
+    border: 1px solid var(--line-strong); border-radius: 5px; background: #fff; }
   .sec { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line); }
   .sec > h3 { margin: 0 0 8px; font-size: 11px; font-weight: 600;
     letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
@@ -173,88 +136,145 @@
   .chip .x { font-size: 11px; opacity: .6; }
   .def-add { display: flex; gap: 6px; margin-top: 8px; max-width: 460px; }
   .def-add input { flex: 1; font: 13px var(--ui); padding: 6px 10px;
-    border: 1px solid var(--line-strong); border-radius: 4px; }
+    border: 1px solid var(--line-strong); border-radius: 5px; }
 
-  /* evidence + annotation */
+  /* evidence grid (click opens the lightbox) */
   .ev-grid { display: grid; grid-template-columns: repeat(auto-fill,
-             minmax(260px, 1fr)); gap: 14px; }
-  .anno { position: relative; user-select: none; touch-action: none;
-          border: 1px solid var(--line); background: #111; }
-  .anno img { width: 100%; display: block; pointer-events: none; }
-  .anno .pid { position: absolute; left: 0; top: 0; z-index: 3;
-    background: rgba(29,33,38,.82); color: #fff; font: 10px var(--mono);
+             minmax(220px, 1fr)); gap: 14px; }
+  .ev-thumb { position: relative; border: 1px solid var(--line);
+              background: #111; cursor: zoom-in; padding: 0; display: block;
+              width: 100%; }
+  .ev-thumb img { width: 100%; display: block; }
+  .ev-thumb .pid { position: absolute; left: 0; top: 0; z-index: 3;
+    background: rgba(28,36,48,.82); color: #fff; font: 10px var(--mono);
     padding: 2px 7px; }
-  .anno .hint { position: absolute; right: 0; bottom: 0; z-index: 3;
-    background: rgba(29,33,38,.65); color: #fff; font: 10px var(--ui);
-    padding: 2px 7px; opacity: 0; transition: opacity .2s; }
-  .anno:hover .hint { opacity: 1; }
-  .anno .box { position: absolute; border: 2px solid var(--danger);
-    background: rgba(163,35,31,.12); z-index: 2; cursor: pointer; }
-  .anno .box .lbl { position: absolute; left: -2px; bottom: 100%;
+  .ev-thumb .n-pins { position: absolute; right: 0; bottom: 0; z-index: 3;
     background: var(--danger); color: #fff; font: 10px var(--ui);
-    padding: 1px 6px; white-space: nowrap; max-width: 240px; overflow: hidden;
-    text-overflow: ellipsis; }
-  .anno .draft { border-style: dashed; background: rgba(163,35,31,.07); }
-  .ev-missing { color: var(--amber); background: var(--amber-soft);
-    border: 1px solid #e8dcb2; border-radius: 4px; padding: 10px 14px;
+    padding: 1px 7px; }
+  .ev-thumb:focus-visible { outline: 2px solid var(--accent);
+                            outline-offset: 2px; }
+  .ev-missing { color: var(--pend); background: var(--pend-soft);
+    border: 1px solid #e8dcb2; border-radius: 5px; padding: 10px 14px;
     font-size: 13px; }
-  #anno-form { position: fixed; z-index: 60; background: var(--panel);
-    border: 1px solid var(--line-strong); border-radius: 6px; padding: 10px;
-    box-shadow: 0 12px 32px -12px rgba(29,33,38,.4); display: none;
+
+  /* ---------- lightbox ---------- */
+  #lightbox { position: fixed; inset: 0; z-index: 70; background:
+              rgba(16,20,26,.94); display: none; flex-direction: column; }
+  #lightbox.on { display: flex; }
+  #lb-top { display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+            color: #dfe3e8; font-size: 13px; }
+  #lb-top .pid { font-family: var(--mono); font-size: 12px; color: #9aa3ad; }
+  #lb-top .spacer { flex: 1; }
+  .lb-btn { border: 1px solid rgba(255,255,255,.25); background: transparent;
+            color: #eef1f4; border-radius: 6px; padding: 6px 12px;
+            font-size: 13px; cursor: pointer; }
+  .lb-btn:hover { border-color: #fff; }
+  .lb-btn[aria-pressed="true"] { background: var(--danger);
+                                 border-color: var(--danger); }
+  #lb-stage { flex: 1; position: relative; overflow: hidden; cursor: grab; }
+  #lb-stage.pinning { cursor: crosshair; }
+  #lb-stage.dragging { cursor: grabbing; }
+  #lb-canvas { position: absolute; transform-origin: 0 0; }
+  #lb-canvas img { display: block; user-select: none; -webkit-user-drag: none; }
+  #lb-canvas .box { position: absolute; border: 2px solid var(--danger);
+    background: rgba(163,35,31,.12); }
+  #lb-canvas .box .lbl { position: absolute; left: -2px; bottom: 100%;
+    background: var(--danger); color: #fff; font: 11px var(--ui);
+    padding: 1px 6px; white-space: nowrap; max-width: 260px; overflow: hidden;
+    text-overflow: ellipsis; }
+  #lb-canvas .box.draft { border-style: dashed;
+                          background: rgba(163,35,31,.07); }
+  #lb-bottom { display: flex; align-items: center; justify-content: center;
+               gap: 10px; padding: 10px 16px; color: #9aa3ad; font-size: 12px;
+               flex-wrap: wrap; }
+  #lb-zoom { font-family: var(--mono); min-width: 46px; text-align: center; }
+  #lb-hint { font-size: 12px; }
+
+  /* annotation label popover (shared by lightbox pins) */
+  #anno-form { position: fixed; z-index: 95; background: var(--panel);
+    border: 1px solid var(--line-strong); border-radius: 8px; padding: 10px;
+    box-shadow: 0 12px 32px -12px rgba(28,36,48,.4); display: none;
     width: 280px; }
   #anno-form select, #anno-form input { width: 100%; font: 13px var(--ui);
     padding: 6px 8px; margin-bottom: 6px; border: 1px solid var(--line-strong);
-    border-radius: 4px; }
+    border-radius: 5px; }
   #anno-form .row { display: flex; gap: 6px; justify-content: flex-end; }
 
   /* comments */
   .c-line { padding: 7px 0; border-top: 1px dotted var(--line); font-size: 13px; }
   .c-line .who { font-weight: 600; font-size: 12px; }
-  .c-line .who.tenant { color: #7a3e8f; }
+  .c-line .who.tenant { color: var(--tenant); }
   .c-line .who.landlord, .c-line .who.agent { color: var(--accent-ink); }
   .c-line .at { font-family: var(--mono); font-size: 10px; color: var(--muted);
                 margin-left: 8px; }
   .c-add { display: flex; gap: 6px; margin-top: 8px; max-width: 560px; }
   .c-add input { flex: 1; font: 13px var(--ui); padding: 7px 10px;
-    border: 1px solid var(--line-strong); border-radius: 4px; }
+    border: 1px solid var(--line-strong); border-radius: 5px; }
 
   /* sticky item actions */
   #actions {
-    position: sticky; bottom: 0; margin: 30px -34px -120px; padding: 12px 34px;
-    background: linear-gradient(to top, var(--paper) 70%, transparent);
-    display: flex; gap: 10px; align-items: center;
+    position: sticky; bottom: 0; margin: 30px -34px 0; padding: 12px 34px;
+    background: var(--panel); border-top: 1px solid var(--line);
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
   }
   .kbd { font-family: var(--mono); font-size: 10px; color: var(--muted);
-         background: var(--panel); border: 1px solid var(--line);
+         background: var(--paper); border: 1px solid var(--line);
          border-radius: 3px; padding: 0 5px; }
+  .kbd-label { font-size: 12px; color: var(--muted); }
 
   /* room view */
   .room-summary { width: 100%; min-height: 70px; font: 14px/1.5 var(--ui);
-    border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: 5px; padding: 10px 12px;
     background: #fff; resize: vertical; }
   .add-form { display: grid; gap: 8px; max-width: 460px; }
   .add-form input, .add-form select { font: 13px var(--ui); padding: 7px 10px;
-    border: 1px solid var(--line-strong); border-radius: 4px; }
+    border: 1px solid var(--line-strong); border-radius: 5px; }
   .add-form label { font-size: 11px; font-weight: 600; letter-spacing: .1em;
     text-transform: uppercase; color: var(--muted); }
   .uncited { display: flex; gap: 8px; flex-wrap: wrap; }
-  .uncited img { height: 72px; border: 1px solid var(--line); display: block; }
+  .uncited .ev-thumb { width: auto; }
+  .uncited img { height: 72px; width: auto; display: block; }
   .uncited figure { margin: 0; }
   .uncited figcaption { font: 9px var(--mono); color: var(--muted); }
-  #redesc-status { font-size: 12px; color: var(--muted); margin-top: 8px;
-                   white-space: pre-wrap; font-family: var(--mono); }
+  #redesc-status { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  #redesc-status details { margin-top: 6px; }
+  #redesc-status pre { font: 11px var(--mono); white-space: pre-wrap;
+    background: var(--paper); border: 1px solid var(--line); border-radius: 5px;
+    padding: 8px 10px; max-height: 220px; overflow: auto; }
 
-  #toast { position: fixed; bottom: 18px; left: 50%; z-index: 80;
-    transform: translateX(-50%) translateY(8px); background: var(--ink);
-    color: #fff; font-size: 13px; padding: 9px 18px; border-radius: 5px;
-    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; }
-  #toast.show { opacity: .97; transform: translateX(-50%); }
+  /* ---------- mobile ---------- */
+  @media (max-width: 900px) {
+    #app { grid-template-columns: 1fr; }
+    #btn-queue { display: inline-block; }
+    #rail { position: fixed; top: 0; bottom: 0; left: 0; width: 82vw;
+            max-width: 360px; z-index: 60; transform: translateX(-103%);
+            transition: transform .22s ease; box-shadow: 12px 0 40px -20px
+            rgba(16,20,26,.5); }
+    #rail.open { transform: none; }
+    #rail-backdrop { display: none; position: fixed; inset: 0; z-index: 55;
+                     background: rgba(28,36,48,.4); }
+    #rail-backdrop.on { display: block; }
+    .addr { display: none; }
+    #detail { padding: 18px 16px 150px; }
+    #actions { position: fixed; left: 0; right: 0; bottom: 0; margin: 0;
+               padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+               z-index: 40; }
+  }
+  @media (hover: none), (max-width: 640px) {
+    .kbd, .kbd-label { display: none; }
+  }
 </style>
 </head>
 <body>
-<header>
-  <span class="wordmark">Homeinventory · Review</span>
-  <span class="addr">{{ inv.property_address or "Property" }}</span>
+<header class="app-header">
+  <button class="btn ghost" id="btn-queue" aria-label="Show item list">☰ Items</button>
+  <span class="wordmark">Homeinventory</span>
+  <nav class="app-nav" aria-label="Sections">
+    <a href="/" aria-current="page">Review</a>
+    <a href="/report" target="_blank" rel="noopener">Report</a>
+  </nav>
+  <span class="addr" id="hdr-addr">{{ inv.property_address or "No address yet" }}</span>
+  <button class="btn ghost" id="btn-details">Details</button>
   <div id="progress">
     <div class="label"><span id="prog-n">0</span> of <span id="prog-d">0</span>
       items confirmed</div>
@@ -262,14 +282,13 @@
   </div>
   {% if share_url %}<span class="share">tenant link:
     <a href="{{ share_url }}" target="_blank">{{ share_url }}</a></span>{% endif %}
-  <span id="dirty" title="Unsaved changes"></span>
-  <button class="btn" id="btn-sign">Sign</button>
-  <button class="btn" id="btn-save">Save</button>
-  <button class="btn primary" id="btn-save-render">Save &amp; re-render</button>
+  <span id="save-state" role="status">All changes saved</span>
+  <button class="btn" id="btn-pdf">Export PDF</button>
+  <button class="btn primary" id="btn-sign">Sign</button>
 </header>
 
 <div id="app">
-  <nav id="rail">
+  <nav id="rail" aria-label="Item queue">
     <div class="tools">
       <div class="filters" id="filters">
         <button data-f="all" aria-pressed="true">All</button>
@@ -278,7 +297,7 @@
         <button data-f="noev" aria-pressed="false">No evidence</button>
       </div>
       <div class="row2">
-        <select id="sort">
+        <select id="sort" aria-label="Sort order">
           <option value="room">By room</option>
           <option value="conf">Least confident first</option>
         </select>
@@ -287,7 +306,30 @@
     </div>
     <div id="queue"></div>
   </nav>
+  <div id="rail-backdrop"></div>
   <section id="detail"></section>
+</div>
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <div id="lb-top">
+    <span class="pid" id="lb-pid"></span>
+    <span id="lb-title"></span>
+    <span class="spacer"></span>
+    <button class="lb-btn" id="lb-pin" aria-pressed="false">Pin defect</button>
+    <button class="lb-btn" id="lb-close" aria-label="Close">✕ Close</button>
+  </div>
+  <div id="lb-stage">
+    <div id="lb-canvas"><img id="lb-img" alt=""></div>
+  </div>
+  <div id="lb-bottom">
+    <button class="lb-btn" id="lb-prev" aria-label="Previous photo">‹</button>
+    <button class="lb-btn" id="lb-out" aria-label="Zoom out">−</button>
+    <span id="lb-zoom">100%</span>
+    <button class="lb-btn" id="lb-in" aria-label="Zoom in">+</button>
+    <button class="lb-btn" id="lb-fit">Fit</button>
+    <button class="lb-btn" id="lb-next" aria-label="Next photo">›</button>
+    <span id="lb-hint">Scroll to zoom · drag to pan · double-click a pin to remove it</span>
+  </div>
 </div>
 
 <div id="anno-form">
@@ -302,6 +344,9 @@
 
 <script type="application/json" id="hi-data">{{ payload | tojson }}</script>
 <script>
+{% include "_ui.js.j2" %}
+</script>
+<script>
 "use strict";
 (function () {
   var payload = JSON.parse(document.getElementById("hi-data").textContent);
@@ -314,11 +359,10 @@
   var CLEANS = ["professionally cleaned", "cleaned to domestic standard",
                 "requires cleaning"];
 
-  var dirty = false;
   var filter = "all";
   var sortMode = "room";
   var sel = null;            // {type:"item", id} | {type:"room", name}
-  var pendingRegion = null;  // staged annotation awaiting defect label
+  var el = ui.el, toast = ui.toast;
 
   function index() {
     var items = [], byId = {}, roomOf = {}, photoById = {};
@@ -332,35 +376,13 @@
   }
   var ix = index();
 
-  /* ---------- helpers ---------- */
-  function el(tag, attrs, children) {
-    var n = document.createElement(tag);
-    Object.keys(attrs || {}).forEach(function (k) {
-      if (k === "text") n.textContent = attrs[k];
-      else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]);
-      else n.setAttribute(k, attrs[k]);
-    });
-    (children || []).forEach(function (c) { n.appendChild(c); });
-    return n;
-  }
-  function toast(msg) {
-    var t = document.getElementById("toast");
-    t.textContent = msg; t.classList.add("show");
-    clearTimeout(toast._t);
-    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2400);
-  }
-  function markDirty() {
-    dirty = true;
-    document.getElementById("dirty").classList.add("on");
-    renderProgress();
-  }
   function api(method, url, body) {
     return fetch(url, {
       method: method,
       headers: { "Content-Type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body)
     }).then(function (r) {
-      return r.json().then(function (j) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
         if (!r.ok) throw new Error(j.error || r.statusText);
         return j;
       });
@@ -369,6 +391,91 @@
   function isDone(it) { return it.reviewed || it.rejected; }
   function hasEvidence(it) {
     return (it.photo_ids || []).some(function (p) { return photoSrc[p]; });
+  }
+
+  /* ---------- autosave ---------- */
+  var dirty = false;
+  var saving = false;
+  var saveTimer = null;
+  var saveState = document.getElementById("save-state");
+  function setSaveState(text, err) {
+    saveState.textContent = text;
+    saveState.classList.toggle("err", !!err);
+  }
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () { flush(); }, 800);
+  }
+  function flush(opts) {
+    // returns a promise resolving once the current state is on disk
+    opts = opts || {};
+    clearTimeout(saveTimer);
+    if (!dirty && !saving) return Promise.resolve();
+    if (saving) {           // let the in-flight save finish, then re-check
+      return new Promise(function (res) {
+        setTimeout(function () { flush(opts).then(res); }, 250);
+      });
+    }
+    saving = true;
+    dirty = false;
+    setSaveState("Saving…");
+    var url = "/api/inventory" + (opts.manual ? "" : "?autosave=1");
+    return api("PUT", url, inv).then(function () {
+      saving = false;
+      if (dirty) { scheduleSave(); return; }
+      setSaveState("All changes saved");
+    }).catch(function (e) {
+      saving = false;
+      dirty = true;
+      setSaveState("Save failed — retrying", true);
+      if (!flush._warned) {
+        flush._warned = true;
+        toast("Could not save: " + e.message + " — will keep retrying");
+      }
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(function () { flush(opts); }, 4000);
+    });
+  }
+  function markDirty() {
+    dirty = true;
+    setSaveState("Unsaved changes…");
+    scheduleSave();
+    renderProgress();
+  }
+  window.addEventListener("beforeunload", function (e) {
+    if (dirty || saving) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+  /* ---------- undo ---------- */
+  var undoStack = [];
+  function snapshotOf(obj) {
+    var json = JSON.stringify(obj);
+    return function restore() {
+      var snap = JSON.parse(json);
+      Object.keys(obj).forEach(function (k) { delete obj[k]; });
+      Object.keys(snap).forEach(function (k) { obj[k] = snap[k]; });
+    };
+  }
+  function pushUndo(label, objs) {
+    var restores = (objs || []).map(snapshotOf);
+    undoStack.push({ label: label, apply: function () {
+      restores.forEach(function (r) { r(); });
+    } });
+    if (undoStack.length > 50) undoStack.shift();
+  }
+  function undo() {
+    var entry = undoStack.pop();
+    if (!entry) { toast("Nothing to undo"); return; }
+    entry.apply();
+    ix = index();
+    markDirty();
+    renderProgress(); renderQueue();
+    if (sel && sel.type === "item" && ix.byId[sel.id]) renderItem(ix.byId[sel.id]);
+    else if (sel && sel.type === "room") {
+      var room = inv.rooms.find(function (r) { return r.name === sel.name; });
+      if (room) renderRoom(room);
+    }
+    toast("Undid: " + entry.label);
   }
 
   /* ---------- progress ---------- */
@@ -381,6 +488,17 @@
   }
 
   /* ---------- queue rail ---------- */
+  var rail = document.getElementById("rail");
+  var railBackdrop = document.getElementById("rail-backdrop");
+  function setRail(open) {
+    rail.classList.toggle("open", open);
+    railBackdrop.classList.toggle("on", open);
+  }
+  document.getElementById("btn-queue").addEventListener("click", function () {
+    setRail(!rail.classList.contains("open"));
+  });
+  railBackdrop.addEventListener("click", function () { setRail(false); });
+
   function visible(it) {
     if (filter === "pending") return !isDone(it);
     if (filter === "defects") {
@@ -398,6 +516,11 @@
       });
     }
     return entries;
+  }
+  function queueRowState(row, it) {
+    row.className = "q-item" +
+      (it.rejected ? " bad" : it.reviewed ? " done" : "") +
+      (sel && sel.type === "item" && sel.id === it.id ? " active" : "");
   }
   function renderQueue() {
     var q = document.getElementById("queue");
@@ -425,13 +548,12 @@
             text: pend ? pend + " open" : "done" })
         ]));
       }
-      var row = el("div", { "class": "q-item" +
-        (it.rejected ? " bad" : it.reviewed ? " done" : "") +
-        (sel && sel.type === "item" && sel.id === it.id ? " active" : ""),
+      var row = el("div", {
         onclick: function () { select({ type: "item", id: it.id }); } });
+      queueRowState(row, it);
       row.setAttribute("data-qid", it.id);
       row.appendChild(el("span", { "class": "dot" }));
-      var name = el("span", { "class": "name" });
+      var name = el("span", { "class": "name", title: it.name || "" });
       name.appendChild(el("span", { "class": "ref", text: it.id }));
       name.appendChild(document.createTextNode(it.name || "(unnamed)"));
       var bits = [];
@@ -443,7 +565,9 @@
         text: bits.join(" · ") }));
       row.appendChild(name);
       var conf = el("span", { "class": "conf" });
-      if (typeof it.confidence === "number") {
+      // confidence is only signal when it is low or when sorting by it
+      if (typeof it.confidence === "number" &&
+          (sortMode === "conf" || it.confidence < 0.6)) {
         var pct = Math.round(it.confidence * 100);
         conf.appendChild(el("span", { "class": "v", text: pct + "%" }));
         var t = el("span", { "class": "t" });
@@ -455,16 +579,29 @@
       q.appendChild(row);
     });
   }
+  function refreshQueueRow(it) {
+    var row = document.querySelector('[data-qid="' + it.id + '"]');
+    if (row) queueRowState(row, it);
+  }
 
   /* ---------- selection ---------- */
   function select(s) {
+    var prev = sel;
     sel = s;
     closeAnnoForm();
-    renderQueue();
-    if (s.type === "item") renderItem(ix.byId[s.id]);
-    else renderRoom(inv.rooms.find(function (r) { return r.name === s.name; }));
+    if (prev && prev.type === "item" && ix.byId[prev.id]) {
+      refreshQueueRow(ix.byId[prev.id]);
+    }
+    if (s.type === "item") {
+      refreshQueueRow(ix.byId[s.id]);
+      renderItem(ix.byId[s.id]);
+    } else {
+      renderRoom(inv.rooms.find(function (r) { return r.name === s.name; }));
+      renderQueue();
+    }
     var row = document.querySelector('[data-qid="' + (s.id || "") + '"]');
     if (row) row.scrollIntoView({ block: "nearest" });
+    if (window.matchMedia("(max-width: 900px)").matches) setRail(false);
   }
   function step(delta) {
     var entries = queueEntries();
@@ -479,6 +616,17 @@
   /* ---------- item detail ---------- */
   function badge(cls, text) { return el("span", { "class": "badge " + cls,
     text: text }); }
+  function confirmItem(it) {
+    pushUndo("confirm " + it.id, [it]);
+    it.reviewed = true; it.rejected = false;
+    markDirty(); refreshQueueRow(it); step(1);
+  }
+  function rejectItem(it) {
+    pushUndo((it.rejected ? "restore " : "reject ") + it.id, [it]);
+    it.rejected = !it.rejected;
+    if (it.rejected) it.reviewed = false;
+    markDirty(); refreshQueueRow(it); renderItem(it);
+  }
   function renderItem(it) {
     var room = ix.roomOf[it.id];
     var d = document.getElementById("detail");
@@ -497,27 +645,53 @@
     }
     d.appendChild(crumb);
 
+    var editSnap = null;   // one undo entry per focus session on text fields
+    function textUndo(node) {
+      node.addEventListener("focus", function () {
+        editSnap = JSON.stringify(it);
+      });
+      node.addEventListener("blur", function () {
+        if (editSnap && editSnap !== JSON.stringify(it)) {
+          var json = editSnap;
+          undoStack.push({ label: "edit " + it.id, apply: function () {
+            var snap = JSON.parse(json);
+            Object.keys(it).forEach(function (k) { delete it[k]; });
+            Object.keys(snap).forEach(function (k) { it[k] = snap[k]; });
+          } });
+          if (undoStack.length > 50) undoStack.shift();
+        }
+        editSnap = null;
+      });
+    }
     var name = el("input", { id: "d-name", value: it.name || "",
+      "aria-label": "Item name",
       oninput: function () { it.name = name.value; markDirty(); },
       onchange: renderQueue });
+    textUndo(name);
     d.appendChild(name);
     var desc = el("textarea", { id: "d-desc",
+      "aria-label": "Item description",
       placeholder: "Material, colour, brand…",
       oninput: function () { it.description = desc.value; markDirty(); } });
     desc.value = it.description || "";
+    textUndo(desc);
     d.appendChild(desc);
 
     var grades = el("div", { "class": "grades" });
     grades.appendChild(gradeBlock("Condition", CONDITIONS.concat(NOT_INSPECTED),
       it.not_inspected || it.condition || "",
       function (v) {
+        pushUndo("condition of " + it.id, [it]);
         if (NOT_INSPECTED.indexOf(v) >= 0) {
           it.not_inspected = v; it.condition = null;
         } else { it.condition = v || null; it.not_inspected = null; }
         markDirty();
       }));
     grades.appendChild(gradeBlock("Cleanliness", CLEANS, it.cleanliness || "",
-      function (v) { it.cleanliness = v || null; markDirty(); }));
+      function (v) {
+        pushUndo("cleanliness of " + it.id, [it]);
+        it.cleanliness = v || null; markDirty();
+      }));
     d.appendChild(grades);
 
     // defects
@@ -542,6 +716,7 @@
         title: struck ? "Restore this defect"
                       : "Strike — kept in the report as “reviewer rejected”",
         onclick: function () {
+          pushUndo((struck ? "restore" : "strike") + " defect", [it]);
           it.defects = it.defects || []; it.rejected_defects = it.rejected_defects || [];
           var from = struck ? it.rejected_defects : it.defects;
           var to = struck ? it.defects : it.rejected_defects;
@@ -561,6 +736,7 @@
     addIn.addEventListener("keydown", function (e) {
       e.stopPropagation();
       if (e.key === "Enter" && addIn.value.trim()) {
+        pushUndo("add defect", [it]);
         (it.defects = it.defects || []).push(addIn.value.trim());
         addIn.value = ""; markDirty(); drawChips();
       }
@@ -569,24 +745,22 @@
     secD.appendChild(addBox);
     d.appendChild(secD);
 
-    // evidence with annotation
+    // evidence
     var secE = el("div", { "class": "sec" });
-    secE.appendChild(el("h3", { text: "Evidence — drag on a photo to pin a defect" }));
+    secE.appendChild(el("h3",
+      { text: "Evidence — click a photo to inspect and pin defects" }));
     var evGrid = el("div", { "class": "ev-grid" });
     function drawEvidence() {
       evGrid.innerHTML = "";
       var any = false;
       if (cropSrc[it.id]) {
         any = true;
-        var cwrap = el("div", { "class": "anno" });
-        cwrap.appendChild(el("img", { src: cropSrc[it.id], alt: "crop" }));
-        cwrap.appendChild(el("span", { "class": "pid", text: "detector crop" }));
-        evGrid.appendChild(cwrap);
+        evGrid.appendChild(evThumb(it, null, cropSrc[it.id], "detector crop"));
       }
       (it.photo_ids || []).forEach(function (pid) {
         if (!photoSrc[pid]) return;
         any = true;
-        evGrid.appendChild(annoPhoto(it, pid, drawEvidence));
+        evGrid.appendChild(evThumb(it, pid, photoSrc[pid], pid));
       });
       if (!any) {
         evGrid.appendChild(el("div", { "class": "ev-missing",
@@ -597,6 +771,7 @@
     drawEvidence();
     secE.appendChild(evGrid);
     d.appendChild(secE);
+    itemDrawEvidence = drawEvidence;
 
     // comments
     var secC = el("div", { "class": "sec" });
@@ -622,6 +797,7 @@
     cIn.addEventListener("keydown", function (e) {
       e.stopPropagation();
       if (e.key === "Enter" && cIn.value.trim()) {
+        pushUndo("comment on " + it.id, [it]);
         (it.comments = it.comments || []).push({
           author: inv.inspected_by || "reviewer", role: "landlord",
           text: cIn.value.trim(), at: new Date().toISOString() });
@@ -636,30 +812,26 @@
     var act = el("div", { id: "actions" });
     act.appendChild(el("button", {
       "class": "btn primary", text: it.reviewed ? "✓ Confirmed" : "✓ Confirm",
-      onclick: function () {
-        it.reviewed = true; it.rejected = false;
-        markDirty(); renderQueue(); step(1);
-      } }));
+      onclick: function () { confirmItem(it); } }));
     act.appendChild(el("button", {
       "class": "btn danger",
       text: it.rejected ? "Restore item" : "✕ Reject item",
-      onclick: function () {
-        it.rejected = !it.rejected;
-        if (it.rejected) it.reviewed = false;
-        markDirty(); renderQueue(); renderItem(it);
-      } }));
+      onclick: function () { rejectItem(it); } }));
     act.appendChild(el("span", { "class": "kbd", text: "space" }));
-    act.appendChild(el("span", { text: "confirm + next" }));
+    act.appendChild(el("span", { "class": "kbd-label", text: "confirm + next" }));
     act.appendChild(el("span", { "class": "kbd", text: "x" }));
-    act.appendChild(el("span", { text: "reject" }));
+    act.appendChild(el("span", { "class": "kbd-label", text: "reject" }));
     act.appendChild(el("span", { "class": "kbd", text: "j / k" }));
-    act.appendChild(el("span", { text: "move" }));
+    act.appendChild(el("span", { "class": "kbd-label", text: "move" }));
+    act.appendChild(el("span", { "class": "kbd", text: "⌘Z" }));
+    act.appendChild(el("span", { "class": "kbd-label", text: "undo" }));
     d.appendChild(act);
   }
+  var itemDrawEvidence = null;
   function gradeBlock(label, opts, current, onset) {
     var wrap = el("div", {});
+    var s = el("select", { "aria-label": label });
     wrap.appendChild(el("label", { text: label }));
-    var s = el("select", {});
     s.appendChild(el("option", { value: "", text: "—" }));
     opts.forEach(function (o) {
       var op = el("option", { value: o, text: o });
@@ -670,68 +842,224 @@
     wrap.appendChild(s);
     return wrap;
   }
+  function evThumb(it, pid, src, label) {
+    var pins = pid ? (it && it.defect_regions || []).filter(function (r) {
+      return r.photo_id === pid; }).length : 0;
+    var b = el("button", { "class": "ev-thumb", type: "button",
+      "aria-label": "Inspect " + label,
+      onclick: function () { lightbox.open(it, pid, src, label); } });
+    b.appendChild(el("img", { src: src, alt: label, loading: "lazy" }));
+    b.appendChild(el("span", { "class": "pid", text: label }));
+    if (pins) b.appendChild(el("span", { "class": "n-pins",
+      text: pins + " pin" + (pins > 1 ? "s" : "") }));
+    return b;
+  }
 
-  /* ---------- defect-region annotation ---------- */
-  function annoPhoto(it, pid, redraw) {
-    var wrap = el("div", { "class": "anno" });
-    wrap.appendChild(el("img", { src: photoSrc[pid], alt: pid }));
-    wrap.appendChild(el("span", { "class": "pid", text: pid }));
-    wrap.appendChild(el("span", { "class": "hint", text: "drag to pin a defect" }));
-    (it.defect_regions || []).forEach(function (reg, ri) {
-      if (reg.photo_id !== pid) return;
-      var b = el("div", { "class": "box",
-        title: "Double-click to remove this pin",
-        ondblclick: function () {
-          it.defect_regions.splice(ri, 1);
-          markDirty(); redraw();
-        } });
-      b.style.left = (reg.x * 100) + "%";
-      b.style.top = (reg.y * 100) + "%";
-      b.style.width = (reg.w * 100) + "%";
-      b.style.height = (reg.h * 100) + "%";
-      b.appendChild(el("span", { "class": "lbl", text: reg.defect }));
-      wrap.appendChild(b);
-    });
+  /* ---------- lightbox ---------- */
+  var lightbox = (function () {
+    var box = document.getElementById("lightbox");
+    var stage = document.getElementById("lb-stage");
+    var canvas = document.getElementById("lb-canvas");
+    var img = document.getElementById("lb-img");
+    var pinBtn = document.getElementById("lb-pin");
+    var zoomLbl = document.getElementById("lb-zoom");
+    var cur = null;   // {it, pid, src, label, pids: [...]}
+    var scale = 1, minScale = 1, tx = 0, ty = 0;
+    var pinning = false;
 
-    var start = null, draft = null;
-    wrap.addEventListener("pointerdown", function (e) {
-      if (e.target.closest(".box")) return;
-      var r = wrap.getBoundingClientRect();
-      start = { x: (e.clientX - r.left) / r.width,
-                y: (e.clientY - r.top) / r.height };
-      draft = el("div", { "class": "box draft" });
-      wrap.appendChild(draft);
-      wrap.setPointerCapture(e.pointerId);
-    });
-    wrap.addEventListener("pointermove", function (e) {
-      if (!start || !draft) return;
-      var r = wrap.getBoundingClientRect();
-      var cur = { x: (e.clientX - r.left) / r.width,
-                  y: (e.clientY - r.top) / r.height };
-      var box = norm(start, cur);
-      draft.style.left = (box.x * 100) + "%";
-      draft.style.top = (box.y * 100) + "%";
-      draft.style.width = (box.w * 100) + "%";
-      draft.style.height = (box.h * 100) + "%";
-    });
-    wrap.addEventListener("pointerup", function (e) {
-      if (!start || !draft) return;
-      var r = wrap.getBoundingClientRect();
-      var cur = { x: (e.clientX - r.left) / r.width,
-                  y: (e.clientY - r.top) / r.height };
-      var box = norm(start, cur);
-      start = null;
-      if (box.w < 0.02 || box.h < 0.02) {  // a click, not a drag
-        draft.remove(); draft = null;
+    function apply() {
+      canvas.style.transform = "translate(" + tx + "px," + ty + "px) " +
+                               "scale(" + scale + ")";
+      zoomLbl.textContent = Math.round(100 * scale / minScale) + "%";
+    }
+    function fit() {
+      var sw = stage.clientWidth, sh = stage.clientHeight;
+      var iw = img.naturalWidth || 1, ih = img.naturalHeight || 1;
+      minScale = Math.min(sw / iw, sh / ih, 1);
+      scale = minScale;
+      tx = (sw - iw * scale) / 2;
+      ty = (sh - ih * scale) / 2;
+      apply();
+    }
+    function clampPan() {
+      var sw = stage.clientWidth, sh = stage.clientHeight;
+      var iw = (img.naturalWidth || 1) * scale;
+      var ih = (img.naturalHeight || 1) * scale;
+      if (iw <= sw) tx = (sw - iw) / 2;
+      else tx = Math.min(0, Math.max(sw - iw, tx));
+      if (ih <= sh) ty = (sh - ih) / 2;
+      else ty = Math.min(0, Math.max(sh - ih, ty));
+    }
+    function zoomAt(factor, cx, cy) {
+      var next = Math.min(Math.max(scale * factor, minScale), minScale * 12);
+      var r = stage.getBoundingClientRect();
+      var px = (cx - r.left - tx) / scale, py = (cy - r.top - ty) / scale;
+      scale = next;
+      tx = cx - r.left - px * scale;
+      ty = cy - r.top - py * scale;
+      clampPan();
+      apply();
+    }
+    function drawRegions() {
+      canvas.querySelectorAll(".box").forEach(function (b) { b.remove(); });
+      if (!cur || !cur.pid || !cur.it) return;
+      var iw = img.naturalWidth || 1, ih = img.naturalHeight || 1;
+      (cur.it.defect_regions || []).forEach(function (reg, ri) {
+        if (reg.photo_id !== cur.pid) return;
+        var b = el("div", { "class": "box",
+          title: "Double-click to remove this pin",
+          ondblclick: function () {
+            pushUndo("remove pin", [cur.it]);
+            cur.it.defect_regions.splice(ri, 1);
+            markDirty(); drawRegions();
+            if (itemDrawEvidence) itemDrawEvidence();
+          } });
+        b.style.left = (reg.x * iw) + "px";
+        b.style.top = (reg.y * ih) + "px";
+        b.style.width = (reg.w * iw) + "px";
+        b.style.height = (reg.h * ih) + "px";
+        b.appendChild(el("span", { "class": "lbl", text: reg.defect }));
+        canvas.appendChild(b);
+      });
+    }
+    function setPinning(on) {
+      if (on && !(cur && cur.pid && cur.it)) {
+        toast("Pins need a cited photo — this image can't be annotated");
         return;
       }
-      pendingRegion = { item: it, photo_id: pid, box: box,
-                        draftEl: draft, redraw: redraw };
-      draft = null;
-      openAnnoForm(e.clientX, e.clientY);
+      pinning = on;
+      pinBtn.setAttribute("aria-pressed", on ? "true" : "false");
+      stage.classList.toggle("pinning", on);
+      document.getElementById("lb-hint").textContent = on
+        ? "Drag on the photo to mark the defect area"
+        : "Scroll to zoom · drag to pan · double-click a pin to remove it";
+    }
+    function show() {
+      document.getElementById("lb-pid").textContent = cur.label || "";
+      document.getElementById("lb-title").textContent =
+        cur.it ? cur.it.name || "" : "";
+      img.onload = function () { fit(); drawRegions(); };
+      img.src = cur.src;
+      if (img.complete && img.naturalWidth) { fit(); drawRegions(); }
+    }
+    function open(it, pid, src, label) {
+      cur = { it: it, pid: pid, src: src, label: label };
+      cur.pids = it ? (it.photo_ids || []).filter(function (p) {
+        return photoSrc[p]; }) : [];
+      box.classList.add("on");
+      setPinning(false);
+      show();
+    }
+    function close() {
+      box.classList.remove("on");
+      closeAnnoForm();
+      cur = null;
+      if (itemDrawEvidence) itemDrawEvidence();
+    }
+    function stepPhoto(delta) {
+      if (!cur || !cur.pids.length) return;
+      var i = cur.pids.indexOf(cur.pid);
+      var next = cur.pids[(Math.max(0, i) + delta + cur.pids.length)
+                          % cur.pids.length];
+      cur.pid = next; cur.src = photoSrc[next]; cur.label = next;
+      setPinning(false);
+      show();
+    }
+
+    document.getElementById("lb-close").addEventListener("click", close);
+    document.getElementById("lb-in").addEventListener("click", function () {
+      var r = stage.getBoundingClientRect();
+      zoomAt(1.4, r.left + r.width / 2, r.top + r.height / 2);
     });
-    return wrap;
-  }
+    document.getElementById("lb-out").addEventListener("click", function () {
+      var r = stage.getBoundingClientRect();
+      zoomAt(1 / 1.4, r.left + r.width / 2, r.top + r.height / 2);
+    });
+    document.getElementById("lb-fit").addEventListener("click", fit);
+    document.getElementById("lb-prev").addEventListener("click", function () {
+      stepPhoto(-1); });
+    document.getElementById("lb-next").addEventListener("click", function () {
+      stepPhoto(1); });
+    pinBtn.addEventListener("click", function () { setPinning(!pinning); });
+    stage.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      zoomAt(e.deltaY < 0 ? 1.18 : 1 / 1.18, e.clientX, e.clientY);
+    }, { passive: false });
+
+    var drag = null, draft = null, draftStart = null;
+    stage.addEventListener("pointerdown", function (e) {
+      if (e.target.closest(".box") && !pinning) return;
+      stage.setPointerCapture(e.pointerId);
+      if (pinning) {
+        var iw = img.naturalWidth || 1, ih = img.naturalHeight || 1;
+        var r = stage.getBoundingClientRect();
+        draftStart = { x: (e.clientX - r.left - tx) / scale / iw,
+                       y: (e.clientY - r.top - ty) / scale / ih };
+        draft = el("div", { "class": "box draft" });
+        canvas.appendChild(draft);
+      } else {
+        drag = { x: e.clientX - tx, y: e.clientY - ty };
+        stage.classList.add("dragging");
+      }
+    });
+    stage.addEventListener("pointermove", function (e) {
+      if (pinning && draft && draftStart) {
+        var iw = img.naturalWidth || 1, ih = img.naturalHeight || 1;
+        var r = stage.getBoundingClientRect();
+        var curPt = { x: (e.clientX - r.left - tx) / scale / iw,
+                      y: (e.clientY - r.top - ty) / scale / ih };
+        var boxN = norm(draftStart, curPt);
+        draft.style.left = (boxN.x * iw) + "px";
+        draft.style.top = (boxN.y * ih) + "px";
+        draft.style.width = (boxN.w * iw) + "px";
+        draft.style.height = (boxN.h * ih) + "px";
+      } else if (drag) {
+        tx = e.clientX - drag.x;
+        ty = e.clientY - drag.y;
+        clampPan();
+        apply();
+      }
+    });
+    stage.addEventListener("pointerup", function (e) {
+      stage.classList.remove("dragging");
+      if (pinning && draft && draftStart) {
+        var iw = img.naturalWidth || 1, ih = img.naturalHeight || 1;
+        var r = stage.getBoundingClientRect();
+        var endPt = { x: (e.clientX - r.left - tx) / scale / iw,
+                      y: (e.clientY - r.top - ty) / scale / ih };
+        var boxN = norm(draftStart, endPt);
+        draftStart = null;
+        if (boxN.w < 0.01 || boxN.h < 0.01) {
+          draft.remove(); draft = null;
+          return;
+        }
+        pendingRegion = { item: cur.it, photo_id: cur.pid, box: boxN,
+                          draftEl: draft, redraw: function () {
+                            drawRegions();
+                            if (itemDrawEvidence) itemDrawEvidence();
+                          } };
+        draft = null;
+        openAnnoForm(e.clientX, e.clientY);
+      }
+      drag = null;
+    });
+    document.addEventListener("keydown", function (e) {
+      if (!box.classList.contains("on")) return;
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        if (pendingRegion) closeAnnoForm();
+        else close();
+      }
+      else if (e.key === "ArrowRight") stepPhoto(1);
+      else if (e.key === "ArrowLeft") stepPhoto(-1);
+    }, true);
+
+    return { open: open, close: close, drawRegions: drawRegions,
+             isOpen: function () { return box.classList.contains("on"); } };
+  })();
+
+  /* ---------- defect-pin label form ---------- */
+  var pendingRegion = null;
   function norm(a, b) {
     function clamp(v) { return Math.max(0, Math.min(1, v)); }
     var x1 = clamp(Math.min(a.x, b.x)), y1 = clamp(Math.min(a.y, b.y));
@@ -763,6 +1091,7 @@
                 document.getElementById("anno-pick").value;
     if (!label) { toast("Pick or describe the defect first"); return; }
     var it = pendingRegion.item;
+    pushUndo("pin defect on " + it.id, [it]);
     if ((it.defects || []).indexOf(label) === -1 &&
         (it.rejected_defects || []).indexOf(label) === -1) {
       (it.defects = it.defects || []).push(label);
@@ -776,8 +1105,10 @@
     pendingRegion = null;
     document.getElementById("anno-form").style.display = "none";
     markDirty();
-    if (sel && sel.type === "item") renderItem(ix.byId[sel.id]);
-    else redraw();
+    if (redraw) redraw();
+    if (sel && sel.type === "item" && !lightbox.isOpen()) {
+      renderItem(ix.byId[sel.id]);
+    }
   });
 
   /* ---------- room view ---------- */
@@ -785,12 +1116,25 @@
     var d = document.getElementById("detail");
     d.innerHTML = "";
     d.appendChild(el("div", { "class": "crumb", text: "Room" }));
-    d.appendChild(el("h2", { id: "d-name", text: room.name }));
+    d.appendChild(el("h2", { "class": "room-title", text: room.name }));
 
     var secS = el("div", { "class": "sec" });
     secS.appendChild(el("h3", { text: "Room summary" }));
     var ta = el("textarea", { "class": "room-summary" });
     ta.value = room.summary || "";
+    var roomSnap = null;
+    ta.addEventListener("focus", function () {
+      roomSnap = room.summary || "";
+    });
+    ta.addEventListener("blur", function () {
+      if (roomSnap !== null && roomSnap !== room.summary) {
+        var prevVal = roomSnap;
+        undoStack.push({ label: "edit summary of " + room.name,
+          apply: function () { room.summary = prevVal; } });
+        if (undoStack.length > 50) undoStack.shift();
+      }
+      roomSnap = null;
+    });
     ta.addEventListener("input", function () {
       room.summary = ta.value; markDirty();
     });
@@ -812,7 +1156,7 @@
       var strip = el("div", { "class": "uncited" });
       orphans.forEach(function (p) {
         var fig = el("figure", {});
-        fig.appendChild(el("img", { src: photoSrc[p.id], alt: p.id }));
+        fig.appendChild(evThumb(null, null, photoSrc[p.id], p.id));
         fig.appendChild(el("figcaption", { text: p.id }));
         strip.appendChild(fig);
       });
@@ -871,37 +1215,58 @@
     var secR = el("div", { "class": "sec" });
     secR.appendChild(el("h3", { text: "Re-describe this room" }));
     secR.appendChild(el("p", { "class": "c-line",
-      text: "Re-runs the AI on this room's photos (after fixing capture " +
-            "problems). Review state for this room is replaced." }));
-    // spend guard (M5a retrofit): name the backend+model beside the button
-    // and send the same {"confirm": backend} contract as /api/build
+      text: "Re-runs the AI over this room's photos — useful after fixing " +
+            "capture problems. Your review decisions for this room are " +
+            "replaced." }));
     secR.appendChild(el("p", { "class": "c-line",
-      text: "Uses backend: " + (payload.backend_label || "not configured") }));
+      text: "AI model: " + (payload.backend_label || "not configured") }));
     var rBtn = el("button", { "class": "btn", text: "Re-describe " + room.name });
     var rStatus = el("div", { id: "redesc-status" });
-    rBtn.addEventListener("click", function () {
-      if (dirty && !confirm("Unsaved edits will be lost for this room. Continue?"))
-        return;
-      if (!confirm("Re-describe " + room.name + " with backend " +
-                   (payload.backend_label || payload.backend) +
-                   "? Paid backends spend API money.")) return;
-      rBtn.disabled = true;
-      api("POST", "/api/redescribe",
-          { room: room.name, confirm: payload.backend }).then(function () {
-        rStatus.textContent = "running…";
-        var t = setInterval(function () {
-          api("GET", "/api/redescribe").then(function (s) {
-            rStatus.textContent = s.status +
-              (s.detail ? "\n" + s.detail : "");
-            if (s.status === "done" || s.status === "failed") {
-              clearInterval(t);
-              rBtn.disabled = false;
-              if (s.status === "done") reload();
+    function watchRedescribe() {
+      rStatus.textContent =
+        "Re-describing — this can take a few minutes…";
+      var t = setInterval(function () {
+        api("GET", "/api/redescribe").then(function (s) {
+          if (s.status === "done") {
+            clearInterval(t);
+            rBtn.disabled = false;
+            rStatus.textContent = "Done — reloading…";
+            reload();
+          } else if (s.status === "failed") {
+            clearInterval(t);
+            rBtn.disabled = false;
+            rStatus.innerHTML = "";
+            rStatus.appendChild(el("span",
+              { text: "Re-describe failed." }));
+            if (s.detail) {
+              var det = el("details", {}, [
+                el("summary", { text: "Show error output" }),
+                el("pre", { text: s.detail })]);
+              rStatus.appendChild(det);
             }
-          });
-        }, 2500);
-      }).catch(function (e) {
-        rBtn.disabled = false; toast(e.message);
+          }
+        }).catch(function () { /* poll again */ });
+      }, 2500);
+    }
+    rBtn.addEventListener("click", function () {
+      ui.confirmDialog({
+        title: "Re-describe " + room.name + "?",
+        message: "Runs " + (payload.backend_label || payload.backend) +
+                 " over this room's photos again." +
+                 (payload.backend === "offline"
+                   ? "" : " Paid backends spend API money."),
+        note: "Review decisions for this room are replaced. Unsaved edits " +
+              "are saved first.",
+        confirmLabel: "Re-describe"
+      }).then(function (yes) {
+        if (!yes) return;
+        rBtn.disabled = true;
+        flush({ manual: true }).then(function () {
+          return api("POST", "/api/redescribe",
+                     { room: room.name, confirm: payload.backend });
+        }).then(watchRedescribe).catch(function (e) {
+          rBtn.disabled = false; toast(e.message);
+        });
       });
     });
     secR.appendChild(rBtn);
@@ -909,24 +1274,102 @@
     d.appendChild(secR);
   }
 
-  /* ---------- save / sign / reload ---------- */
-  function save(render) {
-    return api("PUT", "/api/inventory" + (render ? "?render=1" : ""), inv)
-      .then(function (r) {
-        dirty = false;
-        document.getElementById("dirty").classList.remove("on");
-        toast(render ? "Saved and re-rendered inventory.html"
-                     : "Saved to inventory.json");
-        return r;
-      }).catch(function (e) { toast("Save failed: " + e.message); });
+  /* ---------- details (report metadata) ---------- */
+  document.getElementById("btn-details").addEventListener("click", function () {
+    ui.form({
+      title: "Report details",
+      note: "These appear on the report cover and in the declaration.",
+      submitLabel: "Save details",
+      fields: [
+        { name: "property_address", label: "Property address",
+          value: inv.property_address,
+          placeholder: "12 Example Road, London N1 1AA" },
+        { name: "property_type", label: "Property type",
+          value: inv.property_type,
+          placeholder: "1 bedroom furnished apartment" },
+        { name: "inspected_by", label: "Prepared by",
+          value: inv.inspected_by, placeholder: "Full name" },
+        { name: "agent_name", label: "Agent / company",
+          value: inv.agent_name },
+        { name: "landlord_name", label: "Landlord", value: inv.landlord_name },
+        { name: "tenant_name", label: "Tenant", value: inv.tenant_name },
+        { name: "report_ref", label: "Report reference",
+          value: inv.report_ref },
+        { name: "inspected_at", label: "Date of inspection", type: "date",
+          value: inv.inspected_at }
+      ]
+    }).then(function (values) {
+      if (!values) return;
+      pushUndo("edit report details", [inv]);
+      Object.keys(values).forEach(function (k) { inv[k] = values[k]; });
+      document.getElementById("hdr-addr").textContent =
+        inv.property_address || "No address yet";
+      markDirty();
+      toast("Details saved — they appear on the next report render");
+    });
+  });
+
+  /* ---------- PDF export ---------- */
+  var pdfBtn = document.getElementById("btn-pdf");
+  function pollPdf() {
+    api("GET", "/api/pdf").then(function (s) {
+      if (s.status === "running") {
+        pdfBtn.disabled = true;
+        pdfBtn.textContent = "Preparing PDF…";
+        setTimeout(pollPdf, 1500);
+        return;
+      }
+      pdfBtn.disabled = false;
+      pdfBtn.textContent = "Export PDF";
+      if (s.status === "done" && pollPdf._started) {
+        pollPdf._started = false;
+        toast("PDF ready — opening");
+        window.open("/pdf", "_blank");
+      } else if (s.status === "failed" && pollPdf._started) {
+        pollPdf._started = false;
+        var body = ui.el("div", {});
+        body.appendChild(ui.el("p", { text: "The PDF could not be generated." }));
+        if (s.detail) {
+          body.appendChild(ui.el("p", { "class": "note", text: s.detail }));
+        }
+        ui.open({ title: "PDF export failed", body: body, actions: [
+          { label: "Close", primary: true,
+            onclick: function (close) { close(); } }] });
+      }
+    }).catch(function () { /* server gone; stop polling */ });
   }
+  pdfBtn.addEventListener("click", function () {
+    flush({ manual: true }).then(function () {
+      return api("POST", "/api/pdf", {});
+    }).then(function () {
+      pollPdf._started = true;
+      pollPdf();
+    }).catch(function (e) {
+      var body = ui.el("div", {});
+      body.appendChild(ui.el("p", { text: e.message }));
+      body.appendChild(ui.el("p", { "class": "note",
+        text: "Without WeasyPrint you can still open the report and use " +
+              "your browser's Print → Save as PDF; the server-generated " +
+              "PDF adds page numbers in the contents and the tenant-" +
+              "initials line on every page." }));
+      ui.open({ title: "PDF export unavailable", body: body, actions: [
+        { label: "Open report", onclick: function (close) {
+            close(); window.open("/report", "_blank"); } },
+        { label: "Close", primary: true,
+          onclick: function (close) { close(); } }] });
+    });
+  });
+  pollPdf();   // reflect an export already in flight on page load
+
+  /* ---------- sign / reload ---------- */
   function reload() {
     return api("GET", "/api/inventory").then(function (p) {
       inv = p.inventory; photoSrc = p.photo_src || {};
       cropSrc = p.crop_src || {};
       ix = index();
       dirty = false;
-      document.getElementById("dirty").classList.remove("on");
+      undoStack = [];
+      setSaveState("All changes saved");
       renderProgress(); renderQueue();
       if (sel && sel.type === "item" && ix.byId[sel.id]) {
         renderItem(ix.byId[sel.id]);
@@ -938,27 +1381,29 @@
       }
     });
   }
-  document.getElementById("btn-save").addEventListener("click", function () {
-    save(false);
-  });
-  document.getElementById("btn-save-render").addEventListener("click",
-    function () { save(true); });
   document.getElementById("btn-sign").addEventListener("click", function () {
     var pend = ix.items.filter(function (i) { return !isDone(i); }).length;
-    if (pend && !confirm(pend + " items are still unreviewed. Sign anyway?"))
-      return;
-    var name = prompt("Sign as (full name):", inv.inspected_by || "");
-    if (!name || !name.trim()) return;
-    var role = prompt('Role — "landlord" or "agent":', "landlord");
-    if (!role) return;
-    var doSign = function () {
-      api("POST", "/api/sign", { name: name.trim(), role: role.trim() })
-        .then(function () {
-          toast("Signed — the signature pins the saved inventory hash");
-          return reload();
-        }).catch(function (e) { toast(e.message); });
-    };
-    if (dirty) save(false).then(doSign); else doSign();
+    ui.form({
+      title: "Sign this inventory",
+      note: (pend ? pend + " items are still unreviewed. " : "") +
+            "Signing pins the current content hash to your name in the " +
+            "report's declaration.",
+      submitLabel: "Sign",
+      fields: [
+        { name: "name", label: "Full name", value: inv.inspected_by || "",
+          required: true },
+        { name: "role", label: "Role", type: "select", value: "landlord",
+          options: ["landlord", "agent"] }
+      ]
+    }).then(function (values) {
+      if (!values) return;
+      flush({ manual: true }).then(function () {
+        return api("POST", "/api/sign", values);
+      }).then(function () {
+        toast("Signed — the signature pins the saved inventory hash");
+        return reload();
+      }).catch(function (e) { toast(e.message); });
+    });
   });
 
   /* ---------- filters / sort / bulk ---------- */
@@ -977,15 +1422,31 @@
   document.getElementById("bulk").addEventListener("click", function () {
     var open = queueEntries().filter(function (i) { return !isDone(i); });
     if (!open.length) { toast("Nothing left to accept"); return; }
-    if (!confirm("Mark " + open.length + " visible unreviewed item" +
-                 (open.length > 1 ? "s" : "") + " as confirmed?")) return;
-    open.forEach(function (i) { i.reviewed = true; });
-    markDirty(); renderQueue();
-    if (sel && sel.type === "item") renderItem(ix.byId[sel.id]);
+    ui.confirmDialog({
+      title: "Accept " + open.length + " remaining item" +
+             (open.length > 1 ? "s" : "") + "?",
+      message: "Every visible unreviewed item is marked as confirmed by you.",
+      note: "You can undo this with ⌘Z / Ctrl+Z.",
+      confirmLabel: "Accept all"
+    }).then(function (yes) {
+      if (!yes) return;
+      pushUndo("accept " + open.length + " items", open);
+      open.forEach(function (i) { i.reviewed = true; });
+      markDirty(); renderQueue();
+      if (sel && sel.type === "item") renderItem(ix.byId[sel.id]);
+    });
   });
 
   /* ---------- keyboard ---------- */
   document.addEventListener("keydown", function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") {
+      var t0 = e.target;
+      if (t0 && (t0.tagName === "INPUT" || t0.tagName === "TEXTAREA")) return;
+      e.preventDefault();
+      undo();
+      return;
+    }
+    if (lightbox.isOpen()) return;
     var t = e.target;
     if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" ||
               t.tagName === "SELECT" || t.isContentEditable)) return;
@@ -994,22 +1455,17 @@
     else if (e.key === "k") { e.preventDefault(); step(-1); }
     else if (e.key === " " && it) {
       e.preventDefault();
-      it.reviewed = true; it.rejected = false;
-      markDirty(); renderQueue(); step(1);
+      confirmItem(it);
     } else if (e.key === "x" && it) {
       e.preventDefault();
-      it.rejected = !it.rejected;
-      if (it.rejected) it.reviewed = false;
-      markDirty(); renderQueue(); renderItem(it);
+      rejectItem(it);
     } else if (it && "12345".indexOf(e.key) >= 0) {
       e.preventDefault();
+      pushUndo("condition of " + it.id, [it]);
       it.condition = CONDITIONS[Number(e.key) - 1];
       it.not_inspected = null;
       markDirty(); renderItem(it);
     } else if (e.key === "Escape") closeAnnoForm();
-  });
-  window.addEventListener("beforeunload", function (e) {
-    if (dirty) { e.preventDefault(); e.returnValue = ""; }
   });
 
   /* ---------- boot ---------- */

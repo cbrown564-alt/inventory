@@ -117,13 +117,26 @@ and compare our output against the human-written report.
 > implementer/adversarial-reviewer debate); C2PA/e-signature and
 > multi-property management stay deferred — unchecked, reopenable on request.
 
-- [x] Web UI (upload, review/edit items inline, export PDF) — done 3 Jul 2026:
-      review/edit inline pre-existed (docs/05 Levels 1–3); M5a added upload
+- [x] Web UI (upload, review/edit items inline, export PDF) — M5a landed
+      3 Jul 2026 (see [`docs/09`](09-web-ui-and-capture.md)): upload
       (`POST /api/photos`, magic-byte-sniffed extensions, 64 MiB cap),
       build-from-browser (`POST /api/build`, `{"confirm": backend}` spend
-      guard), PDF export (`/api/pdf` + `/pdf`, 503 hint without WeasyPrint),
-      and the redescribe spend-guard retrofit — see
-      [`docs/09`](09-web-ui-and-capture.md)
+      guard), PDF export routes, redescribe spend-guard retrofit.
+      **Re-opened and re-closed the same day by the product-quality pass
+      ([`docs/10`](10-product-quality-review.md))** — the original box shipped
+      `/api/pdf` with no UI control reaching it and a PDF whose evidence
+      chain was broken; definition-of-done lesson recorded in docs/10 §6
+- [x] Product-quality pass on web UI + PDF flow, 3 Jul 2026
+      ([`docs/10`](10-product-quality-review.md)) — evidence chain repaired in
+      print (item→photo refs, Appendix B photo IDs, printed defect pins,
+      relative paths + full hashes); report-details editor + report/PDF
+      navigation; one design system (shared `_theme.css.j2`/`_ui.js.j2`, no
+      CDN fonts, real modals, de-jargoned copy); autosave + undo; PDF export
+      as a background job with a visible button; evidence lightbox with
+      zoom + full-res pinning; mobile layout fix; drag-and-drop parallel
+      uploads incl. **video** (`POST /api/upload`, streamed, 2 GiB cap);
+      Jinja autoescape enabled everywhere (was silently off — `.html.j2`
+      never matched `select_autoescape(["html"])`)
 - [ ] Mobile guided capture (per-room shot list with live checklist) —
       **implementation complete 3 Jul 2026, box stays open until the
       real-device smoke is executed and recorded** (`homeinventory capture`:

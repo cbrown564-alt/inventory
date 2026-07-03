@@ -78,7 +78,7 @@ def test_report_embeds_review_layer(tmp_path):
     html = (out / "inventory.html").read_text(encoding="utf-8")
     assert 'id="hi-data"' in html          # embedded inventory JSON
     assert "Review docket" in html         # the instrument layer
-    assert "Download reviewed inventory.json" in html
+    assert "Download review file" in html
 
 
 def test_report_renders_review_states(tmp_path):
@@ -612,20 +612,28 @@ def test_redescribe_ui_names_backend(server):
     base, _state, _out, _cap = server
     status, html = _get_text(base + "/")
     assert status == 200
-    assert "Uses backend:" in html              # label beside the button
+    assert "AI model:" in html                  # label beside the button
     assert "offline (no AI)" in html            # payload backend_label
 
 
-# ---- PDF export -------------------------------------------------------------
+# ---- PDF export (background job since docs/10) ------------------------------
 
 def test_pdf_export_and_serve(server):
+    from homeinventory.report import import_weasyprint
     try:
-        import weasyprint  # noqa: F401
+        import_weasyprint()
     except Exception as e:
         pytest.skip(f"WeasyPrint not importable in this environment: {e}")
     base, _state, out, _cap = server
     status, resp = _req("POST", base + "/api/pdf", {})
-    assert status == 200, resp
+    assert status == 200 and resp["status"] == "running", resp
+    deadline = time.time() + 120
+    while time.time() < deadline:
+        _, s = _req("GET", base + "/api/pdf")
+        if s["status"] in ("done", "failed"):
+            break
+        time.sleep(0.2)
+    assert s["status"] == "done", s
     assert (out / "inventory.pdf").is_file()
     req = urllib.request.Request(base + "/pdf")
     with urllib.request.urlopen(req) as r:
@@ -641,3 +649,148 @@ def test_pdf_503_when_weasyprint_missing(server, monkeypatch):
     status, resp = _req("POST", base + "/api/pdf", {})
     assert status == 503                       # never a silent 200
     assert "pip install homeinventory[pdf]" in resp["error"]
+
+
+def test_pdf_export_conflict_409(server):
+    from homeinventory.report import import_weasyprint
+    base, state, _out, _cap = server
+    try:
+        import_weasyprint()                    # same probe the server uses
+        available = True
+    except Exception:
+        available = False                      # any load failure -> 503 path
+    with state.lock:
+        state.pdf = {"status": "running", "detail": ""}
+    try:
+        status, _ = _req("POST", base + "/api/pdf", {})
+        assert status == (409 if available else 503)
+    finally:
+        with state.lock:
+            state.pdf = {"status": "idle", "detail": ""}
+
+
+# ---- docs/10 quality pass: streamed uploads, autosave acks, stale /report ---
+
+def _stream_upload(base, room, filename, data: bytes):
+    from urllib.parse import quote
+    req = urllib.request.Request(
+        base + "/api/upload", data=data, method="POST",
+        headers={"Content-Type": "application/octet-stream",
+                 "X-Room": quote(room), "X-Filename": quote(filename)})
+    try:
+        with urllib.request.urlopen(req) as r:
+            return r.status, json.loads(r.read().decode("utf-8") or "{}")
+    except urllib.error.HTTPError as e:
+        return e.code, json.loads(e.read().decode("utf-8") or "{}")
+
+
+def _mp4_bytes() -> bytes:
+    # minimal ISO-BMFF header with an isom brand — enough for the sniffer
+    return (b"\x00\x00\x00\x18ftypisom\x00\x00\x02\x00isomiso2avc1mp41"
+            + b"\x00" * 256)
+
+
+def test_stream_upload_photo(fresh_server):
+    base, _state, _out, cap = fresh_server
+    data = _jpeg_bytes()
+    status, resp = _stream_upload(base, "Kitchen", "hob.png", data)
+    assert status == 200, resp
+    assert resp["stored_as"] == "hob.jpg" and resp["kind"] == "photo"
+    on_disk = cap / "Kitchen" / "hob.jpg"
+    assert hashlib.sha256(on_disk.read_bytes()).hexdigest() == resp["sha256"]
+    assert resp["sha256"] == hashlib.sha256(data).hexdigest()
+
+
+def test_stream_upload_video(fresh_server):
+    """Videos — the primary real capture format — upload through the web UI."""
+    base, _state, _out, cap = fresh_server
+    data = _mp4_bytes()
+    status, resp = _stream_upload(base, "Living Room", "walk.bin", data)
+    assert status == 200, resp
+    assert resp["stored_as"] == "walk.mp4" and resp["kind"] == "video"
+    assert (cap / "Living Room" / "walk.mp4").read_bytes() == data
+
+
+def test_stream_upload_rejects_traversal_and_junk(fresh_server):
+    base, _state, _out, cap = fresh_server
+    status, _ = _stream_upload(base, "../evil", "x.jpg", _jpeg_bytes())
+    assert status == 400
+    status, resp = _stream_upload(base, "Kitchen", "notes.txt", b"plain text")
+    assert status == 400 and "unrecognised" in resp["error"]
+    assert not list(cap.rglob("*")), "nothing should have been written"
+
+
+def test_stream_upload_never_clobbers(fresh_server):
+    base, _state, _out, cap = fresh_server
+    first, second = _jpeg_bytes(), _jpeg_bytes() + b"\x01"
+    s1, r1 = _stream_upload(base, "Kitchen", "wall.jpg", first)
+    s2, r2 = _stream_upload(base, "Kitchen", "wall.jpg", second)
+    assert s1 == s2 == 200
+    assert r1["stored_as"] == "wall.jpg" and r2["stored_as"] == "wall-1.jpg"
+    assert (cap / "Kitchen" / "wall.jpg").read_bytes() == first
+    assert not list(cap.rglob(".upload-*")), "temp files must be cleaned up"
+
+
+def test_api_rooms_lists_counts(fresh_server):
+    base, _state, _out, _cap = fresh_server
+    assert _stream_upload(base, "Kitchen", "a.jpg", _jpeg_bytes())[0] == 200
+    assert _stream_upload(base, "Kitchen", "walk.mp4", _mp4_bytes())[0] == 200
+    status, resp = _req("GET", base + "/api/rooms")
+    assert status == 200
+    kitchen = [r for r in resp["rooms"] if r["name"] == "Kitchen"][0]
+    assert kitchen["photos"] == 1 and kitchen["videos"] == 1
+
+
+def _ack_count(out, action):
+    path = out / "acknowledgements.jsonl"
+    if not path.exists():
+        return 0
+    return sum(1 for line in path.read_text(encoding="utf-8").splitlines()
+               if json.loads(line)["action"] == action)
+
+
+def test_autosave_acks_are_rate_limited(server):
+    """Debounced autosaves must not write one trail record per keystroke:
+    a record when the review counts change, silence otherwise."""
+    base, _state, out, _cap = server
+    _, body = _req("GET", base + "/api/inventory")
+    inv = body["inventory"]
+
+    before = _ack_count(out, "save_inventory")
+    inv["rooms"][0]["items"][0]["description"] = "edit one"
+    assert _req("PUT", base + "/api/inventory?autosave=1", inv)[0] == 200
+    inv["rooms"][0]["items"][0]["description"] = "edit two"
+    assert _req("PUT", base + "/api/inventory?autosave=1", inv)[0] == 200
+    inv["rooms"][0]["items"][0]["description"] = "edit three"
+    assert _req("PUT", base + "/api/inventory?autosave=1", inv)[0] == 200
+    after_edits = _ack_count(out, "save_inventory")
+    assert after_edits - before <= 1     # counts unchanged -> at most one ack
+
+    inv["rooms"][0]["items"][0]["reviewed"] = True   # counts change -> ack
+    assert _req("PUT", base + "/api/inventory?autosave=1", inv)[0] == 200
+    assert _ack_count(out, "save_inventory") == after_edits + 1
+
+    # a manual flush (no autosave flag) always leaves a record
+    assert _req("PUT", base + "/api/inventory", inv)[0] == 200
+    assert _ack_count(out, "save_inventory") == after_edits + 2
+
+
+def test_report_route_rerenders_when_stale(server):
+    """/report reflects autosaved edits without an explicit re-render call."""
+    base, _state, _out, _cap = server
+    _, body = _req("GET", base + "/api/inventory")
+    inv = body["inventory"]
+    inv["rooms"][0]["items"][0]["name"] = "Stale-check window"
+    assert _req("PUT", base + "/api/inventory?autosave=1", inv)[0] == 200
+    status, html = _get_text(base + "/report")
+    assert status == 200
+    assert "Stale-check window" in html
+
+
+def test_review_app_has_report_and_pdf_controls(server):
+    """docs/10: the deliverable must be reachable from the review app."""
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert 'href="/report"' in html
+    assert 'id="btn-pdf"' in html
+    assert 'id="btn-details"' in html      # report metadata editor

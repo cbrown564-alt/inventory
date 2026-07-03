@@ -52,8 +52,8 @@ The AI drafts; a human confirms and signs. Three ways in, lightest first
    mode: toggle it, click any item to see its claims next to the evidence
    photos, fix grades from dropdowns, strike false defects (kept as
    "reviewer rejected", never silently deleted), confirm items with the
-   keyboard (`j`/`k`/`space`/`1–5`), sign, then *Download reviewed
-   inventory.json* and drop it in the report folder. Works from a file share
+   keyboard (`j`/`k`/`space`/`1–5`), sign, then *Download review file* and
+   drop the `inventory.json` in the report folder. Works from a file share
    or phone browser, no server.
 
 2. **The local review app.** Saves straight back to `inventory.json` —
@@ -63,16 +63,22 @@ The AI drafts; a human confirms and signs. Three ways in, lightest first
    homeinventory review capture/ -o report/
    ```
 
-   Confidence-sorted queue with bulk-accept, drag-a-box defect annotation on
-   photos, per-room coverage panel (photos no item cites), add-missed-item
-   with photo upload, and a *Re-describe room* button for after you fix a
+   Confidence-sorted queue with bulk-accept, autosave with undo (⌘Z), a
+   full-screen evidence lightbox (zoom, pan, pin defect boxes at full
+   resolution), per-room coverage panel (photos no item cites),
+   add-missed-item with photo upload, a report-details editor (address,
+   names, reference — they land on the PDF cover), one-click *Export PDF*
+   (background job), and a *Re-describe room* button for after you fix a
    capture problem (hand-edits in that room are preserved via `--from-json`).
    It also works **before** the first build: a start page lists the capture
-   folder, takes browser photo uploads (`POST /api/photos`, extensions from
-   magic bytes, 64 MiB cap), runs the build itself behind a spend guard
-   (every build/redescribe request must name the backend it will pay for),
-   and exports the PDF (`/pdf`). See
-   [`docs/09-web-ui-and-capture.md`](docs/09-web-ui-and-capture.md).
+   folder, takes drag-and-drop uploads of photos **and walkthrough videos**
+   (streamed `POST /api/upload`, extensions from magic bytes; base64
+   `POST /api/photos` remains for the phone page), and runs the build itself
+   behind a spend guard (every build/redescribe request must name the
+   backend it will pay for). See
+   [`docs/09-web-ui-and-capture.md`](docs/09-web-ui-and-capture.md) and the
+   product-quality pass in
+   [`docs/10-product-quality-review.md`](docs/10-product-quality-review.md).
 
 3. **The tenant countersigns** (`--share`): prints a token-protected link to
    open on the tenant's phone — they walk the rooms, comment per item
@@ -206,6 +212,12 @@ capture (`homeinventory capture`) is implemented behind its real-device
 smoke ([`docs/09`](docs/09-web-ui-and-capture.md)); C2PA/e-signature and
 multi-property stay deferred by recorded decision
 ([`docs/03`](docs/03-implementation-plan.md)).
+**Product-quality pass, 3 Jul 2026** ([`docs/10`](docs/10-product-quality-review.md)):
+the PDF's evidence chain now closes end-to-end (item → photo refs → Appendix
+B IDs → Appendix A hashes, defect pins printed, no machine paths), the web
+surfaces share one design system with autosave/undo, a lightbox, working
+mobile layout and video upload — and template autoescaping, silently off
+since M0, is on.
 
 ## Disclaimer
 

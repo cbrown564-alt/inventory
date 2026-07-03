@@ -3,62 +3,79 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Homeinventory · Start</title>
+<title>Upload &amp; build — Homeinventory</title>
 <style>
-  :root {
-    --ink: #1a1a1a; --muted: #5a5f6a; --rule: #d8dbe0; --accent: #15406b;
-    --band: #f3f5f8; --paper: #ffffff; --confirm: #0e6b46; --reject: #a3231f;
-    --ui: "Segoe UI Variable Text", "Segoe UI", "Avenir Next", "Helvetica Neue", sans-serif;
-    --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
-  }
-  * { box-sizing: border-box; }
-  body { font-family: var(--ui); color: var(--ink); margin: 0;
-         background: var(--band); font-size: 15px; line-height: 1.5; }
-  header { background: var(--accent); color: #fff; padding: 10px 20px;
-           display: flex; align-items: baseline; gap: 14px; }
-  .wordmark { font-weight: 700; letter-spacing: .02em; }
-  .chip { font-size: 12px; background: rgba(255,255,255,.15);
-          padding: 2px 10px; border-radius: 10px; }
-  main { max-width: 720px; margin: 24px auto; padding: 0 16px; }
-  section { background: var(--paper); border: 1px solid var(--rule);
-            border-radius: 8px; padding: 18px 20px; margin-bottom: 18px; }
-  h2 { margin: 0 0 8px; font-size: 17px; color: var(--accent); }
+{% include "_theme.css.j2" %}
+
+  main { max-width: 760px; margin: 24px auto; padding: 0 16px; }
+  section { background: var(--panel); border: 1px solid var(--line);
+            border-radius: 10px; padding: 18px 20px; margin-bottom: 18px; }
+  h2 { margin: 0 0 8px; font-size: 16px; color: var(--ink); }
   p { margin: 6px 0; } .muted { color: var(--muted); font-size: 13px; }
-  pre { background: var(--band); padding: 10px 12px; border-radius: 6px;
+  pre { background: var(--paper); padding: 10px 12px; border-radius: 6px;
         font-family: var(--mono); font-size: 12.5px; overflow-x: auto; }
   table { border-collapse: collapse; width: 100%; font-size: 14px; }
   th, td { text-align: left; padding: 6px 10px;
-           border-bottom: 1px solid var(--rule); }
-  th { color: var(--muted); font-weight: 600; font-size: 12.5px;
+           border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; font-size: 12px;
        text-transform: uppercase; letter-spacing: .05em; }
-  input[type=text] { padding: 7px 9px; border: 1px solid var(--rule);
-                     border-radius: 6px; font: inherit; min-width: 180px; }
-  .btn { font: 600 14px var(--ui); padding: 8px 16px; border-radius: 6px;
-         border: 1px solid var(--accent); background: #fff;
-         color: var(--accent); cursor: pointer; }
-  .btn.primary { background: var(--accent); color: #fff; }
-  .btn[disabled] { opacity: .5; cursor: default; }
+  input[type=text] { padding: 8px 10px; border: 1px solid var(--line-strong);
+                     border-radius: 6px; font: inherit; min-width: 200px; }
   .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
          margin: 10px 0; }
-  #build-backend { font-size: 13px; color: var(--muted); }
-  #build-status, #upload-status { font-family: var(--mono); font-size: 12px;
-    white-space: pre-wrap; margin-top: 8px; }
-  .banner { background: #e7f3ed; border: 1px solid var(--confirm);
-            border-radius: 8px; padding: 12px 16px; margin-bottom: 18px; }
-  .err { color: var(--reject); }
+  .banner { background: var(--accent-soft); border: 1px solid var(--accent);
+            border-radius: 10px; padding: 12px 16px; margin-bottom: 18px;
+            font-size: 14px; }
+  .banner a { color: var(--accent-ink); font-weight: 600; }
+
+  /* drop zone + upload queue */
+  #drop {
+    border: 2px dashed var(--line-strong); border-radius: 10px;
+    padding: 26px 16px; text-align: center; color: var(--muted);
+    cursor: pointer; transition: border-color .15s, background .15s;
+    margin-top: 10px;
+  }
+  #drop:hover, #drop.over { border-color: var(--accent);
+                            background: var(--accent-soft); }
+  #drop strong { color: var(--ink); }
+  #up-list { margin-top: 12px; display: grid; gap: 6px; }
+  .up-row { display: grid; grid-template-columns: 1fr 90px; gap: 4px 12px;
+            align-items: center; font-size: 13px; }
+  .up-row .nm { overflow: hidden; text-overflow: ellipsis;
+                white-space: nowrap; }
+  .up-row .st { text-align: right; color: var(--muted); font-size: 12px;
+                font-variant-numeric: tabular-nums; }
+  .up-row .st.err { color: var(--danger); }
+  .up-row .st.ok { color: var(--confirm); }
+  .up-row .track { grid-column: 1 / -1; height: 3px; background: var(--line);
+                   border-radius: 2px; overflow: hidden; }
+  .up-row .fill { height: 100%; width: 0; background: var(--accent);
+                  transition: width .2s; }
+
+  #build-status { font-size: 13px; margin-top: 8px; }
+  #build-status.err { color: var(--danger); }
+  #build-status details { margin-top: 6px; }
+  #build-status pre { max-height: 240px; overflow: auto; white-space: pre-wrap; }
 </style>
 </head>
 <body>
-<header>
-  <span class="wordmark">Homeinventory · Start</span>
-  <span class="chip">backend: {{ backend_label }}</span>
+<header class="app-header">
+  <span class="wordmark">Homeinventory</span>
+  <nav class="app-nav" aria-label="Sections">
+    <a href="/start" aria-current="page">Upload</a>
+    {% if has_inventory %}
+    <a href="/">Review</a>
+    <a href="/report" target="_blank" rel="noopener">Report</a>
+    {% endif %}
+  </nav>
+  <span class="header-chip">AI model: {{ backend_label }}</span>
 </header>
 <main>
 
 {% if has_inventory %}
 <div class="banner">A report already exists —
   <a href="/">open the review app</a>. Building again re-describes every room
-  but keeps reviewed and hand-added items (<code>--from-json</code>).</div>
+  but keeps your confirmed and hand-added items.</div>
 {% endif %}
 
 {% if rooms %}
@@ -79,50 +96,60 @@
 {% else %}
 <section id="empty-state">
   <h2>No photos yet</h2>
-  <p>The capture folder is empty. Photos live in <strong>one folder per
-  room</strong> — upload them from this page (name a room below), or copy
-  files straight into the folder and refresh:</p>
+  <p>Photos and walkthrough videos live in <strong>one folder per
+  room</strong>. Drop them here (name the room below), or copy files straight
+  into the folder and refresh:</p>
   <pre>{{ capture_dir }}/
   Living Room/   Kitchen/   Bedroom 1/   Bathroom/ ...</pre>
-  <p class="muted">Run <code>homeinventory guide</code> for the room-by-room
-  shot list (walls, floor, ceiling, appliances, meters, every defect
-  close-up).</p>
+  <p class="muted">Not sure what to shoot? <code>homeinventory guide</code>
+  prints the room-by-room shot list (walls, floor, ceiling, appliances,
+  meters, every defect close-up).</p>
 </section>
 {% endif %}
 
 <section id="upload">
-  <h2>Upload photos</h2>
-  <p class="muted">JPEG, PNG or HEIC, up to 64 MiB each. Files are stored
-  byte-for-byte in the capture folder; the extension is set from the file's
-  own bytes.</p>
+  <h2>Upload photos &amp; video</h2>
+  <p class="muted">Photos (JPEG, PNG, HEIC — up to 64&nbsp;MiB) and walkthrough
+  videos (MP4, MOV, MKV, WebM — up to 2&nbsp;GiB). Files are stored
+  byte-for-byte; the type comes from the file's own bytes, never its name.</p>
   <div class="row">
-    <input type="text" id="up-room" list="room-names" placeholder="Room name">
+    <input type="text" id="up-room" list="room-names" placeholder="Room name"
+           aria-label="Room name">
     <datalist id="room-names">
       {% for r in rooms %}<option value="{{ r.name }}">{% endfor %}
     </datalist>
-    <input type="file" id="up-files" multiple
-           accept=".jpg,.jpeg,.png,.heic,.heif,image/*">
-    <button class="btn" id="btn-upload">Upload</button>
   </div>
-  <div id="upload-status"></div>
+  <div id="drop" role="button" tabindex="0"
+       aria-label="Choose or drop files to upload">
+    <strong>Drop files here</strong> or click to choose<br>
+    <span class="muted">uploads go to the room named above</span>
+  </div>
+  <input type="file" id="up-files" multiple accept="image/*,video/*" hidden>
+  <div id="up-list"></div>
 </section>
 
 <section id="build">
   <h2>Build the report</h2>
-  <p class="muted">Runs the full pipeline (ingest &rarr; describe &rarr;
-  report) over every room folder on the server.</p>
+  <p class="muted">Reads every room folder, describes what it sees, and
+  produces the report for review.</p>
   <div class="row">
     <button class="btn primary" id="btn-build">Build report</button>
-    <span id="build-backend">will run backend: {{ backend_label }}</span>
+    <span id="build-backend" class="muted">runs AI model: {{ backend_label }}</span>
   </div>
-  <div id="build-status"></div>
+  <div id="build-status" role="status"></div>
 </section>
 
+</main>
+<div id="toast" role="status"></div>
+<script>
+{% include "_ui.js.j2" %}
+</script>
 <script>
 "use strict";
 (function () {
   var BACKEND = {{ backend | tojson }};
   var BACKEND_LABEL = {{ backend_label | tojson }};
+  var el = ui.el, toast = ui.toast;
 
   function api(method, url, body) {
     return fetch(url, {
@@ -137,77 +164,177 @@
     });
   }
 
-  /* ---------- upload ---------- */
-  var upStatus = document.getElementById("upload-status");
-  document.getElementById("btn-upload").addEventListener("click", function () {
-    var room = document.getElementById("up-room").value.trim();
-    var files = document.getElementById("up-files").files;
-    if (!room) { upStatus.textContent = "Name a room first."; return; }
-    if (!files.length) { upStatus.textContent = "Choose photo files."; return; }
-    var i = 0, done = 0, failed = 0;
-    upStatus.textContent = "";
-    (function next() {
-      if (i >= files.length) {
-        upStatus.textContent += "\n" + done + " uploaded" +
-          (failed ? (", " + failed + " failed") : "") + " — refreshing…";
-        if (done) setTimeout(function () { location.reload(); }, 800);
-        return;
+  /* ---------- upload: drag-drop, 3 parallel streams, live progress ------- */
+  var drop = document.getElementById("drop");
+  var fileInput = document.getElementById("up-files");
+  var upList = document.getElementById("up-list");
+  var queue = [], active = 0, MAX_PARALLEL = 3;
+
+  function roomName() {
+    return document.getElementById("up-room").value.trim();
+  }
+  function fmtBytes(n) {
+    if (n > 1e9) return (n / 1e9).toFixed(1) + " GB";
+    if (n > 1e6) return (n / 1e6).toFixed(1) + " MB";
+    return Math.max(1, Math.round(n / 1e3)) + " kB";
+  }
+  function addFiles(files) {
+    var room = roomName();
+    if (!room) {
+      toast("Name the room first — uploads need a destination folder");
+      document.getElementById("up-room").focus();
+      return;
+    }
+    Array.prototype.forEach.call(files, function (f) {
+      var row = el("div", { "class": "up-row" });
+      var nm = el("span", { "class": "nm",
+        text: room + "/" + f.name + " · " + fmtBytes(f.size) });
+      var st = el("span", { "class": "st", text: "queued" });
+      var track = el("span", { "class": "track" });
+      var fill = el("span", { "class": "fill" });
+      fill.style.display = "block";
+      track.appendChild(fill);
+      row.appendChild(nm); row.appendChild(st); row.appendChild(track);
+      upList.appendChild(row);
+      queue.push({ file: f, room: room, st: st, fill: fill });
+    });
+    pump();
+  }
+  function pump() {
+    while (active < MAX_PARALLEL && queue.length) {
+      startUpload(queue.shift());
+    }
+  }
+  function startUpload(job) {
+    active += 1;
+    job.st.textContent = "uploading";
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/upload");
+    xhr.setRequestHeader("X-Room", encodeURIComponent(job.room));
+    xhr.setRequestHeader("X-Filename", encodeURIComponent(job.file.name));
+    xhr.upload.onprogress = function (e) {
+      if (e.lengthComputable) {
+        job.fill.style.width = Math.round(100 * e.loaded / e.total) + "%";
       }
-      var f = files[i++];
-      var rd = new FileReader();
-      rd.onload = function () {
-        api("POST", "/api/photos", {
-          room: room, filename: f.name,
-          photo_b64: rd.result.split(",", 2)[1]
-        }).then(function (r) {
-          done++;
-          upStatus.textContent += "ok  " + r.path + "  sha256 " +
-            r.sha256.slice(0, 12) + "…\n";
-          next();
-        }).catch(function (e) {
-          failed++;
-          upStatus.textContent += "ERR " + f.name + ": " + e.message + "\n";
-          next();
-        });
-      };
-      rd.readAsDataURL(f);
-    })();
+    };
+    xhr.onload = function () {
+      active -= 1;
+      var resp = {};
+      try { resp = JSON.parse(xhr.responseText || "{}"); } catch (e) {}
+      if (xhr.status === 200) {
+        job.fill.style.width = "100%";
+        job.st.textContent = "done · " + (resp.sha256 || "").slice(0, 8);
+        job.st.className = "st ok";
+        refreshRooms();
+      } else {
+        job.st.textContent = resp.error || ("failed (" + xhr.status + ")");
+        job.st.className = "st err";
+      }
+      pump();
+    };
+    xhr.onerror = function () {
+      active -= 1;
+      job.st.textContent = "network error";
+      job.st.className = "st err";
+      pump();
+    };
+    xhr.send(job.file);
+  }
+  function refreshRooms() {
+    api("GET", "/api/rooms").then(function (r) {
+      var tbody = document.querySelector("#room-list tbody");
+      if (!tbody) { return; }   // empty-state page: counts appear on reload
+      tbody.innerHTML = "";
+      (r.rooms || []).forEach(function (room) {
+        var tr = el("tr", { "data-room": room.name });
+        tr.appendChild(el("td", { text: room.name }));
+        tr.appendChild(el("td", { "class": "n-photos",
+                                  text: String(room.photos) }));
+        tr.appendChild(el("td", { "class": "n-videos",
+                                  text: String(room.videos) }));
+        tbody.appendChild(tr);
+      });
+    }).catch(function () {});
+  }
+  drop.addEventListener("click", function () { fileInput.click(); });
+  drop.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault();
+      fileInput.click(); }
+  });
+  fileInput.addEventListener("change", function () {
+    addFiles(fileInput.files);
+    fileInput.value = "";
+  });
+  ["dragenter", "dragover"].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) {
+      e.preventDefault(); drop.classList.add("over");
+    });
+  });
+  ["dragleave", "drop"].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) {
+      e.preventDefault(); drop.classList.remove("over");
+    });
+  });
+  drop.addEventListener("drop", function (e) {
+    if (e.dataTransfer && e.dataTransfer.files.length) {
+      addFiles(e.dataTransfer.files);
+    }
   });
 
   /* ---------- build (spend guard: confirm names the backend) ---------- */
   var bBtn = document.getElementById("btn-build");
   var bStatus = document.getElementById("build-status");
+  var buildStarted = null;
+  function setBuildStatus(text, err, detail) {
+    bStatus.className = err ? "err" : "";
+    bStatus.textContent = text;
+    if (detail) {
+      var det = el("details", {}, [
+        el("summary", { text: "Show build log" }),
+        el("pre", { text: detail })]);
+      bStatus.appendChild(det);
+    }
+  }
   function pollBuild() {
     api("GET", "/api/build").then(function (s) {
       if (s.status === "running") {
         bBtn.disabled = true;
-        bStatus.textContent = "building… (backend: " + BACKEND_LABEL + ")";
+        var mins = buildStarted
+          ? Math.round((Date.now() - buildStarted) / 60000) : null;
+        setBuildStatus("Building with " + BACKEND_LABEL + "…" +
+          (mins ? " (" + mins + " min elapsed)" : "") +
+          " You can leave this page open; it moves to review when done.");
         setTimeout(pollBuild, 2000);
       } else if (s.status === "done") {
-        bStatus.textContent = "done — opening the review app…";
+        setBuildStatus("Done — opening the review app…");
         location.href = "/";
       } else if (s.status === "failed") {
         bBtn.disabled = false;
-        bStatus.textContent = "build failed:\n" + (s.detail || "");
-        bStatus.className = "err";
+        setBuildStatus("The build failed.", true, s.detail || "");
       }
     });
   }
   bBtn.addEventListener("click", function () {
-    if (!window.confirm("Run a full build with backend " + BACKEND_LABEL +
-                        "? Paid backends spend API money.")) return;
-    bBtn.disabled = true;
-    api("POST", "/api/build", { confirm: BACKEND }).then(function () {
-      pollBuild();
-    }).catch(function (e) {
-      bBtn.disabled = false;
-      bStatus.textContent = "could not start: " + e.message;
-      bStatus.className = "err";
+    ui.confirmDialog({
+      title: "Build the report?",
+      message: "Runs " + BACKEND_LABEL + " over every room folder." +
+               (BACKEND === "offline" ? "" :
+                " Paid backends spend API money."),
+      confirmLabel: "Build report"
+    }).then(function (yes) {
+      if (!yes) return;
+      bBtn.disabled = true;
+      buildStarted = Date.now();
+      api("POST", "/api/build", { confirm: BACKEND }).then(function () {
+        pollBuild();
+      }).catch(function (e) {
+        bBtn.disabled = false;
+        setBuildStatus("Could not start: " + e.message, true);
+      });
     });
   });
   pollBuild();   // reflect a build already in flight on page load
 })();
 </script>
-</main>
 </body>
 </html>

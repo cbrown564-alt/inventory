@@ -545,7 +545,7 @@ def render_comparison(result: dict, checkin: Inventory, checkout: Inventory,
                       pdf: bool = True) -> dict[str, Path]:
     """Write compare.json, compare.html (and compare.pdf when WeasyPrint can
     run) into *out_dir*. Photo evidence is copied under out_dir/photos/."""
-    from jinja2 import Environment, FileSystemLoader, select_autoescape
+    from jinja2 import Environment, FileSystemLoader
 
     out_dir.mkdir(parents=True, exist_ok=True)
     exported: dict = {}
@@ -563,7 +563,7 @@ def render_comparison(result: dict, checkin: Inventory, checkout: Inventory,
         view_rooms.append({**room, "changed": view_changed})
 
     env = Environment(loader=FileSystemLoader(Path(__file__).parent / "templates"),
-                      autoescape=select_autoescape(["html"]))
+                      autoescape=True)
     html = env.get_template("compare.html.j2").render(
         result=result, rooms=view_rooms, class_labels=CLASS_LABELS)
 

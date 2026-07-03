@@ -27,13 +27,14 @@ import secrets
 import subprocess
 import sys
 import threading
+import time
 from dataclasses import asdict
 from datetime import datetime, timezone
 from http.server import ThreadingHTTPServer
 from pathlib import Path
 from typing import Optional
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader
 
 # Server plumbing + the single copy of the browser-upload contract live in
 # webbase (extracted for M5b so the phone capture server reuses them
@@ -74,6 +75,11 @@ class ReviewState:
             secrets.token_urlsafe(16) if share else None)
         self.redescribe = {"status": "idle", "room": None, "detail": ""}
         self.build = {"status": "idle", "detail": "", "cmd": None}
+        self.pdf = {"status": "idle", "detail": ""}
+        # autosave ack rate-limiting: one trail record when the review counts
+        # change, else at most one per 5 minutes (not one per keystroke)
+        self._last_save_ack = 0.0
+        self._last_save_counts: Optional[tuple[int, int]] = None
 
     @property
     def backend_label(self) -> str:
@@ -305,6 +311,37 @@ class ReviewState:
                  f"backend={self.backend} no_detect={self.no_detect}")
         return True
 
+    def start_pdf(self) -> bool:
+        """PDF export as a background job. The HTML re-render (fast — photo
+        exports are mtime-cached) happens under the lock; WeasyPrint, the
+        slow part, runs outside it so saves never block on an export."""
+        with self.lock:
+            if self.pdf["status"] == "running":
+                return False
+            self.pdf = {"status": "running", "detail": ""}
+
+        def run():
+            try:
+                from .report import import_weasyprint, render
+                weasyprint = import_weasyprint()
+                with self.lock:
+                    inv = self.load()
+                    render(inv, self.capture_dir, self.out_dir, pdf=False)
+                    html_text = (self.out_dir / "inventory.html").read_text(
+                        encoding="utf-8")
+                pdf_path = self.out_dir / "inventory.pdf"
+                weasyprint.HTML(string=html_text,
+                                base_url=str(self.out_dir)).write_pdf(
+                                    str(pdf_path))
+                with self.lock:
+                    self.pdf = {"status": "done", "detail": pdf_path.name}
+            except Exception as e:
+                with self.lock:
+                    self.pdf = {"status": "failed", "detail": str(e)}
+        threading.Thread(target=run, daemon=True).start()
+        self.ack("reviewer", "landlord", "export_pdf")
+        return True
+
 
 def _signature(inv: Inventory, name: str, role: str, via: str) -> dict:
     return {"role": role, "name": name, "signed_at": _now(),
@@ -324,7 +361,7 @@ class ReviewHandler(BaseHandler):
         st = self.state
         inv = st.load()
         env = Environment(loader=FileSystemLoader(TEMPLATES),
-                          autoescape=select_autoescape(["html"]))
+                          autoescape=True)
         payload = {"inventory": asdict(inv),
                    "photo_src": st.photo_src(inv),
                    "crop_src": st.crop_src(inv),
@@ -341,7 +378,7 @@ class ReviewHandler(BaseHandler):
         """Start page: pre-build state of the capture folder (M5a)."""
         st = self.state
         env = Environment(loader=FileSystemLoader(TEMPLATES),
-                          autoescape=select_autoescape(["html"]))
+                          autoescape=True)
         return env.get_template("start.html.j2").render(
             rooms=st.scan_capture(), backend=st.backend,
             backend_label=st.backend_label,
@@ -419,12 +456,25 @@ class ReviewHandler(BaseHandler):
             self._file(st.out_dir / "inventory.pdf", "application/pdf")
             return
         if path == "/report":
-            self._file(st.out_dir / "inventory.html",
-                       "text/html; charset=utf-8")
+            html = st.out_dir / "inventory.html"
+            with st.lock:
+                # autosaved edits re-render on demand, not on every save
+                if st.inv_path.exists() and (
+                        not html.exists()
+                        or html.stat().st_mtime < st.inv_path.stat().st_mtime):
+                    st.rerender()
+            self._file(html, "text/html; charset=utf-8")
             return
         if path == "/api/build":
             with st.lock:
                 self._json(dict(st.build))
+            return
+        if path == "/api/pdf":
+            with st.lock:
+                self._json(dict(st.pdf))
+            return
+        if path == "/api/rooms":
+            self._json({"rooms": st.scan_capture()})
             return
         if path == "/api/inventory":
             inv = st.load()
@@ -467,6 +517,14 @@ class ReviewHandler(BaseHandler):
             if path == "/api/photos":
                 self._upload_photo()
                 return
+            if path == "/api/upload":
+                payload = self._upload_stream_common(st.capture_dir, st.lock)
+                if payload is None:
+                    return
+                st.ack("reviewer", "landlord", "upload_media",
+                       payload["path"])
+                self._json(payload)
+                return
             if path == "/api/build":
                 b = self._body()
                 if (b.get("confirm") or "") != st.backend:
@@ -481,21 +539,17 @@ class ReviewHandler(BaseHandler):
                 return
             if path == "/api/pdf":
                 try:
-                    import weasyprint  # noqa: F401
+                    from .report import import_weasyprint
+                    import_weasyprint()
                 except Exception:
                     # never a silent 200: PDF export is unavailable, say so
                     self._err(503, "PDF export needs WeasyPrint — "
                                    "pip install homeinventory[pdf]")
                     return
-                from .report import render
-                with st.lock:
-                    outputs = render(st.load(), st.capture_dir, st.out_dir,
-                                     pdf=True)
-                if "pdf" not in outputs:
-                    self._err(500, "PDF generation failed — see server log")
+                if not st.start_pdf():
+                    self._err(409, "a PDF export is already running")
                     return
-                st.ack("reviewer", "landlord", "export_pdf")
-                self._json({"ok": True, "pdf": "/pdf"})
+                self._json({"ok": True, "status": "running"})
                 return
             if path == "/api/inventory":
                 body = self._body()
@@ -504,12 +558,18 @@ class ReviewHandler(BaseHandler):
                     st.save(inv)
                     if "render=1" in query:
                         st.rerender(inv)
-                st.ack(inv.inspected_by or "reviewer", "landlord",
-                       "save_inventory",
-                       f"{inv.reviewed_count()}/{inv.item_count()} reviewed")
+                counts = (inv.reviewed_count(), inv.item_count())
+                autosave = "autosave=1" in query
+                if (not autosave or counts != st._last_save_counts
+                        or time.time() - st._last_save_ack > 300):
+                    st.ack(inv.inspected_by or "reviewer", "landlord",
+                           "save_inventory",
+                           f"{counts[0]}/{counts[1]} reviewed"
+                           + (" (autosave)" if autosave else ""))
+                    st._last_save_ack = time.time()
+                    st._last_save_counts = counts
                 self._json({"ok": True,
-                            "reviewed": inv.reviewed_count(),
-                            "total": inv.item_count()})
+                            "reviewed": counts[0], "total": counts[1]})
                 return
             if path == "/api/render":
                 with st.lock:

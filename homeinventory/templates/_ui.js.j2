@@ -1,0 +1,163 @@
+{#- Shared UI primitives for the served surfaces: dom helper, toast, and
+    real modal dialogs (confirm / form) that replace window.prompt and
+    window.confirm. ES5-compatible like the rest of the inline JS. -#}
+var ui = (function () {
+  "use strict";
+
+  function el(tag, attrs, children) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === "text") n.textContent = attrs[k];
+      else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { n.appendChild(c); });
+    return n;
+  }
+
+  function toast(msg) {
+    var t = document.getElementById("toast");
+    if (!t) {
+      t = el("div", { id: "toast", role: "status" });
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2600);
+  }
+
+  /* Base modal. opts: {title, body: Node, actions: [{label, primary, danger,
+     onclick(close)}], oncancel} — Esc and backdrop click cancel. */
+  function open(opts) {
+    var backdrop = el("div", { "class": "ui-modal-backdrop" });
+    var modal = el("div", { "class": "ui-modal", role: "dialog",
+                            "aria-modal": "true" });
+    function close() {
+      document.removeEventListener("keydown", onKey, true);
+      backdrop.remove();
+    }
+    function cancel() {
+      close();
+      if (opts.oncancel) opts.oncancel();
+    }
+    function onKey(e) {
+      if (e.key === "Escape") { e.stopPropagation(); cancel(); }
+    }
+    if (opts.title) {
+      modal.appendChild(el("div", { "class": "ui-title", text: opts.title }));
+    }
+    var body = el("div", { "class": "ui-body" });
+    if (opts.body) body.appendChild(opts.body);
+    modal.appendChild(body);
+    var actions = el("div", { "class": "ui-actions" });
+    (opts.actions || []).forEach(function (a) {
+      var cls = "btn" + (a.primary ? " primary" : "") +
+                (a.danger ? " danger" : "") + (a.ghost ? " ghost" : "");
+      actions.appendChild(el("button", { "class": cls, text: a.label,
+        onclick: function () { a.onclick(close); } }));
+    });
+    modal.appendChild(actions);
+    backdrop.appendChild(modal);
+    backdrop.addEventListener("mousedown", function (e) {
+      if (e.target === backdrop) cancel();
+    });
+    document.addEventListener("keydown", onKey, true);
+    document.body.appendChild(backdrop);
+    var first = modal.querySelector("input, select, button");
+    if (first) first.focus();
+    return { close: close };
+  }
+
+  /* Confirm dialog -> Promise<bool>.
+     opts: {title, message, note, confirmLabel, danger} */
+  function confirmDialog(opts) {
+    return new Promise(function (resolve) {
+      var body = el("div", {});
+      if (opts.message) body.appendChild(el("p", { text: opts.message }));
+      if (opts.note) body.appendChild(el("p", { "class": "note",
+                                               text: opts.note }));
+      open({
+        title: opts.title || "Are you sure?",
+        body: body,
+        oncancel: function () { resolve(false); },
+        actions: [
+          { label: "Cancel", ghost: true,
+            onclick: function (close) { close(); resolve(false); } },
+          { label: opts.confirmLabel || "Confirm",
+            primary: !opts.danger, danger: !!opts.danger,
+            onclick: function (close) { close(); resolve(true); } }
+        ]
+      });
+    });
+  }
+
+  /* Form dialog -> Promise<values|null>.
+     opts: {title, note, submitLabel, fields: [{name, label, value,
+     placeholder, type: "text"|"select"|"date", options: [..], required}]} */
+  function form(opts) {
+    return new Promise(function (resolve) {
+      var body = el("div", {});
+      if (opts.note) body.appendChild(el("p", { "class": "note",
+                                               text: opts.note }));
+      var inputs = {};
+      (opts.fields || []).forEach(function (f) {
+        var field = el("div", { "class": "ui-field" });
+        field.appendChild(el("label", { text: f.label || f.name }));
+        var input;
+        if (f.type === "select") {
+          input = el("select", {});
+          (f.options || []).forEach(function (o) {
+            var val = typeof o === "string" ? o : o.value;
+            var lbl = typeof o === "string" ? o : o.label;
+            var op = el("option", { value: val, text: lbl });
+            if (val === (f.value || "")) op.setAttribute("selected", "");
+            input.appendChild(op);
+          });
+        } else {
+          input = el("input", { type: f.type || "text",
+                                placeholder: f.placeholder || "" });
+          input.value = f.value || "";
+        }
+        inputs[f.name] = input;
+        field.appendChild(input);
+        body.appendChild(field);
+      });
+      function collect(close) {
+        var values = {}, missing = null;
+        (opts.fields || []).forEach(function (f) {
+          var v = (inputs[f.name].value || "").trim();
+          values[f.name] = v;
+          if (f.required && !v && !missing) missing = f;
+        });
+        if (missing) {
+          inputs[missing.name].focus();
+          toast((missing.label || missing.name) + " is required");
+          return;
+        }
+        close();
+        resolve(values);
+      }
+      var dlg = open({
+        title: opts.title,
+        body: body,
+        oncancel: function () { resolve(null); },
+        actions: [
+          { label: "Cancel", ghost: true,
+            onclick: function (close) { close(); resolve(null); } },
+          { label: opts.submitLabel || "Save", primary: true,
+            onclick: collect }
+        ]
+      });
+      body.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && e.target.tagName === "INPUT") {
+          e.preventDefault();
+          collect(dlg.close);
+        }
+      });
+    });
+  }
+
+  return { el: el, toast: toast, open: open,
+           confirmDialog: confirmDialog, form: form };
+})();
