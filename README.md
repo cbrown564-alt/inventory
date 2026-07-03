@@ -25,6 +25,11 @@ homeinventory guide               # what to photograph, room by room
 
 # capture/  Living Room/  Kitchen/  Bedroom 1/ ...   (photos and/or videos)
 
+# Or capture straight from your phone — serves a token-gated page on your
+# Wi-Fi with the per-room shot list, a camera button that uploads into the
+# right room folder, and a free local coverage check ("no radiator seen"):
+homeinventory capture capture/
+
 export ANTHROPIC_API_KEY=...      # for the best-quality describe backend
 homeinventory build capture/ -o report/ \
     --address "Flat 2, 1 Example Street, London" \
@@ -62,6 +67,12 @@ The AI drafts; a human confirms and signs. Three ways in, lightest first
    photos, per-room coverage panel (photos no item cites), add-missed-item
    with photo upload, and a *Re-describe room* button for after you fix a
    capture problem (hand-edits in that room are preserved via `--from-json`).
+   It also works **before** the first build: a start page lists the capture
+   folder, takes browser photo uploads (`POST /api/photos`, extensions from
+   magic bytes, 64 MiB cap), runs the build itself behind a spend guard
+   (every build/redescribe request must name the backend it will pay for),
+   and exports the PDF (`/pdf`). See
+   [`docs/09-web-ui-and-capture.md`](docs/09-web-ui-and-capture.md).
 
 3. **The tenant countersigns** (`--share`): prints a token-protected link to
    open on the tenant's phone — they walk the rooms, comment per item
@@ -183,6 +194,18 @@ TDS-grounded wear-vs-damage rubric (per-class agreement vs a professional
 clerk's published check-out in [`docs/08`](docs/08-compare.md)), and renders
 a paired-photo grade-delta discussion sheet; the defect-region annotations
 captured at review are its evidence anchors.
+**M2 (first real property) ran 3 Jul 2026** — a 13-minute walkthrough video
+through the full pipeline (10 rooms, 322 raw items, ≈$3.3 of opus), with the
+raw output frozen for evals, an all-room boundary-bleed audit, and the
+`--trim-lead` ingest fix that came out of it ([`docs/07`](docs/07-own-property-run.md));
+the own-property eval fixture and native-res prompt-tuning gate remain open
+pending hand labelling.
+**M5 (first slice)**: the web UI shipped — pre-build start page, browser
+upload, spend-guarded build-from-browser, PDF export — and phone guided
+capture (`homeinventory capture`) is implemented behind its real-device
+smoke ([`docs/09`](docs/09-web-ui-and-capture.md)); C2PA/e-signature and
+multi-property stay deferred by recorded decision
+([`docs/03`](docs/03-implementation-plan.md)).
 
 ## Disclaimer
 
