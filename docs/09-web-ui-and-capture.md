@@ -85,7 +85,21 @@ review <empty-capture-dir> -o <empty-report-dir> --backend offline
 | 5 | Strike one defect (click its chip) and Save & re-render | Defect shows struck-through, kept as "reviewer rejected" (never silently deleted) in `/report` |
 | 6 | Export the PDF (`POST /api/pdf` via the UI/`curl`), then open `/pdf` | 200 with `{"ok": true, "pdf": "/pdf"}`; `/pdf` serves an `application/pdf` document that opens (starts `%PDF`) |
 
-**Execution: PENDING.** This checklist has not yet been executed in a real
-browser; the orchestrator will run it via browser automation and commit
-the observed-results table separately. Do not treat the table above as an
-executed record — it is the script plus expected observables only.
+### Executed results — 3 Jul 2026, Chromium via Playwright automation
+
+Environment: fresh scratch capture/report dirs; server started exactly as
+scripted above; four generated 640×480 JPEGs as test photos.
+
+| # | Observed | Pass |
+|---|---|---|
+| 1 | Start page rendered: "No photos yet" empty-state block with the one-folder-per-room instructions and `homeinventory guide` pointer; header + build control both show "backend: offline (no AI)" | ✓ |
+| 2 | 2 files → Kitchen, 2 → Living Room via room-name + file picker; page refreshed to the room table (Kitchen 2/0, Living Room 2/0); **sha256 of all 4 files on disk byte-identical to the originals**, correct room folders | ✓ |
+| 3 | Native `confirm` dialog: "Run a full build with backend offline (no AI)? Paid backends spend API money." — accepted; `GET /api/build` reached `done` with the spawned command carrying `--backend offline --no-pdf --no-detect`; page flipped to the review app. **Caveat:** offline + `--no-detect` yields 0 items by design ("0 items across 2 rooms, 4 photos"), so two items were seeded via the documented `inventory.json` hand-edit path before steps 4–5 | ✓ |
+| 4 | LIV-001 condition dropdown fair→good, Save; `inventory.json` on disk carries `"condition": "good"` on reload | ✓ |
+| 5 | Struck "wear to seat cushions" chip, Save & re-render; JSON: defect moved to `rejected_defects` (not deleted); re-rendered HTML keeps it visible struck-through with "reviewer rejected" styling | ✓ |
+| 6 | `POST /api/pdf` → `{"ok": true, "pdf": "/pdf"}`; `GET /pdf` → 200, `application/pdf`, 226,176 bytes, body starts `%PDF-1.7` | ✓ |
+
+Notes: one benign console error (`favicon.ico` 404) on first load — cosmetic,
+no favicon route exists. The step-3 caveat is inherent to the £0 smoke
+configuration, not a defect: any detector-enabled or AI-backend build
+produces items directly.
