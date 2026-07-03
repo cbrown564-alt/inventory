@@ -47,7 +47,14 @@ and compare our output against the human-written report.
 
 ## Milestone 2 — First real property run (the user's own tenancy)
 
-- [ ] Run `guide`, capture own property (~15–25 photos/room), run `build --backend claude`
+- [x] Run `guide`, capture own property (~15–25 photos/room), run `build --backend claude`
+      — done 3 Jul 2026, with a deviation from the plan's wording: capture was a
+      single 13-minute 1080p walkthrough **video** split into 10 per-room segments,
+      not 15–25 photos/room (the `guide` checklist was consulted, not followed
+      shot-by-shot). Raw output frozen at `report/pristine/` before review edits;
+      boundary-bleed scan of all 10 rooms, reviewed-copy cleanup, `--trim-lead`
+      ingest fix and derived run cost (~$3.30–3.90) in
+      [`docs/07`](07-own-property-run.md)
 - [x] Review-loop ergonomics: `--room` partial rebuild, `inventory.json` hand-edits
       preserved on rebuild (`--from-json`)
 - [ ] Tune the describe prompt on real failures (materials, defect localisation) —
