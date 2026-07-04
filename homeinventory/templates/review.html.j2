@@ -38,6 +38,10 @@
   #rail .tools { position: sticky; top: 0; background: var(--panel);
                  padding: 12px 16px 8px; border-bottom: 1px solid var(--line);
                  z-index: 5; }
+  #q-search { width: 100%; font: 13px var(--ui); padding: 6px 10px;
+              margin-bottom: 8px; border: 1px solid var(--line-strong);
+              border-radius: 6px; background: #fff; color: var(--ink); }
+  #q-search:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
   .filters { display: flex; gap: 6px; flex-wrap: wrap; }
   .filters button {
     border: 1px solid var(--line); background: transparent; color: var(--muted);
@@ -272,6 +276,8 @@
   <nav class="app-nav" aria-label="Sections">
     <a href="/" aria-current="page">Review</a>
     <a href="/report" target="_blank" rel="noopener">Report</a>
+    <a href="/issue" target="_blank" rel="noopener"
+       title="Clean copy for sending — no review controls">Final issue</a>
   </nav>
   <span class="addr" id="hdr-addr">{{ inv.property_address or "No address yet" }}</span>
   <button class="btn ghost" id="btn-details">Details</button>
@@ -290,6 +296,8 @@
 <div id="app">
   <nav id="rail" aria-label="Item queue">
     <div class="tools">
+      <input type="search" id="q-search" placeholder="Search items…"
+             aria-label="Search items" autocomplete="off">
       <div class="filters" id="filters">
         <button data-f="all" aria-pressed="true">All</button>
         <button data-f="pending" aria-pressed="false">Unreviewed</button>
@@ -361,6 +369,7 @@
 
   var filter = "all";
   var sortMode = "room";
+  var query = "";
   var sel = null;            // {type:"item", id} | {type:"room", name}
   var el = ui.el, toast = ui.toast;
 
@@ -499,7 +508,19 @@
   });
   railBackdrop.addEventListener("click", function () { setRail(false); });
 
+  function matchesQuery(it) {
+    var room = ix.roomOf[it.id];
+    var hay = [it.id, it.name, it.description, room ? room.name : ""]
+      .concat(it.defects || []).concat(it.rejected_defects || [])
+      .join(" ").toLowerCase();
+    var words = query.split(/\s+/);
+    for (var i = 0; i < words.length; i++) {
+      if (hay.indexOf(words[i]) < 0) return false;
+    }
+    return true;
+  }
   function visible(it) {
+    if (query && !matchesQuery(it)) return false;
     if (filter === "pending") return !isDone(it);
     if (filter === "defects") {
       return (it.defects || []).length || (it.rejected_defects || []).length;
@@ -522,62 +543,110 @@
       (it.rejected ? " bad" : it.reviewed ? " done" : "") +
       (sel && sel.type === "item" && sel.id === it.id ? " active" : "");
   }
+  function queueRow(it) {
+    var room = ix.roomOf[it.id];
+    var row = el("div", {
+      onclick: function () { select({ type: "item", id: it.id }); } });
+    queueRowState(row, it);
+    row.setAttribute("data-qid", it.id);
+    row.appendChild(el("span", { "class": "dot" }));
+    var name = el("span", { "class": "name", title: it.name || "" });
+    name.appendChild(el("span", { "class": "ref", text: it.id }));
+    name.appendChild(document.createTextNode(it.name || "(unnamed)"));
+    var bits = [];
+    if ((it.defects || []).length) bits.push((it.defects.length) + " defect" +
+      (it.defects.length > 1 ? "s" : ""));
+    if (!hasEvidence(it)) bits.push("no evidence");
+    if (sortMode === "conf") bits.unshift(room.name);
+    if (bits.length) name.appendChild(el("span", { "class": "sub",
+      text: bits.join(" · ") }));
+    row.appendChild(name);
+    var conf = el("span", { "class": "conf" });
+    // confidence is only signal when it is low or when sorting by it
+    if (typeof it.confidence === "number" &&
+        (sortMode === "conf" || it.confidence < 0.6)) {
+      var pct = Math.round(it.confidence * 100);
+      conf.appendChild(el("span", { "class": "v", text: pct + "%" }));
+      var t = el("span", { "class": "t" });
+      var f = el("span", { "class": "f" });
+      f.style.display = "block"; f.style.width = pct + "%";
+      t.appendChild(f); conf.appendChild(t);
+    }
+    row.appendChild(conf);
+    return row;
+  }
+
+  /* The rail renders in chunks: first paint is O(chunk) however many items
+     exist, and scrolling (or selecting something deeper) renders more. */
+  var Q_CHUNK = 120;
+  var qview = null;   // {entries, next, lastRoom, box, sentinel}
+  var qObserver = ("IntersectionObserver" in window)
+    ? new IntersectionObserver(function (recs) {
+        recs.forEach(function (r) { if (r.isIntersecting) renderMoreRows(); });
+      }, { root: rail, rootMargin: "600px" })
+    : null;
   function renderQueue() {
     var q = document.getElementById("queue");
+    if (qObserver && qview) qObserver.unobserve(qview.sentinel);
     q.innerHTML = "";
     var entries = queueEntries();
     if (!entries.length) {
+      qview = null;
       q.appendChild(el("div", { "class": "empty-queue",
-        text: filter === "pending"
+        text: query ? "No items match “" + query + "”."
+          : filter === "pending"
           ? "Nothing left to review here — every item is confirmed."
           : "No items match this filter." }));
       return;
     }
-    var lastRoom = null;
-    entries.forEach(function (it) {
+    qview = { entries: entries, next: 0, lastRoom: null, box: q,
+              sentinel: el("div", {}) };
+    q.appendChild(qview.sentinel);
+    renderMoreRows();
+  }
+  function renderMoreRows() {
+    if (!qview) return;
+    var stop = Math.min(qview.entries.length, qview.next + Q_CHUNK);
+    var frag = document.createDocumentFragment();
+    for (; qview.next < stop; qview.next++) {
+      var it = qview.entries[qview.next];
       var room = ix.roomOf[it.id];
-      if (sortMode === "room" && room.name !== lastRoom) {
-        lastRoom = room.name;
+      if (sortMode === "room" && room.name !== qview.lastRoom) {
+        qview.lastRoom = room.name;
         var pend = room.items.filter(function (i) { return !isDone(i); }).length;
-        q.appendChild(el("div", {
+        frag.appendChild(el("div", {
           "class": "room-head",
-          onclick: function () { select({ type: "room", name: room.name }); }
+          onclick: (function (name) { return function () {
+            select({ type: "room", name: name });
+          }; })(room.name)
         }, [
           el("span", { text: room.name }),
           el("span", { "class": "n",
             text: pend ? pend + " open" : "done" })
         ]));
       }
-      var row = el("div", {
-        onclick: function () { select({ type: "item", id: it.id }); } });
-      queueRowState(row, it);
-      row.setAttribute("data-qid", it.id);
-      row.appendChild(el("span", { "class": "dot" }));
-      var name = el("span", { "class": "name", title: it.name || "" });
-      name.appendChild(el("span", { "class": "ref", text: it.id }));
-      name.appendChild(document.createTextNode(it.name || "(unnamed)"));
-      var bits = [];
-      if ((it.defects || []).length) bits.push((it.defects.length) + " defect" +
-        (it.defects.length > 1 ? "s" : ""));
-      if (!hasEvidence(it)) bits.push("no evidence");
-      if (sortMode === "conf") bits.unshift(room.name);
-      if (bits.length) name.appendChild(el("span", { "class": "sub",
-        text: bits.join(" · ") }));
-      row.appendChild(name);
-      var conf = el("span", { "class": "conf" });
-      // confidence is only signal when it is low or when sorting by it
-      if (typeof it.confidence === "number" &&
-          (sortMode === "conf" || it.confidence < 0.6)) {
-        var pct = Math.round(it.confidence * 100);
-        conf.appendChild(el("span", { "class": "v", text: pct + "%" }));
-        var t = el("span", { "class": "t" });
-        var f = el("span", { "class": "f" });
-        f.style.display = "block"; f.style.width = pct + "%";
-        t.appendChild(f); conf.appendChild(t);
+      frag.appendChild(queueRow(it));
+    }
+    qview.box.insertBefore(frag, qview.sentinel);
+    if (qview.next >= qview.entries.length) {
+      if (qObserver) qObserver.unobserve(qview.sentinel);
+      qview.sentinel.remove();
+    } else if (qObserver) {
+      // re-observe so a still-visible sentinel fires again for the next chunk
+      qObserver.unobserve(qview.sentinel);
+      qObserver.observe(qview.sentinel);
+    } else {
+      renderMoreRows();   // no IntersectionObserver: render everything
+    }
+  }
+  function ensureRowRendered(id) {
+    if (!qview) return;
+    for (var i = 0; i < qview.entries.length; i++) {
+      if (qview.entries[i].id === id) {
+        while (qview.next <= i) renderMoreRows();
+        return;
       }
-      row.appendChild(conf);
-      q.appendChild(row);
-    });
+    }
   }
   function refreshQueueRow(it) {
     var row = document.querySelector('[data-qid="' + it.id + '"]');
@@ -593,6 +662,7 @@
       refreshQueueRow(ix.byId[prev.id]);
     }
     if (s.type === "item") {
+      ensureRowRendered(s.id);
       refreshQueueRow(ix.byId[s.id]);
       renderItem(ix.byId[s.id]);
     } else {
@@ -823,6 +893,8 @@
     act.appendChild(el("span", { "class": "kbd-label", text: "reject" }));
     act.appendChild(el("span", { "class": "kbd", text: "j / k" }));
     act.appendChild(el("span", { "class": "kbd-label", text: "move" }));
+    act.appendChild(el("span", { "class": "kbd", text: "/" }));
+    act.appendChild(el("span", { "class": "kbd-label", text: "search" }));
     act.appendChild(el("span", { "class": "kbd", text: "⌘Z" }));
     act.appendChild(el("span", { "class": "kbd-label", text: "undo" }));
     d.appendChild(act);
@@ -1419,6 +1491,33 @@
   document.getElementById("sort").addEventListener("change", function () {
     sortMode = this.value; renderQueue();
   });
+  var searchBox = document.getElementById("q-search");
+  var searchTimer = null;
+  function applySearch() {
+    query = searchBox.value.trim().toLowerCase();
+    renderQueue();
+  }
+  searchBox.addEventListener("input", function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(applySearch, 150);
+  });
+  searchBox.addEventListener("keydown", function (e) {
+    e.stopPropagation();
+    if (e.key === "Escape") {
+      searchBox.value = "";
+      clearTimeout(searchTimer);
+      applySearch();
+      searchBox.blur();
+    } else if (e.key === "Enter") {
+      clearTimeout(searchTimer);
+      applySearch();
+      var entries = queueEntries();
+      if (entries.length) {
+        select({ type: "item", id: entries[0].id });
+        searchBox.blur();
+      }
+    }
+  });
   document.getElementById("bulk").addEventListener("click", function () {
     var open = queueEntries().filter(function (i) { return !isDone(i); });
     if (!open.length) { toast("Nothing left to accept"); return; }
@@ -1447,11 +1546,22 @@
       return;
     }
     if (lightbox.isOpen()) return;
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      if (window.matchMedia("(max-width: 900px)").matches) setRail(true);
+      searchBox.focus(); searchBox.select();
+      return;
+    }
     var t = e.target;
     if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" ||
               t.tagName === "SELECT" || t.isContentEditable)) return;
     var it = sel && sel.type === "item" ? ix.byId[sel.id] : null;
-    if (e.key === "j") { e.preventDefault(); step(1); }
+    if (e.key === "/") {
+      e.preventDefault();
+      if (window.matchMedia("(max-width: 900px)").matches) setRail(true);
+      searchBox.focus(); searchBox.select();
+    }
+    else if (e.key === "j") { e.preventDefault(); step(1); }
     else if (e.key === "k") { e.preventDefault(); step(-1); }
     else if (e.key === " " && it) {
       e.preventDefault();

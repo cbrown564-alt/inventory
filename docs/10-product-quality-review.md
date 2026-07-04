@@ -152,6 +152,8 @@ Six steps, implemented in this change set (details in the diff):
 
 ### Explicitly not done here (follow-ups)
 
+*(All five completed 4 Jul 2026 — see §7.)*
+
 - Queue virtualisation (fine at ~300 items; revisit at 1,000+).
 - Text search / command palette over items.
 - Tenant-page lightbox (view-only) and capture-page theme adoption — the
@@ -167,3 +169,56 @@ docs/03's M5a box now points here: the original checkbox described endpoint
 wiring ("PDF export (`/api/pdf` + `/pdf`)") that no UI reached — worth
 remembering as a definition-of-done lesson: **a milestone that ships a route
 without a control that reaches it is not done.**
+
+---
+
+## 7. Follow-ups completed (4 Jul 2026)
+
+All five §6 follow-ups shipped in a second change set. Verified end-to-end
+by driving the live servers (Playwright/Chromium against the own-property
+data, 289 items / 260 photos) plus 12 new unit tests.
+
+1. **Queue virtualisation.** The rail renders in 120-row chunks: first
+   paint is constant-size regardless of item count, an IntersectionObserver
+   sentinel renders more as the rail scrolls, and any selection (keyboard
+   step, search jump) renders up to the selected row first. Measured: 120
+   rows in the DOM at load for 289 items; full list only if you actually
+   scroll it. Falls back to full render where IntersectionObserver is
+   missing.
+2. **Text search.** A search field above the queue filters live on
+   all-words match over name / id / description / room / defects, and
+   composes with the canned filters. `/` or ⌘K focuses it from anywhere
+   (opening the drawer on mobile), Enter jumps to the first match, Esc
+   clears. The empty state names the query.
+3. **Tenant lightbox + capture theme.** A shared view-only viewer
+   (`ui.photoViewer`: fit/zoom/pan, arrow-key prev/next, defect-region
+   overlays with labels) replaces the tenant page's bare
+   `<a target="_blank">` thumbnails. The capture page now uses the shared
+   theme partials (`_theme.css.j2` header/buttons/chips) and `ui.toast`
+   instead of native `alert()`; found while restyling: the add-room button
+   built HTML from the server-echoed room name, so a slash-free name like
+   `<img src=x onerror=…>` injected markup (`</b>`-style payloads were
+   caught by the path-component check, but a lone open tag was not) — now
+   built as text nodes, verified in-browser. **The capture-page change
+   invalidates the pending M5b real-device smoke: re-run the docs/09
+   checklist on a real phone before flipping that box.**
+4. **Final issue.** `render()` now always writes `inventory-issue.html`
+   next to the artefact — the same document minus the docket, the embedded
+   payload/scripts and the reviewed/unreviewed chips. Rejected entries stay,
+   struck through (the preamble's transparency promise). Served at `/issue`
+   (stale-aware re-render, like `/report`) and linked from the review
+   header nav, per the §6 definition-of-done lesson.
+5. **PDF size budget.** Appendix B now embeds a 900-px / q72 print tier
+   (`photos/print/`, mtime-cached like the full tier) instead of the
+   1400-px / q88 screen exports, and prunes uncited, unannotated
+   walkthrough-video frames that are near-duplicates (dHash Hamming ≤ 8) of
+   the last kept frame of the same video, with an honest per-room note;
+   Appendix A always lists every file. Own-property PDF:
+   **32 MB / 74 pp → 9.3 MB / 72 pp** — under mail-attachment caps.
+   Honest footnote: the pruner found *zero* safe prunes on the own-property
+   data — 245 of 260 frames are cited evidence (never prunable: the printed
+   "Evidence: Pnnn" refs must resolve in Appendix B), and the 15 uncited
+   frames are genuinely distinct (dHash 12–42). The near-duplicate *pages*
+   §5 complained about are cited frames the evidence chain must keep, so
+   the size lever was the tier, not the prune; the prune earns its keep on
+   raw video captures with default frame extraction.

@@ -119,6 +119,70 @@ def test_cover_uses_human_dates_and_hides_empty_rows(tmp_path):
     assert "Prepared by" not in html
 
 
+def test_final_issue_strips_review_instrument(tmp_path):
+    inv, cap, out = _fixture(tmp_path)
+    inv.rooms[0].items[0].reviewed = True
+    inv.rooms[0].items.append(Item(id="KIT-004", name="Phantom lamp",
+                                   rejected=True))
+    outputs = render(inv, cap, out, pdf=False)
+    live = outputs["html"].read_text(encoding="utf-8")
+    issue = outputs["issue"].read_text(encoding="utf-8")
+    assert 'id="hi-data"' in live and "Review docket" in live
+    assert 'id="hi-data"' not in issue         # no embedded payload
+    assert "Review docket" not in issue        # no instrument layer
+    assert "review-flag ok" not in issue       # no review-state chips
+    assert "review-flag pending" not in issue
+    assert "review app" not in issue           # no reviewer-facing copy
+    assert "reviewer rejected" in issue        # transparency promise kept
+
+
+def test_appendix_b_uses_print_tier(tmp_path):
+    inv, cap, out = _fixture(tmp_path)
+    # a big source so the two tiers actually differ
+    Image.new("RGB", (1600, 1200), "white").save(cap / "Kitchen" / "k1.jpg")
+    html = render(inv, cap, out, pdf=False)["html"].read_text(encoding="utf-8")
+    appendix = html.split('id="appendix-photos"', 1)[1]
+    assert "photos/print/P001.jpg" in appendix
+    with Image.open(out / "photos" / "P001.jpg") as full:
+        assert max(full.size) == 1400
+    with Image.open(out / "photos" / "print" / "P001.jpg") as small:
+        assert max(small.size) <= 900
+    # the screen strips and lightbox keep the full tier
+    assert 'src="photos/P001.jpg"' in html.split('id="appendix-photos"')[0]
+
+
+def test_appendix_b_prunes_near_duplicate_frames(tmp_path):
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    for i in (1, 2, 3):
+        _img(cap / "Kitchen" / f"walk_f{i}.jpg")   # identical frames
+    inv = Inventory(
+        inspected_at="2026-07-03",
+        rooms=[Room(name="Kitchen", items=[
+            Item(id="KIT-001", name="Worktop", condition="good",
+                 photo_ids=["P001", "P003"]),
+        ], photos=[
+            Photo(id="P001", path="Kitchen/k1.jpg", room="Kitchen"),
+            Photo(id="P002", path="Kitchen/walk_f1.jpg", room="Kitchen",
+                  source_video="walk.mp4"),
+            Photo(id="P003", path="Kitchen/walk_f2.jpg", room="Kitchen",
+                  source_video="walk.mp4"),
+            Photo(id="P004", path="Kitchen/walk_f3.jpg", room="Kitchen",
+                  source_video="walk.mp4"),
+        ])])
+    html = render(inv, cap, tmp_path / "report",
+                  pdf=False)["html"].read_text(encoding="utf-8")
+    appendix = html.split('id="appendix-photos"', 1)[1]
+    assert 'data-photo-id="P002"' in appendix   # first frame of the video
+    assert 'data-photo-id="P003"' in appendix   # near-duplicate but CITED
+    assert 'data-photo-id="P004"' not in appendix  # uncited near-dup pruned
+    assert "near-duplicate walkthrough-video" in appendix  # honest note
+    # every file still listed with its hash in Appendix A
+    manifest = html.split('id="appendix-manifest"', 1)[1]
+    for pid in ("P002", "P003", "P004"):
+        assert f"<td>{pid}</td>" in manifest
+
+
 def test_photo_export_cache_skips_unchanged(tmp_path):
     inv, cap, out = _fixture(tmp_path)
     render(inv, cap, out, pdf=False)

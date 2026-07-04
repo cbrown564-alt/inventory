@@ -158,6 +158,150 @@ var ui = (function () {
     });
   }
 
+  /* View-only photo lightbox (tenant page; the review app has its own
+     annotating variant). opts: {photos: [{src, label, title,
+     regions: [{x, y, w, h, defect}]}], index} — zoom, pan, arrow keys. */
+  function photoViewer(opts) {
+    var photos = opts.photos || [];
+    if (!photos.length) return null;
+    var idx = Math.min(Math.max(opts.index || 0, 0), photos.length - 1);
+    var scale = 1, minScale = 1, tx = 0, ty = 0;
+
+    var img = el("img", { alt: "" });
+    var canvas = el("div", { "class": "pv-canvas" }, [img]);
+    var stage = el("div", { "class": "pv-stage" }, [canvas]);
+    var pidEl = el("span", { "class": "pv-pid" });
+    var titleEl = el("span", {});
+    var zoomEl = el("span", { "class": "pv-zoom", text: "100%" });
+    var countEl = el("span", { "class": "pv-count" });
+    var box = el("div", { "class": "pv", role: "dialog", "aria-modal": "true",
+                          "aria-label": "Photo viewer" });
+
+    function apply() {
+      canvas.style.transform = "translate(" + tx + "px," + ty + "px) " +
+                               "scale(" + scale + ")";
+      zoomEl.textContent = Math.round(100 * scale / minScale) + "%";
+    }
+    function fit() {
+      var sw = stage.clientWidth, sh = stage.clientHeight;
+      var iw = img.naturalWidth || 1, ih = img.naturalHeight || 1;
+      minScale = Math.min(sw / iw, sh / ih, 1);
+      scale = minScale;
+      tx = (sw - iw * scale) / 2;
+      ty = (sh - ih * scale) / 2;
+      apply();
+    }
+    function clampPan() {
+      var sw = stage.clientWidth, sh = stage.clientHeight;
+      var iw = (img.naturalWidth || 1) * scale;
+      var ih = (img.naturalHeight || 1) * scale;
+      if (iw <= sw) tx = (sw - iw) / 2;
+      else tx = Math.min(0, Math.max(sw - iw, tx));
+      if (ih <= sh) ty = (sh - ih) / 2;
+      else ty = Math.min(0, Math.max(sh - ih, ty));
+    }
+    function zoomAt(factor, cx, cy) {
+      var next = Math.min(Math.max(scale * factor, minScale), minScale * 12);
+      var r = stage.getBoundingClientRect();
+      var px = (cx - r.left - tx) / scale, py = (cy - r.top - ty) / scale;
+      scale = next;
+      tx = cx - r.left - px * scale;
+      ty = cy - r.top - py * scale;
+      clampPan();
+      apply();
+    }
+    function drawRegions() {
+      Array.prototype.forEach.call(canvas.querySelectorAll(".pv-box"),
+        function (b) { b.remove(); });
+      var iw = img.naturalWidth || 1, ih = img.naturalHeight || 1;
+      (photos[idx].regions || []).forEach(function (reg) {
+        var b = el("span", { "class": "pv-box" });
+        b.style.left = (reg.x * iw) + "px";
+        b.style.top = (reg.y * ih) + "px";
+        b.style.width = (reg.w * iw) + "px";
+        b.style.height = (reg.h * ih) + "px";
+        if (reg.defect) b.appendChild(el("span", { "class": "pv-lbl",
+                                                   text: reg.defect }));
+        canvas.appendChild(b);
+      });
+    }
+    function show() {
+      var p = photos[idx];
+      pidEl.textContent = p.label || "";
+      titleEl.textContent = p.title || "";
+      countEl.textContent =
+        photos.length > 1 ? (idx + 1) + " of " + photos.length : "";
+      img.onload = function () { fit(); drawRegions(); };
+      img.src = p.src;
+      if (img.complete && img.naturalWidth) { fit(); drawRegions(); }
+    }
+    function stepTo(d) {
+      if (photos.length < 2) return;
+      idx = (idx + d + photos.length) % photos.length;
+      show();
+    }
+    function close() {
+      document.removeEventListener("keydown", onKey, true);
+      box.remove();
+    }
+    function onKey(e) {
+      if (e.key === "Escape") { e.stopPropagation(); close(); }
+      else if (e.key === "ArrowRight") stepTo(1);
+      else if (e.key === "ArrowLeft") stepTo(-1);
+    }
+    function pvBtn(label, aria, onclick) {
+      return el("button", { "class": "pv-btn", "aria-label": aria,
+                            text: label, onclick: onclick });
+    }
+    function centreZoom(factor) {
+      var r = stage.getBoundingClientRect();
+      zoomAt(factor, r.left + r.width / 2, r.top + r.height / 2);
+    }
+
+    box.appendChild(el("div", { "class": "pv-top" }, [
+      pidEl, titleEl, el("span", { "class": "pv-spacer" }),
+      pvBtn("✕ Close", "Close", close)
+    ]));
+    box.appendChild(stage);
+    box.appendChild(el("div", { "class": "pv-bottom" }, [
+      pvBtn("‹", "Previous photo", function () { stepTo(-1); }),
+      pvBtn("−", "Zoom out", function () { centreZoom(1 / 1.4); }),
+      zoomEl,
+      pvBtn("+", "Zoom in", function () { centreZoom(1.4); }),
+      pvBtn("Fit", "Fit to screen", fit),
+      pvBtn("›", "Next photo", function () { stepTo(1); }),
+      countEl
+    ]));
+
+    stage.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      zoomAt(e.deltaY < 0 ? 1.18 : 1 / 1.18, e.clientX, e.clientY);
+    }, { passive: false });
+    var drag = null;
+    stage.addEventListener("pointerdown", function (e) {
+      stage.setPointerCapture(e.pointerId);
+      drag = { x: e.clientX - tx, y: e.clientY - ty };
+      stage.classList.add("dragging");
+    });
+    stage.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      tx = e.clientX - drag.x;
+      ty = e.clientY - drag.y;
+      clampPan();
+      apply();
+    });
+    stage.addEventListener("pointerup", function () {
+      drag = null;
+      stage.classList.remove("dragging");
+    });
+
+    document.addEventListener("keydown", onKey, true);
+    document.body.appendChild(box);
+    show();
+    return { close: close };
+  }
+
   return { el: el, toast: toast, open: open,
-           confirmDialog: confirmDialog, form: form };
+           confirmDialog: confirmDialog, form: form,
+           photoViewer: photoViewer };
 })();

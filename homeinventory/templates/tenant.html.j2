@@ -44,12 +44,16 @@
 
   .ev { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
   .ev .ph { position: relative; }
+  .ev .ph-btn { display: block; padding: 0; border: 0; background: none;
+                cursor: zoom-in; }
+  .ev .ph-btn:focus-visible { outline: 2px solid var(--accent);
+                              outline-offset: 2px; }
   .ev img { height: 110px; display: block; border: 1px solid var(--line); }
-  .ev .pid { position: absolute; left: 0; bottom: 0;
+  .ev .pid { position: absolute; left: 0; bottom: 0; pointer-events: none;
     background: rgba(29,33,38,.78); color: #fff; font: 9px var(--mono);
     padding: 1px 5px; }
   .ev .box { position: absolute; border: 1.5px solid var(--danger);
-    background: rgba(163,35,31,.12); }
+    background: rgba(163,35,31,.12); pointer-events: none; }
 
   .c-thread { margin-top: 12px; }
   .c-line { padding: 6px 0 0; font-size: 13px; }
@@ -222,28 +226,40 @@
     }
 
     var ev = el("div", { "class": "ev" });
-    var any = false;
-    (it.photo_ids || []).forEach(function (pid) {
-      if (!photoSrc[pid]) return;
-      any = true;
+    var pids = (it.photo_ids || []).filter(function (pid) {
+      return photoSrc[pid];
+    });
+    function viewerPhotos() {
+      return pids.map(function (pid) {
+        return { src: photoSrc[pid], label: pid, title: it.name || "",
+                 regions: (it.defect_regions || []).filter(function (r) {
+                   return r.photo_id === pid;
+                 }) };
+      });
+    }
+    pids.forEach(function (pid, pi) {
       var ph = el("span", { "class": "ph" });
-      var a = el("a", { href: photoSrc[pid], target: "_blank" });
-      a.appendChild(el("img", { src: photoSrc[pid], alt: pid,
+      var b = el("button", { "class": "ph-btn", type: "button",
+        "aria-label": "View photo " + pid,
+        onclick: function () {
+          ui.photoViewer({ photos: viewerPhotos(), index: pi });
+        } });
+      b.appendChild(el("img", { src: photoSrc[pid], alt: pid,
         loading: "lazy" }));
-      ph.appendChild(a);
+      ph.appendChild(b);
       ph.appendChild(el("span", { "class": "pid", text: pid }));
       (it.defect_regions || []).forEach(function (reg) {
         if (reg.photo_id !== pid) return;
-        var b = el("span", { "class": "box", title: reg.defect });
-        b.style.left = (reg.x * 100) + "%";
-        b.style.top = (reg.y * 100) + "%";
-        b.style.width = (reg.w * 100) + "%";
-        b.style.height = (reg.h * 100) + "%";
-        ph.appendChild(b);
+        var box = el("span", { "class": "box", title: reg.defect });
+        box.style.left = (reg.x * 100) + "%";
+        box.style.top = (reg.y * 100) + "%";
+        box.style.width = (reg.w * 100) + "%";
+        box.style.height = (reg.h * 100) + "%";
+        ph.appendChild(box);
       });
       ev.appendChild(ph);
     });
-    if (any) card.appendChild(ev);
+    if (pids.length) card.appendChild(ev);
 
     var thread = el("div", { "class": "c-thread" });
     (it.comments || []).forEach(function (c) {

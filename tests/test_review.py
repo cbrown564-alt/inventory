@@ -166,6 +166,30 @@ def test_owner_app_and_inventory_api(server):
     assert body["photo_src"]  # photos are exported and mapped
 
 
+def test_owner_app_has_search_and_final_issue_link(server):
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert 'id="q-search"' in html             # text search over the queue
+    assert 'href="/issue"' in html             # final issue reachable from UI
+
+
+def test_issue_route_serves_final_copy(server):
+    base, _state, out, _cap = server
+    status, html = _get_text(base + "/issue")
+    assert status == 200
+    assert "Review docket" not in html and 'id="hi-data"' not in html
+    assert (out / "inventory-issue.html").exists()
+    # the print-tier photo derivatives are served too
+    with urllib.request.urlopen(base + "/photos/print/P001.jpg") as r:
+        assert r.status == 200 and r.read()[:2] == b"\xff\xd8"
+
+
+def test_tenant_page_has_lightbox(server):
+    base, state, _out, _cap = server
+    _, html = _get_text(base + f"/t/{state.tenant_token}")
+    assert "photoViewer" in html               # shared view-only lightbox
+
+
 def test_write_back_and_rerender(server):
     base, _state, out, _cap = server
     _, body = _req("GET", base + "/api/inventory")

@@ -318,7 +318,7 @@
   <div class="addr">{{ inv.property_address }}</div>
   {% else %}
   <div class="addr addr-missing">Address not yet specified</div>
-  <div class="meta screen-only">Add it in the review app — Details.</div>
+  {% if not final %}<div class="meta screen-only">Add it in the review app — Details.</div>{% endif %}
   {% endif %}
   {% if inv.property_type %}<div class="property-type">{{ inv.property_type }}</div>{% endif %}
   <table>
@@ -412,6 +412,7 @@ rather than silently deleted.</p>
         <td class="ref-cell"><span class="ref-mono">{{ row.ref }}</span>
           <span class="screen-only ref-internal ref-mono">{{ item.id }}</span>
           {% if item.rejected %}<br><span class="review-flag no">rejected</span>
+          {% elif final %}
           {% elif item.reviewed %}<br><span class="review-flag ok">reviewed</span>
           {% elif reviewed_items %}<br><span class="review-flag pending">unreviewed</span>{% endif %}
           {% if item.added_by %}<br><span class="meta">added by {{ item.added_by }}</span>{% endif %}
@@ -501,14 +502,14 @@ rather than silently deleted.</p>
 <section class="room appendix-photos print-only page-break" id="appendix-photos">
   <h2>Appendix B — Room photographs</h2>
   {% for section in room_sections %}
-  {% if section.photos %}
+  {% if section.appendix_photos %}
   <h3>{{ section.number }}. {{ section.name }}</h3>
   <div class="photo-sheet">
-    {% for photo in section.photos %}
+    {% for photo in section.appendix_photos %}
     <figure id="pdf-photo-{{ photo.id }}" data-photo-id="{{ photo.id }}"
             class="{% if regions_by_photo.get(photo.id) %}annotated {% endif %}{% if loop.index % 12 == 0 %}sheet-break{% endif %}">
       <span class="frame">
-        <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}">
+        <img src="{{ photo_print_src[photo.id] }}" alt="{{ photo.id }}">
         {% for reg in regions_by_photo.get(photo.id, []) %}
           <span class="region" data-label="{{ reg.item_id }} · {{ reg.defect }}"
                 style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
@@ -523,6 +524,12 @@ rather than silently deleted.</p>
     </figure>
     {% endfor %}
   </div>
+  {% if section.appendix_pruned %}
+  <p class="meta">{{ section.appendix_pruned }} near-duplicate walkthrough-video
+  frame{{ "s" if section.appendix_pruned != 1 }} (cited by no item) omitted from
+  this appendix; every capture file remains listed with its checksum in
+  Appendix A.</p>
+  {% endif %}
   {% endif %}
   {% endfor %}
 </section>
@@ -564,6 +571,7 @@ rather than silently deleted.</p>
 </footer>
 </main>
 
+{% if not final %}
 <div id="docket" aria-label="Review controls">
   <div class="bar">
     <span class="brand">Review docket</span>
@@ -1141,5 +1149,6 @@ rather than silently deleted.</p>
   updateProgress();
 })();
 </script>
+{% endif %}
 </body>
 </html>

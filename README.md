@@ -63,13 +63,15 @@ The AI drafts; a human confirms and signs. Three ways in, lightest first
    homeinventory review capture/ -o report/
    ```
 
-   Confidence-sorted queue with bulk-accept, autosave with undo (⌘Z), a
-   full-screen evidence lightbox (zoom, pan, pin defect boxes at full
-   resolution), per-room coverage panel (photos no item cites),
-   add-missed-item with photo upload, a report-details editor (address,
-   names, reference — they land on the PDF cover), one-click *Export PDF*
-   (background job), and a *Re-describe room* button for after you fix a
-   capture problem (hand-edits in that room are preserved via `--from-json`).
+   Confidence-sorted queue with text search (`/` or ⌘K) and bulk-accept,
+   autosave with undo (⌘Z), a full-screen evidence lightbox (zoom, pan, pin
+   defect boxes at full resolution), per-room coverage panel (photos no item
+   cites), add-missed-item with photo upload, a report-details editor
+   (address, names, reference — they land on the PDF cover), one-click
+   *Export PDF* (background job), a *Final issue* link (the report with the
+   review instrument stripped, for sending), and a *Re-describe room* button
+   for after you fix a capture problem (hand-edits in that room are
+   preserved via `--from-json`).
    It also works **before** the first build: a start page lists the capture
    folder, takes drag-and-drop uploads of photos **and walkthrough videos**
    (streamed `POST /api/upload`, extensions from magic bytes; base64

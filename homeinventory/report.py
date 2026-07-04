@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import shutil
 from collections import defaultdict
@@ -240,14 +241,49 @@ def _display_path(photo_path: str, capture_dir: Path, out_dir: Path) -> str:
     return "/".join(p.parts[-3:])  # last resort: room/dir/file.jpg
 
 
+# Appendix B prints photos at ~6 cm wide; a second, smaller derivative keeps
+# the PDF emailable while the full-tier export still feeds the on-screen
+# lightbox (size budget: docs/10 §5).
+PRINT_MAX_DIM = 900
+PRINT_QUALITY = 72
+
+
+def _dhash(im) -> int:
+    """64-bit difference hash of a PIL image — perceptual near-duplicate
+    detection for consecutive walkthrough-video frames."""
+    g = im.convert("L").resize((9, 8))
+    px = g.tobytes()   # row-major 8-bit greyscale
+    bits = 0
+    for row in range(8):
+        for col in range(8):
+            bits = (bits << 1) | (px[row * 9 + col] > px[row * 9 + col + 1])
+    return bits
+
+
+def _hamming(a: int, b: int) -> int:
+    return bin(a ^ b).count("1")
+
+
 def _export_photos(inv: Inventory, capture_dir: Path, out_dir: Path,
-                   max_dim: int = 1400) -> dict[str, str]:
-    """Copy (downscaled) report photos to out_dir/photos; return id -> rel path."""
+                   max_dim: int = 1400) -> tuple[dict[str, str],
+                                                 dict[str, str],
+                                                 dict[str, int]]:
+    """Copy (downscaled) report photos to out_dir/photos plus a smaller
+    print tier to out_dir/photos/print. Returns (id -> rel path,
+    id -> print rel path, id -> dhash)."""
     from PIL import Image
 
     photos_dir = out_dir / "photos"
-    photos_dir.mkdir(parents=True, exist_ok=True)
+    print_dir = photos_dir / "print"
+    print_dir.mkdir(parents=True, exist_ok=True)
+    cache_path = out_dir / "work" / "photo-hashes.json"
+    try:
+        cache = json.loads(cache_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        cache = {}
     src_map: dict[str, str] = {}
+    print_map: dict[str, str] = {}
+    dhash_map: dict[str, int] = {}
     for room in inv.rooms:
         for p in room.photos:
             src = Path(p.path.replace("\\", "/"))
@@ -258,26 +294,74 @@ def _export_photos(inv: Inventory, capture_dir: Path, out_dir: Path,
                     # round-tripped Level-1 export)
                     src = out_dir / p.path
             dest = photos_dir / f"{p.id}.jpg"
-            # unchanged source -> keep the existing export (a re-render after
+            pdest = print_dir / f"{p.id}.jpg"
+            src_map[p.id] = f"photos/{p.id}.jpg"
+            print_map[p.id] = f"photos/print/{p.id}.jpg"
+            # unchanged source -> keep the existing exports (a re-render after
             # review edits must not re-encode hundreds of untouched photos)
             try:
-                if dest.exists() and dest.stat().st_mtime >= src.stat().st_mtime:
-                    src_map[p.id] = f"photos/{p.id}.jpg"
-                    continue
+                src_mtime = src.stat().st_mtime
             except OSError:
-                pass
+                src_mtime = None
+            entry = cache.get(p.id) or {}
+            if (src_mtime is not None
+                    and dest.exists() and dest.stat().st_mtime >= src_mtime
+                    and pdest.exists() and pdest.stat().st_mtime >= src_mtime
+                    and entry.get("src_mtime") == src_mtime):
+                if entry.get("dhash") is not None:
+                    dhash_map[p.id] = entry["dhash"]
+                continue
             try:
                 with Image.open(src) as im:
                     im = im.convert("RGB")
                     if max(im.size) > max_dim:
                         im.thumbnail((max_dim, max_dim))
                     im.save(dest, quality=88)
+                    dhash_map[p.id] = _dhash(im)
+                    if max(im.size) > PRINT_MAX_DIM:
+                        im.thumbnail((PRINT_MAX_DIM, PRINT_MAX_DIM))
+                    im.save(pdest, quality=PRINT_QUALITY)
+                cache[p.id] = {"src_mtime": src_mtime,
+                               "dhash": dhash_map[p.id]}
             except Exception as e:
                 log.warning("could not re-encode %s (%s); copying as-is — the "
                             "report image may not render", src, e)
                 shutil.copyfile(src, dest)
-            src_map[p.id] = f"photos/{p.id}.jpg"
-    return src_map
+                shutil.copyfile(src, pdest)
+                cache[p.id] = {"src_mtime": src_mtime, "dhash": None}
+    try:
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
+        cache_path.write_text(json.dumps(cache), encoding="utf-8")
+    except OSError:
+        pass
+    return src_map, print_map, dhash_map
+
+
+# Two frames of the same walkthrough video within this dHash distance are
+# treated as near-duplicates for Appendix B. Cited or annotated photos are
+# never pruned — the printed evidence chain (item -> "Evidence: Pnnn" ->
+# Appendix B) must always resolve; Appendix A lists every file regardless.
+PRUNE_HAMMING = 8
+
+
+def _prune_near_duplicates(photos, keep_ids: set[str],
+                           dhash: dict[str, int]) -> tuple[list, int]:
+    """Drop uncited, unannotated video frames that look like the last kept
+    frame of the same source video. Returns (kept photos, pruned count)."""
+    kept, pruned = [], 0
+    last_by_video: dict[str, int] = {}
+    for p in photos:
+        h = dhash.get(p.id)
+        video = p.source_video
+        if (video and h is not None and p.id not in keep_ids):
+            prev = last_by_video.get(video)
+            if prev is not None and _hamming(prev, h) <= PRUNE_HAMMING:
+                pruned += 1
+                continue
+        if video and h is not None:
+            last_by_video[video] = h
+        kept.append(p)
+    return kept, pruned
 
 
 def import_weasyprint():
@@ -320,7 +404,8 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
            pdf: bool = True) -> dict[str, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     inv.rooms = sort_rooms(inv.rooms)
-    photo_src = _export_photos(inv, capture_dir, out_dir)
+    photo_src, photo_print_src, dhash_map = _export_photos(
+        inv, capture_dir, out_dir)
     schedule = default_schedule_summary(inv)
     room_sections = prepare_room_sections(inv)
 
@@ -342,9 +427,23 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
                 if reg.get("photo_id"):
                     regions_by_photo[reg["photo_id"]].append(
                         {"item_id": item.id, **reg})
-    html = env.get_template("report.html.j2").render(
+    # photos the printed document must show: cited as evidence by a live
+    # item, or carrying a defect-region annotation
+    keep_ids = set(regions_by_photo)
+    for room in inv.rooms:
+        for item in room.items:
+            if not item.rejected:
+                keep_ids.update(item.photo_ids or [])
+    for section in room_sections:
+        kept, pruned = _prune_near_duplicates(section["photos"], keep_ids,
+                                              dhash_map)
+        section["appendix_photos"] = kept
+        section["appendix_pruned"] = pruned
+
+    context = dict(
         inv=inv,
         photo_src=photo_src,
+        photo_print_src=photo_print_src,
         photo_display_path=photo_display_path,
         regions_by_photo=dict(regions_by_photo),
         total_items=inv.item_count(),
@@ -358,11 +457,20 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
         payload={"inventory": _payload_inventory(inv, photo_display_path),
                  "photo_src": photo_src},
     )
+    template = env.get_template("report.html.j2")
+    html = template.render(final=False, **context)
 
     outputs: dict[str, Path] = {}
     html_path = out_dir / "inventory.html"
     html_path.write_text(html, encoding="utf-8")
     outputs["html"] = html_path
+
+    # the final issue: the same document stripped of the review instrument
+    # (docket, embedded payload, review-state chips) — the copy you send
+    issue_path = out_dir / "inventory-issue.html"
+    issue_path.write_text(template.render(final=True, **context),
+                          encoding="utf-8")
+    outputs["issue"] = issue_path
 
     json_path = out_dir / "inventory.json"
     json_path.write_text(inv.to_json(), encoding="utf-8")

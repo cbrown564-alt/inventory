@@ -412,6 +412,11 @@ class ReviewHandler(BaseHandler):
         if m:
             self._file(st.out_dir / "photos" / m.group(1))
             return
+        m = re.fullmatch(r"/photos/print/(P\d+\.jpg)", path)
+        if m:
+            # Appendix B's smaller print tier (the served report references it)
+            self._file(st.out_dir / "photos" / "print" / m.group(1))
+            return
         m = re.fullmatch(r"/crops/([\w.\- ]+\.jpg)", path)
         if m:
             self._file(st.out_dir / "work" / "crops" / m.group(1))
@@ -455,8 +460,12 @@ class ReviewHandler(BaseHandler):
         if path == "/pdf":
             self._file(st.out_dir / "inventory.pdf", "application/pdf")
             return
-        if path == "/report":
-            html = st.out_dir / "inventory.html"
+        if path in ("/report", "/issue"):
+            # /report: the live artefact with the review docket;
+            # /issue: the final-issue copy with the instrument stripped
+            name = "inventory.html" if path == "/report" else \
+                "inventory-issue.html"
+            html = st.out_dir / name
             with st.lock:
                 # autosaved edits re-render on demand, not on every save
                 if st.inv_path.exists() and (

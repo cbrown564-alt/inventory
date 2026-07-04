@@ -162,6 +162,11 @@ in `inventory.json`. Suite after M5b: 114 passed, 1 skipped (the M5a
 
 ### Manual smoke checklist (real device — the user's phone)
 
+*Note (4 Jul 2026): the capture page was restyled onto the shared theme
+(docs/10 §7) — same IDs, routes and upload contract, but error messages are
+now toasts rather than native `alert()` dialogs. This checklist still
+applies; run it against the restyled page.*
+
 On the computer (this machine needs `prompt_free`: the YOLOE CLIP
 text-mode is permission-blocked, see docs/07):
 
