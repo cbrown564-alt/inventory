@@ -92,58 +92,9 @@ def default_schedule_summary(inv: Inventory) -> list[dict]:
     if inv.schedule_summary:
         return inv.schedule_summary
 
-    all_items = [i for r in inv.rooms for i in r.items if not i.rejected]
-    structural = [i for i in all_items if i.category == "structure"]
-    fixtures = [i for i in all_items if i.category == "fixture"]
-    furniture = [i for i in all_items if i.category == "furniture"]
-    appliances = [i for i in all_items if i.category == "appliance"]
-    safety = [i for i in all_items if i.category == "safety"]
+    from .usecases.tenancy import tenancy_schedule_summary
 
-    rows = [
-        {"ref": "1.1", "name": "Property details",
-         "condition": inv.property_type or "As inspected"},
-        {"ref": "1.2", "name": "Cleaning standard",
-         "condition": _aggregate_cleanliness(all_items)},
-        {"ref": "1.3", "name": "Decorative condition",
-         "condition": _aggregate_condition(structural, structural=True)},
-        {"ref": "1.4", "name": "Flooring",
-         "condition": _aggregate_condition(
-             [i for i in structural if "floor" in i.name.lower()])},
-        {"ref": "1.5", "name": "Windows",
-         "condition": _aggregate_condition(
-             [i for i in all_items if "window" in i.name.lower()])},
-        {"ref": "1.6", "name": "Fixtures / fittings",
-         "condition": _aggregate_condition(fixtures)},
-        {"ref": "1.7", "name": "Furniture",
-         "condition": _aggregate_condition(furniture)},
-        {"ref": "1.8", "name": "Curtains / blinds",
-         "condition": _aggregate_condition(
-             [i for i in all_items if "blind" in i.name.lower()
-              or "curtain" in i.name.lower()])},
-        {"ref": "1.9", "name": "Sanitary ware",
-         "condition": "Water running / working — see bathroom entries"},
-        {"ref": "1.10", "name": "Kitchen appliances",
-         "condition": "Tested for power unless otherwise stated"
-         if appliances else "See kitchen entries"},
-        {"ref": "1.11", "name": "Electrics",
-         "condition": "All lights working — see room entries"
-         if any("light" in i.name.lower() for i in all_items) else "See room entries"},
-        {"ref": "1.12", "name": "Linens",
-         "condition": "See soft furnishing entries"},
-        {"ref": "1.13", "name": "Main switches / fuses",
-         "condition": "See utility / meter entries"},
-        {"ref": "1.14", "name": "Outside area",
-         "condition": _aggregate_condition(
-             [i for r in inv.rooms for i in r.items
-              if "balcony" in r.name.lower() or "garden" in r.name.lower()])},
-        {"ref": "1.15", "name": "Appliance manuals",
-         "condition": "See room entries"},
-    ]
-    if safety:
-        tested = sum(1 for i in safety if i.not_inspected != "not tested")
-        rows.append({"ref": "1.16", "name": "Smoke / CO alarms",
-                     "condition": f"{tested} alarm(s) recorded — see room entries"})
-    return rows
+    return tenancy_schedule_summary(inv)
 
 
 def _group_items_by_category(items: list[Item]) -> list[tuple[str | None, list[Item]]]:

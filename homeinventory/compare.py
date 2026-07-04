@@ -27,6 +27,8 @@ from typing import Optional
 
 from .merge import _head_nouns
 from .schema import CONDITION_GRADES, Inventory, Item
+from .usecases.tenancy import (CLASSIFICATION_CLASSES, CLASS_LABELS,
+                               RUBRIC_PROMPT)
 
 log = logging.getLogger(__name__)
 
@@ -148,84 +150,6 @@ def needs_classification(change: dict) -> bool:
     to attribute, and classifying them would be unmetered spend."""
     return change["grade_delta"] > 0 or bool(change["new_defects"])
 
-
-# --------------------------------------------------------------------------
-# Wear-vs-damage rubric (text-only; cites repo-held TDS guidance)
-# --------------------------------------------------------------------------
-
-CLASSIFICATION_CLASSES = [
-    "fair_wear_and_tear",     # tenant not liable: reasonable use + time
-    "damage",                 # tenant liable: beyond fair wear and tear
-    "cleaning",               # tenant cleaning charge: dirt is removable
-    "landlord_responsibility",  # repairs / pre-existing: landlord's matter
-]
-CLASS_LABELS = {
-    "fair_wear_and_tear": "Fair wear and tear",
-    "damage": "Damage (tenant)",
-    "cleaning": "Cleaning (tenant)",
-    "landlord_responsibility": "Landlord responsibility",
-    "unclassified": "Unclassified",
-}
-
-# Grounding: every principle below is held in this repository —
-# docs/02-research.md ("What a TDS-valid inventory contains", "What
-# adjudicators expect": TDS Guide to Inventories, Check in and Check out
-# Reports; NRLA/TDS on fair wear and tear, proportionate costs and no
-# betterment; TDS via Inventory Hive on condition vs cleanliness) and
-# docs/AI Dispute Evidence.pdf (Housing Rights NI / TDS NI: deposit is the
-# tenant's money, burden of proof on the landlord; Phase 4 check-out design:
-# suggested issue cleaning/repair vs fair wear and tear).
-RUBRIC_PROMPT = """\
-You classify condition changes between a tenancy check-in inventory and a
-check-out inspection, the way a UK Tenancy Deposit Scheme (TDS) adjudicator
-would frame them. Assign exactly one class to each change:
-
-- "fair_wear_and_tear": deterioration from reasonable use of the premises by
-  the tenant and the ordinary passage of time. Not chargeable to the tenant.
-- "damage": deterioration beyond fair wear and tear — breakage, burns,
-  stains, unauthorised alterations, or loss of an item that still had
-  residual value. Chargeable to the tenant.
-- "cleaning": the item is sound but not clean. Condition and cleanliness are
-  distinct: dirt is removable, so an unclean item is a cleaning matter, not
-  damage. Chargeable to the tenant as cleaning, not repair.
-- "landlord_responsibility": mechanical or inherent failure within the
-  landlord's repairing obligations, or a state already recorded at check-in
-  (pre-existing) — the landlord's matter, not the tenant's.
-
-Principles (TDS guidance and dispute-evidence research held in this
-repository: docs/02-research.md; docs/AI Dispute Evidence.pdf):
-1. The deposit is the tenant's money and the burden of proving an
-   entitlement to deduct lies with the landlord (Housing Rights NI / TDS NI).
-   Where the evidence is genuinely ambiguous, prefer the tenant-favourable
-   class.
-2. Damage must EXCEED fair wear and tear to be chargeable, and any remedy
-   must be proportionate with no "betterment" — the landlord cannot end up
-   better off (NRLA on TDS adjudication). Weigh the item's age and condition
-   at check-in: an item already old, worn or below average at check-in has
-   little residual value, so further deterioration — or its loss — is
-   usually fair wear and tear rather than a chargeable loss.
-3. "Exceeds fair wear and tear" is a real threshold, not a label for any
-   deterioration (rubric v2 — added after the v1 IMS agreement run, see
-   docs/08-compare.md): minor localised marks of everyday use — small chips,
-   dents, scuffs, rub marks, screw/hook holes from ordinary picture- or
-   hook-hanging — that do not impair the item's function are fair wear and
-   tear, and the loss of low-value minor contents (brushes, bins, mats,
-   ornaments) with no meaningful residual value is likewise recorded as fair
-   wear and tear rather than a chargeable loss. Reserve "damage" for what
-   reasonable use cannot explain: breakage, burns, significant staining,
-   unauthorised alteration, or loss of items of real value.
-4. Condition is not cleanliness (TDS): grade-relevant wear is physical;
-   removable dirt, limescale, grease or marks that cleaning would lift are
-   "cleaning".
-5. Fair wear scales with tenancy length and occupancy: a longer tenancy and
-   heavier occupancy justify more wear as "fair".
-6. Use ONLY the tenancy length, occupancy and item age you are given. Where
-   a value reads "not provided", you must not assume one and must not cite
-   it in the rationale.
-
-Respond with JSON: {"classification": <one class>, "rationale": <1-3
-sentences citing the observed change and only the provided context values>}.
-"""
 
 CLASSIFY_SCHEMA = {
     "type": "object",
