@@ -194,3 +194,14 @@ Text-only gpt-5.4-mini at $0.75/$4.50 per MTok (rates per
 
 Alignment itself makes zero API calls; `--backend offline` runs the whole
 compare for £0 (classifications `unclassified`).
+
+## 8. Deep-clean profile (`--use-case deepclean`)
+
+The same `compare` command supports before/after cleaning reports. Pass
+baseline and follow-up report dirs built with `--use-case deepclean`; labels
+read **Before** / **After** instead of Check-in / Check-out. Classes:
+`not_cleaned`, `cleaning_damage`, `pre_existing`. Context via `--context`
+(e.g. `scope="full deep clean"`, `clean_date=2026-07-04`) or the review
+project home's browser compare. Capture layout: `cap/before/<Room>/` and
+`cap/after/<Room>/`, or `homeinventory capture cap/ --session before|after
+--use-case deepclean` from the phone.

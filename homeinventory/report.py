@@ -10,7 +10,9 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from .schema import Inventory, Item, Room
+from .schema import Inventory, Item, Room, cover_value
+from .usecases import get_use_case, use_case_for
+from .usecases.base import UseCase
 
 log = logging.getLogger(__name__)
 TEMPLATES = Path(__file__).parent / "templates"
@@ -87,62 +89,35 @@ def _aggregate_condition(items: list[Item], *, structural: bool = False) -> str:
     return f"{label} condition"
 
 
-def default_schedule_summary(inv: Inventory) -> list[dict]:
-    """Build section 1 rows when none were supplied manually."""
+# Cover fields rendered elsewhere on the page (addr block, agent banner, footer).
+_COVER_TABLE_SKIP = frozenset({
+    "property_address", "agent_name", "agent_phone", "property_type",
+})
+
+
+def summary_rows(inv: Inventory, uc: UseCase) -> list[dict]:
+    """Build the summary table rows for the active use-case profile."""
     if inv.schedule_summary:
         return inv.schedule_summary
+    if uc.summary_rows:
+        return uc.summary_rows(inv)
+    return []
 
-    all_items = [i for r in inv.rooms for i in r.items if not i.rejected]
-    structural = [i for i in all_items if i.category == "structure"]
-    fixtures = [i for i in all_items if i.category == "fixture"]
-    furniture = [i for i in all_items if i.category == "furniture"]
-    appliances = [i for i in all_items if i.category == "appliance"]
-    safety = [i for i in all_items if i.category == "safety"]
 
-    rows = [
-        {"ref": "1.1", "name": "Property details",
-         "condition": inv.property_type or "As inspected"},
-        {"ref": "1.2", "name": "Cleaning standard",
-         "condition": _aggregate_cleanliness(all_items)},
-        {"ref": "1.3", "name": "Decorative condition",
-         "condition": _aggregate_condition(structural, structural=True)},
-        {"ref": "1.4", "name": "Flooring",
-         "condition": _aggregate_condition(
-             [i for i in structural if "floor" in i.name.lower()])},
-        {"ref": "1.5", "name": "Windows",
-         "condition": _aggregate_condition(
-             [i for i in all_items if "window" in i.name.lower()])},
-        {"ref": "1.6", "name": "Fixtures / fittings",
-         "condition": _aggregate_condition(fixtures)},
-        {"ref": "1.7", "name": "Furniture",
-         "condition": _aggregate_condition(furniture)},
-        {"ref": "1.8", "name": "Curtains / blinds",
-         "condition": _aggregate_condition(
-             [i for i in all_items if "blind" in i.name.lower()
-              or "curtain" in i.name.lower()])},
-        {"ref": "1.9", "name": "Sanitary ware",
-         "condition": "Water running / working — see bathroom entries"},
-        {"ref": "1.10", "name": "Kitchen appliances",
-         "condition": "Tested for power unless otherwise stated"
-         if appliances else "See kitchen entries"},
-        {"ref": "1.11", "name": "Electrics",
-         "condition": "All lights working — see room entries"
-         if any("light" in i.name.lower() for i in all_items) else "See room entries"},
-        {"ref": "1.12", "name": "Linens",
-         "condition": "See soft furnishing entries"},
-        {"ref": "1.13", "name": "Main switches / fuses",
-         "condition": "See utility / meter entries"},
-        {"ref": "1.14", "name": "Outside area",
-         "condition": _aggregate_condition(
-             [i for r in inv.rooms for i in r.items
-              if "balcony" in r.name.lower() or "garden" in r.name.lower()])},
-        {"ref": "1.15", "name": "Appliance manuals",
-         "condition": "See room entries"},
-    ]
-    if safety:
-        tested = sum(1 for i in safety if i.not_inspected != "not tested")
-        rows.append({"ref": "1.16", "name": "Smoke / CO alarms",
-                     "condition": f"{tested} alarm(s) recorded — see room entries"})
+def default_schedule_summary(inv: Inventory) -> list[dict]:
+    """Back-compat alias delegating to tenancy."""
+    return summary_rows(inv, get_use_case("tenancy"))
+
+
+def build_cover_rows(inv: Inventory, uc: UseCase) -> list[dict]:
+    """Cover-table party rows from the use-case profile, skipping empties."""
+    rows: list[dict] = []
+    for field in uc.cover_fields:
+        if field.name in _COVER_TABLE_SKIP:
+            continue
+        value = cover_value(inv, field)
+        if value:
+            rows.append({"label": field.label, "value": value})
     return rows
 
 
@@ -232,26 +207,36 @@ def _export_photos(inv: Inventory, capture_dir: Path, out_dir: Path,
 
 
 def render(inv: Inventory, capture_dir: Path, out_dir: Path,
-           pdf: bool = True) -> dict[str, Path]:
+           pdf: bool = True, *, use_case: str | None = None) -> dict[str, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     inv.rooms = sort_rooms(inv.rooms)
+    uc = get_use_case(use_case) if use_case else use_case_for(inv)
     photo_src = _export_photos(inv, capture_dir, out_dir)
-    schedule = default_schedule_summary(inv)
+    schedule = summary_rows(inv, uc)
     room_sections = prepare_room_sections(inv)
+    cover = build_cover_rows(inv, uc)
 
     env = Environment(loader=FileSystemLoader(TEMPLATES),
                       autoescape=select_autoescape(["html"]))
     html = env.get_template("report.html.j2").render(
         inv=inv,
+        uc=uc,
         photo_src=photo_src,
         total_items=inv.item_count(),
         total_photos=inv.photo_count(),
         reviewed_items=inv.reviewed_count(),
         schedule_summary=schedule,
+        cover_rows=cover,
         room_sections=room_sections,
         agent_display=inv.agent_name or inv.inspected_by,
         # embedded for the in-report review layer (Level 1)
-        payload={"inventory": asdict(inv), "photo_src": photo_src},
+        payload={
+            "inventory": asdict(inv),
+            "photo_src": photo_src,
+            "owner_role": uc.owner_role.key,
+            "counterparty_role": uc.counterparty_role.key,
+            "signing_roles": uc.signing_role_keys,
+        },
     )
 
     outputs: dict[str, Path] = {}

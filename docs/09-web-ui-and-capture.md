@@ -110,8 +110,9 @@ produces items directly.
 
 ## §M5b — phone guided capture (3 Jul 2026)
 
-`homeinventory capture CAPTURE_DIR [--port]` serves one mobile page for
-walking the property with a phone. Design constraints, all deliberate:
+`homeinventory capture CAPTURE_DIR [--port] [--session KEY] [--use-case …]`
+serves one mobile page for walking the property with a phone. Design constraints,
+all deliberate:
 
 - **Trust model = the review server's Level 3 `--share`**: binds 0.0.0.0;
   every route — page and API — is gated by a random token minted at
@@ -125,11 +126,16 @@ walking the property with a phone. Design constraints, all deliberate:
 - **Photos only** (per-room shot list): keeps evidence per-item and avoids
   the video-walkthrough problems M2 hit — a 1.3 GB source file and
   keyframe extraction; stills also carry EXIF timestamps directly.
-- **One guide, two surfaces**: the shot list lives as structured data in
-  `homeinventory/guide.py`; `homeinventory guide` prints from it
-  (stdout byte-identical to the previous hardcoded string) and the phone
-  page renders the same categories. A pytest asserts every category
-  label appears on both surfaces.
+- **One guide, two surfaces**: the shot list lives on each use-case profile
+  (`per_room_shots` / `whole_property_shots`); `homeinventory guide
+  [--use-case]` prints from it and the phone page renders the same categories.
+  A pytest asserts every category label appears on both surfaces for the
+  default tenancy profile, and `--use-case deepclean` switches both surfaces
+  to the cleaning shot list.
+- **`--session KEY`**: optional session subfolder — uploads land in
+  `CAPTURE_DIR/<session>/<Room>/` (e.g. `before` / `after` for deep-clean
+  workflows). Room scan, creation, and coverage check operate within that
+  subfolder only.
 - **Same upload contract as M5a, same code**: the magic-byte
   sniff / 64 MiB cap / traversal-400 / never-clobber logic was extracted
   to `homeinventory/webbase.py` and is shared by both servers (review's
@@ -149,7 +155,8 @@ nothing anywhere else.
 
 `tests/test_capture_server.py`: token gate mirroring the tenant-link test
 (page + 4 API routes, plus `/` is 404), room creation + 6 traversal
-rejections, guide-on-both-surfaces, template hooks
+rejections, guide-on-both-surfaces (tenancy default + `--use-case deepclean`),
+`--session` upload path, template hooks
 (`capture="environment"`, tick/tally/localStorage, no getUserMedia),
 sha256 round-trip upload with per-room tally, HEIC-lands-as-`.heic`,
 no-clobber, unsniffable/traversal 400s, 64 MiB 413, progress counts,

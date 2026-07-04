@@ -22,8 +22,12 @@ def _photos(tmp_path, n):
 def _backend(response):
     """Build a ClaudeBackend around a canned response, skipping __init__
     (no anthropic import, no credentials)."""
+    from homeinventory.describe import ITEM_SCHEMA, SYSTEM_PROMPT
+
     b = ClaudeBackend.__new__(ClaudeBackend)
     b.model = "claude-opus-4-8"
+    b.system_prompt = SYSTEM_PROMPT
+    b.item_schema = ITEM_SCHEMA
     b._anthropic = SimpleNamespace(AuthenticationError=type(
         "AuthenticationError", (Exception,), {}))
     b.client = SimpleNamespace(messages=SimpleNamespace(

@@ -17,6 +17,7 @@ from homeinventory.capture import serve_capture
 from homeinventory.cli import main
 from homeinventory.guide import PER_ROOM_SHOTS, WHOLE_PROPERTY_SHOTS
 from homeinventory.schema import Inventory
+from homeinventory.usecases.deepclean import DEEP_CLEAN
 
 
 def _img(path: Path):
@@ -131,6 +132,52 @@ def test_guide_categories_on_both_surfaces(cap_server, capsys):
     for shot in WHOLE_PROPERTY_SHOTS:
         assert shot in stdout
         assert shot in html
+
+
+def test_guide_use_case_deepclean(capsys):
+    assert main(["guide", "--use-case", "deepclean"]) == 0
+    stdout = capsys.readouterr().out
+    for shot in DEEP_CLEAN.per_room_shots:
+        assert shot["label"] in stdout
+    for shot in DEEP_CLEAN.whole_property_shots:
+        assert shot in stdout
+    assert "Smoke / CO alarms" not in stdout
+
+
+def test_capture_use_case_shot_list(tmp_path):
+    cap = tmp_path / "capture"
+    httpd = serve_capture(cap, port=0, use_case_key="deepclean")
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    try:
+        base = f"http://127.0.0.1:{httpd.server_address[1]}"
+        _, html = _get_text(f"{base}/c/{httpd.capture_state.token}")
+        for shot in DEEP_CLEAN.per_room_shots:
+            assert shot["label"] in html
+        assert "Smoke / CO alarms" not in html
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_capture_session_uploads_to_subfolder(tmp_path):
+    cap = tmp_path / "capture"
+    httpd = serve_capture(cap, port=0, session="before")
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    try:
+        base = f"http://127.0.0.1:{httpd.server_address[1]}"
+        t = httpd.capture_state.token
+        status, resp = _upload(base, t, "Kitchen", "k2.jpg", _jpeg_bytes())
+        assert status == 200, resp
+        assert (cap / "before" / "Kitchen" / "k2.jpg").is_file()
+        assert not (cap / "Kitchen").exists()
+        status, resp = _req("GET", f"{base}/api/c/{t}/progress")
+        assert status == 200
+        assert {r["name"]: r["photos"] for r in resp["rooms"]} == {"Kitchen": 1}
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
 
 
 def test_capture_page_template_hooks(cap_server):

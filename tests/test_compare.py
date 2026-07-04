@@ -21,8 +21,10 @@ from homeinventory.compare import (CLASSIFICATION_CLASSES, OfflineRubric,
                                    compare_inventories, diff_pair,
                                    match_score, needs_classification)
 from homeinventory.schema import Inventory, Item, Photo, Room
+from homeinventory.usecases.tenancy import TENANCY
 
 ROOT = Path(__file__).resolve().parents[1]
+SPEC = TENANCY.comparison
 
 
 def _load_generator():
@@ -109,7 +111,31 @@ def test_diff_pair_grade_delta_and_new_defects():
     assert change["grade_delta"] == 2            # excellent -> fair, worse
     assert change["new_defects"] == ["burn mark to door glass"]
     assert change["resolved_defects"] == []
+    assert change["cleanliness_delta"] is None
     assert needs_classification(change)
+
+
+def test_diff_pair_cleanliness_delta():
+    ci = _item("K-001", "Worktop", "good",
+               cleanliness="professionally cleaned")
+    co = _item("K-501", "Worktop", "good",
+               cleanliness="requires cleaning")
+    change = diff_pair(ci, co)
+    assert change["grade_delta"] == 0
+    assert change["cleanliness_delta"] == 2
+
+
+def test_none_grade_delta_does_not_raise():
+    ci = _item("A-001", "Walls", None)
+    co = _item("B-001", "Walls", "fair", defects=["chip"])
+    change = diff_pair(ci, co)
+    assert change["grade_delta"] is None
+    assert needs_classification(change) is True
+    result = compare_inventories(
+        Inventory(rooms=[Room(name="Kitchen", items=[ci])]),
+        Inventory(rooms=[Room(name="Kitchen", items=[co])]),
+        rubric=OfflineRubric())
+    assert result["rooms"][0]["changed"]
 
 
 def test_needs_classification_only_on_deterioration():
@@ -221,12 +247,14 @@ def test_offline_rubric_unclassified():
 def test_change_prompt_not_provided_defaults():
     change = diff_pair(_item("A-001", "Walls", "good"),
                        _item("B-001", "Walls", "fair"))
-    text = change_prompt(change, "Kitchen", None, None, None)
-    assert "Tenancy length: not provided" in text
+    text = change_prompt(change, "Kitchen", SPEC, {})
+    assert "Tenancy length (months): not provided" in text
     assert "Occupancy: not provided" in text
     assert "Item age at check-in: not provided" in text
-    provided = change_prompt(change, "Kitchen", 18, "2 adults", "fitted 2019")
-    assert "Tenancy length: 18 months" in provided
+    provided = change_prompt(change, "Kitchen", SPEC,
+                             {"tenancy_months": 18, "occupancy": "2 adults"},
+                             "fitted 2019")
+    assert "Tenancy length (months): 18" in provided
     assert "Occupancy: 2 adults" in provided
     assert "Item age at check-in: fitted 2019" in provided
 
@@ -234,7 +262,7 @@ def test_change_prompt_not_provided_defaults():
 def test_openai_rubric_contract(monkeypatch):
     """Mocked-backend contract (pattern: tests/test_openai_backend.py)."""
     monkeypatch.setenv("OPENAI_API_KEY", "sk-x")
-    rubric = OpenAIRubric()
+    rubric = OpenAIRubric(SPEC)
     sent = {}
 
     def fake_post(payload):
@@ -265,7 +293,7 @@ def test_openai_rubric_contract(monkeypatch):
 
 def test_openai_rubric_unknown_class_becomes_unclassified(monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "sk-x")
-    rubric = OpenAIRubric()
+    rubric = OpenAIRubric(SPEC)
     monkeypatch.setattr(rubric._api, "_post", lambda p: {
         "choices": [{"message": {"content": json.dumps(
             {"classification": "betterment", "rationale": "?"})}}]})
@@ -325,7 +353,9 @@ def test_cli_compare_offline_end_to_end(tmp_path):
     assert any((out / "photos" / "checkout").glob("*.jpg"))
 
     result = json.loads((out / "compare.json").read_text(encoding="utf-8"))
-    assert result["params"]["tenancy_months"] == 12
+    assert result["params"]["context"]["tenancy_months"] == 12
+    assert result["use_case"] == "tenancy"
+    assert result["labels"]["baseline"] == "Check-in"
     assert result["totals"]["changed"] >= 4      # 2 grade drops + 2 new defects
 
 

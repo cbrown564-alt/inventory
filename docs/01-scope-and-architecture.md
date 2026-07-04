@@ -88,6 +88,27 @@ Canonical intermediate: **`inventory.json`** — everything downstream (report,
 comparison, evals) consumes this. The v2 comparison feature is `compare(baseline.json,
 checkout.json)` plus photo pairs; no pipeline changes needed.
 
+### 3.4 Use-case profiles
+
+The describe/report/compare/review/capture surfaces share a **use-case profile**
+(`tenancy`, `deepclean`, …) registered in `homeinventory/usecases/`. Each
+profile bundles:
+
+- system prompt + item JSON schema (tenancy: TDS clerk + `est_value_band`;
+  deepclean: soil inventory, no value bands)
+- report type, cover fields, summary table, declaration, signing roles
+- capture shot list (`per_room_shots`, `whole_property_shots`)
+- optional multi-session layout (`sessions`: e.g. `before` / `after`)
+- comparison rubric (classes, labels, context params) when supported
+
+CLI flags: `--use-case` on `build`, `render`, `review`, `compare`, `guide`,
+`capture`; `--party KEY=NAME` on `build` for profile-specific cover fields;
+`--context KEY=VALUE` (and tenancy `--tenancy-months` / `--occupancy`) on
+`compare`; `--session KEY` on `capture` (uploads → `CAPTURE_DIR/<session>/<Room>/`).
+
+Tenancy remains the default; existing single-folder capture layouts and
+`examples/sample-report` are unchanged.
+
 ### 3.3 Photos vs video
 
 Both supported. Recommendation to users: **guided photos beat one continuous video**
@@ -99,9 +120,8 @@ The capture guide (§4) makes photos nearly as fast as video.
 
 Prototype is a CLI; the same flow maps directly onto a future mobile/web app.
 
-1. **`homeinventory guide`** — prints a per-room capture checklist (wide shots of each
-   wall, floor, ceiling; close-ups of appliances, existing damage, meters, keys,
-   alarms). ~15–25 photos per room.
+1. **`homeinventory guide [--use-case tenancy|deepclean]`** — prints a per-room
+   capture checklist from the active profile's shot list (~15–25 photos per room).
 2. **Capture**: user photographs the property, dropping files into
    `capture/<Room Name>/…` (or one video per room). Folder = room name; this is the
    simplest reliable room-assignment UX and avoids fragile room classification.
