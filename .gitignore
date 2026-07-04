@@ -29,3 +29,6 @@ evals/fixtures/ownproperty/
 # own-property walkthrough source video (personal data, 1.3 GB) + Finder junk
 examples/videos/IMG_5512.MOV
 .DS_Store
+
+# segmentation spike outputs (personal frames)
+segment-spike*/
