@@ -1027,6 +1027,36 @@ def test_deepclean_web_e2e_compare_argv_pin(tmp_path):
         httpd.server_close()
 
 
+def test_multi_session_page_prefix_and_bare_404(tmp_path):
+    """Session review pages under /s/<key>/ carry their route prefix (api()
+    calls and nav links), and bare paths with no session 404 rather than 500."""
+    cap = tmp_path / "capture"
+    out = tmp_path / "report"
+    base, httpd = _start_multi_server(cap, out)
+    try:
+        assert _req("POST", base + "/api/project",
+                    {"use_case": "deepclean"})[0] == 200
+        # bare paths have no session in multi mode: clean 404, not a
+        # proj.session() KeyError 500
+        assert _req("GET", base + "/favicon.ico")[0] == 404
+        assert _req("GET", base + "/api/pdf")[0] == 404
+
+        _img(cap / "before" / "Kitchen" / "k1.jpg")
+        assert main(["build", str(cap / "before"), "-o", str(out / "before"),
+                     "--backend", "offline", "--no-detect", "--no-pdf",
+                     "--use-case", "deepclean"]) == 0
+        status, html = _get_text(base + "/s/before/")
+        assert status == 200
+        assert 'var PREFIX = "/s/before"' in html
+        assert 'href="/s/before/report"' in html
+        # single-session pages keep bare paths
+        status, resp = _req("GET", base + "/s/before/api/pdf")
+        assert status == 200 and resp["status"] == "idle"
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
 def test_compare_serving_paths_and_trailing_slash(tmp_path):
     cap = tmp_path / "capture"
     out = tmp_path / "report"

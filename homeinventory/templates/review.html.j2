@@ -274,9 +274,9 @@
   <button class="btn ghost" id="btn-queue" aria-label="Show item list">☰ Items</button>
   <span class="wordmark">Homeinventory</span>
   <nav class="app-nav" aria-label="Sections">
-    <a href="/" aria-current="page">Review</a>
-    <a href="/report" target="_blank" rel="noopener">Report</a>
-    <a href="/issue" target="_blank" rel="noopener"
+    <a href="{{ route_prefix }}/" aria-current="page">Review</a>
+    <a href="{{ route_prefix }}/report" target="_blank" rel="noopener">Report</a>
+    <a href="{{ route_prefix }}/issue" target="_blank" rel="noopener"
        title="Clean copy for sending — no review controls">Final issue</a>
   </nav>
   <span class="addr" id="hdr-addr">{{ inv.property_address or "No address yet" }}</span>
@@ -358,6 +358,7 @@
 "use strict";
 (function () {
   var payload = JSON.parse(document.getElementById("hi-data").textContent);
+  var PREFIX = {{ route_prefix|default("", true) | tojson }};
   var inv = payload.inventory;
   var photoSrc = payload.photo_src || {};
   var cropSrc = payload.crop_src || {};
@@ -388,7 +389,7 @@
   var ix = index();
 
   function api(method, url, body) {
-    return fetch(url, {
+    return fetch(PREFIX + url, {
       method: method,
       headers: { "Content-Type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body)
@@ -1413,7 +1414,7 @@
       if (s.status === "done" && pollPdf._started) {
         pollPdf._started = false;
         toast("PDF ready — opening");
-        window.open("/pdf", "_blank");
+        window.open(PREFIX + "/pdf", "_blank");
       } else if (s.status === "failed" && pollPdf._started) {
         pollPdf._started = false;
         var body = ui.el("div", {});
@@ -1443,7 +1444,7 @@
               "initials line on every page." }));
       ui.open({ title: "PDF export unavailable", body: body, actions: [
         { label: "Open report", onclick: function (close) {
-            close(); window.open("/report", "_blank"); } },
+            close(); window.open(PREFIX + "/report", "_blank"); } },
         { label: "Close", primary: true,
           onclick: function (close) { close(); } }] });
     });

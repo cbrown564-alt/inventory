@@ -665,7 +665,8 @@ class ReviewHandler(BaseHandler):
                           autoescape=select_autoescape(["html"]))
         return env.get_template(template).render(
             inv=inv, payload=self._review_payload(st, inv, **extra),
-            share_url=extra.get("share_url", ""))
+            share_url=extra.get("share_url", ""),
+            route_prefix=st.route_prefix)
 
     def _render_start(self, st: SessionState, *, show_picker: bool | None = None) -> str:
         proj = self.project
@@ -854,7 +855,13 @@ class ReviewHandler(BaseHandler):
             return
 
         if st is None:
-            st = proj.session()
+            try:
+                st = proj.session()
+            except KeyError:
+                # multi-session: bare paths have no session — a clean 404,
+                # not a KeyError 500 (e.g. /favicon.ico)
+                self._err(404, "not found")
+                return
 
         if path == "/":
             if not st.inv_path.exists():
