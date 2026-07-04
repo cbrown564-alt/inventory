@@ -6,18 +6,19 @@
 <title>{{ inv.report_type }} — {{ inv.property_address or "Property" }}</title>
 <style>
   :root {
-    --ink: #1a1a1a; --muted: #5a5f6a; --rule: #d8dbe0; --accent: #15406b;
-    --band: #f3f5f8; --paper: #ffffff;
+    --ink: #21252c; --muted: #5c626d; --rule: #ded8ca; --accent: #262c36;
+    --brass: #9a7729; --band: #f5f2ea; --paper: #fffdf9;
     /* review instrument palette */
     --confirm: #0e6b46; --confirm-soft: #e7f3ed;
     --reject: #a3231f; --reject-soft: #f9ecec;
     --pend: #8a6d1f; --pend-soft: #faf4e3;
-    --ui: -apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+    --serif: "New York", "Iowan Old Style", "Palatino", Charter, Georgia, "Times New Roman", serif;
+    --ui: "Avenir Next", Avenir, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, "Cascadia Code", Consolas, "Liberation Mono", monospace;
   }
   * { box-sizing: border-box; }
   body {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--serif);
     color: var(--ink); margin: 0; font-size: 11pt; line-height: 1.45;
     background: var(--paper);
   }
@@ -26,22 +27,25 @@
   .cover {
     text-align: center; padding: 120px 24px 60px; page-break-after: always;
   }
-  .cover h1 { font-size: 26pt; margin-bottom: 4px; }
+  .cover h1 { font-size: 27pt; margin-bottom: 4px; }
+  .cover h1::after { content: ""; display: block; width: 72px;
+    border-bottom: 2px solid var(--brass); margin: 18px auto 0; }
   .cover .addr { font-size: 16pt; margin: 18px 0 40px; }
   .cover table { margin: 0 auto; border-collapse: collapse; font-size: 11pt; }
   .cover td { padding: 5px 14px; text-align: left; }
   .cover td:first-child { color: var(--muted); }
-  .kicker { letter-spacing: .22em; text-transform: uppercase; font-size: 9pt;
-            color: var(--muted); }
+  .kicker { letter-spacing: .3em; text-transform: uppercase; font-size: 9pt;
+            color: var(--brass); font-family: var(--ui); font-weight: 600; }
   section.room { page-break-before: always; }
-  h2 { font-size: 15pt; border-bottom: 2px solid var(--accent);
+  h2 { font-size: 15pt; border-bottom: 2px solid var(--brass);
        padding-bottom: 4px; margin-top: 28px; }
   .summary { background: var(--band); padding: 10px 14px; border-left: 3px solid
-             var(--accent); margin: 12px 0 18px; }
+             var(--brass); margin: 12px 0 18px; }
   table.items { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
   table.items th {
-    text-align: left; background: var(--accent); color: #fff; padding: 6px 8px;
-    font-weight: 600;
+    text-align: left; background: var(--band); color: var(--ink);
+    padding: 6px 8px; font: 600 8.5pt var(--ui); letter-spacing: .05em;
+    text-transform: uppercase; border-bottom: 2px solid var(--brass);
   }
   table.items td { border-bottom: 1px solid var(--rule); padding: 6px 8px;
                    vertical-align: top; }
@@ -92,7 +96,7 @@
   .screen-only { }
   .page-break { page-break-before: always; }
   .agent-name { font: 600 11pt var(--ui); letter-spacing: .08em;
-                text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+                text-transform: uppercase; color: var(--brass); margin-bottom: 8px; }
   .property-type { font-size: 12pt; color: var(--muted); margin: 8px 0 24px; }
   .toc-list { list-style: none; padding: 0; margin: 16px 0; }
   .toc-list li { display: flex; justify-content: space-between; gap: 12px;
@@ -141,7 +145,7 @@
     tr.item-rejected, #docket, #toast, tr.rv-evidence { display: none !important; }
     .print-only { display: block !important; }
     table.items { font-family: var(--ui); font-size: 9pt; }
-    table.items th { background: #e8ebf0; color: var(--ink); border: 1px solid var(--rule); }
+    table.items th { background: var(--band); color: var(--ink); border: 1px solid var(--rule); }
     table.items td { border: 1px solid var(--rule); }
     h2 { font-family: var(--ui); font-size: 13pt; border-bottom: 1px solid var(--ink); }
     h3 { font-family: var(--ui); }
@@ -471,7 +475,8 @@ rather than silently deleted.</p>
         {% endfor %}
       </div>
       <figcaption>{{ photo.id }}{% if photo.captured_at %} &middot; {{ photo.captured_at }}{% endif %}
-        {% if photo.source_video %}&middot; frame of {{ photo.source_video | basename }}{% endif %}</figcaption>
+        {%- if photo_time.get(photo.id) %} &middot; seen at {{ photo_time[photo.id].t | timecode }} in {{ photo.source_video | basename }}
+        {%- elif photo.source_video %} &middot; frame of {{ photo.source_video | basename }}{% endif %}</figcaption>
     </figure>
     {% endfor %}
   </div>
@@ -490,7 +495,7 @@ rather than silently deleted.</p>
     {% for room in inv.rooms %}{% for photo in room.photos %}
       <tr><td>{{ photo.id }}</td><td>{{ room.name }}</td>
           <td>{{ photo_display_path[photo.id] }}{% if photo.source_video %}<br>
-            <span class="meta">frame of {{ photo.source_video | basename }}</span>{% endif %}</td>
+            <span class="meta">{% if photo_time.get(photo.id) %}at {{ photo_time[photo.id].t | timecode }} in {% else %}frame of {% endif %}{{ photo.source_video | basename }}</span>{% endif %}</td>
           <td>{{ photo.captured_at or "—" }}</td>
           <td class="hash">{{ photo.sha256 or "—" }}</td></tr>
     {% endfor %}{% endfor %}
@@ -518,6 +523,7 @@ rather than silently deleted.</p>
       <figcaption>
         <div class="ref-tag">{{ photo.id }} — Ref {{ section.number }}</div>
         <div>{% if photo.captured_at %}{{ photo.captured_at | human_date }}
+          {%- elif photo_time.get(photo.id) %}seen at {{ photo_time[photo.id].t | timecode }} in {{ photo.source_video | basename }}
           {%- elif photo.source_video %}frame of {{ photo.source_video | basename }}
           {%- else %}{{ inv.inspected_at | human_date }}{% endif %}</div>
       </figcaption>

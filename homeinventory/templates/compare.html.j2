@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ result.comparison.title }} — {{ result.checkin.address or "Property" }}</title>
+{% include "_favicon.j2" %}
 <style>
 {% include "_theme.css.j2" %}
 {% for cls, tone in class_tones.items() %}

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inventory review — {{ inv.property_address or "Property" }}</title>
+{% include "_favicon.j2" %}
 <style>
 {% include "_theme.css.j2" %}
 
@@ -13,8 +14,8 @@
   .masthead { padding: 30px 0 26px; border-bottom: 2px solid var(--ink); }
   .masthead .kicker { font-size: 11px; font-weight: 600; letter-spacing: .18em;
     text-transform: uppercase; color: var(--accent-ink); }
-  .masthead h1 { font-size: 30px; font-weight: 700; letter-spacing: -.02em;
-    margin: 8px 0 4px; line-height: 1.15; }
+  .masthead h1 { font: 600 32px/1.15 var(--display);
+    letter-spacing: -.015em; margin: 8px 0 4px; }
   .masthead .meta { color: var(--muted); font-size: 13px; }
   .howto { margin: 22px 0 6px; padding: 14px 18px; background: var(--panel);
     border-left: 3px solid var(--accent); font-size: 14px; }
@@ -87,9 +88,9 @@
   #signbar input { font: 14px var(--ui); padding: 10px 12px; min-width: 200px;
     border: 1px solid var(--line-strong); border-radius: 6px; }
   #signbar button { font: 600 14px var(--ui); padding: 10px 20px;
-    background: var(--accent); color: #fff; border: none; border-radius: 6px;
-    cursor: pointer; }
-  #signbar button:hover { background: var(--accent-ink); }
+    background: var(--brass); color: #14100a; border: none;
+    border-radius: 7px; cursor: pointer; }
+  #signbar button:hover { background: var(--brass-bright); }
   #signbar button:active { transform: translateY(1px); }
   #signbar.done { background: var(--accent-soft); }
   #signbar.done .inner { color: var(--accent-ink); font-weight: 500; }

@@ -198,6 +198,13 @@ def human_date(value: str) -> str:
         return value
 
 
+def _timecode(seconds) -> str:
+    """Seconds into the footage -> '4:12' (or '1:04:12' past the hour)."""
+    s = max(0, int(seconds or 0))
+    h, m, r = s // 3600, (s % 3600) // 60, s % 60
+    return f"{h}:{m:02d}:{r:02d}" if h else f"{m}:{r:02d}"
+
+
 def _display_path(photo_path: str, capture_dir: Path, out_dir: Path) -> str:
     """A path fit for the printed manifest: relative to the capture root or
     the report folder — never an absolute path from the build machine."""
@@ -388,6 +395,15 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
                       autoescape=True)
     env.filters["human_date"] = human_date
     env.filters["basename"] = lambda p: Path(str(p).replace("\\", "/")).name
+    env.filters["timecode"] = _timecode
+
+    # exhibit provenance: each extracted frame's second in its source video
+    try:
+        from .videometa import video_payload
+        _videos, photo_time = video_payload(inv, capture_dir,
+                                            out_dir / "work", "", {})
+    except Exception:              # never let provenance break the render
+        photo_time = {}
     photo_display_path = {
         p.id: _display_path(p.path, capture_dir, out_dir)
         for room in inv.rooms for p in room.photos
@@ -420,6 +436,7 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
         uc=uc,
         photo_src=photo_src,
         photo_print_src=photo_print_src,
+        photo_time=photo_time,
         photo_display_path=photo_display_path,
         regions_by_photo=dict(regions_by_photo),
         total_items=inv.item_count(),
