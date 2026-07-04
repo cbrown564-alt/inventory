@@ -56,6 +56,10 @@
   #build-status.err { color: var(--danger); }
   #build-status details { margin-top: 6px; }
   #build-status pre { max-height: 240px; overflow: auto; white-space: pre-wrap; }
+  .cards { display: grid; gap: 12px; margin-top: 12px; }
+  .card { display: block; width: 100%; text-align: left; padding: 14px 16px; }
+  .card strong { display: block; margin-bottom: 4px; }
+  #picker-status.err { color: var(--danger); margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -69,9 +73,30 @@
     {% endif %}
   </nav>
   <span class="header-chip">AI model: {{ backend_label }}</span>
+  {% if not show_picker|default(false) and use_case_label|default(none) %}
+  <span class="header-chip" id="use-case-chip">{{ use_case_label }}</span>
+  {% endif %}
 </header>
 <main>
 
+{% if show_picker|default(false) %}
+<section id="use-case-picker">
+  <h2>Choose a use case</h2>
+  <p class="muted">Pick the workflow that matches this job. You can upload
+  photos and build once a use case is selected.</p>
+  <div class="cards">
+  {% for u in use_cases|default([]) %}
+    <button class="card btn" data-use-case="{{ u.key }}" type="button">
+      <strong>{{ u.name }}</strong>
+      <span class="muted">{{ u.description }}</span>
+    </button>
+  {% endfor %}
+  </div>
+  <div id="picker-status"></div>
+</section>
+{% endif %}
+
+{% if not show_picker|default(false) %}
 {% if has_inventory %}
 <div class="banner">A report already exists —
   <a href="/">open the review app</a>. Building again re-describes every room
@@ -138,6 +163,7 @@
   </div>
   <div id="build-status" role="status"></div>
 </section>
+{% endif %}
 
 </main>
 <div id="toast" role="status"></div>
@@ -149,6 +175,7 @@
 (function () {
   var BACKEND = {{ backend | tojson }};
   var BACKEND_LABEL = {{ backend_label | tojson }};
+  var PREFIX = {{ route_prefix|default("", true) | tojson }};
   var el = ui.el, toast = ui.toast;
 
   function api(method, url, body) {
@@ -209,7 +236,7 @@
     active += 1;
     job.st.textContent = "uploading";
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/api/upload");
+    xhr.open("POST", PREFIX + "/api/upload");
     xhr.setRequestHeader("X-Room", encodeURIComponent(job.room));
     xhr.setRequestHeader("X-Filename", encodeURIComponent(job.file.name));
     xhr.upload.onprogress = function (e) {
@@ -241,7 +268,7 @@
     xhr.send(job.file);
   }
   function refreshRooms() {
-    api("GET", "/api/rooms").then(function (r) {
+    api("GET", PREFIX + "/api/rooms").then(function (r) {
       var tbody = document.querySelector("#room-list tbody");
       if (!tbody) { return; }   // empty-state page: counts appear on reload
       tbody.innerHTML = "";
@@ -296,7 +323,7 @@
     }
   }
   function pollBuild() {
-    api("GET", "/api/build").then(function (s) {
+    api("GET", PREFIX + "/api/build").then(function (s) {
       if (s.status === "running") {
         bBtn.disabled = true;
         var mins = buildStarted
@@ -307,7 +334,7 @@
         setTimeout(pollBuild, 2000);
       } else if (s.status === "done") {
         setBuildStatus("Done — opening the review app…");
-        location.href = "/";
+        location.href = PREFIX + "/";
       } else if (s.status === "failed") {
         bBtn.disabled = false;
         setBuildStatus("The build failed.", true, s.detail || "");
@@ -325,7 +352,7 @@
       if (!yes) return;
       bBtn.disabled = true;
       buildStarted = Date.now();
-      api("POST", "/api/build", { confirm: BACKEND }).then(function () {
+      api("POST", PREFIX + "/api/build", { confirm: BACKEND }).then(function () {
         pollBuild();
       }).catch(function (e) {
         bBtn.disabled = false;
@@ -334,6 +361,24 @@
     });
   });
   pollBuild();   // reflect a build already in flight on page load
+
+  var picker = document.getElementById("use-case-picker");
+  if (picker) {
+    var pStatus = document.getElementById("picker-status");
+    picker.querySelectorAll("[data-use-case]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var key = btn.getAttribute("data-use-case");
+        btn.disabled = true;
+        api("POST", "/api/project", { use_case: key }).then(function () {
+          location.reload();
+        }).catch(function (e) {
+          btn.disabled = false;
+          pStatus.textContent = e.message;
+          pStatus.className = "err";
+        });
+      });
+    });
+  }
 })();
 </script>
 </body>

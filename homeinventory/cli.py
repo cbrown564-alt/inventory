@@ -54,9 +54,9 @@ def _add_detect_args(p):
                    help="torch device for YOLOE (cpu, cuda, 0, …)")
 
 
-def cmd_guide(_args) -> int:
+def cmd_guide(args) -> int:
     from .guide import guide_text
-    print(guide_text())
+    print(guide_text(args.use_case))
     return 0
 
 
@@ -91,6 +91,7 @@ def cmd_build(args) -> int:
     from .integrity import build_manifest
     from .merge import merge_items, merge_room_with_prior, room_code
     from .report import render
+    from .usecases import DEFAULT_USE_CASE, get_use_case
 
     capture_dir = Path(args.capture_dir)
     out_dir = Path(args.out)
@@ -125,6 +126,8 @@ def cmd_build(args) -> int:
     if prior is None and args.from_json is not None:
         return 2
 
+    use_case = args.use_case or (prior.use_case if prior else DEFAULT_USE_CASE)
+
     # 3. detect (only the rooms being built)
     detector = _detector_from_args(args)
     detections: dict[str, list] = {}
@@ -142,7 +145,7 @@ def cmd_build(args) -> int:
     # 4-5. describe + merge, room by room, checkpointing as we go
     try:
         backend = get_backend(args.backend, model=args.model,
-                              base_url=args.base_url)
+                              base_url=args.base_url, use_case=use_case)
     except FatalBackendError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
@@ -160,6 +163,19 @@ def cmd_build(args) -> int:
                             if getattr(backend, "model", None) else ""),
         notes=args.notes or (prior.notes if prior else ""),
     )
+    inv.use_case = use_case
+    # A customised title survives rebuilds; the bare dataclass default (the
+    # tenancy title) is replaced by the profile's, healing pre-fix builds.
+    default_title = Inventory.__dataclass_fields__["report_type"].default
+    prior_title = prior.report_type if prior else ""
+    inv.report_type = (prior_title
+                       if prior_title and prior_title != default_title
+                       else get_use_case(use_case).report_type)
+    inv.parties = dict(prior.parties if prior else {})
+    for spec in args.party:
+        key, _, name = spec.partition("=")
+        if key:
+            inv.parties[key] = name
     if prior and preserve_edits:
         inv.inspected_at = prior.inspected_at
         inv.signatures = list(prior.signatures)
@@ -264,7 +280,8 @@ def cmd_render(args) -> int:
     from .report import render
     out_dir = Path(args.out)
     inv = Inventory.from_json((out_dir / "inventory.json").read_text(encoding="utf-8"))
-    render(inv, Path(args.capture_dir), out_dir, pdf=not args.no_pdf)
+    render(inv, Path(args.capture_dir), out_dir, pdf=not args.no_pdf,
+           use_case=args.use_case)
     print(f"re-rendered {out_dir / 'inventory.html'}")
     return 0
 
@@ -278,7 +295,7 @@ def cmd_review(args) -> int:
         httpd = serve(Path(args.capture_dir), Path(args.out), port=args.port,
                       share=args.share, backend=args.backend, model=args.model,
                       base_url=args.base_url, open_browser=not args.no_open,
-                      no_detect=args.no_detect)
+                      no_detect=args.no_detect, use_case=args.use_case)
     except FileNotFoundError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
@@ -304,7 +321,9 @@ def cmd_capture(args) -> int:
         httpd = serve_capture(Path(args.capture_dir), port=args.port,
                               detect_mode=args.detect_mode,
                               det_conf=args.det_conf,
-                              device=getattr(args, "device", None))
+                              device=getattr(args, "device", None),
+                              session=args.session,
+                              use_case_key=args.use_case)
     except OSError as e:
         print(f"error: could not bind port {args.port}: {e}", file=sys.stderr)
         return 2
@@ -362,13 +381,24 @@ def cmd_check(args) -> int:
     return 0
 
 
+def _parse_context_kv(pairs: list[str]) -> dict:
+    out: dict = {}
+    for pair in pairs:
+        if "=" not in pair:
+            raise ValueError(f"context entry must be KEY=VALUE, got {pair!r}")
+        key, val = pair.split("=", 1)
+        out[key.strip()] = val.strip()
+    return out
+
+
 def cmd_compare(args) -> int:
-    """Check-in vs check-out comparison: lexical alignment (no API calls),
-    wear-vs-damage rubric for deteriorated items, paired-photo delta report.
+    """Baseline vs follow-up comparison: lexical alignment (no API calls),
+    use-case rubric for gated changes, paired-photo delta report.
     See docs/08-compare.md."""
     from .compare import (compare_inventories, get_rubric_backend, _item_ages,
                           load_inventory_arg, render_comparison)
     from .describe import FatalBackendError
+    from .usecases import get_use_case, use_case_for
 
     try:
         checkin, checkin_dir, checkin_raw = load_inventory_arg(Path(args.checkin))
@@ -376,25 +406,58 @@ def cmd_compare(args) -> int:
     except FileNotFoundError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
+
+    if args.use_case:
+        uc = get_use_case(args.use_case)
+    else:
+        ci_uc, co_uc = use_case_for(checkin), use_case_for(checkout)
+        if ci_uc.key != co_uc.key:
+            print(f"error: use_case mismatch — check-in has {ci_uc.key!r}, "
+                  f"check-out has {co_uc.key!r}; pass --use-case explicitly.",
+                  file=sys.stderr)
+            return 2
+        uc = ci_uc
+    spec = uc.comparison
+    if spec is None:
+        print(f"error: use case {uc.key!r} has no comparison profile",
+              file=sys.stderr)
+        return 2
+
     try:
-        rubric = get_rubric_backend(args.backend, model=args.model,
+        context = _parse_context_kv(args.context)
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+    if args.tenancy_months is not None:
+        context.setdefault("tenancy_months", args.tenancy_months)
+    if args.occupancy:
+        context.setdefault("occupancy", args.occupancy)
+
+    try:
+        rubric = get_rubric_backend(args.backend, spec, model=args.model,
                                     base_url=args.base_url)
     except FatalBackendError as e:
         print(f"error: {e}\nhint: --backend offline compares without "
               "classification (changes stay 'unclassified').", file=sys.stderr)
         return 2
 
-    result = compare_inventories(
-        checkin, checkout, rubric=rubric,
-        tenancy_months=args.tenancy_months, occupancy=args.occupancy,
-        item_ages=_item_ages(checkin_raw))
+    try:
+        result = compare_inventories(
+            checkin, checkout, rubric=rubric, use_case=uc, context=context,
+            item_ages=_item_ages(checkin_raw))
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+
     outputs = render_comparison(result, checkin, checkout, checkin_dir,
                                 checkout_dir, Path(args.out),
                                 pdf=not args.no_pdf)
+    labels = result["labels"]
     t = result["totals"]
     print(f"\n{t['matched']} items matched ({t['changed']} changed, "
           f"{t['unchanged']} unchanged), {t['removed']} not located at "
-          f"check-out, {t['added']} new at check-out.")
+          f"{labels['followup'].lower()}, {t['added']} new at "
+          f"{labels['followup'].lower()}.")
     if result["usage"].get("prompt_tokens"):
         u = result["usage"]
         print(f"classification tokens: {u['prompt_tokens']} in / "
@@ -405,13 +468,18 @@ def cmd_compare(args) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
+    from .usecases import REGISTRY
+    use_cases = sorted(REGISTRY)
+
     parser = argparse.ArgumentParser(prog="homeinventory",
                                      description="AI property inventory reports")
     parser.add_argument("-v", "--verbose", action="store_true")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("guide", help="print the photo capture checklist") \
-       .set_defaults(func=cmd_guide)
+    g = sub.add_parser("guide", help="print the photo capture checklist")
+    g.add_argument("--use-case", choices=use_cases, default=None,
+                   help="use-case profile (default: tenancy)")
+    g.set_defaults(func=cmd_guide)
 
     b = sub.add_parser("build", help="build a report from a capture folder")
     b.add_argument("capture_dir")
@@ -436,6 +504,12 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--tenant", help="tenant name(s) for the cover page")
     b.add_argument("--landlord", help="landlord or agent name for the cover page")
     b.add_argument("--report-ref", help="report reference number")
+    b.add_argument("--use-case", choices=use_cases, default=None,
+                   help="use-case profile (default: prior inventory's use_case "
+                        "when rebuilding, else tenancy)")
+    b.add_argument("--party", action="append", default=[], metavar="KEY=NAME",
+                   help="party name for cover/signing (repeatable; e.g. "
+                        "customer_name=Jane Doe)")
     b.add_argument("--notes", help="general notes for the report front matter")
     b.add_argument("--room", help="only (re)build these rooms, comma-separated; "
                                   "other rooms are kept from the existing inventory.json")
@@ -460,6 +534,8 @@ def main(argv: list[str] | None = None) -> int:
     r = sub.add_parser("render", help="re-render report from edited inventory.json")
     r.add_argument("capture_dir")
     r.add_argument("-o", "--out", default="report")
+    r.add_argument("--use-case", choices=use_cases, default=None,
+                   help="override use-case profile when rendering")
     r.add_argument("--no-pdf", action="store_true")
     r.set_defaults(func=cmd_render)
 
@@ -481,6 +557,9 @@ def main(argv: list[str] | None = None) -> int:
     rv.add_argument("--no-detect", action="store_true",
                     help="server-spawned builds (start-page build, "
                          "re-describe) skip YOLOE detection")
+    rv.add_argument("--use-case", choices=use_cases, default=None,
+                   help="use-case profile when no inventory.json yet (default: "
+                        "tenancy; overridden by inventory.json or project.json)")
     rv.set_defaults(func=cmd_review)
 
     cp = sub.add_parser("capture",
@@ -497,6 +576,11 @@ def main(argv: list[str] | None = None) -> int:
     cp.add_argument("--det-conf", type=float, default=0.25)
     cp.add_argument("--device", default=None,
                     help="torch device for the coverage check")
+    cp.add_argument("--session", default=None,
+                    help="session subfolder under CAPTURE_DIR (e.g. before, "
+                         "after); uploads land in CAPTURE_DIR/<session>/<Room>/")
+    cp.add_argument("--use-case", choices=use_cases, default=None,
+                   help="use-case profile for the shot list (default: tenancy)")
     cp.set_defaults(func=cmd_capture)
 
     ck = sub.add_parser("check",
@@ -510,17 +594,23 @@ def main(argv: list[str] | None = None) -> int:
     ck.set_defaults(func=cmd_check)
 
     c = sub.add_parser("compare",
-                       help="check-in vs check-out comparison: aligned item "
-                            "deltas, wear-vs-damage classification, paired "
-                            "photo evidence")
-    c.add_argument("checkin", metavar="CHECKIN",
-                   help="check-in report dir (or inventory.json path)")
-    c.add_argument("checkout", metavar="CHECKOUT",
-                   help="check-out report dir (or inventory.json path)")
+                       help="baseline vs follow-up comparison: aligned item "
+                            "deltas, use-case classification, paired photo "
+                            "evidence")
+    c.add_argument("checkin", metavar="BASELINE",
+                   help="baseline report dir (or inventory.json path)")
+    c.add_argument("checkout", metavar="FOLLOWUP",
+                   help="follow-up report dir (or inventory.json path)")
     c.add_argument("-o", "--out", default="compare",
                    help="output dir for compare.json/.html/.pdf")
+    c.add_argument("--use-case", choices=use_cases, default=None,
+                   help="use-case profile (default: derived from inventories; "
+                        "error if they disagree)")
+    c.add_argument("--context", action="append", default=[], metavar="KEY=VALUE",
+                   help="comparison context for the rubric (repeatable; e.g. "
+                        "tenancy_months=12, scope='full deep clean')")
     c.add_argument("--backend", choices=["openai", "offline"], default="openai",
-                   help="wear-vs-damage rubric backend; offline skips "
+                   help="classification rubric backend; offline skips "
                         "classification (everything 'unclassified')")
     c.add_argument("--model", default=None,
                    help="rubric model for --backend openai "
@@ -529,11 +619,11 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--base-url", default=None,
                    help="override the API base URL for --backend openai")
     c.add_argument("--tenancy-months", type=int, default=None,
-                   help="tenancy length in months, cited by the rubric; "
-                        "omitted = 'not provided'")
+                   help="tenancy length in months (tenancy use-case; folded "
+                        "into --context; omitted = 'not provided')")
     c.add_argument("--occupancy", default=None,
-                   help="occupancy description (e.g. '2 adults, 1 child'), "
-                        "cited by the rubric; omitted = 'not provided'")
+                   help="occupancy description (tenancy use-case; folded into "
+                        "--context; omitted = 'not provided')")
     c.add_argument("--no-pdf", action="store_true")
     c.set_defaults(func=cmd_compare)
 

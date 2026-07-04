@@ -286,7 +286,7 @@
       items confirmed</div>
     <div class="track"><div class="fill" id="prog-fill"></div></div>
   </div>
-  {% if share_url %}<span class="share">tenant link:
+  {% if share_url %}<span class="share">{{ payload.share.link_noun }} link:
     <a href="{{ share_url }}" target="_blank">{{ share_url }}</a></span>{% endif %}
   <span id="save-state" role="status">All changes saved</span>
   <button class="btn" id="btn-pdf">Export PDF</button>
@@ -361,6 +361,8 @@
   var inv = payload.inventory;
   var photoSrc = payload.photo_src || {};
   var cropSrc = payload.crop_src || {};
+  var signingRoles = payload.signing_roles || ["landlord", "agent"];
+  var coverFields = payload.cover_fields || [];
 
   var CONDITIONS = ["new", "excellent", "good", "fair", "poor"];
   var NOT_INSPECTED = ["not tested", "not visible"];
@@ -1348,11 +1350,10 @@
 
   /* ---------- details (report metadata) ---------- */
   document.getElementById("btn-details").addEventListener("click", function () {
-    ui.form({
-      title: "Report details",
-      note: "These appear on the report cover and in the declaration.",
-      submitLabel: "Save details",
-      fields: [
+    var fields = coverFields.length ? coverFields.map(function (f) {
+      return { name: f.name, label: f.label, value: f.value || "",
+               placeholder: f.placeholder || "" };
+    }) : [
         { name: "property_address", label: "Property address",
           value: inv.property_address,
           placeholder: "12 Example Road, London N1 1AA" },
@@ -1369,11 +1370,27 @@
           value: inv.report_ref },
         { name: "inspected_at", label: "Date of inspection", type: "date",
           value: inv.inspected_at }
-      ]
+      ];
+    ui.form({
+      title: "Report details",
+      note: "These appear on the report cover and in the declaration.",
+      submitLabel: "Save details",
+      fields: fields.concat(coverFields.length ? [
+        { name: "inspected_by", label: "Prepared by",
+          value: inv.inspected_by, placeholder: "Full name" },
+        { name: "inspected_at", label: "Date of inspection", type: "date",
+          value: inv.inspected_at }
+      ] : [])
     }).then(function (values) {
       if (!values) return;
       pushUndo("edit report details", [inv]);
-      Object.keys(values).forEach(function (k) { inv[k] = values[k]; });
+      Object.keys(values).forEach(function (k) {
+        if (k in inv && k !== "parties") inv[k] = values[k];
+        else {
+          inv.parties = inv.parties || {};
+          inv.parties[k] = values[k];
+        }
+      });
       document.getElementById("hdr-addr").textContent =
         inv.property_address || "No address yet";
       markDirty();
@@ -1464,8 +1481,9 @@
       fields: [
         { name: "name", label: "Full name", value: inv.inspected_by || "",
           required: true },
-        { name: "role", label: "Role", type: "select", value: "landlord",
-          options: ["landlord", "agent"] }
+        { name: "role", label: "Role", type: "select",
+          value: signingRoles[0] || "landlord",
+          options: signingRoles }
       ]
     }).then(function (values) {
       if (!values) return;

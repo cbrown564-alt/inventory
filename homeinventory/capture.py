@@ -45,8 +45,18 @@ class CaptureState:
     """Shared state for the capture handler threads."""
 
     def __init__(self, capture_dir: Path, detect_mode: str = "text",
-                 det_conf: float = 0.25, device: Optional[str] = None):
+                 det_conf: float = 0.25, device: Optional[str] = None,
+                 session: Optional[str] = None,
+                 use_case_key: Optional[str] = None):
+        from .usecases import DEFAULT_USE_CASE, get_use_case
+
         self.capture_dir = capture_dir
+        self.session = (session or "").strip() or None
+        if self.session and not _safe_component(self.session):
+            raise ValueError("session must be a plain folder name — no path "
+                             "separators, '..' or leading dots")
+        self.data_dir = capture_dir / self.session if self.session else capture_dir
+        self.use_case = get_use_case(use_case_key or DEFAULT_USE_CASE)
         self.detect_mode = detect_mode
         self.det_conf = det_conf
         self.device = device
@@ -54,7 +64,7 @@ class CaptureState:
         self.token = secrets.token_urlsafe(16)
 
     def scan(self) -> list[dict]:
-        return scan_rooms(self.capture_dir)
+        return scan_rooms(self.data_dir)
 
     def room_photo_count(self, room: str) -> int:
         for r in self.scan():
@@ -67,8 +77,8 @@ class CaptureState:
         if not _safe_component(name):
             return 400, {"error": "room name must be a plain folder name — "
                                   "no path separators, '..' or leading dots"}
-        room_dir = self.capture_dir / name
-        if room_dir.resolve().parent != self.capture_dir.resolve():
+        room_dir = self.data_dir / name
+        if room_dir.resolve().parent != self.data_dir.resolve():
             return 400, {"error": "room escapes the capture folder"}
         with self.lock:
             room_dir.mkdir(parents=True, exist_ok=True)
@@ -82,16 +92,17 @@ class CaptureState:
         room = (room or "").strip()
         if not _safe_component(room):
             return 400, {"error": "invalid room name"}
-        room_dir = self.capture_dir / room
+        room_dir = self.data_dir / room
         if not room_dir.is_dir():
             return 404, {"error": f"no such room: {room}"}
-        photos = [Photo(id=f"C{i:03d}", path=f"{room}/{f.name}", room=room)
+        path_prefix = f"{self.session}/{room}" if self.session else room
+        photos = [Photo(id=f"C{i:03d}", path=f"{path_prefix}/{f.name}", room=room)
                   for i, f in enumerate(sorted(room_dir.iterdir()))
                   if f.is_file() and f.suffix.lower() in IMAGE_EXTS]
         if not photos:
             return 200, {"status": "no_photos", "room": room, "gaps": [],
                          "detail": "no photos in this room yet"}
-        report = check_capture(self.capture_dir, {room: photos},
+        report = check_capture(self.data_dir, {room: photos},
                                conf=self.det_conf, device=self.device,
                                mode=self.detect_mode)
         if report is None:
@@ -112,14 +123,14 @@ class CaptureHandler(BaseHandler):
         return secrets.compare_digest(token, self.state.token)
 
     def _render_page(self) -> str:
-        from .guide import PER_ROOM_SHOTS, TIPS, WHOLE_PROPERTY_SHOTS
+        from .guide import TIPS
         st = self.state
         env = Environment(loader=FileSystemLoader(TEMPLATES),
                           autoescape=True)
         return env.get_template("capture.html.j2").render(
             token=st.token, rooms=st.scan(),
-            per_room_shots=PER_ROOM_SHOTS,
-            whole_property_shots=WHOLE_PROPERTY_SHOTS,
+            per_room_shots=st.use_case.per_room_shots,
+            whole_property_shots=st.use_case.whole_property_shots,
             tips=TIPS)
 
     def do_GET(self):
@@ -164,7 +175,7 @@ class CaptureHandler(BaseHandler):
                 return
             action = m.group(2)
             if action == "photos":
-                payload = self._upload_photo_common(st.capture_dir, st.lock)
+                payload = self._upload_photo_common(st.data_dir, st.lock)
                 if payload is None:
                     return
                 # the phone checklist shows a per-room running tally
@@ -194,13 +205,17 @@ class CaptureHandler(BaseHandler):
 
 def serve_capture(capture_dir: Path, port: int = 8485,
                   detect_mode: str = "text", det_conf: float = 0.25,
-                  device: Optional[str] = None) -> ThreadingHTTPServer:
+                  device: Optional[str] = None,
+                  session: Optional[str] = None,
+                  use_case_key: Optional[str] = None) -> ThreadingHTTPServer:
     """Build the capture server (returned so tests can drive it); call
     .serve_forever() to block. Always binds 0.0.0.0 — the phone is the
     client — with every route gated by the printed token."""
     capture_dir.mkdir(parents=True, exist_ok=True)
     state = CaptureState(capture_dir, detect_mode=detect_mode,
-                         det_conf=det_conf, device=device)
+                         det_conf=det_conf, device=device,
+                         session=session, use_case_key=use_case_key)
+    state.data_dir.mkdir(parents=True, exist_ok=True)
     handler = type("BoundCaptureHandler", (CaptureHandler,), {"state": state})
     httpd = ThreadingHTTPServer(("0.0.0.0", port), handler)
     httpd.capture_state = state  # type: ignore[attr-defined]
@@ -208,9 +223,12 @@ def serve_capture(capture_dir: Path, port: int = 8485,
     actual_port = httpd.server_address[1]
     # flush: the link is the product — it must appear even when stdout is
     # redirected (block-buffered) rather than a TTY
+    dest = f"{capture_dir}/{state.session}/" if state.session else f"{capture_dir}/"
     print(f"\nPhone capture link: http://{lan_ip()}:{actual_port}/c/{state.token}",
           flush=True)
+    print(f"  Uploads land in {dest}<Room>/  "
+          f"({state.use_case.display_name} shot list).", flush=True)
     print("  Open it on your phone (same Wi-Fi). Anyone with the link can "
-          "add photos to the\n  capture folder; it dies with this process — "
-          "restart for a new link.", flush=True)
+          "add photos; it dies with this process — restart for a new link.",
+          flush=True)
     return httpd

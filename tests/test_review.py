@@ -3,6 +3,7 @@ the local review server (Level 2) and the multi-party flow (Level 3)."""
 
 import json
 import threading
+import time
 import urllib.request
 from pathlib import Path
 
@@ -391,8 +392,8 @@ def _heic_bytes() -> bytes:
     return b"\x00\x00\x00\x18ftypheic\x00\x00\x00\x00heicmif1" + b"\x00" * 64
 
 
-def _upload(base, room, filename, data: bytes):
-    return _req("POST", base + "/api/photos", {
+def _upload(base, room, filename, data: bytes, url_prefix: str = ""):
+    return _req("POST", base + url_prefix + "/api/photos", {
         "room": room, "filename": filename,
         "photo_b64": base64.b64encode(data).decode()})
 
@@ -401,7 +402,9 @@ def _upload(base, room, filename, data: bytes):
 
 def test_start_page_empty_capture(fresh_server):
     base, _state, _out, _cap = fresh_server
-    status, html = _get_text(base + "/")
+    _, html_root = _get_text(base + "/")
+    assert 'id="use-case-picker"' in html_root
+    status, html = _get_text(base + "/start")
     assert status == 200
     assert 'id="empty-state"' in html          # empty-state instruction block
     assert "one folder per" in html            # the instruction text itself
@@ -420,7 +423,9 @@ def test_start_page_lists_rooms_with_counts(tmp_path):
     out = tmp_path / "report"
     base, httpd = _start_server(cap, out)
     try:
-        status, html = _get_text(base + "/")
+        assert _req("POST", base + "/api/project",
+                    {"use_case": "tenancy"})[0] == 200
+        status, html = _get_text(base + "/start")
         assert status == 200
         assert 'id="room-list"' in html and 'id="empty-state"' not in html
         assert 'data-room="Kitchen"' in html
@@ -818,3 +823,279 @@ def test_review_app_has_report_and_pdf_controls(server):
     assert 'href="/report"' in html
     assert 'id="btn-pdf"' in html
     assert 'id="btn-details"' in html      # report metadata editor
+
+
+def test_sign_whitelist_tenancy(server):
+    """Owner /api/sign accepts every signing role in the tenancy profile."""
+    base, _state, _out, _cap = server
+    for role in ("landlord", "agent", "tenant"):
+        status, resp = _req("POST", base + "/api/sign",
+                            {"name": f"Signer ({role})", "role": role})
+        assert status == 200, resp
+    status, resp = _req("POST", base + "/api/sign",
+                        {"name": "Nope", "role": "cleaner"})
+    assert status == 400
+    assert "landlord|agent|tenant" in resp["error"]
+
+
+def test_sign_whitelist_deepclean(tmp_path):
+    """Deep-clean profile whitelists customer/cleaner on /api/sign."""
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    out = tmp_path / "report"
+    assert main(["build", str(cap), "-o", str(out),
+                 "--backend", "offline", "--no-detect", "--no-pdf",
+                 "--use-case", "deepclean"]) == 0
+    inv = Inventory.from_json((out / "inventory.json").read_text(encoding="utf-8"))
+    inv.rooms[0].items.append(Item(id="KIT-001", name="Floor", condition="good",
+                                   photo_ids=[p.id for p in inv.rooms[0].photos]))
+    (out / "inventory.json").write_text(inv.to_json(), encoding="utf-8")
+    httpd = serve(cap, out, port=0, share=False, backend="offline",
+                  open_browser=False)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    base = f"http://127.0.0.1:{httpd.server_address[1]}"
+    try:
+        for role in ("customer", "cleaner"):
+            status, resp = _req("POST", base + "/api/sign",
+                                {"name": f"Signer ({role})", "role": role})
+            assert status == 200, resp
+        status, resp = _req("POST", base + "/api/sign",
+                            {"name": "Nope", "role": "landlord"})
+        assert status == 400
+        assert "customer|cleaner" in resp["error"]
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_share_link_wording_uses_link_noun(server):
+    """Review app share label comes from the profile's link_noun."""
+    base, state, _out, _cap = server
+    status, html = _get_text(base + "/")
+    assert status == 200
+    assert f'{state.uc.share_page.link_noun} link:' in html
+
+
+def test_share_link_noun_deepclean(tmp_path, capsys):
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    out = tmp_path / "report"
+    assert main(["build", str(cap), "-o", str(out),
+                 "--backend", "offline", "--no-detect", "--no-pdf",
+                 "--use-case", "deepclean"]) == 0
+    inv = Inventory.from_json((out / "inventory.json").read_text(encoding="utf-8"))
+    inv.rooms[0].items.append(Item(id="KIT-001", name="Floor", condition="good",
+                                   photo_ids=[p.id for p in inv.rooms[0].photos]))
+    (out / "inventory.json").write_text(inv.to_json(), encoding="utf-8")
+    httpd = serve(cap, out, port=0, share=True, backend="offline",
+                  open_browser=False)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    try:
+        captured = capsys.readouterr()
+        assert "Customer link:" in captured.out
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_single_session_photos_served_at_root(server):
+    """Regression: /photos/* must work without a /s/<session>/ prefix."""
+    base, _state, out, _cap = server
+    _, body = _req("GET", base + "/api/inventory")
+    pid = next(iter(body["photo_src"]))
+    with urllib.request.urlopen(base + f"/photos/{pid}.jpg") as r:
+        assert r.status == 200 and r.read()[:2] == b"\xff\xd8"
+
+
+def test_use_case_picker_when_no_project_or_inventory(fresh_server):
+    base, _state, _out, _cap = fresh_server
+    status, html = _get_text(base + "/")
+    assert status == 200
+    assert 'id="use-case-picker"' in html
+    assert 'data-use-case="tenancy"' in html
+    assert 'data-use-case="deepclean"' in html
+    assert 'id="use-case-chip"' not in html
+
+
+def test_post_api_project_creates_deepclean_layout(tmp_path):
+    cap = tmp_path / "capture"
+    cap.mkdir()
+    out = tmp_path / "report"
+    base, httpd = _start_server(cap, out)
+    try:
+        status, resp = _req("POST", base + "/api/project",
+                            {"use_case": "deepclean"})
+        assert status == 200, resp
+        assert resp["use_case"] == "deepclean" and resp["multi"] is True
+        proj = json.loads((out / "project.json").read_text(encoding="utf-8"))
+        assert proj == {"version": 1, "use_case": "deepclean"}
+        assert (cap / "before").is_dir() and (cap / "after").is_dir()
+        assert (out / "before").is_dir() and (out / "after").is_dir()
+        status, html = _get_text(base + "/")
+        assert status == 200 and 'id="session-list"' in html
+        assert 'id="use-case-picker"' not in html
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_post_api_project_409_after_build(tmp_path):
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    out = tmp_path / "report"
+    base, httpd = _start_server(cap, out)
+    try:
+        assert _upload(base, "Kitchen", "k1.jpg", _jpeg_bytes())[0] == 200
+        assert _req("POST", base + "/api/build", {"confirm": "offline"})[0] == 200
+        deadline = time.time() + 120
+        while time.time() < deadline:
+            _, resp = _req("GET", base + "/api/build")
+            if resp["status"] in ("done", "failed"):
+                break
+            time.sleep(0.2)
+        assert resp["status"] == "done", resp
+        status, resp = _req("POST", base + "/api/project",
+                            {"use_case": "deepclean"})
+        assert status == 409
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def _start_multi_server(cap: Path, out: Path):
+    httpd = serve(cap, out, port=0, share=False, backend="offline",
+                  open_browser=False, no_detect=True)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    return f"http://127.0.0.1:{httpd.server_address[1]}", httpd
+
+
+def test_deepclean_web_e2e_compare_argv_pin(tmp_path):
+    """Multi-session deepclean: build before+after from browser, compare offline."""
+    cap = tmp_path / "capture"
+    out = tmp_path / "report"
+    base, httpd = _start_multi_server(cap, out)
+    try:
+        assert _req("POST", base + "/api/project",
+                    {"use_case": "deepclean"})[0] == 200
+
+        for sess, room in [("before", "Kitchen"), ("after", "Kitchen")]:
+            prefix = f"/s/{sess}"
+            assert _upload(base, room, f"{sess}.jpg", _jpeg_bytes(),
+                           url_prefix=prefix)[0] == 200
+            assert _req("POST", base + prefix + "/api/build",
+                        {"confirm": "offline"})[0] == 200
+            deadline = time.time() + 120
+            while time.time() < deadline:
+                _, resp = _req("GET", base + prefix + "/api/build")
+                if resp["status"] in ("done", "failed"):
+                    break
+                time.sleep(0.2)
+            assert resp["status"] == "done", resp
+            assert (out / sess / "inventory.json").is_file()
+
+        status, resp = _req("POST", base + "/api/compare", {})
+        assert status == 400 and "confirm" in resp["error"]
+        status, resp = _req("POST", base + "/api/compare",
+                            {"confirm": "openai"})
+        assert status == 400 and "offline" in resp["error"]
+
+        status, resp = _req("POST", base + "/api/compare",
+                            {"confirm": "offline"})
+        assert status == 200, resp
+        import sys as _sys
+        with httpd.project_state.lock:
+            cmd = httpd.project_state.compare["cmd"]
+        assert cmd == [_sys.executable, "-m", "homeinventory.cli", "compare",
+                       str(out / "before"), str(out / "after"),
+                       "-o", str(out / "compare"),
+                       "--backend", "offline", "--no-pdf",
+                       "--use-case", "deepclean"]
+
+        deadline = time.time() + 120
+        while time.time() < deadline:
+            _, resp = _req("GET", base + "/api/compare")
+            if resp["status"] in ("done", "failed"):
+                break
+            time.sleep(0.2)
+        assert resp["status"] == "done", resp
+        assert (out / "compare" / "compare.html").is_file()
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_compare_serving_paths_and_trailing_slash(tmp_path):
+    cap = tmp_path / "capture"
+    out = tmp_path / "report"
+    base, httpd = _start_multi_server(cap, out)
+    try:
+        assert _req("POST", base + "/api/project",
+                    {"use_case": "deepclean"})[0] == 200
+        for sess in ("before", "after"):
+            prefix = f"/s/{sess}"
+            _upload(base, "Kitchen", f"{sess}.jpg", _jpeg_bytes(),
+                    url_prefix=prefix)
+            _req("POST", base + prefix + "/api/build", {"confirm": "offline"})
+            deadline = time.time() + 120
+            while time.time() < deadline:
+                _, resp = _req("GET", base + prefix + "/api/build")
+                if resp["status"] in ("done", "failed"):
+                    break
+                time.sleep(0.2)
+        _req("POST", base + "/api/compare", {"confirm": "offline"})
+        deadline = time.time() + 120
+        while time.time() < deadline:
+            _, resp = _req("GET", base + "/api/compare")
+            if resp["status"] in ("done", "failed"):
+                break
+            time.sleep(0.2)
+        assert resp["status"] == "done", resp
+
+        import urllib.error
+        req = urllib.request.Request(base + "/compare")
+        try:
+            urllib.request.urlopen(req)
+        except urllib.error.HTTPError as e:
+            assert e.code == 301
+            assert e.headers.get("Location") == "/compare/"
+
+        status, html = _get_text(base + "/compare/")
+        assert status == 200 and "Grade-delta summary" in html
+
+        assert (out / "compare" / "compare.json").is_file()
+        status, _ = _get_text(base + "/compare/compare.json")
+        assert status == 200
+
+        # evidence photos live under photos/checkin|checkout/ when present
+        photos_dir = out / "compare" / "photos"
+        if photos_dir.is_dir():
+            sub = next(photos_dir.iterdir())
+            rel = sub.name + "/" + next(sub.iterdir()).name
+            status, _ = _get_text(base + "/compare/photos/" + rel)
+            assert status == 200
+
+        httpd_share = serve(cap, out, port=0, share=True, backend="offline",
+                            open_browser=False, no_detect=True)
+        thread = threading.Thread(target=httpd_share.serve_forever, daemon=True)
+        thread.start()
+        share_base = f"http://127.0.0.1:{httpd_share.server_address[1]}"
+        token = httpd_share.review_state.tenant_token
+        try:
+            status, html = _get_text(share_base + f"/t/{token}/compare/")
+            assert status == 200 and "Grade-delta summary" in html
+            status, _ = _get_text(share_base + f"/t/{token}/compare/compare.json")
+            assert status == 200
+            status, _ = _req("GET", share_base + f"/t/wrong/compare/")
+            assert status == 403
+            # multi-session share link serves the followup session counterparty view
+            status, html = _get_text(share_base + f"/t/{token}")
+            assert status == 200 and "photoViewer" in html
+        finally:
+            httpd_share.shutdown()
+            httpd_share.server_close()
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
