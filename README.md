@@ -29,6 +29,8 @@ homeinventory guide               # what to photograph, room by room
 # Wi-Fi with the per-room shot list, a camera button that uploads into the
 # right room folder, and a free local coverage check ("no radiator seen"):
 homeinventory capture capture/
+# multi-session deep cleans: uploads land in capture/<session>/<Room>/
+homeinventory capture cap/ --session before --use-case deepclean
 
 export ANTHROPIC_API_KEY=...      # for the best-quality describe backend
 homeinventory build capture/ -o report/ \
@@ -101,7 +103,29 @@ Before spending API money, `homeinventory check capture/` runs the free local
 detector against a per-room checklist ("no radiator seen in Bedroom 2") to
 catch coverage gaps while you're still at the property.
 
-## Check-out comparison
+## Use-case profiles
+
+The pipeline is parameterised by **use-case profiles** (`tenancy`, `deepclean`)
+rather than hard-coded for letting agents only. Each profile owns:
+
+- the describe prompt and item schema (tenancy adds `est_value_band`; deep-clean
+  omits it and emphasises soil/defect inventory)
+- report cover fields, summary table, declaration, and signing roles
+- the capture shot list (`homeinventory guide` and the phone capture page)
+- comparison rubric and labels (when a profile supports before/after)
+
+Pass `--use-case` on `build`, `render`, `review`, `compare`, `guide`, and
+`capture`. Omit it and tenancy is the default (or the prior
+`inventory.json` / `project.json` wins on rebuild).
+
+Party names for non-tenancy covers use repeatable `--party KEY=NAME` on
+`build` (e.g. `--party customer_name="Jane Doe" --party cleaner_name="Sparkle Ltd"`).
+Comparison context for the rubric uses repeatable `--context KEY=VALUE` on
+`compare` (e.g. `--context scope="full deep clean" --context clean_date=2026-07-04`);
+tenancy also accepts `--tenancy-months` and `--occupancy`, which fold into
+`--context`.
+
+## Check-out comparison (tenancy)
 
 At the end of the tenancy, build a check-out report the same way, then
 compare it against the check-in:
@@ -128,6 +152,37 @@ Costs well under 1p per compare with gpt-5.4-mini; `--backend offline` skips
 classification entirely (changes stay "unclassified"). Rubric agreement with
 a professional clerk's published check-out calls is measured per class in
 [`docs/08-compare.md`](docs/08-compare.md).
+
+## Deep-clean workflow (before / after)
+
+For cleaning companies or end-of-tenancy deep cleans, use the `deepclean`
+profile. Capture **before** and **after** into separate session folders, build
+each report, then compare:
+
+```sh
+homeinventory guide --use-case deepclean          # cleaning-focused shot list
+
+# Option A — folder layout by hand:
+#   cap/before/Kitchen/ …   cap/after/Kitchen/ …
+
+# Option B — phone capture with session subfolders:
+homeinventory capture cap/ --session before --use-case deepclean
+# walk the property, then restart for the after pass:
+homeinventory capture cap/ --session after --use-case deepclean
+
+homeinventory build cap/before -o out/before --use-case deepclean \
+    --party customer_name="Jane Doe" --party cleaner_name="Sparkle Ltd"
+homeinventory build cap/after -o out/after --use-case deepclean
+
+homeinventory compare out/before out/after -o out/compare \
+    --context scope="full deep clean" --context clean_date=2026-07-04
+```
+
+The review web UI can also manage multi-session projects: pick *Deep clean* on
+the start page (creates `project.json`, `cap/before/` + `cap/after/`, and
+matching report dirs), build each session from the browser, then run compare
+from the project home. The compare report classifies changes as **not cleaned /
+cleaning damage / pre-existing** rather than wear-vs-damage.
 
 ## How it works
 
@@ -160,7 +215,7 @@ photos / video → keyframes → SHA-256 manifest → YOLOE open-vocab detection
 
 ## Docs
 
-- [`docs/01-scope-and-architecture.md`](docs/01-scope-and-architecture.md) — scope, architecture, UX, evals
+- [`docs/01-scope-and-architecture.md`](docs/01-scope-and-architecture.md) — scope, architecture, use-case profiles, UX, evals
 - [`docs/02-research.md`](docs/02-research.md) — TDS/AIIC standards, YOLOE, VLM condition-grading, competitor gaps
 - [`docs/03-implementation-plan.md`](docs/03-implementation-plan.md) — milestones M0 (this prototype) → M5
 - [`docs/04-backend-comparison.md`](docs/04-backend-comparison.md) — describe backends on first real footage

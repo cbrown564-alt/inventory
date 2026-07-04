@@ -54,9 +54,9 @@ def _add_detect_args(p):
                    help="torch device for YOLOE (cpu, cuda, 0, …)")
 
 
-def cmd_guide(_args) -> int:
+def cmd_guide(args) -> int:
     from .guide import guide_text
-    print(guide_text())
+    print(guide_text(args.use_case))
     return 0
 
 
@@ -315,7 +315,9 @@ def cmd_capture(args) -> int:
         httpd = serve_capture(Path(args.capture_dir), port=args.port,
                               detect_mode=args.detect_mode,
                               det_conf=args.det_conf,
-                              device=getattr(args, "device", None))
+                              device=getattr(args, "device", None),
+                              session=args.session,
+                              use_case_key=args.use_case)
     except OSError as e:
         print(f"error: could not bind port {args.port}: {e}", file=sys.stderr)
         return 2
@@ -465,8 +467,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("-v", "--verbose", action="store_true")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("guide", help="print the photo capture checklist") \
-       .set_defaults(func=cmd_guide)
+    g = sub.add_parser("guide", help="print the photo capture checklist")
+    g.add_argument("--use-case", choices=["tenancy", "deepclean"], default=None,
+                   help="use-case profile (default: tenancy)")
+    g.set_defaults(func=cmd_guide)
 
     b = sub.add_parser("build", help="build a report from a capture folder")
     b.add_argument("capture_dir")
@@ -563,6 +567,11 @@ def main(argv: list[str] | None = None) -> int:
     cp.add_argument("--det-conf", type=float, default=0.25)
     cp.add_argument("--device", default=None,
                     help="torch device for the coverage check")
+    cp.add_argument("--session", default=None,
+                    help="session subfolder under CAPTURE_DIR (e.g. before, "
+                         "after); uploads land in CAPTURE_DIR/<session>/<Room>/")
+    cp.add_argument("--use-case", choices=["tenancy", "deepclean"], default=None,
+                   help="use-case profile for the shot list (default: tenancy)")
     cp.set_defaults(func=cmd_capture)
 
     ck = sub.add_parser("check",
