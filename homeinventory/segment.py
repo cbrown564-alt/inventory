@@ -140,7 +140,8 @@ def sample_strip(video: Path, every_s: float = 5.0, width: int = 448,
 
 def _chunk_content(chunk: list[SampledFrame], duration_s: float,
                    every_s: float, prior_rooms: list[str],
-                   prior_end_room: Optional[str]) -> list[dict]:
+                   prior_end_room: Optional[str],
+                   provider: str = "anthropic") -> list[dict]:
     import base64
     content: list[dict] = []
     intro = (f"Walkthrough video, total duration {duration_s:.0f}s; frames "
@@ -158,10 +159,15 @@ def _chunk_content(chunk: list[SampledFrame], duration_s: float,
     content.append({"type": "text", "text": intro})
     for f in chunk:
         content.append({"type": "text", "text": f"t={f.t_s:.0f}s:"})
-        content.append({"type": "image",
-                        "source": {"type": "base64",
-                                   "media_type": "image/jpeg",
-                                   "data": base64.b64encode(f.jpeg).decode()}})
+        b64 = base64.b64encode(f.jpeg).decode()
+        if provider == "anthropic":
+            content.append({"type": "image",
+                            "source": {"type": "base64",
+                                       "media_type": "image/jpeg",
+                                       "data": b64}})
+        else:
+            content.append({"type": "image_url", "image_url":
+                            {"url": f"data:image/jpeg;base64,{b64}"}})
     content.append({"type": "text", "text":
                     "Segment this strip into rooms. Timestamps in seconds."})
     return content
@@ -190,17 +196,65 @@ def _normalise(segments: list[Segment], duration_s: float) -> list[Segment]:
     return merged
 
 
+def _call_anthropic(client, model: str, content: list[dict],
+                    usage: dict) -> str:
+    response = client.messages.create(
+        model=model,
+        max_tokens=8000,
+        system=SYSTEM_PROMPT,
+        messages=[{"role": "user", "content": content}],
+        output_config={"format": {"type": "json_schema",
+                                  "schema": SEGMENT_SCHEMA}},
+    )
+    u = getattr(response, "usage", None)
+    if u is not None:
+        usage["input_tokens"] += int(getattr(u, "input_tokens", 0) or 0)
+        usage["output_tokens"] += int(getattr(u, "output_tokens", 0) or 0)
+    texts = [b.text for b in response.content if b.type == "text"]
+    if not texts:
+        raise RuntimeError(
+            f"no text in response (stop_reason={response.stop_reason!r}, "
+            f"blocks={[b.type for b in response.content]!r})")
+    return texts[-1]
+
+
+def _call_openai(backend, content: list[dict], usage: dict) -> str:
+    """One chat-completions call via the shared OpenAI-compat plumbing
+    (gemini-* models are routed to Google's endpoint automatically)."""
+    resp = backend._post({
+        "model": backend.model,
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": content},
+        ],
+        "response_format": {"type": "json_schema", "json_schema": {
+            "name": "video_segments", "strict": True,
+            "schema": SEGMENT_SCHEMA}},
+    })
+    u = resp.get("usage") or {}
+    usage["input_tokens"] += int(u.get("prompt_tokens") or 0)
+    usage["output_tokens"] += int(u.get("completion_tokens") or 0)
+    choice = resp["choices"][0]
+    if choice.get("finish_reason") == "length":
+        raise RuntimeError("segmentation output truncated at token limit")
+    return choice["message"]["content"]
+
+
 def segment_frames(frames: list[SampledFrame], duration: float,
                    every_s: float, model: str = DEFAULT_MODEL,
                    width: int = 448) -> tuple[list[Segment], dict]:
     """Return (segments, meta) for a pre-sampled strip. meta carries
     sampling params and token usage so runs are comparable across models."""
-    import anthropic
-
     if not frames:
         raise RuntimeError("no frames sampled from the video")
 
-    client = anthropic.Anthropic()
+    provider = "anthropic" if model.startswith("claude") else "openai"
+    if provider == "anthropic":
+        import anthropic
+        client = anthropic.Anthropic()
+    else:
+        from .describe import OpenAICompatBackend
+        client = OpenAICompatBackend(model=model)
     segments: list[Segment] = []
     usage = {"input_tokens": 0, "output_tokens": 0}
     rooms_so_far: list[str] = []
@@ -208,21 +262,13 @@ def segment_frames(frames: list[SampledFrame], duration: float,
     for i in range(0, len(frames), _MAX_IMAGES_PER_CALL):
         chunk = frames[i:i + _MAX_IMAGES_PER_CALL]
         prior_end_room = segments[-1].room if segments else None
-        response = client.messages.create(
-            model=model,
-            max_tokens=4000,
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": _chunk_content(
-                chunk, duration, every_s, rooms_so_far, prior_end_room)}],
-            output_config={"format": {"type": "json_schema",
-                                      "schema": SEGMENT_SCHEMA}},
-        )
+        content = _chunk_content(chunk, duration, every_s, rooms_so_far,
+                                 prior_end_room, provider=provider)
+        if provider == "anthropic":
+            text = _call_anthropic(client, model, content, usage)
+        else:
+            text = _call_openai(client, content, usage)
         calls += 1
-        u = getattr(response, "usage", None)
-        if u is not None:
-            usage["input_tokens"] += int(getattr(u, "input_tokens", 0) or 0)
-            usage["output_tokens"] += int(getattr(u, "output_tokens", 0) or 0)
-        text = next(b.text for b in response.content if b.type == "text")
         for seg in json.loads(text)["segments"]:
             segments.append(Segment(room=str(seg["room"]).strip(),
                                     start_s=float(seg["start_s"]),
@@ -309,38 +355,49 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument("video")
     parser.add_argument("-o", "--out", default="segment-spike")
     parser.add_argument("--every", type=float, default=5.0)
-    parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument("--model", default=DEFAULT_MODEL,
+                        help="model id, or a comma-separated list to compare "
+                             "(sampling runs once; one output dir per model)")
     parser.add_argument("--width", type=int, default=448)
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     from .dotenv import load_dotenv
     load_dotenv()
 
-    video, out_dir = Path(args.video), Path(args.out)
-    out_dir.mkdir(parents=True, exist_ok=True)
+    video, out_base = Path(args.video), Path(args.out)
+    models = [m.strip() for m in args.model.split(",") if m.strip()]
     duration = video_duration_s(video)
     frames = sample_strip(video, every_s=args.every, width=args.width)
     log.info("sampled %d frames over %.0fs", len(frames), duration)
-    segments, meta = segment_frames(frames, duration, args.every,
-                                    model=args.model, width=args.width)
-    meta["video"] = video.name
-    (out_dir / "segments.json").write_text(json.dumps(
-        {**meta, "segments": [asdict(s) for s in segments]},
-        indent=2, ensure_ascii=False), encoding="utf-8")
-    sheet = write_contact_sheet(frames, segments, meta, out_dir)
 
     def clock(t: float) -> str:
         return f"{int(t) // 60}:{int(t) % 60:02d}"
 
-    print(f"\n{len(segments)} segments "
-          f"({meta['usage']['input_tokens']} in / "
-          f"{meta['usage']['output_tokens']} out tokens, "
-          f"{meta['api_calls']} calls):")
-    for s in segments:
-        print(f"  {clock(s.start_s):>6}–{clock(s.end_s):<6} {s.room}")
-    print(f"\n  json  {out_dir / 'segments.json'}")
-    print(f"  sheet {sheet}")
-    return 0
+    failures = 0
+    for model in models:
+        out_dir = out_base if len(models) == 1 else \
+            out_base / model.replace(":", "_").replace("/", "_")
+        out_dir.mkdir(parents=True, exist_ok=True)
+        try:
+            segments, meta = segment_frames(frames, duration, args.every,
+                                            model=model, width=args.width)
+        except Exception as e:
+            failures += 1
+            print(f"\n== {model}: FAILED — {e}")
+            continue
+        meta["video"] = video.name
+        (out_dir / "segments.json").write_text(json.dumps(
+            {**meta, "segments": [asdict(s) for s in segments]},
+            indent=2, ensure_ascii=False), encoding="utf-8")
+        sheet = write_contact_sheet(frames, segments, meta, out_dir)
+        print(f"\n== {model}: {len(segments)} segments "
+              f"({meta['usage']['input_tokens']} in / "
+              f"{meta['usage']['output_tokens']} out tokens, "
+              f"{meta['api_calls']} calls)")
+        for s in segments:
+            print(f"  {clock(s.start_s):>6}–{clock(s.end_s):<6} {s.room}")
+        print(f"  json  {out_dir / 'segments.json'}\n  sheet {sheet}")
+    return 1 if failures else 0
 
 
 if __name__ == "__main__":
