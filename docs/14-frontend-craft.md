@@ -1,4 +1,4 @@
-# 13 — Frontend craft: what great looks like for video-evidence review
+# 14 — Frontend craft: what great looks like for video-evidence review
 
 *4 Jul 2026. Research pass before the frontend rebuild. The brief: the
 frontend experience is poor and needs radical upgrades; this is a deeply

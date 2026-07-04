@@ -1,6 +1,6 @@
 """Video-evidence plumbing: frame→timestamp mapping, ranged video serving.
 
-The review UI's walkthrough spine (docs/13) depends on three contracts:
+The review UI's walkthrough spine (docs/14) depends on three contracts:
 keyframe filenames encode their source frame index, /video/<rel> serves
 capture videos with HTTP Range support, and the review payload carries
 ``videos`` + ``photo_time``.
