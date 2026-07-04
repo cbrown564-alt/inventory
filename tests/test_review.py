@@ -443,8 +443,8 @@ def _heic_bytes() -> bytes:
     return b"\x00\x00\x00\x18ftypheic\x00\x00\x00\x00heicmif1" + b"\x00" * 64
 
 
-def _upload(base, room, filename, data: bytes):
-    return _req("POST", base + "/api/photos", {
+def _upload(base, room, filename, data: bytes, url_prefix=""):
+    return _req("POST", base + url_prefix + "/api/photos", {
         "room": room, "filename": filename,
         "photo_b64": base64.b64encode(data).decode()})
 
@@ -717,3 +717,192 @@ def test_pdf_503_when_weasyprint_missing(server, monkeypatch):
     status, resp = _req("POST", base + "/api/pdf", {})
     assert status == 503                       # never a silent 200
     assert "pip install homeinventory[pdf]" in resp["error"]
+
+
+# --------------------------------------------------------------------------
+# Phase 6: project/session web model, compare from UI
+# --------------------------------------------------------------------------
+
+def test_use_case_picker_when_no_project_or_inventory(fresh_server):
+    base, _state, _out, _cap = fresh_server
+    status, html = _get_text(base + "/")
+    assert status == 200
+    assert 'id="use-case-picker"' in html
+    assert 'data-use-case="tenancy"' in html
+    assert 'data-use-case="deepclean"' in html
+    assert 'id="use-case-chip"' not in html
+
+
+def test_post_api_project_creates_deepclean_layout(tmp_path):
+    cap = tmp_path / "capture"
+    cap.mkdir()
+    out = tmp_path / "report"
+    base, httpd = _start_server(cap, out)
+    try:
+        status, resp = _req("POST", base + "/api/project",
+                            {"use_case": "deepclean"})
+        assert status == 200, resp
+        assert resp["use_case"] == "deepclean" and resp["multi"] is True
+        proj = json.loads((out / "project.json").read_text(encoding="utf-8"))
+        assert proj == {"version": 1, "use_case": "deepclean"}
+        assert (cap / "before").is_dir() and (cap / "after").is_dir()
+        assert (out / "before").is_dir() and (out / "after").is_dir()
+        # project home replaces the picker
+        status, html = _get_text(base + "/")
+        assert status == 200 and 'id="session-list"' in html
+        assert 'id="use-case-picker"' not in html
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_post_api_project_409_after_build(tmp_path):
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    out = tmp_path / "report"
+    base, httpd = _start_server(cap, out)
+    try:
+        assert _upload(base, "Kitchen", "k1.jpg", _jpeg_bytes())[0] == 200
+        assert _req("POST", base + "/api/build", {"confirm": "offline"})[0] == 200
+        deadline = time.time() + 120
+        while time.time() < deadline:
+            _, resp = _req("GET", base + "/api/build")
+            if resp["status"] in ("done", "failed"):
+                break
+            time.sleep(0.2)
+        assert resp["status"] == "done", resp
+        status, resp = _req("POST", base + "/api/project",
+                            {"use_case": "deepclean"})
+        assert status == 409
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def _start_multi_server(cap: Path, out: Path):
+    httpd = serve(cap, out, port=0, share=False, backend="offline",
+                  open_browser=False, no_detect=True)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    return f"http://127.0.0.1:{httpd.server_address[1]}", httpd
+
+
+def test_deepclean_web_e2e_compare_argv_pin(tmp_path):
+    """Multi-session deepclean: build before+after from browser, compare with
+    pinned offline argv."""
+    cap = tmp_path / "capture"
+    out = tmp_path / "report"
+    base, httpd = _start_multi_server(cap, out)
+    try:
+        assert _req("POST", base + "/api/project",
+                    {"use_case": "deepclean"})[0] == 200
+
+        for sess, room in [("before", "Kitchen"), ("after", "Kitchen")]:
+            prefix = f"/s/{sess}"
+            assert _upload(base, room, f"{sess}.jpg", _jpeg_bytes(),
+                           url_prefix=prefix)[0] == 200
+            assert _req("POST", base + prefix + "/api/build",
+                        {"confirm": "offline"})[0] == 200
+            deadline = time.time() + 120
+            while time.time() < deadline:
+                _, resp = _req("GET", base + prefix + "/api/build")
+                if resp["status"] in ("done", "failed"):
+                    break
+                time.sleep(0.2)
+            assert resp["status"] == "done", resp
+            assert (out / sess / "inventory.json").is_file()
+
+        status, resp = _req("POST", base + "/api/compare", {})
+        assert status == 400 and "confirm" in resp["error"]
+        status, resp = _req("POST", base + "/api/compare",
+                            {"confirm": "openai"})
+        assert status == 400 and "offline" in resp["error"]
+
+        status, resp = _req("POST", base + "/api/compare",
+                            {"confirm": "offline"})
+        assert status == 200, resp
+        import sys as _sys
+        with httpd.project_state.lock:
+            cmd = httpd.project_state.compare["cmd"]
+        assert cmd == [_sys.executable, "-m", "homeinventory.cli", "compare",
+                       str(out / "before"), str(out / "after"),
+                       "-o", str(out / "compare"),
+                       "--backend", "offline", "--no-pdf",
+                       "--use-case", "deepclean"]
+
+        deadline = time.time() + 120
+        while time.time() < deadline:
+            _, resp = _req("GET", base + "/api/compare")
+            if resp["status"] in ("done", "failed"):
+                break
+            time.sleep(0.2)
+        assert resp["status"] == "done", resp
+        assert (out / "compare" / "compare.html").is_file()
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_compare_serving_paths_and_trailing_slash(tmp_path):
+    cap = tmp_path / "capture"
+    out = tmp_path / "report"
+    base, httpd = _start_multi_server(cap, out)
+    try:
+        assert _req("POST", base + "/api/project",
+                    {"use_case": "deepclean"})[0] == 200
+        for sess in ("before", "after"):
+            prefix = f"/s/{sess}"
+            _upload(base, "Kitchen", f"{sess}.jpg", _jpeg_bytes(),
+                    url_prefix=prefix)
+            _req("POST", base + prefix + "/api/build", {"confirm": "offline"})
+            deadline = time.time() + 120
+            while time.time() < deadline:
+                _, resp = _req("GET", base + prefix + "/api/build")
+                if resp["status"] in ("done", "failed"):
+                    break
+                time.sleep(0.2)
+        _req("POST", base + "/api/compare", {"confirm": "offline"})
+        deadline = time.time() + 120
+        while time.time() < deadline:
+            _, resp = _req("GET", base + "/api/compare")
+            if resp["status"] in ("done", "failed"):
+                break
+            time.sleep(0.2)
+        assert resp["status"] == "done", resp
+
+        # trailing-slash redirect
+        import urllib.error
+        req = urllib.request.Request(base + "/compare")
+        try:
+            urllib.request.urlopen(req)
+        except urllib.error.HTTPError as e:
+            assert e.code == 301
+            assert e.headers.get("Location") == "/compare/"
+
+        status, html = _get_text(base + "/compare/")
+        assert status == 200 and "Grade-delta summary" in html
+
+        assert (out / "compare" / "compare.json").is_file()
+        status, _ = _get_text(base + "/compare/compare.json")
+        assert status == 200
+
+        # share-compare read-only
+        httpd_share = serve(cap, out, port=0, share=True, backend="offline",
+                            open_browser=False, no_detect=True)
+        thread = threading.Thread(target=httpd_share.serve_forever, daemon=True)
+        thread.start()
+        share_base = f"http://127.0.0.1:{httpd_share.server_address[1]}"
+        token = httpd_share.review_state.tenant_token
+        try:
+            status, html = _get_text(share_base + f"/t/{token}/compare/")
+            assert status == 200 and "Grade-delta summary" in html
+            status, _ = _get_text(share_base + f"/t/{token}/compare/compare.json")
+            assert status == 200
+            status, _ = _req("GET", share_base + f"/t/wrong/compare/")
+            assert status == 403
+        finally:
+            httpd_share.shutdown()
+            httpd_share.server_close()
+    finally:
+        httpd.shutdown()
+        httpd.server_close()

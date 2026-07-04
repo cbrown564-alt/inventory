@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homeinventory · Project</title>
+<style>
+  :root {
+    --ink: #1a1a1a; --muted: #5a5f6a; --rule: #d8dbe0; --accent: #15406b;
+    --band: #f3f5f8; --paper: #ffffff; --confirm: #0e6b46; --reject: #a3231f;
+    --ui: "Segoe UI Variable Text", "Segoe UI", "Avenir Next", "Helvetica Neue", sans-serif;
+    --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: var(--ui); color: var(--ink); margin: 0;
+         background: var(--band); font-size: 15px; line-height: 1.5; }
+  header { background: var(--accent); color: #fff; padding: 10px 20px;
+           display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .wordmark { font-weight: 700; letter-spacing: .02em; }
+  .chip { font-size: 12px; background: rgba(255,255,255,.15);
+          padding: 2px 10px; border-radius: 10px; }
+  main { max-width: 720px; margin: 24px auto; padding: 0 16px; }
+  section { background: var(--paper); border: 1px solid var(--rule);
+            border-radius: 8px; padding: 18px 20px; margin-bottom: 18px; }
+  h2 { margin: 0 0 8px; font-size: 17px; color: var(--accent); }
+  p { margin: 6px 0; } .muted { color: var(--muted); font-size: 13px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px;
+           border-bottom: 1px solid var(--rule); }
+  th { color: var(--muted); font-weight: 600; font-size: 12.5px;
+       text-transform: uppercase; letter-spacing: .05em; }
+  .btn { font: 600 14px var(--ui); padding: 8px 16px; border-radius: 6px;
+         border: 1px solid var(--accent); background: #fff;
+         color: var(--accent); cursor: pointer; text-decoration: none;
+         display: inline-block; }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn[disabled] { opacity: .5; cursor: default; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+         margin: 10px 0; }
+  .ok { color: var(--confirm); font-weight: 600; }
+  .pending { color: var(--muted); }
+  #compare-status { font-family: var(--mono); font-size: 12px;
+    white-space: pre-wrap; margin-top: 8px; }
+  .err { color: var(--reject); }
+</style>
+</head>
+<body>
+<header>
+  <span class="wordmark">Homeinventory · Project</span>
+  <span class="chip">{{ use_case_label }}</span>
+  <span class="chip">backend: {{ backend_label }}</span>
+</header>
+<main>
+
+<section id="sessions">
+  <h2>Sessions</h2>
+  <p class="muted">Capture photos and build each session before running compare.</p>
+  <table id="session-list">
+    <thead><tr><th>Session</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for s in sessions %}
+      <tr data-session="{{ s.key }}">
+        <td>{{ s.label }}</td>
+        <td class="{% if s.built %}ok{% else %}pending{% endif %}">
+          {% if s.built %}built{% else %}not built{% endif %}</td>
+        <td><a class="btn" href="{{ s.prefix }}/start">Open</a>
+          {% if s.built %}<a class="btn" href="{{ s.prefix }}/">Review</a>{% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section id="compare">
+  <h2>Compare</h2>
+  <p class="muted">Runs the offline comparison between the first two sessions
+  ({{ sessions[0].label }} vs {{ sessions[1].label }}).</p>
+  <div class="row">
+    {% if compare_built %}
+    <a class="btn primary" href="/compare/">Open compare report</a>
+    {% else %}
+    <button class="btn primary" id="btn-compare"
+            {% if not compare_ready or compare_running %}disabled{% endif %}>
+      Run compare</button>
+    {% endif %}
+  </div>
+  <div id="compare-status">{% if compare_running %}compare running…{% endif %}</div>
+</section>
+
+<script>
+"use strict";
+(function () {
+  var COMPARE_BACKEND = {{ backend | tojson }} === "offline" ? "offline" : "openai";
+
+  function api(method, url, body) {
+    return fetch(url, {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) throw new Error(j.error || (r.status + ""));
+        return j;
+      });
+    });
+  }
+
+  var btn = document.getElementById("btn-compare");
+  var status = document.getElementById("compare-status");
+  if (!btn) return;
+
+  function pollCompare() {
+    api("GET", "/api/compare").then(function (s) {
+      if (s.status === "running") {
+        btn.disabled = true;
+        status.textContent = "comparing…";
+        setTimeout(pollCompare, 2000);
+      } else if (s.status === "done") {
+        status.textContent = "done — opening compare report…";
+        location.href = "/compare/";
+      } else if (s.status === "failed") {
+        btn.disabled = false;
+        status.textContent = "compare failed:\n" + (s.detail || "");
+        status.className = "err";
+      }
+    });
+  }
+
+  btn.addEventListener("click", function () {
+    if (!window.confirm("Run compare with backend " + COMPARE_BACKEND + "?")) return;
+    btn.disabled = true;
+    api("POST", "/api/compare", { confirm: COMPARE_BACKEND }).then(function () {
+      pollCompare();
+    }).catch(function (e) {
+      btn.disabled = false;
+      status.textContent = e.message;
+      status.className = "err";
+    });
+  });
+  pollCompare();
+})();
+</script>
+</main>
+</body>
+</html>
