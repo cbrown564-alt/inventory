@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Review — {{ inv.property_address or "Property inventory" }}</title>
+{% include "_favicon.j2" %}
 <style>
 {% include "_theme.css.j2" %}
 
@@ -12,264 +13,403 @@
 
   /* ---------- header ---------- */
   .addr { font-weight: 500; color: var(--muted); font-size: 13px;
-          max-width: 300px; overflow: hidden; text-overflow: ellipsis;
+          max-width: 260px; overflow: hidden; text-overflow: ellipsis;
           white-space: nowrap; }
   #progress { flex: 1 1 170px; min-width: 140px; }
   #progress .label { font-size: 12px; color: var(--muted);
                      font-variant-numeric: tabular-nums; }
-  #progress .track { height: 4px; background: var(--line); border-radius: 2px;
-                     overflow: hidden; margin-top: 3px; }
+  #progress .track { height: 3px; background: var(--line); border-radius: 2px;
+                     overflow: hidden; margin-top: 4px; }
   #progress .fill { height: 100%; width: 0; background: var(--confirm);
                     transition: width .35s cubic-bezier(.16,1,.3,1); }
-  #save-state { font-size: 12px; color: var(--muted); white-space: nowrap;
+  #save-state { font-size: 12px; color: var(--faint); white-space: nowrap;
                 min-width: 88px; text-align: right; }
   #save-state.err { color: var(--danger); }
-  .share { font-family: var(--mono); font-size: 11px; color: var(--muted); }
-  .share a { color: var(--accent-ink); }
+  .share { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+  .share a { color: var(--brass); }
   #btn-queue { display: none; }
 
   /* ---------- layout ---------- */
-  #app { flex: 1; display: grid; grid-template-columns: 360px 1fr;
+  #app { flex: 1; display: grid; grid-template-columns: 292px 1fr;
          min-height: 0; }
 
   /* ---------- queue rail ---------- */
   #rail { border-right: 1px solid var(--line); background: var(--panel);
           overflow-y: auto; }
   #rail .tools { position: sticky; top: 0; background: var(--panel);
-                 padding: 12px 16px 8px; border-bottom: 1px solid var(--line);
+                 padding: 12px 14px 10px; border-bottom: 1px solid var(--line);
                  z-index: 5; }
-  #q-search { width: 100%; font: 13px var(--ui); padding: 6px 10px;
-              margin-bottom: 8px; border: 1px solid var(--line-strong);
-              border-radius: 6px; background: #fff; color: var(--ink); }
-  #q-search:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
-  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  #q-search { width: 100%; font: 13px var(--ui); padding: 7px 11px;
+              margin-bottom: 9px; border: 1px solid var(--line);
+              border-radius: 7px; background: var(--paper);
+              color: var(--ink); }
+  #q-search::placeholder { color: var(--faint); }
+  #q-search:focus { outline: 2px solid var(--brass); outline-offset: -1px; }
+  .filters { display: flex; gap: 5px; flex-wrap: wrap; }
   .filters button {
-    border: 1px solid var(--line); background: transparent; color: var(--muted);
-    border-radius: 999px; font-size: 12px; padding: 3px 11px; cursor: pointer;
+    border: 1px solid var(--line); background: transparent;
+    color: var(--muted); border-radius: 999px; font-size: 12px;
+    padding: 3px 11px; cursor: pointer;
   }
-  .filters button[aria-pressed="true"] { background: var(--accent);
-    border-color: var(--accent); color: #fff; }
-  .tools .row2 { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
-  .tools select { font: 12px var(--ui); border: 1px solid var(--line);
-                  border-radius: 5px; padding: 3px 6px; background: #fff;
-                  color: var(--muted); }
+  .filters button:hover { color: var(--ink); border-color: var(--line-strong); }
+  .filters button[aria-pressed="true"] { background: var(--brass-soft);
+    border-color: var(--brass); color: var(--brass-bright); }
+  .tools .row2 { display: flex; gap: 6px; margin-top: 9px;
+                 align-items: center; }
+  .tools select { flex: 1; font: 12px var(--ui); border: 1px solid var(--line);
+                  border-radius: 6px; padding: 4px 6px;
+                  background: var(--paper); color: var(--muted); }
   #bulk { font-size: 12px; padding: 4px 10px; }
 
   .room-head {
-    padding: 14px 16px 4px; font-size: 11px; font-weight: 600;
-    letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
-    display: flex; justify-content: space-between; align-items: baseline;
-    cursor: pointer;
+    padding: 14px 14px 6px; font-size: 11px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+    cursor: pointer; user-select: none;
   }
-  .room-head:hover { color: var(--accent-ink); }
-  .room-head .n { font-family: var(--mono); font-size: 10px; }
+  .room-head:hover { color: var(--brass-bright); }
+  .room-head .top { display: flex; justify-content: space-between;
+                    align-items: baseline; gap: 8px; }
+  .room-head .n { font-family: var(--mono); font-size: 10px;
+                  letter-spacing: 0; text-transform: none; }
+  .room-head .meter { height: 2px; background: var(--line); margin-top: 5px;
+                      border-radius: 1px; overflow: hidden; }
+  .room-head .meter i { display: block; height: 100%;
+                        background: var(--confirm); }
   .q-item {
-    display: grid; grid-template-columns: 14px 1fr auto; gap: 10px;
-    align-items: center; padding: 8px 16px; cursor: pointer;
-    border-top: 1px solid var(--line);
+    display: grid; grid-template-columns: 12px 1fr auto; gap: 9px;
+    align-items: center; padding: 7px 14px; cursor: pointer;
+    border-left: 2px solid transparent;
   }
-  .q-item:hover { background: var(--paper); }
-  .q-item.active { background: var(--accent-soft); }
-  .q-item .dot { width: 8px; height: 8px; border-radius: 50%;
+  .q-item:hover { background: var(--panel-2); }
+  .q-item.active { background: var(--brass-soft);
+                   border-left-color: var(--brass); }
+  .q-item .dot { width: 7px; height: 7px; border-radius: 50%;
                  border: 1.5px solid var(--line-strong); }
   .q-item.done .dot { background: var(--confirm); border-color: var(--confirm); }
   .q-item.bad .dot { background: var(--danger); border-color: var(--danger); }
   .q-item .name { font-weight: 500; font-size: 13px; overflow: hidden;
                   text-overflow: ellipsis; white-space: nowrap; }
   .q-item .name .ref { font-family: var(--mono); font-size: 10px;
-                       color: var(--muted); margin-right: 6px; }
-  .q-item .name .sub { display: block; font-size: 11px; color: var(--muted);
+                       color: var(--faint); margin-right: 6px; }
+  .q-item .name .sub { display: block; font-size: 11px; color: var(--faint);
                        font-weight: 400; }
   .q-item.bad .name { text-decoration: line-through; color: var(--muted); }
-  .conf { width: 44px; }
+  .conf { width: 40px; }
   .conf .t { height: 3px; background: var(--line); border-radius: 2px;
              overflow: hidden; }
   .conf .f { height: 100%; background: var(--pend); }
-  .conf .v { font-family: var(--mono); font-size: 9px; color: var(--muted);
+  .conf .v { font-family: var(--mono); font-size: 9px; color: var(--faint);
              text-align: right; display: block; }
   .empty-queue { padding: 28px 16px; color: var(--muted); font-size: 13px;
                  text-align: center; }
   #rail-backdrop { display: none; }
 
   /* ---------- detail pane ---------- */
-  #detail { overflow-y: auto; padding: 26px 34px 140px; min-width: 0; }
-  .crumb { font-family: var(--mono); font-size: 11px; color: var(--muted);
-           display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .badge { font-size: 10px; font-weight: 600; letter-spacing: .08em;
-           text-transform: uppercase; border-radius: 3px; padding: 2px 7px; }
+  #detail { overflow-y: auto; padding: 20px 26px 40px; min-width: 0; }
+  .work { display: grid; grid-template-columns: minmax(0, 1fr) 384px;
+          gap: 20px; align-items: start; }
+
+  /* ----- the evidence stage ----- */
+  .stage-col { min-width: 0; }
+  #stage { position: relative; background: #05070b;
+           border: 1px solid var(--line); border-radius: 12px;
+           overflow: hidden; height: clamp(300px, 54vh, 600px); }
+  #stage .media { width: 100%; height: 100%; display: flex;
+                  align-items: center; justify-content: center; }
+  #stage img, #stage video { max-width: 100%; max-height: 100%;
+                             display: block; }
+  #stage img { cursor: zoom-in; }
+  #stage .media.fading img { animation: stage-in .22s ease; }
+  @keyframes stage-in { from { opacity: .25; } to { opacity: 1; } }
+  .hud { position: absolute; display: flex; gap: 6px; align-items: center;
+         z-index: 4; }
+  .hud.tl { top: 10px; left: 10px; }
+  .hud.tr { top: 10px; right: 10px; }
+  .hud.bl { bottom: 10px; left: 10px; }
+  .hud.br { bottom: 10px; right: 10px; }
+  .hud-chip { background: rgba(8, 10, 14, .78); color: #dfe5ec;
+              font: 11px var(--mono); padding: 3px 9px; border-radius: 6px;
+              border: 1px solid rgba(255,255,255,.08); }
+  .hud-chip .tc { color: var(--brass-bright); }
+  .hud-btn { background: rgba(8, 10, 14, .78); color: #eef1f4;
+             border: 1px solid rgba(255,255,255,.16); border-radius: 7px;
+             font: 500 12px var(--ui); padding: 5px 11px; cursor: pointer; }
+  .hud-btn:hover { border-color: var(--brass-bright);
+                   color: var(--brass-bright); }
+  .hud-btn.on { background: var(--brass); border-color: var(--brass);
+                color: #14100a; }
+  .stage-empty { color: var(--muted); font-size: 13px; text-align: center;
+                 padding: 40px 24px; max-width: 380px; margin: 0 auto; }
+  .stage-empty b { color: var(--pend); display: block; font-size: 14px;
+                   margin-bottom: 6px; }
+
+  /* ----- filmstrip of cited frames ----- */
+  .strip { display: flex; gap: 6px; margin-top: 10px; overflow-x: auto;
+           padding-bottom: 4px; scrollbar-width: thin; }
+  .strip button { flex: 0 0 auto; padding: 0; border: 2px solid transparent;
+                  border-radius: 7px; overflow: hidden; background: #05070b;
+                  cursor: pointer; position: relative; line-height: 0; }
+  .strip button:hover { border-color: var(--line-strong); }
+  .strip button.active { border-color: var(--brass); }
+  .strip img { height: 56px; width: auto; display: block; opacity: .92; }
+  .strip button.active img { opacity: 1; }
+  .strip .pin-n { position: absolute; right: 3px; bottom: 3px;
+                  background: var(--danger); color: #fff;
+                  font: 9px var(--ui); line-height: 1.5; padding: 0 5px;
+                  border-radius: 4px; }
+  .strip .tag { position: absolute; left: 3px; top: 3px;
+                background: rgba(8,10,14,.75); color: #cfd6de;
+                font: 9px var(--mono); padding: 1px 4px; border-radius: 3px; }
+
+  /* ----- the walkthrough spine ----- */
+  #spine { margin-top: 12px; user-select: none; }
+  #spine .chapters { display: flex; gap: 2px; height: 20px;
+                     margin-bottom: 6px; }
+  #spine .chap { position: relative; border-radius: 4px; overflow: hidden;
+                 background: var(--panel-2); cursor: pointer; min-width: 4px; }
+  #spine .chap span { position: absolute; inset: 0; display: block;
+                      font: 9px/20px var(--ui); letter-spacing: .04em;
+                      text-transform: uppercase; color: var(--faint);
+                      padding: 0 6px; white-space: nowrap; overflow: hidden;
+                      text-overflow: ellipsis; }
+  #spine .chap:hover span { color: var(--muted); }
+  #spine .chap.here { background: var(--brass-soft); }
+  #spine .chap.here span { color: var(--brass-bright); }
+  #spine .scrub { position: relative; height: 30px; cursor: pointer; }
+  #spine .scrub .rail-line { position: absolute; left: 0; right: 0;
+                             top: 14px; height: 2px; background: var(--line);
+                             border-radius: 1px; }
+  #spine .tick { position: absolute; top: 10px; width: 2px; height: 10px;
+                 background: var(--faint); opacity: .5; border-radius: 1px;
+                 transform: translateX(-1px); }
+  #spine .tick.cited { background: var(--brass); opacity: .95; top: 8px;
+                       height: 14px; }
+  #spine .tick.flag { background: var(--danger); opacity: .95; top: 8px;
+                      height: 14px; }
+  #spine .playhead { position: absolute; top: 4px; width: 2px; height: 22px;
+                     background: var(--brass-bright);
+                     box-shadow: 0 0 8px rgba(229,196,127,.6);
+                     transform: translateX(-1px);
+                     transition: left .25s cubic-bezier(.16,1,.3,1); }
+  #spine .playhead::after { content: ""; position: absolute; top: -4px;
+                            left: -3px; width: 8px; height: 8px;
+                            transform: rotate(45deg);
+                            background: var(--brass-bright); }
+  #spine.live .playhead { transition: none; }
+  #spine .peek { position: absolute; bottom: 34px; z-index: 6;
+                 transform: translateX(-50%); display: none;
+                 background: #05070b; border: 1px solid var(--line-strong);
+                 border-radius: 8px; padding: 4px; pointer-events: none;
+                 box-shadow: var(--shadow); }
+  #spine .peek img { display: block; width: 128px; height: auto;
+                     border-radius: 5px; }
+  #spine .peek .t { display: block; text-align: center;
+                    font: 10px var(--mono); color: var(--brass-bright);
+                    padding: 3px 0 1px; }
+  .prov { margin-top: 10px; font-size: 12px; color: var(--muted);
+          display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .prov .tc { font-family: var(--mono); color: var(--brass-bright); }
+  .prov .vid { font-family: var(--mono); color: var(--faint); }
+
+  /* ----- claim card ----- */
+  .claim { background: var(--panel); border: 1px solid var(--line);
+           border-radius: 12px; position: sticky; top: 12px;
+           max-height: calc(100vh - 90px); display: flex;
+           flex-direction: column; min-width: 0; }
+  .claim .scroll { overflow-y: auto; padding: 16px 18px 6px; }
+  .crumb { font-family: var(--mono); font-size: 11px; color: var(--faint);
+           display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .badge { font-size: 10px; font-weight: 600; letter-spacing: .07em;
+           text-transform: uppercase; border-radius: 4px; padding: 2px 7px; }
   .badge.ok { color: var(--confirm); background: var(--confirm-soft); }
   .badge.no { color: var(--danger); background: var(--danger-soft); }
   .badge.pend { color: var(--pend); background: var(--pend-soft); }
-  .badge.prov { color: var(--muted); background: var(--paper);
-                border: 1px solid var(--line); text-transform: none;
-                letter-spacing: 0; font-weight: 500; }
+  .badge.prov { color: var(--muted); background: var(--panel-2);
+                text-transform: none; letter-spacing: 0; font-weight: 500;
+                font-family: var(--ui); }
   #d-name {
-    font: 600 26px/1.2 var(--ui); letter-spacing: -.02em; color: var(--ink);
-    border: none; background: transparent; width: 100%; margin: 10px 0 2px;
+    font: 600 20px/1.25 var(--ui); letter-spacing: -.01em; color: var(--ink);
+    border: none; background: transparent; width: 100%; margin: 8px 0 0;
     padding: 2px 0; border-bottom: 1px dashed transparent;
   }
   #d-name:hover, #d-name:focus { border-bottom-color: var(--line-strong);
                                  outline: none; }
   #d-desc {
-    font: 14px/1.5 var(--ui); color: var(--ink); width: 100%; min-height: 54px;
-    border: 1px solid transparent; background: transparent; resize: vertical;
-    padding: 4px 0; border-radius: 5px;
+    font: 13px/1.5 var(--ui); color: var(--muted); width: 100%;
+    min-height: 46px; border: 1px solid transparent; background: transparent;
+    resize: vertical; padding: 4px 0; border-radius: 6px; margin-top: 2px;
   }
   #d-desc:hover { border-color: var(--line); }
-  #d-desc:focus { border-color: var(--accent); outline: none; background: #fff;
-                  padding: 4px 8px; }
-  .grades { display: flex; gap: 26px; margin: 16px 0; flex-wrap: wrap; }
-  .grades label { display: block; font-size: 11px; font-weight: 600;
-    letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+  #d-desc:focus { border-color: var(--brass); outline: none;
+                  background: var(--paper); padding: 4px 8px;
+                  color: var(--ink); }
+  .grades { display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+            margin: 14px 0 0; }
+  .grades label { display: block; font-size: 10px; font-weight: 600;
+    letter-spacing: .09em; text-transform: uppercase; color: var(--faint);
     margin-bottom: 4px; }
-  .grades select { font: 13px var(--ui); padding: 6px 10px; min-width: 180px;
-    border: 1px solid var(--line-strong); border-radius: 5px; background: #fff; }
-  .sec { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--line); }
-  .sec > h3 { margin: 0 0 8px; font-size: 11px; font-weight: 600;
-    letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .grades select { width: 100%; font: 13px var(--ui); padding: 6px 8px;
+    border: 1px solid var(--line-strong); border-radius: 6px;
+    background: var(--paper); color: var(--ink); }
+  .sec { margin-top: 16px; padding-top: 12px;
+         border-top: 1px solid var(--line); }
+  .sec > h3 { margin: 0 0 8px; font-size: 10px; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
 
   .chip {
     display: inline-flex; align-items: center; gap: 6px; margin: 2px 6px 2px 0;
-    font-size: 13px; color: var(--danger); background: var(--danger-soft);
-    border: 1px solid #e6c8c7; border-radius: 999px; padding: 3px 12px;
+    font-size: 12.5px; color: var(--danger); background: var(--danger-soft);
+    border: 1px solid transparent; border-radius: 999px; padding: 3px 11px;
     cursor: pointer; user-select: none;
   }
+  .chip:hover { border-color: var(--danger); }
   .chip:active { transform: scale(.97); }
-  .chip.struck { color: var(--muted); background: var(--paper);
-                 border-color: var(--line); text-decoration: line-through; }
+  .chip.struck { color: var(--faint); background: var(--panel-2);
+                 text-decoration: line-through; }
+  .chip.struck:hover { border-color: var(--line-strong); }
   .chip .x { font-size: 11px; opacity: .6; }
-  .def-add { display: flex; gap: 6px; margin-top: 8px; max-width: 460px; }
-  .def-add input { flex: 1; font: 13px var(--ui); padding: 6px 10px;
-    border: 1px solid var(--line-strong); border-radius: 5px; }
+  .def-add { display: flex; gap: 6px; margin-top: 8px; }
+  .def-add input { flex: 1; font: 12.5px var(--ui); padding: 6px 10px;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: var(--paper); color: var(--ink); }
+  .def-add input::placeholder { color: var(--faint); }
 
-  /* evidence grid (click opens the lightbox) */
-  .ev-grid { display: grid; grid-template-columns: repeat(auto-fill,
-             minmax(220px, 1fr)); gap: 14px; }
-  .ev-thumb { position: relative; border: 1px solid var(--line);
-              background: #111; cursor: zoom-in; padding: 0; display: block;
-              width: 100%; }
-  .ev-thumb img { width: 100%; display: block; }
-  .ev-thumb .pid { position: absolute; left: 0; top: 0; z-index: 3;
-    background: rgba(28,36,48,.82); color: #fff; font: 10px var(--mono);
-    padding: 2px 7px; }
-  .ev-thumb .n-pins { position: absolute; right: 0; bottom: 0; z-index: 3;
-    background: var(--danger); color: #fff; font: 10px var(--ui);
-    padding: 1px 7px; }
-  .ev-thumb:focus-visible { outline: 2px solid var(--accent);
-                            outline-offset: 2px; }
   .ev-missing { color: var(--pend); background: var(--pend-soft);
-    border: 1px solid #e8dcb2; border-radius: 5px; padding: 10px 14px;
-    font-size: 13px; }
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    padding: 10px 14px; font-size: 13px; }
 
-  /* ---------- lightbox ---------- */
-  #lightbox { position: fixed; inset: 0; z-index: 70; background:
-              rgba(16,20,26,.94); display: none; flex-direction: column; }
+  /* comments */
+  .c-line { padding: 7px 0; border-top: 1px dotted var(--line);
+            font-size: 12.5px; }
+  .c-line .who { font-weight: 600; font-size: 12px; }
+  .c-line .who.tenant { color: var(--tenant); }
+  .c-line .who.landlord, .c-line .who.agent { color: var(--brass-bright); }
+  .c-line .at { font-family: var(--mono); font-size: 10px;
+                color: var(--faint); margin-left: 8px; }
+  .c-add { display: flex; gap: 6px; margin-top: 8px; }
+  .c-add input { flex: 1; font: 12.5px var(--ui); padding: 7px 10px;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: var(--paper); color: var(--ink); }
+  .c-add input::placeholder { color: var(--faint); }
+
+  /* claim card actions */
+  #actions { padding: 12px 18px 14px; border-top: 1px solid var(--line);
+             background: linear-gradient(to top, var(--panel) 75%,
+                         transparent); border-radius: 0 0 12px 12px; }
+  #actions .row { display: flex; gap: 8px; }
+  #actions .row .btn { flex: 1; padding: 9px 10px; font-size: 13px; }
+  .kbd-row { display: flex; gap: 10px; margin-top: 9px; flex-wrap: wrap;
+             justify-content: center; }
+  .kbd { font-family: var(--mono); font-size: 10px; color: var(--muted);
+         background: var(--panel-2); border: 1px solid var(--line);
+         border-radius: 4px; padding: 0 5px; }
+  .kbd-label { font-size: 11px; color: var(--faint); }
+
+  /* ---------- room view ---------- */
+  .room-title { font: 600 22px/1.2 var(--ui); letter-spacing: -.01em;
+                margin: 6px 0 0; }
+  .room-grid { display: grid; grid-template-columns: minmax(0, 1fr) 384px;
+               gap: 20px; align-items: start; margin-top: 14px; }
+  .room-cards .card { background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 14px 18px 16px; margin-bottom: 14px; }
+  .room-cards .card > h3 { margin: 0 0 8px; font-size: 10px; font-weight: 600;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
+  .hint { font-size: 12.5px; color: var(--muted); margin: 4px 0 10px; }
+  .room-summary { width: 100%; min-height: 70px; font: 13px/1.5 var(--ui);
+    border: 1px solid var(--line); border-radius: 7px; padding: 10px 12px;
+    background: var(--paper); color: var(--ink); resize: vertical; }
+  .add-form { display: grid; gap: 8px; }
+  .add-form input, .add-form select { font: 13px var(--ui); padding: 7px 10px;
+    border: 1px solid var(--line); border-radius: 6px;
+    background: var(--paper); color: var(--ink); }
+  .add-form input::placeholder { color: var(--faint); }
+  .uncited { display: flex; gap: 8px; flex-wrap: wrap; }
+  .uncited button { padding: 0; border: 2px solid transparent;
+    border-radius: 7px; overflow: hidden; background: #05070b;
+    cursor: pointer; line-height: 0; }
+  .uncited button:hover { border-color: var(--brass); }
+  .uncited img { height: 64px; width: auto; display: block; }
+  .uncited figure { margin: 0; }
+  .uncited figcaption { font: 9px var(--mono); color: var(--faint);
+                        padding-top: 2px; }
+  #redesc-status { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  #redesc-status details { margin-top: 6px; }
+  #redesc-status pre { font: 11px var(--mono); white-space: pre-wrap;
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: 6px; padding: 8px 10px; max-height: 220px;
+    overflow: auto; }
+
+  /* ---------- lightbox (inspect + pin) ---------- */
+  #lightbox { position: fixed; inset: 0; z-index: 70;
+              background: rgba(5, 7, 11, .97); display: none;
+              flex-direction: column; }
   #lightbox.on { display: flex; }
   #lb-top { display: flex; align-items: center; gap: 12px; padding: 10px 16px;
             color: #dfe3e8; font-size: 13px; }
-  #lb-top .pid { font-family: var(--mono); font-size: 12px; color: #9aa3ad; }
+  #lb-top .pid { font-family: var(--mono); font-size: 12px;
+                 color: var(--brass-bright); }
   #lb-top .spacer { flex: 1; }
-  .lb-btn { border: 1px solid rgba(255,255,255,.25); background: transparent;
-            color: #eef1f4; border-radius: 6px; padding: 6px 12px;
+  .lb-btn { border: 1px solid rgba(255,255,255,.22); background: transparent;
+            color: #eef1f4; border-radius: 7px; padding: 6px 12px;
             font-size: 13px; cursor: pointer; }
-  .lb-btn:hover { border-color: #fff; }
+  .lb-btn:hover { border-color: var(--brass-bright);
+                  color: var(--brass-bright); }
   .lb-btn[aria-pressed="true"] { background: var(--danger);
-                                 border-color: var(--danger); }
+                                 border-color: var(--danger); color: #fff; }
   #lb-stage { flex: 1; position: relative; overflow: hidden; cursor: grab; }
   #lb-stage.pinning { cursor: crosshair; }
   #lb-stage.dragging { cursor: grabbing; }
   #lb-canvas { position: absolute; transform-origin: 0 0; }
   #lb-canvas img { display: block; user-select: none; -webkit-user-drag: none; }
   #lb-canvas .box { position: absolute; border: 2px solid var(--danger);
-    background: rgba(163,35,31,.12); }
+    background: rgba(224,100,89,.12); }
   #lb-canvas .box .lbl { position: absolute; left: -2px; bottom: 100%;
     background: var(--danger); color: #fff; font: 11px var(--ui);
     padding: 1px 6px; white-space: nowrap; max-width: 260px; overflow: hidden;
     text-overflow: ellipsis; }
   #lb-canvas .box.draft { border-style: dashed;
-                          background: rgba(163,35,31,.07); }
+                          background: rgba(224,100,89,.07); }
   #lb-bottom { display: flex; align-items: center; justify-content: center;
-               gap: 10px; padding: 10px 16px; color: #9aa3ad; font-size: 12px;
+               gap: 10px; padding: 10px 16px; color: #93a0ae; font-size: 12px;
                flex-wrap: wrap; }
   #lb-zoom { font-family: var(--mono); min-width: 46px; text-align: center; }
   #lb-hint { font-size: 12px; }
 
   /* annotation label popover (shared by lightbox pins) */
   #anno-form { position: fixed; z-index: 95; background: var(--panel);
-    border: 1px solid var(--line-strong); border-radius: 8px; padding: 10px;
-    box-shadow: 0 12px 32px -12px rgba(28,36,48,.4); display: none;
-    width: 280px; }
+    border: 1px solid var(--line-strong); border-radius: 10px; padding: 10px;
+    box-shadow: var(--shadow); display: none; width: 280px; }
   #anno-form select, #anno-form input { width: 100%; font: 13px var(--ui);
     padding: 6px 8px; margin-bottom: 6px; border: 1px solid var(--line-strong);
-    border-radius: 5px; }
+    border-radius: 6px; background: var(--paper); color: var(--ink); }
   #anno-form .row { display: flex; gap: 6px; justify-content: flex-end; }
 
-  /* comments */
-  .c-line { padding: 7px 0; border-top: 1px dotted var(--line); font-size: 13px; }
-  .c-line .who { font-weight: 600; font-size: 12px; }
-  .c-line .who.tenant { color: var(--tenant); }
-  .c-line .who.landlord, .c-line .who.agent { color: var(--accent-ink); }
-  .c-line .at { font-family: var(--mono); font-size: 10px; color: var(--muted);
-                margin-left: 8px; }
-  .c-add { display: flex; gap: 6px; margin-top: 8px; max-width: 560px; }
-  .c-add input { flex: 1; font: 13px var(--ui); padding: 7px 10px;
-    border: 1px solid var(--line-strong); border-radius: 5px; }
-
-  /* sticky item actions */
-  #actions {
-    position: sticky; bottom: 0; margin: 30px -34px 0; padding: 12px 34px;
-    background: var(--panel); border-top: 1px solid var(--line);
-    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  /* ---------- responsive ---------- */
+  @media (max-width: 1220px) {
+    .work, .room-grid { grid-template-columns: 1fr; }
+    .claim { position: static; max-height: none; }
+    #stage { height: clamp(280px, 48vh, 520px); }
   }
-  .kbd { font-family: var(--mono); font-size: 10px; color: var(--muted);
-         background: var(--paper); border: 1px solid var(--line);
-         border-radius: 3px; padding: 0 5px; }
-  .kbd-label { font-size: 12px; color: var(--muted); }
-
-  /* room view */
-  .room-summary { width: 100%; min-height: 70px; font: 14px/1.5 var(--ui);
-    border: 1px solid var(--line); border-radius: 5px; padding: 10px 12px;
-    background: #fff; resize: vertical; }
-  .add-form { display: grid; gap: 8px; max-width: 460px; }
-  .add-form input, .add-form select { font: 13px var(--ui); padding: 7px 10px;
-    border: 1px solid var(--line-strong); border-radius: 5px; }
-  .add-form label { font-size: 11px; font-weight: 600; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--muted); }
-  .uncited { display: flex; gap: 8px; flex-wrap: wrap; }
-  .uncited .ev-thumb { width: auto; }
-  .uncited img { height: 72px; width: auto; display: block; }
-  .uncited figure { margin: 0; }
-  .uncited figcaption { font: 9px var(--mono); color: var(--muted); }
-  #redesc-status { font-size: 12px; color: var(--muted); margin-top: 8px; }
-  #redesc-status details { margin-top: 6px; }
-  #redesc-status pre { font: 11px var(--mono); white-space: pre-wrap;
-    background: var(--paper); border: 1px solid var(--line); border-radius: 5px;
-    padding: 8px 10px; max-height: 220px; overflow: auto; }
-
-  /* ---------- mobile ---------- */
   @media (max-width: 900px) {
     #app { grid-template-columns: 1fr; }
     #btn-queue { display: inline-block; }
     #rail { position: fixed; top: 0; bottom: 0; left: 0; width: 82vw;
             max-width: 360px; z-index: 60; transform: translateX(-103%);
-            transition: transform .22s ease; box-shadow: 12px 0 40px -20px
-            rgba(16,20,26,.5); }
+            transition: transform .22s ease; box-shadow: var(--shadow); }
     #rail.open { transform: none; }
     #rail-backdrop { display: none; position: fixed; inset: 0; z-index: 55;
-                     background: rgba(28,36,48,.4); }
+                     background: rgba(5,7,11,.55); }
     #rail-backdrop.on { display: block; }
     .addr { display: none; }
-    #detail { padding: 18px 16px 150px; }
-    #actions { position: fixed; left: 0; right: 0; bottom: 0; margin: 0;
-               padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-               z-index: 40; }
+    #detail { padding: 14px 12px 40px; }
+    #stage { height: clamp(240px, 42vh, 420px); border-radius: 10px; }
   }
   @media (hover: none), (max-width: 640px) {
-    .kbd, .kbd-label { display: none; }
+    .kbd, .kbd-label, .kbd-row { display: none; }
   }
 </style>
 </head>
-<body>
+<body class="stage">
 <header class="app-header">
   <button class="btn ghost" id="btn-queue" aria-label="Show item list">☰ Items</button>
   <span class="wordmark">Homeinventory</span>
@@ -318,11 +458,12 @@
   <section id="detail"></section>
 </div>
 
-<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo inspector">
   <div id="lb-top">
     <span class="pid" id="lb-pid"></span>
     <span id="lb-title"></span>
     <span class="spacer"></span>
+    <button class="lb-btn" id="lb-play" hidden>▶ Play this moment</button>
     <button class="lb-btn" id="lb-pin" aria-pressed="false">Pin defect</button>
     <button class="lb-btn" id="lb-close" aria-label="Close">✕ Close</button>
   </div>
@@ -362,6 +503,8 @@
   var inv = payload.inventory;
   var photoSrc = payload.photo_src || {};
   var cropSrc = payload.crop_src || {};
+  var videos = payload.videos || {};
+  var photoTime = payload.photo_time || {};
   var signingRoles = payload.signing_roles || ["landlord", "agent"];
   var coverFields = payload.cover_fields || [];
 
@@ -403,6 +546,12 @@
   function isDone(it) { return it.reviewed || it.rejected; }
   function hasEvidence(it) {
     return (it.photo_ids || []).some(function (p) { return photoSrc[p]; });
+  }
+  function pad2(n) { return (n < 10 ? "0" : "") + n; }
+  function fmtT(s) {
+    s = Math.max(0, Math.floor(s || 0));
+    var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), r = s % 60;
+    return h ? h + ":" + pad2(m) + ":" + pad2(r) : m + ":" + pad2(r);
   }
 
   /* ---------- autosave ---------- */
@@ -617,16 +766,24 @@
       if (sortMode === "room" && room.name !== qview.lastRoom) {
         qview.lastRoom = room.name;
         var pend = room.items.filter(function (i) { return !isDone(i); }).length;
-        frag.appendChild(el("div", {
+        var head = el("div", {
           "class": "room-head",
           onclick: (function (name) { return function () {
             select({ type: "room", name: name });
           }; })(room.name)
-        }, [
+        });
+        head.appendChild(el("div", { "class": "top" }, [
           el("span", { text: room.name }),
           el("span", { "class": "n",
             text: pend ? pend + " open" : "done" })
         ]));
+        var meter = el("div", { "class": "meter" });
+        var mfill = el("i", {});
+        mfill.style.width = room.items.length
+          ? (100 * (room.items.length - pend) / room.items.length) + "%" : "0";
+        meter.appendChild(mfill);
+        head.appendChild(meter);
+        frag.appendChild(head);
       }
       frag.appendChild(queueRow(it));
     }
@@ -686,6 +843,425 @@
     select({ type: "item", id: next.id });
   }
 
+  /* ================================================================
+     The evidence stage: the item's cited frames on a dark stage, a
+     filmstrip of alternatives, and the walkthrough spine — a chaptered
+     timeline of the source footage. "Play this moment" swaps the still
+     for the video, seeked to the second the camera saw this frame.
+     ================================================================ */
+  var stageCtl = null;   // controller for the currently-mounted stage
+  var videoFail = {};    // video rel -> true when this browser can't play it
+
+  function pinsOn(it, pid) {
+    return it ? (it.defect_regions || []).filter(function (r) {
+      return r.photo_id === pid; }).length : 0;
+  }
+
+  function buildStage(host, opts) {
+    // opts: {pids: [pid…] with sources, crop: url|null, item: item|null,
+    //        roomName: str}
+    var pids = opts.pids || [];
+    var entries = [];             // {kind:"photo"|"crop", pid, src, label}
+    if (opts.crop) entries.push({ kind: "crop", pid: null, src: opts.crop,
+                                  label: "close-up" });
+    pids.forEach(function (pid) {
+      entries.push({ kind: "photo", pid: pid, src: photoSrc[pid],
+                     label: pid });
+    });
+
+    var box = el("div", { "class": "stage-col" });
+    host.appendChild(box);
+
+    if (!entries.length) {
+      var stage0 = el("div", { id: "stage" });
+      stage0.appendChild(el("div", { "class": "media" }, [
+        el("div", { "class": "stage-empty" }, [
+          el("b", { text: "No footage cited for this item" }),
+          el("span", { text: "Confirm it only if you can vouch for it " +
+            "yourself, or reject it. You can add a photo from the room view." })
+        ])
+      ]));
+      box.appendChild(stage0);
+      stageCtl = { host: box, mode: "empty" };
+      return stageCtl;
+    }
+
+    // pick the first entry that has a timestamp, else the first photo
+    var startIdx = 0;
+    for (var i = 0; i < entries.length; i++) {
+      if (entries[i].pid && photoTime[entries[i].pid]) { startIdx = i; break; }
+    }
+
+    var stage = el("div", { id: "stage" });
+    var media = el("div", { "class": "media" });
+    stage.appendChild(media);
+    var hudTL = el("div", { "class": "hud tl" });
+    var hudTR = el("div", { "class": "hud tr" });
+    var hudBL = el("div", { "class": "hud bl" });
+    stage.appendChild(hudTL); stage.appendChild(hudTR);
+    stage.appendChild(hudBL);
+    box.appendChild(stage);
+
+    var strip = null;
+    if (entries.length > 1) {
+      strip = el("div", { "class": "strip", role: "listbox",
+                          "aria-label": "Evidence frames" });
+      box.appendChild(strip);
+    }
+
+    var spine = el("div", { id: "spine", hidden: "hidden" });
+    box.appendChild(spine);
+    var prov = el("div", { "class": "prov" });
+    box.appendChild(prov);
+
+    var ctl = {
+      host: box, mode: "frame", cur: startIdx, entries: entries,
+      video: null, vrel: null, item: opts.item, roomName: opts.roomName
+    };
+
+    function curEntry() { return ctl.entries[ctl.cur]; }
+    function timeOfCur() {
+      var e = curEntry();
+      return e && e.pid && photoTime[e.pid] ? photoTime[e.pid] : null;
+    }
+    function videoRelOfCur() {
+      var pt = timeOfCur();
+      if (pt && videos[pt.video] && !videoFail[pt.video]) return pt.video;
+      return null;
+    }
+
+    /* ----- frame mode ----- */
+    function showFrame(idx, keepSpine) {
+      if (ctl.video) { ctl.video.pause(); }
+      ctl.mode = "frame";
+      ctl.cur = idx;
+      var e = curEntry();
+      media.innerHTML = "";
+      media.classList.remove("fading");
+      void media.offsetWidth;               // restart the fade animation
+      media.classList.add("fading");
+      var img = el("img", { src: e.src, alt: e.label,
+        title: "Open the inspector — zoom, pan, pin defects",
+        onclick: function () {
+          if (opts.item) lightbox.open(opts.item, e.pid, e.src, e.label);
+          else ui.photoViewer({ photos: ctl.entries.map(function (x) {
+                 return { label: x.label, src: x.src }; }), index: ctl.cur });
+        } });
+      media.appendChild(img);
+      drawHud();
+      drawStripActive();
+      if (!keepSpine) drawSpine();
+      movePlayhead();
+      drawProv();
+    }
+
+    function drawHud() {
+      hudTL.innerHTML = ""; hudTR.innerHTML = ""; hudBL.innerHTML = "";
+      var e = curEntry();
+      var pt = timeOfCur();
+      if (ctl.mode === "frame") {
+        var chip = el("span", { "class": "hud-chip" });
+        chip.appendChild(document.createTextNode(
+          ctl.roomName + " · " + (e.label || "")));
+        if (pt) {
+          chip.appendChild(document.createTextNode(" · "));
+          chip.appendChild(el("span", { "class": "tc", text: fmtT(pt.t) }));
+        }
+        hudTL.appendChild(chip);
+        var n = e.pid && opts.item ? pinsOn(opts.item, e.pid) : 0;
+        if (n) hudTL.appendChild(el("span", { "class": "hud-chip",
+          text: n + " pin" + (n > 1 ? "s" : "") }));
+        hudTR.appendChild(el("button", { "class": "hud-btn",
+          text: "⤢ Inspect", onclick: function () {
+            if (opts.item) lightbox.open(opts.item, e.pid, e.src, e.label);
+            else ui.photoViewer({ photos: ctl.entries.map(function (x) {
+                   return { label: x.label, src: x.src }; }), index: ctl.cur });
+          } }));
+        if (videoRelOfCur()) {
+          hudBL.appendChild(el("button", { "class": "hud-btn",
+            text: "▶ Play this moment",
+            title: "Watch the walkthrough around this frame (v)",
+            onclick: function () { enterVideo(null, true); } }));
+        }
+      } else {
+        var v = ctl.video;
+        var playing = v && !v.paused;
+        hudBL.appendChild(el("button", { "class": "hud-btn" +
+            (playing ? " on" : ""),
+          text: playing ? "❚❚ Pause" : "▶ Play",
+          onclick: function () { togglePlay(); } }));
+        hudBL.appendChild(el("button", { "class": "hud-btn", text: "−1f",
+          title: "Back one frame (,)",
+          onclick: function () { frameStep(-1); } }));
+        hudBL.appendChild(el("button", { "class": "hud-btn", text: "+1f",
+          title: "Forward one frame (.)",
+          onclick: function () { frameStep(1); } }));
+        var tc = el("span", { "class": "hud-chip" });
+        tc.appendChild(el("span", { "class": "tc", id: "stage-tc",
+          text: fmtT(v ? v.currentTime : 0) }));
+        tc.appendChild(document.createTextNode(
+          " / " + fmtT(videos[ctl.vrel].duration)));
+        hudBL.appendChild(tc);
+        hudTL.appendChild(el("span", { "class": "hud-chip",
+          text: "Walkthrough · " + videos[ctl.vrel].name }));
+        hudTR.appendChild(el("button", { "class": "hud-btn",
+          text: "✕ Back to still", title: "Esc",
+          onclick: function () { showFrame(ctl.cur); } }));
+      }
+    }
+
+    /* ----- video mode ----- */
+    function enterVideo(atT, play) {
+      var pt = timeOfCur();
+      var rel = videoRelOfCur() ||
+        (pt && videos[pt.video] && !videoFail[pt.video] ? pt.video : null);
+      if (!rel) return;
+      var t = (atT != null) ? atT : Math.max((pt ? pt.t : 0) - 1.2, 0);
+      ctl.mode = "video";
+      ctl.vrel = rel;
+      media.innerHTML = "";
+      media.classList.remove("fading");
+      var v = document.createElement("video");
+      v.src = videos[rel].src;
+      v.preload = "auto";
+      v.playsInline = true;
+      ctl.video = v;
+      v.addEventListener("error", function () {
+        videoFail[rel] = true;
+        ctl.video = null;
+        toast("This browser can't play " + videos[rel].name +
+              " — showing stills instead");
+        showFrame(ctl.cur);
+      });
+      v.addEventListener("loadedmetadata", function () {
+        try { v.currentTime = Math.min(t, Math.max(v.duration - .1, 0)); }
+        catch (err) { /* seek unavailable */ }
+        if (play) v.play().catch(function () {});
+      });
+      v.addEventListener("timeupdate", function () {
+        var tcEl = document.getElementById("stage-tc");
+        if (tcEl) tcEl.textContent = fmtT(v.currentTime);
+        movePlayhead();
+        markChapter(v.currentTime);
+      });
+      v.addEventListener("play", drawHud);
+      v.addEventListener("pause", drawHud);
+      v.addEventListener("click", function () { togglePlay(); });
+      media.appendChild(v);
+      spine.classList.add("live");
+      drawHud();
+      drawProv();
+    }
+    function togglePlay() {
+      var v = ctl.video;
+      if (!v) return;
+      if (v.paused) v.play().catch(function () {});
+      else v.pause();
+    }
+    function frameStep(dir) {
+      var v = ctl.video;
+      if (!v) return;
+      v.pause();
+      var fps = videos[ctl.vrel].fps || 30;
+      v.currentTime = Math.max(0, v.currentTime + dir / fps);
+    }
+
+    /* ----- filmstrip ----- */
+    function drawStrip() {
+      if (!strip) return;
+      strip.innerHTML = "";
+      ctl.entries.forEach(function (e, i) {
+        var b = el("button", { role: "option", type: "button",
+          "aria-label": "Show " + e.label,
+          onclick: function () { showFrame(i); } });
+        b.appendChild(el("img", { src: e.src, alt: e.label,
+                                  loading: "lazy" }));
+        b.appendChild(el("span", { "class": "tag",
+          text: e.pid && photoTime[e.pid]
+            ? fmtT(photoTime[e.pid].t) : e.label }));
+        var n = e.pid && opts.item ? pinsOn(opts.item, e.pid) : 0;
+        if (n) b.appendChild(el("span", { "class": "pin-n", text: n }));
+        strip.appendChild(b);
+      });
+      drawStripActive();
+    }
+    function drawStripActive() {
+      if (!strip) return;
+      Array.prototype.forEach.call(strip.children, function (b, i) {
+        b.classList.toggle("active", i === ctl.cur);
+      });
+    }
+
+    /* ----- the walkthrough spine ----- */
+    var scrub = null, playhead = null, peek = null, chapEls = [];
+    function spineData() {
+      var pt = timeOfCur();
+      var rel = (ctl.mode === "video" && ctl.vrel) ? ctl.vrel
+        : (pt ? pt.video : null);
+      if (!rel || !videos[rel] || videoFail[rel]) return null;
+      return { rel: rel, meta: videos[rel] };
+    }
+    function drawSpine() {
+      spine.innerHTML = "";
+      chapEls = [];
+      var d = spineData();
+      if (!d || !d.meta.duration) { spine.hidden = true; return; }
+      spine.hidden = false;
+      var dur = d.meta.duration;
+      var segs = d.meta.segments || [];
+      if (segs.length > 1) {
+        var chaps = el("div", { "class": "chapters" });
+        segs.forEach(function (s) {
+          var c = el("div", { "class": "chap", title: s.room + " · " +
+            fmtT(s.start) + "–" + fmtT(s.end) });
+          c.style.flexGrow = Math.max(s.end - s.start, 0.1);
+          c.appendChild(el("span", { text: s.room }));
+          c.addEventListener("click", function () {
+            enterVideo(s.start, true);
+          });
+          chapEls.push({ el: c, start: s.start, end: s.end });
+          chaps.appendChild(c);
+        });
+        spine.appendChild(chaps);
+      }
+      scrub = el("div", { "class": "scrub",
+        "aria-label": "Walkthrough timeline" });
+      scrub.appendChild(el("div", { "class": "rail-line" }));
+      // keyframe ticks: every extracted frame of this video, brass when
+      // cited by the current item, red when it carries one of its pins
+      var citedSet = {};
+      (opts.pids || []).forEach(function (p) { citedSet[p] = true; });
+      Object.keys(photoTime).forEach(function (pid) {
+        var pt2 = photoTime[pid];
+        if (pt2.video !== d.rel || !photoSrc[pid]) return;
+        var cls = "tick";
+        if (opts.item && pinsOn(opts.item, pid)) cls += " flag";
+        else if (citedSet[pid]) cls += " cited";
+        var tick = el("span", { "class": cls,
+          title: pid + " · " + fmtT(pt2.t) });
+        tick.style.left = (100 * pt2.t / dur) + "%";
+        scrub.appendChild(tick);
+      });
+      playhead = el("div", { "class": "playhead" });
+      scrub.appendChild(playhead);
+      peek = el("div", { "class": "peek" });
+      peek.appendChild(el("img", { alt: "" }));
+      peek.appendChild(el("span", { "class": "t" }));
+      scrub.appendChild(peek);
+      scrub.addEventListener("click", function (ev) {
+        var t = scrubTime(ev);
+        if (ctl.mode === "video" && ctl.video) {
+          ctl.video.currentTime = t;
+        } else {
+          enterVideo(t, false);
+        }
+      });
+      scrub.addEventListener("mousemove", function (ev) {
+        var t = scrubTime(ev);
+        var near = nearestFrame(d.rel, t);
+        if (!near) { peek.style.display = "none"; return; }
+        peek.querySelector("img").src = photoSrc[near.pid];
+        peek.querySelector(".t").textContent = fmtT(t);
+        var r = scrub.getBoundingClientRect();
+        var x = ev.clientX - r.left;
+        peek.style.left = Math.max(70, Math.min(r.width - 70, x)) + "px";
+        peek.style.display = "block";
+      });
+      scrub.addEventListener("mouseleave", function () {
+        peek.style.display = "none";
+      });
+      spine.appendChild(scrub);
+      movePlayhead();
+      markChapter(curT());
+    }
+    function scrubTime(ev) {
+      var d = spineData();
+      var r = scrub.getBoundingClientRect();
+      var f = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width));
+      return f * d.meta.duration;
+    }
+    function nearestFrame(rel, t) {
+      var best = null, bd = 1e9;
+      Object.keys(photoTime).forEach(function (pid) {
+        var pt2 = photoTime[pid];
+        if (pt2.video !== rel || !photoSrc[pid]) return;
+        var dd = Math.abs(pt2.t - t);
+        if (dd < bd) { bd = dd; best = { pid: pid, t: pt2.t }; }
+      });
+      return best;
+    }
+    function curT() {
+      if (ctl.mode === "video" && ctl.video) return ctl.video.currentTime;
+      var pt = timeOfCur();
+      return pt ? pt.t : 0;
+    }
+    function movePlayhead() {
+      var d = spineData();
+      if (!playhead || !d || !d.meta.duration) return;
+      spine.classList.toggle("live", ctl.mode === "video");
+      playhead.style.left = (100 * curT() / d.meta.duration) + "%";
+    }
+    function markChapter(t) {
+      chapEls.forEach(function (c) {
+        c.el.classList.toggle("here", t >= c.start && t < c.end);
+      });
+    }
+
+    /* ----- provenance ----- */
+    function drawProv() {
+      prov.innerHTML = "";
+      var e = curEntry();
+      var pt = timeOfCur();
+      if (ctl.mode === "video") {
+        prov.appendChild(el("span",
+          { text: "Watching the walkthrough — the report cites the marked " +
+                  "frames." }));
+        return;
+      }
+      if (pt) {
+        prov.appendChild(el("span", {}, [
+          document.createTextNode("Seen at "),
+          el("span", { "class": "tc", text: fmtT(pt.t) }),
+          document.createTextNode(" in "),
+          el("span", { "class": "vid", text: videos[pt.video].name })
+        ]));
+      } else if (e && e.kind === "crop") {
+        prov.appendChild(el("span",
+          { text: "Detector close-up — open a cited photo for context." }));
+      } else {
+        prov.appendChild(el("span", { text: "From photo capture." }));
+      }
+      var ph = e && e.pid ? ix.photoById[e.pid] : null;
+      if (ph && ph.captured_at) {
+        prov.appendChild(el("span", { "class": "vid",
+          text: "taken " + (ph.captured_at + "").slice(0, 16)
+                  .replace("T", " ") }));
+      }
+    }
+
+    // keyboard hooks (wired by the global handler)
+    ctl.key = function (key) {
+      if (key === "v") {
+        if (ctl.mode === "video") togglePlay();
+        else enterVideo(null, true);
+        return true;
+      }
+      if (ctl.mode !== "video") return false;
+      if (key === ",") { frameStep(-1); return true; }
+      if (key === ".") { frameStep(1); return true; }
+      if (key === "Escape") { showFrame(ctl.cur); return true; }
+      return false;
+    };
+    ctl.refreshPins = function () {
+      drawStrip(); drawSpine(); drawHud();
+    };
+
+    drawStrip();
+    showFrame(startIdx);
+    stageCtl = ctl;
+    return ctl;
+  }
+
   /* ---------- item detail ---------- */
   function badge(cls, text) { return el("span", { "class": "badge " + cls,
     text: text }); }
@@ -704,19 +1280,36 @@
     var room = ix.roomOf[it.id];
     var d = document.getElementById("detail");
     d.innerHTML = "";
+    stageCtl = null;
+
+    var work = el("div", { "class": "work" });
+    d.appendChild(work);
+
+    // left: the evidence stage
+    buildStage(work, {
+      pids: (it.photo_ids || []).filter(function (p) { return photoSrc[p]; }),
+      crop: cropSrc[it.id] || null,
+      item: it,
+      roomName: room.name
+    });
+
+    // right: the claim card
+    var claim = el("div", { "class": "claim" });
+    var scroll = el("div", { "class": "scroll" });
+    claim.appendChild(scroll);
+    work.appendChild(claim);
 
     var crumb = el("div", { "class": "crumb" });
     crumb.appendChild(el("span", { text: room.name + " · " + it.id }));
     crumb.appendChild(it.rejected ? badge("no", "rejected") :
       it.reviewed ? badge("ok", "reviewed") : badge("pend", "unreviewed"));
-    var prov = it.added_by ? "added by " + it.added_by
-                           : (inv.describe_backend || "AI") + " draft";
-    crumb.appendChild(badge("prov", prov));
+    crumb.appendChild(badge("prov",
+      it.added_by ? "added by " + it.added_by : "AI draft"));
     if (typeof it.confidence === "number") {
       crumb.appendChild(el("span", { text:
-        "confidence " + Math.round(it.confidence * 100) + "%" }));
+        Math.round(it.confidence * 100) + "% confident" }));
     }
-    d.appendChild(crumb);
+    scroll.appendChild(crumb);
 
     var editSnap = null;   // one undo entry per focus session on text fields
     function textUndo(node) {
@@ -741,14 +1334,14 @@
       oninput: function () { it.name = name.value; markDirty(); },
       onchange: renderQueue });
     textUndo(name);
-    d.appendChild(name);
+    scroll.appendChild(name);
     var desc = el("textarea", { id: "d-desc",
       "aria-label": "Item description",
       placeholder: "Material, colour, brand…",
       oninput: function () { it.description = desc.value; markDirty(); } });
     desc.value = it.description || "";
     textUndo(desc);
-    d.appendChild(desc);
+    scroll.appendChild(desc);
 
     var grades = el("div", { "class": "grades" });
     grades.appendChild(gradeBlock("Condition", CONDITIONS.concat(NOT_INSPECTED),
@@ -765,7 +1358,7 @@
         pushUndo("cleanliness of " + it.id, [it]);
         it.cleanliness = v || null; markDirty();
       }));
-    d.appendChild(grades);
+    scroll.appendChild(grades);
 
     // defects
     var secD = el("div", { "class": "sec" });
@@ -795,7 +1388,8 @@
           var to = struck ? it.defects : it.rejected_defects;
           var i = from.indexOf(text);
           if (i >= 0) { from.splice(i, 1); to.push(text); }
-          markDirty(); drawChips(); drawEvidence();
+          markDirty(); drawChips();
+          if (stageCtl && stageCtl.refreshPins) stageCtl.refreshPins();
         } });
       c.appendChild(el("span", { text: text }));
       c.appendChild(el("span", { "class": "x", text: struck ? "↩" : "✕" }));
@@ -816,35 +1410,7 @@
     });
     addBox.appendChild(addIn);
     secD.appendChild(addBox);
-    d.appendChild(secD);
-
-    // evidence
-    var secE = el("div", { "class": "sec" });
-    secE.appendChild(el("h3",
-      { text: "Evidence — click a photo to inspect and pin defects" }));
-    var evGrid = el("div", { "class": "ev-grid" });
-    function drawEvidence() {
-      evGrid.innerHTML = "";
-      var any = false;
-      if (cropSrc[it.id]) {
-        any = true;
-        evGrid.appendChild(evThumb(it, null, cropSrc[it.id], "detector crop"));
-      }
-      (it.photo_ids || []).forEach(function (pid) {
-        if (!photoSrc[pid]) return;
-        any = true;
-        evGrid.appendChild(evThumb(it, pid, photoSrc[pid], pid));
-      });
-      if (!any) {
-        evGrid.appendChild(el("div", { "class": "ev-missing",
-          text: "No evidence photos cited for this item. Confirm it only if " +
-                "you can vouch for it yourself, or reject it." }));
-      }
-    }
-    drawEvidence();
-    secE.appendChild(evGrid);
-    d.appendChild(secE);
-    itemDrawEvidence = drawEvidence;
+    scroll.appendChild(secD);
 
     // comments
     var secC = el("div", { "class": "sec" });
@@ -879,30 +1445,30 @@
     });
     cBox.appendChild(cIn);
     secC.appendChild(cBox);
-    d.appendChild(secC);
+    scroll.appendChild(secC);
 
     // actions
     var act = el("div", { id: "actions" });
-    act.appendChild(el("button", {
-      "class": "btn primary", text: it.reviewed ? "✓ Confirmed" : "✓ Confirm",
+    var row = el("div", { "class": "row" });
+    row.appendChild(el("button", {
+      "class": "btn confirm", text: it.reviewed ? "✓ Confirmed" : "✓ Confirm",
       onclick: function () { confirmItem(it); } }));
-    act.appendChild(el("button", {
+    row.appendChild(el("button", {
       "class": "btn danger",
-      text: it.rejected ? "Restore item" : "✕ Reject item",
+      text: it.rejected ? "Restore item" : "✕ Reject",
       onclick: function () { rejectItem(it); } }));
-    act.appendChild(el("span", { "class": "kbd", text: "space" }));
-    act.appendChild(el("span", { "class": "kbd-label", text: "confirm + next" }));
-    act.appendChild(el("span", { "class": "kbd", text: "x" }));
-    act.appendChild(el("span", { "class": "kbd-label", text: "reject" }));
-    act.appendChild(el("span", { "class": "kbd", text: "j / k" }));
-    act.appendChild(el("span", { "class": "kbd-label", text: "move" }));
-    act.appendChild(el("span", { "class": "kbd", text: "/" }));
-    act.appendChild(el("span", { "class": "kbd-label", text: "search" }));
-    act.appendChild(el("span", { "class": "kbd", text: "⌘Z" }));
-    act.appendChild(el("span", { "class": "kbd-label", text: "undo" }));
-    d.appendChild(act);
+    act.appendChild(row);
+    var kb = el("div", { "class": "kbd-row" });
+    [["space", "confirm + next"], ["x", "reject"], ["j k", "move"],
+     ["v", "play moment"], ["/", "search"], ["⌘Z", "undo"]]
+      .forEach(function (pair) {
+        kb.appendChild(el("span", { "class": "kbd", text: pair[0] }));
+        kb.appendChild(el("span", { "class": "kbd-label", text: pair[1] }));
+      });
+    act.appendChild(kb);
+    claim.appendChild(act);
   }
-  var itemDrawEvidence = null;
+
   function gradeBlock(label, opts, current, onset) {
     var wrap = el("div", {});
     var s = el("select", { "aria-label": label });
@@ -917,26 +1483,15 @@
     wrap.appendChild(s);
     return wrap;
   }
-  function evThumb(it, pid, src, label) {
-    var pins = pid ? (it && it.defect_regions || []).filter(function (r) {
-      return r.photo_id === pid; }).length : 0;
-    var b = el("button", { "class": "ev-thumb", type: "button",
-      "aria-label": "Inspect " + label,
-      onclick: function () { lightbox.open(it, pid, src, label); } });
-    b.appendChild(el("img", { src: src, alt: label, loading: "lazy" }));
-    b.appendChild(el("span", { "class": "pid", text: label }));
-    if (pins) b.appendChild(el("span", { "class": "n-pins",
-      text: pins + " pin" + (pins > 1 ? "s" : "") }));
-    return b;
-  }
 
-  /* ---------- lightbox ---------- */
+  /* ---------- lightbox (inspect + pin) ---------- */
   var lightbox = (function () {
     var box = document.getElementById("lightbox");
     var stage = document.getElementById("lb-stage");
     var canvas = document.getElementById("lb-canvas");
     var img = document.getElementById("lb-img");
     var pinBtn = document.getElementById("lb-pin");
+    var playBtn = document.getElementById("lb-play");
     var zoomLbl = document.getElementById("lb-zoom");
     var cur = null;   // {it, pid, src, label, pids: [...]}
     var scale = 1, minScale = 1, tx = 0, ty = 0;
@@ -987,7 +1542,7 @@
             pushUndo("remove pin", [cur.it]);
             cur.it.defect_regions.splice(ri, 1);
             markDirty(); drawRegions();
-            if (itemDrawEvidence) itemDrawEvidence();
+            if (stageCtl && stageCtl.refreshPins) stageCtl.refreshPins();
           } });
         b.style.left = (reg.x * iw) + "px";
         b.style.top = (reg.y * ih) + "px";
@@ -1010,9 +1565,14 @@
         : "Scroll to zoom · drag to pan · double-click a pin to remove it";
     }
     function show() {
-      document.getElementById("lb-pid").textContent = cur.label || "";
+      document.getElementById("lb-pid").textContent =
+        (cur.label || "") + (cur.pid && photoTime[cur.pid]
+          ? " · " + fmtT(photoTime[cur.pid].t) : "");
       document.getElementById("lb-title").textContent =
         cur.it ? cur.it.name || "" : "";
+      playBtn.hidden = !(cur.pid && photoTime[cur.pid] &&
+        videos[photoTime[cur.pid].video] &&
+        !videoFail[photoTime[cur.pid].video]);
       img.onload = function () { fit(); drawRegions(); };
       img.src = cur.src;
       if (img.complete && img.naturalWidth) { fit(); drawRegions(); }
@@ -1029,7 +1589,7 @@
       box.classList.remove("on");
       closeAnnoForm();
       cur = null;
-      if (itemDrawEvidence) itemDrawEvidence();
+      if (stageCtl && stageCtl.refreshPins) stageCtl.refreshPins();
     }
     function stepPhoto(delta) {
       if (!cur || !cur.pids.length) return;
@@ -1042,6 +1602,11 @@
     }
 
     document.getElementById("lb-close").addEventListener("click", close);
+    playBtn.addEventListener("click", function () {
+      if (!cur || !cur.pid || !photoTime[cur.pid]) return;
+      close();
+      if (stageCtl && stageCtl.key) stageCtl.key("v");
+    });
     document.getElementById("lb-in").addEventListener("click", function () {
       var r = stage.getBoundingClientRect();
       zoomAt(1.4, r.left + r.width / 2, r.top + r.height / 2);
@@ -1111,7 +1676,9 @@
         pendingRegion = { item: cur.it, photo_id: cur.pid, box: boxN,
                           draftEl: draft, redraw: function () {
                             drawRegions();
-                            if (itemDrawEvidence) itemDrawEvidence();
+                            if (stageCtl && stageCtl.refreshPins) {
+                              stageCtl.refreshPins();
+                            }
                           } };
         draft = null;
         openAnnoForm(e.clientX, e.clientY);
@@ -1190,12 +1757,25 @@
   function renderRoom(room) {
     var d = document.getElementById("detail");
     d.innerHTML = "";
+    stageCtl = null;
     d.appendChild(el("div", { "class": "crumb", text: "Room" }));
     d.appendChild(el("h2", { "class": "room-title", text: room.name }));
 
-    var secFix = el("div", { "class": "sec" });
+    var grid = el("div", { "class": "room-grid" });
+    d.appendChild(grid);
+
+    // left: the room's footage on the stage
+    var roomPids = (room.photos || []).map(function (p) { return p.id; })
+      .filter(function (pid) { return photoSrc[pid]; });
+    buildStage(grid, { pids: roomPids, crop: null, item: null,
+                       roomName: room.name });
+
+    var cards = el("div", { "class": "room-cards" });
+    grid.appendChild(cards);
+
+    var secFix = el("div", { "class": "card" });
     secFix.appendChild(el("h3", { text: "Room name & boundaries" }));
-    secFix.appendChild(el("p", { "class": "c-line",
+    secFix.appendChild(el("p", { "class": "hint",
       text: "Segmentation sometimes merges or misnames a room — fix it here "
             + "before signing." }));
     var renameRow = el("div", { "class": "add-form" });
@@ -1214,6 +1794,7 @@
     renameRow.appendChild(renameBtn);
     secFix.appendChild(renameRow);
     var mergeRow = el("div", { "class": "add-form" });
+    mergeRow.style.marginTop = "8px";
     var mergeSelect = el("select", {});
     mergeSelect.appendChild(el("option", { value: "", text: "Merge into…" }));
     inv.rooms.forEach(function (r) {
@@ -1241,9 +1822,9 @@
     mergeRow.appendChild(mergeSelect);
     mergeRow.appendChild(mergeBtn);
     secFix.appendChild(mergeRow);
-    d.appendChild(secFix);
+    cards.appendChild(secFix);
 
-    var secS = el("div", { "class": "sec" });
+    var secS = el("div", { "class": "card" });
     secS.appendChild(el("h3", { text: "Room summary" }));
     var ta = el("textarea", { "class": "room-summary" });
     ta.value = room.summary || "";
@@ -1264,7 +1845,7 @@
       room.summary = ta.value; markDirty();
     });
     secS.appendChild(ta);
-    d.appendChild(secS);
+    cards.appendChild(secS);
 
     // coverage: photos no item cites
     var cited = {};
@@ -1274,28 +1855,38 @@
     var orphans = (room.photos || []).filter(function (p) {
       return !cited[p.id] && photoSrc[p.id];
     });
-    var secO = el("div", { "class": "sec" });
+    var secO = el("div", { "class": "card" });
     secO.appendChild(el("h3", {
-      text: "Coverage — photos no item cites (" + orphans.length + ")" }));
+      text: "Coverage — frames no item cites (" + orphans.length + ")" }));
     if (orphans.length) {
       var strip = el("div", { "class": "uncited" });
       orphans.forEach(function (p) {
         var fig = el("figure", {});
-        fig.appendChild(evThumb(null, null, photoSrc[p.id], p.id));
-        fig.appendChild(el("figcaption", { text: p.id }));
+        var b = el("button", { type: "button",
+          "aria-label": "Inspect " + p.id,
+          onclick: function () {
+            ui.photoViewer({ photos: orphans.map(function (o) {
+              return { label: o.id, src: photoSrc[o.id] }; }),
+              index: orphans.indexOf(p) });
+          } });
+        b.appendChild(el("img", { src: photoSrc[p.id], alt: p.id,
+                                  loading: "lazy" }));
+        fig.appendChild(b);
+        fig.appendChild(el("figcaption", { text: p.id +
+          (photoTime[p.id] ? " · " + fmtT(photoTime[p.id].t) : "") }));
         strip.appendChild(fig);
       });
       secO.appendChild(strip);
-      secO.appendChild(el("p", { "class": "c-line",
+      secO.appendChild(el("p", { "class": "hint",
         text: "Wasted shots, or items the AI missed — check before signing." }));
     } else {
-      secO.appendChild(el("p", { "class": "c-line",
+      secO.appendChild(el("p", { "class": "hint",
         text: "Every embedded photo in this room is cited by at least one item." }));
     }
-    d.appendChild(secO);
+    cards.appendChild(secO);
 
     // add missing item
-    var secA = el("div", { "class": "sec" });
+    var secA = el("div", { "class": "card" });
     secA.appendChild(el("h3", { text: "Add a missed item" }));
     var form = el("div", { "class": "add-form" });
     var fName = el("input", { type: "text", placeholder: "Item name *" });
@@ -1334,12 +1925,12 @@
       form.appendChild(n);
     });
     secA.appendChild(form);
-    d.appendChild(secA);
+    cards.appendChild(secA);
 
     // re-describe
-    var secR = el("div", { "class": "sec" });
+    var secR = el("div", { "class": "card" });
     secR.appendChild(el("h3", { text: "Re-describe this room" }));
-    secR.appendChild(el("p", { "class": "c-line",
+    secR.appendChild(el("p", { "class": "hint",
       text: "Re-runs the AI over this room's photos — useful after fixing " +
             "capture problems. Your review decisions for this room are " +
             "replaced." }));
@@ -1394,7 +1985,7 @@
     });
     secR.appendChild(rBtn);
     secR.appendChild(rStatus);
-    d.appendChild(secR);
+    cards.appendChild(secR);
   }
 
   /* ---------- details (report metadata) ---------- */
@@ -1504,6 +2095,8 @@
     return api("GET", "/api/inventory").then(function (p) {
       inv = p.inventory; photoSrc = p.photo_src || {};
       cropSrc = p.crop_src || {};
+      videos = p.videos || videos;
+      photoTime = p.photo_time || photoTime;
       ix = index();
       dirty = false;
       undoStack = [];
@@ -1622,6 +2215,12 @@
     var t = e.target;
     if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" ||
               t.tagName === "SELECT" || t.isContentEditable)) return;
+    // stage keys first: v (play the moment), , . (frame step), Esc (exit)
+    if (stageCtl && stageCtl.key && !e.metaKey && !e.ctrlKey &&
+        stageCtl.key(e.key)) {
+      e.preventDefault();
+      return;
+    }
     var it = sel && sel.type === "item" ? ix.byId[sel.id] : null;
     if (e.key === "/") {
       e.preventDefault();

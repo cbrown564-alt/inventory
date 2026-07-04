@@ -315,6 +315,7 @@ class SessionState:
         self.pdf = {"status": "idle", "detail": ""}
         self._last_save_ack = 0.0
         self._last_save_counts: Optional[tuple[int, int]] = None
+        self._video_probe_cache: dict = {}
 
     @property
     def lock(self):
@@ -422,6 +423,28 @@ class SessionState:
                 if (crops / name).exists():
                     out[it.id] = f"{prefix}/crops/{name}"
         return out
+
+    def video_meta(self, inv: Inventory) -> tuple[dict, dict]:
+        """(videos, photo_time) linking evidence frames to their moment in
+        the source footage. Probe results cache for the server's life."""
+        from .videometa import video_payload
+        return video_payload(inv, self.capture_dir, self.out_dir / "work",
+                             self.route_prefix, self._video_probe_cache)
+
+    def video_file(self, rel: str) -> Optional[Path]:
+        """Resolve a capture-relative video path safely, or None."""
+        if not rel or rel.startswith(("/", "\\")) or ".." in rel \
+                or "\x00" in rel:
+            return None
+        target = (self.capture_dir / rel).resolve()
+        try:
+            target.relative_to(self.capture_dir.resolve())
+        except ValueError:
+            return None
+        from .ingest import VIDEO_EXTS
+        if not target.is_file() or target.suffix.lower() not in VIDEO_EXTS:
+            return None
+        return target
 
     def add_item(self, room_name: str, name: str, description: str = "",
                  condition: Optional[str] = None,
@@ -749,10 +772,13 @@ class ReviewHandler(BaseHandler):
         if uc.agent_role:
             roles["agent"] = {"key": uc.agent_role.key,
                               "label": uc.agent_role.label}
+        videos, photo_time = st.video_meta(inv)
         payload = {
             "inventory": asdict(inv),
             "photo_src": st.photo_src(inv),
             "crop_src": st.crop_src(inv),
+            "videos": videos,
+            "photo_time": photo_time,
             "backend": st.backend,
             "backend_label": st.backend_label,
             "spend": spend_info(st.backend, st.model),
@@ -862,8 +888,8 @@ class ReviewHandler(BaseHandler):
     def do_GET(self):
         try:
             self._route_get()
-        except BrokenPipeError:
-            pass
+        except (BrokenPipeError, ConnectionResetError):
+            pass   # client hung up mid-stream (video seeks do this constantly)
         except Exception as e:
             log.exception("GET %s failed", self.path)
             try:
@@ -908,6 +934,17 @@ class ReviewHandler(BaseHandler):
             m = re.fullmatch(r"/crops/([\w.\- ]+\.jpg)", subpath)
             if m:
                 self._file(st.out_dir / "work" / "crops" / m.group(1))
+                return True
+            m = re.fullmatch(r"/video/(.+)", subpath)
+            if m:
+                from urllib.parse import unquote
+                from .videometa import VIDEO_CTYPES
+                target = st.video_file(unquote(m.group(1)))
+                if target is None:
+                    self._err(404, "not found")
+                    return True
+                self._file_stream(target, VIDEO_CTYPES.get(
+                    target.suffix.lower(), "application/octet-stream"))
                 return True
             return False
 
@@ -1020,9 +1057,11 @@ class ReviewHandler(BaseHandler):
             return
         if path == "/api/inventory":
             inv = st.load()
+            videos, photo_time = st.video_meta(inv)
             self._json({"inventory": asdict(inv),
                         "photo_src": st.photo_src(inv),
-                        "crop_src": st.crop_src(inv)})
+                        "crop_src": st.crop_src(inv),
+                        "videos": videos, "photo_time": photo_time})
             return
         if path == "/api/redescribe":
             with st.lock:

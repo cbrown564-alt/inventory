@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import re
 import socket
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
@@ -153,6 +154,50 @@ class BaseHandler(BaseHTTPRequestHandler):
             self._err(404, "not found")
             return
         self._send(200, path.read_bytes(), ctype)
+
+    def _file_stream(self, path: Path, ctype: str) -> None:
+        """Serve a file honouring single-range requests. ``<video>`` seeking
+        requires 206 partial responses; whole multi-GB walkthroughs are
+        streamed in chunks, never read into memory."""
+        if not path.is_file():
+            self._err(404, "not found")
+            return
+        size = path.stat().st_size
+        start, end, status = 0, size - 1, 200
+        m = re.fullmatch(r"bytes=(\d*)-(\d*)",
+                         (self.headers.get("Range") or "").strip())
+        if m and (m.group(1) or m.group(2)):
+            if m.group(1):
+                start = int(m.group(1))
+                if m.group(2):
+                    end = min(int(m.group(2)), size - 1)
+            else:                          # suffix range: the last N bytes
+                start = max(size - int(m.group(2)), 0)
+            if start >= size:
+                self.send_response(416)
+                self.send_header("Content-Range", f"bytes */{size}")
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+                return
+            status = 206
+        length = end - start + 1
+        self.send_response(status)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Accept-Ranges", "bytes")
+        self.send_header("Content-Length", str(length))
+        if status == 206:
+            self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        with open(path, "rb") as f:
+            f.seek(start)
+            remaining = length
+            while remaining > 0:
+                chunk = f.read(min(_STREAM_CHUNK, remaining))
+                if not chunk:
+                    break
+                self.wfile.write(chunk)
+                remaining -= len(chunk)
 
     def _body(self) -> dict:
         n = int(self.headers.get("Content-Length") or 0)
