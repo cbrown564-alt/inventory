@@ -274,7 +274,8 @@ def cmd_render(args) -> int:
     from .report import render
     out_dir = Path(args.out)
     inv = Inventory.from_json((out_dir / "inventory.json").read_text(encoding="utf-8"))
-    render(inv, Path(args.capture_dir), out_dir, pdf=not args.no_pdf)
+    render(inv, Path(args.capture_dir), out_dir, pdf=not args.no_pdf,
+           use_case=args.use_case)
     print(f"re-rendered {out_dir / 'inventory.html'}")
     return 0
 
@@ -476,6 +477,8 @@ def main(argv: list[str] | None = None) -> int:
     r = sub.add_parser("render", help="re-render report from edited inventory.json")
     r.add_argument("capture_dir")
     r.add_argument("-o", "--out", default="report")
+    r.add_argument("--use-case", choices=["tenancy", "deepclean"], default=None,
+                   help="override use-case profile when rendering")
     r.add_argument("--no-pdf", action="store_true")
     r.set_defaults(func=cmd_render)
 

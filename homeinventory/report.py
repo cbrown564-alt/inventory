@@ -10,7 +10,9 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from .schema import Inventory, Item, Room
+from .schema import Inventory, Item, Room, cover_value
+from .usecases import get_use_case, use_case_for
+from .usecases.base import UseCase
 
 log = logging.getLogger(__name__)
 TEMPLATES = Path(__file__).parent / "templates"
@@ -87,14 +89,36 @@ def _aggregate_condition(items: list[Item], *, structural: bool = False) -> str:
     return f"{label} condition"
 
 
-def default_schedule_summary(inv: Inventory) -> list[dict]:
-    """Build section 1 rows when none were supplied manually."""
+# Cover fields rendered elsewhere on the page (addr block, agent banner, footer).
+_COVER_TABLE_SKIP = frozenset({
+    "property_address", "agent_name", "agent_phone", "property_type",
+})
+
+
+def summary_rows(inv: Inventory, uc: UseCase) -> list[dict]:
+    """Build the summary table rows for the active use-case profile."""
     if inv.schedule_summary:
         return inv.schedule_summary
+    if uc.summary_rows:
+        return uc.summary_rows(inv)
+    return []
 
-    from .usecases.tenancy import tenancy_schedule_summary
 
-    return tenancy_schedule_summary(inv)
+def default_schedule_summary(inv: Inventory) -> list[dict]:
+    """Back-compat alias delegating to tenancy."""
+    return summary_rows(inv, get_use_case("tenancy"))
+
+
+def build_cover_rows(inv: Inventory, uc: UseCase) -> list[dict]:
+    """Cover-table party rows from the use-case profile, skipping empties."""
+    rows: list[dict] = []
+    for field in uc.cover_fields:
+        if field.name in _COVER_TABLE_SKIP:
+            continue
+        value = cover_value(inv, field)
+        if value:
+            rows.append({"label": field.label, "value": value})
+    return rows
 
 
 def _group_items_by_category(items: list[Item]) -> list[tuple[str | None, list[Item]]]:
@@ -183,26 +207,36 @@ def _export_photos(inv: Inventory, capture_dir: Path, out_dir: Path,
 
 
 def render(inv: Inventory, capture_dir: Path, out_dir: Path,
-           pdf: bool = True) -> dict[str, Path]:
+           pdf: bool = True, *, use_case: str | None = None) -> dict[str, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     inv.rooms = sort_rooms(inv.rooms)
+    uc = get_use_case(use_case) if use_case else use_case_for(inv)
     photo_src = _export_photos(inv, capture_dir, out_dir)
-    schedule = default_schedule_summary(inv)
+    schedule = summary_rows(inv, uc)
     room_sections = prepare_room_sections(inv)
+    cover = build_cover_rows(inv, uc)
 
     env = Environment(loader=FileSystemLoader(TEMPLATES),
                       autoescape=select_autoescape(["html"]))
     html = env.get_template("report.html.j2").render(
         inv=inv,
+        uc=uc,
         photo_src=photo_src,
         total_items=inv.item_count(),
         total_photos=inv.photo_count(),
         reviewed_items=inv.reviewed_count(),
         schedule_summary=schedule,
+        cover_rows=cover,
         room_sections=room_sections,
         agent_display=inv.agent_name or inv.inspected_by,
         # embedded for the in-report review layer (Level 1)
-        payload={"inventory": asdict(inv), "photo_src": photo_src},
+        payload={
+            "inventory": asdict(inv),
+            "photo_src": photo_src,
+            "owner_role": uc.owner_role.key,
+            "counterparty_role": uc.counterparty_role.key,
+            "signing_roles": uc.signing_role_keys,
+        },
     )
 
     outputs: dict[str, Path] = {}

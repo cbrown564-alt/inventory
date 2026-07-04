@@ -114,7 +114,11 @@
       font: 8pt var(--ui); color: #5a5f6a;
     }
     @bottom-right {
+      {% if uc.initials_note %}
       content: "Tenant initials: __________";
+      {% else %}
+      content: none;
+      {% endif %}
       font: 8pt var(--ui); color: #5a5f6a;
     }
   }
@@ -274,22 +278,16 @@
 <body>
 <div class="cover">
   {% if inv.agent_name %}<div class="agent-name">{{ inv.agent_name }}</div>{% endif %}
-  <div class="kicker">Property Inventory</div>
+  <div class="kicker">{{ uc.report_kicker }}</div>
   <h1>{{ inv.report_type }}</h1>
   <div class="addr">{{ inv.property_address or "Address not specified" }}</div>
   {% if inv.property_type %}<div class="property-type">{{ inv.property_type }}</div>{% endif %}
   <table>
     <tr><td>Date of inspection</td><td><strong>{{ inv.inspected_at }}</strong></td></tr>
     <tr><td>Prepared by</td><td><strong>{{ inv.inspected_by or "—" }}</strong></td></tr>
-    {% if inv.landlord_name %}
-    <tr><td>Landlord / agent</td><td><strong>{{ inv.landlord_name }}</strong></td></tr>
-    {% endif %}
-    {% if inv.tenant_name %}
-    <tr><td>Tenant</td><td><strong>{{ inv.tenant_name }}</strong></td></tr>
-    {% endif %}
-    {% if inv.report_ref %}
-    <tr><td>Report reference</td><td><strong>{{ inv.report_ref }}</strong></td></tr>
-    {% endif %}
+    {% for row in cover_rows %}
+    <tr><td>{{ row.label }}</td><td><strong>{{ row.value }}</strong></td></tr>
+    {% endfor %}
     <tr><td>Rooms inspected</td><td><strong>{{ inv.rooms | length }}</strong></td></tr>
     <tr><td>Items recorded</td><td><strong>{{ total_items }}</strong></td></tr>
     <tr><td>Photographs</td><td><strong>{{ total_photos }}</strong></td></tr>
@@ -302,7 +300,9 @@
 <section class="toc page-break">
   <h2>Contents</h2>
   <ol class="toc-list">
-    <li><span>1. Schedule of Condition</span></li>
+    {% if uc.summary_section_title %}
+    <li><span>1. {{ uc.summary_section_title }}</span></li>
+    {% endif %}
     {% for section in room_sections %}
     <li><a href="#room-{{ section.number }}">{{ section.number }}. {{ section.name }}</a></li>
     {% endfor %}
@@ -328,8 +328,9 @@ AI-drafted entries that the reviewer rejected remain visible, struck through,
 rather than silently deleted.</p>
 {% if inv.notes %}<p class="summary">{{ inv.notes }}</p>{% endif %}
 
+{% if uc.summary_section_title %}
 <section class="schedule-summary page-break" id="schedule">
-  <h2>1. Schedule of Condition</h2>
+  <h2>1. {{ uc.summary_section_title }}</h2>
   <table class="items">
     <thead><tr><th style="width:9%">Ref</th><th style="width:28%">Name</th><th>Condition</th></tr></thead>
     <tbody>
@@ -340,6 +341,7 @@ rather than silently deleted.</p>
     </tbody>
   </table>
 </section>
+{% endif %}
 
 {% for section in room_sections %}
 <section class="room" id="room-{{ section.number }}" data-room="{{ section.name }}">
@@ -460,12 +462,10 @@ rather than silently deleted.</p>
 
 <section class="declaration page-break">
   <h3>Declaration</h3>
-  <p>This inventory was prepared with AI assistance and has been reviewed for
-  accuracy by the undersigned. It provides a fair and accurate record of the
-  contents and internal condition of the property on the date stated. Unless
-  amendments are notified in writing within 7 days of receipt, this inventory
-  will be deemed accepted by all parties.</p>
-  <p class="initials-note print-only">Tenant: please initial each page to confirm you have read this report.</p>
+  <p>{{ uc.declaration_text }}</p>
+  {% if uc.initials_note %}
+  <p class="initials-note print-only">{{ uc.initials_note }}</p>
+  {% endif %}
   {% if inv.signatures %}
   <div id="signatures">
     {% for sig in inv.signatures %}
@@ -480,9 +480,9 @@ rather than silently deleted.</p>
   {% else %}<div id="signatures"></div>{% endif %}
   <div>
     <span class="sigline"></span><span class="sigline"></span><br>
-    <span class="meta">Landlord / Agent &nbsp; — date</span>
+    <span class="meta">{% if uc.agent_role %}{{ uc.owner_role.label }} / {{ uc.agent_role.label }}{% else %}{{ uc.owner_role.label }}{% endif %} &nbsp; — date</span>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <span class="meta">Tenant &nbsp; — date</span>
+    <span class="meta">{{ uc.counterparty_role.label }} &nbsp; — date</span>
   </div>
 </section>
 
@@ -522,6 +522,9 @@ rather than silently deleted.</p>
   var payload = JSON.parse(dataEl.textContent);
   var inv = payload.inventory;
   var photoSrc = payload.photo_src || {};
+  var ownerRoleKey = payload.owner_role || "landlord";
+  var counterpartyRoleKey = payload.counterparty_role || "tenant";
+  var signingRoles = payload.signing_roles || ["landlord", "agent", "tenant"];
 
   var CONDITIONS = ["new", "excellent", "good", "fair", "poor"];
   var CLEANS = ["professionally cleaned", "cleaned to domestic standard",
@@ -851,7 +854,7 @@ rather than silently deleted.</p>
       if (!t) return;
       it.comments = it.comments || [];
       it.comments.push({ author: inv.inspected_by || "reviewer",
-        role: "landlord", text: t, at: new Date().toISOString() });
+        role: ownerRoleKey, text: t, at: new Date().toISOString() });
       input.value = "";
       markDirty(); openDrawer(tr);
     });
@@ -953,7 +956,7 @@ rather than silently deleted.</p>
     }
     var name = prompt("Sign as (full name):", inv.inspected_by || "");
     if (!name || !name.trim()) return;
-    var role = prompt('Role — "landlord" or "agent":', "landlord");
+    var role = prompt('Role — "' + ownerRoleKey + '" or "agent":', ownerRoleKey);
     if (!role || !role.trim()) return;
     canonicalHash(inv).then(function (hash) {
       inv.signatures = inv.signatures || [];

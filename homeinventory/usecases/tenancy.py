@@ -318,6 +318,9 @@ TENANCY = UseCase(
     ),
 )
 
-from ..describe import build_item_schema  # noqa: E402
 
-ITEM_SCHEMA = build_item_schema(TENANCY)
+def __getattr__(name: str):
+    if name == "ITEM_SCHEMA":
+        from ..describe import build_item_schema
+        return build_item_schema(TENANCY)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
