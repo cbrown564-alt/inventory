@@ -45,6 +45,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 # verbatim). sniff_extension/_safe_component stay importable from here.
 from .webbase import (TEMPLATES, BaseHandler, WALKTHROUGH_ROOM, _safe_component,  # noqa: F401
                       lan_ip as _lan_ip, scan_capture, scan_rooms, sniff_extension)
+from .ingest import ROOM_ALIASES_FILE
 from .progress import BuildProgress
 from .dotenv import load_dotenv
 from .schema import Inventory, Item, Photo, cover_value
@@ -593,6 +594,30 @@ class SessionState:
             })
         return out
 
+    def _record_room_alias(self, old: str, new: str) -> None:
+        """Persist a review-time rename/merge so rebuilds honour it.
+
+        Builds re-derive room names from capture folders and the cached
+        segments.json; without the alias a re-describe of a renamed room
+        finds no photos and a full rebuild resurrects the old name."""
+        path = self.out_dir / "work" / ROOM_ALIASES_FILE
+        amap: dict[str, str] = {}
+        if path.is_file():
+            try:
+                data = json.loads(path.read_text(encoding="utf-8"))
+                if isinstance(data.get("map"), dict):
+                    amap = data["map"]
+            except json.JSONDecodeError:
+                pass
+        for k, v in amap.items():
+            if v.lower() == old.lower():
+                amap[k] = new
+        amap[old] = new
+        amap = {k: v for k, v in amap.items() if k != v}
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps({"version": 1, "map": amap}, indent=2,
+                                   ensure_ascii=False), encoding="utf-8")
+
     def rename_room(self, old_name: str, new_name: str) -> None:
         new_name = new_name.strip()
         if not new_name:
@@ -606,10 +631,12 @@ class SessionState:
             if any(r.name.lower() == new_name.lower() and r is not room
                    for r in inv.rooms):
                 raise ValueError(f"room already exists: {new_name}")
+            old_canonical = room.name
             room.name = new_name
             for p in room.photos:
                 p.room = new_name
             self.save(inv)
+            self._record_room_alias(old_canonical, new_name)
         self.rerender()
         self.ack("reviewer", self.uc.owner_role.key, "rename_room",
                  f"{old_name} → {new_name}")
@@ -631,6 +658,7 @@ class SessionState:
                 p.room = dst.name
             inv.rooms = [r for r in inv.rooms if r is not src]
             self.save(inv)
+            self._record_room_alias(src.name, dst.name)
         self.rerender()
         self.ack("reviewer", self.uc.owner_role.key, "merge_rooms",
                  f"{source} → {into}")

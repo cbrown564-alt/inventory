@@ -127,6 +127,13 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
         last_kept_small = small
 
     idx = 0
+    if clip_start > 0:
+        # Seek instead of decoding the whole prefix: per-segment extraction
+        # over one walkthrough would otherwise re-decode from frame zero for
+        # every room. The t_s < clip_start guard below stays as the fallback
+        # for backends whose seek lands early (or fails and leaves idx at 0).
+        cap.set(cv2.CAP_PROP_POS_FRAMES, int(clip_start * fps))
+        idx = int(cap.get(cv2.CAP_PROP_POS_FRAMES))
     while True:
         ok = cap.grab()
         if not ok:
@@ -161,6 +168,26 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
     flush()
     cap.release()
     return kept
+
+
+ROOM_ALIASES_FILE = "room-aliases.json"
+
+
+def load_room_aliases(work_dir: Path) -> dict[str, str]:
+    """Review-time room renames/merges ({old name: new name}).
+
+    Rebuilds re-derive room names from capture folders and the cached
+    segments.json, so corrections made in review must be re-applied at
+    ingest or a rebuild resurrects the old names and orphans hand edits."""
+    path = work_dir / ROOM_ALIASES_FILE
+    if not path.is_file():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    amap = data.get("map") if isinstance(data, dict) else None
+    return amap if isinstance(amap, dict) else {}
 
 
 def find_root_videos(capture_dir: Path) -> list[Path]:
@@ -282,4 +309,15 @@ def ingest(capture_dir: Path, work_dir: Path,
                                lead_trim_s=lead_trim_s)
             if on_segmented:
                 on_segmented(len(rooms))
+
+    aliases = load_room_aliases(work_dir)
+    if aliases:
+        lower = {k.lower(): v for k, v in aliases.items()}
+        aliased: dict[str, list[Photo]] = {}
+        for name, photos in rooms.items():
+            target = lower.get(name.lower(), name)
+            for p in photos:
+                p.room = target
+            aliased.setdefault(target, []).extend(photos)
+        rooms = aliased
     return rooms

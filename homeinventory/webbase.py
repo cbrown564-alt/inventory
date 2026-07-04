@@ -195,7 +195,7 @@ class BaseHandler(BaseHTTPRequestHandler):
             self._err(413, "upload too large — videos are capped at 2 GiB")
             return None
         room_dir = capture_dir if at_root else capture_dir / room
-        if room_dir.resolve().parent != capture_dir.resolve():
+        if not at_root and room_dir.resolve().parent != capture_dir.resolve():
             self.close_connection = True
             self._err(400, "room escapes the capture folder")
             return None

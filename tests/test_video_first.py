@@ -69,6 +69,22 @@ def test_ingest_preserves_folder_rooms_with_segments(tmp_path):
     assert "Bathroom" in rooms and "Kitchen" in rooms
 
 
+def test_ingest_applies_room_aliases(tmp_path):
+    """Review renames/merges (work/room-aliases.json) survive re-ingest."""
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    _img(cap / "Snug" / "s1.jpg")
+    work = tmp_path / "work"
+    work.mkdir()
+    (work / "room-aliases.json").write_text(json.dumps(
+        {"version": 1, "map": {"Kitchen": "Pantry", "Snug": "Pantry"}}),
+        encoding="utf-8")
+    rooms = ingest(cap, work)
+    assert set(rooms) == {"Pantry"}
+    assert len(rooms["Pantry"]) == 2
+    assert all(p.room == "Pantry" for p in rooms["Pantry"])
+
+
 def test_extract_keyframes_time_window(tmp_path):
     pytest.importorskip("cv2")
     import cv2

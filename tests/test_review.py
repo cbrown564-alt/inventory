@@ -668,6 +668,32 @@ def test_redescribe_requires_confirm(server):
     assert s["status"] == "done", s
 
 
+def test_rename_room_then_redescribe_survives(server):
+    """Builds re-derive room names from the capture layer, so a review-time
+    rename must be recorded as an alias or re-describe finds no photos."""
+    base, _state, out, _cap = server
+    status, _ = _req("POST", base + "/api/rooms/rename",
+                     {"from": "Kitchen", "to": "Pantry"})
+    assert status == 200
+    aliases = json.loads(
+        (out / "work" / "room-aliases.json").read_text(encoding="utf-8"))
+    assert aliases["map"] == {"Kitchen": "Pantry"}
+
+    status, resp = _req("POST", base + "/api/redescribe",
+                        {"room": "Pantry", "confirm": "yes"})
+    assert status == 200, resp
+    deadline = time.time() + 120
+    while time.time() < deadline:
+        _, s = _req("GET", base + "/api/redescribe")
+        if s["status"] in ("done", "failed"):
+            break
+        time.sleep(0.2)
+    assert s["status"] == "done", s
+    _, body = _req("GET", base + "/api/inventory")
+    names = [r["name"] for r in body["inventory"]["rooms"]]
+    assert "Pantry" in names and "Kitchen" not in names
+
+
 def test_redescribe_ui_uses_spend_copy(server):
     base, _state, _out, _cap = server
     status, html = _get_text(base + "/")
@@ -745,6 +771,22 @@ def test_stream_upload_video(fresh_server):
     assert status == 200, resp
     assert resp["stored_as"] == "walk.mp4" and resp["kind"] == "video"
     assert (cap / "Living Room" / "walk.mp4").read_bytes() == data
+
+
+def test_stream_upload_walkthrough_video_lands_at_capture_root(fresh_server):
+    """The video-first journey: X-Room __walkthrough__ stores at the root."""
+    base, _state, _out, cap = fresh_server
+    data = _mp4_bytes()
+    status, resp = _upload(base, "__walkthrough__", "walk.bin", data)
+    assert status == 200, resp
+    assert resp["stored_as"] == "walk.mp4" and resp["kind"] == "video"
+    assert resp["room"] == "" and resp["path"] == "walk.mp4"
+    assert (cap / "walk.mp4").read_bytes() == data
+    # traversal is still rejected at the root
+    assert _upload(base, "__walkthrough__", "../evil.mp4", data)[0] == 400
+    # and the capture summary counts it (enables the build button)
+    status, body = _req("GET", base + "/api/rooms")
+    assert status == 200 and body["walkthrough_videos"] == 1
 
 
 def test_api_rooms_lists_counts(fresh_server):
