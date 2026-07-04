@@ -1325,7 +1325,5 @@
     "unmatched_label_rate_delta": 5.6,
     "coverage_gap_rate_delta": 29.2,
     "recommendation": "text (default) \u2014 prompt_free recall +17.3pp on this fixture but coverage gaps +29.2pp (LVIS names miss checklist terms like smoke alarm / towel rail); keep household vocabulary for build/check, re-run eval_detect after capture"
-  },
-  "device": "mps",
-  "evaluated": "2026-07-04"
+  }
 }

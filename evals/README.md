@@ -89,7 +89,8 @@ recommendation. Use `--detect-mode prompt_free` on `homeinventory build` to
 try prompt-free in the full pipeline.
 
 Reference run on the InventoryFlex fixture is at
-`evals/fixtures/inventoryflex/detect-comparison.json`.
+`evals/fixtures/inventoryflex/detect-comparison.json`. Findings and install
+notes: `docs/13-yoloe-detection.md`.
 
 ## Metrics & targets
 
