@@ -260,6 +260,8 @@ class ReviewState:
         return True
 
     def _build_flags(self) -> list[str]:
+        from .usecases import DEFAULT_USE_CASE
+
         flags: list[str] = []
         if self.no_detect:
             flags.append("--no-detect")
@@ -267,6 +269,10 @@ class ReviewState:
             flags += ["--model", self.model]
         if self.base_url:
             flags += ["--base-url", self.base_url]
+        if self.inv_path.exists():
+            inv = self.load()
+            if inv.use_case != DEFAULT_USE_CASE:
+                flags += ["--use-case", inv.use_case]
         return flags
 
     def start_build(self) -> bool:

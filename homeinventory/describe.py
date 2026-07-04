@@ -30,10 +30,78 @@ from pathlib import Path
 from typing import Optional, Protocol
 
 from .detect import Detection
-from .schema import Item, Photo
-from .usecases.tenancy import ITEM_SCHEMA, SYSTEM_PROMPT, VALUE_BANDS
+from .schema import (CATEGORIES, CLEANLINESS_GRADES, CONDITION_GRADES, Item,
+                     Photo)
+from .usecases.base import UseCase
 
 log = logging.getLogger(__name__)
+
+
+def build_item_schema(uc: UseCase) -> dict:
+    """JSON schema for a room's item schedule, parametrised by use case."""
+    item_props = {
+        "name": {"type": "string",
+                 "description": "Short item name, e.g. 'Three-seat sofa'"},
+        "category": {"type": "string", "enum": CATEGORIES},
+        "description": {
+            "type": "string",
+            "description": "Material, colour, brand/model if visible, "
+                           "approximate size.",
+        },
+        "condition": {"type": "string", "enum": CONDITION_GRADES},
+        "cleanliness": {"type": "string", "enum": CLEANLINESS_GRADES},
+        "defects": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Specific localized defects, e.g. 'scuff mark "
+                           "10cm left of door handle'. Empty if none visible.",
+        },
+        "quantity": {"type": "integer"},
+        "photo_ids": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "IDs of the photos this item is visible in.",
+        },
+        "confidence": {
+            "type": "number",
+            "description": "0-1: how confident you are this item is "
+                           "correctly identified and graded.",
+        },
+    }
+    required = ["name", "category", "description", "condition",
+                "cleanliness", "defects", "quantity", "photo_ids", "confidence"]
+    if uc.value_bands is not None:
+        item_props["est_value_band"] = {
+            "type": "string", "enum": list(uc.value_bands),
+        }
+        required.append("est_value_band")
+    return {
+        "type": "object",
+        "properties": {
+            "room_summary": {
+                "type": "string",
+                "description": "2-4 sentence overall narrative: decorative order, "
+                               "cleanliness, general state of the room as evidenced "
+                               "by these photos.",
+            },
+            "items": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": item_props,
+                    "required": required,
+                    "additionalProperties": False,
+                },
+            },
+        },
+        "required": ["room_summary", "items"],
+        "additionalProperties": False,
+    }
+
+
+# Back-compat aliases from the tenancy profile (defined after build_item_schema
+# so tenancy.py can import this function without a circular import).
+from .usecases.tenancy import ITEM_SCHEMA, SYSTEM_PROMPT, VALUE_BANDS  # noqa: E402
 
 
 class DescribeBackend(Protocol):
@@ -196,13 +264,17 @@ def _parse_items(data: dict, photos: list[Photo]) -> tuple[str, list[Item]]:
 class ClaudeBackend:
     name = "claude"
 
-    def __init__(self, model: str = "claude-opus-4-8"):
+    def __init__(self, model: str = "claude-opus-4-8",
+                 system_prompt: str = SYSTEM_PROMPT,
+                 item_schema: dict | None = None):
         import anthropic
         self._anthropic = anthropic
         # Credential resolution is delegated to the SDK: ANTHROPIC_API_KEY,
         # ANTHROPIC_AUTH_TOKEN, or an `ant auth login` profile all work.
         self.client = anthropic.Anthropic()
         self.model = model
+        self.system_prompt = system_prompt
+        self.item_schema = item_schema if item_schema is not None else ITEM_SCHEMA
 
     def describe_room(self, room_name, photos, photo_paths, detections):
         # Reset per room so a failed call can't inherit the previous room's
@@ -228,9 +300,10 @@ class ClaudeBackend:
             response = self.client.messages.create(
                 model=self.model,
                 max_tokens=16000,
-                system=SYSTEM_PROMPT,
+                system=self.system_prompt,
                 messages=[{"role": "user", "content": content}],
-                output_config={"format": {"type": "json_schema", "schema": ITEM_SCHEMA}},
+                output_config={"format": {"type": "json_schema",
+                                         "schema": self.item_schema}},
             )
         except self._anthropic.AuthenticationError as e:
             raise DescribeAuthError(
@@ -271,8 +344,12 @@ class LocalBackend:
     def __init__(self, model: Optional[str] = None, host: Optional[str] = None,
                  batch_size: int = 6, max_dim: int = 1120, num_ctx: int = 24576,
                  num_predict: int = 12288, repeat_penalty: float = 1.1,
-                 temperature: float = 0.0, timeout: float = 900.0):
+                 temperature: float = 0.0, timeout: float = 900.0,
+                 system_prompt: str = SYSTEM_PROMPT,
+                 item_schema: dict | None = None):
         self.model = model or self.DEFAULT_MODEL
+        self.system_prompt = system_prompt
+        self.item_schema = item_schema if item_schema is not None else ITEM_SCHEMA
         self.host = (host or os.environ.get("OLLAMA_HOST")
                      or "http://localhost:11434").rstrip("/")
         # consumer-GPU constraints: few images per call keeps the KV cache on
@@ -338,7 +415,7 @@ class LocalBackend:
             "model": self.model,
             "messages": messages,
             "stream": False,
-            "format": ITEM_SCHEMA,
+            "format": self.item_schema,
             "options": {"num_ctx": self.num_ctx, "temperature": temperature,
                         "num_predict": self.num_predict,
                         "repeat_penalty": self.repeat_penalty},
@@ -388,7 +465,7 @@ class LocalBackend:
             log.info("  local batch %d/%d (%d photos)…", b, len(batches),
                      len(batch_photos))
             msgs = [
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": self.system_prompt},
                 {"role": "user", "content": prompt, "images": images},
             ]
             resp = None
@@ -449,8 +526,12 @@ class OpenAICompatBackend:
     GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai"
 
     def __init__(self, model: Optional[str] = None, base_url: Optional[str] = None,
-                 api_key: Optional[str] = None, timeout: float = 300.0):
+                 api_key: Optional[str] = None, timeout: float = 300.0,
+                 system_prompt: str = SYSTEM_PROMPT,
+                 item_schema: dict | None = None):
         self.model = model or self.DEFAULT_MODEL
+        self.system_prompt = system_prompt
+        self.item_schema = item_schema if item_schema is not None else ITEM_SCHEMA
         if base_url is None and self.model.startswith("gemini"):
             base_url = self.GEMINI_BASE
         base_url = (base_url or os.environ.get("OPENAI_BASE_URL")
@@ -515,11 +596,12 @@ class OpenAICompatBackend:
         resp = self._post({
             "model": self.model,
             "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": self.system_prompt},
                 {"role": "user", "content": content},
             ],
             "response_format": {"type": "json_schema", "json_schema": {
-                "name": "inventory_room", "strict": True, "schema": ITEM_SCHEMA}},
+                "name": "inventory_room", "strict": True,
+                "schema": self.item_schema}},
         })
         choice = resp["choices"][0]
         if choice.get("finish_reason") == "length":
@@ -570,13 +652,21 @@ class OfflineBackend:
 
 
 def get_backend(name: str, model: Optional[str] = None,
-                base_url: Optional[str] = None) -> DescribeBackend:
+                base_url: Optional[str] = None,
+                use_case: Optional[str] = None) -> DescribeBackend:
+    from .usecases import DEFAULT_USE_CASE, get_use_case
+
+    uc = get_use_case(use_case or DEFAULT_USE_CASE)
+    schema = build_item_schema(uc)
+    prompt = uc.system_prompt
     if name == "claude":
-        return ClaudeBackend(model=model or "claude-opus-4-8")
+        return ClaudeBackend(model=model or "claude-opus-4-8",
+                             system_prompt=prompt, item_schema=schema)
     if name == "openai":
-        return OpenAICompatBackend(model=model, base_url=base_url)
+        return OpenAICompatBackend(model=model, base_url=base_url,
+                                   system_prompt=prompt, item_schema=schema)
     if name == "local":
-        return LocalBackend(model=model)
+        return LocalBackend(model=model, system_prompt=prompt, item_schema=schema)
     if name == "offline":
         return OfflineBackend()
     raise ValueError(f"unknown describe backend: {name!r} "

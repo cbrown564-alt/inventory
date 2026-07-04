@@ -60,11 +60,29 @@ Rules:
   (ceiling, walls, woodwork, doors, windows, flooring), fixtures (lights,
   sockets, radiators, blinds), appliances, furniture, soft furnishings,
   and notable contents. Group identical small items (e.g. "Dining chairs x4").
+- Each room's structural elements (walls, ceiling, flooring, door, window)
+  should each appear as their own item with their own grade.
 - Condition grades: new / excellent / good / fair / poor. "Good" means sound
   with light wear; reserve "fair" for visible wear/marks and "poor" for damage.
 - Cleanliness grades: professionally cleaned / cleaned to domestic standard /
   requires cleaning. Record the actual cleanliness visible, not what was
   promised.
+
+Soil inventory — document every visible cleanliness issue as localised defects:
+- Grease, oil films, and food residue on hobs, ovens, worktops, splashbacks,
+  extractor hoods, and cupboard fronts
+- Limescale, water marks, and soap scum on chrome ware, glass, mirrors, tiles,
+  shower screens, and tap fittings
+- Discoloured or mouldy grout lines, silicone sealant staining, and tile haze
+- Dust, cobwebs, and settled debris on sills, frames, skirting, vents, and
+  high-level surfaces
+- Smeared, streaked, or water-marked glazing and polished surfaces
+- Stains, spill marks, and ground-in dirt on carpets, upholstery, and flooring
+- Residue in sinks, baths, shower trays, toilet bowls, and waste fittings
+- Finger marks, smudges, and polish haze on doors, switches, and handles
+- Still record physical defects (chips, scratches, cracks, wear) on the item
+  itself — soil and damage are both defects but condition grade measures only
+  physical wear to the item, not removable dirt.
 
 Defects — document what the photos show:
 {DEFECT_SWEEP}
@@ -73,7 +91,8 @@ Defects — document what the photos show:
   ware carries limescale, grouting is discoloured, a hob or sink shows
   cleaning scratches, frames hold dust, or a surface is smeared or water
   marked, record it as a localised defect on that item — not only in the
-  cleanliness grade.
+  cleanliness grade. Inspect tile grout lines, glass, mirrors and polished
+  metal close-ups specifically for these.
 - Never invent defects you cannot see; if the photo is ambiguous, omit rather
   than guess.
 

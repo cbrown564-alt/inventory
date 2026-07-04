@@ -125,3 +125,42 @@ def test_deepclean_summary_rows_one_per_room():
     assert "Requires cleaning" in rows[0]["condition"]
     assert rows[1]["name"] == "Bathroom"
     assert "Professionally cleaned" in rows[1]["condition"]
+
+
+def test_build_item_schema_tenancy_has_est_value_band():
+    from homeinventory.describe import build_item_schema
+
+    schema = build_item_schema(TENANCY)
+    item = schema["properties"]["items"]["items"]
+    assert "est_value_band" in item["properties"]
+    assert "est_value_band" in item["required"]
+    desc = item["properties"]["description"]["description"]
+    assert "inventory clerk" not in desc.lower()
+
+
+def test_build_item_schema_deepclean_omits_est_value_band():
+    from homeinventory.describe import build_item_schema
+
+    schema = build_item_schema(DEEP_CLEAN)
+    item = schema["properties"]["items"]["items"]
+    assert "est_value_band" not in item["properties"]
+    assert "est_value_band" not in item["required"]
+
+
+def test_get_backend_deepclean_uses_cleaning_prompt(monkeypatch):
+    from homeinventory.describe import get_backend
+
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    backend = get_backend("openai", use_case="deepclean")
+    assert "TDS" not in backend.system_prompt
+    assert "Cleaning Condition Report" in backend.system_prompt
+    assert "est_value_band" not in backend.item_schema["properties"]["items"]["items"]["properties"]
+
+
+def test_get_backend_tenancy_uses_tds_prompt(monkeypatch):
+    from homeinventory.describe import get_backend
+
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    backend = get_backend("openai", use_case="tenancy")
+    assert "TDS" in backend.system_prompt
+    assert "est_value_band" in backend.item_schema["properties"]["items"]["items"]["properties"]

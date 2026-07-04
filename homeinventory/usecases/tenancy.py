@@ -2,65 +2,11 @@
 
 from __future__ import annotations
 
-from ..schema import CATEGORIES, CLEANLINESS_GRADES, CONDITION_GRADES, Inventory, Item
+from ..schema import Inventory, Item
 from .base import (ComparisonSpec, ContextParam, CoverField, Role, SessionSpec,
                    SharePageSpec, UseCase)
 
 VALUE_BANDS = ["<£50", "£50-250", "£250-1000", ">£1000"]
-
-ITEM_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "room_summary": {
-            "type": "string",
-            "description": "2-4 sentence overall narrative: decorative order, "
-                           "cleanliness, general state of the room as evidenced "
-                           "by these photos.",
-        },
-        "items": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {"type": "string", "description": "Short item name, e.g. 'Three-seat sofa'"},
-                    "category": {"type": "string", "enum": CATEGORIES},
-                    "description": {
-                        "type": "string",
-                        "description": "Material, colour, brand/model if visible, "
-                                       "approximate size. Written like a professional "
-                                       "inventory clerk.",
-                    },
-                    "condition": {"type": "string", "enum": CONDITION_GRADES},
-                    "cleanliness": {"type": "string", "enum": CLEANLINESS_GRADES},
-                    "defects": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "description": "Specific localized defects, e.g. 'scuff mark "
-                                       "10cm left of door handle'. Empty if none visible.",
-                    },
-                    "quantity": {"type": "integer"},
-                    "est_value_band": {"type": "string", "enum": VALUE_BANDS},
-                    "photo_ids": {
-                        "type": "array",
-                        "items": {"type": "string"},
-                        "description": "IDs of the photos this item is visible in.",
-                    },
-                    "confidence": {
-                        "type": "number",
-                        "description": "0-1: how confident you are this item is "
-                                       "correctly identified and graded.",
-                    },
-                },
-                "required": ["name", "category", "description", "condition",
-                             "cleanliness", "defects", "quantity",
-                             "est_value_band", "photo_ids", "confidence"],
-                "additionalProperties": False,
-            },
-        },
-    },
-    "required": ["room_summary", "items"],
-    "additionalProperties": False,
-}
 
 SYSTEM_PROMPT = """\
 You are a professional property inventory clerk preparing a Tenancy Deposit
@@ -371,3 +317,7 @@ TENANCY = UseCase(
         ),
     ),
 )
+
+from ..describe import build_item_schema  # noqa: E402
+
+ITEM_SCHEMA = build_item_schema(TENANCY)

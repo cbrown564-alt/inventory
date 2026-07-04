@@ -91,6 +91,7 @@ def cmd_build(args) -> int:
     from .integrity import build_manifest
     from .merge import merge_items, merge_room_with_prior, room_code
     from .report import render
+    from .usecases import DEFAULT_USE_CASE
 
     capture_dir = Path(args.capture_dir)
     out_dir = Path(args.out)
@@ -125,6 +126,8 @@ def cmd_build(args) -> int:
     if prior is None and args.from_json is not None:
         return 2
 
+    use_case = args.use_case or (prior.use_case if prior else DEFAULT_USE_CASE)
+
     # 3. detect (only the rooms being built)
     detector = _detector_from_args(args)
     detections: dict[str, list] = {}
@@ -142,7 +145,7 @@ def cmd_build(args) -> int:
     # 4-5. describe + merge, room by room, checkpointing as we go
     try:
         backend = get_backend(args.backend, model=args.model,
-                              base_url=args.base_url)
+                              base_url=args.base_url, use_case=use_case)
     except FatalBackendError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
@@ -160,6 +163,13 @@ def cmd_build(args) -> int:
                             if getattr(backend, "model", None) else ""),
         notes=args.notes or (prior.notes if prior else ""),
     )
+    inv.use_case = use_case
+    if use_case == "deepclean":
+        inv.parties = dict(prior.parties if prior else {})
+        for spec in args.party:
+            key, _, name = spec.partition("=")
+            if key:
+                inv.parties[key] = name
     if prior and preserve_edits:
         inv.inspected_at = prior.inspected_at
         inv.signatures = list(prior.signatures)
@@ -436,6 +446,12 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--tenant", help="tenant name(s) for the cover page")
     b.add_argument("--landlord", help="landlord or agent name for the cover page")
     b.add_argument("--report-ref", help="report reference number")
+    b.add_argument("--use-case", choices=["tenancy", "deepclean"], default=None,
+                   help="use-case profile (default: prior inventory's use_case "
+                        "when rebuilding, else tenancy)")
+    b.add_argument("--party", action="append", default=[], metavar="KEY=NAME",
+                   help="party name for cover/signing (repeatable; e.g. "
+                        "customer_name=Jane Doe)")
     b.add_argument("--notes", help="general notes for the report front matter")
     b.add_argument("--room", help="only (re)build these rooms, comma-separated; "
                                   "other rooms are kept from the existing inventory.json")
