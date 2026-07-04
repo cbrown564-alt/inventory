@@ -19,6 +19,12 @@ capture/
 # (capture/ above already excludes the extracted benchmark photos — regenerate
 # both with benchmarks/extract_inventoryflex.py + a build)
 benchmarks/*/report-*/photos/
+benchmarks/*/report-*/work/crops/
+benchmarks/*/report-*/inventory.pdf
+benchmarks/*/report-*/inventory-issue.html
+
+# local smoke-test capture from docs/09 (regenerate with homeinventory capture)
+capture-smoke/
 
 # build/run logs (stdout captures from background builds)
 *.log
