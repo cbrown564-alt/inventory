@@ -30,6 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from homeinventory.compare import OpenAIRubric  # noqa: E402
+from homeinventory.usecases.tenancy import TENANCY  # noqa: E402
 
 LABELS = ROOT / "benchmarks" / "samples" / "ims-checkout-labels.json"
 RESULTS = ROOT / "benchmarks" / "samples" / "ims-rubric-results.json"
@@ -66,7 +67,7 @@ def main() -> int:
     scored = [e for e in labels["entries"] if e.get("clerk_class")]
     excluded = [e for e in labels["entries"] if not e.get("clerk_class")]
 
-    rubric = OpenAIRubric(model=args.model)
+    rubric = OpenAIRubric(TENANCY.comparison, model=args.model)
     per_entry: list[dict] = []
     confusion: dict[str, Counter] = defaultdict(Counter)
     for e in scored:

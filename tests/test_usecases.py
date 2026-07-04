@@ -7,7 +7,7 @@ import pytest
 from homeinventory.compare import (CLASSIFICATION_CLASSES as COMPARE_CLASSES,
                                    CLASS_LABELS as COMPARE_LABELS,
                                    RUBRIC_PROMPT as COMPARE_RUBRIC)
-from homeinventory.schema import Inventory, Item, Room, cover_value, set_cover_value
+from homeinventory.schema import Inventory, Item, Photo, Room, cover_value, set_cover_value
 from homeinventory.usecases import DEFAULT_USE_CASE, REGISTRY, get_use_case, use_case_for
 from homeinventory.usecases.deepclean import DEEP_CLEAN
 from homeinventory.usecases.tenancy import (CLASSIFICATION_CLASSES, CLASS_LABELS,
@@ -155,6 +155,63 @@ def test_get_backend_deepclean_uses_cleaning_prompt(monkeypatch):
     assert "TDS" not in backend.system_prompt
     assert "Cleaning Condition Report" in backend.system_prompt
     assert "est_value_band" not in backend.item_schema["properties"]["items"]["items"]["properties"]
+
+
+def test_deepclean_compare_gate_and_labels(tmp_path):
+    """Deep-clean gate fires on improvements, resolved defects, cleanliness."""
+    from homeinventory.cli import main as cli_main
+    from homeinventory.compare import compare_inventories, diff_pair
+    from homeinventory.usecases.deepclean import DEEP_CLEAN
+    from PIL import Image
+
+    gate = DEEP_CLEAN.comparison.gate
+    assert gate(diff_pair(
+        Item(id="A", name="Floor", condition="good",
+             cleanliness="professionally cleaned"),
+        Item(id="B", name="Floor", condition="good",
+             cleanliness="requires cleaning"),
+    ))
+    assert gate(diff_pair(
+        Item(id="A", name="Floor", condition="good"),
+        Item(id="B", name="Floor", condition="excellent"),
+    ))
+    resolved = diff_pair(
+        Item(id="A", name="Floor", condition="good", defects=["stain"]),
+        Item(id="B", name="Floor", condition="good", defects=[]),
+    )
+    assert gate(resolved)
+
+    before = Inventory(use_case="deepclean", property_address="1 Clean St",
+                       rooms=[Room(name="Kitchen", items=[
+                           Item(id="K1", name="Worktop", condition="good",
+                                cleanliness="requires cleaning",
+                                photo_ids=["P001"]),
+                       ], photos=[Photo(id="P001", path="k.jpg", room="Kitchen")])])
+    after = Inventory(use_case="deepclean",
+                      rooms=[Room(name="Kitchen", items=[
+                          Item(id="K2", name="Worktop", condition="good",
+                               cleanliness="professionally cleaned",
+                               photo_ids=["P001"]),
+                      ], photos=[Photo(id="P001", path="k.jpg", room="Kitchen")])])
+
+    for d, inv in [("before", before), ("after", after)]:
+        p = tmp_path / d
+        (p / "photos").mkdir(parents=True)
+        (p / "inventory.json").write_text(inv.to_json(), encoding="utf-8")
+        Image.new("RGB", (64, 48), "white").save(p / "photos" / "P001.jpg")
+
+    out = tmp_path / "cmp"
+    rc = cli_main(["compare", str(tmp_path / "before"), str(tmp_path / "after"),
+                   "-o", str(out), "--backend", "offline", "--no-pdf"])
+    assert rc == 0
+    html = (out / "compare.html").read_text(encoding="utf-8")
+    assert "Before" in html
+    assert "After" in html
+    assert "Check-in" not in html
+
+    result = compare_inventories(before, after, use_case="deepclean")
+    assert result["labels"] == {"baseline": "Before", "followup": "After"}
+    assert result["rooms"][0]["changed"]
 
 
 def test_get_backend_tenancy_uses_tds_prompt(monkeypatch):

@@ -373,13 +373,24 @@ def cmd_check(args) -> int:
     return 0
 
 
+def _parse_context_kv(pairs: list[str]) -> dict:
+    out: dict = {}
+    for pair in pairs:
+        if "=" not in pair:
+            raise ValueError(f"context entry must be KEY=VALUE, got {pair!r}")
+        key, val = pair.split("=", 1)
+        out[key.strip()] = val.strip()
+    return out
+
+
 def cmd_compare(args) -> int:
-    """Check-in vs check-out comparison: lexical alignment (no API calls),
-    wear-vs-damage rubric for deteriorated items, paired-photo delta report.
+    """Baseline vs follow-up comparison: lexical alignment (no API calls),
+    use-case rubric for gated changes, paired-photo delta report.
     See docs/08-compare.md."""
     from .compare import (compare_inventories, get_rubric_backend, _item_ages,
                           load_inventory_arg, render_comparison)
     from .describe import FatalBackendError
+    from .usecases import get_use_case, use_case_for
 
     try:
         checkin, checkin_dir, checkin_raw = load_inventory_arg(Path(args.checkin))
@@ -387,25 +398,58 @@ def cmd_compare(args) -> int:
     except FileNotFoundError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
+
+    if args.use_case:
+        uc = get_use_case(args.use_case)
+    else:
+        ci_uc, co_uc = use_case_for(checkin), use_case_for(checkout)
+        if ci_uc.key != co_uc.key:
+            print(f"error: use_case mismatch — check-in has {ci_uc.key!r}, "
+                  f"check-out has {co_uc.key!r}; pass --use-case explicitly.",
+                  file=sys.stderr)
+            return 2
+        uc = ci_uc
+    spec = uc.comparison
+    if spec is None:
+        print(f"error: use case {uc.key!r} has no comparison profile",
+              file=sys.stderr)
+        return 2
+
     try:
-        rubric = get_rubric_backend(args.backend, model=args.model,
+        context = _parse_context_kv(args.context)
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+    if args.tenancy_months is not None:
+        context.setdefault("tenancy_months", args.tenancy_months)
+    if args.occupancy:
+        context.setdefault("occupancy", args.occupancy)
+
+    try:
+        rubric = get_rubric_backend(args.backend, spec, model=args.model,
                                     base_url=args.base_url)
     except FatalBackendError as e:
         print(f"error: {e}\nhint: --backend offline compares without "
               "classification (changes stay 'unclassified').", file=sys.stderr)
         return 2
 
-    result = compare_inventories(
-        checkin, checkout, rubric=rubric,
-        tenancy_months=args.tenancy_months, occupancy=args.occupancy,
-        item_ages=_item_ages(checkin_raw))
+    try:
+        result = compare_inventories(
+            checkin, checkout, rubric=rubric, use_case=uc, context=context,
+            item_ages=_item_ages(checkin_raw))
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+
     outputs = render_comparison(result, checkin, checkout, checkin_dir,
                                 checkout_dir, Path(args.out),
                                 pdf=not args.no_pdf)
+    labels = result["labels"]
     t = result["totals"]
     print(f"\n{t['matched']} items matched ({t['changed']} changed, "
           f"{t['unchanged']} unchanged), {t['removed']} not located at "
-          f"check-out, {t['added']} new at check-out.")
+          f"{labels['followup'].lower()}, {t['added']} new at "
+          f"{labels['followup'].lower()}.")
     if result["usage"].get("prompt_tokens"):
         u = result["usage"]
         print(f"classification tokens: {u['prompt_tokens']} in / "
@@ -529,17 +573,23 @@ def main(argv: list[str] | None = None) -> int:
     ck.set_defaults(func=cmd_check)
 
     c = sub.add_parser("compare",
-                       help="check-in vs check-out comparison: aligned item "
-                            "deltas, wear-vs-damage classification, paired "
-                            "photo evidence")
-    c.add_argument("checkin", metavar="CHECKIN",
-                   help="check-in report dir (or inventory.json path)")
-    c.add_argument("checkout", metavar="CHECKOUT",
-                   help="check-out report dir (or inventory.json path)")
+                       help="baseline vs follow-up comparison: aligned item "
+                            "deltas, use-case classification, paired photo "
+                            "evidence")
+    c.add_argument("checkin", metavar="BASELINE",
+                   help="baseline report dir (or inventory.json path)")
+    c.add_argument("checkout", metavar="FOLLOWUP",
+                   help="follow-up report dir (or inventory.json path)")
     c.add_argument("-o", "--out", default="compare",
                    help="output dir for compare.json/.html/.pdf")
+    c.add_argument("--use-case", choices=["tenancy", "deepclean"], default=None,
+                   help="use-case profile (default: derived from inventories; "
+                        "error if they disagree)")
+    c.add_argument("--context", action="append", default=[], metavar="KEY=VALUE",
+                   help="comparison context for the rubric (repeatable; e.g. "
+                        "tenancy_months=12, scope='full deep clean')")
     c.add_argument("--backend", choices=["openai", "offline"], default="openai",
-                   help="wear-vs-damage rubric backend; offline skips "
+                   help="classification rubric backend; offline skips "
                         "classification (everything 'unclassified')")
     c.add_argument("--model", default=None,
                    help="rubric model for --backend openai "
@@ -548,11 +598,11 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--base-url", default=None,
                    help="override the API base URL for --backend openai")
     c.add_argument("--tenancy-months", type=int, default=None,
-                   help="tenancy length in months, cited by the rubric; "
-                        "omitted = 'not provided'")
+                   help="tenancy length in months (tenancy use-case; folded "
+                        "into --context; omitted = 'not provided')")
     c.add_argument("--occupancy", default=None,
-                   help="occupancy description (e.g. '2 adults, 1 child'), "
-                        "cited by the rubric; omitted = 'not provided'")
+                   help="occupancy description (tenancy use-case; folded into "
+                        "--context; omitted = 'not provided')")
     c.add_argument("--no-pdf", action="store_true")
     c.set_defaults(func=cmd_compare)
 

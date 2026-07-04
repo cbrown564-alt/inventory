@@ -7,11 +7,9 @@ and containment rule. Zero API calls. An embedding matcher was considered and
 not built for v1 (see docs/08-compare.md); renames that only add or drop
 descriptor words ("Walls" / "Walls (Cream Emulsion)") align lexically already.
 
-Classification (fair wear and tear vs damage vs cleaning vs landlord
-responsibility) is a prompted, text-only rubric grounded in the TDS guidance
-this repo holds (docs/02-research.md §"What a TDS-valid inventory contains" /
-§adjudication; docs/AI Dispute Evidence.pdf). It runs only for aligned items
-with a condition-grade delta or a new defect. The ``offline`` backend yields
+Classification is a prompted, text-only rubric driven by the active use-case
+profile's :class:`~homeinventory.usecases.base.ComparisonSpec`. It runs only
+for aligned items that pass the spec's gate. The ``offline`` backend yields
 ``unclassified``. The output is a discussion sheet: it identifies and
 classifies changes, it never prices them (no £ amounts — monetary valuation
 is an explicit non-goal).
@@ -21,16 +19,23 @@ from __future__ import annotations
 
 import json
 import logging
-from dataclasses import asdict
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 from .merge import _head_nouns
-from .schema import CONDITION_GRADES, Inventory, Item
+from .schema import CLEANLINESS_GRADES, CONDITION_GRADES, Inventory, Item
+from .usecases import get_use_case, use_case_for
+from .usecases.base import ComparisonSpec, UseCase
 from .usecases.tenancy import (CLASSIFICATION_CLASSES, CLASS_LABELS,
-                               RUBRIC_PROMPT)
+                               RUBRIC_PROMPT, needs_classification)
 
 log = logging.getLogger(__name__)
+
+# Back-compat aliases (tenancy profile originals)
+__all__ = [
+    "CLASSIFICATION_CLASSES", "CLASS_LABELS", "RUBRIC_PROMPT",
+    "needs_classification",
+]
 
 # --------------------------------------------------------------------------
 # Alignment: room match + lexical head-noun matching (reuses merge.py)
@@ -102,6 +107,10 @@ def _grade_index(grade: Optional[str]) -> Optional[int]:
     return CONDITION_GRADES.index(grade) if grade in CONDITION_GRADES else None
 
 
+def _cleanliness_index(grade: Optional[str]) -> Optional[int]:
+    return CLEANLINESS_GRADES.index(grade) if grade in CLEANLINESS_GRADES else None
+
+
 def _norm_defect(d: str) -> str:
     return " ".join(d.strip().lower().split())
 
@@ -110,13 +119,19 @@ def diff_pair(checkin: Item, checkout: Item) -> dict:
     """Structured delta for one aligned pair.
 
     ``grade_delta`` is checkout minus check-in on the ordinal grade scale —
-    positive means worse at check-out. ``new_defects`` are check-out defects
-    with no lexically-equal check-in counterpart; ``resolved_defects`` the
-    reverse (informational — two independent describes word defects
-    differently, so treat "resolved" as "not re-observed").
+    positive means worse at check-out. ``cleanliness_delta`` uses the same
+    sign convention on :data:`~homeinventory.schema.CLEANLINESS_GRADES`.
+    ``new_defects`` are check-out defects with no lexically-equal check-in
+    counterpart; ``resolved_defects`` the reverse (informational — two
+    independent describes word defects differently, so treat "resolved" as
+    "not re-observed").
     """
     ci_idx, co_idx = _grade_index(checkin.condition), _grade_index(checkout.condition)
     delta = (co_idx - ci_idx) if ci_idx is not None and co_idx is not None else None
+    ci_cl, co_cl = (_cleanliness_index(checkin.cleanliness),
+                   _cleanliness_index(checkout.cleanliness))
+    cleanliness_delta = ((co_cl - ci_cl)
+                         if ci_cl is not None and co_cl is not None else None)
     ci_defects = {_norm_defect(d) for d in checkin.defects}
     co_defects = {_norm_defect(d) for d in checkout.defects}
     new_defects = [d for d in checkout.defects if _norm_defect(d) not in ci_defects]
@@ -129,6 +144,7 @@ def diff_pair(checkin: Item, checkout: Item) -> dict:
         "checkin_condition": checkin.condition,
         "checkout_condition": checkout.condition,
         "grade_delta": delta,
+        "cleanliness_delta": cleanliness_delta,
         "checkin_defects": list(checkin.defects),
         "checkout_defects": list(checkout.defects),
         "new_defects": new_defects,
@@ -144,13 +160,6 @@ def diff_pair(checkin: Item, checkout: Item) -> dict:
     }
 
 
-def needs_classification(change: dict) -> bool:
-    """Rubric runs only for a deterioration: a worse condition grade or a
-    new defect. Improvements need no wear-vs-damage call — there is nothing
-    to attribute, and classifying them would be unmetered spend."""
-    return change["grade_delta"] > 0 or bool(change["new_defects"])
-
-
 CLASSIFY_SCHEMA = {
     "type": "object",
     "properties": {
@@ -162,13 +171,26 @@ CLASSIFY_SCHEMA = {
 }
 
 
-def change_prompt(change: dict, room: str, tenancy_months: Optional[int],
-                  occupancy: Optional[str], age: Optional[str],
+def _classify_schema(classes: tuple[str, ...]) -> dict:
+    return {
+        "type": "object",
+        "properties": {
+            "classification": {"type": "string", "enum": list(classes)},
+            "rationale": {"type": "string"},
+        },
+        "required": ["classification", "rationale"],
+        "additionalProperties": False,
+    }
+
+
+def change_prompt(change: dict, room: str, spec: ComparisonSpec,
+                  context: Optional[dict] = None, age: Optional[str] = None,
                   checkin_description: str = "",
                   checkout_description: str = "") -> str:
     """User-message text for one change. Context values the caller did not
     provide are rendered literally as "not provided" — the rubric may cite
     only provided values."""
+    context = context or {}
 
     def grade(g: Optional[str]) -> str:
         return g if g else "not graded"
@@ -180,34 +202,39 @@ def change_prompt(change: dict, room: str, tenancy_months: Optional[int],
     if delta is None:
         delta_txt = "not gradeable (a grade is missing on one side)"
     elif delta > 0:
-        delta_txt = f"{delta} grade(s) worse at check-out"
+        delta_txt = f"{delta} grade(s) worse at {spec.followup.lower()}"
     elif delta < 0:
-        delta_txt = f"{-delta} grade(s) better at check-out"
+        delta_txt = f"{-delta} grade(s) better at {spec.followup.lower()}"
     else:
         delta_txt = "no grade change"
 
+    baseline = spec.baseline
+    followup = spec.followup
     lines = [
         f"Item: {change.get('checkin_name') or change.get('name')} (room: {room})",
-        f"Check-in record: condition {grade(change.get('checkin_condition'))}"
+        f"{baseline} record: condition {grade(change.get('checkin_condition'))}"
         + (f"; {checkin_description}" if checkin_description else "")
         + f"; defects: {defects(change.get('checkin_defects', []))}",
-        f"Check-out record: condition {grade(change.get('checkout_condition'))}"
+        f"{followup} record: condition {grade(change.get('checkout_condition'))}"
         + (f"; {checkout_description}" if checkout_description else "")
         + f"; defects: {defects(change.get('checkout_defects', []))}"
-        + f"; new since check-in: {defects(change.get('new_defects', []))}",
+        + f"; new since {baseline.lower()}: {defects(change.get('new_defects', []))}",
         f"Grade change: {delta_txt}",
-        f"Tenancy length: {tenancy_months} months" if tenancy_months
-        else "Tenancy length: not provided",
-        f"Occupancy: {occupancy}" if occupancy else "Occupancy: not provided",
-        f"Item age at check-in: {age}" if age
-        else "Item age at check-in: not provided",
-        "Classify this change.",
     ]
+    for param in spec.context_params:
+        val = context.get(param.key)
+        if val is not None and val != "":
+            lines.append(f"{param.label}: {val}")
+        else:
+            lines.append(f"{param.label}: not provided")
+    lines.append(f"Item age at {baseline.lower()}: {age}" if age
+                 else f"Item age at {baseline.lower()}: not provided")
+    lines.append("Classify this change.")
     return "\n".join(lines)
 
 
 class OpenAIRubric:
-    """Text-only wear-vs-damage rubric over any OpenAI-compatible API.
+    """Text-only rubric over any OpenAI-compatible API.
 
     Transport (base URL / key resolution / error mapping) is reused from
     describe.OpenAICompatBackend; only the payload differs (no images, the
@@ -219,9 +246,12 @@ class OpenAIRubric:
     name = "openai"
     DEFAULT_MODEL = "gpt-5.4-mini"
 
-    def __init__(self, model: Optional[str] = None,
+    def __init__(self, spec: ComparisonSpec, model: Optional[str] = None,
                  base_url: Optional[str] = None):
         from .describe import OpenAICompatBackend
+        self.spec = spec
+        self._classes = spec.classes
+        self._schema = _classify_schema(spec.classes)
         self._api = OpenAICompatBackend(model=model or self.DEFAULT_MODEL,
                                         base_url=base_url)
         self.model = self._api.model
@@ -238,18 +268,18 @@ class OpenAIRubric:
         payload = {
             "model": self.model,
             "messages": [
-                {"role": "system", "content": RUBRIC_PROMPT},
+                {"role": "system", "content": self.spec.rubric_prompt},
                 {"role": "user", "content": entry_text},
             ],
             "response_format": {"type": "json_schema", "json_schema": {
                 "name": "change_classification", "strict": True,
-                "schema": CLASSIFY_SCHEMA}},
+                "schema": self._schema}},
         }
         resp = self._api._post(payload)
         self._accumulate(resp)
         data = json.loads(resp["choices"][0]["message"]["content"])
         cls = data.get("classification")
-        if cls not in CLASSIFICATION_CLASSES:
+        if cls not in self._classes:
             return {"classification": "unclassified",
                     "rationale": f"backend returned unknown class {cls!r}"}
         return {"classification": cls,
@@ -270,10 +300,11 @@ class OfflineRubric:
                 "rationale": "offline backend: no classification performed"}
 
 
-def get_rubric_backend(name: str, model: Optional[str] = None,
+def get_rubric_backend(name: str, spec: ComparisonSpec,
+                       model: Optional[str] = None,
                        base_url: Optional[str] = None):
     if name == "openai":
-        return OpenAIRubric(model=model, base_url=base_url)
+        return OpenAIRubric(spec, model=model, base_url=base_url)
     if name == "offline":
         return OfflineRubric()
     raise ValueError(f"unknown compare backend: {name!r} (expected openai|offline)")
@@ -282,6 +313,20 @@ def get_rubric_backend(name: str, model: Optional[str] = None,
 # --------------------------------------------------------------------------
 # Comparison orchestration
 # --------------------------------------------------------------------------
+
+
+def _resolve_use_case(checkin: Inventory, checkout: Inventory,
+                      use_case: Optional[Union[str, UseCase]] = None) -> UseCase:
+    if isinstance(use_case, UseCase):
+        return use_case
+    if use_case is not None:
+        return get_use_case(use_case)
+    ci = use_case_for(checkin)
+    co = use_case_for(checkout)
+    if ci.key != co.key:
+        raise ValueError(
+            f"use_case mismatch: check-in has {ci.key!r}, check-out has {co.key!r}")
+    return ci
 
 
 def _item_ages(raw_inventory_json: str) -> dict[str, str]:
@@ -310,18 +355,25 @@ def _active_items(items: list[Item]) -> list[Item]:
 
 
 def compare_inventories(checkin: Inventory, checkout: Inventory,
-                        rubric=None, tenancy_months: Optional[int] = None,
-                        occupancy: Optional[str] = None,
+                        rubric=None, use_case: Optional[Union[str, UseCase]] = None,
+                        context: Optional[dict] = None,
                         item_ages: Optional[dict[str, str]] = None) -> dict:
-    """Align two inventories and classify the deteriorations.
+    """Align two inventories and classify changes that pass the use-case gate.
 
     Every item on either side is accounted for exactly once: matched
-    (changed or unchanged), removed (check-in only) or added (check-out
-    only). ``rubric`` (see :func:`get_rubric_backend`) classifies matched
-    items with a grade delta or new defect; ``None`` behaves like offline.
+    (changed or unchanged), removed (baseline only) or added (followup only).
+    ``rubric`` (see :func:`get_rubric_backend`) classifies gated matched
+    items; ``None`` behaves like offline.
     """
+    uc = _resolve_use_case(checkin, checkout, use_case)
+    spec = uc.comparison
+    if spec is None:
+        raise ValueError(f"use case {uc.key!r} has no comparison profile")
+
     rubric = rubric or OfflineRubric()
+    context = dict(context or {})
     item_ages = item_ages or {}
+    gate = spec.gate
 
     ci_rooms = {_norm_name(r.name): r for r in checkin.rooms}
     co_rooms = {_norm_name(r.name): r for r in checkout.rooms}
@@ -349,9 +401,9 @@ def compare_inventories(checkin: Inventory, checkout: Inventory,
         for ci, co, score in pairs:
             change = diff_pair(ci, co)
             change["match_score"] = score
-            if needs_classification(change):
+            if gate(change):
                 entry = change_prompt(
-                    change, room_name, tenancy_months, occupancy,
+                    change, room_name, spec, context,
                     item_ages.get(ci.id),
                     checkin_description=ci.description,
                     checkout_description=co.description)
@@ -390,7 +442,18 @@ def compare_inventories(checkin: Inventory, checkout: Inventory,
         "checkout": {"address": checkout.property_address,
                      "inspected_at": checkout.inspected_at,
                      "backend": checkout.describe_backend},
-        "params": {"tenancy_months": tenancy_months, "occupancy": occupancy,
+        "use_case": uc.key,
+        "labels": {"baseline": spec.baseline, "followup": spec.followup},
+        "comparison": {
+            "title": spec.title,
+            "intro_note": spec.intro_note,
+            "class_labels": spec.class_labels,
+            "class_tones": spec.class_tones,
+            "context_params": [
+                {"key": p.key, "label": p.label} for p in spec.context_params
+            ],
+        },
+        "params": {"context": context,
                    "backend": rubric.name, "model": getattr(rubric, "model", None)},
         "rooms": rooms_out,
         "totals": totals,
@@ -486,10 +549,15 @@ def render_comparison(result: dict, checkin: Inventory, checkout: Inventory,
             })
         view_rooms.append({**room, "changed": view_changed})
 
+    comp = result["comparison"]
     env = Environment(loader=FileSystemLoader(Path(__file__).parent / "templates"),
                       autoescape=select_autoescape(["html"]))
     html = env.get_template("compare.html.j2").render(
-        result=result, rooms=view_rooms, class_labels=CLASS_LABELS)
+        result=result, rooms=view_rooms,
+        labels=result["labels"],
+        class_labels=comp["class_labels"],
+        class_tones=comp["class_tones"],
+        context_params=comp["context_params"])
 
     outputs: dict[str, Path] = {}
     json_path = out_dir / "compare.json"
