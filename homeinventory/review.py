@@ -40,8 +40,10 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 # verbatim). sniff_extension/_safe_component stay importable from here.
 from .webbase import (TEMPLATES, BaseHandler, _safe_component,  # noqa: F401
                       lan_ip as _lan_ip, scan_rooms, sniff_extension)
-from .schema import Inventory, Item, Photo
+from .schema import Inventory, Item, Photo, cover_value
 from .integrity import sha256_file
+from .usecases import DEFAULT_USE_CASE, get_use_case, use_case_for
+from .usecases.base import UseCase
 
 log = logging.getLogger(__name__)
 
@@ -62,18 +64,37 @@ class ReviewState:
     def __init__(self, capture_dir: Path, out_dir: Path,
                  backend: str = "claude", model: Optional[str] = None,
                  base_url: Optional[str] = None, share: bool = False,
-                 no_detect: bool = False):
+                 no_detect: bool = False, use_case: Optional[str] = None):
         self.capture_dir = capture_dir
         self.out_dir = out_dir
         self.backend = backend
         self.model = model
         self.base_url = base_url
         self.no_detect = no_detect
+        self.use_case = use_case
         self.lock = threading.Lock()
         self.tenant_token: Optional[str] = (
             secrets.token_urlsafe(16) if share else None)
         self.redescribe = {"status": "idle", "room": None, "detail": ""}
         self.build = {"status": "idle", "detail": "", "cmd": None}
+
+    @property
+    def uc(self) -> UseCase:
+        """Resolve profile: inventory.json → project.json → CLI flag → tenancy."""
+        if self.inv_path.exists():
+            return use_case_for(self.load())
+        proj = self.out_dir / "project.json"
+        if proj.exists():
+            try:
+                data = json.loads(proj.read_text(encoding="utf-8"))
+                key = data.get("use_case")
+                if key:
+                    return get_use_case(key)
+            except (json.JSONDecodeError, KeyError, TypeError):
+                pass
+        if self.use_case:
+            return get_use_case(self.use_case)
+        return get_use_case(DEFAULT_USE_CASE)
 
     @property
     def backend_label(self) -> str:
@@ -206,7 +227,7 @@ class ReviewState:
 
             room.items.append(item)
             self.save(inv)
-        self.ack(author, "landlord", "add_item", name, item.id)
+        self.ack(author, self.uc.owner_role.key, "add_item", name, item.id)
         with self.lock:
             self.rerender()
         return asdict(item)
@@ -256,12 +277,10 @@ class ReviewState:
                     self.redescribe = {"status": "failed", "room": room,
                                        "detail": str(e)}
         threading.Thread(target=run, daemon=True).start()
-        self.ack("reviewer", "landlord", "redescribe", room)
+        self.ack("reviewer", self.uc.owner_role.key, "redescribe", room)
         return True
 
     def _build_flags(self) -> list[str]:
-        from .usecases import DEFAULT_USE_CASE
-
         flags: list[str] = []
         if self.no_detect:
             flags.append("--no-detect")
@@ -269,10 +288,9 @@ class ReviewState:
             flags += ["--model", self.model]
         if self.base_url:
             flags += ["--base-url", self.base_url]
-        if self.inv_path.exists():
-            inv = self.load()
-            if inv.use_case != DEFAULT_USE_CASE:
-                flags += ["--use-case", inv.use_case]
+        key = self.uc.key
+        if key != DEFAULT_USE_CASE:
+            flags += ["--use-case", key]
         return flags
 
     def start_build(self) -> bool:
@@ -307,7 +325,7 @@ class ReviewState:
                     self.build = {"status": "failed", "detail": str(e),
                                   "cmd": cmd}
         threading.Thread(target=run, daemon=True).start()
-        self.ack("reviewer", "landlord", "build",
+        self.ack("reviewer", self.uc.owner_role.key, "build",
                  f"backend={self.backend} no_detect={self.no_detect}")
         return True
 
@@ -326,21 +344,49 @@ class ReviewHandler(BaseHandler):
         expected = self.state.tenant_token
         return bool(expected) and secrets.compare_digest(token, expected)
 
+    def _review_payload(self, inv: Inventory, **extra) -> dict:
+        st = self.state
+        uc = st.uc
+        roles: dict = {
+            "owner": {"key": uc.owner_role.key, "label": uc.owner_role.label},
+            "counterparty": {"key": uc.counterparty_role.key,
+                             "label": uc.counterparty_role.label},
+        }
+        if uc.agent_role:
+            roles["agent"] = {"key": uc.agent_role.key,
+                              "label": uc.agent_role.label}
+        payload = {
+            "inventory": asdict(inv),
+            "photo_src": st.photo_src(inv),
+            "crop_src": st.crop_src(inv),
+            "backend": st.backend,
+            "backend_label": st.backend_label,
+            "use_case": uc.key,
+            "roles": roles,
+            "signing_roles": list(uc.signing_role_keys),
+            "cover_fields": [
+                {"name": f.name, "label": f.label, "placeholder": f.placeholder,
+                 "value": cover_value(inv, f)}
+                for f in uc.cover_fields
+            ],
+            "share": {
+                "link_noun": uc.share_page.link_noun,
+                "kicker": uc.share_page.kicker,
+                "howto": uc.share_page.howto,
+                "sign_bar": uc.share_page.sign_bar,
+                "placeholder": uc.share_page.placeholder,
+            },
+        }
+        payload.update(extra)
+        return payload
+
     def _render_app(self, template: str, **extra) -> str:
         st = self.state
         inv = st.load()
         env = Environment(loader=FileSystemLoader(TEMPLATES),
                           autoescape=select_autoescape(["html"]))
-        payload = {"inventory": asdict(inv),
-                   "photo_src": st.photo_src(inv),
-                   "crop_src": st.crop_src(inv),
-                   # spend guard: the UI names the backend+model that a
-                   # confirmed redescribe/build would run
-                   "backend": st.backend,
-                   "backend_label": st.backend_label}
-        payload.update(extra)
         return env.get_template(template).render(
-            inv=inv, payload=payload,
+            inv=inv, payload=self._review_payload(inv, **extra),
             share_url=extra.get("share_url", ""))
 
     def _render_start(self) -> str:
@@ -392,7 +438,7 @@ class ReviewHandler(BaseHandler):
             if not self._tenant_token_ok(m.group(1)):
                 self._err(403, "invalid or expired link")
                 return
-            self._html(self._render_app("tenant.html.j2", token=m.group(1)))
+            self._html(self._render_app("share.html.j2", token=m.group(1)))
             return
         m = re.fullmatch(r"/api/t/([\w\-]+)/inventory", path)
         if m:
@@ -500,7 +546,7 @@ class ReviewHandler(BaseHandler):
                 if "pdf" not in outputs:
                     self._err(500, "PDF generation failed — see server log")
                     return
-                st.ack("reviewer", "landlord", "export_pdf")
+                st.ack("reviewer", st.uc.owner_role.key, "export_pdf")
                 self._json({"ok": True, "pdf": "/pdf"})
                 return
             if path == "/api/inventory":
@@ -510,7 +556,7 @@ class ReviewHandler(BaseHandler):
                     st.save(inv)
                     if "render=1" in query:
                         st.rerender(inv)
-                st.ack(inv.inspected_by or "reviewer", "landlord",
+                st.ack(inv.inspected_by or "reviewer", st.uc.owner_role.key,
                        "save_inventory",
                        f"{inv.reviewed_count()}/{inv.item_count()} reviewed")
                 self._json({"ok": True,
@@ -554,9 +600,11 @@ class ReviewHandler(BaseHandler):
             if path == "/api/sign":
                 b = self._body()
                 name = (b.get("name") or "").strip()
-                role = (b.get("role") or "landlord").strip().lower()
-                if not name or role not in ("landlord", "agent"):
-                    self._err(400, "name and role (landlord|agent) required")
+                role = (b.get("role") or st.uc.owner_role.key).strip().lower()
+                allowed = st.uc.signing_role_keys
+                if not name or role not in allowed:
+                    self._err(400, "name and role ("
+                                   + "|".join(allowed) + ") required")
                     return
                 with st.lock:
                     inv = st.load()
@@ -587,7 +635,7 @@ class ReviewHandler(BaseHandler):
         payload = self._upload_photo_common(st.capture_dir, st.lock)
         if payload is None:
             return
-        st.ack("reviewer", "landlord", "upload_photo", payload["path"])
+        st.ack("reviewer", st.uc.owner_role.key, "upload_photo", payload["path"])
         self._json(payload)
 
     # ---- tenant actions --------------------------------------------------
@@ -595,7 +643,9 @@ class ReviewHandler(BaseHandler):
         st = self.state
         item_id = b.get("item_id")
         text = (b.get("text") or "").strip()
-        author = (b.get("author") or "tenant").strip() or "tenant"
+        author = (b.get("author") or st.uc.counterparty_role.key).strip() or \
+            st.uc.counterparty_role.key
+        cp_role = st.uc.counterparty_role.key
         if not item_id or not text:
             self._err(400, "item_id and text are required")
             return
@@ -604,7 +654,7 @@ class ReviewHandler(BaseHandler):
             for room in inv.rooms:
                 for it in room.items:
                     if it.id == item_id:
-                        it.comments.append({"author": author, "role": "tenant",
+                        it.comments.append({"author": author, "role": cp_role,
                                             "text": text, "at": _now()})
                         st.save(inv)
                         break
@@ -614,7 +664,7 @@ class ReviewHandler(BaseHandler):
             else:
                 self._err(404, f"no such item: {item_id}")
                 return
-        st.ack(author, "tenant", "comment", text, item_id)
+        st.ack(author, cp_role, "comment", text, item_id)
         self._json({"ok": True})
 
     def _tenant_sign(self, b: dict):
@@ -626,9 +676,11 @@ class ReviewHandler(BaseHandler):
         with st.lock:
             inv = st.load()
             inv.signatures.append(_signature(
-                inv, name, "tenant", "shared review link (level 3)"))
+                inv, name, st.uc.counterparty_role.key,
+                "shared review link (level 3)"))
             st.save(inv)
-        st.ack(name, "tenant", "sign", "acknowledged receipt and countersigned")
+        st.ack(name, st.uc.counterparty_role.key, "sign",
+               "acknowledged receipt and countersigned")
         self._json({"ok": True})
 
 
@@ -636,11 +688,13 @@ def serve(capture_dir: Path, out_dir: Path, port: int = 8484,
           share: bool = False, backend: str = "claude",
           model: Optional[str] = None, base_url: Optional[str] = None,
           open_browser: bool = True,
-          no_detect: bool = False) -> ThreadingHTTPServer:
+          no_detect: bool = False,
+          use_case: Optional[str] = None) -> ThreadingHTTPServer:
     """Build the server (returned so tests can drive it); call
     .serve_forever() to block."""
     state = ReviewState(capture_dir, out_dir, backend=backend, model=model,
-                        base_url=base_url, share=share, no_detect=no_detect)
+                        base_url=base_url, share=share, no_detect=no_detect,
+                        use_case=use_case)
     if not state.inv_path.exists():
         # no build yet — the start page handles upload + the first build
         print(f"\nNo {state.inv_path} yet — serving the start page "
@@ -657,7 +711,9 @@ def serve(capture_dir: Path, out_dir: Path, port: int = 8484,
     # is redirected (block-buffered) rather than a TTY
     print(f"\nReview app:  http://127.0.0.1:{actual_port}/", flush=True)
     if share:
-        print(f"Tenant link: http://{_lan_ip()}:{actual_port}/t/{state.tenant_token}",
+        noun = state.uc.share_page.link_noun
+        print(f"{noun.capitalize()} link: "
+              f"http://{_lan_ip()}:{actual_port}/t/{state.tenant_token}",
               flush=True)
         print("  Anyone with this link can read the inventory, comment and "
               "countersign.\n  It dies with this process; restart for a new link.")

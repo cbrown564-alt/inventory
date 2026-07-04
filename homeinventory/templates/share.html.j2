@@ -65,7 +65,7 @@
   .c-thread { margin-top: 12px; }
   .c-line { padding: 6px 0 0; font-size: 13px; }
   .c-line .who { font-weight: 600; font-size: 12px; color: var(--accent-ink); }
-  .c-line .who.tenant { color: var(--tenant); }
+  .c-line .who.who-counterparty { color: var(--tenant); }
   .c-line .at { font-family: var(--mono); font-size: 10px; color: var(--muted);
                 margin-left: 8px; }
   .c-add { display: flex; gap: 8px; margin-top: 10px; }
@@ -113,10 +113,8 @@
 
 <div id="signbar">
   <div class="inner" id="signbar-inner">
-    <span class="lead">Walked the property and checked this inventory?
-      Countersigning records your acknowledgement next to the landlord's
-      signature.</span>
-    <input id="sign-name" type="text" placeholder="Your full name">
+    <span class="lead" id="signbar-lead"></span>
+    <input id="sign-name" type="text" placeholder="">
     <button id="sign-btn">Acknowledge &amp; countersign</button>
   </div>
 </div>
@@ -130,6 +128,14 @@
   var inv = payload.inventory;
   var photoSrc = payload.photo_src || {};
   var token = payload.token;
+  var share = payload.share || {};
+  var roles = payload.roles || {};
+  var counterpartyKey = (roles.counterparty && roles.counterparty.key) || "tenant";
+  var counterpartyLabel = (roles.counterparty && roles.counterparty.label) || "Tenant";
+
+  document.getElementById("signbar-lead").textContent = share.sign_bar || "";
+  document.getElementById("sign-name").placeholder =
+    share.placeholder || "Your full name";
   var api = function (method, path, body) {
     return fetch("/api/t/" + token + path, {
       method: method,
@@ -162,13 +168,17 @@
   var savedName = "";
   try { savedName = localStorage.getItem("hi-tenant-name") || ""; } catch (e) {}
 
+  function whoClass(role) {
+    return role === counterpartyKey ? "who-counterparty" : "who-owner";
+  }
+
   function render() {
     var m = document.getElementById("main");
     m.innerHTML = "";
 
     var head = el("div", { "class": "masthead" });
     head.appendChild(el("div", { "class": "kicker",
-      text: "Inventory & schedule of condition — tenant review" }));
+      text: share.kicker || "Inventory review" }));
     head.appendChild(el("h1", { text: inv.property_address || "Property" }));
     head.appendChild(el("div", { "class": "meta",
       text: "Inspected " + (inv.inspected_at || "") +
@@ -176,11 +186,7 @@
             inv.rooms.length + " rooms" }));
     m.appendChild(head);
     m.appendChild(el("div", { "class": "howto",
-      text: "Walk each room with this page open. If something was already " +
-            "marked, scuffed or missing before you moved in, say so in a " +
-            "comment on that item — your comments are stored with the " +
-            "inventory and protect your deposit. When you're done, " +
-            "countersign at the bottom." }));
+      text: share.howto || "" }));
 
     inv.rooms.forEach(function (room, ri) {
       m.appendChild(el("h2", { "class": "room",
@@ -211,7 +217,7 @@
     m.appendChild(sig);
 
     var mine = (inv.signatures || []).some(function (s) {
-      return s.role === "tenant";
+      return s.role === counterpartyKey;
     });
     if (mine) {
       var bar = document.getElementById("signbar");
@@ -276,7 +282,7 @@
     (it.comments || []).forEach(function (c) {
       var line = el("div", { "class": "c-line" });
       line.appendChild(el("span", {
-        "class": "who " + (c.role || ""),
+        "class": "who " + whoClass(c.role || ""),
         text: (c.author || "?") + " (" + (c.role || "reviewer") + ")" }));
       if (c.at) line.appendChild(el("span", { "class": "at",
         text: (c.at + "").slice(0, 16).replace("T", " ") }));
@@ -303,8 +309,8 @@
       api("POST", "/comments", { item_id: it.id, text: text, author: name })
         .then(function () {
           var line = el("div", { "class": "c-line" });
-          line.appendChild(el("span", { "class": "who tenant",
-            text: name + " (tenant)" }));
+          line.appendChild(el("span", { "class": "who who-counterparty",
+            text: name + " (" + counterpartyKey + ")" }));
           line.appendChild(el("div", { text: text }));
           thread.appendChild(line);
           input.value = "";

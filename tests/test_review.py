@@ -222,6 +222,82 @@ def test_owner_sign_pins_content_hash(server):
     assert sig["inventory_sha256"] == on_disk.content_sha256()
 
 
+def test_sign_whitelist_tenancy(server):
+    """Owner /api/sign accepts every signing role in the tenancy profile."""
+    base, _state, _out, _cap = server
+    for role in ("landlord", "agent", "tenant"):
+        status, resp = _req("POST", base + "/api/sign",
+                            {"name": f"Signer ({role})", "role": role})
+        assert status == 200, resp
+    status, resp = _req("POST", base + "/api/sign",
+                        {"name": "Nope", "role": "cleaner"})
+    assert status == 400
+    assert "landlord|agent|tenant" in resp["error"]
+
+
+def test_sign_whitelist_deepclean(tmp_path):
+    """Deep-clean profile whitelists customer/cleaner on /api/sign."""
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    out = tmp_path / "report"
+    assert main(["build", str(cap), "-o", str(out),
+                 "--backend", "offline", "--no-detect", "--no-pdf",
+                 "--use-case", "deepclean"]) == 0
+    inv = Inventory.from_json((out / "inventory.json").read_text(encoding="utf-8"))
+    inv.rooms[0].items.append(Item(id="KIT-001", name="Floor", condition="good",
+                                   photo_ids=[p.id for p in inv.rooms[0].photos]))
+    (out / "inventory.json").write_text(inv.to_json(), encoding="utf-8")
+    httpd = serve(cap, out, port=0, share=False, backend="offline",
+                  open_browser=False)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    base = f"http://127.0.0.1:{httpd.server_address[1]}"
+    try:
+        for role in ("customer", "cleaner"):
+            status, resp = _req("POST", base + "/api/sign",
+                                {"name": f"Signer ({role})", "role": role})
+            assert status == 200, resp
+        status, resp = _req("POST", base + "/api/sign",
+                            {"name": "Nope", "role": "landlord"})
+        assert status == 400
+        assert "customer|cleaner" in resp["error"]
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_share_link_wording_uses_link_noun(server, capsys):
+    """Console share URL label comes from the profile's link_noun."""
+    base, state, _out, _cap = server
+    status, html = _get_text(base + "/")
+    assert status == 200
+    assert f'{state.uc.share_page.link_noun} link:' in html
+    assert "tenant link:" in html
+
+
+def test_share_link_noun_deepclean(tmp_path, capsys):
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    out = tmp_path / "report"
+    assert main(["build", str(cap), "-o", str(out),
+                 "--backend", "offline", "--no-detect", "--no-pdf",
+                 "--use-case", "deepclean"]) == 0
+    inv = Inventory.from_json((out / "inventory.json").read_text(encoding="utf-8"))
+    inv.rooms[0].items.append(Item(id="KIT-001", name="Floor", condition="good",
+                                   photo_ids=[p.id for p in inv.rooms[0].photos]))
+    (out / "inventory.json").write_text(inv.to_json(), encoding="utf-8")
+    httpd = serve(cap, out, port=0, share=True, backend="offline",
+                  open_browser=False)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    try:
+        captured = capsys.readouterr()
+        assert "Customer link:" in captured.out
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
 def test_tenant_token_gate(server):
     base, state, _out, _cap = server
     status, _ = _get_text(base + f"/t/{state.tenant_token}")
