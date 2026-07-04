@@ -53,13 +53,19 @@ truth, so there is no headroom a 4× price buys.
 
 ## Decision
 
-- **Default segmentation model: `claude-sonnet-5`** — the property owner
-  already has an Anthropic key for the describe step ("configure once");
-  ~£0.30 per property is well inside the cost story; and it was the only
-  model to match the manual cut outright.
-- **`gemini-3.5-flash` is the documented cheap alternative** (needs a
-  `GEMINI_API_KEY`): its two merges are exactly the kind of error the
-  review app's rename/re-describe affordances repair in seconds.
+- **Default segmentation model: `gemini-3.5-flash`** (product owner's
+  call, 4 Jul 2026, overriding the implementer's sonnet recommendation):
+  pennies per run, zero invented rooms, and its two merges (loft office →
+  loft bedroom, cupboard → hallway) are exactly the kind of error the
+  review app's rename/re-describe affordances repair in seconds. Needs a
+  `GEMINI_API_KEY` in `.env`.
+- **`claude-sonnet-5` is the quality alternative** (~£0.30/run, matched
+  the manual cut outright, one key shared with the claude describe
+  backend).
+- Follow-up opened by the same call: evaluate `gemini-3.5-flash` on the
+  **core describe task** against the docs/04 gold fixture — if it lands
+  near the opus ceiling there too, the whole pipeline's default gets
+  cheaper. Plan of record: docs/12.
 - Boundary precision at 5 s sampling was within one frame of the eyeballed
   transitions everywhere it was checked; a 1 s refinement pass around
   boundaries stays **parked** until real use shows boundary bleed in built

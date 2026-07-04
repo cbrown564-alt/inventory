@@ -170,6 +170,8 @@ photos / video → keyframes → SHA-256 manifest → YOLOE open-vocab detection
 - [`docs/06-professional-report-benchmark.md`](docs/06-professional-report-benchmark.md) — pipeline vs a professional clerk's published report (M1)
 - [`docs/07-own-property-run.md`](docs/07-own-property-run.md) — first full own-property run (M2)
 - [`docs/08-compare.md`](docs/08-compare.md) — check-in vs check-out comparison: alignment, wear-vs-damage rubric, IMS agreement (M4)
+- [`docs/11-video-segmentation.md`](docs/11-video-segmentation.md) — room segmentation from one walkthrough video: six-model benchmark on real footage
+- [`docs/12-video-first-journey.md`](docs/12-video-first-journey.md) — **plan of record**: the video-first journey pivot, done/remaining/acceptance criteria
 - [`evals/README.md`](evals/README.md) — fixture format and quality metrics
 
 ## Status
