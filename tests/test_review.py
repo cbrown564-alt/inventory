@@ -412,15 +412,13 @@ def test_start_page_empty_capture(fresh_server):
     assert 'id="use-case-picker"' in html_root
     status, html = _get_text(base + "/start")
     assert status == 200
-    assert 'id="empty-state"' in html          # empty-state instruction block
-    assert "one folder per" in html            # the instruction text itself
-    # build confirm control names backend+model (template assertion)
+    assert 'id="filming-guide"' in html
+    assert "Drop your walkthrough video" in html
     assert 'id="btn-build"' in html
-    assert 'id="build-backend"' in html
-    assert "offline (no AI)" in html
+    assert "one folder per" not in html
 
 
-def test_start_page_lists_rooms_with_counts(tmp_path):
+def test_start_page_lists_capture_via_api(tmp_path):
     cap = tmp_path / "capture"
     _img(cap / "Kitchen" / "k1.jpg")
     _img(cap / "Kitchen" / "k2.jpg")
@@ -431,13 +429,11 @@ def test_start_page_lists_rooms_with_counts(tmp_path):
     try:
         assert _req("POST", base + "/api/project",
                     {"use_case": "tenancy"})[0] == 200
-        status, html = _get_text(base + "/start")
+        status, body = _req("GET", base + "/api/rooms")
         assert status == 200
-        assert 'id="room-list"' in html and 'id="empty-state"' not in html
-        assert 'data-room="Kitchen"' in html
-        assert 'data-room="Living Room"' in html
-        assert '<td class="n-photos">2</td>' in html    # Kitchen photos
-        assert '<td class="n-videos">1</td>' in html    # Living Room video
+        rooms = {r["name"]: r for r in body["rooms"]}
+        assert rooms["Kitchen"]["photos"] == 2
+        assert rooms["Living Room"]["videos"] == 1
     finally:
         httpd.shutdown()
         httpd.server_close()
@@ -594,24 +590,26 @@ def test_build_e2e_offline(fresh_server):
     assert _upload(base, "Kitchen", "k1.jpg", _jpeg_bytes())[0] == 200
     assert _upload(base, "Living Room", "l1.jpg", _jpeg_bytes())[0] == 200
 
-    # missing confirm -> 400; wrong backend named -> 400; nothing started
+    # missing confirm -> 400; wrong token -> 400; nothing started
     status, resp = _req("POST", base + "/api/build", {})
     assert status == 400 and "confirm" in resp["error"]
     status, resp = _req("POST", base + "/api/build", {"confirm": "claude"})
-    assert status == 400 and "offline" in resp["error"]
+    assert status == 400 and "yes" in resp["error"]
     status, resp = _req("GET", base + "/api/build")
     assert status == 200 and resp["status"] == "idle"
 
-    # correct confirm starts the pinned £0 command — asserted as the FULL
-    # spawned argument list, not just flag membership (M5a audit nit)
-    status, resp = _req("POST", base + "/api/build", {"confirm": "offline"})
+    # correct confirm starts the pinned £0 command
+    status, resp = _req("POST", base + "/api/build", {"confirm": "yes"})
     assert status == 200, resp
     import sys as _sys
     with state.lock:
         cmd = state.build["cmd"]
+    progress = str(out / "work" / "build-progress.json")
     assert cmd == [_sys.executable, "-m", "homeinventory.cli", "build",
                    str(_cap), "-o", str(out),
-                   "--backend", "offline", "--no-pdf", "--no-detect"]
+                   "--backend", "offline",
+                   "--progress-file", progress,
+                   "--no-detect"]
 
     deadline = time.time() + 120
     while time.time() < deadline:
@@ -634,15 +632,15 @@ def test_build_and_redescribe_concurrency_409(fresh_server):
     base, state, _out, _cap = fresh_server
     with state.lock:
         state.build = {"status": "running", "detail": "", "cmd": None}
-    status, _ = _req("POST", base + "/api/build", {"confirm": "offline"})
+    status, _ = _req("POST", base + "/api/build", {"confirm": "yes"})
     assert status == 409
     status, _ = _req("POST", base + "/api/redescribe",
-                     {"room": "Kitchen", "confirm": "offline"})
+                     {"room": "Kitchen", "confirm": "yes"})
     assert status == 409                        # build blocks redescribe
     with state.lock:
         state.build = {"status": "idle", "detail": "", "cmd": None}
         state.redescribe = {"status": "running", "room": "X", "detail": ""}
-    status, _ = _req("POST", base + "/api/build", {"confirm": "offline"})
+    status, _ = _req("POST", base + "/api/build", {"confirm": "yes"})
     assert status == 409                        # redescribe blocks build
     with state.lock:
         state.redescribe = {"status": "idle", "room": None, "detail": ""}
@@ -656,10 +654,10 @@ def test_redescribe_requires_confirm(server):
     assert status == 400 and "confirm" in resp["error"]
     status, resp = _req("POST", base + "/api/redescribe",
                         {"room": "Kitchen", "confirm": "claude"})
-    assert status == 400 and "offline" in resp["error"]
+    assert status == 400 and "yes" in resp["error"]
     # correct confirm still works end-to-end (offline, £0)
     status, resp = _req("POST", base + "/api/redescribe",
-                        {"room": "Kitchen", "confirm": "offline"})
+                        {"room": "Kitchen", "confirm": "yes"})
     assert status == 200, resp
     deadline = time.time() + 120
     while time.time() < deadline:
@@ -670,13 +668,12 @@ def test_redescribe_requires_confirm(server):
     assert s["status"] == "done", s
 
 
-def test_redescribe_ui_names_backend(server):
-    """Template assertion: the redescribe UI shows backend+model."""
+def test_redescribe_ui_uses_spend_copy(server):
     base, _state, _out, _cap = server
     status, html = _get_text(base + "/")
     assert status == 200
-    assert "AI model:" in html                  # label beside the button
-    assert "offline (no AI)" in html            # payload backend_label
+    assert "AI model:" not in html
+    assert "Re-describe" in html
 
 
 # ---- PDF export (background job since docs/10) ------------------------------
@@ -924,7 +921,7 @@ def test_post_api_project_creates_deepclean_layout(tmp_path):
         assert (cap / "before").is_dir() and (cap / "after").is_dir()
         assert (out / "before").is_dir() and (out / "after").is_dir()
         status, html = _get_text(base + "/")
-        assert status == 200 and 'id="session-list"' in html
+        assert status == 200 and 'class="slots"' in html
         assert 'id="use-case-picker"' not in html
     finally:
         httpd.shutdown()
@@ -938,7 +935,7 @@ def test_post_api_project_409_after_build(tmp_path):
     base, httpd = _start_server(cap, out)
     try:
         assert _upload(base, "Kitchen", "k1.jpg", _jpeg_bytes())[0] == 200
-        assert _req("POST", base + "/api/build", {"confirm": "offline"})[0] == 200
+        assert _req("POST", base + "/api/build", {"confirm": "yes"})[0] == 200
         deadline = time.time() + 120
         while time.time() < deadline:
             _, resp = _req("GET", base + "/api/build")
@@ -976,7 +973,7 @@ def test_deepclean_web_e2e_compare_argv_pin(tmp_path):
             assert _upload(base, room, f"{sess}.jpg", _jpeg_bytes(),
                            url_prefix=prefix)[0] == 200
             assert _req("POST", base + prefix + "/api/build",
-                        {"confirm": "offline"})[0] == 200
+                        {"confirm": "yes"})[0] == 200
             deadline = time.time() + 120
             while time.time() < deadline:
                 _, resp = _req("GET", base + prefix + "/api/build")
@@ -986,15 +983,14 @@ def test_deepclean_web_e2e_compare_argv_pin(tmp_path):
             assert resp["status"] == "done", resp
             assert (out / sess / "inventory.json").is_file()
 
-        status, resp = _req("POST", base + "/api/compare", {})
-        assert status == 400 and "confirm" in resp["error"]
-        status, resp = _req("POST", base + "/api/compare",
-                            {"confirm": "openai"})
-        assert status == 400 and "offline" in resp["error"]
-
-        status, resp = _req("POST", base + "/api/compare",
-                            {"confirm": "offline"})
-        assert status == 200, resp
+        # auto-compare runs when the second session build completes
+        deadline = time.time() + 120
+        while time.time() < deadline:
+            _, resp = _req("GET", base + "/api/compare")
+            if resp["status"] in ("done", "failed"):
+                break
+            time.sleep(0.2)
+        assert resp["status"] == "done", resp
         import sys as _sys
         with httpd.project_state.lock:
             cmd = httpd.project_state.compare["cmd"]
@@ -1004,13 +1000,6 @@ def test_deepclean_web_e2e_compare_argv_pin(tmp_path):
                        "--backend", "offline", "--no-pdf",
                        "--use-case", "deepclean"]
 
-        deadline = time.time() + 120
-        while time.time() < deadline:
-            _, resp = _req("GET", base + "/api/compare")
-            if resp["status"] in ("done", "failed"):
-                break
-            time.sleep(0.2)
-        assert resp["status"] == "done", resp
         assert (out / "compare" / "compare.html").is_file()
     finally:
         httpd.shutdown()
@@ -1058,14 +1047,13 @@ def test_compare_serving_paths_and_trailing_slash(tmp_path):
             prefix = f"/s/{sess}"
             _upload(base, "Kitchen", f"{sess}.jpg", _jpeg_bytes(),
                     url_prefix=prefix)
-            _req("POST", base + prefix + "/api/build", {"confirm": "offline"})
+            _req("POST", base + prefix + "/api/build", {"confirm": "yes"})
             deadline = time.time() + 120
             while time.time() < deadline:
                 _, resp = _req("GET", base + prefix + "/api/build")
                 if resp["status"] in ("done", "failed"):
                     break
                 time.sleep(0.2)
-        _req("POST", base + "/api/compare", {"confirm": "offline"})
         deadline = time.time() + 120
         while time.time() < deadline:
             _, resp = _req("GET", base + "/api/compare")

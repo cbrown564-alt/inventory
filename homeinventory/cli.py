@@ -88,6 +88,7 @@ def cmd_build(args) -> int:
     from .ingest import ingest
     from .integrity import build_manifest
     from .merge import merge_items, merge_room_with_prior, room_code
+    from .progress import BuildProgress
     from .report import render
     from .usecases import DEFAULT_USE_CASE, get_use_case
 
@@ -98,10 +99,38 @@ def cmd_build(args) -> int:
         return 2
     out_dir.mkdir(parents=True, exist_ok=True)
     work_dir = out_dir / "work"
+    progress_path = getattr(args, "progress_file", None)
+    if progress_path:
+        progress_path = Path(progress_path)
+    progress = BuildProgress()
+    progress.start(progress_path)
+
+    seg_json = getattr(args, "segments_json", None)
+    if seg_json:
+        seg_json = Path(seg_json)
+
+    def _on_segmenting():
+        progress.segmenting(progress_path)
+
+    def _on_segmented(n_rooms: int):
+        progress.segmented(progress_path, n_rooms)
 
     # 1. ingest
-    rooms_photos = ingest(capture_dir, work_dir,
-                          lead_trim_s=getattr(args, "trim_lead", 0.0))
+    try:
+        rooms_photos = ingest(
+            capture_dir, work_dir,
+            lead_trim_s=getattr(args, "trim_lead", 0.0),
+            segment_model=getattr(args, "segment_model", "gemini-3.5-flash"),
+            segment_every=getattr(args, "segment_every", 5.0),
+            segments_json=seg_json,
+            no_segment=getattr(args, "no_segment", False),
+            on_segmenting=_on_segmenting,
+            on_segmented=_on_segmented,
+        )
+    except Exception as e:
+        progress.failed(progress_path, str(e))
+        print(f"error: ingest failed: {e}", file=sys.stderr)
+        return 2
     if not rooms_photos:
         print("error: no photos or videos found (see `homeinventory guide`)",
               file=sys.stderr)
@@ -196,7 +225,9 @@ def cmd_build(args) -> int:
 
     built: dict[str, Room] = {}
     failures: list[str] = []
-    for room_name in sorted(selected):
+    room_names = sorted(selected)
+    for ri, room_name in enumerate(room_names, start=1):
+        progress.describing(progress_path, ri, len(room_names), room_name)
         photos = selected[room_name]
         ckpt = ckpt_dir / _checkpoint_name(room_name)
         if args.resume and ckpt.exists():
@@ -258,7 +289,9 @@ def cmd_build(args) -> int:
         inv.rooms = [built[k] for k in sorted(built)]
 
     # 6. report
+    progress.rendering(progress_path)
     outputs = render(inv, capture_dir, out_dir, pdf=not args.no_pdf)
+    progress.done(progress_path)
     print(f"\n{inv.item_count()} items across {len(inv.rooms)} rooms, "
           f"{inv.photo_count()} photos.")
     for kind, path in outputs.items():
@@ -497,6 +530,19 @@ def main(argv: list[str] | None = None) -> int:
                         "when room segments were cut from one continuous "
                         "walkthrough, so the previous room's tail frames don't "
                         "bleed into this room's schedule")
+    b.add_argument("--no-segment", action="store_true",
+                   help="skip VLM room segmentation for root walkthrough videos "
+                        "(treat as one General room)")
+    b.add_argument("--segment-model", default="gemini-3.5-flash",
+                   help="VLM for walkthrough segmentation (default: "
+                        "gemini-3.5-flash)")
+    b.add_argument("--segment-every", type=float, default=5.0,
+                   help="thumbnail strip interval in seconds for segmentation")
+    b.add_argument("--segments-json", default=None,
+                   help="reuse a pre-computed segments.json (skips the VLM "
+                        "segmentation call)")
+    b.add_argument("--progress-file", default=None,
+                   help="write staged build progress JSON for the web UI")
     b.add_argument("--no-detect", action="store_true",
                    help="skip YOLOE detection (no crops / hints)")
     _add_detect_args(b)
@@ -580,6 +626,8 @@ def main(argv: list[str] | None = None) -> int:
     c.set_defaults(func=cmd_compare)
 
     args = parser.parse_args(argv)
+    from .dotenv import load_dotenv
+    load_dotenv()
     logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO,
                         format="%(levelname)s %(message)s")
     return args.func(args)

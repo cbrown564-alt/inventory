@@ -8,8 +8,10 @@ a room called "General".
 
 from __future__ import annotations
 
+import json
 import logging
 import os
+import re
 from pathlib import Path
 from typing import Optional
 
@@ -59,10 +61,18 @@ def exif_capture_time(path: Path) -> Optional[str]:
     return None
 
 
+def segment_frame_budget(duration_s: float, base_max: int = 24,
+                         min_frames: int = 4) -> int:
+    """Keyframes for one segment — ~6 per minute, capped."""
+    return max(min_frames, min(base_max, round(duration_s / 60.0 * 6)))
+
+
 def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
                       min_window_s: float = 0.75,
                       min_diff: float = 12.0,
-                      lead_trim_s: float = 0.0) -> list[Path]:
+                      lead_trim_s: float = 0.0,
+                      start_s: float = 0.0,
+                      end_s: Optional[float] = None) -> list[Path]:
     """Keep the sharpest frame from each time window of the video.
 
     An absolute sharpness threshold doesn't transfer across devices, codecs
@@ -90,7 +100,10 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
     fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
     n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
     duration = n_frames / fps if n_frames else 0.0
-    window_s = max(duration / max_frames, min_window_s) if duration else min_window_s
+    clip_end = end_s if end_s is not None else duration
+    clip_start = max(0.0, start_s)
+    clip_dur = max(clip_end - clip_start, 0.0)
+    window_s = max(clip_dur / max_frames, min_window_s) if clip_dur else min_window_s
     step = max(1, int(fps / 3))  # ~3 candidate frames per second
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -121,14 +134,20 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
         if idx % step:
             idx += 1
             continue
-        if lead_trim_s and (idx / fps) < lead_trim_s:
+        t_s = idx / fps
+        if t_s < clip_start:
+            idx += 1
+            continue
+        if end_s is not None and t_s >= clip_end:
+            break
+        if lead_trim_s and t_s < clip_start + lead_trim_s:
             idx += 1
             continue
         ok, frame = cap.retrieve()
         if not ok:
             idx += 1
             continue
-        w = int((idx / fps) / window_s)
+        w = int((t_s - clip_start) / window_s)
         if w != window:
             flush()
             best, window = None, w
@@ -144,8 +163,70 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
     return kept
 
 
+def find_root_videos(capture_dir: Path) -> list[Path]:
+    """Walkthrough videos dropped at the capture root (video-first journey)."""
+    out: list[Path] = []
+    if not capture_dir.is_dir():
+        return out
+    for entry in sorted(capture_dir.iterdir(), key=lambda p: p.name.lower()):
+        if entry.is_file() and not entry.name.startswith(".") \
+                and entry.suffix.lower() in VIDEO_EXTS:
+            out.append(entry)
+    return out
+
+
+def _load_segments(video: Path, work_dir: Path, *,
+                   segment_model: str, every_s: float,
+                   segments_json: Optional[Path]) -> list:
+    """Return segment list, caching to work_dir/segments/."""
+    from dataclasses import asdict
+    from .segment import Segment, segment_video
+
+    cache = segments_json or work_dir / "segments" / f"{video.stem}.json"
+    if cache.is_file():
+        data = json.loads(cache.read_text(encoding="utf-8"))
+        segments = [Segment(**s) for s in data["segments"]]
+        log.info("loaded %d segments from %s", len(segments), cache)
+        return segments
+    segments, meta = segment_video(video, every_s=every_s, model=segment_model)
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    cache.write_text(json.dumps(
+        {**meta, "segments": [asdict(s) for s in segments]},
+        indent=2, ensure_ascii=False), encoding="utf-8")
+    return segments
+
+
+def _ingest_root_video(video: Path, work_dir: Path, capture_dir: Path, add,
+                       *, segment_model: str, segment_every: float,
+                       segments_json: Optional[Path], no_segment: bool,
+                       lead_trim_s: float) -> None:
+    if no_segment:
+        for fr in extract_keyframes(video, work_dir / "frames" / "General",
+                                    lead_trim_s=lead_trim_s):
+            add("General", fr, source_video=video.name)
+        return
+    segments = _load_segments(video, work_dir, segment_model=segment_model,
+                              every_s=segment_every,
+                              segments_json=segments_json)
+    for i, seg in enumerate(segments):
+        seg_dur = max(seg.end_s - seg.start_s, 0.1)
+        budget = segment_frame_budget(seg_dur)
+        safe = re.sub(r"[^\w\- ]+", "_", seg.room)[:40]
+        frame_dir = work_dir / "frames" / f"{safe}_seg{i:02d}"
+        for fr in extract_keyframes(video, frame_dir, max_frames=budget,
+                                    start_s=seg.start_s, end_s=seg.end_s):
+            add(seg.room, fr, source_video=video.name)
+
+
 def ingest(capture_dir: Path, work_dir: Path,
-           lead_trim_s: float = 0.0) -> dict[str, list[Photo]]:
+           lead_trim_s: float = 0.0,
+           *,
+           segment_model: str = "gemini-3.5-flash",
+           segment_every: float = 5.0,
+           segments_json: Optional[Path] = None,
+           no_segment: bool = False,
+           on_segmenting=None,
+           on_segmented=None) -> dict[str, list[Photo]]:
     """Return {room_name: [Photo, ...]}. Video keyframes land in work_dir/frames.
 
     ``lead_trim_s`` is forwarded to keyframe extraction — use it when per-room
@@ -191,7 +272,14 @@ def ingest(capture_dir: Path, work_dir: Path,
             if _decodable(entry):
                 add("General", entry)
         elif entry.is_file() and entry.suffix.lower() in VIDEO_EXTS:
-            for fr in extract_keyframes(entry, work_dir / "frames" / "General",
-                                        lead_trim_s=lead_trim_s):
-                add("General", fr, source_video=entry.name)
+            if on_segmenting:
+                on_segmenting()
+            _ingest_root_video(entry, work_dir, capture_dir, add,
+                               segment_model=segment_model,
+                               segment_every=segment_every,
+                               segments_json=segments_json,
+                               no_segment=no_segment,
+                               lead_trim_s=lead_trim_s)
+            if on_segmented:
+                on_segmented(len(rooms))
     return rooms

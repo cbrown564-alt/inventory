@@ -25,7 +25,7 @@ log = logging.getLogger(__name__)
 # Claude accepts up to 100 images per request; stay under it with margin.
 _MAX_IMAGES_PER_CALL = 90
 
-DEFAULT_MODEL = "claude-haiku-4-5"
+DEFAULT_MODEL = "gemini-3.5-flash"
 
 SYSTEM_PROMPT = """\
 You segment a continuous walkthrough video of a residential property into

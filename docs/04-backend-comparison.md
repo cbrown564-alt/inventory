@@ -31,6 +31,28 @@ hallucination. Targets from `evals/README.md`.
 Reproduce: `python evals/score_benchmarks.py` (or `--json`). Per-run JSON in
 `benchmarks/inventoryflex/report-<run>/inventory.json`.
 
+## gemini-3.5-flash describe eval (opened Jul 2026, docs/12)
+
+Segmentation already uses `gemini-3.5-flash` (docs/11). The describe-task
+benchmark on the InventoryFlex fixture is **not yet scored** — it needs a
+`GEMINI_API_KEY` in `.env` and a one-off build:
+
+```bash
+homeinventory build benchmarks/inventoryflex/capture \
+  -o benchmarks/inventoryflex/report-gemini35flash \
+  --backend openai --model gemini-3.5-flash
+python evals/run_eval.py benchmarks/inventoryflex/report-gemini35flash/inventory.json \
+  evals/fixtures/inventoryflex/labels.json
+```
+
+Decision gate (docs/12): within a few points of claude-v4 on hallucination,
+condition-exact and notable recall → default describe model; otherwise record
+the numbers here and keep claude as quality default.
+
+| Backend (run) | notable recall | halluc. | cond-exact | status |
+|---|---|---|---|---|
+| gemini-3.5-flash | — | — | — | pending API run |
+
 ## Reading the gap
 
 **`claude` vs `openai` (gpt-5.4-mini).** These are close enough that the

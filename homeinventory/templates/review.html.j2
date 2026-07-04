@@ -1193,6 +1193,56 @@
     d.appendChild(el("div", { "class": "crumb", text: "Room" }));
     d.appendChild(el("h2", { "class": "room-title", text: room.name }));
 
+    var secFix = el("div", { "class": "sec" });
+    secFix.appendChild(el("h3", { text: "Room name & boundaries" }));
+    secFix.appendChild(el("p", { "class": "c-line",
+      text: "Segmentation sometimes merges or misnames a room — fix it here "
+            + "before signing." }));
+    var renameRow = el("div", { "class": "add-form" });
+    var renameInput = el("input", { type: "text", value: room.name,
+      placeholder: "Room name" });
+    var renameBtn = el("button", { "class": "btn", text: "Rename room" });
+    renameBtn.addEventListener("click", function () {
+      var nm = renameInput.value.trim();
+      if (!nm || nm === room.name) return;
+      renameBtn.disabled = true;
+      api("POST", "/api/rooms/rename", { from: room.name, to: nm })
+        .then(function () { location.reload(); })
+        .catch(function (e) { renameBtn.disabled = false; toast(e.message); });
+    });
+    renameRow.appendChild(renameInput);
+    renameRow.appendChild(renameBtn);
+    secFix.appendChild(renameRow);
+    var mergeRow = el("div", { "class": "add-form" });
+    var mergeSelect = el("select", {});
+    mergeSelect.appendChild(el("option", { value: "", text: "Merge into…" }));
+    inv.rooms.forEach(function (r) {
+      if (r.name !== room.name) {
+        mergeSelect.appendChild(el("option", { value: r.name, text: r.name }));
+      }
+    });
+    var mergeBtn = el("button", { "class": "btn", text: "Merge into neighbour" });
+    mergeBtn.addEventListener("click", function () {
+      if (!mergeSelect.value) { toast("Pick a room to merge into"); return; }
+      ui.confirmDialog({
+        title: "Merge rooms?",
+        message: "Move every item and photo from " + room.name + " into "
+                 + mergeSelect.value + ". This cannot be undone.",
+        confirmLabel: "Merge"
+      }).then(function (yes) {
+        if (!yes) return;
+        mergeBtn.disabled = true;
+        api("POST", "/api/rooms/merge",
+            { source: room.name, into: mergeSelect.value })
+          .then(function () { location.reload(); })
+          .catch(function (e) { mergeBtn.disabled = false; toast(e.message); });
+      });
+    });
+    mergeRow.appendChild(mergeSelect);
+    mergeRow.appendChild(mergeBtn);
+    secFix.appendChild(mergeRow);
+    d.appendChild(secFix);
+
     var secS = el("div", { "class": "sec" });
     secS.appendChild(el("h3", { text: "Room summary" }));
     var ta = el("textarea", { "class": "room-summary" });
@@ -1293,8 +1343,6 @@
       text: "Re-runs the AI over this room's photos — useful after fixing " +
             "capture problems. Your review decisions for this room are " +
             "replaced." }));
-    secR.appendChild(el("p", { "class": "c-line",
-      text: "AI model: " + (payload.backend_label || "not configured") }));
     var rBtn = el("button", { "class": "btn", text: "Re-describe " + room.name });
     var rStatus = el("div", { id: "redesc-status" });
     function watchRedescribe() {
@@ -1326,10 +1374,9 @@
     rBtn.addEventListener("click", function () {
       ui.confirmDialog({
         title: "Re-describe " + room.name + "?",
-        message: "Runs " + (payload.backend_label || payload.backend) +
-                 " over this room's photos again." +
-                 (payload.backend === "offline"
-                   ? "" : " Paid backends spend API money."),
+        message: (payload.spend ? payload.spend.label + " — est. "
+                  + payload.spend.estimate + ". " : "") +
+                 "Re-runs the AI over this room's photos.",
         note: "Review decisions for this room are replaced. Unsaved edits " +
               "are saved first.",
         confirmLabel: "Re-describe"
@@ -1338,7 +1385,8 @@
         rBtn.disabled = true;
         flush({ manual: true }).then(function () {
           return api("POST", "/api/redescribe",
-                     { room: room.name, confirm: payload.backend });
+                     { room: room.name,
+                       confirm: payload.build_confirm || "yes" });
         }).then(watchRedescribe).catch(function (e) {
           rBtn.disabled = false; toast(e.message);
         });

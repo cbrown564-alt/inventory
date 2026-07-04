@@ -43,8 +43,10 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 # Server plumbing + the single copy of the browser-upload contract live in
 # webbase (extracted for M5b so the phone capture server reuses them
 # verbatim). sniff_extension/_safe_component stay importable from here.
-from .webbase import (TEMPLATES, BaseHandler, _safe_component,  # noqa: F401
-                      lan_ip as _lan_ip, scan_rooms, sniff_extension)
+from .webbase import (TEMPLATES, BaseHandler, WALKTHROUGH_ROOM, _safe_component,  # noqa: F401
+                      lan_ip as _lan_ip, scan_capture, scan_rooms, sniff_extension)
+from .progress import BuildProgress
+from .dotenv import load_dotenv
 from .schema import Inventory, Item, Photo, cover_value
 from .integrity import sha256_file
 from .usecases import DEFAULT_USE_CASE, REGISTRY, get_use_case, use_case_for
@@ -57,6 +59,25 @@ log = logging.getLogger(__name__)
 # no paid backend without a per-request confirm naming it).
 _BACKEND_DEFAULT_MODEL = {"claude": "claude-opus-4-8", "openai": "gpt-4.1-mini",
                           "local": "qwen3.5:9b"}
+BUILD_CONFIRM = "yes"
+
+
+def spend_info(backend: str, model: Optional[str] = None) -> dict:
+    """Plain-language spend copy for the UI — no backend or model names."""
+    if backend == "offline":
+        return {"label": "Draft mode", "estimate": "£0",
+                "note": "No AI — useful for testing the journey."}
+    if backend == "claude":
+        return {"label": "Full-quality report", "estimate": "~£1–3",
+                "note": "Best for the signed PDF."}
+    if backend == "openai":
+        return {"label": "Smart report", "estimate": "pennies–£1",
+                "note": "Good for iteration — review the output carefully."}
+    if backend == "local":
+        return {"label": "On-device draft", "estimate": "£0",
+                "note": "Runs on your machine — slower, needs review."}
+    return {"label": "AI report", "estimate": "varies",
+            "note": "Uses a paid API."}
 
 
 def _now() -> str:
@@ -268,7 +289,7 @@ class ProjectState:
             out.append({
                 "key": spec.key, "label": spec.label, "built": built,
                 "prefix": st.route_prefix,
-                "rooms": len(st.scan_capture()) if not built else None,
+                "rooms": st.scan_capture()["walkthrough_videos"] if not built else None,
             })
         return out
 
@@ -336,8 +357,8 @@ class SessionState:
     def backend_label(self) -> str:
         return self.project.backend_label
 
-    def scan_capture(self) -> list[dict]:
-        return scan_rooms(self.capture_dir)
+    def scan_capture(self) -> dict:
+        return scan_capture(self.capture_dir)
 
     @property
     def inv_path(self) -> Path:
@@ -519,13 +540,16 @@ class SessionState:
         with self.lock:
             if self._busy():
                 return False
+            progress_path = self.out_dir / "work" / "build-progress.json"
             cmd = [sys.executable, "-m", "homeinventory.cli", "build",
                    str(self.capture_dir), "-o", str(self.out_dir),
-                   "--backend", self.backend, "--no-pdf"]
+                   "--backend", self.backend,
+                   "--progress-file", str(progress_path)]
             if self.inv_path.exists():
                 cmd.append("--from-json")
             cmd += self._build_flags()
-            self.build = {"status": "running", "detail": "", "cmd": cmd}
+            self.build = {"status": "running", "detail": "", "cmd": cmd,
+                            "progress_path": str(progress_path)}
 
         def run():
             try:
@@ -538,15 +562,78 @@ class SessionState:
                         "detail": (proc.stdout if ok else
                                    (proc.stderr or proc.stdout))[-2000:],
                         "cmd": cmd,
+                        "progress_path": str(progress_path),
                     }
+                if ok and self.project.is_multi and self.project.all_sessions_built():
+                    if not (self.project.compare_dir / "compare.html").is_file():
+                        self.project.start_compare()
             except Exception as e:
                 with self.lock:
                     self.build = {"status": "failed", "detail": str(e),
-                                  "cmd": cmd}
+                                  "cmd": cmd,
+                                  "progress_path": str(progress_path)}
         threading.Thread(target=run, daemon=True).start()
         self.ack("reviewer", self.uc.owner_role.key, "build",
                  f"backend={self.backend} no_detect={self.no_detect}")
         return True
+
+    def build_status(self) -> dict:
+        with self.lock:
+            out = dict(self.build)
+        path = out.get("progress_path")
+        if path:
+            prog = BuildProgress.load(Path(path))
+            out.update({
+                "stage": prog.stage,
+                "stage_detail": prog.detail,
+                "rooms_found": prog.rooms_found,
+                "room_index": prog.room_index,
+                "room_total": prog.room_total,
+                "room_name": prog.room_name,
+            })
+        return out
+
+    def rename_room(self, old_name: str, new_name: str) -> None:
+        new_name = new_name.strip()
+        if not new_name:
+            raise ValueError("new room name is required")
+        with self.lock:
+            inv = self.load()
+            room = next((r for r in inv.rooms
+                         if r.name.lower() == old_name.lower()), None)
+            if room is None:
+                raise KeyError(f"no such room: {old_name}")
+            if any(r.name.lower() == new_name.lower() and r is not room
+                   for r in inv.rooms):
+                raise ValueError(f"room already exists: {new_name}")
+            room.name = new_name
+            for p in room.photos:
+                p.room = new_name
+            self.save(inv)
+        self.rerender()
+        self.ack("reviewer", self.uc.owner_role.key, "rename_room",
+                 f"{old_name} → {new_name}")
+
+    def merge_rooms(self, source: str, into: str) -> None:
+        with self.lock:
+            inv = self.load()
+            src = next((r for r in inv.rooms
+                        if r.name.lower() == source.lower()), None)
+            dst = next((r for r in inv.rooms
+                        if r.name.lower() == into.lower()), None)
+            if src is None or dst is None:
+                raise KeyError("source and target rooms must exist")
+            if src is dst:
+                raise ValueError("cannot merge a room into itself")
+            dst.photos.extend(src.photos)
+            dst.items.extend(src.items)
+            for p in dst.photos:
+                p.room = dst.name
+            inv.rooms = [r for r in inv.rooms if r is not src]
+            self.save(inv)
+        self.rerender()
+        self.ack("reviewer", self.uc.owner_role.key, "merge_rooms",
+                 f"{source} → {into}")
 
     def start_pdf(self) -> bool:
         """PDF export as a background job (WeasyPrint runs outside the lock)."""
@@ -640,6 +727,8 @@ class ReviewHandler(BaseHandler):
             "crop_src": st.crop_src(inv),
             "backend": st.backend,
             "backend_label": st.backend_label,
+            "spend": spend_info(st.backend, st.model),
+            "build_confirm": BUILD_CONFIRM,
             "use_case": uc.key,
             "roles": roles,
             "signing_roles": list(uc.signing_role_keys),
@@ -677,13 +766,14 @@ class ReviewHandler(BaseHandler):
                            and not st.inv_path.exists())
         picker = show_picker
         return env.get_template("start.html.j2").render(
-            rooms=st.scan_capture(), backend=st.backend,
-            backend_label=st.backend_label,
+            capture=st.scan_capture(), backend=st.backend,
+            spend=spend_info(st.backend, st.model),
             capture_dir=str(st.capture_dir),
             has_inventory=st.inv_path.exists(),
             use_case=proj.uc.key,
             use_case_label=proj.uc.display_name,
             show_picker=picker,
+            walkthrough_room=WALKTHROUGH_ROOM,
             use_cases=[{"key": u.key, "name": u.display_name,
                         "description": u.description}
                        for u in REGISTRY.values()],
@@ -891,15 +981,14 @@ class ReviewHandler(BaseHandler):
             self._file(html, "text/html; charset=utf-8")
             return
         if path == "/api/build":
-            with st.lock:
-                self._json(dict(st.build))
+            self._json(st.build_status())
             return
         if path == "/api/pdf":
             with st.lock:
                 self._json(dict(st.pdf))
             return
         if path == "/api/rooms":
-            self._json({"rooms": st.scan_capture()})
+            self._json(st.scan_capture())
             return
         if path == "/api/inventory":
             inv = st.load()
@@ -996,10 +1085,8 @@ class ReviewHandler(BaseHandler):
                 return
             if path == "/api/build":
                 b = self._body()
-                if (b.get("confirm") or "") != st.backend:
-                    self._err(400, "build must be confirmed with the "
-                                   f"configured backend name ({st.backend!r})"
-                                   " in {\"confirm\": ...}")
+                if (b.get("confirm") or "") != BUILD_CONFIRM:
+                    self._err(400, 'build must be confirmed with {"confirm": "yes"}')
                     return
                 if not st.start_build():
                     self._err(409, "a build or re-describe is already running")
@@ -1061,13 +1148,32 @@ class ReviewHandler(BaseHandler):
                 if not b.get("room"):
                     self._err(400, "room is required")
                     return
-                if (b.get("confirm") or "") != st.backend:
-                    self._err(400, "re-describe must be confirmed with the "
-                                   f"configured backend name ({st.backend!r})"
-                                   " in {\"confirm\": ...}")
+                if (b.get("confirm") or "") != BUILD_CONFIRM:
+                    self._err(400, 're-describe must be confirmed with '
+                                   '{"confirm": "yes"}')
                     return
                 if not st.start_redescribe(b["room"]):
                     self._err(409, "a build or re-describe is already running")
+                    return
+                self._json({"ok": True})
+                return
+            if path == "/api/rooms/rename":
+                b = self._body()
+                try:
+                    st.rename_room(b.get("from") or b.get("old") or "",
+                                   b.get("to") or b.get("new") or "")
+                except (ValueError, KeyError) as e:
+                    self._err(400, str(e))
+                    return
+                self._json({"ok": True})
+                return
+            if path == "/api/rooms/merge":
+                b = self._body()
+                try:
+                    st.merge_rooms(b.get("source") or b.get("from") or "",
+                                   b.get("into") or b.get("to") or "")
+                except (ValueError, KeyError) as e:
+                    self._err(400, str(e))
                     return
                 self._json({"ok": True})
                 return
@@ -1151,6 +1257,7 @@ def serve(capture_dir: Path, out_dir: Path, port: int = 8484,
           use_case: Optional[str] = None) -> ThreadingHTTPServer:
     """Build the server (returned so tests can drive it); call
     .serve_forever() to block."""
+    load_dotenv()
     project = ProjectState(capture_dir, out_dir, backend=backend, model=model,
                            base_url=base_url, share=share, no_detect=no_detect,
                            use_case=use_case)

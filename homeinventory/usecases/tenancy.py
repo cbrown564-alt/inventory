@@ -231,7 +231,7 @@ _WHOLE_PROPERTY_SHOTS = (
 
 TENANCY = UseCase(
     key="tenancy",
-    display_name="Tenancy inventory",
+    display_name="Inventory",
     description="TDS-compliant inventory and schedule of condition for deposit disputes.",
     system_prompt=SYSTEM_PROMPT,
     value_bands=tuple(VALUE_BANDS),

@@ -15,7 +15,7 @@ from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from typing import Optional
 
-from .ingest import IMAGE_EXTS, VIDEO_EXTS
+from .ingest import IMAGE_EXTS, VIDEO_EXTS, find_root_videos
 
 log = logging.getLogger(__name__)
 TEMPLATES = Path(__file__).parent / "templates"
@@ -75,6 +75,10 @@ def _safe_component(name: str) -> bool:
         and "/" not in name and "\\" not in name and "\x00" not in name
 
 
+# Walkthrough videos upload to the capture root (video-first journey).
+WALKTHROUGH_ROOM = "__walkthrough__"
+
+
 def scan_rooms(capture_dir: Path) -> list[dict]:
     """Room subfolders of the capture dir with photo/video counts."""
     rooms: list[dict] = []
@@ -94,6 +98,14 @@ def scan_rooms(capture_dir: Path) -> list[dict]:
                 videos += 1
         rooms.append({"name": d.name, "photos": photos, "videos": videos})
     return rooms
+
+
+def scan_capture(capture_dir: Path) -> dict:
+    """Capture folder summary for the upload-first UI."""
+    return {
+        "rooms": scan_rooms(capture_dir),
+        "walkthrough_videos": len(find_root_videos(capture_dir)),
+    }
 
 
 def lan_ip() -> str:
@@ -162,12 +174,18 @@ class BaseHandler(BaseHTTPRequestHandler):
         room = unquote(self.headers.get("X-Room") or "").strip()
         filename = unquote(self.headers.get("X-Filename") or "").strip()
         n = int(self.headers.get("Content-Length") or 0)
-        if not room or not filename or n <= 0:
+        at_root = room == WALKTHROUGH_ROOM
+        if not filename or n <= 0 or (not room and not at_root):
             self.close_connection = True
             self._err(400, "X-Room and X-Filename headers and a non-empty "
                            "body are required")
             return None
-        if not (_safe_component(room) and _safe_component(filename)):
+        if at_root:
+            if not _safe_component(filename):
+                self.close_connection = True
+                self._err(400, "filename must be a plain name")
+                return None
+        elif not (_safe_component(room) and _safe_component(filename)):
             self.close_connection = True
             self._err(400, "room and filename must be plain names — no "
                            "path separators, '..' or leading dots")
@@ -176,7 +194,7 @@ class BaseHandler(BaseHTTPRequestHandler):
             self.close_connection = True
             self._err(413, "upload too large — videos are capped at 2 GiB")
             return None
-        room_dir = capture_dir / room
+        room_dir = capture_dir if at_root else capture_dir / room
         if room_dir.resolve().parent != capture_dir.resolve():
             self.close_connection = True
             self._err(400, "room escapes the capture folder")
@@ -221,7 +239,9 @@ class BaseHandler(BaseHTTPRequestHandler):
             self.close_connection = True
             self._err(400, f"upload failed: {e}")
             return None
-        return {"ok": True, "room": room, "stored_as": dest.name,
-                "path": f"{room}/{dest.name}", "kind":
+        return {"ok": True, "room": "" if at_root else room,
+                "stored_as": dest.name,
+                "path": dest.name if at_root else f"{room}/{dest.name}",
+                "kind":
                     "photo" if is_image else "video",
                 "sha256": digest.hexdigest(), "bytes": got}

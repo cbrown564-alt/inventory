@@ -166,7 +166,7 @@ _WHOLE_PROPERTY_SHOTS = (
 
 DEEP_CLEAN = UseCase(
     key="deepclean",
-    display_name="Deep clean",
+    display_name="Before & after clean",
     description="Before/after cleaning condition report for domestic and commercial cleans.",
     system_prompt=SYSTEM_PROMPT,
     value_bands=None,

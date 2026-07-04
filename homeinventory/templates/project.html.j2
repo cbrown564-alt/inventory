@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Homeinventory · Project</title>
+<title>Before &amp; after — Homeinventory</title>
 <style>
   :root {
     --ink: #1a1a1a; --muted: #5a5f6a; --rule: #d8dbe0; --accent: #15406b;
@@ -19,125 +19,138 @@
   .wordmark { font-weight: 700; letter-spacing: .02em; }
   .chip { font-size: 12px; background: rgba(255,255,255,.15);
           padding: 2px 10px; border-radius: 10px; }
-  main { max-width: 720px; margin: 24px auto; padding: 0 16px; }
+  main { max-width: 760px; margin: 24px auto; padding: 0 16px; }
   section { background: var(--paper); border: 1px solid var(--rule);
             border-radius: 8px; padding: 18px 20px; margin-bottom: 18px; }
   h2 { margin: 0 0 8px; font-size: 17px; color: var(--accent); }
   p { margin: 6px 0; } .muted { color: var(--muted); font-size: 13px; }
-  table { border-collapse: collapse; width: 100%; font-size: 14px; }
-  th, td { text-align: left; padding: 8px 10px;
-           border-bottom: 1px solid var(--rule); }
-  th { color: var(--muted); font-weight: 600; font-size: 12.5px;
-       text-transform: uppercase; letter-spacing: .05em; }
+  .slots { display: grid; gap: 16px; }
+  @media (min-width: 560px) { .slots { grid-template-columns: 1fr 1fr; } }
+  .slot { border: 1px solid var(--rule); border-radius: 8px; padding: 14px; }
+  .slot h3 { margin: 0 0 6px; font-size: 15px; }
+  .drop { border: 2px dashed var(--rule); border-radius: 8px; padding: 18px 12px;
+          text-align: center; color: var(--muted); cursor: pointer; font-size: 13px; }
+  .drop:hover { border-color: var(--accent); background: #f0f4f8; }
+  .ok { color: var(--confirm); font-weight: 600; }
+  .pending { color: var(--muted); }
   .btn { font: 600 14px var(--ui); padding: 8px 16px; border-radius: 6px;
          border: 1px solid var(--accent); background: #fff;
          color: var(--accent); cursor: pointer; text-decoration: none;
-         display: inline-block; }
+         display: inline-block; margin-top: 8px; }
   .btn.primary { background: var(--accent); color: #fff; }
   .btn[disabled] { opacity: .5; cursor: default; }
-  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
-         margin: 10px 0; }
-  .ok { color: var(--confirm); font-weight: 600; }
-  .pending { color: var(--muted); }
-  #compare-status { font-family: var(--mono); font-size: 12px;
-    white-space: pre-wrap; margin-top: 8px; }
+  #compare-status { font-size: 13px; margin-top: 8px; }
   .err { color: var(--reject); }
 </style>
 </head>
 <body>
 <header>
-  <span class="wordmark">Homeinventory · Project</span>
+  <span class="wordmark">Homeinventory</span>
   <span class="chip">{{ use_case_label }}</span>
-  <span class="chip">backend: {{ backend_label }}</span>
 </header>
 <main>
 
-<section id="sessions">
-  <h2>Sessions</h2>
-  <p class="muted">Capture photos and build each session before running compare.</p>
-  <table id="session-list">
-    <thead><tr><th>Session</th><th>Status</th><th></th></tr></thead>
-    <tbody>
-    {% for s in sessions %}
-      <tr data-session="{{ s.key }}">
-        <td>{{ s.label }}</td>
-        <td class="{% if s.built %}ok{% else %}pending{% endif %}">
-          {% if s.built %}built{% else %}not built{% endif %}</td>
-        <td><a class="btn" href="{{ s.prefix }}/start">Open</a>
-          {% if s.built %}<a class="btn" href="{{ s.prefix }}/">Review</a>{% endif %}
-        </td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+<section>
+  <h2>Before &amp; after clean</h2>
+  <p class="muted">Drop a walkthrough video for each visit. When both reports
+  are built, the comparison sheet appears automatically.</p>
+</section>
+
+<section class="slots">
+  {% for s in sessions %}
+  <div class="slot" data-session="{{ s.key }}">
+    <h3>{{ s.label }}</h3>
+    <p class="{% if s.built %}ok{% else %}pending{% endif %}">
+      {% if s.built %}Report ready{% else %}Waiting for video{% endif %}
+    </p>
+    <div class="drop" data-prefix="{{ s.prefix }}" tabindex="0" role="button"
+         aria-label="Upload {{ s.label|lower }} video">
+      Drop {{ s.label|lower }} video
+    </div>
+    <input type="file" class="up-input" accept="video/*" hidden>
+    <div class="up-status muted"></div>
+    <a class="btn" href="{{ s.prefix }}/start">Open session</a>
+    {% if s.built %}<a class="btn" href="{{ s.prefix }}/">Review</a>{% endif %}
+  </div>
+  {% endfor %}
 </section>
 
 <section id="compare">
-  <h2>Compare</h2>
-  <p class="muted">Runs the offline comparison between the first two sessions
-  ({{ sessions[0].label }} vs {{ sessions[1].label }}).</p>
-  <div class="row">
-    {% if compare_built %}
-    <a class="btn primary" href="/compare/">Open compare report</a>
-    {% else %}
-    <button class="btn primary" id="btn-compare"
-            {% if not compare_ready or compare_running %}disabled{% endif %}>
-      Run compare</button>
-    {% endif %}
-  </div>
-  <div id="compare-status">{% if compare_running %}compare running…{% endif %}</div>
+  <h2>Comparison</h2>
+  {% if compare_built %}
+  <p class="ok">Comparison ready.</p>
+  <a class="btn primary" href="/compare/">Open comparison sheet</a>
+  {% elif compare_running %}
+  <p id="compare-status">Building comparison…</p>
+  {% elif compare_ready %}
+  <p class="muted">Both reports are built — comparison runs automatically.</p>
+  {% else %}
+  <p class="muted">Upload and build both videos to see the comparison.</p>
+  {% endif %}
 </section>
 
 <script>
 "use strict";
 (function () {
-  var COMPARE_BACKEND = {{ backend | tojson }} === "offline" ? "offline" : "openai";
+  var WALK = "__walkthrough__";
 
-  function api(method, url, body) {
-    return fetch(url, {
-      method: method,
-      headers: { "Content-Type": "application/json" },
-      body: body === undefined ? undefined : JSON.stringify(body)
-    }).then(function (r) {
-      return r.json().catch(function () { return {}; }).then(function (j) {
-        if (!r.ok) throw new Error(j.error || (r.status + ""));
-        return j;
-      });
-    });
+  function upload(prefix, file, statusEl, dropEl) {
+    statusEl.textContent = "Uploading…";
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", prefix + "/api/upload");
+    xhr.setRequestHeader("X-Room", encodeURIComponent(WALK));
+    xhr.setRequestHeader("X-Filename", encodeURIComponent(file.name));
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        statusEl.textContent = "Uploaded — open the session to build.";
+        statusEl.className = "ok";
+      } else {
+        var resp = {};
+        try { resp = JSON.parse(xhr.responseText || "{}"); } catch (e) {}
+        statusEl.textContent = resp.error || "Upload failed";
+        statusEl.className = "err";
+      }
+    };
+    xhr.onerror = function () {
+      statusEl.textContent = "Network error";
+      statusEl.className = "err";
+    };
+    xhr.send(file);
   }
 
-  var btn = document.getElementById("btn-compare");
-  var status = document.getElementById("compare-status");
-  if (!btn) return;
-
-  function pollCompare() {
-    api("GET", "/api/compare").then(function (s) {
-      if (s.status === "running") {
-        btn.disabled = true;
-        status.textContent = "comparing…";
-        setTimeout(pollCompare, 2000);
-      } else if (s.status === "done") {
-        status.textContent = "done — opening compare report…";
-        location.href = "/compare/";
-      } else if (s.status === "failed") {
-        btn.disabled = false;
-        status.textContent = "compare failed:\n" + (s.detail || "");
-        status.className = "err";
+  document.querySelectorAll(".slot").forEach(function (slot) {
+    var drop = slot.querySelector(".drop");
+    var input = slot.querySelector(".up-input");
+    var statusEl = slot.querySelector(".up-status");
+    var prefix = drop.getAttribute("data-prefix") || "";
+    drop.addEventListener("click", function () { input.click(); });
+    input.addEventListener("change", function () {
+      if (input.files && input.files[0]) {
+        upload(prefix, input.files[0], statusEl, drop);
+        input.value = "";
       }
     });
-  }
-
-  btn.addEventListener("click", function () {
-    if (!window.confirm("Run compare with backend " + COMPARE_BACKEND + "?")) return;
-    btn.disabled = true;
-    api("POST", "/api/compare", { confirm: COMPARE_BACKEND }).then(function () {
-      pollCompare();
-    }).catch(function (e) {
-      btn.disabled = false;
-      status.textContent = e.message;
-      status.className = "err";
+    drop.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); }
     });
   });
+
+  function pollCompare() {
+    var el = document.getElementById("compare-status");
+    if (!el) return;
+    fetch("/api/compare").then(function (r) { return r.json(); })
+      .then(function (s) {
+        if (s.status === "running") {
+          el.textContent = "Building comparison…";
+          setTimeout(pollCompare, 2000);
+        } else if (s.status === "done") {
+          location.href = "/compare/";
+        } else if (s.status === "failed") {
+          el.textContent = "Comparison failed: " + (s.detail || "");
+          el.className = "err";
+        }
+      }).catch(function () {});
+  }
   pollCompare();
 })();
 </script>

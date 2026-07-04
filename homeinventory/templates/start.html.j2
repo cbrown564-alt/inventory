@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Upload &amp; build — Homeinventory</title>
+<title>New report — Homeinventory</title>
 <style>
 {% include "_theme.css.j2" %}
 
@@ -12,23 +12,19 @@
             border-radius: 10px; padding: 18px 20px; margin-bottom: 18px; }
   h2 { margin: 0 0 8px; font-size: 16px; color: var(--ink); }
   p { margin: 6px 0; } .muted { color: var(--muted); font-size: 13px; }
-  pre { background: var(--paper); padding: 10px 12px; border-radius: 6px;
-        font-family: var(--mono); font-size: 12.5px; overflow-x: auto; }
-  table { border-collapse: collapse; width: 100%; font-size: 14px; }
-  th, td { text-align: left; padding: 6px 10px;
-           border-bottom: 1px solid var(--line); }
-  th { color: var(--muted); font-weight: 600; font-size: 12px;
-       text-transform: uppercase; letter-spacing: .05em; }
-  input[type=text] { padding: 8px 10px; border: 1px solid var(--line-strong);
-                     border-radius: 6px; font: inherit; min-width: 200px; }
+  ul.guide { margin: 8px 0 0 18px; font-size: 14px; }
+  ul.guide li { margin: 4px 0; }
   .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
          margin: 10px 0; }
   .banner { background: var(--accent-soft); border: 1px solid var(--accent);
             border-radius: 10px; padding: 12px 16px; margin-bottom: 18px;
             font-size: 14px; }
   .banner a { color: var(--accent-ink); font-weight: 600; }
+  .cards { display: grid; gap: 12px; margin-top: 12px; }
+  .card { display: block; width: 100%; text-align: left; padding: 14px 16px; }
+  .card strong { display: block; margin-bottom: 4px; }
+  #picker-status.err { color: var(--danger); margin-top: 8px; }
 
-  /* drop zone + upload queue */
   #drop {
     border: 2px dashed var(--line-strong); border-radius: 10px;
     padding: 26px 16px; text-align: center; color: var(--muted);
@@ -52,27 +48,26 @@
   .up-row .fill { height: 100%; width: 0; background: var(--accent);
                   transition: width .2s; }
 
-  #build-status { font-size: 13px; margin-top: 8px; }
+  #build-status { font-size: 14px; margin-top: 8px; min-height: 1.4em; }
   #build-status.err { color: var(--danger); }
+  #build-status .stage { font-weight: 600; color: var(--ink); }
   #build-status details { margin-top: 6px; }
   #build-status pre { max-height: 240px; overflow: auto; white-space: pre-wrap; }
-  .cards { display: grid; gap: 12px; margin-top: 12px; }
-  .card { display: block; width: 100%; text-align: left; padding: 14px 16px; }
-  .card strong { display: block; margin-bottom: 4px; }
-  #picker-status.err { color: var(--danger); margin-top: 8px; }
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .chip { font-size: 12px; background: var(--paper); border: 1px solid var(--line);
+          padding: 2px 10px; border-radius: 10px; color: var(--muted); }
 </style>
 </head>
 <body>
 <header class="app-header">
   <span class="wordmark">Homeinventory</span>
   <nav class="app-nav" aria-label="Sections">
-    <a href="/start" aria-current="page">Upload</a>
+    <a href="/start" aria-current="page">New report</a>
     {% if has_inventory %}
     <a href="/">Review</a>
     <a href="/report" target="_blank" rel="noopener">Report</a>
     {% endif %}
   </nav>
-  <span class="header-chip">AI model: {{ backend_label }}</span>
   {% if not show_picker|default(false) and use_case_label|default(none) %}
   <span class="header-chip" id="use-case-chip">{{ use_case_label }}</span>
   {% endif %}
@@ -81,9 +76,8 @@
 
 {% if show_picker|default(false) %}
 <section id="use-case-picker">
-  <h2>Choose a use case</h2>
-  <p class="muted">Pick the workflow that matches this job. You can upload
-  photos and build once a use case is selected.</p>
+  <h2>New report</h2>
+  <p class="muted">Choose the type of report, then drop your walkthrough video.</p>
   <div class="cards">
   {% for u in use_cases|default([]) %}
     <button class="card btn" data-use-case="{{ u.key }}" type="button">
@@ -99,69 +93,49 @@
 {% if not show_picker|default(false) %}
 {% if has_inventory %}
 <div class="banner">A report already exists —
-  <a href="/">open the review app</a>. Building again re-describes every room
-  but keeps your confirmed and hand-added items.</div>
+  <a href="/">open review</a>. Building again re-describes every room but
+  keeps your confirmed and hand-added items.</div>
 {% endif %}
 
-{% if rooms %}
-<section>
-  <h2>Rooms in the capture folder</h2>
-  <p class="muted">{{ capture_dir }}</p>
-  <table id="room-list">
-    <thead><tr><th>Room</th><th>Photos</th><th>Videos</th></tr></thead>
-    <tbody>
-    {% for r in rooms %}
-      <tr data-room="{{ r.name }}"><td>{{ r.name }}</td>
-        <td class="n-photos">{{ r.photos }}</td>
-        <td class="n-videos">{{ r.videos }}</td></tr>
-    {% endfor %}
-    </tbody>
-  </table>
+<section id="filming-guide">
+  <h2>Before you film</h2>
+  <ul class="guide">
+    <li>Walk slowly — steady pans, not rushed sweeps.</li>
+    <li>Say each room name aloud as you enter (Kitchen, Bedroom 1…).</li>
+    <li>Pause in each room for a wide shot, then close-ups of any defects.</li>
+    <li>One continuous video is fine — we find the rooms for you.</li>
+  </ul>
 </section>
-{% else %}
-<section id="empty-state">
-  <h2>No photos yet</h2>
-  <p>Photos and walkthrough videos live in <strong>one folder per
-  room</strong>. Drop them here (name the room below), or copy files straight
-  into the folder and refresh:</p>
-  <pre>{{ capture_dir }}/
-  Living Room/   Kitchen/   Bedroom 1/   Bathroom/ ...</pre>
-  <p class="muted">Not sure what to shoot? <code>homeinventory guide</code>
-  prints the room-by-room shot list (walls, floor, ceiling, appliances,
-  meters, every defect close-up).</p>
-</section>
-{% endif %}
 
 <section id="upload">
-  <h2>Upload photos &amp; video</h2>
-  <p class="muted">Photos (JPEG, PNG, HEIC — up to 64&nbsp;MiB) and walkthrough
-  videos (MP4, MOV, MKV, WebM — up to 2&nbsp;GiB). Files are stored
-  byte-for-byte; the type comes from the file's own bytes, never its name.</p>
-  <div class="row">
-    <input type="text" id="up-room" list="room-names" placeholder="Room name"
-           aria-label="Room name">
-    <datalist id="room-names">
-      {% for r in rooms %}<option value="{{ r.name }}">{% endfor %}
-    </datalist>
-  </div>
+  <h2>Drop your walkthrough video</h2>
+  <p class="muted">MP4, MOV, MKV or WebM — up to 2&nbsp;GiB. One video per
+  session; it stays on your machine until you build the report.</p>
+  {% set cap = capture|default({"rooms": [], "walkthrough_videos": 0}) %}
+  {% if cap.walkthrough_videos %}
+  <p class="muted">{{ cap.walkthrough_videos }} walkthrough video(s) ready.</p>
+  {% endif %}
   <div id="drop" role="button" tabindex="0"
-       aria-label="Choose or drop files to upload">
-    <strong>Drop files here</strong> or click to choose<br>
-    <span class="muted">uploads go to the room named above</span>
+       aria-label="Choose or drop your walkthrough video">
+    <strong>Drop your video here</strong> or click to choose
   </div>
-  <input type="file" id="up-files" multiple accept="image/*,video/*" hidden>
+  <input type="file" id="up-files" accept="video/*" hidden>
   <div id="up-list"></div>
 </section>
 
 <section id="build">
-  <h2>Build the report</h2>
-  <p class="muted">Reads every room folder, describes what it sees, and
-  produces the report for review.</p>
-  <div class="row">
-    <button class="btn primary" id="btn-build">Build report</button>
-    <span id="build-backend" class="muted">runs AI model: {{ backend_label }}</span>
+  <h2>Build your report</h2>
+  <p class="muted">We watch the video, find the rooms, draft each one, and
+  prepare a PDF — usually a few minutes.</p>
+  <div class="chip-row">
+    <span class="chip">{{ spend.label }} · est. {{ spend.estimate }}</span>
   </div>
-  <div id="build-status" role="status"></div>
+  <div class="row">
+    <button class="btn primary" id="btn-build"
+            {% if not cap.walkthrough_videos and not cap.rooms %}disabled{% endif %}>
+      Build report</button>
+  </div>
+  <div id="build-status" role="status" aria-live="polite"></div>
 </section>
 {% endif %}
 
@@ -173,8 +147,8 @@
 <script>
 "use strict";
 (function () {
-  var BACKEND = {{ backend | tojson }};
-  var BACKEND_LABEL = {{ backend_label | tojson }};
+  var SPEND = {{ spend|default({"label":"Report","estimate":"varies","note":""}) | tojson }};
+  var WALKTHROUGH = {{ walkthrough_room|default("__walkthrough__", true) | tojson }};
   var PREFIX = {{ route_prefix|default("", true) | tojson }};
   var el = ui.el, toast = ui.toast;
 
@@ -191,53 +165,24 @@
     });
   }
 
-  /* ---------- upload: drag-drop, 3 parallel streams, live progress ------- */
   var drop = document.getElementById("drop");
   var fileInput = document.getElementById("up-files");
   var upList = document.getElementById("up-list");
-  var queue = [], active = 0, MAX_PARALLEL = 3;
+  var bBtn = document.getElementById("btn-build");
+  var queue = [], active = 0, MAX_PARALLEL = 1;
 
-  function roomName() {
-    return document.getElementById("up-room").value.trim();
-  }
   function fmtBytes(n) {
     if (n > 1e9) return (n / 1e9).toFixed(1) + " GB";
     if (n > 1e6) return (n / 1e6).toFixed(1) + " MB";
     return Math.max(1, Math.round(n / 1e3)) + " kB";
   }
-  function addFiles(files) {
-    var room = roomName();
-    if (!room) {
-      toast("Name the room first — uploads need a destination folder");
-      document.getElementById("up-room").focus();
-      return;
-    }
-    Array.prototype.forEach.call(files, function (f) {
-      var row = el("div", { "class": "up-row" });
-      var nm = el("span", { "class": "nm",
-        text: room + "/" + f.name + " · " + fmtBytes(f.size) });
-      var st = el("span", { "class": "st", text: "queued" });
-      var track = el("span", { "class": "track" });
-      var fill = el("span", { "class": "fill" });
-      fill.style.display = "block";
-      track.appendChild(fill);
-      row.appendChild(nm); row.appendChild(st); row.appendChild(track);
-      upList.appendChild(row);
-      queue.push({ file: f, room: room, st: st, fill: fill });
-    });
-    pump();
-  }
-  function pump() {
-    while (active < MAX_PARALLEL && queue.length) {
-      startUpload(queue.shift());
-    }
-  }
+
   function startUpload(job) {
     active += 1;
     job.st.textContent = "uploading";
     var xhr = new XMLHttpRequest();
     xhr.open("POST", PREFIX + "/api/upload");
-    xhr.setRequestHeader("X-Room", encodeURIComponent(job.room));
+    xhr.setRequestHeader("X-Room", encodeURIComponent(WALKTHROUGH));
     xhr.setRequestHeader("X-Filename", encodeURIComponent(job.file.name));
     xhr.upload.onprogress = function (e) {
       if (e.lengthComputable) {
@@ -250,117 +195,127 @@
       try { resp = JSON.parse(xhr.responseText || "{}"); } catch (e) {}
       if (xhr.status === 200) {
         job.fill.style.width = "100%";
-        job.st.textContent = "done · " + (resp.sha256 || "").slice(0, 8);
+        job.st.textContent = "done";
         job.st.className = "st ok";
-        refreshRooms();
+        if (bBtn) bBtn.disabled = false;
       } else {
         job.st.textContent = resp.error || ("failed (" + xhr.status + ")");
         job.st.className = "st err";
       }
-      pump();
     };
     xhr.onerror = function () {
       active -= 1;
       job.st.textContent = "network error";
       job.st.className = "st err";
-      pump();
     };
     xhr.send(job.file);
   }
-  function refreshRooms() {
-    api("GET", PREFIX + "/api/rooms").then(function (r) {
-      var tbody = document.querySelector("#room-list tbody");
-      if (!tbody) { return; }   // empty-state page: counts appear on reload
-      tbody.innerHTML = "";
-      (r.rooms || []).forEach(function (room) {
-        var tr = el("tr", { "data-room": room.name });
-        tr.appendChild(el("td", { text: room.name }));
-        tr.appendChild(el("td", { "class": "n-photos",
-                                  text: String(room.photos) }));
-        tr.appendChild(el("td", { "class": "n-videos",
-                                  text: String(room.videos) }));
-        tbody.appendChild(tr);
-      });
-    }).catch(function () {});
-  }
-  drop.addEventListener("click", function () { fileInput.click(); });
-  drop.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" || e.key === " ") { e.preventDefault();
-      fileInput.click(); }
-  });
-  fileInput.addEventListener("change", function () {
-    addFiles(fileInput.files);
-    fileInput.value = "";
-  });
-  ["dragenter", "dragover"].forEach(function (ev) {
-    drop.addEventListener(ev, function (e) {
-      e.preventDefault(); drop.classList.add("over");
-    });
-  });
-  ["dragleave", "drop"].forEach(function (ev) {
-    drop.addEventListener(ev, function (e) {
-      e.preventDefault(); drop.classList.remove("over");
-    });
-  });
-  drop.addEventListener("drop", function (e) {
-    if (e.dataTransfer && e.dataTransfer.files.length) {
-      addFiles(e.dataTransfer.files);
-    }
-  });
 
-  /* ---------- build (spend guard: confirm names the backend) ---------- */
-  var bBtn = document.getElementById("btn-build");
-  var bStatus = document.getElementById("build-status");
-  var buildStarted = null;
-  function setBuildStatus(text, err, detail) {
-    bStatus.className = err ? "err" : "";
-    bStatus.textContent = text;
-    if (detail) {
-      var det = el("details", {}, [
-        el("summary", { text: "Show build log" }),
-        el("pre", { text: detail })]);
-      bStatus.appendChild(det);
-    }
+  function addFiles(files) {
+    Array.prototype.forEach.call(files, function (f) {
+      if (!f.type.startsWith("video/") && !/\.(mp4|mov|mkv|webm|avi|m4v)$/i.test(f.name)) {
+        toast("Please upload a walkthrough video (MP4, MOV, MKV, WebM)");
+        return;
+      }
+      var row = el("div", { "class": "up-row" });
+      var nm = el("span", { "class": "nm",
+        text: f.name + " · " + fmtBytes(f.size) });
+      var st = el("span", { "class": "st", text: "queued" });
+      var track = el("span", { "class": "track" });
+      var fill = el("span", { "class": "fill" });
+      fill.style.display = "block";
+      track.appendChild(fill);
+      row.appendChild(nm); row.appendChild(st); row.appendChild(track);
+      upList.appendChild(row);
+      startUpload({ file: f, st: st, fill: fill });
+    });
   }
-  function pollBuild() {
-    api("GET", PREFIX + "/api/build").then(function (s) {
-      if (s.status === "running") {
-        bBtn.disabled = true;
-        var mins = buildStarted
-          ? Math.round((Date.now() - buildStarted) / 60000) : null;
-        setBuildStatus("Building with " + BACKEND_LABEL + "…" +
-          (mins ? " (" + mins + " min elapsed)" : "") +
-          " You can leave this page open; it moves to review when done.");
-        setTimeout(pollBuild, 2000);
-      } else if (s.status === "done") {
-        setBuildStatus("Done — opening the review app…");
-        location.href = PREFIX + "/";
-      } else if (s.status === "failed") {
-        bBtn.disabled = false;
-        setBuildStatus("The build failed.", true, s.detail || "");
+
+  if (drop) {
+    drop.addEventListener("click", function () { fileInput.click(); });
+    drop.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault();
+        fileInput.click(); }
+    });
+    fileInput.addEventListener("change", function () {
+      addFiles(fileInput.files);
+      fileInput.value = "";
+    });
+    ["dragenter", "dragover"].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) {
+        e.preventDefault(); drop.classList.add("over");
+      });
+    });
+    ["dragleave", "drop"].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) {
+        e.preventDefault(); drop.classList.remove("over");
+      });
+    });
+    drop.addEventListener("drop", function (e) {
+      if (e.dataTransfer && e.dataTransfer.files.length) {
+        addFiles(e.dataTransfer.files);
       }
     });
   }
-  bBtn.addEventListener("click", function () {
-    ui.confirmDialog({
-      title: "Build the report?",
-      message: "Runs " + BACKEND_LABEL + " over every room folder." +
-               (BACKEND === "offline" ? "" :
-                " Paid backends spend API money."),
-      confirmLabel: "Build report"
-    }).then(function (yes) {
-      if (!yes) return;
-      bBtn.disabled = true;
-      buildStarted = Date.now();
-      api("POST", PREFIX + "/api/build", { confirm: BACKEND }).then(function () {
-        pollBuild();
-      }).catch(function (e) {
+
+  var bStatus = document.getElementById("build-status");
+  function stageLabel(s) {
+    if (s.stage === "segmenting") return "Watching your video…";
+    if (s.stage === "segmented") return s.stage_detail || ("Found " + (s.rooms_found || "?") + " rooms");
+    if (s.stage === "describing") return s.stage_detail || "Drafting rooms…";
+    if (s.stage === "rendering") return "Building your report…";
+    if (s.stage === "done") return "Your report is ready";
+    if (s.status === "running") return "Working…";
+    return s.stage_detail || "";
+  }
+  function setBuildStatus(s, err, detail) {
+    if (!bStatus) return;
+    bStatus.className = err ? "err" : "";
+    bStatus.innerHTML = "";
+    var txt = stageLabel(s);
+    if (txt) bStatus.appendChild(el("div", { "class": "stage", text: txt }));
+    if (detail) {
+      bStatus.appendChild(el("details", {}, [
+        el("summary", { text: "Show log" }),
+        el("pre", { text: detail })]));
+    }
+  }
+  function pollBuild() {
+    if (!bBtn) return;
+    api("GET", PREFIX + "/api/build").then(function (s) {
+      if (s.status === "running") {
+        bBtn.disabled = true;
+        setBuildStatus(s, false, "");
+        setTimeout(pollBuild, 1500);
+      } else if (s.status === "done") {
+        setBuildStatus({ stage: "done" }, false, "");
+        location.href = PREFIX + "/";
+      } else if (s.status === "failed") {
         bBtn.disabled = false;
-        setBuildStatus("Could not start: " + e.message, true);
+        setBuildStatus(s, true, s.detail || "");
+      }
+    }).catch(function () {});
+  }
+  if (bBtn) {
+    bBtn.addEventListener("click", function () {
+      ui.confirmDialog({
+        title: "Build your report?",
+        message: SPEND.label + " — estimated " + SPEND.estimate + ". " +
+                 (SPEND.note || ""),
+        confirmLabel: "Build report"
+      }).then(function (yes) {
+        if (!yes) return;
+        bBtn.disabled = true;
+        api("POST", PREFIX + "/api/build", { confirm: "yes" }).then(function () {
+          pollBuild();
+        }).catch(function (e) {
+          bBtn.disabled = false;
+          setBuildStatus({}, true, e.message);
+        });
       });
     });
-  });
-  pollBuild();   // reflect a build already in flight on page load
+    pollBuild();
+  }
 
   var picker = document.getElementById("use-case-picker");
   if (picker) {
