@@ -986,9 +986,6 @@ class ReviewHandler(BaseHandler):
                     self._err(404, "not found")
                     return
 
-            if path == "/api/photos":
-                self._upload_photo(st)
-                return
             if path == "/api/upload":
                 payload = self._upload_stream_common(st.capture_dir, st.lock)
                 if payload is None:
@@ -1102,13 +1099,6 @@ class ReviewHandler(BaseHandler):
                 self._err(500, str(e))
             except Exception:
                 pass
-
-    def _upload_photo(self, st: SessionState):
-        payload = self._upload_photo_common(st.capture_dir, st.lock)
-        if payload is None:
-            return
-        st.ack("reviewer", st.uc.owner_role.key, "upload_photo", payload["path"])
-        self._json(payload)
 
     def _tenant_comment(self, st: SessionState, b: dict):
         item_id = b.get("item_id")

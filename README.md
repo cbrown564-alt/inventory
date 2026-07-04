@@ -25,11 +25,6 @@ homeinventory guide               # what to photograph, room by room
 
 # capture/  Living Room/  Kitchen/  Bedroom 1/ ...   (photos and/or videos)
 
-# Or capture straight from your phone — serves a token-gated page on your
-# Wi-Fi with the per-room shot list, a camera button that uploads into the
-# right room folder, and a free local coverage check ("no radiator seen"):
-homeinventory capture capture/
-
 export ANTHROPIC_API_KEY=...      # for the best-quality describe backend
 homeinventory build capture/ -o report/ \
     --address "Flat 2, 1 Example Street, London" \
@@ -74,8 +69,7 @@ The AI drafts; a human confirms and signs. Three ways in, lightest first
    preserved via `--from-json`).
    It also works **before** the first build: a start page lists the capture
    folder, takes drag-and-drop uploads of photos **and walkthrough videos**
-   (streamed `POST /api/upload`, extensions from magic bytes; base64
-   `POST /api/photos` remains for the phone page), and runs the build itself
+   (streamed `POST /api/upload`, extensions from magic bytes), and runs the build itself
    behind a spend guard (every build/redescribe request must name the
    backend it will pay for). See
    [`docs/09-web-ui-and-capture.md`](docs/09-web-ui-and-capture.md) and the
@@ -209,9 +203,11 @@ raw output frozen for evals, an all-room boundary-bleed audit, and the
 the own-property eval fixture and native-res prompt-tuning gate remain open
 pending hand labelling.
 **M5 (first slice)**: the web UI shipped — pre-build start page, browser
-upload, spend-guarded build-from-browser, PDF export — and phone guided
-capture (`homeinventory capture`) is implemented behind its real-device
-smoke ([`docs/09`](docs/09-web-ui-and-capture.md)); C2PA/e-signature and
+upload, spend-guarded build-from-browser, PDF export
+([`docs/09`](docs/09-web-ui-and-capture.md)). Phone guided capture
+(`homeinventory capture`, M5b) shipped, failed its real-device test, and
+was **removed 4 Jul 2026** — the product pivoted to one walkthrough video
+uploaded in the browser as the primary capture path. C2PA/e-signature and
 multi-property stay deferred by recorded decision
 ([`docs/03`](docs/03-implementation-plan.md)).
 **Product-quality pass, 3 Jul 2026** ([`docs/10`](docs/10-product-quality-review.md)):

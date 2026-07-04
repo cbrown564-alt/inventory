@@ -137,14 +137,13 @@ and compare our output against the human-written report.
       uploads incl. **video** (`POST /api/upload`, streamed, 2 GiB cap);
       Jinja autoescape enabled everywhere (was silently off — `.html.j2`
       never matched `select_autoescape(["html"])`)
-- [ ] Mobile guided capture (per-room shot list with live checklist) —
-      **implementation complete 3 Jul 2026, box stays open until the
-      real-device smoke is executed and recorded** (`homeinventory capture`:
-      token-gated LAN page, camera via plain file input, shot list from
-      `guide.py`, uploads into `capture/<Room>/`); **live checklist =
-      shot-list tally + local detector coverage check; live AI capture
-      guidance remains parked (docs/05 Level 4)**. Real-device smoke
-      checklist in [`docs/09`](09-web-ui-and-capture.md) §M5b
+- [x] ~~Mobile guided capture (per-room shot list with live checklist)~~ —
+      **closed as REMOVED, 4 Jul 2026.** Implementation completed 3 Jul; the
+      real-device test happened and the user killed the feature: the guided
+      per-room photo flow was a bad experience on a phone. Product pivot
+      recorded the same day: the primary capture path is **one walkthrough
+      video uploaded in the browser**, with room segmentation handled by the
+      pipeline. Retirement note in [`docs/09`](09-web-ui-and-capture.md) §M5b
 - [ ] C2PA / signed manifests; e-signature integration
 - [ ] Multi-property management, tenancy metadata, scheme-specific templates
 

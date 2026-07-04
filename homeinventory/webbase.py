@@ -1,16 +1,12 @@
-"""Shared stdlib-HTTP plumbing for the local web servers.
+"""Stdlib-HTTP plumbing for the local web server (`review.py`).
 
-Two servers ride on this: the review server (docs/05 Levels 2–3,
-`review.py`) and the phone capture server (M5b, `capture.py`). Both are
-plain `http.server` — no framework, no npm, no websockets — and both take
-browser photo uploads, so the upload contract (magic-byte-sniffed
-extensions, 64 MiB cap, traversal rejection, never clobber) lives here
-exactly once.
+Plain `http.server` — no framework, no npm, no websockets. The browser
+upload contract (magic-byte-sniffed extensions, size caps, traversal
+rejection, never clobber) lives here.
 """
 
 from __future__ import annotations
 
-import base64
 import hashlib
 import json
 import logging
@@ -26,12 +22,10 @@ TEMPLATES = Path(__file__).parent / "templates"
 
 _LOOPBACK = {"127.0.0.1", "::1", "::ffff:127.0.0.1"}
 
-# Browser uploads: hard cap on one photo's decoded bytes; the request body
-# cap adds base64's 4/3 inflation plus JSON envelope slack.
+# Browser uploads: hard cap on one photo's bytes.
 _UPLOAD_CAP = 64 * 1024 * 1024
-_UPLOAD_BODY_CAP = _UPLOAD_CAP * 4 // 3 + 1024 * 1024
 # Streamed binary uploads (/api/upload) also take walkthrough videos — the
-# primary real-world capture format — which do not fit a base64 JSON body.
+# primary real-world capture format.
 _VIDEO_CAP = 2 * 1024 * 1024 * 1024
 _STREAM_CHUNK = 1024 * 1024
 
@@ -102,45 +96,6 @@ def scan_rooms(capture_dir: Path) -> list[dict]:
     return rooms
 
 
-def store_photo(capture_dir: Path, room: str, filename: str,
-                photo_b64: str) -> tuple[int, dict]:
-    """The shared upload contract: validate, sniff, write UNMODIFIED bytes
-    into capture/<Room>/. Returns (http_status, payload) — 200 payloads
-    carry path/stored_as/sha256/bytes so the sender can verify identity.
-    Callers serialise concurrent writes (hold their lock around this)."""
-    room = (room or "").strip()
-    filename = (filename or "").strip()
-    if not room or not filename or not photo_b64:
-        return 400, {"error": "room, filename and photo_b64 are required"}
-    if not (_safe_component(room) and _safe_component(filename)):
-        return 400, {"error": "room and filename must be plain names — no "
-                              "path separators, '..' or leading dots"}
-    try:
-        data = base64.b64decode(photo_b64, validate=True)
-    except Exception:
-        return 400, {"error": "photo_b64 is not valid base64"}
-    if len(data) > _UPLOAD_CAP:
-        return 413, {"error": "photo exceeds the 64 MiB cap"}
-    ext = sniff_extension(data)
-    if ext is None:
-        return 400, {"error": "unrecognised image bytes — JPEG, PNG or "
-                              "HEIC only"}
-    room_dir = capture_dir / room
-    if room_dir.resolve().parent != capture_dir.resolve():
-        return 400, {"error": "room escapes the capture folder"}
-    room_dir.mkdir(parents=True, exist_ok=True)
-    stem = Path(filename).stem or "photo"
-    dest, k = room_dir / f"{stem}{ext}", 1
-    while dest.exists():                   # never clobber an existing file
-        dest = room_dir / f"{stem}-{k}{ext}"
-        k += 1
-    dest.write_bytes(data)                 # stored byte-for-byte as sent
-    return 200, {"ok": True, "room": room, "stored_as": dest.name,
-                 "path": f"{room}/{dest.name}",
-                 "sha256": hashlib.sha256(data).hexdigest(),
-                 "bytes": len(data)}
-
-
 def lan_ip() -> str:
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
@@ -193,29 +148,6 @@ class BaseHandler(BaseHTTPRequestHandler):
             raise ValueError("request too large")
         raw = self.rfile.read(n) if n else b"{}"
         return json.loads(raw.decode("utf-8"))
-
-    def _upload_photo_common(self, capture_dir: Path, lock) -> Optional[dict]:
-        """Run the shared upload contract for a POSTed photo. Sends the
-        error response itself and returns None on failure; returns the
-        (unsent) success payload so the caller can extend and send it."""
-        n = int(self.headers.get("Content-Length") or 0)
-        if n > _UPLOAD_BODY_CAP:
-            self.close_connection = True   # body is unread; don't reuse
-            self._err(413, "upload too large — photos are capped at 64 MiB")
-            return None
-        try:
-            body = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
-        except ValueError:
-            self._err(400, "invalid JSON body")
-            return None
-        with lock:
-            code, payload = store_photo(capture_dir, body.get("room"),
-                                        body.get("filename"),
-                                        body.get("photo_b64") or "")
-        if code != 200:
-            self._err(code, payload["error"])
-            return None
-        return payload
 
     def _upload_stream_common(self, capture_dir: Path, lock) -> Optional[dict]:
         """Streamed binary upload (photos AND videos): raw file bytes as the

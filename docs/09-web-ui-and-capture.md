@@ -108,7 +108,16 @@ no favicon route exists. The step-3 caveat is inherent to the £0 smoke
 configuration, not a defect: any detector-enabled or AI-backend build
 produces items directly.
 
-## §M5b — phone guided capture (3 Jul 2026)
+## §M5b — phone guided capture (3 Jul 2026) — REMOVED 4 Jul 2026
+
+> **Retired.** The real-device test happened and the user's verdict was
+> that the guided-capture experience was bad enough to kill the feature:
+> the primary capture path is now **one walkthrough video uploaded in the
+> browser**, with room segmentation handled by the pipeline. `capture.py`,
+> its template, tests, the `capture` subcommand and the base64
+> `/api/photos` route were deleted; the streamed `/api/upload` contract
+> (webbase.py) is the single upload path. The section below is kept as the
+> historical record of what was built and why.
 
 `homeinventory capture CAPTURE_DIR [--port]` serves one mobile page for
 walking the property with a phone. Design constraints, all deliberate:

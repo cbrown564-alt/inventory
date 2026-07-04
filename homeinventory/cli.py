@@ -4,8 +4,6 @@
   homeinventory build CAPTURE_DIR -o OUT_DIR   # run the full pipeline
   homeinventory review CAPTURE_DIR -o OUT_DIR  # local review web app (--share
                                                # adds a tenant link)
-  homeinventory capture CAPTURE_DIR            # phone capture page on the LAN
-                                               # (token link, guided shot list)
   homeinventory check CAPTURE_DIR              # detector-only coverage check
   homeinventory compare CHECKIN CHECKOUT -o DIR  # check-in vs check-out
                                                # delta report (docs/08)
@@ -311,31 +309,6 @@ def cmd_review(args) -> int:
     return 0
 
 
-def cmd_capture(args) -> int:
-    """Serve the phone guided-capture page (M5b): token-gated LAN page with
-    the shot-list checklist, camera upload into capture/<Room>/, and the
-    free detector coverage check. See docs/09-web-ui-and-capture.md."""
-    from .capture import serve_capture
-
-    try:
-        httpd = serve_capture(Path(args.capture_dir), port=args.port,
-                              detect_mode=args.detect_mode,
-                              det_conf=args.det_conf,
-                              device=getattr(args, "device", None),
-                              session=args.session,
-                              use_case_key=args.use_case)
-    except OSError as e:
-        print(f"error: could not bind port {args.port}: {e}", file=sys.stderr)
-        return 2
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        print("\nstopped — photos are already in the capture folder")
-    finally:
-        httpd.server_close()
-    return 0
-
-
 def cmd_check(args) -> int:
     """Detector-only capture coverage check — flags per-room gaps before the
     (paid) describe step. Cannot hallucinate items; only prompts a second look."""
@@ -561,27 +534,6 @@ def main(argv: list[str] | None = None) -> int:
                    help="use-case profile when no inventory.json yet (default: "
                         "tenancy; overridden by inventory.json or project.json)")
     rv.set_defaults(func=cmd_review)
-
-    cp = sub.add_parser("capture",
-                        help="phone guided-capture page on the LAN "
-                             "(token link, shot-list checklist, camera "
-                             "upload, coverage check)")
-    cp.add_argument("capture_dir")
-    cp.add_argument("--port", type=int, default=8485)
-    cp.add_argument("--detect-mode", choices=DETECT_MODE_CHOICES,
-                    default="text",
-                    help="YOLOE mode for the room coverage check "
-                         "(prompt_free where CLIP text-mode is blocked, "
-                         "see docs/07)")
-    cp.add_argument("--det-conf", type=float, default=0.25)
-    cp.add_argument("--device", default=None,
-                    help="torch device for the coverage check")
-    cp.add_argument("--session", default=None,
-                    help="session subfolder under CAPTURE_DIR (e.g. before, "
-                         "after); uploads land in CAPTURE_DIR/<session>/<Room>/")
-    cp.add_argument("--use-case", choices=use_cases, default=None,
-                   help="use-case profile for the shot list (default: tenancy)")
-    cp.set_defaults(func=cmd_capture)
 
     ck = sub.add_parser("check",
                         help="detector-only coverage check of a capture folder")

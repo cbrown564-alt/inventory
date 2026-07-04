@@ -351,7 +351,6 @@ def test_check_cli_without_detector(tmp_path, monkeypatch):
 # PDF export (docs/09-web-ui-and-capture.md)
 # --------------------------------------------------------------------------
 
-import base64      # noqa: E402
 import hashlib     # noqa: E402
 import time        # noqa: E402
 
@@ -393,9 +392,16 @@ def _heic_bytes() -> bytes:
 
 
 def _upload(base, room, filename, data: bytes, url_prefix: str = ""):
-    return _req("POST", base + url_prefix + "/api/photos", {
-        "room": room, "filename": filename,
-        "photo_b64": base64.b64encode(data).decode()})
+    from urllib.parse import quote
+    req = urllib.request.Request(
+        base + url_prefix + "/api/upload", data=data, method="POST",
+        headers={"Content-Type": "application/octet-stream",
+                 "X-Room": quote(room), "X-Filename": quote(filename)})
+    try:
+        with urllib.request.urlopen(req) as r:
+            return r.status, json.loads(r.read().decode("utf-8") or "{}")
+    except urllib.error.HTTPError as e:
+        return e.code, json.loads(e.read().decode("utf-8") or "{}")
 
 
 # ---- start page: both states -----------------------------------------------
@@ -478,7 +484,7 @@ def test_upload_unsniffable_400(fresh_server):
     base, _state, _out, cap = fresh_server
     status, resp = _upload(base, "Kitchen", "notes.txt", b"just some text")
     assert status == 400
-    assert "JPEG, PNG or HEIC" in resp["error"]
+    assert "unrecognised" in resp["error"]
     assert not list(cap.rglob("notes*"))       # nothing was written
 
 
@@ -504,34 +510,62 @@ def test_upload_never_clobbers(fresh_server):
     assert r1["stored_as"] == "wall.jpg" and r2["stored_as"] == "wall-1.jpg"
     assert (cap / "Kitchen" / "wall.jpg").read_bytes() == first   # untouched
     assert (cap / "Kitchen" / "wall-1.jpg").read_bytes() == second
+    assert not list(cap.rglob(".upload-*")), "temp files must be cleaned up"
 
 
 def test_upload_413_over_64mib(fresh_server):
+    """Photos over the 64 MiB cap 413 after the sniffed head chunk — the
+    server must not require (or read) the rest of the body first."""
+    import socket as sock
     base, _state, _out, cap = fresh_server
-    # valid JPEG magic so the size cap — not the sniffer — must reject it
-    data = b"\xff\xd8" + b"\x00" * (64 * 1024 * 1024)
-    status, resp = _upload(base, "Kitchen", "huge.jpg", data)
-    assert status == 413, resp
+    host, port = base.replace("http://", "").split(":")
+    n = 64 * 1024 * 1024 + 2               # valid JPEG magic, over the cap
+    head = (b"\xff\xd8" + b"\x00" * (1024 * 1024))[:1024 * 1024]
+    s = sock.create_connection((host, int(port)), timeout=15)
+    try:
+        s.sendall((
+            "POST /api/upload HTTP/1.1\r\n"
+            "Host: test\r\n"
+            "Content-Type: application/octet-stream\r\n"
+            "X-Room: Kitchen\r\n"
+            "X-Filename: huge.jpg\r\n"
+            f"Content-Length: {n}\r\n\r\n"
+        ).encode() + head)                 # the head chunk the server sniffs
+        data = b""
+        while True:
+            try:
+                chunk = s.recv(65536)
+            except ConnectionResetError:
+                break
+            if not chunk:
+                break
+            data += chunk
+    finally:
+        s.close()
+    assert b" 413 " in data.split(b"\r\n", 1)[0] + b" "
+    assert b"64 MiB" in data
     assert not list(cap.rglob("huge*"))
 
 
 def test_upload_header_level_413_without_reading_body(fresh_server):
-    """M5a audit nit: a Content-Length over the body cap must 413 on the
-    header alone (early return) and close the connection unread."""
+    """A Content-Length over the video cap must 413 on the header alone
+    (early return) and close the connection unread."""
     import socket as sock
     base, _state, _out, cap = fresh_server
     host, port = base.replace("http://", "").split(":")
     s = sock.create_connection((host, int(port)), timeout=15)
     try:
         # headers only, no body bytes: an implementation that tried to read
-        # the declared 200 MiB would block and time this test out; the
+        # the declared 3 GiB would block and time this test out; the
         # early-return branch answers from the header alone. (No body is
         # sent so the server's close is a clean FIN, not a RST.)
         s.sendall((
-            "POST /api/photos HTTP/1.1\r\n"
+            "POST /api/upload HTTP/1.1\r\n"
             "Host: test\r\n"
-            "Content-Type: application/json\r\n"
-            f"Content-Length: {200 * 1024 * 1024}\r\n\r\n"
+            "Content-Type: application/octet-stream\r\n"
+            "X-Room: Kitchen\r\n"
+            "X-Filename: huge.mp4\r\n"
+            f"Content-Length: {3 * 1024 * 1024 * 1024}\r\n\r\n"
         ).encode())
         data = b""
         while True:                # server must CLOSE the connection …
@@ -546,8 +580,8 @@ def test_upload_header_level_413_without_reading_body(fresh_server):
         s.close()
     status_line = data.split(b"\r\n", 1)[0]
     assert b" 413 " in status_line + b" "      # … after answering 413
-    assert b"64 MiB" in data
-    assert not list(cap.rglob("*.jpg"))        # nothing was written
+    assert b"2 GiB" in data
+    assert not list(cap.rglob("*.mp4"))        # nothing was written
 
 
 # ---- build-from-browser: confirm guard, progress, e2e ----------------------
@@ -700,70 +734,26 @@ def test_pdf_export_conflict_409(server):
 
 # ---- docs/10 quality pass: streamed uploads, autosave acks, stale /report ---
 
-def _stream_upload(base, room, filename, data: bytes):
-    from urllib.parse import quote
-    req = urllib.request.Request(
-        base + "/api/upload", data=data, method="POST",
-        headers={"Content-Type": "application/octet-stream",
-                 "X-Room": quote(room), "X-Filename": quote(filename)})
-    try:
-        with urllib.request.urlopen(req) as r:
-            return r.status, json.loads(r.read().decode("utf-8") or "{}")
-    except urllib.error.HTTPError as e:
-        return e.code, json.loads(e.read().decode("utf-8") or "{}")
-
-
 def _mp4_bytes() -> bytes:
     # minimal ISO-BMFF header with an isom brand — enough for the sniffer
     return (b"\x00\x00\x00\x18ftypisom\x00\x00\x02\x00isomiso2avc1mp41"
             + b"\x00" * 256)
 
 
-def test_stream_upload_photo(fresh_server):
-    base, _state, _out, cap = fresh_server
-    data = _jpeg_bytes()
-    status, resp = _stream_upload(base, "Kitchen", "hob.png", data)
-    assert status == 200, resp
-    assert resp["stored_as"] == "hob.jpg" and resp["kind"] == "photo"
-    on_disk = cap / "Kitchen" / "hob.jpg"
-    assert hashlib.sha256(on_disk.read_bytes()).hexdigest() == resp["sha256"]
-    assert resp["sha256"] == hashlib.sha256(data).hexdigest()
-
-
 def test_stream_upload_video(fresh_server):
     """Videos — the primary real capture format — upload through the web UI."""
     base, _state, _out, cap = fresh_server
     data = _mp4_bytes()
-    status, resp = _stream_upload(base, "Living Room", "walk.bin", data)
+    status, resp = _upload(base, "Living Room", "walk.bin", data)
     assert status == 200, resp
     assert resp["stored_as"] == "walk.mp4" and resp["kind"] == "video"
     assert (cap / "Living Room" / "walk.mp4").read_bytes() == data
 
 
-def test_stream_upload_rejects_traversal_and_junk(fresh_server):
-    base, _state, _out, cap = fresh_server
-    status, _ = _stream_upload(base, "../evil", "x.jpg", _jpeg_bytes())
-    assert status == 400
-    status, resp = _stream_upload(base, "Kitchen", "notes.txt", b"plain text")
-    assert status == 400 and "unrecognised" in resp["error"]
-    assert not list(cap.rglob("*")), "nothing should have been written"
-
-
-def test_stream_upload_never_clobbers(fresh_server):
-    base, _state, _out, cap = fresh_server
-    first, second = _jpeg_bytes(), _jpeg_bytes() + b"\x01"
-    s1, r1 = _stream_upload(base, "Kitchen", "wall.jpg", first)
-    s2, r2 = _stream_upload(base, "Kitchen", "wall.jpg", second)
-    assert s1 == s2 == 200
-    assert r1["stored_as"] == "wall.jpg" and r2["stored_as"] == "wall-1.jpg"
-    assert (cap / "Kitchen" / "wall.jpg").read_bytes() == first
-    assert not list(cap.rglob(".upload-*")), "temp files must be cleaned up"
-
-
 def test_api_rooms_lists_counts(fresh_server):
     base, _state, _out, _cap = fresh_server
-    assert _stream_upload(base, "Kitchen", "a.jpg", _jpeg_bytes())[0] == 200
-    assert _stream_upload(base, "Kitchen", "walk.mp4", _mp4_bytes())[0] == 200
+    assert _upload(base, "Kitchen", "a.jpg", _jpeg_bytes())[0] == 200
+    assert _upload(base, "Kitchen", "walk.mp4", _mp4_bytes())[0] == 200
     status, resp = _req("GET", base + "/api/rooms")
     assert status == 200
     kitchen = [r for r in resp["rooms"] if r["name"] == "Kitchen"][0]
