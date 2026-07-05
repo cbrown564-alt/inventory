@@ -339,7 +339,111 @@ photos.
 | **No train/val split convention** | All ML experiments | Add `evals/splits/` with room-held-out protocol |
 | **NC-licensed IQA in product** | MUSIQ deploy | Distillation (ML-E6) or Apache encoder only |
 
-### 2.4 Labelling effort estimates (not calendar time)
+### 2.4 Adjacent open datasets (Jul 2026 research)
+
+There is **no public dataset** for UK tenancy inventory reports, check-in/out
+schedules, or clerk-style condition grading. What exists is **adjacent**:
+real-estate listing photos, indoor scene recognition, residential layout,
+building-surface defects, egocentric home video, and generic household object
+detection. Most are useful for **pretraining, transfer learning, and eval
+oracles** — not as a drop-in substitute for our gold fixtures.
+
+**Important caveats across the board:**
+
+- **Domain gap:** Listing photos are staged wide shots; our walkthrough frames
+  include motion blur, close-ups, and mixed room bleed. Defect datasets are
+  mostly **exterior / structural** (cracks in concrete) not **interior fair
+  wear** (scuff on skirting). Expect transfer, not plug-and-play.
+- **Licence:** Several of the best real-estate sets are **academic-only** or
+  **not redistributable** (ZInD, ScanNet, Matterport3D). Check before training
+  anything we might ship.
+- **UK / TDS vocabulary:** No dataset uses our condition/cleanliness ordinals
+  or item naming register. Labels must stay internal.
+
+#### By pipeline task
+
+| Our task | Best open datasets | Scale | Labels | Licence / access | Fit |
+|---|---|---|---|---|---|
+| **Room type classifier** | [MIT Indoor 67](https://web.mit.edu/torralba/www/indoor.html), [HF indoor-scene-classification](https://huggingface.co/datasets/keremberke/indoor-scene-classification) (15.7k / 67 classes), [Places205](http://places.csail.mit.edu/) (2.4M / 205 scenes) | 15k–2.4M | Scene class | Research / CC BY (Places) | **High** for kitchen/bathroom/bedroom/hallway; many classes irrelevant (airport, casino) |
+| **Real-estate room tagger** | [REI / WACV 2017](https://doi.org/10.1109/wacv.2017.48) (7 classes from Zillow crawl), [RE-Tagger paper](https://arxiv.org/abs/2207.05696) (3.1M **internal** — not public) | REI: small; RE-Tagger: closed | bedroom, bath, kitchen, hall, exterior, docs, other | REI: paper + DB request | **Medium** — closest semantic match to listing photos; RE-Tagger weights/data unavailable |
+| **Room layout / doors** | [ZInD](https://github.com/zillow/zind) (67k 360° panos, 1.5k **unfurnished US** homes, room type + W/D/O + floor plans) | 67k panos | Layout, room name | **Academic only** — [Bridge registration](https://bridgedataoutput.com/register/zgindoor) | **High** for layout/doorway cues; 360° not phone walkthrough; commercial use blocked |
+| **3D indoor + objects** | [ScanNet](http://www.scan-net.org/) (1.5k scans, instance seg), [Matterport3D](https://niessner.github.io/Matterport/) (2k rooms, 40 object classes), [ARKitScenes](https://github.com/apple/ARKitScenes) (mobile RGB-D) | 1.5k–2k scenes | 3D bbox, semantic | Academic TOS (email request) | **Medium** for detector pretrain; furnished US homes; heavy 3D pipeline |
+| **Video room change** | [Ego4D](https://ego4d-data.org/) (3.6k h egocentric, household scenarios), [EPIC-Kitchens-100](https://epic-kitchens.github.io/) (100 h, 45 kitchens, narrated segments) | 100–3600 h | Activity segments, some room context | Ego4D / EPIC research licence | **Medium** for changepoint / motion; kitchen-heavy; not inventory-specific |
+| **Cover / establishing shot** | [CineScale](https://cinescale.github.io/shotscale/) (792k frames, LS/MS/CU/ECU), [types-of-film-shots HF](https://huggingface.co/datasets/szymonrucinski/types-of-film-shots) (~925 images, CC BY 4.0) | 925–792k | Shot scale | Research / CC BY 4.0 (small set) | **Medium** — "long shot" ≈ establishing; film domain not interiors |
+| **Image quality (NR-IQA)** | [KonIQ-10k](https://database.mmsp-kn.de/koniq-10k-database.html) (10k images, MOS scores), LIVE-in-the-Wild | 10k | Quality score | Research download | **High** for blur/exposure ranker pretrain; not room-semantics-aware |
+| **Scene parsing (wall/floor)** | [ADE20K](https://github.com/CSAILVision/ADE20K) (25k images, 150-class seg subset), LSUN scenes (bedroom/kitchen/living/dining millions) | 25k–3M+ | Pixel / scene | MIT (ADE20K code); LSUN MIT | **Medium** for establishing-score features (floor+wall fraction) |
+| **Household object detection** | [Open Images V7](https://storage.googleapis.com/openimages/web/index.html) (600 box classes; bathtub, stove, washer, furniture…), ScanNet/Matterport | 16M boxes (full); filter subset | Bbox + mask | Apache 2.0 (OI) | **High** for detector pretrain / vocab expansion; long-tail ≠ inventory terms |
+| **Interior surface defects** | [RBDID](https://doi.org/10.57760/sciencedb.28941) (26k images, 17 defect cats, **residential**), [BD3](https://github.com/Praveenkottari/BD3-Dataset) (4k, stain/peel/spall/crack), [StructDamage](https://arxiv.org/abs/2603.10484) (78k aggregated, CC BY 4.0), [MBDD2025](https://zenodo.org/records/15622584) (14k UAV building) | 4k–78k | Bbox or class | Mostly open; RBDID via ScienceDB | **Medium–low** for tenancy scuffs/stains; **high** for "damage present?" binary pre-filter (ML-E15) |
+| **Check-in/out change** | xBD, [DamageTriage-Bench](https://huggingface.co/datasets/Ymx1025/DamageTriage-Bench) (satellite post-disaster) | varies | Damage typology | HF / research | **Low** — disaster/aerial, not room-item pairs |
+
+#### Tier list — what to actually download first
+
+**Tier A — download for immediate spikes (licence-safe, direct task match):**
+
+1. **KonIQ-10k** — pretrain or distil NR-IQA ranker (ML-E6); complements MUSIQ
+   oracle without NC licence in product weights.
+2. **MIT Indoor 67 / HF indoor-scene-classification** — room-type head for
+   segment validation and wrong-room frame rejection; small enough to fine-tune
+   on laptop; map 67 → our ~10 room names.
+3. **Open Images V7 (filtered)** — ~30 household classes matching
+   `HOUSEHOLD_VOCAB`; pretrain Grounding DINO / YOLO before ML-E10/ML-E12.
+   Use FiftyOne class filter — full set is ~561 GB.
+4. **types-of-film-shots** (925 img, CC BY 4.0) — quick shot-scale baseline for
+   establishing vs close-up before CLIP prompts (ML-E4/E7).
+
+**Tier B — worth requesting / academic use only:**
+
+5. **ZInD** — best real-estate-native room layout + type + door/window labels;
+   extract perspective crops from panoramas for room classifier; **cannot ship
+   commercial model trained solely on ZInD** without Zillow licence.
+6. **ScanNet / Matterport3D** — object instance pretrain if Open Images insufficient;
+   3D bbox → 2D crop pipeline is extra work.
+7. **REI database (WACV 2017)** — contact authors; 7-class real-estate tags from
+   Zillow crawl; small but on-domain.
+
+**Tier C — defect / change (assistive pre-filter only):**
+
+8. **BD3 + StructDamage** — binary "surface anomaly" pre-filter; expect false
+   positives on intentional patina, wood grain, shadows.
+9. **RBDID** — closest to **residential interior** defect bbox (74k instances,
+   17 categories); China housing stock; still not UK tenancy scuffs.
+
+**Tier D — large but weak transfer (defer):**
+
+10. **LSUN** bedroom/kitchen (millions) — generative / GAN era; unlabelled beyond
+    scene; use only if training room classifier from scratch.
+11. **Ego4D / EPIC-Kitchens** — only if ML-E1 embedding changepoint fails; heavy
+    download and licence; kitchen-centric.
+12. **CineScale** — 792k film frames; use if Tier A shot-scale too small.
+
+#### What does *not* exist (gaps no public set fills)
+
+| Need | Closest public proxy | Gap |
+|---|---|---|
+| Phone walkthrough → room boundaries | Ego4D room tours + our IMG_5512 | No timestamped room-boundary labels on egocentric video |
+| Inventory item + UK condition grade | Open Images objects + VLM | No ordinal condition/cleanliness on household items |
+| Establishing cover for property overview | REI wide rooms + CineScale LS | No "brochure cover" labels on walkthrough frames |
+| Check-in vs check-out same item | — | No paired tenancy photo datasets found |
+| Smoke alarm / towel rail / skirting board | Partial in OI / ScanNet | Inventory-specific long-tail still needs our labels |
+
+#### Recommended incorporation (updates ML programme)
+
+| ID | Action | Dataset |
+|---|---|---|
+| **ML-E16** | Fine-tune room-type classifier (67→10 classes); eval wrong-room rejection on bleed audit | MIT Indoor / HF indoor-scene |
+| **ML-E17** | Pretrain KonCept512-style tiny IQA on KonIQ-10k; distill to ONNX; compare hero-gold | KonIQ-10k |
+| **ML-E18** | Filter OI V7 to ~40 household classes; pretrain detector; eval on InventoryFlex | Open Images V7 |
+| **ML-E19** | Zero-shot shot-scale (LS vs CU) on hero-gold before SigLIP | types-of-film-shots + CineScale |
+| **ML-E20** | Binary defect pre-filter FP rate on InventoryFlex photos | BD3 or StructDamage |
+
+Add **`evals/external/`** README listing download URLs, licences, and which
+ML-E spike consumed each set — do not commit multi-GB archives to git.
+
+**No UK tenancy inventory dataset was found.** The viable strategy is:
+**public pretrain → our fixtures fine-tune/eval** (InventoryFlex, hero-gold,
+eventual bbox labels), same pattern as docs/04 VLM benchmarks.
+
+### 2.5 Labelling effort estimates (not calendar time)
 
 | Task | Effort | Yield |
 |---|---|---|
@@ -408,6 +512,11 @@ standard as docs/11 and docs/18.
 | **ML-E13** | Segmentation | SegFormer floor+wall fraction | ρ with establishing gold | scatter plot |
 | **ML-E14** | Compare | Siamese embedding on pairs | — (exploratory) | paired fixture only |
 | **ML-E15** | Defect | Anomaly pre-filter zero-shot | FP rate <10% on IFlex | defect-filter-report.json |
+| **ML-E16** | Room type | Fine-tune Indoor67→10 classes | Wrong-room bleed ↓ on audit | room-clf-eval.json |
+| **ML-E17** | IQA | KonIQ-10k pretrain → ONNX distill | top-1 ≥ ML-E6 on hero-gold | iqa-koniq-onnx.html |
+| **ML-E18** | Detection | OI V7 household subset pretrain | Recall ↑ vs ML-E10 baseline | detect-comparison-oi.json |
+| **ML-E19** | Cover | Shot-scale classifier transfer | ρ vs hero-gold ≥ classical | hero-contact-shotscale.html |
+| **ML-E20** | Defect | StructDamage/BD3 pretrain pre-filter | FP <10% on IFlex | defect-pretrain-report.json |
 
 ### Recommended sequence
 
@@ -418,8 +527,12 @@ Phase 0 — Data (parallel)
   evals/splits/ room-held-out protocol
 
 Phase 1 — Cheap local signal (no training)
-  ML-E1, ML-E4, ML-E5, ML-E10
+  ML-E1, ML-E4, ML-E5, ML-E10, ML-E19
   → decision: embedding segmentation + SigLIP relevance + Apache detector?
+
+Phase 1b — Public dataset pretrain (Tier A)
+  ML-E16, ML-E17, ML-E18 in parallel with Phase 1
+  → decision: room clf + KonIQ ONNX + OI-pretrained detector?
 
 Phase 2 — Small learned models
   ML-E6, ML-E7, ML-E3
@@ -429,7 +542,7 @@ Phase 3 — API-augmented ceiling
   ML-E2, ML-E8 only if Phase 1–2 miss pass bars
 
 Phase 4 — v2 / when paired data exists
-  ML-E14, ML-E12 fine-tune, ML-E15
+  ML-E14, ML-E12 fine-tune, ML-E15, ML-E20
 ```
 
 ---
@@ -533,8 +646,9 @@ ML pre-filters are enabled — gate on InventoryFlex before ship.
 - [x] Experiment backlog (ML-E1–E15) with pass bars
 - [x] Decision gates and non-goals stated
 - [x] Recommended phased sequence
+- [x] Adjacent open datasets surveyed (§2.4)
 - [ ] Phase 0 data labelling started (ML-E11)
-- [ ] Phase 1 spikes scheduled / run
+- [ ] Tier A external datasets downloaded to `evals/external/` (ML-E16–E18)
 
 This document is the **plan**; individual spikes update their experiment
 rows and may spawn focused docs (e.g. `20-segment-embedding-spike.md`) when
