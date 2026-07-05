@@ -41,3 +41,4 @@ segment-spike*/
 
 # Tier A external dataset cache (see evals/external/README.md)
 evals/external/data/
+evals/fixtures/own-property/segment-embed-strip/

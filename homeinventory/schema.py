@@ -66,6 +66,10 @@ class Photo:
     # quality is the within-room 0..1 score the election used.
     hero: Optional[int] = None
     quality: Optional[float] = None
+    # two-tier pools (docs/15, ML-E3): flags only — describe pool stays dense;
+    # presentation pool uses strict cover gates for human-facing surfaces.
+    describe_eligible: Optional[bool] = None
+    presentation_eligible: Optional[bool] = None
 
 
 @dataclass

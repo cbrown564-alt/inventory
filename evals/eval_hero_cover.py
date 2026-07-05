@@ -13,6 +13,9 @@ Usage:
         -o evals/fixtures/own-property/hero-contact-hard-gates.html
     uv run python evals/eval_hero_cover.py report --gold \\
         evals/fixtures/own-property/hero-gold.json
+    uv run python evals/eval_hero_cover.py report --scorer mslap \\
+        -o evals/fixtures/own-property/hero-contact-mslap.html
+    uv run python evals/eval_relevance_siglip.py report
 """
 
 from __future__ import annotations
@@ -33,9 +36,22 @@ from homeinventory.curate import (  # noqa: E402
     _cover_metrics,
     _passes_cover_gates,
     _percentile,
+    classical_features,
     cover_score,
     frame_quality,
+    linear_iqa_score,
+    mslap_score,
 )
+
+DEFAULT_WEIGHTS = (
+    ROOT / "evals" / "fixtures" / "own-property" / "iqa-linear-weights.json"
+)
+
+_CLIP_PROMPTS = (
+    ("a wide interior photograph of a room", "a close-up of an object"),
+    ("a sharp photograph", "a blurry photograph"),
+)
+_clip_model = None
 
 
 def ranks(values: list[float]) -> list[float]:
@@ -102,10 +118,10 @@ def load_gold(path: Path | None) -> dict[str, dict]:
     return data.get("rooms", {})
 
 
-def score_frame(path: Path) -> dict:
+def score_frame(path: Path, *, include_mslap: bool = True) -> dict:
     quality, _, establishing = frame_quality(path)
     sh, smooth, cbr, clipped = _cover_metrics(path)
-    return {
+    out = {
         "quality": quality,
         "sharpness": sh,
         "establishing": establishing,
@@ -113,9 +129,104 @@ def score_frame(path: Path) -> dict:
         "cbr": cbr,
         "clipped": clipped,
     }
+    if include_mslap:
+        out["mslap"] = mslap_score(path)
+    return out
 
 
-def scorer_sort_key(scorer: str, metrics: dict, *, gated: bool) -> tuple:
+def score_siglip(paths: list[Path], *, backend: str = "siglip",
+                 device: str = "cpu") -> dict[str, float]:
+    """{filename: relevance margin} for ML-E4."""
+    from evals.ml_scorers import make_relevance_scorer
+
+    scorer = make_relevance_scorer(backend=backend, device=device)
+    out: dict[str, float] = {}
+    for path in paths:
+        out[path.name] = scorer.score_path(path)
+    return out
+
+
+def load_linear_weights(path: Path | None) -> dict:
+    p = path or DEFAULT_WEIGHTS
+    if not p.is_file():
+        raise FileNotFoundError(f"linear weights not found: {p}")
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
+def metrics_features(metrics: dict) -> dict[str, float]:
+    return classical_features(
+        metrics["sharpness"],
+        metrics["smooth"],
+        metrics["cbr"],
+        metrics["clipped"],
+        metrics["establishing"],
+        metrics["quality"],
+    )
+
+
+def linear_musiq_value(metrics: dict, weights: dict) -> float:
+    feats = metrics_features(metrics)
+    row = {n: 1.0 if n == "bias" else feats.get(n, 0.0)
+           for n in weights["features"]}
+    return linear_iqa_score(row, weights)
+
+
+def load_clip_model():
+    """Lazy-load OpenCLIP ViT-B/32 (Apache-2.0, ML-E7)."""
+    global _clip_model
+    if _clip_model is not None:
+        return _clip_model
+    try:
+        import open_clip
+        import torch
+        from PIL import Image
+    except ImportError as e:
+        raise ImportError(
+            "clip-establishing requires: uv pip install open-clip-torch torch"
+        ) from e
+
+    model, _, preprocess = open_clip.create_model_and_transforms(
+        "ViT-B-32", pretrained="openai")
+    model.eval()
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = model.to(device)
+    pos_texts = [p[0] for p in _CLIP_PROMPTS]
+    neg_texts = [p[1] for p in _CLIP_PROMPTS]
+    tokenizer = open_clip.get_tokenizer("ViT-B-32")
+    with torch.no_grad():
+        pos = model.encode_text(tokenizer(pos_texts).to(device))
+        neg = model.encode_text(tokenizer(neg_texts).to(device))
+        pos = pos / pos.norm(dim=-1, keepdim=True)
+        neg = neg / neg.norm(dim=-1, keepdim=True)
+    _clip_model = {
+        "model": model,
+        "preprocess": preprocess,
+        "device": device,
+        "pos": pos,
+        "neg": neg,
+        "Image": Image,
+        "torch": torch,
+    }
+    return _clip_model
+
+
+def clip_establishing_score(path: Path) -> float:
+    """Prompt-pair margin: establishing wide interior vs close-up (+ sharp)."""
+    clip = load_clip_model()
+    torch = clip["torch"]
+    with clip["Image"].open(path) as im:
+        im = im.convert("RGB")
+        tensor = clip["preprocess"](im).unsqueeze(0).to(clip["device"])
+    with torch.no_grad():
+        img = clip["model"].encode_image(tensor)
+        img = img / img.norm(dim=-1, keepdim=True)
+        pos_sim = (img @ clip["pos"].T).mean().item()
+        neg_sim = (img @ clip["neg"].T).mean().item()
+    return pos_sim - neg_sim
+
+
+def scorer_sort_key(scorer: str, metrics: dict, *, gated: bool,
+                    weights: dict | None = None) -> tuple:
     """Sort key for contact-sheet ordering (higher = better rank)."""
     if scorer == "classical":
         return (metrics["quality"], metrics["establishing"])
@@ -127,6 +238,16 @@ def scorer_sort_key(scorer: str, metrics: dict, *, gated: bool) -> tuple:
     if scorer == "cover":
         cs = cover_score(metrics["establishing"], metrics["cbr"])
         return (cs, metrics["quality"])
+    if scorer == "linear-musiq":
+        if weights is None:
+            raise ValueError("linear-musiq requires weights")
+        return (linear_musiq_value(metrics, weights), metrics["establishing"])
+    if scorer == "clip-establishing":
+        return (metrics.get("clip_margin", 0.0), metrics["quality"])
+    if scorer == "mslap":
+        return (metrics.get("mslap", 0.0), metrics["quality"])
+    if scorer == "siglip":
+        return (metrics.get("siglip", 0.0), metrics["quality"])
     raise ValueError(f"unknown scorer: {scorer}")
 
 
@@ -137,6 +258,7 @@ def pick_rank_one(
         *,
         room_median: float,
         room_p25: float,
+        weights: dict | None = None,
 ) -> dict:
     """Return the entry dict the scorer would pick as rank-1 cover."""
     if scorer == "classical":
@@ -178,6 +300,20 @@ def pick_rank_one(
             if alts:
                 best = max(alts, key=cs)
         return best
+    if scorer == "linear-musiq":
+        return max(
+            entries,
+            key=lambda e: linear_musiq_value(metrics[e["name"]], weights or {}),
+        )
+    if scorer == "clip-establishing":
+        return max(
+            entries,
+            key=lambda e: metrics[e["name"]].get("clip_margin", 0.0),
+        )
+    if scorer == "mslap":
+        return max(entries, key=lambda e: metrics[e["name"]].get("mslap", 0.0))
+    if scorer == "siglip":
+        return max(entries, key=lambda e: metrics[e["name"]].get("siglip", 0.0))
     raise ValueError(f"unknown scorer: {scorer}")
 
 
@@ -261,6 +397,7 @@ def render_html(
                 f"{star}<strong>{html.escape(e['name'])}</strong><br>",
                 f"<span class='metrics'>",
                 f"sh={m['sharpness']:.0f} est={m['establishing']:.2f} "
+                f"mslap={m.get('mslap', 0):.2f} "
                 f"{hero_txt} {scorer}={e['scorer_rank']:.0f} {gold_txt}{gate}",
                 "</span></div></div>",
             ])
@@ -276,6 +413,7 @@ def evaluate_room(
         entries: list[dict],
         metrics: dict[str, dict],
         gold_room: dict | None,
+        weights: dict | None = None,
 ) -> dict:
     sharpnesses = [metrics[e["name"]]["sharpness"] for e in entries]
     room_median = _percentile(sharpnesses, 0.5)
@@ -284,6 +422,7 @@ def evaluate_room(
     pick = pick_rank_one(
         scorer, entries, metrics,
         room_median=room_median, room_p25=room_p25,
+        weights=weights,
     )
     pick_name = pick["name"]
     pick_sh = metrics[pick_name]["sharpness"]
@@ -293,6 +432,7 @@ def evaluate_room(
         key=lambda e: scorer_sort_key(
             scorer, metrics[e["name"]],
             gated=e.get("gated_out", False),
+            weights=weights,
         ),
         reverse=True,
     )
@@ -331,6 +471,8 @@ def evaluate_room(
 def build_room_entries(
         report_dir: Path,
         frames: list[dict],
+        *,
+        scorer: str = "cover",
 ) -> tuple[list[dict], dict[str, dict]]:
     entries: list[dict] = []
     metrics: dict[str, dict] = {}
@@ -338,6 +480,8 @@ def build_room_entries(
         path = resolve_path(report_dir, f["path"])
         name = frame_name(path)
         m = score_frame(path)
+        if scorer == "clip-establishing":
+            m["clip_margin"] = clip_establishing_score(path)
         metrics[name] = m
         entries.append({
             "id": f["id"],
@@ -362,6 +506,11 @@ def build_room_entries(
 def aggregate_metrics(per_room: dict[str, dict]) -> dict:
     rooms_with_gold = [r for r in per_room.values() if "top1_hit" in r]
     out: dict = {"per_room": per_room, "n_rooms": len(per_room)}
+    latencies = [r["clip_ms_per_frame"] for r in per_room.values()
+                 if "clip_ms_per_frame" in r]
+    if latencies:
+        out["clip_latency_ms_per_frame"] = round(
+            sum(latencies) / len(latencies), 1)
     if rooms_with_gold:
         out["top1_hit_rate"] = round(
             100 * sum(1 for r in rooms_with_gold if r["top1_hit"])
@@ -384,17 +533,30 @@ def default_output(scorer: str) -> Path:
             / f"hero-contact-{scorer}.html")
 
 
+SCORER_CHOICES = [
+    "classical", "establishing", "hard-gates", "cover",
+    "linear-musiq", "clip-establishing", "mslap", "siglip",
+]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("report_dir", type=Path, nargs="?", default=Path("report"),
                     help="build output dir containing inventory.json")
     ap.add_argument("--scorer", default="cover",
-                    choices=["classical", "establishing", "hard-gates", "cover"],
-                    help="ranking method for cover selection (default: classical)")
+                    choices=SCORER_CHOICES,
+                    help="ranking method for cover selection (default: cover)")
+    ap.add_argument("--weights", type=Path, default=None,
+                    help="iqa-linear-weights.json for linear-musiq")
     ap.add_argument("-o", "--output", type=Path, default=None,
                     help="HTML contact sheet path")
     ap.add_argument("--gold", type=Path, default=None,
                     help="hero-gold.json for metrics")
+    ap.add_argument("--relevance-backend", default="siglip",
+                    choices=["siglip", "openclip"],
+                    help="encoder for --scorer siglip (Apache-2.0)")
+    ap.add_argument("--device", default="cpu",
+                    help="torch device for --scorer siglip")
     args = ap.parse_args()
 
     report_dir = args.report_dir.resolve()
@@ -404,15 +566,44 @@ def main() -> int:
         print("no video frames found", file=sys.stderr)
         return 1
 
+    weights = None
+    if args.scorer == "linear-musiq":
+        weights = load_linear_weights(args.weights)
+
+    clip_timer = {"start": None, "total": 0.0, "n": 0}
+    if args.scorer == "clip-establishing":
+        import time
+        clip_timer["start"] = time.perf_counter()
+
     n_frames = sum(len(f) for _, f in rooms)
     print(f"{len(rooms)} rooms, {n_frames} video frames, scorer={args.scorer}")
 
     room_entries: dict[str, list[dict]] = {}
     all_metrics: dict[str, dict] = {}
     for room_name, frames in rooms:
-        entries, metrics = build_room_entries(report_dir, frames)
+        entries, metrics = build_room_entries(
+            report_dir, frames, scorer=args.scorer)
         room_entries[room_name] = entries
         all_metrics[room_name] = metrics
+
+    if args.scorer == "siglip":
+        paths = [e["path"] for entries in room_entries.values() for e in entries]
+        try:
+            siglip_by_name = score_siglip(
+                paths, backend=args.relevance_backend, device=args.device)
+        except ImportError as e:
+            print(str(e), file=sys.stderr)
+            return 1
+        for room_name, entries in room_entries.items():
+            metrics = all_metrics[room_name]
+            for e in entries:
+                metrics[e["name"]]["siglip"] = siglip_by_name.get(e["name"], 0.0)
+
+    if args.scorer == "clip-establishing" and clip_timer["start"] is not None:
+        import time
+        elapsed = time.perf_counter() - clip_timer["start"]
+        clip_timer["total"] = elapsed
+        clip_timer["n"] = n_frames
 
     per_room: dict[str, dict] = {}
     for room_name, entries in room_entries.items():
@@ -422,13 +613,18 @@ def main() -> int:
             entries=entries,
             metrics=metrics,
             gold_room=gold.get(room_name),
+            weights=weights,
         )
+        if args.scorer == "clip-establishing" and clip_timer["n"]:
+            per_room[room_name]["clip_ms_per_frame"] = round(
+                1000 * clip_timer["total"] / clip_timer["n"], 1)
         # attach display ranks after evaluation
         by_scorer = sorted(
             entries,
             key=lambda e: scorer_sort_key(
                 args.scorer, metrics[e["name"]],
                 gated=e.get("gated_out", False),
+                weights=weights,
             ),
             reverse=True,
         )

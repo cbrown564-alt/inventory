@@ -1,0 +1,32 @@
+{
+  "experiment": "ML-E6",
+  "licence": "MIT",
+  "target": "musiq_score",
+  "target_note": "MUSIQ oracle (eval only, NC) \u2014 weights are MIT",
+  "features": [
+    "bias",
+    "log_sharpness",
+    "smooth",
+    "log_cbr",
+    "clipped",
+    "establishing",
+    "cover"
+  ],
+  "weights": [
+    8.048598,
+    11.903115,
+    -8.209767,
+    9.3912,
+    -2.137336,
+    16.087534,
+    4.680631
+  ],
+  "training": {
+    "fixture": "evals/fixtures/own-property/iqa-comparison-mps.json",
+    "mode": "bootstrap-scores",
+    "n_resolved_frames": 260,
+    "ridge_alpha": 1.0,
+    "n_samples": 260,
+    "spearman_pred_vs_musiq": 0.74
+  }
+}

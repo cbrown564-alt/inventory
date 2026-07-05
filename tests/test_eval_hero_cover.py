@@ -115,6 +115,24 @@ def test_eval_writes_html_and_metrics(tmp_path):
     assert "top1_hit_rate" in summary
 
 
+def test_linear_musiq_scorer_on_synthetic(tmp_path):
+    report = _synthetic_report(tmp_path)
+    weights_path = (
+        pathlib.Path(__file__).resolve().parents[1]
+        / "evals/fixtures/own-property/iqa-linear-weights.json"
+    )
+    if not weights_path.is_file():
+        return
+    weights = eval_hero_cover.load_linear_weights(weights_path)
+    rooms = eval_hero_cover.load_rooms(report)
+    entries, metrics = eval_hero_cover.build_room_entries(report, rooms[0][1])
+    pick = eval_hero_cover.pick_rank_one(
+        "linear-musiq", entries, metrics,
+        room_median=50.0, room_p25=20.0, weights=weights,
+    )
+    assert pick["name"] in {e["name"] for e in entries}
+
+
 def test_gold_rank_map():
     gold = {"top": ["a.jpg", "b.jpg", "c.jpg"], "bottom": ["y.jpg", "z.jpg"]}
     ranks = eval_hero_cover.gold_rank_map(gold, 10)
