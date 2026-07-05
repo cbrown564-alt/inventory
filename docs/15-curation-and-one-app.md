@@ -129,3 +129,32 @@ hero) so templates need no side-lookups.
 
 Definition of done throughout stays docs/10's: reachable from the UI,
 product-grade — a scoring module with no visible effect is not done.
+
+## Shipped — 5 Jul 2026 (M1 `1b4c4da`, M2 `b7256f8`, M3 `b9b2187`, M4 `2c5ba20`)
+
+All four milestones landed the day this doc was written, verified in a
+real browser against the own-property build (playwright round-trip:
+shell nav, deep links both ways, moment link playing the walkthrough,
+highlight toggle persisting, back button crossing worlds).
+
+- **Curation numbers on the real walkthrough:** 260 frames → 60 heroes
+  (6 per room), scored + elected in 3.1 s, pure PIL. The learned IQA
+  tier (pyiqa MUSIQ / CLIP-IQA) remains the planned upgrade; the
+  classical gate + MMR already removes the blurred/duplicate frames the
+  critique named. Quality is stored as a *ratio to the room's best
+  frame* — min–max normalisation blew sensor noise into a full 0..1
+  spread and drowned the distinctness term (found by test).
+- **Override keys are content hashes** (photo sha256, frame-filename
+  fallback), so identical bytes share one curation fate and rebuilds,
+  renames and photo-id renumbering can't orphan a reviewer's decision.
+- **Deliberate photo captures never compete** — only video frames enter
+  the election; a person choosing to take a photo is the strongest
+  quality signal we have.
+- **M4 in practice:** the VLM backends never map items to boxes, so
+  `merge.attach_detector_crops` lends items the best-confidence YOLOE
+  crop whose label words all appear in the item name, only within the
+  item's own cited photos (wrong close-up > no close-up). On the real
+  Kitchen: 8 of 35 items picked up genuinely useful close-ups (sink,
+  under-cabinet lighting, cabinet spotlights).
+- **Leak fixed en route:** the report's embedded payload carried the
+  build machine's absolute `crop_path`s; now sanitised like photo paths.
