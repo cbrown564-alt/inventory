@@ -1,0 +1,809 @@
+{
+  "experiment": "ML-E10",
+  "capture_dir": "benchmarks/inventoryflex/capture",
+  "labels": "evals/fixtures/inventoryflex/labels.json",
+  "vocab": "HOUSEHOLD_VOCAB",
+  "device": "cpu",
+  "evaluated": "2026-07-05",
+  "modes": [
+    {
+      "backend": "yoloe",
+      "mode": "text",
+      "model": "yoloe-11s-seg.pt",
+      "device": "cpu",
+      "conf": 0.25,
+      "available": true,
+      "gold_recall_all": 56.0,
+      "gold_recall_notable": 58.7,
+      "unmatched_label_rate": 65.8,
+      "detections_per_photo": 1.86,
+      "coverage_gap_rate": 37.5,
+      "vocab_coverage": 79.2,
+      "top_unmatched_labels": [
+        {
+          "label": "television",
+          "rooms": 4
+        },
+        {
+          "label": "tap",
+          "rooms": 4
+        },
+        {
+          "label": "chair",
+          "rooms": 3
+        },
+        {
+          "label": "desk",
+          "rooms": 3
+        },
+        {
+          "label": "mirror",
+          "rooms": 3
+        },
+        {
+          "label": "bathtub",
+          "rooms": 3
+        },
+        {
+          "label": "lamp",
+          "rooms": 3
+        },
+        {
+          "label": "carpet",
+          "rooms": 3
+        },
+        {
+          "label": "rug",
+          "rooms": 2
+        },
+        {
+          "label": "cabinet",
+          "rooms": 2
+        },
+        {
+          "label": "clock",
+          "rooms": 2
+        },
+        {
+          "label": "bed",
+          "rooms": 2
+        },
+        {
+          "label": "refrigerator",
+          "rooms": 2
+        },
+        {
+          "label": "speaker",
+          "rooms": 1
+        },
+        {
+          "label": "wardrobe",
+          "rooms": 1
+        }
+      ],
+      "rooms": {
+        "Entrance Hall": {
+          "photos": 27,
+          "detections": 30,
+          "unique_labels": 12,
+          "labels": [
+            "cabinet",
+            "ceiling light",
+            "chair",
+            "desk",
+            "door",
+            "mirror",
+            "picture frame",
+            "rug",
+            "speaker",
+            "tap",
+            "television",
+            "wardrobe"
+          ],
+          "unmatched_labels": [
+            "speaker",
+            "chair",
+            "television",
+            "wardrobe",
+            "picture frame",
+            "tap",
+            "rug",
+            "desk",
+            "mirror",
+            "cabinet"
+          ],
+          "gold_recall": 41.7,
+          "gold_recall_notable": 50.0,
+          "coverage_gaps": [
+            "window",
+            "smoke alarm"
+          ]
+        },
+        "Walk In Wardrobe": {
+          "photos": 18,
+          "detections": 21,
+          "unique_labels": 11,
+          "labels": [
+            "bathtub",
+            "bed",
+            "cabinet",
+            "clock",
+            "door",
+            "lamp",
+            "mirror",
+            "refrigerator",
+            "shower",
+            "wardrobe",
+            "washing machine"
+          ],
+          "unmatched_labels": [
+            "clock",
+            "bed",
+            "shower",
+            "bathtub",
+            "mirror",
+            "washing machine",
+            "refrigerator",
+            "lamp"
+          ],
+          "gold_recall": 41.7,
+          "gold_recall_notable": 42.9,
+          "coverage_gaps": [
+            "window"
+          ]
+        },
+        "Bathroom": {
+          "photos": 27,
+          "detections": 57,
+          "unique_labels": 18,
+          "labels": [
+            "bathtub",
+            "cabinet",
+            "carpet",
+            "ceiling light",
+            "clock",
+            "dishwasher",
+            "lamp",
+            "light fitting",
+            "mirror",
+            "refrigerator",
+            "rug",
+            "shower",
+            "sink",
+            "smoke alarm",
+            "tap",
+            "television",
+            "toilet",
+            "window"
+          ],
+          "unmatched_labels": [
+            "clock",
+            "carpet",
+            "television",
+            "tap",
+            "window",
+            "dishwasher",
+            "rug",
+            "refrigerator",
+            "lamp"
+          ],
+          "gold_recall": 73.1,
+          "gold_recall_notable": 66.7,
+          "coverage_gaps": [
+            "door",
+            "towel rail"
+          ]
+        },
+        "Bedroom": {
+          "photos": 27,
+          "detections": 33,
+          "unique_labels": 11,
+          "labels": [
+            "bathtub",
+            "bed",
+            "cabinet",
+            "chair",
+            "chest of drawers",
+            "desk",
+            "lamp",
+            "mirror",
+            "painting",
+            "television",
+            "window"
+          ],
+          "unmatched_labels": [
+            "chair",
+            "television",
+            "desk",
+            "mirror",
+            "bathtub"
+          ],
+          "gold_recall": 47.4,
+          "gold_recall_notable": 61.5,
+          "coverage_gaps": [
+            "door",
+            "radiator"
+          ]
+        },
+        "Reception & Open Plan Kitchen": {
+          "photos": 87,
+          "detections": 205,
+          "unique_labels": 30,
+          "labels": [
+            "bathtub",
+            "bed",
+            "blinds",
+            "cabinet",
+            "carpet",
+            "ceiling light",
+            "chair",
+            "coffee table",
+            "desk",
+            "dining table",
+            "dishwasher",
+            "door",
+            "kettle",
+            "lamp",
+            "laptop",
+            "light fitting",
+            "mattress",
+            "mirror",
+            "oven",
+            "painting",
+            "refrigerator",
+            "sink",
+            "sofa",
+            "stove",
+            "tap",
+            "television",
+            "toilet",
+            "vacuum cleaner",
+            "washing machine",
+            "window"
+          ],
+          "unmatched_labels": [
+            "television",
+            "desk",
+            "laptop",
+            "bed",
+            "carpet",
+            "bathtub",
+            "toilet",
+            "tap",
+            "mattress"
+          ],
+          "gold_recall": 60.5,
+          "gold_recall_notable": 66.7,
+          "coverage_gaps": [
+            "smoke alarm"
+          ]
+        },
+        "Balcony": {
+          "photos": 6,
+          "detections": 11,
+          "unique_labels": 8,
+          "labels": [
+            "cabinet",
+            "carpet",
+            "chair",
+            "coffee table",
+            "lamp",
+            "sofa",
+            "tap",
+            "window"
+          ],
+          "unmatched_labels": [
+            "chair",
+            "carpet",
+            "tap",
+            "coffee table",
+            "cabinet",
+            "sofa",
+            "lamp"
+          ],
+          "gold_recall": 25.0,
+          "gold_recall_notable": 0.0,
+          "coverage_gaps": [
+            "door"
+          ]
+        }
+      },
+      "_counts": {
+        "gold_items": 116,
+        "gold_notable": 75,
+        "found": 65,
+        "found_notable": 44,
+        "detections": 357,
+        "unique_labels": 38,
+        "unmatched_labels": 48,
+        "coverage_gaps": 9,
+        "coverage_checks": 24,
+        "vocab_hits": 38,
+        "unique_unmatched": 25
+      }
+    },
+    {
+      "backend": "gdino",
+      "mode": "text",
+      "model": "IDEA-Research/grounding-dino-tiny",
+      "device": "cpu",
+      "conf": 0.25,
+      "available": true,
+      "gold_recall_all": 74.1,
+      "gold_recall_notable": 76.0,
+      "unmatched_label_rate": 79.6,
+      "detections_per_photo": 7.4,
+      "coverage_gap_rate": 4.2,
+      "vocab_coverage": 85.4,
+      "top_unmatched_labels": [
+        {
+          "label": "chest of drawers",
+          "rooms": 5
+        },
+        {
+          "label": "rug",
+          "rooms": 5
+        },
+        {
+          "label": "curtains",
+          "rooms": 5
+        },
+        {
+          "label": "towel rail",
+          "rooms": 5
+        },
+        {
+          "label": "vacuum cleaner",
+          "rooms": 5
+        },
+        {
+          "label": "television",
+          "rooms": 4
+        },
+        {
+          "label": "desk",
+          "rooms": 4
+        },
+        {
+          "label": "mirror",
+          "rooms": 4
+        },
+        {
+          "label": "carpet",
+          "rooms": 4
+        },
+        {
+          "label": "wardrobe",
+          "rooms": 4
+        },
+        {
+          "label": "armchair",
+          "rooms": 4
+        },
+        {
+          "label": "lamp",
+          "rooms": 4
+        },
+        {
+          "label": "mattress",
+          "rooms": 4
+        },
+        {
+          "label": "tap",
+          "rooms": 4
+        },
+        {
+          "label": "blinds",
+          "rooms": 3
+        }
+      ],
+      "rooms": {
+        "Entrance Hall": {
+          "photos": 27,
+          "detections": 140,
+          "unique_labels": 33,
+          "labels": [
+            "##helf rail",
+            "armchair",
+            "blinds",
+            "cabinet",
+            "carpet",
+            "ceiling light",
+            "ceiling towel",
+            "chair",
+            "chest of drawers",
+            "chestf",
+            "clock",
+            "curtains",
+            "desk",
+            "door",
+            "frame alarm",
+            "lamp",
+            "light alarm",
+            "light fitting",
+            "mattress",
+            "mirror",
+            "monitor",
+            "painting",
+            "picture frame",
+            "rug",
+            "sink",
+            "smoke alarm",
+            "sofa",
+            "speaker",
+            "television",
+            "towel rail",
+            "vacuum cleaner",
+            "wardrobe",
+            "window"
+          ],
+          "unmatched_labels": [
+            "monitor",
+            "blinds",
+            "clock",
+            "chair",
+            "television",
+            "desk",
+            "mirror",
+            "sofa",
+            "speaker",
+            "carpet",
+            "chest of drawers",
+            "light alarm",
+            "picture frame",
+            "wardrobe",
+            "sink",
+            "rug",
+            "armchair",
+            "lamp",
+            "##helf rail",
+            "chestf",
+            "curtains",
+            "towel rail",
+            "window",
+            "vacuum cleaner",
+            "mattress",
+            "cabinet"
+          ],
+          "gold_recall": 66.7,
+          "gold_recall_notable": 70.0,
+          "coverage_gaps": []
+        },
+        "Walk In Wardrobe": {
+          "photos": 18,
+          "detections": 115,
+          "unique_labels": 24,
+          "labels": [
+            "bathtub",
+            "bed",
+            "blinds",
+            "cabinet",
+            "carpet",
+            "ceiling light",
+            "chest of drawers",
+            "chesthelf",
+            "curtains",
+            "door",
+            "lamp",
+            "light alarm",
+            "light fitting",
+            "mattress",
+            "mirror",
+            "painting",
+            "picture frame",
+            "radiator",
+            "rug",
+            "smoke alarm",
+            "towel rail",
+            "vacuum cleaner",
+            "wardrobe",
+            "window"
+          ],
+          "unmatched_labels": [
+            "radiator",
+            "blinds",
+            "mirror",
+            "bed",
+            "chest of drawers",
+            "light alarm",
+            "rug",
+            "bathtub",
+            "lamp",
+            "curtains",
+            "towel rail",
+            "window",
+            "vacuum cleaner",
+            "chesthelf",
+            "mattress"
+          ],
+          "gold_recall": 83.3,
+          "gold_recall_notable": 85.7,
+          "coverage_gaps": []
+        },
+        "Bathroom": {
+          "photos": 27,
+          "detections": 203,
+          "unique_labels": 30,
+          "labels": [
+            "##helf",
+            "armchair",
+            "bathtub",
+            "blinds",
+            "bookshelf",
+            "carpet",
+            "ceiling light",
+            "chest books",
+            "chest of drawers",
+            "curtains",
+            "door",
+            "lamp",
+            "light fitting",
+            "light light alarm",
+            "mattress",
+            "mirror",
+            "monitor",
+            "painting",
+            "picture frame",
+            "refrigerator",
+            "rug",
+            "sink",
+            "smoke alarm",
+            "tap",
+            "television",
+            "toilet",
+            "towel rail",
+            "vacuum cleaner",
+            "wardrobe",
+            "window"
+          ],
+          "unmatched_labels": [
+            "television",
+            "carpet",
+            "chest of drawers",
+            "refrigerator",
+            "light light alarm",
+            "wardrobe",
+            "chest books",
+            "rug",
+            "armchair",
+            "lamp",
+            "curtains",
+            "tap",
+            "window",
+            "vacuum cleaner",
+            "mattress"
+          ],
+          "gold_recall": 84.6,
+          "gold_recall_notable": 91.7,
+          "coverage_gaps": []
+        },
+        "Bedroom": {
+          "photos": 27,
+          "detections": 169,
+          "unique_labels": 33,
+          "labels": [
+            "armchair",
+            "bathtub",
+            "bed",
+            "blinds",
+            "bookshelf",
+            "cabinet",
+            "carpet",
+            "ceiling light",
+            "chair",
+            "chest of drawers",
+            "chestf",
+            "chesthelf",
+            "clock",
+            "curtains",
+            "desk",
+            "door",
+            "lamp",
+            "light light alarm",
+            "mattress",
+            "mirror",
+            "painting",
+            "picture frame",
+            "rug",
+            "sink",
+            "smoke alarm",
+            "sofa",
+            "speaker",
+            "tap",
+            "television",
+            "towel rail",
+            "vacuum cleaner",
+            "wardrobe",
+            "window"
+          ],
+          "unmatched_labels": [
+            "chair",
+            "clock",
+            "television",
+            "desk",
+            "mirror",
+            "sofa",
+            "speaker",
+            "light light alarm",
+            "wardrobe",
+            "sink",
+            "rug",
+            "bathtub",
+            "armchair",
+            "bookshelf",
+            "chestf",
+            "curtains",
+            "towel rail",
+            "tap",
+            "vacuum cleaner",
+            "chesthelf"
+          ],
+          "gold_recall": 73.7,
+          "gold_recall_notable": 84.6,
+          "coverage_gaps": [
+            "radiator"
+          ]
+        },
+        "Reception & Open Plan Kitchen": {
+          "photos": 87,
+          "detections": 740,
+          "unique_labels": 47,
+          "labels": [
+            "##f",
+            "##helf",
+            "armchair",
+            "bathtub",
+            "bed",
+            "blinds",
+            "bookshelf",
+            "cabinet",
+            "carpet",
+            "ceiling light",
+            "chair",
+            "chest drawers",
+            "chest of drawers",
+            "chestf",
+            "chesthelf",
+            "cleaner pot",
+            "curtains",
+            "desk",
+            "door",
+            "kettle",
+            "lamp",
+            "light fitting",
+            "light light alarm",
+            "mattress",
+            "microwave",
+            "mirror",
+            "monitor",
+            "oven",
+            "painting",
+            "picture frame",
+            "plant pot",
+            "radiator",
+            "refrigerator",
+            "rug",
+            "sink",
+            "smoke alarm",
+            "sofa",
+            "speaker",
+            "stove",
+            "tap",
+            "television",
+            "toilet",
+            "towel rail",
+            "vacuum cleaner",
+            "wardrobe",
+            "washing machine",
+            "window"
+          ],
+          "unmatched_labels": [
+            "plant pot",
+            "television",
+            "cleaner pot",
+            "desk",
+            "bed",
+            "carpet",
+            "##helf",
+            "chest of drawers",
+            "chest drawers",
+            "light light alarm",
+            "picture frame",
+            "wardrobe",
+            "bathtub",
+            "toilet",
+            "bookshelf",
+            "##f",
+            "chestf",
+            "towel rail",
+            "tap",
+            "chesthelf",
+            "mattress"
+          ],
+          "gold_recall": 65.1,
+          "gold_recall_notable": 63.3,
+          "coverage_gaps": []
+        },
+        "Balcony": {
+          "photos": 6,
+          "detections": 54,
+          "unique_labels": 21,
+          "labels": [
+            "##helf",
+            "armchair",
+            "blinds",
+            "bookshelf",
+            "carpet",
+            "chest booksf",
+            "chest of drawers",
+            "curtains",
+            "desk",
+            "door",
+            "lamp",
+            "light fitting",
+            "mirror",
+            "painting",
+            "plant pot",
+            "rug",
+            "sofa",
+            "tap",
+            "towel rail",
+            "vacuum cleaner",
+            "window"
+          ],
+          "unmatched_labels": [
+            "blinds",
+            "plant pot",
+            "chest booksf",
+            "desk",
+            "mirror",
+            "sofa",
+            "##helf",
+            "carpet",
+            "chest of drawers",
+            "light fitting",
+            "rug",
+            "armchair",
+            "bookshelf",
+            "lamp",
+            "curtains",
+            "towel rail",
+            "tap",
+            "vacuum cleaner"
+          ],
+          "gold_recall": 100.0,
+          "gold_recall_notable": 100.0,
+          "coverage_gaps": []
+        }
+      },
+      "_counts": {
+        "gold_items": 116,
+        "gold_notable": 75,
+        "found": 86,
+        "found_notable": 57,
+        "detections": 1421,
+        "unique_labels": 54,
+        "unmatched_labels": 115,
+        "coverage_gaps": 1,
+        "coverage_checks": 24,
+        "vocab_hits": 41,
+        "unique_unmatched": 43
+      }
+    }
+  ],
+  "comparison": {
+    "backends": [
+      "yoloe",
+      "gdino"
+    ],
+    "gold_recall_notable_delta": 17.3,
+    "gold_recall_all_delta": 18.1,
+    "unmatched_label_rate_delta": 13.8,
+    "coverage_gap_rate_delta": -33.3,
+    "recommendation": "yoloe text (default) \u2014 gdino recall +17.3pp but unmatched labels +13.8pp vs text; keep YOLOE until noise is controlled"
+  },
+  "dependency_notes": {
+    "yoloe": "pip install -e '.[detect]' && pip install git+https://github.com/ultralytics/CLIP.git",
+    "gdino": "pip install transformers accelerate (Apache-2.0; eval only)"
+  }
+}

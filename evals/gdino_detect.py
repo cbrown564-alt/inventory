@@ -97,7 +97,7 @@ class GroundingDinoDetector:
         results = self._processor.post_process_grounded_object_detection(
             outputs,
             inputs["input_ids"],
-            box_threshold=self.conf,
+            threshold=self.conf,
             text_threshold=self.conf,
             target_sizes=target_sizes,
         )[0]
@@ -105,7 +105,7 @@ class GroundingDinoDetector:
         dets: list[Detection] = []
         boxes = results.get("boxes")
         scores = results.get("scores")
-        labels = results.get("labels") or results.get("text_labels") or []
+        labels = results.get("text_labels") or results.get("labels") or []
         if boxes is None or scores is None:
             return dets
 

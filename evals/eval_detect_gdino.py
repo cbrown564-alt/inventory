@@ -28,7 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from eval_detect import compare_modes, evaluate_detector, evaluate_mode  # noqa: E402
+from eval_detect import evaluate_detector, evaluate_mode  # noqa: E402
 from gdino_detect import DEFAULT_MODEL, GroundingDinoDetector  # noqa: E402
 from homeinventory.detect import Detector, default_model  # noqa: E402
 from homeinventory.ingest import ingest  # noqa: E402
@@ -149,19 +149,28 @@ def main() -> int:
         print(f"  unavailable: {gdino.get('error')}", file=sys.stderr)
 
     yoloe = next((r for r in results if r.get("backend") == "yoloe"), None)
-    comparison = compare_modes([r for r in results if r.get("available")])
+    comparison: dict = {}
     if yoloe and gdino.get("available") and yoloe.get("available"):
         comparison = {
-            **comparison,
             "backends": ["yoloe", "gdino"],
             "gold_recall_notable_delta": round(
                 (gdino.get("gold_recall_notable") or 0)
                 - (yoloe.get("gold_recall_notable") or 0),
                 1,
             ),
+            "gold_recall_all_delta": round(
+                (gdino.get("gold_recall_all") or 0)
+                - (yoloe.get("gold_recall_all") or 0),
+                1,
+            ),
             "unmatched_label_rate_delta": round(
                 (gdino.get("unmatched_label_rate") or 0)
                 - (yoloe.get("unmatched_label_rate") or 0),
+                1,
+            ),
+            "coverage_gap_rate_delta": round(
+                (gdino.get("coverage_gap_rate") or 0)
+                - (yoloe.get("coverage_gap_rate") or 0),
                 1,
             ),
             "recommendation": _gdino_recommendation(yoloe, gdino),

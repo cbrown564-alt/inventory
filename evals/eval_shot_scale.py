@@ -31,10 +31,8 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from eval_hero_cover import (  # noqa: E402
-    aggregate_metrics,
     build_room_entries,
     evaluate_room,
-    frame_name,
     gold_rank_map,
     img_href,
     load_gold,
@@ -409,7 +407,10 @@ def main() -> int:
 
     note = (
         "CLIP zero-shot margin: mean(long-shot prompts) − mean(close-up prompts). "
-        "Pass bar: mean Spearman ρ vs hero-gold ≥ E5 cover scorer (classical baseline)."
+        "Pass bar: mean Spearman ρ vs hero-gold ≥ E5 cover scorer (classical baseline). "
+        f"Report: {report_dir.name}"
+        + (" (smoke proxy — re-run on full IMG_5512 report/ for gold pass bar)"
+           if "smoke" in str(report_dir) else "")
     )
     render_html(
         html_path=args.output.resolve(),
