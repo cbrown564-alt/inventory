@@ -17,7 +17,13 @@ adopted (docs/15, 5 Jul 2026): MUSIQ ranked marginally more like a human
 commercially — and ~100x slower; CLIP-IQA rewards overexposure and lost
 to this gate outright. Known bias to keep in mind: Laplacian variance
 rewards patterned surfaces (wallpaper, oven racks), so texture-rich
-frames outrank cleaner compositions of equal sharpness.
+frames outrank cleaner compositions of equal sharpness. An
+``establishing_score`` (0..1, PIL-only) dampens that bias by penalising
+edge activity concentrated in one quadrant (typical object close-up) and
+rewarding balanced activity across vertical bands (ceiling + floor
+visible). ``frame_quality`` multiplies sharpness×exposure by
+``0.4 + 0.6 × establishing``; after MMR election, rank 1 is reassigned
+to the hero with the highest establishing score (ranks 2..n unchanged).
 
 Election is greedy maximal-marginal-relevance: each pick maximises
 quality minus similarity to what is already picked, so near-identical
@@ -58,6 +64,9 @@ MMR_LAMBDA = 0.5
 DUP_SIM = 0.95
 
 _THUMB = (48, 27)
+_LAPLACIAN_KERNEL = (3, 3), [0, 1, 0, 1, -4, 1, 0, 1, 0]
+# establishing swings quality between 40% and 100% of sharpness×exposure
+_ESTABLISHING_WEIGHT = 0.6
 
 
 def hero_budget(n: int) -> int:
@@ -67,14 +76,57 @@ def hero_budget(n: int) -> int:
     return max(HERO_MIN, min(HERO_MAX, round(n / 4)))
 
 
-def frame_quality(path: Path) -> tuple[float, Optional[bytes]]:
-    """(quality score, grey thumbnail bytes) for one image.
+def _laplacian(g):
+    from PIL import ImageFilter
 
-    Sharpness (Laplacian variance) × exposure factor. The factor tolerates
-    ~8% clipped pixels (dark corners and windows are normal in interiors)
-    then decays, so blown-out or near-black frames lose to balanced ones
-    even when their in-focus regions are sharp. Unreadable files score 0
-    so a corrupt frame can never be elected over a readable one.
+    return g.filter(ImageFilter.Kernel(
+        *_LAPLACIAN_KERNEL, scale=1, offset=128))
+
+
+def _region_var(lap, box: tuple[int, int, int, int]) -> float:
+    from PIL import ImageStat
+
+    return ImageStat.Stat(lap.crop(box)).var[0]
+
+
+def establishing_score(g) -> float:
+    """0..1 heuristic favouring wide room views over object close-ups.
+
+    Penalises Laplacian edge activity concentrated in one quadrant; rewards
+    balanced activity across top/middle/bottom vertical bands (ceiling and
+    floor both visible in a typical establishing shot).
+    """
+    w, h = g.size
+    if w < 8 or h < 8:
+        return 0.5
+
+    lap = _laplacian(g)
+    mx, my = w // 2, h // 2
+    quads = [(0, 0, mx, my), (mx, 0, w, my),
+             (0, my, mx, h), (mx, my, w, h)]
+    qe = [_region_var(lap, q) for q in quads]
+    q_total = sum(qe) or 1.0
+    q_max = max(qe) / q_total
+    quadrant_balance = max(0.0, min(1.0, 1.0 - (q_max - 0.25) / 0.75))
+
+    b1, b2 = h // 3, 2 * h // 3
+    bands = [(0, 0, w, b1), (0, b1, w, b2), (0, b2, w, h)]
+    be = [_region_var(lap, b) for b in bands]
+    b_total = sum(be) or 1.0
+    b_max = max(be) / b_total
+    band_balance = max(0.0, min(1.0, 1.0 - (b_max - 1 / 3) / (2 / 3)))
+
+    return 0.5 * quadrant_balance + 0.5 * band_balance
+
+
+def frame_quality(path: Path) -> tuple[float, Optional[bytes], float]:
+    """(quality score, grey thumbnail bytes, establishing score) for one image.
+
+    Sharpness (Laplacian variance) × exposure factor × establishing bias.
+    The exposure factor tolerates ~8% clipped pixels (dark corners and
+    windows are normal in interiors) then decays. Establishing bias is
+    ``0.4 + 0.6 × establishing_score`` — see module docstring. Unreadable
+    files score 0 so a corrupt frame can never be elected over a readable one.
     """
     from PIL import Image, ImageFilter, ImageStat
 
@@ -84,19 +136,22 @@ def frame_quality(path: Path) -> tuple[float, Optional[bytes]]:
             g = im.convert("L")
             if max(g.size) > 640:
                 g.thumbnail((640, 640))
-            lap = g.filter(ImageFilter.Kernel(
-                (3, 3), [0, 1, 0, 1, -4, 1, 0, 1, 0], scale=1, offset=128))
-            sharpness = ImageStat.Stat(lap).var[0]
+            lap = _laplacian(g)
+            sharpness = _region_var(lap, (0, 0, g.size[0], g.size[1]))
             hist = g.histogram()
             total = sum(hist) or 1
             clipped = (sum(hist[:6]) + sum(hist[250:])) / total
             exposure = max(0.1, 1.0 - 2.5 * max(0.0, clipped - 0.08))
+            establishing = establishing_score(g)
+            quality = (sharpness * exposure
+                       * (1.0 - _ESTABLISHING_WEIGHT
+                          + _ESTABLISHING_WEIGHT * establishing))
             thumb = g.resize(_THUMB).tobytes()
-            return sharpness * exposure, thumb
+            return quality, thumb, establishing
     except Exception as e:
         log.warning("could not score %s (%s) — treating as lowest quality",
                     path, e)
-        return 0.0, None
+        return 0.0, None, 0.0
 
 
 def _similarity(a: Optional[bytes], b: Optional[bytes]) -> float:
@@ -140,8 +195,26 @@ def save_override(work_dir: Path, key: str, action: str) -> None:
                     encoding="utf-8")
 
 
+def _promote_best_establishing(
+        photos: list[Photo],
+        establishing: dict[str, float]) -> None:
+    """Move rank 1 to the hero with the best establishing score."""
+    heroes = [p for p in photos if p.hero is not None]
+    if len(heroes) <= 1:
+        return
+    best = max(heroes, key=lambda p: establishing.get(p.id, 0.0))
+    if best.hero == 1:
+        return
+    old_rank = best.hero
+    for p in heroes:
+        if p is best:
+            p.hero = 1
+        elif p.hero < old_rank:
+            p.hero += 1
+
+
 def elect_heroes(photos: list[Photo],
-                 scores: dict[str, tuple[float, Optional[bytes]]],
+                 scores: dict[str, tuple[float, Optional[bytes], float]],
                  overrides: dict[str, str]) -> None:
     """Assign Photo.hero ranks (and Photo.quality) for one room, in place.
 
@@ -157,13 +230,13 @@ def elect_heroes(photos: list[Photo],
     # sensor noise between equally sharp frames up into a full 0..1 spread
     # and drown the MMR distinctness term; a ratio keeps like frames alike
     # while genuinely blurred ones fall away
-    raw = {p.id: scores.get(p.id, (0.0, None))[0] for p in photos}
+    raw = {p.id: scores.get(p.id, (0.0, None, 0.0))[0] for p in photos}
     hi = max(raw.values(), default=0.0)
     for p in photos:
         p.quality = round(raw[p.id] / hi, 3) if hi > 0 else 1.0
 
     def thumb(p: Photo) -> Optional[bytes]:
-        return scores.get(p.id, (0.0, None))[1]
+        return scores.get(p.id, (0.0, None, 0.0))[1]
 
     demoted = {p.id for p in photos if overrides.get(override_key(p)) == "hidden"}
     forced = [p for p in photos if p.id not in demoted
@@ -203,13 +276,15 @@ def curate(rooms: dict[str, list[Photo]], capture_dir: Path,
     the Photo objects (hero/quality) that flow into the inventory."""
     overrides = load_overrides(work_dir)
     for room_name, photos in rooms.items():
-        scores: dict[str, tuple[float, Optional[bytes]]] = {}
+        scores: dict[str, tuple[float, Optional[bytes], float]] = {}
         for p in photos:
             full = Path(p.path)
             if not full.is_absolute():
                 full = capture_dir / full
             scores[p.id] = frame_quality(full)
         elect_heroes(photos, scores, overrides)
+        _promote_best_establishing(
+            photos, {pid: s[2] for pid, s in scores.items()})
         n_hero = sum(1 for p in photos if p.hero)
         if n_hero < len(photos):
             log.info("curated %s: %d of %d frames shown by default",

@@ -5,11 +5,12 @@ import json
 import random
 from pathlib import Path
 
-from PIL import Image, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter
 
 from homeinventory.cli import main
-from homeinventory.curate import (apply_override, curate, hero_budget,
-                                  load_overrides, override_key, save_override)
+from homeinventory.curate import (apply_override, curate, establishing_score,
+                                  frame_quality, hero_budget, load_overrides,
+                                  override_key, save_override)
 from homeinventory.report import render
 from homeinventory.schema import Inventory, Item, Photo, Room
 
@@ -146,3 +147,75 @@ def test_build_offline_curates_photo_captures_as_heroes(tmp_path):
     assert all(p["quality"] is not None for p in photos)
     html = (out / "inventory.html").read_text(encoding="utf-8")
     assert '<details class="more-frames' not in html   # nothing to disclose
+
+
+def _wide_balanced_img(path: Path) -> None:
+    """Synthetic establishing shot: detail in every quadrant and band."""
+    w, h = 320, 180
+    im = Image.new("L", (w, h), 128)
+    draw = ImageDraw.Draw(im)
+    rnd = random.Random(42)
+    for y in range(0, h, 4):
+        shade = rnd.randrange(80, 176)
+        draw.line([(0, y), (w, y)], fill=shade)
+    for x in range(0, w, 6):
+        shade = rnd.randrange(70, 186)
+        draw.line([(x, 0), (x, h)], fill=shade)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    im.save(path, quality=92)
+
+
+def _corner_closeup_img(path: Path) -> None:
+    """Synthetic close-up: sharp detail in one quadrant only."""
+    w, h = 320, 180
+    im = Image.new("L", (w, h), 30)          # dark surround — distinct thumb
+    detail = Image.new("L", (w // 2, h // 2))
+    detail.putdata([random.Random(i).randrange(256) for i in range(w // 2 * h // 2)])
+    im.paste(detail, (w // 2, h // 2))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    im.save(path, quality=92)
+
+
+def test_establishing_score_prefers_wide_balanced_frame():
+    wide = Image.new("L", (320, 180), 128)
+    draw = ImageDraw.Draw(wide)
+    rnd = random.Random(7)
+    for y in range(0, 180, 3):
+        draw.line([(0, y), (320, y)], fill=rnd.randrange(256))
+    for x in range(0, 320, 5):
+        draw.line([(x, 0), (x, 180)], fill=rnd.randrange(256))
+
+    close = Image.new("L", (320, 180), 30)
+    patch = Image.new("L", (160, 90))
+    patch.putdata([random.Random(i).randrange(256) for i in range(160 * 90)])
+    close.paste(patch, (160, 90))
+
+    wide_score = establishing_score(wide)
+    close_score = establishing_score(close)
+    assert wide_score > close_score
+    assert 0.0 <= wide_score <= 1.0
+    assert 0.0 <= close_score <= 1.0
+
+
+def test_establishing_score_uniform_frame_is_neutral():
+    flat = Image.new("L", (160, 90), 128)
+    assert establishing_score(flat) == 1.0
+
+
+def test_wide_balanced_frame_wins_hero_rank_one(tmp_path):
+    wide_path = tmp_path / "wide.jpg"
+    close_path = tmp_path / "close.jpg"
+    _wide_balanced_img(wide_path)
+    _corner_closeup_img(close_path)
+    photos = [
+        Photo(id="P001", path=str(close_path), room="Living Room",
+              source_video="walk.mp4"),
+        Photo(id="P002", path=str(wide_path), room="Living Room",
+              source_video="walk.mp4"),
+    ]
+    curate({"Living Room": photos}, tmp_path, tmp_path / "work")
+    assert photos[1].hero == 1
+    assert photos[0].hero == 2
+    _, _, wide_est = frame_quality(wide_path)
+    _, _, close_est = frame_quality(close_path)
+    assert wide_est > close_est

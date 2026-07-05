@@ -447,11 +447,39 @@
          border-radius: 3px; padding: 1px 4px; }
   .kbd-label { font-size: 10px; color: var(--faint); opacity: .75; }
 
-  /* ---------- room view ---------- */
-  .room-headline { margin-bottom: 20px; }
-  .room-headline .claim-loc { display: block; margin-bottom: 6px; }
-  .room-title { font: 600 24px/1.25 var(--ui); letter-spacing: -.015em;
-                margin: 0; }
+  /* ---------- review nav banner (items + rooms) ---------- */
+  .review-nav {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 14px; margin-bottom: 18px;
+  }
+  .review-nav-back {
+    font-size: 13px; color: var(--muted); text-decoration: none;
+    flex-shrink: 0;
+  }
+  .review-nav-back:hover { color: var(--brass-bright); }
+  .review-nav-controls {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; flex: 1; min-width: 0;
+  }
+  .review-nav-center {
+    text-align: center; min-width: 0; flex: 1 1 auto;
+  }
+  .review-nav-title {
+    font: 600 18px/1.25 var(--ui); letter-spacing: -.015em;
+    margin: 0 0 2px; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .review-nav-pos {
+    font-size: 12px; color: var(--faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .review-nav-btn {
+    font-size: 12px; padding: 6px 10px; white-space: nowrap;
+    flex-shrink: 0; max-width: 34%;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .review-nav-btn:disabled { opacity: .35; cursor: default; }
   .room-grid { display: grid; grid-template-columns: minmax(0, 1fr) 420px;
                gap: 24px; align-items: start; }
   .room-panel {
@@ -504,22 +532,34 @@
     color: var(--ink); font-weight: 600;
     box-shadow: inset 0 -2px 0 var(--brass);
   }
-  .overview { max-width: 1120px; }
+  body.stage #detail:has(.overview) {
+    display: flex; flex-direction: column;
+  }
+  .overview {
+    width: 100%; max-width: none; flex: 1;
+    display: flex; flex-direction: column; min-height: 0;
+  }
   .overview-stats {
+    flex-shrink: 0;
     font-size: 13px; line-height: 1.55; color: var(--muted);
     font-variant-numeric: tabular-nums;
   }
   .overview-stats .walkthrough { display: block; margin-top: 4px; color: var(--faint); }
-  .overview-ctas { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 24px; }
+  .overview-ctas {
+    flex-shrink: 0;
+    display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 24px;
+  }
   .overview-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
+    flex: 1; min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+    grid-auto-rows: minmax(0, 1fr);
+    gap: clamp(10px, 1.2vw, 16px);
   }
   @media (max-width: 520px) {
     .overview-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
     }
-    .overview { max-width: none; }
     .overview-ctas .btn { flex: 1 1 auto; min-width: 0; font-size: 12px;
                            padding: 8px 10px; }
   }
@@ -527,11 +567,13 @@
     border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
     background: var(--panel); cursor: pointer; text-align: left;
     padding: 0; font: inherit; color: inherit;
+    display: flex; flex-direction: column; min-height: 0; min-width: 0;
     transition: border-color .15s;
   }
   .room-card:hover { border-color: var(--brass); }
   .room-card .thumb {
-    aspect-ratio: 4 / 3; background: #05070b; overflow: hidden;
+    flex: 1 1 auto; min-height: 100px;
+    background: #05070b; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
   }
   .room-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -539,7 +581,7 @@
     color: var(--faint); font-size: 11px; letter-spacing: .04em;
     text-transform: uppercase;
   }
-  .room-card .body { padding: 12px 14px 14px; }
+  .room-card .body { flex-shrink: 0; padding: 12px 14px 14px; }
   .room-card .name {
     font: 600 15px/1.3 var(--ui); margin: 0 0 4px; letter-spacing: -.01em;
   }
@@ -565,6 +607,7 @@
   .room-breadcrumb a:hover { color: var(--brass-bright); }
   .room-breadcrumb .sep { color: var(--faint); margin: 0 6px; }
   .coach-mark {
+    flex-shrink: 0;
     background: var(--brass-soft); border: 1px solid var(--brass);
     border-radius: 10px; padding: 14px 16px; margin-bottom: 20px;
     font-size: 13px; line-height: 1.5; color: var(--ink);
@@ -727,6 +770,9 @@
     .coach-mark { font-size: 12px; padding: 12px; }
     .room-card .body { padding: 10px; }
     .room-card .name { font-size: 14px; }
+    .review-nav { padding: 8px 10px; gap: 8px; }
+    .review-nav-btn .review-nav-btn-label { display: none; }
+    .review-nav-title { font-size: 16px; }
     #detail { padding: 10px 10px 28px; }
   }
 </style>
@@ -864,6 +910,7 @@
   var query = "";
   var viewMode = "overview"; // overview | items | room | finish
   var sel = null;            // {type:"item", id} | {type:"room", name}
+  var lastRoomName = null;   // last room opened in room view
   var roomShowAll = {};      // room name -> true: disclosed tier revealed
   var collapsedRooms = {};   // room name -> true when collapsed in the rail
   var el = ui.el, toast = ui.toast;
@@ -1325,6 +1372,24 @@
     renderQueue();
     setViewHash("overview");
   }
+  function defaultRoom() {
+    if (lastRoomName) {
+      var last = inv.rooms.find(function (r) { return r.name === lastRoomName; });
+      if (last) return last;
+    }
+    return inv.rooms.length ? inv.rooms[0] : null;
+  }
+  function showLastRoom() {
+    var room = defaultRoom();
+    if (!room) {
+      toast("No rooms yet");
+      return;
+    }
+    if (viewMode === "room" && sel && sel.type === "room" && sel.name === room.name) {
+      return;
+    }
+    select({ type: "room", name: room.name });
+  }
   function startReview() {
     filter = "pending";
     sortMode = "conf";
@@ -1705,8 +1770,7 @@
   });
   document.getElementById("nav-rooms").addEventListener("click", function (e) {
     e.preventDefault();
-    if (viewMode === "room" && sel && sel.type === "room") return;
-    showOverview();
+    showLastRoom();
   });
   document.getElementById("nav-finish").addEventListener("click", function (e) {
     e.preventDefault();
@@ -1920,11 +1984,18 @@
       refreshQueueRow(ix.byId[s.id]);
       renderItem(ix.byId[s.id]);
       setViewHash("item", s.id);
+      if (!prev || prev.type !== "item" || prev.id !== s.id) {
+        document.getElementById("detail").scrollTop = 0;
+      }
     } else {
       viewMode = "room";
+      lastRoomName = s.name;
       renderRoom(inv.rooms.find(function (r) { return r.name === s.name; }));
       renderQueue();
       setViewHash("room", s.name);
+      if (!prev || prev.type !== "room" || prev.name !== s.name) {
+        document.getElementById("detail").scrollTop = 0;
+      }
     }
     updateSubNav();
     var row = document.querySelector('[data-qid="' + (s.id || "") + '"]');
@@ -1939,6 +2010,17 @@
     var next = entries[Math.max(0, Math.min(entries.length - 1,
       (i === -1 ? 0 : i + delta)))];
     select({ type: "item", id: next.id });
+  }
+  function roomIndex(name) {
+    return inv.rooms.findIndex(function (r) { return r.name === name; });
+  }
+  function stepRoom(delta) {
+    if (!inv.rooms.length) return;
+    var i = sel && sel.type === "room" ? roomIndex(sel.name) : roomIndex(lastRoomName);
+    if (i < 0) i = 0;
+    var next = Math.max(0, Math.min(inv.rooms.length - 1, i + delta));
+    if (next === i) return;
+    select({ type: "room", name: inv.rooms[next].name });
   }
 
   /* ================================================================
@@ -2414,6 +2496,67 @@
   }
 
   /* ---------- item detail ---------- */
+  function itemLabel(it) {
+    var name = (it.name || "").trim();
+    return name || it.id || "(unnamed)";
+  }
+  function buildReviewNav(opts) {
+    var nav = el("nav", {
+      "class": "review-nav",
+      "aria-label": opts.ariaLabel || "Navigation"
+    });
+    var back = el("a", {
+      href: opts.backHref || "#overview",
+      "class": "review-nav-back",
+      text: opts.backLabel || "Overview"
+    });
+    back.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (opts.onBack) opts.onBack();
+      else showOverview();
+    });
+    nav.appendChild(back);
+
+    var controls = el("div", { "class": "review-nav-controls" });
+    var prevAttrs = {
+      type: "button", "class": "btn ghost review-nav-btn",
+      "aria-label": opts.prev ? "Previous: " + opts.prev.label : "Previous"
+    };
+    if (!opts.prev) prevAttrs.disabled = "";
+    else prevAttrs.onclick = opts.prev.onClick;
+    var prevBtn = el("button", prevAttrs);
+    prevBtn.appendChild(el("span", { text: "\u2039 " }));
+    if (opts.prev) {
+      prevBtn.appendChild(el("span", {
+        "class": "review-nav-btn-label", text: opts.prev.label
+      }));
+    }
+    controls.appendChild(prevBtn);
+
+    var center = el("div", { "class": "review-nav-center" });
+    center.appendChild(el("h2", { "class": "review-nav-title", text: opts.title }));
+    if (opts.subtitle) {
+      center.appendChild(el("span", { "class": "review-nav-pos", text: opts.subtitle }));
+    }
+    controls.appendChild(center);
+
+    var nextAttrs = {
+      type: "button", "class": "btn ghost review-nav-btn",
+      "aria-label": opts.next ? "Next: " + opts.next.label : "Next"
+    };
+    if (!opts.next) nextAttrs.disabled = "";
+    else nextAttrs.onclick = opts.next.onClick;
+    var nextBtn = el("button", nextAttrs);
+    if (opts.next) {
+      nextBtn.appendChild(el("span", {
+        "class": "review-nav-btn-label", text: opts.next.label
+      }));
+    }
+    nextBtn.appendChild(el("span", { text: " \u203a" }));
+    controls.appendChild(nextBtn);
+    nav.appendChild(controls);
+    return nav;
+  }
   function badge(cls, text) { return el("span", { "class": "badge " + cls,
     text: text }); }
   function confirmItem(it) {
@@ -2432,6 +2575,30 @@
     var d = document.getElementById("detail");
     d.innerHTML = "";
     stageCtl = null;
+    overviewHost = null;
+
+    var entries = queueEntries();
+    var ii = entries.findIndex(function (x) { return x.id === it.id; });
+    var prevIt = ii > 0 ? entries[ii - 1] : null;
+    var nextIt = ii >= 0 && ii < entries.length - 1 ? entries[ii + 1] : null;
+    var subtitle = "";
+    if (ii >= 0) subtitle = (ii + 1) + " of " + entries.length;
+    if (room && room.name) {
+      subtitle += (subtitle ? " \u00b7 " : "") + room.name;
+    }
+    d.appendChild(buildReviewNav({
+      ariaLabel: "Item navigation",
+      title: it.name || "(unnamed)",
+      subtitle: subtitle,
+      prev: prevIt ? {
+        label: itemLabel(prevIt),
+        onClick: function () { select({ type: "item", id: prevIt.id }); }
+      } : null,
+      next: nextIt ? {
+        label: itemLabel(nextIt),
+        onClick: function () { select({ type: "item", id: nextIt.id }); }
+      } : null
+    }));
 
     var work = el("div", { "class": "work" });
     d.appendChild(work);
@@ -2944,20 +3111,23 @@
     stageCtl = null;
     overviewHost = null;
 
-    var crumb = el("nav", { "class": "room-breadcrumb", "aria-label": "Breadcrumb" });
-    var back = el("a", { href: "#overview", text: "Overview" });
-    back.addEventListener("click", function (e) {
-      e.preventDefault(); showOverview();
-    });
-    crumb.appendChild(back);
-    crumb.appendChild(el("span", { "class": "sep", text: "\u2192" }));
-    crumb.appendChild(el("span", { text: room.name }));
-    d.appendChild(crumb);
+    var ri = roomIndex(room.name);
+    var prevRoom = ri > 0 ? inv.rooms[ri - 1] : null;
+    var nextRoom = ri >= 0 && ri < inv.rooms.length - 1 ? inv.rooms[ri + 1] : null;
 
-    var headline = el("div", { "class": "room-headline" });
-    headline.appendChild(el("span", { "class": "claim-loc", text: "Room view" }));
-    headline.appendChild(el("h2", { "class": "room-title", text: room.name }));
-    d.appendChild(headline);
+    d.appendChild(buildReviewNav({
+      ariaLabel: "Room navigation",
+      title: room.name,
+      subtitle: ri >= 0 ? (ri + 1) + " of " + inv.rooms.length : "",
+      prev: prevRoom ? {
+        label: prevRoom.name,
+        onClick: function () { select({ type: "room", name: prevRoom.name }); }
+      } : null,
+      next: nextRoom ? {
+        label: nextRoom.name,
+        onClick: function () { select({ type: "room", name: nextRoom.name }); }
+      } : null
+    }));
 
     var grid = el("div", { "class": "room-grid" });
     d.appendChild(grid);
@@ -3367,6 +3537,14 @@
       if (window.matchMedia("(max-width: 900px)").matches) setRail(true);
       searchBox.focus(); searchBox.select();
     }
+    else if (viewMode === "room" && sel && sel.type === "room") {
+      if (e.key === "j" || e.key === "ArrowRight") { e.preventDefault(); stepRoom(1); }
+      else if (e.key === "k" || e.key === "ArrowLeft") { e.preventDefault(); stepRoom(-1); }
+    }
+    else if (viewMode === "items" && sel && sel.type === "item") {
+      if (e.key === "j" || e.key === "ArrowRight") { e.preventDefault(); step(1); }
+      else if (e.key === "k" || e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+    }
     else if (e.key === "j") { e.preventDefault(); step(1); }
     else if (e.key === "k") { e.preventDefault(); step(-1); }
     else if (e.key === " " && it) {
@@ -3395,6 +3573,10 @@
     }
     if (h === "items") {
       startReview();
+      return true;
+    }
+    if (h === "rooms") {
+      showLastRoom();
       return true;
     }
     if (h === "finish") {

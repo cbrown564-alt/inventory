@@ -33,6 +33,11 @@ IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif", ".bmp", ".tif"
 HEIF_EXTS = {".heic", ".heif"}
 VIDEO_EXTS = {".mp4", ".mov", ".avi", ".mkv", ".webm", ".m4v"}
 
+# VLM segment seams and midpoint normalisation can land up to ~2s inside the
+# previous room; trim that lead window when extracting keyframes per segment
+# from one continuous walkthrough (docs/07, docs/11).
+SEGMENT_BOUNDARY_TRIM_S = 2.0
+
 
 def _decodable(path: Path) -> bool:
     if path.suffix.lower() in HEIF_EXTS and not _HEIF_OK:
@@ -243,12 +248,17 @@ def _ingest_root_video(video: Path, work_dir: Path, capture_dir: Path, add,
         on_segmented(len(room_names), room_names)
     if on_extracting:
         on_extracting()
+    boundary_trim = lead_trim_s if lead_trim_s > 0 else SEGMENT_BOUNDARY_TRIM_S
     for i, seg in enumerate(segments):
         seg_dur = max(seg.end_s - seg.start_s, 0.1)
         budget = segment_frame_budget(seg_dur)
         safe = re.sub(r"[^\w\- ]+", "_", seg.room)[:40]
         frame_dir = work_dir / "frames" / f"{safe}_seg{i:02d}"
+        # First segment starts at t=0; later segments inherit bleed from the
+        # previous room at the seam unless we trim the lead window.
+        seg_trim = boundary_trim if i > 0 else 0.0
         for fr in extract_keyframes(video, frame_dir, max_frames=budget,
+                                    lead_trim_s=seg_trim,
                                     start_s=seg.start_s, end_s=seg.end_s):
             add(seg.room, fr, source_video=video.name)
 
