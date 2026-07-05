@@ -1,0 +1,152 @@
+{
+  "reviewer": "composer-2.5",
+  "pass": 1,
+  "room": "Bathroom",
+  "verdicts": [
+    {
+      "id": "bathroom-bath-p14_i03",
+      "verdict": "reject",
+      "note": "Box frames shower glass partition and ceiling, not the bathtub."
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i02",
+      "verdict": "reject",
+      "note": "Full-frame box captures shower hose and tiles, not a mirrored cabinet."
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i04",
+      "verdict": "reject",
+      "note": "Narrow edge strip of wall/door frame with reflection, not the cabinet."
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i03",
+      "verdict": "reject",
+      "note": "Thin vertical sliver of shower glass hardware, not a mirrored cabinet."
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i08",
+      "verdict": "accept",
+      "note": "Box covers the open mirrored cabinet interior and shelves."
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i09",
+      "verdict": "accept",
+      "note": "Box tightly frames the illuminated cabinet shelving unit."
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i10",
+      "verdict": "relocate",
+      "note": "Cabinet interior is correct but left edge bleeds into the sink area."
+    },
+    {
+      "id": "bathroom-sink-p14_i01",
+      "verdict": "relocate",
+      "note": "Box spans sink and bathtub corner instead of the sink alone."
+    },
+    {
+      "id": "bathroom-sink-p14_i08",
+      "verdict": "reject",
+      "note": "Thin horizontal strip of tub rim and glass, not a sink."
+    },
+    {
+      "id": "bathroom-sink-p15_i10",
+      "verdict": "relocate",
+      "note": "Box centers on faucet handle and marble tile, missing the basin."
+    },
+    {
+      "id": "bathroom-smoke-alarm-p14_i03",
+      "verdict": "accept",
+      "note": "Tight box on the ceiling-mounted circular smoke alarm."
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i00",
+      "verdict": "accept",
+      "note": "Box cleanly frames the three-panel mirrored medicine cabinet."
+    },
+    {
+      "id": "bathroom-sink-p14_i00",
+      "verdict": "relocate",
+      "note": "Sink is partially boxed but left side includes a large bathtub section."
+    },
+    {
+      "id": "bathroom-sink-p15_i07",
+      "verdict": "accept",
+      "note": "Tight box on the rectangular sink basin and rim."
+    },
+    {
+      "id": "bathroom-sink-p15_i08",
+      "verdict": "reject",
+      "note": "Box localizes a circular cabinet mirror/light, not a sink."
+    },
+    {
+      "id": "bathroom-bath-p14_i00",
+      "verdict": "accept",
+      "note": "Box covers the full bathtub including glass screen and tiled front."
+    },
+    {
+      "id": "bathroom-bath-p14_i07",
+      "verdict": "relocate",
+      "note": "Bathtub is correct but lower third of box is checkered floor."
+    },
+    {
+      "id": "bathroom-bath-p14_i11",
+      "verdict": "accept",
+      "note": "Box captures the bathtub basin and rim with acceptable tightness."
+    },
+    {
+      "id": "bathroom-bath-p15_i02",
+      "verdict": "reject",
+      "note": "Horizontal slice of hose, wall, and tub rim misses the bathtub body."
+    },
+    {
+      "id": "bathroom-ceiling-p14_i03",
+      "verdict": "reject",
+      "note": "Tiny box on one ceiling fixture does not localize the ceiling item."
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i01",
+      "verdict": "relocate",
+      "note": "Mirror door is correct but box is loose with excess surrounding wall."
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i03",
+      "verdict": "accept",
+      "note": "Box aligns with a single mirror pane of the cabinet unit."
+    },
+    {
+      "id": "bathroom-recessed-spotlights-p15_i01",
+      "verdict": "reject",
+      "note": "Box frames a chrome wall hook/handle, not recessed spotlights."
+    },
+    {
+      "id": "bathroom-recessed-spotlights-p15_i04",
+      "verdict": "reject",
+      "note": "Box frames a circular exhaust vent, not recessed spotlights."
+    },
+    {
+      "id": "bathroom-toilet-p14_i02",
+      "verdict": "accept",
+      "note": "Box correctly localizes the toilet bowl and lid."
+    },
+    {
+      "id": "bathroom-toilet-p16_i02",
+      "verdict": "accept",
+      "note": "Tight box around the full toilet with lid raised."
+    },
+    {
+      "id": "bathroom-bath-p14_i01",
+      "verdict": "accept",
+      "note": "Box spans the bathtub length from shower screen to far rim."
+    },
+    {
+      "id": "bathroom-toilet-p15_i11",
+      "verdict": "accept",
+      "note": "Tight box on the closed toilet lid and upper bowl."
+    },
+    {
+      "id": "bathroom-toilet-p16_i01",
+      "verdict": "accept",
+      "note": "Tight box around the wall-hung toilet with seat and lid up."
+    }
+  ]
+}

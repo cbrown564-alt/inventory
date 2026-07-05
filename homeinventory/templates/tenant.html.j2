@@ -4,34 +4,64 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inventory review — {{ inv.property_address or "Property" }}</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+{% include "_favicon.j2" %}
 <style>
-  :root {
-    --paper: #f6f6f3; --panel: #ffffff; --ink: #1d2126; --muted: #6a7077;
-    --line: #e2e3df; --line-strong: #c9cbc4;
-    --accent: #0f6b4a; --accent-ink: #0a4a33; --accent-soft: #e6f2ec;
-    --danger: #a3231f; --danger-soft: #f7eceb;
-    --tenant: #7a3e8f;
-    --ui: "Outfit", "Segoe UI Variable Text", "Segoe UI", sans-serif;
-    --mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; font: 15px/1.55 var(--ui); color: var(--ink);
-         background: var(--paper); }
-  main { max-width: 760px; margin: 0 auto; padding: 40px 22px 180px; }
+{% include "_theme.css.j2" %}
 
-  .masthead { padding: 30px 0 26px; border-bottom: 2px solid var(--ink); }
+  body { font-size: 15px; line-height: 1.55; }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 22px 48px; }
+
+  @media (max-width: 480px) {
+    main { max-width: none; padding: 16px 12px 40px; }
+    .room-gallery { gap: 10px; }
+    .sign-section { margin-top: 32px; padding-top: 20px; position: static; }
+    .sign-form input, .sign-form button { flex: 1 1 100%; min-width: 0; width: 100%; }
+    .ev img { height: 96px; }
+  }
+
+  .masthead { padding: 24px 0 20px; border-bottom: 2px solid var(--ink); }
   .masthead .kicker { font-size: 11px; font-weight: 600; letter-spacing: .18em;
     text-transform: uppercase; color: var(--accent-ink); }
-  .masthead h1 { font-size: 30px; font-weight: 700; letter-spacing: -.02em;
-    margin: 8px 0 4px; line-height: 1.15; }
+  .masthead h1 { font: 600 clamp(26px, 4vw, 32px)/1.15 var(--display);
+    letter-spacing: -.015em; margin: 8px 0 4px; }
   .masthead .meta { color: var(--muted); font-size: 13px; }
-  .howto { margin: 22px 0 6px; padding: 14px 18px; background: var(--panel);
+  .howto { margin: 18px 0 6px; padding: 14px 18px; background: var(--panel);
     border-left: 3px solid var(--accent); font-size: 14px; }
 
+  .progress-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+                  margin: 20px 0 8px; font-size: 13px; color: var(--muted); }
+  .progress-bar strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  /* room gallery */
+  .room-gallery { display: grid; grid-template-columns: repeat(2, 1fr);
+                  gap: 12px; margin: 20px 0 28px; }
+  @media (min-width: 520px) {
+    .room-gallery { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  }
+  .room-card { display: block; text-align: left; padding: 0; border: 1px solid var(--line);
+               border-radius: 10px; background: var(--panel); cursor: pointer;
+               overflow: hidden; transition: border-color .15s, box-shadow .15s; }
+  .room-card:hover { border-color: var(--brass); box-shadow: var(--shadow); }
+  .room-card.viewed { border-color: var(--confirm-soft); }
+  .room-card .thumb { aspect-ratio: 4/3; background: var(--panel-2);
+                      position: relative; overflow: hidden; }
+  .room-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .room-card .thumb .placeholder { display: flex; align-items: center;
+    justify-content: center; height: 100%; color: var(--faint); font-size: 12px; }
+  .room-card .body { padding: 10px 12px 12px; }
+  .room-card .name { font: 600 15px var(--display); margin: 0 0 2px; color: var(--ink); }
+  .room-card .sub { font-size: 12px; color: var(--muted); }
+  .room-card .viewed-badge { position: absolute; top: 8px; right: 8px;
+    background: var(--confirm); color: #fff; font: 600 10px var(--ui);
+    padding: 2px 7px; border-radius: 999px; }
+
+  .room-nav { display: flex; align-items: center; gap: 10px; margin: 16px 0 8px; }
+  .room-nav .back { font: 500 13px var(--ui); color: var(--brass-bright);
+                    background: none; border: 0; cursor: pointer; padding: 0; }
+  .room-nav .back:hover { text-decoration: underline; }
+
   h2.room { font-size: 13px; font-weight: 600; letter-spacing: .14em;
-    text-transform: uppercase; color: var(--muted); margin: 44px 0 6px;
+    text-transform: uppercase; color: var(--muted); margin: 32px 0 6px;
     display: flex; align-items: baseline; gap: 12px; }
   h2.room::after { content: ""; flex: 1; border-top: 1px solid var(--line-strong); }
   .room-summary { color: var(--muted); font-size: 14px; margin: 0 0 18px; }
@@ -55,12 +85,18 @@
 
   .ev { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
   .ev .ph { position: relative; }
+  .ev .ph-btn { display: block; padding: 0; border: 0; background: none;
+                cursor: zoom-in; }
+  .ev .ph-btn:focus-visible { outline: 2px solid var(--accent);
+                              outline-offset: 2px; }
   .ev img { height: 110px; display: block; border: 1px solid var(--line); }
-  .ev .pid { position: absolute; left: 0; bottom: 0;
+  .ev .cap { font: 10px var(--mono); color: var(--muted); margin-top: 3px;
+             max-width: 120px; }
+  .ev .pid { position: absolute; left: 0; bottom: 0; pointer-events: none;
     background: rgba(29,33,38,.78); color: #fff; font: 9px var(--mono);
     padding: 1px 5px; }
   .ev .box { position: absolute; border: 1.5px solid var(--danger);
-    background: rgba(163,35,31,.12); }
+    background: rgba(163,35,31,.12); pointer-events: none; }
 
   .c-thread { margin-top: 12px; }
   .c-line { padding: 6px 0 0; font-size: 13px; }
@@ -75,61 +111,112 @@
     border: 1px solid var(--line-strong); background: var(--panel);
     border-radius: 4px; }
   .c-add button:hover { border-color: var(--tenant); color: var(--tenant); }
-  .c-add button:active { transform: translateY(1px); }
 
-  .sigblock { margin-top: 54px; border-top: 2px solid var(--ink);
+  .sign-section { margin-top: 40px; border-top: 2px solid var(--ink);
+                  padding-top: 24px; }
+  .sign-section h2 { font-size: 18px; margin: 0 0 8px; }
+  .sign-section .lead { font-size: 14px; color: var(--muted); margin: 0 0 16px; }
+  .sign-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .sign-form input { font: 14px var(--ui); padding: 10px 12px; min-width: 200px;
+    flex: 1 1 200px; border: 1px solid var(--line-strong); border-radius: 6px; }
+  .sign-form button { font: 600 14px var(--ui); padding: 10px 20px;
+    background: var(--brass); color: #14100a; border: none;
+    border-radius: 7px; cursor: pointer; }
+  .sign-form button:hover { background: var(--brass-bright); }
+  .sign-done { padding: 14px 16px; background: var(--accent-soft);
+               border-radius: 8px; color: var(--accent-ink); font-weight: 500; }
+
+  .sigblock { margin-top: 32px; border-top: 1px solid var(--line);
               padding-top: 18px; }
-  .sigblock h2 { font-size: 18px; margin: 0 0 8px; }
+  .sigblock h2 { font-size: 16px; margin: 0 0 8px; }
   .sigcard { border-left: 3px solid var(--accent); background: var(--panel);
              padding: 10px 14px; margin: 10px 0; font-size: 14px; }
   .sigcard .hash { font-family: var(--mono); font-size: 10px;
                    color: var(--muted); word-break: break-all; }
 
-  #signbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
-    background: var(--panel); border-top: 1px solid var(--line-strong);
-    box-shadow: 0 -10px 30px -20px rgba(29,33,38,.5); }
-  #signbar .inner { max-width: 760px; margin: 0 auto; padding: 14px 22px;
-    display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  #signbar .lead { font-size: 13px; color: var(--muted); flex: 1 1 240px; }
-  #signbar input { font: 14px var(--ui); padding: 10px 12px; min-width: 200px;
-    border: 1px solid var(--line-strong); border-radius: 4px; }
-  #signbar button { font: 600 14px var(--ui); padding: 10px 20px;
-    background: var(--accent); color: #fff; border: none; border-radius: 4px;
-    cursor: pointer; }
-  #signbar button:hover { background: var(--accent-ink); }
-  #signbar button:active { transform: translateY(1px); }
-  #signbar.done { background: var(--accent-soft); }
-  #signbar.done .inner { color: var(--accent-ink); font-weight: 500; }
+  .finish-cta { margin: 24px 0; text-align: center; }
+  .finish-cta .btn { font-size: 14px; padding: 10px 22px; }
 
-  #toast { position: fixed; bottom: 92px; left: 50%; z-index: 40;
-    transform: translateX(-50%) translateY(8px); background: var(--ink);
-    color: #fff; font-size: 13px; padding: 9px 18px; border-radius: 5px;
-    opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; }
-  #toast.show { opacity: .97; transform: translateX(-50%); }
+  #toast { bottom: 18px; }
 </style>
 </head>
 <body>
 <main id="main"></main>
-
-<div id="signbar">
-  <div class="inner" id="signbar-inner">
-    <span class="lead">Walked the property and checked this inventory?
-      Countersigning records your acknowledgement next to the landlord's
-      signature.</span>
-    <input id="sign-name" type="text" placeholder="Your full name">
-    <button id="sign-btn">Acknowledge &amp; countersign</button>
-  </div>
-</div>
 <div id="toast" role="status"></div>
 
 <script type="application/json" id="hi-data">{{ payload | tojson }}</script>
+<script>
+{% include "_ui.js.j2" %}
+</script>
 <script>
 "use strict";
 (function () {
   var payload = JSON.parse(document.getElementById("hi-data").textContent);
   var inv = payload.inventory;
   var photoSrc = payload.photo_src || {};
+  var photoTime = payload.photo_time || {};
+  var videos = payload.videos || {};
   var token = payload.token;
+  var el = ui.el, toast = ui.toast;
+  var VIEW_KEY = "hi-tenant-viewed-" + token;
+
+  var view = { mode: "gallery", roomIndex: null };
+  var viewed = {};
+  try {
+    var saved = JSON.parse(localStorage.getItem(VIEW_KEY) || "{}");
+    if (saved && typeof saved === "object") viewed = saved;
+  } catch (e) {}
+
+  function saveViewed() {
+    try { localStorage.setItem(VIEW_KEY, JSON.stringify(viewed)); } catch (e) {}
+  }
+
+  function commentCount() {
+    var n = 0;
+    inv.rooms.forEach(function (room) {
+      (room.items || []).forEach(function (it) {
+        n += (it.comments || []).length;
+      });
+    });
+    return n;
+  }
+
+  function viewedCount() {
+    return inv.rooms.filter(function (_, i) { return viewed[i]; }).length;
+  }
+
+  function formatTimecode(sec) {
+    var s = Math.max(0, parseInt(sec, 10) || 0);
+    var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), r = s % 60;
+    return h ? h + ":" + ("0" + m).slice(-2) + ":" + ("0" + r).slice(-2)
+             : m + ":" + ("0" + r).slice(-2);
+  }
+
+  function photoCaption(pid, roomPhotos) {
+    var pt = photoTime[pid];
+    if (pt && pt.t != null) {
+      var vid = videos[pt.video];
+      return "seen at " + formatTimecode(pt.t) +
+        (vid ? " in " + vid.name : "");
+    }
+    var ph = (roomPhotos || []).find(function (p) { return p.id === pid; });
+    if (ph && ph.captured_at) {
+      return (ph.captured_at + "").slice(0, 16).replace("T", " ");
+    }
+    return pid;
+  }
+
+  function heroThumb(room) {
+    var photos = room.photos || [];
+    var heroes = photos.filter(function (p) { return p.hero && photoSrc[p.id]; })
+      .sort(function (a, b) { return (a.hero || 0) - (b.hero || 0); });
+    if (heroes.length) return photoSrc[heroes[0].id];
+    for (var i = 0; i < photos.length; i++) {
+      if (photoSrc[photos[i].id]) return photoSrc[photos[i].id];
+    }
+    return null;
+  }
+
   var api = function (method, path, body) {
     return fetch("/api/t/" + token + path, {
       method: method,
@@ -143,29 +230,10 @@
     });
   };
 
-  function el(tag, attrs, children) {
-    var n = document.createElement(tag);
-    Object.keys(attrs || {}).forEach(function (k) {
-      if (k === "text") n.textContent = attrs[k];
-      else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]);
-      else n.setAttribute(k, attrs[k]);
-    });
-    (children || []).forEach(function (c) { n.appendChild(c); });
-    return n;
-  }
-  function toast(msg) {
-    var t = document.getElementById("toast");
-    t.textContent = msg; t.classList.add("show");
-    clearTimeout(toast._t);
-    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2600);
-  }
   var savedName = "";
   try { savedName = localStorage.getItem("hi-tenant-name") || ""; } catch (e) {}
 
-  function render() {
-    var m = document.getElementById("main");
-    m.innerHTML = "";
-
+  function renderHead(m) {
     var head = el("div", { "class": "masthead" });
     head.appendChild(el("div", { "class": "kicker",
       text: "Inventory & schedule of condition — tenant review" }));
@@ -173,27 +241,140 @@
     head.appendChild(el("div", { "class": "meta",
       text: "Inspected " + (inv.inspected_at || "") +
             (inv.inspected_by ? " by " + inv.inspected_by : "") + " · " +
-            inv.rooms.length + " rooms" }));
+            inv.rooms.length + " rooms · " +
+            inv.rooms.reduce(function (n, r) {
+              return n + (r.items || []).length;
+            }, 0) + " items" }));
     m.appendChild(head);
+
+    var prog = el("div", { "class": "progress-bar" });
+    prog.innerHTML = "Viewed <strong>" + viewedCount() + "</strong> of <strong>" +
+      inv.rooms.length + "</strong> rooms · <strong>" +
+      commentCount() + "</strong> comment" + (commentCount() === 1 ? "" : "s");
+    m.appendChild(prog);
+  }
+
+  function renderGallery(m) {
     m.appendChild(el("div", { "class": "howto",
-      text: "Walk each room with this page open. If something was already " +
-            "marked, scuffed or missing before you moved in, say so in a " +
-            "comment on that item — your comments are stored with the " +
-            "inventory and protect your deposit. When you're done, " +
-            "countersign at the bottom." }));
+      text: "Start with the room overview — open each room to check items " +
+            "and evidence. Flag anything that was already marked or missing " +
+            "before you moved in. Countersign when you have walked every room." }));
 
+    var grid = el("div", { "class": "room-gallery" });
     inv.rooms.forEach(function (room, ri) {
-      m.appendChild(el("h2", { "class": "room",
-        text: (ri + 1) + ". " + room.name }));
-      if (room.summary) m.appendChild(el("p", { "class": "room-summary",
-        text: room.summary }));
-      (room.items || []).forEach(function (it) {
-        m.appendChild(itemCard(it));
-      });
+      var card = el("button", { "class": "room-card" + (viewed[ri] ? " viewed" : ""),
+        type: "button",
+        onclick: function () { openRoom(ri); } });
+      var thumb = el("div", { "class": "thumb" });
+      var src = heroThumb(room);
+      if (src) {
+        thumb.appendChild(el("img", { src: src, alt: room.name, loading: "lazy" }));
+      } else {
+        thumb.appendChild(el("div", { "class": "placeholder", text: "No photo" }));
+      }
+      if (viewed[ri]) {
+        thumb.appendChild(el("span", { "class": "viewed-badge", text: "Viewed" }));
+      }
+      card.appendChild(thumb);
+      var body = el("div", { "class": "body" });
+      body.appendChild(el("div", { "class": "name", text: room.name }));
+      body.appendChild(el("div", { "class": "sub",
+        text: (room.items || []).length + " items" }));
+      card.appendChild(body);
+      grid.appendChild(card);
     });
+    m.appendChild(grid);
 
+    if (viewedCount() === inv.rooms.length && inv.rooms.length > 0) {
+      var cta = el("div", { "class": "finish-cta" });
+      var btn = el("button", { "class": "btn primary", type: "button",
+        text: "Continue to countersign" });
+      btn.addEventListener("click", function () {
+        document.getElementById("sign-section").scrollIntoView(
+          { behavior: "smooth", block: "start" });
+      });
+      cta.appendChild(btn);
+      m.appendChild(cta);
+    }
+  }
+
+  function openRoom(ri) {
+    viewed[ri] = true;
+    saveViewed();
+    view.mode = "room";
+    view.roomIndex = ri;
+    render();
+    window.scrollTo(0, 0);
+  }
+
+  function renderRoom(m, ri) {
+    var room = inv.rooms[ri];
+    var nav = el("div", { "class": "room-nav" });
+    var back = el("button", { "class": "back", type: "button", text: "← All rooms" });
+    back.addEventListener("click", function () {
+      view.mode = "gallery";
+      view.roomIndex = null;
+      render();
+    });
+    nav.appendChild(back);
+    m.appendChild(nav);
+
+    m.appendChild(el("h2", { "class": "room", text: (ri + 1) + ". " + room.name }));
+    if (room.summary) m.appendChild(el("p", { "class": "room-summary",
+      text: room.summary }));
+    (room.items || []).forEach(function (it) {
+      m.appendChild(itemCard(it, room.photos || []));
+    });
+  }
+
+  function renderSign(m) {
+    var mine = (inv.signatures || []).some(function (s) {
+      return s.role === "tenant";
+    });
+    var sec = el("div", { "class": "sign-section", id: "sign-section" });
+    sec.appendChild(el("h2", { text: "Countersign" }));
+    if (mine) {
+      sec.appendChild(el("div", { "class": "sign-done",
+        text: "Countersigned — thank you. Your comments and signature are on record." }));
+    } else {
+      sec.appendChild(el("p", { "class": "lead",
+        text: "Walked the property and checked this inventory? Countersigning " +
+              "records your acknowledgement next to the landlord's signature." }));
+      var form = el("div", { "class": "sign-form" });
+      var nameInput = el("input", { id: "sign-name", type: "text",
+        placeholder: "Your full name", value: savedName });
+      var signBtn = el("button", { id: "sign-btn", type: "button",
+        text: "Acknowledge & countersign" });
+      signBtn.addEventListener("click", function () {
+        var name = nameInput.value.trim();
+        if (!name) { toast("Type your full name first"); return; }
+        ui.confirmDialog({
+          title: "Countersign as " + name + "?",
+          message: "This records that you have received and reviewed the " +
+                   "inventory, alongside any comments you made.",
+          confirmLabel: "Countersign"
+        }).then(function (yes) {
+          if (!yes) return;
+          api("POST", "/sign", { name: name }).then(function () {
+            return api("GET", "/inventory");
+          }).then(function (p) {
+            inv = p.inventory; photoSrc = p.photo_src || {};
+            photoTime = p.photo_time || photoTime;
+            render();
+            toast("Countersigned — thank you");
+          }).catch(function (e) { toast(e.message); });
+        });
+      });
+      form.appendChild(nameInput);
+      form.appendChild(signBtn);
+      sec.appendChild(form);
+    }
+    m.appendChild(sec);
+  }
+
+  function renderSignatures(m) {
     var sig = el("div", { "class": "sigblock" });
-    sig.appendChild(el("h2", { text: "Signatures" }));
+    sig.appendChild(el("h2", { text: "Signatures on record" }));
     if ((inv.signatures || []).length) {
       inv.signatures.forEach(function (s) {
         var card = el("div", { "class": "sigcard" });
@@ -209,19 +390,9 @@
         text: "No signatures recorded yet." }));
     }
     m.appendChild(sig);
-
-    var mine = (inv.signatures || []).some(function (s) {
-      return s.role === "tenant";
-    });
-    if (mine) {
-      var bar = document.getElementById("signbar");
-      bar.classList.add("done");
-      document.getElementById("signbar-inner").innerHTML =
-        "Countersigned — thank you. Your comments and signature are on record.";
-    }
   }
 
-  function itemCard(it) {
+  function itemCard(it, roomPhotos) {
     var card = el("div", { "class": "item" + (it.rejected ? " rejected" : "") });
     var head = el("div", { "class": "head" });
     head.appendChild(el("span", { "class": "ref", text: it.id }));
@@ -249,28 +420,40 @@
     }
 
     var ev = el("div", { "class": "ev" });
-    var any = false;
-    (it.photo_ids || []).forEach(function (pid) {
-      if (!photoSrc[pid]) return;
-      any = true;
+    var pids = (it.photo_ids || []).filter(function (pid) {
+      return photoSrc[pid];
+    });
+    function viewerPhotos() {
+      return pids.map(function (pid) {
+        return { src: photoSrc[pid], label: pid, title: it.name || "",
+                 regions: (it.defect_regions || []).filter(function (r) {
+                   return r.photo_id === pid;
+                 }) };
+      });
+    }
+    pids.forEach(function (pid, pi) {
       var ph = el("span", { "class": "ph" });
-      var a = el("a", { href: photoSrc[pid], target: "_blank" });
-      a.appendChild(el("img", { src: photoSrc[pid], alt: pid,
-        loading: "lazy" }));
-      ph.appendChild(a);
+      var b = el("button", { "class": "ph-btn", type: "button",
+        "aria-label": "View photo " + pid,
+        onclick: function () {
+          ui.photoViewer({ photos: viewerPhotos(), index: pi });
+        } });
+      b.appendChild(el("img", { src: photoSrc[pid], alt: pid, loading: "lazy" }));
+      ph.appendChild(b);
       ph.appendChild(el("span", { "class": "pid", text: pid }));
+      ph.appendChild(el("div", { "class": "cap", text: photoCaption(pid, roomPhotos) }));
       (it.defect_regions || []).forEach(function (reg) {
         if (reg.photo_id !== pid) return;
-        var b = el("span", { "class": "box", title: reg.defect });
-        b.style.left = (reg.x * 100) + "%";
-        b.style.top = (reg.y * 100) + "%";
-        b.style.width = (reg.w * 100) + "%";
-        b.style.height = (reg.h * 100) + "%";
-        ph.appendChild(b);
+        var box = el("span", { "class": "box", title: reg.defect });
+        box.style.left = (reg.x * 100) + "%";
+        box.style.top = (reg.y * 100) + "%";
+        box.style.width = (reg.w * 100) + "%";
+        box.style.height = (reg.h * 100) + "%";
+        ph.appendChild(box);
       });
       ev.appendChild(ph);
     });
-    if (any) card.appendChild(ev);
+    if (pids.length) card.appendChild(ev);
 
     var thread = el("div", { "class": "c-thread" });
     (it.comments || []).forEach(function (c) {
@@ -290,26 +473,29 @@
     function send() {
       var text = input.value.trim();
       if (!text) return;
-      var name = savedName;
-      if (!name) {
-        name = (prompt("Your name (shown next to your comments):") || "").trim();
-        if (!name) return;
-        savedName = name;
-        try { localStorage.setItem("hi-tenant-name", name); } catch (e) {}
-        var sn = document.getElementById("sign-name");
-        if (sn && !sn.value) sn.value = name;
+      if (!savedName) {
+        ui.form({
+          title: "Who is commenting?",
+          note: "Your name is shown next to your comments in the record.",
+          submitLabel: "Continue",
+          fields: [{ name: "name", label: "Your name", required: true }]
+        }).then(function (values) {
+          if (!values) return;
+          savedName = values.name;
+          try { localStorage.setItem("hi-tenant-name", savedName); } catch (e) {}
+          send();
+        });
+        return;
       }
       btn.disabled = true;
-      api("POST", "/comments", { item_id: it.id, text: text, author: name })
+      api("POST", "/comments", { item_id: it.id, text: text, author: savedName })
         .then(function () {
-          var line = el("div", { "class": "c-line" });
-          line.appendChild(el("span", { "class": "who tenant",
-            text: name + " (tenant)" }));
-          line.appendChild(el("div", { text: text }));
-          thread.appendChild(line);
-          input.value = "";
+          if (!it.comments) it.comments = [];
+          it.comments.push({ author: savedName, role: "tenant", text: text });
           btn.disabled = false;
+          input.value = "";
           toast("Comment recorded on " + it.id);
+          render();
         }).catch(function (e) {
           btn.disabled = false;
           toast("Could not save: " + e.message);
@@ -326,21 +512,18 @@
     return card;
   }
 
-  document.getElementById("sign-btn").addEventListener("click", function () {
-    var name = document.getElementById("sign-name").value.trim();
-    if (!name) { toast("Type your full name first"); return; }
-    if (!confirm("Sign as " + name + "? This records that you have received " +
-                 "and reviewed the inventory, alongside any comments you " +
-                 "made.")) return;
-    api("POST", "/sign", { name: name }).then(function () {
-      return api("GET", "/inventory");
-    }).then(function (p) {
-      inv = p.inventory; photoSrc = p.photo_src || {};
-      render();
-      toast("Countersigned — thank you");
-    }).catch(function (e) { toast(e.message); });
-  });
-  if (savedName) document.getElementById("sign-name").value = savedName;
+  function render() {
+    var m = document.getElementById("main");
+    m.innerHTML = "";
+    renderHead(m);
+    if (view.mode === "room" && view.roomIndex != null) {
+      renderRoom(m, view.roomIndex);
+    } else {
+      renderGallery(m);
+    }
+    renderSign(m);
+    renderSignatures(m);
+  }
 
   render();
 })();

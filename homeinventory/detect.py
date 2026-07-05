@@ -41,6 +41,8 @@ HOUSEHOLD_VOCAB = [
     "washing machine", "dishwasher", "vacuum cleaner", "sink", "tap", "toilet",
     "bathtub", "shower", "towel rail", "picture frame", "painting", "clock",
     "plant pot", "bicycle", "smoke alarm", "door", "window",
+    # InventoryFlex / UK schedule terms missing from base COCO-like set
+    "hob", "extractor hood", "bar stool", "patio door", "medicine cabinet",
 ]
 
 DEFAULT_MODEL_TEXT = "yoloe-11s-seg.pt"       # smallest text-prompt YOLOE; fine on CPU

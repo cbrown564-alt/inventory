@@ -1,0 +1,109 @@
+{
+  "experiment": "ML-E17",
+  "report_dir": "/Users/cobro/code/inventory/report",
+  "koniq_weights": "evals/fixtures/own-property/iqa-koniq-weights.json",
+  "mle6_weights": "evals/fixtures/own-property/iqa-linear-weights.json",
+  "comparison": {
+    "n_rooms_with_gold": 9,
+    "koniq_top1_hit_rate": 44.4,
+    "mle6_top1_hit_rate": 44.4,
+    "koniq_top1_hits": "4/9",
+    "mle6_top1_hits": "4/9",
+    "koniq_beats_mle6": true,
+    "pass_bar": "top-1 \u2265 ML-E6 on hero-gold (\u22658/9 target per docs/19)"
+  },
+  "koniq_training_mode": "own-property-features",
+  "disclaimer": null,
+  "per_room": {
+    "Hallway": {
+      "koniq_pick": "IMG_5512_f009738.jpg",
+      "mle6_pick": "IMG_5512_f009738.jpg",
+      "koniq_top1_hit": true,
+      "mle6_top1_hit": true,
+      "koniq_top3_hit": true,
+      "mle6_top3_hit": true,
+      "koniq_spearman": 0.8,
+      "mle6_spearman": 0.8
+    },
+    "Living Room": {
+      "koniq_pick": "IMG_5512_f008676.jpg",
+      "mle6_pick": "IMG_5512_f008676.jpg",
+      "koniq_top1_hit": false,
+      "mle6_top1_hit": false,
+      "koniq_top3_hit": true,
+      "mle6_top3_hit": true,
+      "koniq_spearman": 0.8,
+      "mle6_spearman": 0.8
+    },
+    "Kitchen": {
+      "koniq_pick": "IMG_5512_f006039.jpg",
+      "mle6_pick": "IMG_5512_f006039.jpg",
+      "koniq_top1_hit": false,
+      "mle6_top1_hit": false,
+      "koniq_top3_hit": false,
+      "mle6_top3_hit": false,
+      "koniq_spearman": 0.4,
+      "mle6_spearman": 0.4
+    },
+    "Bedroom 1": {
+      "koniq_pick": "IMG_5512_f011250.jpg",
+      "mle6_pick": "IMG_5512_f011250.jpg",
+      "koniq_top1_hit": false,
+      "mle6_top1_hit": false,
+      "koniq_top3_hit": false,
+      "mle6_top3_hit": false,
+      "koniq_spearman": -0.5,
+      "mle6_spearman": -0.5
+    },
+    "Loft Bedroom": {
+      "koniq_pick": "IMG_5512_f019476.jpg",
+      "mle6_pick": "IMG_5512_f019476.jpg",
+      "koniq_top1_hit": false,
+      "mle6_top1_hit": false,
+      "koniq_top3_hit": false,
+      "mle6_top3_hit": false,
+      "koniq_spearman": -0.1,
+      "mle6_spearman": -0.1
+    },
+    "Bathroom": {
+      "koniq_pick": "IMG_5512_f011070.jpg",
+      "mle6_pick": "IMG_5512_f011070.jpg",
+      "koniq_top1_hit": true,
+      "mle6_top1_hit": true,
+      "koniq_top3_hit": true,
+      "mle6_top3_hit": true,
+      "koniq_spearman": null,
+      "mle6_spearman": null
+    },
+    "En-suite Shower Room": {
+      "koniq_pick": "IMG_5512_f012564.jpg",
+      "mle6_pick": "IMG_5512_f012564.jpg",
+      "koniq_top1_hit": false,
+      "mle6_top1_hit": false,
+      "koniq_top3_hit": true,
+      "mle6_top3_hit": true,
+      "koniq_spearman": null,
+      "mle6_spearman": null
+    },
+    "Loft Shower Room": {
+      "koniq_pick": "IMG_5512_f021879.jpg",
+      "mle6_pick": "IMG_5512_f021879.jpg",
+      "koniq_top1_hit": true,
+      "mle6_top1_hit": true,
+      "koniq_top3_hit": true,
+      "mle6_top3_hit": true,
+      "koniq_spearman": 1.0,
+      "mle6_spearman": 1.0
+    },
+    "Stairs and Landing": {
+      "koniq_pick": "IMG_5512_f014904.jpg",
+      "mle6_pick": "IMG_5512_f014904.jpg",
+      "koniq_top1_hit": true,
+      "mle6_top1_hit": true,
+      "koniq_top3_hit": true,
+      "mle6_top3_hit": true,
+      "koniq_spearman": 0.3,
+      "mle6_spearman": 0.3
+    }
+  }
+}

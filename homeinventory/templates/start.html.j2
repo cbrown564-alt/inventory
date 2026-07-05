@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New report — Homeinventory</title>
+{% include "_favicon.j2" %}
+<style>
+{% include "_theme.css.j2" %}
+
+  main { max-width: 1080px; margin: 0 auto; padding: 0 24px 64px; }
+
+  /* rebuild banner — continue review first, rebuild secondary */
+  .banner.rebuild {
+    background: var(--panel); border: 1px solid var(--line-strong);
+    border-radius: 12px; padding: 16px 18px; margin: 22px 0 0;
+  }
+  .banner-row { display: flex; align-items: center; gap: 14px;
+                 flex-wrap: wrap; justify-content: space-between; }
+  .banner-copy { font-size: 15px; font-weight: 600; color: var(--ink); }
+  .banner-note { margin: 10px 0 0; font-size: 13px; line-height: 1.55;
+                 color: var(--muted); max-width: 58ch; }
+
+  .hero { display: grid; grid-template-columns: minmax(0, 1.05fr)
+          minmax(0, 1fr); gap: 56px; align-items: start;
+          padding-top: 54px; }
+  h1 { font: 600 clamp(30px, 4.2vw, 44px)/1.12 var(--display);
+       letter-spacing: -.015em; margin: 0 0 14px; color: var(--ink); }
+  h1 em { font-style: italic; color: var(--brass); }
+  .sub { font-size: 15.5px; line-height: 1.65; color: var(--muted);
+         margin: 0 0 30px; max-width: 46ch; }
+
+  .guide { list-style: none; margin: 0; padding: 0; counter-reset: film; }
+  .guide li { counter-increment: film; display: flex; gap: 14px;
+              padding: 11px 0; border-top: 1px solid var(--line);
+              font-size: 14px; align-items: baseline; }
+  .guide li::before { content: counter(film); flex: 0 0 26px; height: 26px;
+    border: 1px solid var(--brass); border-radius: 50%; color: var(--brass);
+    font: 600 12px/24px var(--display); text-align: center;
+    position: relative; top: 3px; }
+  .guide li b { font-weight: 600; }
+  .guide-kicker { font-size: 11px; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--faint); margin: 0 0 6px; }
+
+  .action-col { display: grid; gap: 14px; align-content: start; }
+
+  /* drop slate + outcome preview */
+  .slate-wrap { display: grid; gap: 12px; }
+  .outcome-preview {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px 16px; font-size: 13px;
+    line-height: 1.55; color: var(--muted);
+  }
+  .outcome-preview b { display: block; font-size: 11px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+    margin-bottom: 6px; }
+  .outcome-preview em { font-style: normal; color: var(--ink);
+                         font-weight: 600; }
+
+  .slate { background:
+      radial-gradient(420px 200px at 50% -60px, #1a2029 0%, #0e1116 70%);
+    border: 1px solid #2a3340; border-radius: 14px; padding: 18px;
+    box-shadow: var(--shadow); }
+  #drop { border: 2px dashed rgba(200, 163, 92, .45); border-radius: 10px;
+    padding: 44px 20px; text-align: center; color: #94a1b2;
+    cursor: pointer; transition: border-color .18s, background .18s;
+    font-size: 13.5px; }
+  #drop:hover, #drop.over { border-color: #e5c47f;
+    background: rgba(200, 163, 92, .07); }
+  #drop .play { width: 46px; height: 46px; border-radius: 50%; margin: 0
+    auto 12px; border: 1.5px solid rgba(200, 163, 92, .55); display: flex;
+    align-items: center; justify-content: center; }
+  #drop .play svg { display: block; margin-left: 3px; }
+  #drop strong { color: #e8ecf1; display: block; font-size: 15px;
+                 margin-bottom: 3px; }
+  .slate .formats { margin: 12px 4px 0; font: 11px var(--mono);
+                    color: #5f6c7c; text-align: center; }
+
+  /* upload rows — filename, duration, size, remove/replace */
+  #up-list { margin-top: 12px; display: grid; gap: 8px; }
+  .up-file { background: rgba(255, 255, 255, .04); border: 1px solid #2a3340;
+             border-radius: 8px; padding: 10px 12px; }
+  .up-file .up-top { display: flex; align-items: flex-start; gap: 10px;
+                      justify-content: space-between; }
+  .up-file .nm { font-family: var(--mono); font-size: 12px; color: #e8ecf1;
+                 overflow: hidden; text-overflow: ellipsis;
+                 white-space: nowrap; max-width: 100%; }
+  .up-file .dims { font-size: 12px; color: #94a1b2; margin-top: 3px;
+                   font-variant-numeric: tabular-nums; }
+  .up-file .up-actions { display: flex; gap: 4px; flex-shrink: 0; }
+  .up-file .up-actions .btn { padding: 4px 8px; font-size: 11.5px; }
+  .up-file .st { font-size: 12px; color: #94a1b2; margin-top: 6px; }
+  .up-file .st.err { color: #e06459; }
+  .up-file .st.ok { color: #45b681; }
+  .up-file .track { margin-top: 6px; height: 3px; background: #232c38;
+                    border-radius: 2px; overflow: hidden; }
+  .up-file .fill { display: block; height: 100%; width: 0;
+                   background: var(--brass); transition: width .2s; }
+
+  .build { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .build .btn.primary { padding: 11px 26px; font-size: 14px; }
+  .build .btn.danger { padding: 11px 20px; font-size: 14px; }
+  .spend { font-size: 12.5px; color: var(--muted); }
+  .spend b { color: var(--ink); font-weight: 600; }
+  .rebuild-note { font-size: 12.5px; color: var(--muted); max-width: 42ch;
+                  line-height: 1.5; }
+
+  /* full-viewport build progress card */
+  #build-overlay {
+    display: none; position: fixed; inset: 0; z-index: 60;
+    background: rgba(246, 243, 236, .92); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center; padding: 24px;
+  }
+  #build-overlay.show { display: flex; }
+  .build-card {
+    width: min(520px, 100%); background: var(--panel);
+    border: 1px solid var(--line-strong); border-radius: 14px;
+    padding: 28px 28px 24px; box-shadow: var(--shadow);
+  }
+  .build-card h2 { margin: 0 0 6px; font: 600 20px/1.25 var(--display); }
+  .build-card .build-lede { margin: 0 0 20px; font-size: 13.5px;
+                            color: var(--muted); }
+  .build-card.err h2 { color: var(--danger); }
+  .stages { list-style: none; margin: 0; padding: 0; }
+  .stages li { display: flex; gap: 10px; align-items: baseline;
+               padding: 7px 0; font-size: 14px; color: var(--faint); }
+  .stages li::before { content: "○"; flex: 0 0 16px; text-align: center; }
+  .stages li.done { color: var(--muted); }
+  .stages li.done::before { content: "✓"; color: var(--confirm); }
+  .stages li.now { color: var(--ink); font-weight: 600; }
+  .stages li.now::before { content: "●"; color: var(--brass);
+    animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .35; } }
+  .stages li .note { font-weight: 400; color: var(--muted);
+                     font-size: 12.5px; }
+  .room-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 4px; }
+  .room-chips .chip {
+    font-size: 12px; padding: 3px 10px; border-radius: 999px;
+    background: var(--brass-soft); color: var(--brass-bright);
+    border: 1px solid rgba(154, 119, 41, .25);
+  }
+  .build-fail { margin: 0 0 16px; font-size: 14px; line-height: 1.55;
+                color: var(--ink); }
+  .build-fail-actions { display: flex; gap: 8px; }
+
+  /* report-type picker */
+  #use-case-picker { max-width: 720px; margin: 60px auto 0; }
+  #use-case-picker h1 { text-align: center; }
+  #use-case-picker .lede { text-align: center; color: var(--muted);
+    margin: 0 0 30px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit,
+           minmax(280px, 1fr)); gap: 16px; }
+  .card { text-align: left; background: var(--panel);
+    border: 1px solid var(--line-strong); border-radius: 12px;
+    padding: 22px 22px 20px; cursor: pointer;
+    transition: border-color .15s, transform .15s, box-shadow .15s;
+    border-top: 3px solid var(--brass); }
+  .card:hover { border-color: var(--brass); transform: translateY(-2px);
+                box-shadow: var(--shadow); }
+  .card strong { display: block; font: 600 19px/1.25 var(--display);
+                 margin-bottom: 7px; color: var(--ink); }
+  .card span { color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+  .card .outcome { display: block; margin-top: 10px; font-size: 12.5px;
+                   font-weight: 600; color: var(--brass-bright); }
+  #picker-status.err { color: var(--danger); margin-top: 12px;
+                       text-align: center; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; gap: 30px; padding-top: 30px; }
+    .sub { margin-bottom: 20px; }
+  }
+  @media (max-width: 480px) {
+    main { padding: 0 12px 48px; }
+    .hero { gap: 24px; padding-top: 20px; }
+    h1 { font-size: 28px; }
+    .banner.rebuild { padding: 14px; margin-top: 16px; }
+    .banner-row { flex-direction: column; align-items: stretch; }
+    .banner-row .btn { width: 100%; text-align: center; }
+    #drop { padding: 32px 16px; }
+    .build-card { padding: 22px 18px 18px; }
+  }
+</style>
+</head>
+<body>
+<header class="app-header">
+  <span class="wordmark">Homeinventory</span>
+  <nav class="app-nav" aria-label="Sections">
+    <a href="/start" aria-current="page">New report</a>
+    {% if has_inventory %}
+    <a href="/">Review</a>
+    <a href="/report" target="_blank" rel="noopener">Report</a>
+    {% endif %}
+  </nav>
+  {% if not show_picker|default(false) and use_case_label|default(none) %}
+  <span class="header-chip" id="use-case-chip">{{ use_case_label }}</span>
+  {% endif %}
+</header>
+<main>
+{% set cap = capture|default({"rooms": [], "walkthrough_videos": 0,
+                              "walkthrough_files": []}) %}
+
+{% if show_picker|default(false) %}
+<section id="use-case-picker">
+  <h1>What are you evidencing?</h1>
+  <p class="lede">Pick the report type — it sets the sections, the grades
+    and who signs.</p>
+  <div class="cards">
+  {% for u in use_cases|default([]) %}
+    <button class="card" data-use-case="{{ u.key }}" type="button">
+      <strong>{{ u.name }}</strong>
+      <span>{{ u.description }}</span>
+      {% if u.outcome|default("") %}
+      <span class="outcome">{{ u.outcome }}</span>
+      {% endif %}
+    </button>
+  {% endfor %}
+  </div>
+  <div id="picker-status"></div>
+</section>
+{% endif %}
+
+{% if not show_picker|default(false) %}
+{% if has_inventory %}
+<div class="banner rebuild">
+  <div class="banner-row">
+    <span class="banner-copy">A report already exists</span>
+    <a href="{{ route_prefix|default('', true) }}/#overview"
+       class="btn primary">Continue review</a>
+  </div>
+  <p class="banner-note">Rebuilding re-describes every room but keeps your
+    confirmed and hand-added items.</p>
+</div>
+{% endif %}
+
+<div class="hero">
+  <section id="filming-guide" class="pitch">
+    <h1>Walk the property once.<br>Leave with <em>evidence</em>.</h1>
+    <p class="sub">Film one continuous walkthrough on your phone and drop
+      it here. The rooms are found, every item is drafted, and each claim
+      stays tied to the second of footage that proves it — you review
+      and sign.</p>
+    <p class="guide-kicker">Before you film</p>
+    <ul class="guide">
+      <li><span><b>Walk slowly</b> — steady pans, not rushed sweeps.</span></li>
+      <li><span><b>Say each room's name aloud</b> as you enter
+        (Kitchen, Bedroom 1…).</span></li>
+      <li><span><b>Pause for a wide shot</b> in each room, then close-ups
+        of any defects.</span></li>
+      <li><span><b>Keep rolling</b> — one continuous video is fine; the
+        rooms are found for you.</span></li>
+    </ul>
+  </section>
+
+  <section id="upload" class="action">
+    <div class="action-col">
+      <div class="slate-wrap">
+        <div class="outcome-preview" aria-hidden="false">
+          <b>What you get back</b>
+          Typical 3-bed: <em>~8 rooms</em>, <em>~200 items</em>,
+          <em>~15 min review</em>.
+        </div>
+        <div class="slate">
+          <div id="drop" role="button" tabindex="0"
+               aria-label="Choose or drop your walkthrough video">
+            <div class="play">
+              <svg width="16" height="18" viewBox="0 0 16 18" aria-hidden="true">
+                <path d="M1 1.5v15l14-7.5z" fill="none" stroke="#c8a35c"
+                      stroke-width="1.6" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <strong>Drop your walkthrough video</strong>
+            or click to choose a file
+          </div>
+          <input type="file" id="up-files" accept="video/*" hidden>
+          <div id="up-list"></div>
+          <p class="formats">MP4 · MOV · MKV · WebM — up to 2 GiB. Stays on
+            your machine.</p>
+        </div>
+      </div>
+
+      <div class="build" id="build">
+        {% if has_inventory %}
+        <button class="btn danger" id="btn-build"
+                {% if not cap.walkthrough_videos and not cap.rooms %}disabled{% endif %}>
+          Rebuild from video</button>
+        <span class="rebuild-note">Destructive — re-runs room finding and
+          item drafting on your video.</span>
+        {% else %}
+        <button class="btn primary" id="btn-build"
+                {% if not cap.walkthrough_videos and not cap.rooms %}disabled{% endif %}>
+          Build the report</button>
+        {% endif %}
+        <span class="spend"><b>{{ spend.label }}</b> · est.
+          {{ spend.estimate }}</span>
+      </div>
+    </div>
+  </section>
+</div>
+{% endif %}
+
+</main>
+
+<div id="build-overlay" role="status" aria-live="polite" aria-hidden="true">
+  <div class="build-card" id="build-card">
+    <h2 id="build-title">Building your report</h2>
+    <p class="build-lede" id="build-lede">This usually takes a few minutes.
+      You can leave this tab open.</p>
+    <ul class="stages" id="build-stages"></ul>
+    <div class="room-chips" id="room-chips" hidden></div>
+    <div id="build-fail" hidden>
+      <p class="build-fail" id="build-fail-msg"></p>
+      <div class="build-fail-actions">
+        <button class="btn primary" id="btn-build-retry" type="button">
+          Try again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" role="status"></div>
+<script>
+{% include "_ui.js.j2" %}
+</script>
+<script>
+"use strict";
+(function () {
+  var SPEND = {{ spend|default({"label":"Report","estimate":"varies","note":""}) | tojson }};
+  var WALKTHROUGH = {{ walkthrough_room|default("__walkthrough__", true) | tojson }};
+  var PREFIX = {{ route_prefix|default("", true) | tojson }};
+  var HAS_INVENTORY = {{ has_inventory|default(false) | tojson }};
+  var SERVER_FILES = {{ cap.walkthrough_files|default([]) | tojson }};
+  var el = ui.el, toast = ui.toast;
+
+  function api(method, url, body) {
+    return fetch(url, {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) throw new Error(j.error || (r.status + ""));
+        return j;
+      });
+    });
+  }
+
+  function fmtBytes(n) {
+    if (n > 1e9) return (n / 1e9).toFixed(1) + " GB";
+    if (n > 1e6) return (n / 1e6).toFixed(1) + " MB";
+    return Math.max(1, Math.round(n / 1e3)) + " kB";
+  }
+
+  function fmtDuration(sec) {
+    if (!sec || sec <= 0) return "—";
+    var m = Math.floor(sec / 60);
+    var s = Math.floor(sec % 60);
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  function dimsText(size, duration) {
+    var bits = [];
+    if (duration && duration > 0) bits.push(fmtDuration(duration));
+    if (size) bits.push(fmtBytes(size));
+    return bits.join(" · ") || "—";
+  }
+
+  var drop = document.getElementById("drop");
+  var fileInput = document.getElementById("up-files");
+  var upList = document.getElementById("up-list");
+  var bBtn = document.getElementById("btn-build");
+  var active = 0;
+  var readyCount = 0;
+
+  function syncBuildBtn() {
+    if (!bBtn) return;
+    bBtn.disabled = readyCount < 1 && active > 0;
+    if (readyCount > 0) bBtn.disabled = false;
+    else if (active === 0 && upList && !upList.querySelector(".up-file")) {
+      bBtn.disabled = true;
+    }
+  }
+
+  function makeFileRow(opts) {
+    var row = el("div", { "class": "up-file", "data-name": opts.name });
+    var top = el("div", { "class": "up-top" });
+    var meta = el("div", {});
+    meta.appendChild(el("div", { "class": "nm", text: opts.name }));
+    var dims = el("div", { "class": "dims",
+      text: dimsText(opts.size, opts.duration) });
+    meta.appendChild(dims);
+    top.appendChild(meta);
+    var actions = el("div", { "class": "up-actions" });
+    var rep = el("button", { "class": "btn ghost up-replace", type: "button",
+      text: "Replace" });
+    var rem = el("button", { "class": "btn ghost up-remove", type: "button",
+      text: "Remove" });
+    actions.appendChild(rep);
+    actions.appendChild(rem);
+    top.appendChild(actions);
+    row.appendChild(top);
+    var st = el("div", { "class": "st", text: opts.status || "ready" });
+    if (opts.statusClass) st.className = "st " + opts.statusClass;
+    row.appendChild(st);
+    var track = el("div", { "class": "track", hidden: !opts.uploading });
+    var fill = el("span", { "class": "fill" });
+    fill.style.display = "block";
+    track.appendChild(fill);
+    row.appendChild(track);
+
+    rep.addEventListener("click", function (e) {
+      e.stopPropagation();
+      row._replaceTarget = opts.name;
+      row._replaceServer = !opts.local;
+      fileInput.click();
+    });
+    rem.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (opts.local && opts.file) {
+        row.remove();
+        readyCount = Math.max(0, readyCount - 1);
+        syncBuildBtn();
+        return;
+      }
+      rem.disabled = true;
+      api("POST", PREFIX + "/api/capture/remove", { name: opts.name })
+        .then(function () {
+          row.remove();
+          readyCount = Math.max(0, readyCount - 1);
+          syncBuildBtn();
+        })
+        .catch(function (err) {
+          rem.disabled = false;
+          toast(err.message);
+        });
+    });
+    row._fill = fill;
+    row._st = st;
+    row._dims = dims;
+    return row;
+  }
+
+  function probeClientDuration(file, cb) {
+    var v = document.createElement("video");
+    v.preload = "metadata";
+    v.onloadedmetadata = function () {
+      cb(v.duration || 0);
+      URL.revokeObjectURL(v.src);
+    };
+    v.onerror = function () {
+      cb(0);
+      URL.revokeObjectURL(v.src);
+    };
+    v.src = URL.createObjectURL(file);
+  }
+
+  function addServerFile(vf) {
+    var row = makeFileRow({
+      name: vf.name,
+      size: vf.size,
+      duration: vf.duration,
+      status: "ready",
+      statusClass: "ok"
+    });
+    upList.appendChild(row);
+    readyCount += 1;
+  }
+
+  SERVER_FILES.forEach(addServerFile);
+  syncBuildBtn();
+
+  function startUpload(job) {
+    active += 1;
+    job.row._st.textContent = "uploading";
+    job.row._st.className = "st";
+    job.row.querySelector(".track").hidden = false;
+    ui.uploadMedia(PREFIX, job.file, WALKTHROUGH, {
+      onProgress: function (loaded, total) {
+        job.row._fill.style.width = Math.round(100 * loaded / total) + "%";
+      },
+      onDone: function () {
+        active -= 1;
+        job.row._fill.style.width = "100%";
+        job.row._st.textContent = "ready";
+        job.row._st.className = "st ok";
+        job.row.querySelector(".track").hidden = true;
+        job.row._replaceTarget = null;
+        readyCount += 1;
+        syncBuildBtn();
+      },
+      onError: function (msg) {
+        active -= 1;
+        job.row._st.textContent = msg;
+        job.row._st.className = "st err";
+        syncBuildBtn();
+      }
+    }).catch(function () {});
+  }
+
+  function addFiles(files, replaceName, replaceServer) {
+    Array.prototype.forEach.call(files, function (f) {
+      if (!f.type.startsWith("video/") &&
+          !/\.(mp4|mov|mkv|webm|avi|m4v)$/i.test(f.name)) {
+        toast("Please upload a walkthrough video (MP4, MOV, MKV, WebM)");
+        return;
+      }
+      function enqueue() {
+        if (replaceName) {
+          var old = upList.querySelector(
+            '.up-file[data-name="' + replaceName + '"]');
+          if (old) {
+            if (old._st.className.indexOf("ok") >= 0) {
+              readyCount = Math.max(0, readyCount - 1);
+            }
+            old.remove();
+          }
+        }
+        var row = makeFileRow({
+          name: f.name,
+          size: f.size,
+          duration: 0,
+          status: "queued",
+          uploading: true,
+          local: true,
+          file: f
+        });
+        upList.appendChild(row);
+        probeClientDuration(f, function (dur) {
+          row._dims.textContent = dimsText(f.size, dur);
+        });
+        startUpload({ file: f, row: row });
+        syncBuildBtn();
+      }
+      if (replaceName && replaceServer) {
+        api("POST", PREFIX + "/api/capture/remove", { name: replaceName })
+          .then(enqueue)
+          .catch(function (err) { toast(err.message); });
+      } else {
+        enqueue();
+      }
+    });
+  }
+
+  if (drop) {
+    drop.addEventListener("click", function () { fileInput.click(); });
+    drop.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        fileInput.click();
+      }
+    });
+    fileInput.addEventListener("change", function () {
+      var replaceName = null;
+      var replaceServer = false;
+      upList.querySelectorAll(".up-file").forEach(function (r) {
+        if (r._replaceTarget) {
+          replaceName = r._replaceTarget;
+          replaceServer = !!r._replaceServer;
+        }
+      });
+      addFiles(fileInput.files, replaceName, replaceServer);
+      fileInput.value = "";
+    });
+    ["dragenter", "dragover"].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) {
+        e.preventDefault(); drop.classList.add("over");
+      });
+    });
+    ["dragleave", "drop"].forEach(function (ev) {
+      drop.addEventListener(ev, function (e) {
+        e.preventDefault(); drop.classList.remove("over");
+      });
+    });
+    drop.addEventListener("drop", function (e) {
+      if (e.dataTransfer && e.dataTransfer.files.length) {
+        addFiles(e.dataTransfer.files);
+      }
+    });
+  }
+
+  /* Build progress — staged journey, not subprocess stdout. */
+  var STAGES = [
+    { key: "segmenting", label: "Watching footage" },
+    { key: "segmented", label: "Finding rooms" },
+    { key: "extracting", label: "Extracting frames" },
+    { key: "describing", label: "Drafting items" },
+    { key: "rendering", label: "Rendering report" }
+  ];
+
+  var overlay = document.getElementById("build-overlay");
+  var buildCard = document.getElementById("build-card");
+  var buildTitle = document.getElementById("build-title");
+  var buildLede = document.getElementById("build-lede");
+  var buildStages = document.getElementById("build-stages");
+  var roomChips = document.getElementById("room-chips");
+  var buildFail = document.getElementById("build-fail");
+  var buildFailMsg = document.getElementById("build-fail-msg");
+  var btnRetry = document.getElementById("btn-build-retry");
+
+  function stageIndex(s) {
+    if (s.stage === "done") return STAGES.length;
+    if (s.stage === "starting") return 0;
+    for (var i = 0; i < STAGES.length; i++) {
+      if (STAGES[i].key === s.stage) return i;
+    }
+    return s.status === "running" ? 0 : -1;
+  }
+
+  function showOverlay(on) {
+    if (!overlay) return;
+    overlay.classList.toggle("show", on);
+    overlay.setAttribute("aria-hidden", on ? "false" : "true");
+  }
+
+  function renderRoomChips(names) {
+    if (!roomChips || !names || !names.length) {
+      if (roomChips) roomChips.hidden = true;
+      return;
+    }
+    roomChips.innerHTML = "";
+    names.forEach(function (n) {
+      roomChips.appendChild(el("span", { "class": "chip", text: n }));
+    });
+    roomChips.hidden = false;
+  }
+
+  function setBuildStatus(s, err) {
+    if (!buildStages) return;
+    buildFail.hidden = true;
+    buildStages.hidden = false;
+    buildLede.hidden = false;
+    buildCard.classList.toggle("err", !!err);
+
+    if (err) {
+      buildTitle.textContent = "Build failed";
+      buildLede.hidden = true;
+      buildStages.hidden = true;
+      roomChips.hidden = true;
+      buildFail.hidden = false;
+      buildFailMsg.textContent =
+        "We couldn't finish the report. Check that the video plays from " +
+        "start to finish, then try again.";
+      showOverlay(true);
+      return;
+    }
+
+    buildTitle.textContent = "Building your report";
+    var at = stageIndex(s);
+    if (at < 0 && !s.stage) return;
+
+    buildStages.innerHTML = "";
+    STAGES.forEach(function (st, i) {
+      var li = el("li", { "class": i < at ? "done" : i === at ? "now" : "" });
+      li.appendChild(el("span", { text: st.label }));
+      if (i === at && s.stage_detail) {
+        li.appendChild(el("span", { "class": "note",
+          text: " — " + s.stage_detail }));
+      }
+      buildStages.appendChild(li);
+    });
+    if (at >= STAGES.length) {
+      buildStages.appendChild(el("li", { "class": "now",
+        text: "Your report is ready — opening review…" }));
+    }
+
+    if (s.room_names && s.room_names.length) {
+      renderRoomChips(s.room_names);
+    } else if (s.rooms_found && at >= 2) {
+      renderRoomChips([]);
+      roomChips.hidden = true;
+    }
+    showOverlay(true);
+  }
+
+  function pollBuild() {
+    if (!bBtn) return;
+    api("GET", PREFIX + "/api/build").then(function (s) {
+      if (s.status === "running") {
+        bBtn.disabled = true;
+        setBuildStatus(s, false);
+        setTimeout(pollBuild, 1500);
+      } else if (s.status === "done") {
+        setBuildStatus({ stage: "done", room_names: s.room_names }, false);
+        location.href = PREFIX + "/#overview";
+      } else if (s.status === "failed") {
+        bBtn.disabled = false;
+        setBuildStatus(s, true);
+      } else {
+        showOverlay(false);
+      }
+    }).catch(function () {});
+  }
+
+  if (btnRetry) {
+    btnRetry.addEventListener("click", function () {
+      showOverlay(false);
+      buildCard.classList.remove("err");
+      if (bBtn) bBtn.disabled = readyCount < 1;
+    });
+  }
+
+  if (bBtn) {
+    bBtn.addEventListener("click", function () {
+      var title = HAS_INVENTORY ? "Rebuild from video?" : "Build your report?";
+      var msg = HAS_INVENTORY
+        ? "This re-describes every room from your video. Confirmed and " +
+          "hand-added items are kept, but room names and drafts will refresh."
+        : SPEND.label + " — estimated " + SPEND.estimate + ". " +
+          (SPEND.note || "");
+      var confirmLabel = HAS_INVENTORY ? "Rebuild report" : "Build report";
+      ui.confirmDialog({
+        title: title,
+        message: msg,
+        confirmLabel: confirmLabel
+      }).then(function (yes) {
+        if (!yes) return;
+        bBtn.disabled = true;
+        api("POST", PREFIX + "/api/build", { confirm: "yes" }).then(function () {
+          pollBuild();
+        }).catch(function (e) {
+          bBtn.disabled = false;
+          setBuildStatus({}, true);
+          buildFailMsg.textContent =
+            "We couldn't start the build. " + (e.message || "Try again.");
+        });
+      });
+    });
+    pollBuild();
+  }
+
+  var picker = document.getElementById("use-case-picker");
+  if (picker) {
+    var pStatus = document.getElementById("picker-status");
+    picker.querySelectorAll("[data-use-case]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var key = btn.getAttribute("data-use-case");
+        btn.disabled = true;
+        api("POST", "/api/project", { use_case: key }).then(function () {
+          location.reload();
+        }).catch(function (e) {
+          btn.disabled = false;
+          pStatus.textContent = e.message;
+          pStatus.className = "err";
+        });
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

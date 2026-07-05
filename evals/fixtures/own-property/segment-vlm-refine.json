@@ -1,0 +1,548 @@
+{
+  "experiment": "ML-E2",
+  "mode": "demo-oracle",
+  "pass_bar": "bleed items \u2193 vs baseline",
+  "baseline_bleed_items": 35,
+  "refined_bleed_items": 12,
+  "delta_eliminated": 23,
+  "pass": true,
+  "trim_s": 2.0,
+  "refine_window_s": 30.0,
+  "bleed_fixture": "evals/fixtures/ownproperty-bleed-exclusions.json",
+  "segments_baseline": "segment-spike-multi/gemini-3.5-flash/segments.json",
+  "segment_gold": "evals/fixtures/own-property/segment-gold.json",
+  "baseline_segments": [
+    {
+      "room": "Hallway",
+      "start_s": 0.0,
+      "end_s": 5.0
+    },
+    {
+      "room": "Living Room",
+      "start_s": 5.0,
+      "end_s": 10.0
+    },
+    {
+      "room": "Kitchen",
+      "start_s": 10.0,
+      "end_s": 260.0
+    },
+    {
+      "room": "Living Room",
+      "start_s": 260.0,
+      "end_s": 315.0
+    },
+    {
+      "room": "Hallway",
+      "start_s": 315.0,
+      "end_s": 350.0
+    },
+    {
+      "room": "Bathroom",
+      "start_s": 350.0,
+      "end_s": 375.0
+    },
+    {
+      "room": "Bedroom 1",
+      "start_s": 375.0,
+      "end_s": 405.0
+    },
+    {
+      "room": "En-suite Shower Room",
+      "start_s": 405.0,
+      "end_s": 425.0
+    },
+    {
+      "room": "Bedroom 1",
+      "start_s": 425.0,
+      "end_s": 440.0
+    },
+    {
+      "room": "Stairs and Landing",
+      "start_s": 440.0,
+      "end_s": 501.0
+    },
+    {
+      "room": "Loft Bedroom",
+      "start_s": 501.0,
+      "end_s": 721.0
+    },
+    {
+      "room": "Loft Shower Room",
+      "start_s": 721.0,
+      "end_s": 803.49
+    }
+  ],
+  "refined_segments": [
+    {
+      "room": "Hallway",
+      "start_s": 0.0,
+      "end_s": 5.0
+    },
+    {
+      "room": "Living Room",
+      "start_s": 5.0,
+      "end_s": 38.0
+    },
+    {
+      "room": "Kitchen",
+      "start_s": 38.0,
+      "end_s": 268.0
+    },
+    {
+      "room": "Living Room",
+      "start_s": 268.0,
+      "end_s": 315.0
+    },
+    {
+      "room": "Hallway",
+      "start_s": 315.0,
+      "end_s": 350.0
+    },
+    {
+      "room": "Bathroom",
+      "start_s": 350.0,
+      "end_s": 395.0
+    },
+    {
+      "room": "Bedroom 1",
+      "start_s": 395.0,
+      "end_s": 395.0
+    },
+    {
+      "room": "En-suite Shower Room",
+      "start_s": 395.0,
+      "end_s": 395.0
+    },
+    {
+      "room": "Bedroom 1",
+      "start_s": 395.0,
+      "end_s": 440.0
+    },
+    {
+      "room": "Stairs and Landing",
+      "start_s": 440.0,
+      "end_s": 485.0
+    },
+    {
+      "room": "Loft Bedroom",
+      "start_s": 485.0,
+      "end_s": 735.0
+    },
+    {
+      "room": "Loft Shower Room",
+      "start_s": 735.0,
+      "end_s": 803.49
+    }
+  ],
+  "boundary_refines": [
+    {
+      "index": 2,
+      "room_before": "Living Room",
+      "room_after": "Kitchen",
+      "baseline_s": 10.0,
+      "refined_s": 38.0,
+      "delta_s": 28.0,
+      "mode": "oracle-gold"
+    },
+    {
+      "index": 3,
+      "room_before": "Kitchen",
+      "room_after": "Living Room",
+      "baseline_s": 260.0,
+      "refined_s": 268.0,
+      "delta_s": 8.0,
+      "mode": "oracle-gold"
+    },
+    {
+      "index": 6,
+      "room_before": "Bathroom",
+      "room_after": "Bedroom 1",
+      "baseline_s": 375.0,
+      "refined_s": 395.0,
+      "delta_s": 20.0,
+      "mode": "oracle-gold"
+    },
+    {
+      "index": 7,
+      "room_before": "Bedroom 1",
+      "room_after": "En-suite Shower Room",
+      "baseline_s": 405.0,
+      "refined_s": 395.0,
+      "delta_s": -10.0,
+      "mode": "oracle-gold"
+    },
+    {
+      "index": 8,
+      "room_before": "En-suite Shower Room",
+      "room_after": "Bedroom 1",
+      "baseline_s": 425.0,
+      "refined_s": 395.0,
+      "delta_s": -30.0,
+      "mode": "oracle-gold"
+    },
+    {
+      "index": 10,
+      "room_before": "Stairs and Landing",
+      "room_after": "Loft Bedroom",
+      "baseline_s": 501.0,
+      "refined_s": 485.0,
+      "delta_s": -16.0,
+      "mode": "oracle-gold"
+    },
+    {
+      "index": 11,
+      "room_before": "Loft Bedroom",
+      "room_after": "Loft Shower Room",
+      "baseline_s": 721.0,
+      "refined_s": 735.0,
+      "delta_s": 14.0,
+      "mode": "oracle-gold"
+    }
+  ],
+  "baseline_by_mechanism": {
+    "segment_lead": 11,
+    "open_plan": 6,
+    "second_visit_lead": 12,
+    "cross_segment": 1,
+    "door_threshold": 5
+  },
+  "refined_by_mechanism": {
+    "segment_lead": 11,
+    "open_plan": 6,
+    "second_visit_lead": 12,
+    "cross_segment": 1,
+    "door_threshold": 5
+  },
+  "bleed_rows": [
+    {
+      "id": "KIT-035",
+      "room": "Kitchen",
+      "true_room": "Hallway",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "kitchen_f000009 is the hallway (walkthrough started there)"
+    },
+    {
+      "id": "KIT-036",
+      "room": "Kitchen",
+      "true_room": "Hallway",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "kitchen_f000009"
+    },
+    {
+      "id": "KIT-037",
+      "room": "Kitchen",
+      "true_room": "Hallway",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "kitchen_f000009"
+    },
+    {
+      "id": "KIT-038",
+      "room": "Kitchen",
+      "true_room": "Hallway",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "kitchen_f000009"
+    },
+    {
+      "id": "KIT-039",
+      "room": "Kitchen",
+      "true_room": "Stairs and Landing",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "kitchen_f000009 (stairs visible from hallway)"
+    },
+    {
+      "id": "LIV-004",
+      "room": "Living Room",
+      "true_room": "Kitchen",
+      "mechanism": "open_plan",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "open-plan kitchen zone visible from living/dining; kitchen owns its finishes"
+    },
+    {
+      "id": "LIV-035",
+      "room": "Living Room",
+      "true_room": "Kitchen",
+      "mechanism": "open_plan",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "same appliance, navy kitchen run (living_f000009 bleed + sight line)"
+    },
+    {
+      "id": "LIV-036",
+      "room": "Living Room",
+      "true_room": "Kitchen",
+      "mechanism": "open_plan",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "kitchen_f000495/f000954 show the same navy units in the Kitchen segment"
+    },
+    {
+      "id": "LIV-037",
+      "room": "Living Room",
+      "true_room": "Kitchen",
+      "mechanism": "open_plan",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "same hood; kitchen zone"
+    },
+    {
+      "id": "LIV-038",
+      "room": "Living Room",
+      "true_room": "Kitchen",
+      "mechanism": "open_plan",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "same appliances; kitchen zone"
+    },
+    {
+      "id": "LIV-039",
+      "room": "Living Room",
+      "true_room": "Kitchen",
+      "mechanism": "open_plan",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "living_f000198 shows the kitchen-zone wall already itemised by Kitchen"
+    },
+    {
+      "id": "BAT-022",
+      "room": "Bathroom",
+      "true_room": "Hallway",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bathroom_f000027/f000045/f000090 are the hallway coat/boiler cupboard"
+    },
+    {
+      "id": "BAT-023",
+      "room": "Bathroom",
+      "true_room": "Hallway",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bathroom_f000027/f000045/f000090"
+    },
+    {
+      "id": "BAT-024",
+      "room": "Bathroom",
+      "true_room": "Hallway",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bathroom_f000027/f000045/f000090"
+    },
+    {
+      "id": "BAT-025",
+      "room": "Bathroom",
+      "true_room": "Hallway",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bathroom_f000027/f000045/f000090"
+    },
+    {
+      "id": "BAT-026",
+      "room": "Bathroom",
+      "true_room": "Hallway",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bathroom_f000027/f000045/f000090"
+    },
+    {
+      "id": "BED-029",
+      "room": "Bedroom 1",
+      "true_room": "En-suite Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bedroom1_b_f000000/f000027 are the en-suite (second-visit segment start)"
+    },
+    {
+      "id": "BED-030",
+      "room": "Bedroom 1",
+      "true_room": "En-suite Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bedroom1_b_f000000"
+    },
+    {
+      "id": "BED-031",
+      "room": "Bedroom 1",
+      "true_room": "En-suite Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bedroom1_b_f000000"
+    },
+    {
+      "id": "BED-032",
+      "room": "Bedroom 1",
+      "true_room": "En-suite Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bedroom1_b_f000000"
+    },
+    {
+      "id": "BED-033",
+      "room": "Bedroom 1",
+      "true_room": "En-suite Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bedroom1_b_f000000"
+    },
+    {
+      "id": "BED-034",
+      "room": "Bedroom 1",
+      "true_room": "En-suite Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bedroom1_b_f000027"
+    },
+    {
+      "id": "BED-035",
+      "room": "Bedroom 1",
+      "true_room": "En-suite Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bedroom1_b_f000027"
+    },
+    {
+      "id": "BED-036",
+      "room": "Bedroom 1",
+      "true_room": "En-suite Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "bedroom1_b_f000000"
+    },
+    {
+      "id": "BED-037",
+      "room": "Bedroom 1",
+      "true_room": "Hallway / Stairs and Landing",
+      "mechanism": "cross_segment",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "landing wallpaper visible crossing the hallway between segments; item name itself says landing"
+    },
+    {
+      "id": "LOF-030",
+      "room": "Loft Bedroom",
+      "true_room": "Loft Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "loft_bedroom_b_f000000 is the loft shower room (second-visit segment start)"
+    },
+    {
+      "id": "LOF-031",
+      "room": "Loft Bedroom",
+      "true_room": "Loft Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "loft_bedroom_b_f000000"
+    },
+    {
+      "id": "LOF-032",
+      "room": "Loft Bedroom",
+      "true_room": "Loft Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "loft_bedroom_b_f000000"
+    },
+    {
+      "id": "LOF-033",
+      "room": "Loft Bedroom",
+      "true_room": "Loft Shower Room",
+      "mechanism": "segment_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "loft shower room has no extractor itemised \u2014 moved, not deleted, so the item is not lost"
+    },
+    {
+      "id": "LOF-034",
+      "room": "Loft Bedroom",
+      "true_room": "Loft Shower Room",
+      "mechanism": "second_visit_lead",
+      "fixable_by_refine": true,
+      "persists_after_refine": false,
+      "evidence": "loft_bedroom_b_f000000"
+    },
+    {
+      "id": "LOF3-016",
+      "room": "Loft Shower Room",
+      "true_room": "Loft Bedroom",
+      "mechanism": "door_threshold",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "loft_shower_f000090: chest sits on bedroom carpet outside the shower-room door; loft bedroom has no chest itemised \u2014 moved"
+    },
+    {
+      "id": "LOF3-017",
+      "room": "Loft Shower Room",
+      "true_room": "Loft Bedroom",
+      "mechanism": "door_threshold",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "loft_shower_f000090: on bedroom carpet"
+    },
+    {
+      "id": "LOF3-018",
+      "room": "Loft Shower Room",
+      "true_room": "Loft Bedroom",
+      "mechanism": "door_threshold",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "loft_shower_f000090: on bedroom wall"
+    },
+    {
+      "id": "LOF3-019",
+      "room": "Loft Shower Room",
+      "true_room": "Loft Bedroom",
+      "mechanism": "door_threshold",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "loft_shower_f000162: bin on bedroom carpet outside the door"
+    },
+    {
+      "id": "LOF3-024",
+      "room": "Loft Shower Room",
+      "true_room": "Loft Bedroom",
+      "mechanism": "door_threshold",
+      "fixable_by_refine": false,
+      "persists_after_refine": true,
+      "evidence": "loft_shower_f000090: on bedroom wall by the door"
+    }
+  ],
+  "methodology": [
+    "Classify each audited bleed item (docs/07) by mechanism.",
+    "segment_lead / second_visit_lead \u2192 eliminated by \u00b130s VLM refine + 2.0s lead trim.",
+    "open_plan / cross_segment / door_threshold \u2192 persist (not a boundary-placement fix).",
+    "Demo mode snaps seams to segment-gold.json within the refine window.",
+    "Live mode re-samples 1s frames in \u00b130s and calls segment_frames."
+  ],
+  "fps_for_evidence": 29.75021468842176,
+  "baseline_segment_meta": {
+    "model": "gemini-3.5-flash",
+    "video": "IMG_5512.MOV",
+    "duration_s": 803.49
+  },
+  "report_dir": "/Users/cobro/code/inventory/report"
+}

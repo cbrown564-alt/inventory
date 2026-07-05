@@ -1,0 +1,1947 @@
+{
+  "_schema_version": 1,
+  "_source": "ML-E11 bbox gold \u2014 YOLOE text-mode proposals matched to notable gold items (docs/19 \u00a71.4). Review in bbox-gallery.html.",
+  "_schema_doc": "Run `uv run python evals/label_boxes.py schema` for field definitions.",
+  "fixture": "inventoryflex",
+  "labels_ref": "evals/fixtures/inventoryflex/labels.json",
+  "split_ref": "evals/splits/inventoryflex.json",
+  "rooms": [
+    "Bathroom",
+    "Reception & Open Plan Kitchen"
+  ],
+  "target": {
+    "min_boxes": 50,
+    "max_boxes": 100,
+    "rooms": 2,
+    "notable_only": true
+  },
+  "boxes": [
+    {
+      "id": "bathroom-bath-p14_i00",
+      "room": "Bathroom",
+      "photo": "p14_i00.jpg",
+      "item_name": "bath",
+      "gold_item": "bath",
+      "notable": true,
+      "box_xyxy": [
+        41,
+        420,
+        437,
+        599
+      ],
+      "det_label": "bathtub",
+      "det_confidence": 0.838,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-bath-p14_i01",
+      "room": "Bathroom",
+      "photo": "p14_i01.jpg",
+      "item_name": "bath",
+      "gold_item": "bath",
+      "notable": true,
+      "box_xyxy": [
+        235,
+        415,
+        699,
+        500
+      ],
+      "det_label": "bathtub",
+      "det_confidence": 0.84,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-bath-p14_i07",
+      "room": "Bathroom",
+      "photo": "p14_i07.jpg",
+      "item_name": "bath",
+      "gold_item": "bath",
+      "notable": true,
+      "box_xyxy": [
+        635,
+        221,
+        799,
+        433
+      ],
+      "det_label": "bathtub",
+      "det_confidence": 0.782,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-bath-p14_i11",
+      "room": "Bathroom",
+      "photo": "p14_i11.jpg",
+      "item_name": "bath",
+      "gold_item": "bath",
+      "notable": true,
+      "box_xyxy": [
+        33,
+        224,
+        799,
+        599
+      ],
+      "det_label": "bathtub",
+      "det_confidence": 0.818,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i00",
+      "room": "Bathroom",
+      "photo": "p14_i00.jpg",
+      "item_name": "mirrored cabinet",
+      "gold_item": "mirrored cabinet",
+      "notable": true,
+      "box_xyxy": [
+        378,
+        106,
+        574,
+        322
+      ],
+      "det_label": "mirror",
+      "det_confidence": 0.433,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i01",
+      "room": "Bathroom",
+      "photo": "p14_i01.jpg",
+      "item_name": "mirrored cabinet",
+      "gold_item": "mirrored cabinet",
+      "notable": true,
+      "box_xyxy": [
+        690,
+        62,
+        800,
+        331
+      ],
+      "det_label": "mirror",
+      "det_confidence": 0.594,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i03",
+      "room": "Bathroom",
+      "photo": "p14_i03.jpg",
+      "item_name": "mirrored cabinet",
+      "gold_item": "mirrored cabinet",
+      "notable": true,
+      "box_xyxy": [
+        666,
+        422,
+        798,
+        600
+      ],
+      "det_label": "mirror",
+      "det_confidence": 0.64,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i08",
+      "room": "Bathroom",
+      "photo": "p15_i08.jpg",
+      "item_name": "mirrored cabinet",
+      "gold_item": "mirrored cabinet",
+      "notable": true,
+      "box_xyxy": [
+        354,
+        1,
+        752,
+        599
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.38,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:03:17.176Z"
+      }
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i09",
+      "room": "Bathroom",
+      "photo": "p15_i09.jpg",
+      "item_name": "mirrored cabinet",
+      "gold_item": "mirrored cabinet",
+      "notable": true,
+      "box_xyxy": [
+        54,
+        32,
+        493,
+        598
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.469,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:03:21.087Z"
+      }
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i10",
+      "room": "Bathroom",
+      "photo": "p15_i10.jpg",
+      "item_name": "mirrored cabinet",
+      "gold_item": "mirrored cabinet",
+      "notable": true,
+      "box_xyxy": [
+        58,
+        0,
+        566,
+        512
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.369,
+      "labeler": "human-review",
+      "verified": false,
+      "human_review": {
+        "verdict": "redraw",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:03:29.025Z"
+      },
+      "needs_redraw": true
+    },
+    {
+      "id": "bathroom-recessed-spotlights-p14_i03",
+      "room": "Bathroom",
+      "photo": "p14_i03.jpg",
+      "item_name": "recessed spotlights",
+      "gold_item": "recessed spotlights",
+      "notable": true,
+      "box_xyxy": [
+        493,
+        163,
+        530,
+        190
+      ],
+      "det_label": "ceiling light",
+      "det_confidence": 0.539,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-sink-p14_i00",
+      "room": "Bathroom",
+      "photo": "p14_i00.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        529,
+        347,
+        570,
+        375
+      ],
+      "det_label": "tap",
+      "det_confidence": 0.488,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-sink-p14_i01",
+      "room": "Bathroom",
+      "photo": "p14_i01.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        633,
+        347,
+        800,
+        513
+      ],
+      "det_label": "sink",
+      "det_confidence": 0.481,
+      "labeler": "human-review",
+      "verified": false,
+      "human_review": {
+        "verdict": "redraw",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:03:37.814Z"
+      },
+      "needs_redraw": true
+    },
+    {
+      "id": "bathroom-sink-p15_i07",
+      "room": "Bathroom",
+      "photo": "p15_i07.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        97,
+        167,
+        708,
+        486
+      ],
+      "det_label": "sink",
+      "det_confidence": 0.286,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-sink-p15_i10",
+      "room": "Bathroom",
+      "photo": "p15_i10.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        291,
+        111,
+        400
+      ],
+      "det_label": "sink",
+      "det_confidence": 0.386,
+      "labeler": "human-review",
+      "verified": false,
+      "human_review": {
+        "verdict": "redraw",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:04:06.103Z"
+      },
+      "needs_redraw": true
+    },
+    {
+      "id": "bathroom-toilet-p14_i02",
+      "room": "Bathroom",
+      "photo": "p14_i02.jpg",
+      "item_name": "toilet",
+      "gold_item": "toilet",
+      "notable": true,
+      "box_xyxy": [
+        608,
+        179,
+        799,
+        356
+      ],
+      "det_label": "toilet",
+      "det_confidence": 0.881,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-toilet-p15_i11",
+      "room": "Bathroom",
+      "photo": "p15_i11.jpg",
+      "item_name": "toilet",
+      "gold_item": "toilet",
+      "notable": true,
+      "box_xyxy": [
+        257,
+        215,
+        496,
+        524
+      ],
+      "det_label": "toilet",
+      "det_confidence": 0.89,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-toilet-p16_i01",
+      "room": "Bathroom",
+      "photo": "p16_i01.jpg",
+      "item_name": "toilet",
+      "gold_item": "toilet",
+      "notable": true,
+      "box_xyxy": [
+        259,
+        10,
+        511,
+        549
+      ],
+      "det_label": "toilet",
+      "det_confidence": 0.954,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "bathroom-toilet-p16_i02",
+      "room": "Bathroom",
+      "photo": "p16_i02.jpg",
+      "item_name": "toilet",
+      "gold_item": "toilet",
+      "notable": true,
+      "box_xyxy": [
+        263,
+        0,
+        497,
+        497
+      ],
+      "det_label": "toilet",
+      "det_confidence": 0.953,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        654,
+        94,
+        765,
+        465
+      ],
+      "det_label": "door",
+      "det_confidence": 0.3,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        84,
+        97,
+        260,
+        491
+      ],
+      "det_label": "door",
+      "det_confidence": 0.384,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i02.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        72,
+        298,
+        250,
+        600
+      ],
+      "det_label": "patio door",
+      "det_confidence": 0.447,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p27_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i04.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        0,
+        378,
+        595
+      ],
+      "det_label": "patio door",
+      "det_confidence": 0.261,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p30_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i01.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        548,
+        15,
+        799,
+        600
+      ],
+      "det_label": "door",
+      "det_confidence": 0.354,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p31_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i01.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        371,
+        0,
+        637,
+        599
+      ],
+      "det_label": "door",
+      "det_confidence": 0.472,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p31_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i07.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        632,
+        3,
+        799,
+        599
+      ],
+      "det_label": "patio door",
+      "det_confidence": 0.254,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        409,
+        311,
+        469,
+        412
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.667,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        39,
+        315,
+        122,
+        431
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.615,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        448,
+        72,
+        600
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.61,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        222,
+        359,
+        330,
+        488
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.879,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        327,
+        387,
+        423,
+        515
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.655,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        473,
+        336,
+        628,
+        493
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.889,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:05:34.183Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i08.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        0,
+        800,
+        599
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.476,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:00:45.201Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i04.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        308,
+        0,
+        493,
+        123
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.519,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i09.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        210,
+        156,
+        485,
+        478
+      ],
+      "det_label": "bar stool",
+      "det_confidence": 0.408,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i10.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        0,
+        59,
+        87
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.482,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:05:56.487Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i11",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i11.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        228,
+        67,
+        718,
+        564
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.859,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p27_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i06.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        322,
+        580,
+        463,
+        599
+      ],
+      "det_label": "bar stool",
+      "det_confidence": 0.254,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p31_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i04.jpg",
+      "item_name": "bar chairs",
+      "gold_item": "bar chairs",
+      "notable": true,
+      "box_xyxy": [
+        713,
+        47,
+        800,
+        245
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.791,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-canvas-picture-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "item_name": "canvas picture",
+      "gold_item": "canvas picture",
+      "notable": true,
+      "box_xyxy": [
+        86,
+        103,
+        216,
+        302
+      ],
+      "det_label": "painting",
+      "det_confidence": 0.45,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-canvas-picture-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "item_name": "canvas picture",
+      "gold_item": "canvas picture",
+      "notable": true,
+      "box_xyxy": [
+        654,
+        138,
+        799,
+        347
+      ],
+      "det_label": "painting",
+      "det_confidence": 0.494,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-canvas-picture-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "item_name": "canvas picture",
+      "gold_item": "canvas picture",
+      "notable": true,
+      "box_xyxy": [
+        21,
+        138,
+        157,
+        342
+      ],
+      "det_label": "painting",
+      "det_confidence": 0.605,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-canvas-picture-p26_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i02.jpg",
+      "item_name": "canvas picture",
+      "gold_item": "canvas picture",
+      "notable": true,
+      "box_xyxy": [
+        312,
+        0,
+        605,
+        584
+      ],
+      "det_label": "painting",
+      "det_confidence": 0.743,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-canvas-picture-p26_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i04.jpg",
+      "item_name": "canvas picture",
+      "gold_item": "canvas picture",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        0,
+        99,
+        237
+      ],
+      "det_label": "painting",
+      "det_confidence": 0.492,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "item_name": "coffee table",
+      "gold_item": "coffee table",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        441,
+        109,
+        598
+      ],
+      "det_label": "coffee table",
+      "det_confidence": 0.75,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "item_name": "coffee table",
+      "gold_item": "coffee table",
+      "notable": true,
+      "box_xyxy": [
+        439,
+        378,
+        540,
+        442
+      ],
+      "det_label": "coffee table",
+      "det_confidence": 0.79,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "item_name": "coffee table",
+      "gold_item": "coffee table",
+      "notable": true,
+      "box_xyxy": [
+        766,
+        456,
+        799,
+        599
+      ],
+      "det_label": "coffee table",
+      "det_confidence": 0.678,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-dining-table-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "item_name": "dining table",
+      "gold_item": "dining table",
+      "notable": true,
+      "box_xyxy": [
+        357,
+        406,
+        564,
+        514
+      ],
+      "det_label": "dining table",
+      "det_confidence": 0.568,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-dishwasher-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "item_name": "dishwasher",
+      "gold_item": "dishwasher",
+      "notable": true,
+      "box_xyxy": [
+        252,
+        287,
+        297,
+        422
+      ],
+      "det_label": "dishwasher",
+      "det_confidence": 0.306,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-extractor-hood-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "item_name": "extractor hood",
+      "gold_item": "extractor hood",
+      "notable": true,
+      "box_xyxy": [
+        669,
+        0,
+        800,
+        113
+      ],
+      "det_label": "extractor hood",
+      "det_confidence": 0.27,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-extractor-hood-p30_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i07.jpg",
+      "item_name": "extractor hood",
+      "gold_item": "extractor hood",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        0,
+        790,
+        190
+      ],
+      "det_label": "extractor hood",
+      "det_confidence": 0.48,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-extractor-hood-p30_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i10.jpg",
+      "item_name": "extractor hood",
+      "gold_item": "extractor hood",
+      "notable": true,
+      "box_xyxy": [
+        606,
+        171,
+        718,
+        321
+      ],
+      "det_label": "extractor hood",
+      "det_confidence": 0.716,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i01.jpg",
+      "item_name": "fridge freezer",
+      "gold_item": "fridge freezer",
+      "notable": true,
+      "box_xyxy": [
+        46,
+        1,
+        649,
+        600
+      ],
+      "det_label": "refrigerator",
+      "det_confidence": 0.389,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:01:15.632Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        598,
+        115,
+        671,
+        221
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.735,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        591,
+        359,
+        649,
+        513
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.536,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        289,
+        344,
+        443,
+        412
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.658,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        690,
+        0,
+        800,
+        597
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.689,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        650,
+        349,
+        800,
+        463
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.609,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        248,
+        235,
+        380,
+        295
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.423,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:08:06.789Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p26_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i09.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        90,
+        157,
+        531
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.686,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p29_i05.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        603,
+        0,
+        800,
+        131
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.36,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:02:14.311Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p29_i09.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        537,
+        3,
+        800,
+        600
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.373,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:02:17.790Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i00.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        27,
+        63,
+        706,
+        583
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.43,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:08:11.812Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i01.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        72,
+        0,
+        781,
+        539
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.25,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:02:26.416Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "item_name": "mirror",
+      "gold_item": "mirror",
+      "notable": true,
+      "box_xyxy": [
+        119,
+        254,
+        211,
+        448
+      ],
+      "det_label": "mirror",
+      "det_confidence": 0.655,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i06.jpg",
+      "item_name": "mirror",
+      "gold_item": "mirror",
+      "notable": true,
+      "box_xyxy": [
+        339,
+        45,
+        561,
+        599
+      ],
+      "det_label": "mirror",
+      "det_confidence": 0.875,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p31_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i04.jpg",
+      "item_name": "mirror",
+      "gold_item": "mirror",
+      "notable": true,
+      "box_xyxy": [
+        619,
+        0,
+        800,
+        292
+      ],
+      "det_label": "mirror",
+      "det_confidence": 0.349,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:09:00.145Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "item_name": "oven",
+      "gold_item": "oven",
+      "notable": true,
+      "box_xyxy": [
+        591,
+        223,
+        662,
+        371
+      ],
+      "det_label": "oven",
+      "det_confidence": 0.531,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "item_name": "oven",
+      "gold_item": "oven",
+      "notable": true,
+      "box_xyxy": [
+        722,
+        260,
+        800,
+        599
+      ],
+      "det_label": "oven",
+      "det_confidence": 0.635,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "item_name": "oven",
+      "gold_item": "oven",
+      "notable": true,
+      "box_xyxy": [
+        492,
+        290,
+        604,
+        469
+      ],
+      "det_label": "oven",
+      "det_confidence": 0.703,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i03.jpg",
+      "item_name": "oven",
+      "gold_item": "oven",
+      "notable": true,
+      "box_xyxy": [
+        59,
+        15,
+        724,
+        588
+      ],
+      "det_label": "oven",
+      "det_confidence": 0.309,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i04.jpg",
+      "item_name": "oven",
+      "gold_item": "oven",
+      "notable": true,
+      "box_xyxy": [
+        431,
+        0,
+        800,
+        600
+      ],
+      "det_label": "oven",
+      "det_confidence": 0.348,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:09:06.275Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        528,
+        108,
+        554,
+        230
+      ],
+      "det_label": "lamp",
+      "det_confidence": 0.469,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        353,
+        92,
+        377,
+        228
+      ],
+      "det_label": "lamp",
+      "det_confidence": 0.544,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        224,
+        28,
+        286,
+        269
+      ],
+      "det_label": "lamp",
+      "det_confidence": 0.887,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        573,
+        56,
+        606,
+        77
+      ],
+      "det_label": "ceiling light",
+      "det_confidence": 0.491,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        492,
+        0,
+        578,
+        301
+      ],
+      "det_label": "lamp",
+      "det_confidence": 0.96,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        581,
+        0,
+        669,
+        336
+      ],
+      "det_label": "lamp",
+      "det_confidence": 0.93,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p30_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i09.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        753,
+        0,
+        790,
+        18
+      ],
+      "det_label": "ceiling light",
+      "det_confidence": 0.455,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p30_i11",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i11.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        157,
+        126,
+        234,
+        188
+      ],
+      "det_label": "lamp",
+      "det_confidence": 0.327,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p31_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i00.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        282,
+        68,
+        346,
+        157
+      ],
+      "det_label": "lamp",
+      "det_confidence": 0.378,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p31_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i02.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        361,
+        25,
+        454,
+        92
+      ],
+      "det_label": "ceiling light",
+      "det_confidence": 0.611,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p31_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i05.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        385,
+        117,
+        440,
+        152
+      ],
+      "det_label": "ceiling light",
+      "det_confidence": 0.534,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        376,
+        245,
+        410,
+        310
+      ],
+      "det_label": "tap",
+      "det_confidence": 0.54,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        329,
+        294,
+        384,
+        412
+      ],
+      "det_label": "tap",
+      "det_confidence": 0.771,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        340,
+        474,
+        495,
+        534
+      ],
+      "det_label": "sink",
+      "det_confidence": 0.771,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i03.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        179,
+        102,
+        734,
+        492
+      ],
+      "det_label": "sink",
+      "det_confidence": 0.373,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i04.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        406,
+        720,
+        599
+      ],
+      "det_label": "sink",
+      "det_confidence": 0.307,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:09:24.990Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i08.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        636,
+        398,
+        800,
+        600
+      ],
+      "det_label": "sink",
+      "det_confidence": 0.542,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "item_name": "sofa",
+      "gold_item": "sofa",
+      "notable": true,
+      "box_xyxy": [
+        125,
+        318,
+        443,
+        549
+      ],
+      "det_label": "sofa",
+      "det_confidence": 0.762,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "item_name": "sofa",
+      "gold_item": "sofa",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        391,
+        509,
+        599
+      ],
+      "det_label": "sofa",
+      "det_confidence": 0.668,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "item_name": "sofa",
+      "gold_item": "sofa",
+      "notable": true,
+      "box_xyxy": [
+        433,
+        406,
+        796,
+        518
+      ],
+      "det_label": "sofa",
+      "det_confidence": 0.451,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "item_name": "sofa",
+      "gold_item": "sofa",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        404,
+        176,
+        556
+      ],
+      "det_label": "sofa",
+      "det_confidence": 0.444,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:09:33.736Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "item_name": "sofa",
+      "gold_item": "sofa",
+      "notable": true,
+      "box_xyxy": [
+        340,
+        466,
+        794,
+        599
+      ],
+      "det_label": "sofa",
+      "det_confidence": 0.329,
+      "labeler": "human-review",
+      "verified": true,
+      "human_review": {
+        "verdict": "keep",
+        "note": "",
+        "reviewed_at": "2026-07-05T20:09:55.889Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p26_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i04.jpg",
+      "item_name": "sofa",
+      "gold_item": "sofa",
+      "notable": true,
+      "box_xyxy": [
+        78,
+        63,
+        721,
+        563
+      ],
+      "det_label": "sofa",
+      "det_confidence": 0.321,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p31_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i06.jpg",
+      "item_name": "washing machine",
+      "gold_item": "washing machine",
+      "notable": true,
+      "box_xyxy": [
+        113,
+        252,
+        396,
+        485
+      ],
+      "det_label": "washing machine",
+      "det_confidence": 0.809,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p32_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p32_i01.jpg",
+      "item_name": "washing machine",
+      "gold_item": "washing machine",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        0,
+        612,
+        294
+      ],
+      "det_label": "washing machine",
+      "det_confidence": 0.755,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-window-p25_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i10.jpg",
+      "item_name": "window",
+      "gold_item": "window",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        1,
+        736,
+        596
+      ],
+      "det_label": "window",
+      "det_confidence": 0.259,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-window-p26_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i01.jpg",
+      "item_name": "window",
+      "gold_item": "window",
+      "notable": true,
+      "box_xyxy": [
+        76,
+        226,
+        766,
+        600
+      ],
+      "det_label": "window",
+      "det_confidence": 0.384,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-window-p26_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i06.jpg",
+      "item_name": "window",
+      "gold_item": "window",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        1,
+        234,
+        416
+      ],
+      "det_label": "window",
+      "det_confidence": 0.485,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-window-p26_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i07.jpg",
+      "item_name": "window",
+      "gold_item": "window",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        0,
+        241,
+        259
+      ],
+      "det_label": "window",
+      "det_confidence": 0.271,
+      "labeler": "yoloe-bootstrap",
+      "verified": true
+    }
+  ],
+  "_trim": {
+    "consensus_reject_keys": 49,
+    "stats": {
+      "bootstrap": 138,
+      "consensus_drop": 12,
+      "human_drop": 25,
+      "human_keep": 16,
+      "human_redraw": 3,
+      "kept_bootstrap": 82
+    }
+  }
+}

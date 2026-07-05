@@ -23,6 +23,22 @@ detect = ["ultralytics>=8.3", "opencv-python-headless>=4.9"]
 claude = ["anthropic>=0.40"]
 # PDF output (HTML report works without it)
 pdf = ["weasyprint>=61"]
+# ML/DL eval + GPU re-run stack (docs/22, docs/23). NOT a product dependency —
+# used only by evals/. Install torch with the matching CUDA build separately:
+#   uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+ml = [
+    "torch>=2.2",
+    "torchvision>=0.17",
+    "open-clip-torch>=2.24",
+    "timm>=1.0",
+    "transformers>=4.44",
+    "datasets>=2.20",
+    "huggingface_hub>=0.24",
+    "numpy>=1.26",
+    "onnx>=1.16",
+    "onnxruntime>=1.18",
+    "fiftyone>=0.25",
+]
 all = ["homeinventory[detect,claude,pdf]"]
 dev = ["pytest>=8"]
 

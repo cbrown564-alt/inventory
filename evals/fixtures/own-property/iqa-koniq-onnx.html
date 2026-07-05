@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset='utf-8'>
+<title>ML-E17 KonIQ linear vs ML-E6</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:1rem;background:#111;color:#eee}
+h1,h2{margin:0.5rem 0}
+.summary{background:#222;padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.cell{background:#222;border-radius:8px;overflow:hidden;border:2px solid #333}
+.cell.koniq{border-color:#4caf50}
+.cell.mle6{border-color:#2196f3}
+.cell img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;background:#000}
+.meta{padding:8px;font-size:12px;line-height:1.4}
+.metrics{color:#aaa}
+</style></head><body>
+<h1>ML-E17 — KonIQ-distilled linear vs ML-E6</h1>
+<p>Report: /Users/cobro/code/inventory/report</p>
+<div class='summary'><h2>Summary</h2><pre>
+{
+  &quot;experiment&quot;: &quot;ML-E17&quot;,
+  &quot;report_dir&quot;: &quot;/Users/cobro/code/inventory/report&quot;,
+  &quot;koniq_weights&quot;: &quot;evals/fixtures/own-property/iqa-koniq-weights.json&quot;,
+  &quot;mle6_weights&quot;: &quot;evals/fixtures/own-property/iqa-linear-weights.json&quot;,
+  &quot;comparison&quot;: {
+    &quot;n_rooms_with_gold&quot;: 9,
+    &quot;koniq_top1_hit_rate&quot;: 44.4,
+    &quot;mle6_top1_hit_rate&quot;: 44.4,
+    &quot;koniq_top1_hits&quot;: &quot;4/9&quot;,
+    &quot;mle6_top1_hits&quot;: &quot;4/9&quot;,
+    &quot;koniq_beats_mle6&quot;: true,
+    &quot;pass_bar&quot;: &quot;top-1 \u2265 ML-E6 on hero-gold (\u22658/9 target per docs/19)&quot;
+  },
+  &quot;koniq_training_mode&quot;: &quot;own-property-features&quot;,
+  &quot;disclaimer&quot;: null,
+  &quot;per_room&quot;: {
+    &quot;Hallway&quot;: {
+      &quot;koniq_pick&quot;: &quot;IMG_5512_f009738.jpg&quot;,
+      &quot;mle6_pick&quot;: &quot;IMG_5512_f009738.jpg&quot;,
+      &quot;koniq_top1_hit&quot;: true,
+      &quot;mle6_top1_hit&quot;: true,
+      &quot;koniq_top3_hit&quot;: true,
+      &quot;mle6_top3_hit&quot;: true,
+      &quot;koniq_spearman&quot;: 0.8,
+      &quot;mle6_spearman&quot;: 0.8
+    },
+    &quot;Living Room&quot;: {
+      &quot;koniq_pick&quot;: &quot;IMG_5512_f008676.jpg&quot;,
+      &quot;mle6_pick&quot;: &quot;IMG_5512_f008676.jpg&quot;,
+      &quot;koniq_top1_hit&quot;: false,
+      &quot;mle6_top1_hit&quot;: false,
+      &quot;koniq_top3_hit&quot;: true,
+      &quot;mle6_top3_hit&quot;: true,
+      &quot;koniq_spearman&quot;: 0.8,
+      &quot;mle6_spearman&quot;: 0.8
+    },
+    &quot;Kitchen&quot;: {
+      &quot;koniq_pick&quot;: &quot;IMG_5512_f006039.jpg&quot;,
+      &quot;mle6_pick&quot;: &quot;IMG_5512_f006039.jpg&quot;,
+      &quot;koniq_top1_hit&quot;: false,
+      &quot;mle6_top1_hit&quot;: false,
+      &quot;koniq_top3_hit&quot;: false,
+      &quot;mle6_top3_hit&quot;: false,
+      &quot;koniq_spearman&quot;: 0.4,
+      &quot;mle6_spearman&quot;: 0.4
+    },
+    &quot;Bedroom 1&quot;: {
+      &quot;koniq_pick&quot;: &quot;IMG_5512_f011250.jpg&quot;,
+      &quot;mle6_pick&quot;: &quot;IMG_5512_f011250.jpg&quot;,
+      &quot;koniq_top1_hit&quot;: false,
+      &quot;mle6_top1_hit&quot;: false,
+      &quot;koniq_top3_hit&quot;: false,
+      &quot;mle6_top3_hit&quot;: false,
+      &quot;koniq_spearman&quot;: -0.5,
+      &quot;mle6_spearman&quot;: -0.5
+    },
+    &quot;Loft Bedroom&quot;: {
+      &quot;koniq_pick&quot;: &quot;IMG_5512_f019476.jpg&quot;,
+      &quot;mle6_pick&quot;: &quot;IMG_5512_f019476.jpg&quot;,
+      &quot;koniq_top1_hit&quot;: false,
+      &quot;mle6_top1_hit&quot;: false,
+      &quot;koniq_top3_hit&quot;: false,
+      &quot;mle6_top3_hit&quot;: false,
+      &quot;koniq_spearman&quot;: -0.1,
+      &quot;mle6_spearman&quot;: -0.1
+    },
+    &quot;Bathroom&quot;: {
+      &quot;koniq_pick&quot;: &quot;IMG_5512_f011070.jpg&quot;,
+      &quot;mle6_pick&quot;: &quot;IMG_5512_f011070.jpg&quot;,
+      &quot;koniq_top1_hit&quot;: true,
+      &quot;mle6_top1_hit&quot;: true,
+      &quot;koniq_top3_hit&quot;: true,
+      &quot;mle6_top3_hit&quot;: true,
+      &quot;koniq_spearman&quot;: null,
+      &quot;mle6_spearman&quot;: null
+    },
+    &quot;En-suite Shower Room&quot;: {
+      &quot;koniq_pick&quot;: &quot;IMG_5512_f012564.jpg&quot;,
+      &quot;mle6_pick&quot;: &quot;IMG_5512_f012564.jpg&quot;,
+      &quot;koniq_top1_hit&quot;: false,
+      &quot;mle6_top1_hit&quot;: false,
+      &quot;koniq_top3_hit&quot;: true,
+      &quot;mle6_top3_hit&quot;: true,
+      &quot;koniq_spearman&quot;: null,
+      &quot;mle6_spearman&quot;: null
+    },
+    &quot;Loft Shower Room&quot;: {
+      &quot;koniq_pick&quot;: &quot;IMG_5512_f021879.jpg&quot;,
+      &quot;mle6_pick&quot;: &quot;IMG_5512_f021879.jpg&quot;,
+      &quot;koniq_top1_hit&quot;: true,
+      &quot;mle6_top1_hit&quot;: true,
+      &quot;koniq_top3_hit&quot;: true,
+      &quot;mle6_top3_hit&quot;: true,
+      &quot;koniq_spearman&quot;: 1.0,
+      &quot;mle6_spearman&quot;: 1.0
+    },
+    &quot;Stairs and Landing&quot;: {
+      &quot;koniq_pick&quot;: &quot;IMG_5512_f014904.jpg&quot;,
+      &quot;mle6_pick&quot;: &quot;IMG_5512_f014904.jpg&quot;,
+      &quot;koniq_top1_hit&quot;: true,
+      &quot;mle6_top1_hit&quot;: true,
+      &quot;koniq_top3_hit&quot;: true,
+      &quot;mle6_top3_hit&quot;: true,
+      &quot;koniq_spearman&quot;: 0.3,
+      &quot;mle6_spearman&quot;: 0.3
+    }
+  }
+}
+</pre></div>
+<h2>Hallway</h2>
+<p>KonIQ pick: <strong>IMG_5512_f009738.jpg</strong> | ML-E6 pick: <strong>IMG_5512_f009738.jpg</strong> | gold top-1 hit koniq=True mle6=True</p>
+<div class='grid'>
+<div class='cell koniq'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f009738.jpg' alt='IMG_5512_f009738.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f009738.jpg</strong><br>
+<span class='metrics'>
+koniq=53.22 rank=1 mle6=53.22 rank=1 sh=1240
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f009432.jpg' alt='IMG_5512_f009432.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f009432.jpg</strong><br>
+<span class='metrics'>
+koniq=51.09 rank=2 mle6=51.09 rank=2 sh=975
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000045.jpg' alt='IMG_5512_f000045.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000045.jpg</strong><br>
+<span class='metrics'>
+koniq=49.86 rank=3 mle6=49.86 rank=3 sh=895
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000009.jpg' alt='IMG_5512_f000009.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000009.jpg</strong><br>
+<span class='metrics'>
+koniq=49.67 rank=4 mle6=49.67 rank=4 sh=873
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f010071.jpg' alt='IMG_5512_f010071.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010071.jpg</strong><br>
+<span class='metrics'>
+koniq=44.00 rank=5 mle6=44.00 rank=5 sh=479
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000081.jpg' alt='IMG_5512_f000081.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000081.jpg</strong><br>
+<span class='metrics'>
+koniq=42.57 rank=6 mle6=42.57 rank=6 sh=387
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000144.jpg' alt='IMG_5512_f000144.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000144.jpg</strong><br>
+<span class='metrics'>
+koniq=42.55 rank=7 mle6=42.55 rank=7 sh=422
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f010341.jpg' alt='IMG_5512_f010341.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010341.jpg</strong><br>
+<span class='metrics'>
+koniq=40.45 rank=8 mle6=40.45 rank=8 sh=309
+</span></div></div>
+</div>
+<h2>Living Room</h2>
+<p>KonIQ pick: <strong>IMG_5512_f008676.jpg</strong> | ML-E6 pick: <strong>IMG_5512_f008676.jpg</strong> | gold top-1 hit koniq=False mle6=False</p>
+<div class='grid'>
+<div class='cell koniq'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f008676.jpg' alt='IMG_5512_f008676.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f008676.jpg</strong><br>
+<span class='metrics'>
+koniq=47.74 rank=1 mle6=47.74 rank=1 sh=523
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f009126.jpg' alt='IMG_5512_f009126.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f009126.jpg</strong><br>
+<span class='metrics'>
+koniq=46.79 rank=2 mle6=46.79 rank=2 sh=673
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f009063.jpg' alt='IMG_5512_f009063.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f009063.jpg</strong><br>
+<span class='metrics'>
+koniq=45.30 rank=3 mle6=45.30 rank=3 sh=507
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f007839.jpg' alt='IMG_5512_f007839.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f007839.jpg</strong><br>
+<span class='metrics'>
+koniq=44.64 rank=4 mle6=44.64 rank=4 sh=520
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f008496.jpg' alt='IMG_5512_f008496.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f008496.jpg</strong><br>
+<span class='metrics'>
+koniq=44.32 rank=5 mle6=44.32 rank=5 sh=397
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg01/IMG_5512_f000243.jpg' alt='IMG_5512_f000243.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000243.jpg</strong><br>
+<span class='metrics'>
+koniq=42.91 rank=6 mle6=42.91 rank=6 sh=432
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f008280.jpg' alt='IMG_5512_f008280.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f008280.jpg</strong><br>
+<span class='metrics'>
+koniq=42.19 rank=7 mle6=42.19 rank=7 sh=607
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg01/IMG_5512_f000216.jpg' alt='IMG_5512_f000216.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000216.jpg</strong><br>
+<span class='metrics'>
+koniq=41.24 rank=8 mle6=41.24 rank=8 sh=345
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg01/IMG_5512_f000297.jpg' alt='IMG_5512_f000297.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000297.jpg</strong><br>
+<span class='metrics'>
+koniq=37.51 rank=9 mle6=37.51 rank=9 sh=213
+</span></div></div>
+</div>
+<h2>Kitchen</h2>
+<p>KonIQ pick: <strong>IMG_5512_f006039.jpg</strong> | ML-E6 pick: <strong>IMG_5512_f006039.jpg</strong> | gold top-1 hit koniq=False mle6=False</p>
+<div class='grid'>
+<div class='cell koniq'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f006039.jpg' alt='IMG_5512_f006039.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006039.jpg</strong><br>
+<span class='metrics'>
+koniq=50.98 rank=1 mle6=50.98 rank=1 sh=1098
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f006300.jpg' alt='IMG_5512_f006300.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006300.jpg</strong><br>
+<span class='metrics'>
+koniq=48.95 rank=2 mle6=48.95 rank=2 sh=913
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f005292.jpg' alt='IMG_5512_f005292.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f005292.jpg</strong><br>
+<span class='metrics'>
+koniq=48.24 rank=3 mle6=48.24 rank=3 sh=700
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f007182.jpg' alt='IMG_5512_f007182.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f007182.jpg</strong><br>
+<span class='metrics'>
+koniq=47.23 rank=4 mle6=47.23 rank=4 sh=549
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f000981.jpg' alt='IMG_5512_f000981.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000981.jpg</strong><br>
+<span class='metrics'>
+koniq=46.37 rank=5 mle6=46.37 rank=5 sh=486
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f002376.jpg' alt='IMG_5512_f002376.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002376.jpg</strong><br>
+<span class='metrics'>
+koniq=45.14 rank=6 mle6=45.14 rank=6 sh=582
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f001854.jpg' alt='IMG_5512_f001854.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f001854.jpg</strong><br>
+<span class='metrics'>
+koniq=45.08 rank=7 mle6=45.08 rank=7 sh=416
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f001584.jpg' alt='IMG_5512_f001584.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f001584.jpg</strong><br>
+<span class='metrics'>
+koniq=45.05 rank=8 mle6=45.05 rank=8 sh=416
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f004023.jpg' alt='IMG_5512_f004023.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004023.jpg</strong><br>
+<span class='metrics'>
+koniq=44.44 rank=9 mle6=44.44 rank=9 sh=410
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f002529.jpg' alt='IMG_5512_f002529.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002529.jpg</strong><br>
+<span class='metrics'>
+koniq=43.66 rank=10 mle6=43.66 rank=10 sh=491
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f006579.jpg' alt='IMG_5512_f006579.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006579.jpg</strong><br>
+<span class='metrics'>
+koniq=42.81 rank=11 mle6=42.81 rank=11 sh=425
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f000495.jpg' alt='IMG_5512_f000495.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000495.jpg</strong><br>
+<span class='metrics'>
+koniq=42.68 rank=12 mle6=42.68 rank=12 sh=411
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f002898.jpg' alt='IMG_5512_f002898.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002898.jpg</strong><br>
+<span class='metrics'>
+koniq=42.52 rank=13 mle6=42.52 rank=13 sh=326
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f003393.jpg' alt='IMG_5512_f003393.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f003393.jpg</strong><br>
+<span class='metrics'>
+koniq=41.47 rank=14 mle6=41.47 rank=14 sh=340
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f005625.jpg' alt='IMG_5512_f005625.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f005625.jpg</strong><br>
+<span class='metrics'>
+koniq=41.24 rank=15 mle6=41.24 rank=15 sh=382
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f000684.jpg' alt='IMG_5512_f000684.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000684.jpg</strong><br>
+<span class='metrics'>
+koniq=41.23 rank=16 mle6=41.23 rank=16 sh=283
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f003528.jpg' alt='IMG_5512_f003528.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f003528.jpg</strong><br>
+<span class='metrics'>
+koniq=34.08 rank=17 mle6=34.08 rank=17 sh=187
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f004374.jpg' alt='IMG_5512_f004374.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004374.jpg</strong><br>
+<span class='metrics'>
+koniq=30.43 rank=18 mle6=30.43 rank=18 sh=115
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f003762.jpg' alt='IMG_5512_f003762.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f003762.jpg</strong><br>
+<span class='metrics'>
+koniq=30.19 rank=19 mle6=30.19 rank=19 sh=113
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f006948.jpg' alt='IMG_5512_f006948.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006948.jpg</strong><br>
+<span class='metrics'>
+koniq=30.00 rank=20 mle6=30.00 rank=20 sh=101
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f001503.jpg' alt='IMG_5512_f001503.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f001503.jpg</strong><br>
+<span class='metrics'>
+koniq=29.03 rank=21 mle6=29.03 rank=21 sh=103
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f004977.jpg' alt='IMG_5512_f004977.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004977.jpg</strong><br>
+<span class='metrics'>
+koniq=28.84 rank=22 mle6=28.84 rank=22 sh=91
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f007686.jpg' alt='IMG_5512_f007686.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f007686.jpg</strong><br>
+<span class='metrics'>
+koniq=28.53 rank=23 mle6=28.53 rank=23 sh=101
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f004914.jpg' alt='IMG_5512_f004914.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004914.jpg</strong><br>
+<span class='metrics'>
+koniq=21.04 rank=24 mle6=21.04 rank=24 sh=52
+</span></div></div>
+</div>
+<h2>Bedroom 1</h2>
+<p>KonIQ pick: <strong>IMG_5512_f011250.jpg</strong> | ML-E6 pick: <strong>IMG_5512_f011250.jpg</strong> | gold top-1 hit koniq=False mle6=False</p>
+<div class='grid'>
+<div class='cell koniq'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f011250.jpg' alt='IMG_5512_f011250.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011250.jpg</strong><br>
+<span class='metrics'>
+koniq=46.22 rank=1 mle6=46.22 rank=1 sh=513
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f012843.jpg' alt='IMG_5512_f012843.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012843.jpg</strong><br>
+<span class='metrics'>
+koniq=45.35 rank=2 mle6=45.35 rank=2 sh=512
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f011430.jpg' alt='IMG_5512_f011430.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011430.jpg</strong><br>
+<span class='metrics'>
+koniq=40.68 rank=3 mle6=40.68 rank=3 sh=259
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f012735.jpg' alt='IMG_5512_f012735.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012735.jpg</strong><br>
+<span class='metrics'>
+koniq=39.12 rank=4 mle6=39.12 rank=4 sh=198
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f013023.jpg' alt='IMG_5512_f013023.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013023.jpg</strong><br>
+<span class='metrics'>
+koniq=33.41 rank=5 mle6=33.41 rank=5 sh=123
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f012906.jpg' alt='IMG_5512_f012906.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012906.jpg</strong><br>
+<span class='metrics'>
+koniq=28.21 rank=6 mle6=28.21 rank=6 sh=108
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f011700.jpg' alt='IMG_5512_f011700.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011700.jpg</strong><br>
+<span class='metrics'>
+koniq=26.93 rank=7 mle6=26.93 rank=7 sh=82
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f012042.jpg' alt='IMG_5512_f012042.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012042.jpg</strong><br>
+<span class='metrics'>
+koniq=24.10 rank=8 mle6=24.10 rank=8 sh=77
+</span></div></div>
+</div>
+<h2>Loft Bedroom</h2>
+<p>KonIQ pick: <strong>IMG_5512_f019476.jpg</strong> | ML-E6 pick: <strong>IMG_5512_f019476.jpg</strong> | gold top-1 hit koniq=False mle6=False</p>
+<div class='grid'>
+<div class='cell koniq'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f019476.jpg' alt='IMG_5512_f019476.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f019476.jpg</strong><br>
+<span class='metrics'>
+koniq=51.70 rank=1 mle6=51.70 rank=1 sh=1068
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f018801.jpg' alt='IMG_5512_f018801.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f018801.jpg</strong><br>
+<span class='metrics'>
+koniq=46.61 rank=2 mle6=46.61 rank=2 sh=658
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f018756.jpg' alt='IMG_5512_f018756.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f018756.jpg</strong><br>
+<span class='metrics'>
+koniq=46.54 rank=3 mle6=46.54 rank=3 sh=572
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f019107.jpg' alt='IMG_5512_f019107.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f019107.jpg</strong><br>
+<span class='metrics'>
+koniq=46.40 rank=4 mle6=46.40 rank=4 sh=554
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f015777.jpg' alt='IMG_5512_f015777.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f015777.jpg</strong><br>
+<span class='metrics'>
+koniq=45.57 rank=5 mle6=45.57 rank=5 sh=329
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f020196.jpg' alt='IMG_5512_f020196.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f020196.jpg</strong><br>
+<span class='metrics'>
+koniq=44.17 rank=6 mle6=44.17 rank=6 sh=503
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f016461.jpg' alt='IMG_5512_f016461.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016461.jpg</strong><br>
+<span class='metrics'>
+koniq=43.22 rank=7 mle6=43.22 rank=7 sh=323
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f020295.jpg' alt='IMG_5512_f020295.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f020295.jpg</strong><br>
+<span class='metrics'>
+koniq=42.49 rank=8 mle6=42.49 rank=8 sh=401
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f021177.jpg' alt='IMG_5512_f021177.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f021177.jpg</strong><br>
+<span class='metrics'>
+koniq=40.10 rank=9 mle6=40.10 rank=9 sh=329
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f018468.jpg' alt='IMG_5512_f018468.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f018468.jpg</strong><br>
+<span class='metrics'>
+koniq=39.58 rank=10 mle6=39.58 rank=10 sh=233
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f021150.jpg' alt='IMG_5512_f021150.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f021150.jpg</strong><br>
+<span class='metrics'>
+koniq=39.37 rank=11 mle6=39.37 rank=11 sh=303
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f017100.jpg' alt='IMG_5512_f017100.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017100.jpg</strong><br>
+<span class='metrics'>
+koniq=38.34 rank=12 mle6=38.34 rank=12 sh=173
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f020754.jpg' alt='IMG_5512_f020754.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f020754.jpg</strong><br>
+<span class='metrics'>
+koniq=37.48 rank=13 mle6=37.48 rank=13 sh=243
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f017658.jpg' alt='IMG_5512_f017658.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017658.jpg</strong><br>
+<span class='metrics'>
+koniq=37.30 rank=14 mle6=37.30 rank=14 sh=179
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f015174.jpg' alt='IMG_5512_f015174.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f015174.jpg</strong><br>
+<span class='metrics'>
+koniq=37.24 rank=15 mle6=37.24 rank=15 sh=206
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f015246.jpg' alt='IMG_5512_f015246.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f015246.jpg</strong><br>
+<span class='metrics'>
+koniq=33.70 rank=16 mle6=33.70 rank=16 sh=135
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f017469.jpg' alt='IMG_5512_f017469.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017469.jpg</strong><br>
+<span class='metrics'>
+koniq=33.52 rank=17 mle6=33.52 rank=17 sh=149
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f019683.jpg' alt='IMG_5512_f019683.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f019683.jpg</strong><br>
+<span class='metrics'>
+koniq=30.62 rank=18 mle6=30.62 rank=18 sh=129
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f016038.jpg' alt='IMG_5512_f016038.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016038.jpg</strong><br>
+<span class='metrics'>
+koniq=30.00 rank=19 mle6=30.00 rank=19 sh=99
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f016695.jpg' alt='IMG_5512_f016695.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016695.jpg</strong><br>
+<span class='metrics'>
+koniq=29.10 rank=20 mle6=29.10 rank=20 sh=98
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f017883.jpg' alt='IMG_5512_f017883.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017883.jpg</strong><br>
+<span class='metrics'>
+koniq=22.96 rank=21 mle6=22.96 rank=21 sh=79
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f016164.jpg' alt='IMG_5512_f016164.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016164.jpg</strong><br>
+<span class='metrics'>
+koniq=22.15 rank=22 mle6=22.15 rank=22 sh=76
+</span></div></div>
+</div>
+<h2>Bathroom</h2>
+<p>KonIQ pick: <strong>IMG_5512_f011070.jpg</strong> | ML-E6 pick: <strong>IMG_5512_f011070.jpg</strong> | gold top-1 hit koniq=True mle6=True</p>
+<div class='grid'>
+<div class='cell koniq'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f011070.jpg' alt='IMG_5512_f011070.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011070.jpg</strong><br>
+<span class='metrics'>
+koniq=50.75 rank=1 mle6=50.75 rank=1 sh=758
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f010854.jpg' alt='IMG_5512_f010854.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010854.jpg</strong><br>
+<span class='metrics'>
+koniq=48.82 rank=2 mle6=48.82 rank=2 sh=551
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f010593.jpg' alt='IMG_5512_f010593.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010593.jpg</strong><br>
+<span class='metrics'>
+koniq=42.18 rank=3 mle6=42.18 rank=3 sh=287
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f010629.jpg' alt='IMG_5512_f010629.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010629.jpg</strong><br>
+<span class='metrics'>
+koniq=40.99 rank=4 mle6=40.99 rank=4 sh=251
+</span></div></div>
+</div>
+<h2>En-suite Shower Room</h2>
+<p>KonIQ pick: <strong>IMG_5512_f012564.jpg</strong> | ML-E6 pick: <strong>IMG_5512_f012564.jpg</strong> | gold top-1 hit koniq=False mle6=False</p>
+<div class='grid'>
+<div class='cell koniq'>
+<img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012564.jpg' alt='IMG_5512_f012564.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012564.jpg</strong><br>
+<span class='metrics'>
+koniq=51.18 rank=1 mle6=51.18 rank=1 sh=838
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012492.jpg' alt='IMG_5512_f012492.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012492.jpg</strong><br>
+<span class='metrics'>
+koniq=44.74 rank=2 mle6=44.74 rank=2 sh=393
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012141.jpg' alt='IMG_5512_f012141.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012141.jpg</strong><br>
+<span class='metrics'>
+koniq=38.98 rank=3 mle6=38.98 rank=3 sh=275
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012213.jpg' alt='IMG_5512_f012213.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012213.jpg</strong><br>
+<span class='metrics'>
+koniq=27.37 rank=4 mle6=27.37 rank=4 sh=81
+</span></div></div>
+</div>
+<h2>Loft Shower Room</h2>
+<p>KonIQ pick: <strong>IMG_5512_f021879.jpg</strong> | ML-E6 pick: <strong>IMG_5512_f021879.jpg</strong> | gold top-1 hit koniq=True mle6=True</p>
+<div class='grid'>
+<div class='cell koniq'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f021879.jpg' alt='IMG_5512_f021879.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f021879.jpg</strong><br>
+<span class='metrics'>
+koniq=43.01 rank=1 mle6=43.01 rank=1 sh=415
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f022194.jpg' alt='IMG_5512_f022194.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f022194.jpg</strong><br>
+<span class='metrics'>
+koniq=32.21 rank=2 mle6=32.21 rank=2 sh=113
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f023526.jpg' alt='IMG_5512_f023526.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f023526.jpg</strong><br>
+<span class='metrics'>
+koniq=25.91 rank=3 mle6=25.91 rank=3 sh=77
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f021726.jpg' alt='IMG_5512_f021726.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f021726.jpg</strong><br>
+<span class='metrics'>
+koniq=25.88 rank=4 mle6=25.88 rank=4 sh=95
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f022833.jpg' alt='IMG_5512_f022833.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f022833.jpg</strong><br>
+<span class='metrics'>
+koniq=23.37 rank=5 mle6=23.37 rank=5 sh=73
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f023724.jpg' alt='IMG_5512_f023724.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f023724.jpg</strong><br>
+<span class='metrics'>
+koniq=20.52 rank=6 mle6=20.52 rank=6 sh=49
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f023022.jpg' alt='IMG_5512_f023022.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f023022.jpg</strong><br>
+<span class='metrics'>
+koniq=19.97 rank=7 mle6=19.97 rank=7 sh=45
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f022626.jpg' alt='IMG_5512_f022626.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f022626.jpg</strong><br>
+<span class='metrics'>
+koniq=14.55 rank=8 mle6=14.55 rank=8 sh=27
+</span></div></div>
+</div>
+<h2>Stairs and Landing</h2>
+<p>KonIQ pick: <strong>IMG_5512_f014904.jpg</strong> | ML-E6 pick: <strong>IMG_5512_f014904.jpg</strong> | gold top-1 hit koniq=True mle6=True</p>
+<div class='grid'>
+<div class='cell koniq'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f014904.jpg' alt='IMG_5512_f014904.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f014904.jpg</strong><br>
+<span class='metrics'>
+koniq=41.27 rank=1 mle6=41.27 rank=1 sh=331
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f014274.jpg' alt='IMG_5512_f014274.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f014274.jpg</strong><br>
+<span class='metrics'>
+koniq=34.73 rank=2 mle6=34.73 rank=2 sh=145
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f014382.jpg' alt='IMG_5512_f014382.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f014382.jpg</strong><br>
+<span class='metrics'>
+koniq=34.41 rank=3 mle6=34.41 rank=3 sh=179
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f013482.jpg' alt='IMG_5512_f013482.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013482.jpg</strong><br>
+<span class='metrics'>
+koniq=33.73 rank=4 mle6=33.73 rank=4 sh=150
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f013176.jpg' alt='IMG_5512_f013176.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013176.jpg</strong><br>
+<span class='metrics'>
+koniq=33.47 rank=5 mle6=33.47 rank=5 sh=163
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f013896.jpg' alt='IMG_5512_f013896.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013896.jpg</strong><br>
+<span class='metrics'>
+koniq=22.43 rank=6 mle6=22.43 rank=6 sh=55
+</span></div></div>
+</div>
+</body></html>

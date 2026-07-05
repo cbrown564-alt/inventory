@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ use_case_label }} — Homeinventory</title>
+{% include "_favicon.j2" %}
+<style>
+{% include "_theme.css.j2" %}
+
+  main { max-width: 920px; margin: 0 auto; padding: 0 20px 60px; }
+  h1 { font: 600 clamp(26px, 3.4vw, 34px)/1.15 var(--display);
+       letter-spacing: -.01em; margin: 40px 0 8px; }
+  .lede { color: var(--muted); margin: 0 0 32px; max-width: 56ch; }
+
+  /* horizontal stepper: Before → After → Compare */
+  .stepper { display: flex; align-items: stretch; gap: 0; margin: 0 0 28px;
+             overflow-x: auto; -webkit-overflow-scrolling: touch;
+             padding-bottom: 4px; }
+  .step { flex: 1 1 0; min-width: 200px; background: var(--panel);
+          border: 1px solid var(--line); border-radius: 12px;
+          padding: 16px 18px 18px; position: relative; }
+  .step + .step { margin-left: 28px; }
+  .step + .step::before {
+    content: ""; position: absolute; left: -24px; top: 50%;
+    width: 20px; height: 2px; background: var(--line-strong);
+    transform: translateY(-50%);
+  }
+  .step.done { border-top: 3px solid var(--confirm); }
+  .step.current { border-top: 3px solid var(--brass);
+                  box-shadow: var(--shadow); }
+  .step.pending { border-top: 3px solid var(--line); opacity: .92; }
+  .step-num { font: 600 11px var(--ui); letter-spacing: .12em;
+              text-transform: uppercase; color: var(--faint); margin: 0 0 4px; }
+  .step.done .step-num { color: var(--confirm); }
+  .step.current .step-num { color: var(--brass-bright); }
+  .step h3 { margin: 0 0 6px; font: 600 18px/1.3 var(--display); }
+  .step .state { font-size: 12.5px; margin: 0 0 10px; }
+  .step .state.ok { color: var(--confirm); font-weight: 600; }
+  .step .state.pending { color: var(--faint); }
+  .step .counts { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  .drop { background:
+      radial-gradient(240px 120px at 50% -40px, #1a2029 0%, #0e1116 70%);
+    border: 2px dashed rgba(200, 163, 92, .45); border-radius: 9px;
+    padding: 16px 12px; text-align: center; color: #94a1b2;
+    cursor: pointer; font-size: 13px; transition: border-color .18s; }
+  .drop:hover { border-color: #e5c47f; }
+  .up-status { font-size: 12.5px; margin-top: 8px; min-height: 1.2em;
+               color: var(--muted); }
+  .up-status.ok { color: var(--confirm); }
+  .up-status.err { color: var(--danger); }
+  .step .row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .step .btn { text-decoration: none; display: inline-block; }
+  .step-cta { margin-top: 12px; font-size: 13px; color: var(--muted); }
+  .step-cta a { color: var(--brass-bright); font-weight: 600; }
+
+  #compare { scroll-margin-top: 20px; background: var(--panel);
+             border: 1px solid var(--line); border-radius: 12px;
+             padding: 18px 20px; border-top: 3px solid var(--brass); }
+  #compare h2 { margin: 0 0 6px; font: 600 18px/1.3 var(--display); }
+  #compare .ok { color: var(--confirm); font-weight: 600; }
+  #compare .btn { text-decoration: none; display: inline-block; margin-top: 8px; }
+  #compare-status { font-size: 13px; margin-top: 6px; }
+  .muted { color: var(--muted); font-size: 13.5px; }
+  .err { color: var(--danger); }
+
+  @media (max-width: 640px) {
+    .stepper { flex-direction: column; gap: 12px; }
+    .step + .step { margin-left: 0; }
+    .step + .step::before {
+      left: 50%; top: -14px; width: 2px; height: 12px;
+      transform: translateX(-50%);
+    }
+  }
+</style>
+</head>
+<body>
+<header class="app-header">
+  <span class="wordmark">Homeinventory</span>
+  <span class="header-chip">{{ use_case_label }}</span>
+</header>
+<main>
+
+<h1>{{ use_case_label }}</h1>
+<p class="lede">Drop a walkthrough video for each visit. When both reports
+are built, the comparison sheet appears automatically.</p>
+
+{% set before = sessions[0] %}
+{% set after = sessions[1] if sessions|length > 1 else none %}
+{% set before_done = before.built %}
+{% set after_done = after.built if after else false %}
+{% set compare_step_done = compare_built %}
+{% set current_step = 3 if compare_step_done else 2 if after_done else 1 if before_done else 1 %}
+
+<nav class="stepper" aria-label="Project timeline">
+  <div class="step {% if before_done %}done{% elif current_step == 1 %}current{% else %}pending{% endif %}"
+       data-session="{{ before.key }}">
+    <p class="step-num">Step 1</p>
+    <h3>{{ before.label }}</h3>
+    <p class="state {% if before_done %}ok{% else %}pending{% endif %}">
+      {% if before_done %}Report ready{% else %}Waiting for video{% endif %}
+    </p>
+    {% if before_done and before.room_count is defined %}
+    <p class="counts">{{ before.room_count }} rooms · {{ before.item_count }} items</p>
+    {% endif %}
+    {% if not before_done %}
+    <div class="drop" data-prefix="{{ before.prefix }}" tabindex="0" role="button"
+         aria-label="Upload {{ before.label|lower }} video">
+      Drop the {{ before.label|lower }} video here
+    </div>
+    <input type="file" class="up-input" accept="video/*" hidden>
+    <div class="up-status"></div>
+    {% endif %}
+    <div class="row">
+      <a class="btn" href="{{ before.prefix }}/start">Open session</a>
+      {% if before_done %}<a class="btn primary" href="{{ before.prefix }}/">Review</a>{% endif %}
+    </div>
+  </div>
+
+  {% if after %}
+  <div class="step {% if after_done %}done{% elif current_step == 2 %}current{% else %}pending{% endif %}"
+       id="after-step" data-session="{{ after.key }}">
+    <p class="step-num">Step 2</p>
+    <h3>{{ after.label }}</h3>
+    <p class="state {% if after_done %}ok{% else %}pending{% endif %}">
+      {% if after_done %}Report ready{% else %}Waiting for video{% endif %}
+    </p>
+    {% if after_done and after.room_count is defined %}
+    <p class="counts">{{ after.room_count }} rooms · {{ after.item_count }} items</p>
+    {% endif %}
+    {% if not after_done %}
+    <div class="drop" data-prefix="{{ after.prefix }}" tabindex="0" role="button"
+         aria-label="Upload {{ after.label|lower }} video">
+      Drop the {{ after.label|lower }} video here
+    </div>
+    <input type="file" class="up-input" accept="video/*" hidden>
+    <div class="up-status"></div>
+    {% if before_done %}
+    <p class="step-cta">Before report is ready — <a href="#after-step">upload the after video</a> to continue.</p>
+    {% endif %}
+    {% endif %}
+    <div class="row">
+      <a class="btn" href="{{ after.prefix }}/start">Open session</a>
+      {% if after_done %}<a class="btn primary" href="{{ after.prefix }}/">Review</a>{% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="step {% if compare_step_done %}done{% elif compare_ready %}current{% else %}pending{% endif %}"
+       id="compare-step">
+    <p class="step-num">Step 3</p>
+    <h3>Compare</h3>
+    {% if compare_built %}
+    <p class="state ok">Comparison ready</p>
+    <a class="btn primary" href="/compare/">Open comparison sheet</a>
+    {% elif compare_running %}
+    <p class="state pending" id="compare-status">Building comparison…</p>
+    {% elif compare_ready %}
+    <p class="state pending">Both reports built — comparison runs automatically.</p>
+    {% elif before_done and not after_done %}
+    <p class="state pending">Needs after visit</p>
+    <p class="step-cta"><a href="#after-step">Upload after video</a> to generate the comparison.</p>
+    {% else %}
+    <p class="state pending">Waiting for both reports</p>
+    {% endif %}
+  </div>
+</nav>
+
+<section id="compare" aria-label="Comparison status">
+  <h2>Comparison sheet</h2>
+  {% if compare_built %}
+  <p class="ok">Ready — changed items, classifications, and paired photos.</p>
+  <a class="btn primary" href="/compare/">Open comparison sheet</a>
+  {% elif compare_running %}
+  <p id="compare-status-detail">Building comparison…</p>
+  {% elif compare_ready %}
+  <p class="muted">Both reports are built — comparison runs automatically.</p>
+  {% elif before_done and not after_done %}
+  <p class="muted">Upload and build the <strong>after</strong> walkthrough to see what changed.</p>
+  <a class="btn primary" href="{{ after.prefix }}/start">Upload after video</a>
+  {% else %}
+  <p class="muted">Upload and build both videos to see the comparison.</p>
+  {% endif %}
+</section>
+
+<script>
+{% include "_ui.js.j2" %}
+</script>
+<script>
+"use strict";
+(function () {
+  var WALK = "__walkthrough__";
+
+  function upload(prefix, file, statusEl) {
+    statusEl.textContent = "Uploading…";
+    statusEl.className = "up-status";
+    ui.uploadMedia(prefix, file, WALK, {
+      onDone: function () {
+        statusEl.textContent = "Uploaded — open the session to build.";
+        statusEl.className = "up-status ok";
+      },
+      onError: function (msg) {
+        statusEl.textContent = msg;
+        statusEl.className = "up-status err";
+      }
+    }).catch(function () {});
+  }
+
+  document.querySelectorAll(".step[data-session]").forEach(function (slot) {
+    var drop = slot.querySelector(".drop");
+    if (!drop) return;
+    var input = slot.querySelector(".up-input");
+    var statusEl = slot.querySelector(".up-status");
+    var prefix = drop.getAttribute("data-prefix") || "";
+    drop.addEventListener("click", function () { input.click(); });
+    input.addEventListener("change", function () {
+      if (input.files && input.files[0]) {
+        upload(prefix, input.files[0], statusEl);
+        input.value = "";
+      }
+    });
+    drop.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); }
+    });
+  });
+
+  var compareReady = {{ "true" if compare_ready else "false" }};
+  var compareBuilt = {{ "true" if compare_built else "false" }};
+  var compareRunning = {{ "true" if compare_running else "false" }};
+
+  function scrollToCompare() {
+    var el = document.getElementById("compare");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  if (compareReady && !compareBuilt) {
+    scrollToCompare();
+  }
+
+  function pollCompare() {
+    fetch("/api/compare").then(function (r) { return r.json(); })
+      .then(function (s) {
+        var statusEls = document.querySelectorAll(
+          "#compare-status, #compare-status-detail");
+        if (s.status === "running") {
+          statusEls.forEach(function (el) {
+            if (el) el.textContent = "Building comparison…";
+          });
+          setTimeout(pollCompare, 2000);
+        } else if (s.status === "done") {
+          ui.toast("Comparison ready — opening sheet");
+          setTimeout(function () { location.href = "/compare/"; }, 600);
+        } else if (s.status === "failed") {
+          statusEls.forEach(function (el) {
+            if (el) {
+              el.textContent = "Comparison failed: " + (s.detail || "");
+              el.className = "err";
+            }
+          });
+        } else if (compareReady && !compareBuilt) {
+          setTimeout(pollCompare, 2000);
+        }
+      }).catch(function () {});
+  }
+
+  if (compareRunning || (compareReady && !compareBuilt)) {
+    pollCompare();
+  }
+})();
+</script>
+</main>
+</body>
+</html>

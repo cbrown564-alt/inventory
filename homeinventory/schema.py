@@ -10,7 +10,10 @@ import hashlib
 import json
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
+
+if TYPE_CHECKING:
+    from .usecases.base import CoverField
 
 # Industry-standard vocabularies (AIIC/TDS practice). Ordinal, best -> worst.
 CONDITION_GRADES = ["new", "excellent", "good", "fair", "poor"]
@@ -58,6 +61,15 @@ class Photo:
     captured_at: Optional[str] = None   # ISO 8601, from EXIF when available
     source_video: Optional[str] = None  # set when extracted from a video
     note: Optional[str] = None
+    # curation (docs/15 M2): what is *shown by default*, never what exists.
+    # hero is a 1-based display rank within the room (None = disclosed tier);
+    # quality is the within-room 0..1 score the election used.
+    hero: Optional[int] = None
+    quality: Optional[float] = None
+    # two-tier pools (docs/15, ML-E3): flags only — describe pool stays dense;
+    # presentation pool uses strict cover gates for human-facing surfaces.
+    describe_eligible: Optional[bool] = None
+    presentation_eligible: Optional[bool] = None
 
 
 @dataclass
@@ -123,6 +135,8 @@ class Inventory:
     tenant_name: str = ""
     landlord_name: str = ""
     report_ref: str = ""
+    use_case: str = "tenancy"
+    parties: dict = field(default_factory=dict)
     # Section 1 Schedule of Condition rows: {"ref", "name", "condition"}
     schedule_summary: list[dict] = field(default_factory=list)
     rooms: list[Room] = field(default_factory=list)
@@ -173,3 +187,16 @@ class Inventory:
         canon = json.dumps(body, sort_keys=True, ensure_ascii=False,
                            separators=(",", ":"))
         return hashlib.sha256(canon.encode("utf-8")).hexdigest()
+
+
+def cover_value(inv: Inventory, field: "CoverField") -> str:
+    if field.name in Inventory.__dataclass_fields__:
+        return getattr(inv, field.name) or ""
+    return inv.parties.get(field.name, "")
+
+
+def set_cover_value(inv: Inventory, field: "CoverField", value: str) -> None:
+    if field.name in Inventory.__dataclass_fields__:
+        setattr(inv, field.name, value)
+    else:
+        inv.parties[field.name] = value

@@ -1,0 +1,23 @@
+{
+  "video": "IMG_5512.MOV",
+  "duration_s": 803,
+  "_doc": [
+    "Manual 10-room M2 cut referenced in docs/11 (Hallway through Stairs and Landing).",
+    "Boundary start times are approximate placeholders until evals/label_segments.py",
+    "exports verified timestamps; ML-E1 still reports mean boundary error against these.",
+    "Spot-check anchors from docs/11: kitchen zone ~10–260s, storage cupboard ~336s,",
+    "loft office desk ~561s."
+  ],
+  "rooms": [
+    {"room": "Hallway", "start_s": 0},
+    {"room": "Living Room", "start_s": 38},
+    {"room": "Kitchen", "start_s": 105},
+    {"room": "Bedroom 1", "start_s": 268},
+    {"room": "Loft Bedroom", "start_s": 395},
+    {"room": "Bathroom", "start_s": 485},
+    {"room": "En-suite Shower Room", "start_s": 545},
+    {"room": "Loft Office", "start_s": 585},
+    {"room": "Loft Shower Room", "start_s": 655},
+    {"room": "Stairs and Landing", "start_s": 735}
+  ]
+}

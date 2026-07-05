@@ -1,0 +1,372 @@
+{
+  "schema_version": 1,
+  "exported_at": "2026-07-05T20:10:05.835Z",
+  "reviewer": "human",
+  "verdicts": [
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i09",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T19:56:50.155Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p25_i10",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T19:57:18.262Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i00",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T19:57:49.093Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i07",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T19:59:28.584Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p31_i10",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T19:59:33.788Z"
+    },
+    {
+      "id": "bathroom-bath-p14_i03",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T19:59:43.132Z"
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i02",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T19:59:50.302Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i01",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T19:59:54.745Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i06",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:00:00.679Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i07",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:00:39.184Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i08",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:00:45.201Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p30_i09",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:00:59.988Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p30_i01",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:01:07.070Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i01",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:01:15.632Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i04",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:01:20.601Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i00",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:01:48.153Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p26_i11",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:01:56.778Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p27_i06",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:02:02.269Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i05",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:02:14.311Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i09",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:02:17.790Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i01",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:02:26.416Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p30_i01",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:02:29.205Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p31_i01",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:02:33.989Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p28_i07",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:02:42.104Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p29_i03",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:02:44.655Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i06",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:02:53.295Z"
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i04",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:02:58.904Z"
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i03",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:03:07.816Z"
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i08",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:03:17.176Z"
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i09",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:03:21.087Z"
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i10",
+      "verdict": "redraw",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:03:29.025Z"
+    },
+    {
+      "id": "bathroom-sink-p14_i01",
+      "verdict": "redraw",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:03:37.814Z"
+    },
+    {
+      "id": "bathroom-sink-p14_i08",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:03:47.385Z"
+    },
+    {
+      "id": "bathroom-sink-p15_i10",
+      "verdict": "redraw",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:04:06.103Z"
+    },
+    {
+      "id": "bathroom-smoke-alarm-p14_i03",
+      "verdict": "drop",
+      "note": "this is a light, the thing labelled ceiling should also be labelled a ceiling light not just ceiling",
+      "reviewed_at": "2026-07-05T20:05:16.828Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i05",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:05:34.183Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i07",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:05:43.180Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i10",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:05:56.487Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p28_i04",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:06:01.499Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p30_i03",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:06:08.649Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i00",
+      "verdict": "drop",
+      "note": "that is a smoke alarm",
+      "reviewed_at": "2026-07-05T20:06:42.319Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i02",
+      "verdict": "drop",
+      "note": "that is a smoke alarm",
+      "reviewed_at": "2026-07-05T20:07:37.693Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i03",
+      "verdict": "drop",
+      "note": "that is a smoke alarm",
+      "reviewed_at": "2026-07-05T20:07:52.613Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p28_i08",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:08:00.189Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i06",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:08:06.789Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i00",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:08:11.812Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p31_i01",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:08:16.507Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p25_i01",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:08:20.859Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p25_i05",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:08:40.882Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i10",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:08:44.032Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p31_i04",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:09:00.145Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i04",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:09:06.275Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i05",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:09:11.058Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p27_i03",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:09:14.925Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p30_i09",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:09:18.797Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i04",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:09:24.990Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i10",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:09:29.880Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i04",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:09:33.736Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i05",
+      "verdict": "keep",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:09:55.889Z"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p30_i08",
+      "verdict": "drop",
+      "note": "",
+      "reviewed_at": "2026-07-05T20:10:00.793Z"
+    }
+  ],
+  "summary": {
+    "drop": 39,
+    "keep": 18,
+    "redraw": 3
+  }
+}

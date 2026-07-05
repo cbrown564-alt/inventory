@@ -2,10 +2,14 @@
 
   homeinventory guide                          # print the photo capture checklist
   homeinventory build CAPTURE_DIR -o OUT_DIR   # run the full pipeline
+  homeinventory curate-only CAPTURE_DIR -o OUT_DIR
+                                               # re-run hero curation + render
+                                               # from existing inventory.json
   homeinventory review CAPTURE_DIR -o OUT_DIR  # local review web app (--share
                                                # adds a tenant link)
   homeinventory check CAPTURE_DIR              # detector-only coverage check
-  homeinventory compare CHECKIN CHECKOUT       # v2 (stub)
+  homeinventory compare CHECKIN CHECKOUT -o DIR  # check-in vs check-out
+                                               # delta report (docs/08)
 """
 
 from __future__ import annotations
@@ -51,40 +55,9 @@ def _add_detect_args(p):
                    help="torch device for YOLOE (cpu, cuda, 0, …)")
 
 
-GUIDE = """\
-HOMEINVENTORY CAPTURE GUIDE
-===========================
-Folder layout: one folder per room inside your capture folder, e.g.
-
-  capture/
-    Living Room/   Kitchen/   Bedroom 1/   Bathroom/   Hallway/
-
-Photos beat video for quality; a steady, slow video per room also works
-(sharp keyframes are extracted automatically). Keep your phone's date/time
-correct — EXIF timestamps go into the evidence manifest.
-
-PER ROOM (~15-25 photos):
-  1. Wide shot of each wall, floor-to-ceiling           (4 photos)
-  2. Floor coverage + close-up of any marks             (2-3)
-  3. Ceiling and light fittings                         (1-2)
-  4. Door (both sides), window(s) incl. frames/sills    (2-4)
-  5. Each appliance: front + inside + behind if movable (2-3 each)
-  6. Each large furniture item: front + wear points     (1-2 each)
-  7. EVERY existing defect close-up, with context shot  (as needed)
-
-WHOLE PROPERTY (put in a "General" folder):
-  - All meters (close enough to read the numbers)
-  - Smoke / CO alarms (one photo each, press test button)
-  - Keys handed over, laid out on a plain surface
-  - Boiler, stopcock, fuse box
-
-TIPS: turn all lights on, open curtains, shoot landscape, hold still a
-beat before each shot, avoid your reflection in mirrors/windows.
-"""
-
-
-def cmd_guide(_args) -> int:
-    print(GUIDE)
+def cmd_guide(args) -> int:
+    from .guide import guide_text
+    print(guide_text(args.use_case))
     return 0
 
 
@@ -118,7 +91,9 @@ def cmd_build(args) -> int:
     from .ingest import ingest
     from .integrity import build_manifest
     from .merge import merge_items, merge_room_with_prior, room_code
+    from .progress import BuildProgress
     from .report import render
+    from .usecases import DEFAULT_USE_CASE, get_use_case
 
     capture_dir = Path(args.capture_dir)
     out_dir = Path(args.out)
@@ -127,9 +102,42 @@ def cmd_build(args) -> int:
         return 2
     out_dir.mkdir(parents=True, exist_ok=True)
     work_dir = out_dir / "work"
+    progress_path = getattr(args, "progress_file", None)
+    if progress_path:
+        progress_path = Path(progress_path)
+    progress = BuildProgress()
+    progress.start(progress_path)
+
+    seg_json = getattr(args, "segments_json", None)
+    if seg_json:
+        seg_json = Path(seg_json)
+
+    def _on_segmenting():
+        progress.segmenting(progress_path)
+
+    def _on_segmented(n_rooms: int, room_names: list[str] | None = None):
+        progress.segmented(progress_path, n_rooms, room_names)
+
+    def _on_extracting():
+        progress.extracting(progress_path)
 
     # 1. ingest
-    rooms_photos = ingest(capture_dir, work_dir)
+    try:
+        rooms_photos = ingest(
+            capture_dir, work_dir,
+            lead_trim_s=getattr(args, "trim_lead", 0.0),
+            segment_model=getattr(args, "segment_model", "gemini-3.5-flash"),
+            segment_every=getattr(args, "segment_every", 5.0),
+            segments_json=seg_json,
+            no_segment=getattr(args, "no_segment", False),
+            on_segmenting=_on_segmenting,
+            on_segmented=_on_segmented,
+            on_extracting=_on_extracting,
+        )
+    except Exception as e:
+        progress.failed(progress_path, str(e))
+        print(f"error: ingest failed: {e}", file=sys.stderr)
+        return 2
     if not rooms_photos:
         print("error: no photos or videos found (see `homeinventory guide`)",
               file=sys.stderr)
@@ -139,6 +147,12 @@ def cmd_build(args) -> int:
 
     # 2. integrity manifest
     build_manifest(capture_dir, rooms_photos, out_dir / "manifest.json")
+
+    # 2b. curation: score every frame and elect each room's hero set — the
+    # few, high-quality, distinct frames shown by default (docs/15). Runs
+    # after the manifest so reviewer overrides key on sha256.
+    from .curate import curate
+    curate(rooms_photos, capture_dir, work_dir)
 
     only = {r.strip().lower() for r in args.room.split(",")} if args.room else None
     selected = {name: photos for name, photos in rooms_photos.items()
@@ -151,6 +165,8 @@ def cmd_build(args) -> int:
     prior, preserve_edits = _load_prior(args, out_dir)
     if prior is None and args.from_json is not None:
         return 2
+
+    use_case = args.use_case or (prior.use_case if prior else DEFAULT_USE_CASE)
 
     # 3. detect (only the rooms being built)
     detector = _detector_from_args(args)
@@ -169,7 +185,7 @@ def cmd_build(args) -> int:
     # 4-5. describe + merge, room by room, checkpointing as we go
     try:
         backend = get_backend(args.backend, model=args.model,
-                              base_url=args.base_url)
+                              base_url=args.base_url, use_case=use_case)
     except FatalBackendError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
@@ -187,6 +203,19 @@ def cmd_build(args) -> int:
                             if getattr(backend, "model", None) else ""),
         notes=args.notes or (prior.notes if prior else ""),
     )
+    inv.use_case = use_case
+    # A customised title survives rebuilds; the bare dataclass default (the
+    # tenancy title) is replaced by the profile's, healing pre-fix builds.
+    default_title = Inventory.__dataclass_fields__["report_type"].default
+    prior_title = prior.report_type if prior else ""
+    inv.report_type = (prior_title
+                       if prior_title and prior_title != default_title
+                       else get_use_case(use_case).report_type)
+    inv.parties = dict(prior.parties if prior else {})
+    for spec in args.party:
+        key, _, name = spec.partition("=")
+        if key:
+            inv.parties[key] = name
     if prior and preserve_edits:
         inv.inspected_at = prior.inspected_at
         inv.signatures = list(prior.signatures)
@@ -209,7 +238,9 @@ def cmd_build(args) -> int:
 
     built: dict[str, Room] = {}
     failures: list[str] = []
-    for room_name in sorted(selected):
+    room_names = sorted(selected)
+    for ri, room_name in enumerate(room_names, start=1):
+        progress.describing(progress_path, ri, len(room_names), room_name)
         photos = selected[room_name]
         ckpt = ckpt_dir / _checkpoint_name(room_name)
         if args.resume and ckpt.exists():
@@ -259,6 +290,13 @@ def cmd_build(args) -> int:
             built[room_name] = Room(name=room_name, summary=summary,
                                     items=items, photos=photos)
 
+    # 5b. detector close-ups for the schedule (docs/15 M4) — VLM items
+    # borrow the best matching YOLOE crop from their own cited photos
+    if detections:
+        from .merge import attach_detector_crops
+        for room in built.values():
+            attach_detector_crops(room.items, detections)
+
     if prior:
         built_by_lower = {k.lower(): k for k in built}
         rooms: list[Room] = []
@@ -271,7 +309,9 @@ def cmd_build(args) -> int:
         inv.rooms = [built[k] for k in sorted(built)]
 
     # 6. report
+    progress.rendering(progress_path)
     outputs = render(inv, capture_dir, out_dir, pdf=not args.no_pdf)
+    progress.done(progress_path)
     print(f"\n{inv.item_count()} items across {len(inv.rooms)} rooms, "
           f"{inv.photo_count()} photos.")
     for kind, path in outputs.items():
@@ -286,12 +326,48 @@ def cmd_build(args) -> int:
     return 0
 
 
+def cmd_curate_only(args) -> int:
+    """Re-run frame curation on an existing build (no describe/detect cost).
+
+    Reloads inventory.json, re-scores every frame path, re-elects hero ranks,
+    saves inventory.json, and re-renders HTML — same post-curate path as build.
+    """
+    from .curate import curate
+    from .report import render
+    from .schema import Inventory
+
+    capture_dir = Path(args.capture_dir)
+    out_dir = Path(args.out)
+    if not capture_dir.is_dir():
+        print(f"error: capture dir not found: {capture_dir}", file=sys.stderr)
+        return 2
+    inv_path = out_dir / "inventory.json"
+    if not inv_path.is_file():
+        print(f"error: no inventory.json at {inv_path} — run build first",
+              file=sys.stderr)
+        return 2
+    work_dir = out_dir / "work"
+    inv = Inventory.from_json(inv_path.read_text(encoding="utf-8"))
+    if not inv.rooms:
+        print("error: inventory has no rooms", file=sys.stderr)
+        return 2
+    rooms = {r.name: r.photos for r in inv.rooms}
+    curate(rooms, capture_dir, work_dir)
+    outputs = render(inv, capture_dir, out_dir, pdf=not args.no_pdf,
+                     use_case=args.use_case)
+    print(f"re-curated {inv.photo_count()} photos across {len(inv.rooms)} rooms.")
+    for kind, path in outputs.items():
+        print(f"  {kind:5} {path}")
+    return 0
+
+
 def cmd_render(args) -> int:
     """Re-render the report from an edited inventory.json (review loop)."""
     from .report import render
     out_dir = Path(args.out)
     inv = Inventory.from_json((out_dir / "inventory.json").read_text(encoding="utf-8"))
-    render(inv, Path(args.capture_dir), out_dir, pdf=not args.no_pdf)
+    render(inv, Path(args.capture_dir), out_dir, pdf=not args.no_pdf,
+           use_case=args.use_case)
     print(f"re-rendered {out_dir / 'inventory.html'}")
     return 0
 
@@ -304,7 +380,8 @@ def cmd_review(args) -> int:
     try:
         httpd = serve(Path(args.capture_dir), Path(args.out), port=args.port,
                       share=args.share, backend=args.backend, model=args.model,
-                      base_url=args.base_url, open_browser=not args.no_open)
+                      base_url=args.base_url, open_browser=not args.no_open,
+                      no_detect=args.no_detect, use_case=args.use_case)
     except FileNotFoundError as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
@@ -365,20 +442,105 @@ def cmd_check(args) -> int:
     return 0
 
 
-def cmd_compare(_args) -> int:
-    print("compare (check-in vs check-out) is the v2 feature — see "
-          "docs/03-implementation-plan.md milestone 4.", file=sys.stderr)
-    return 1
+def _parse_context_kv(pairs: list[str]) -> dict:
+    out: dict = {}
+    for pair in pairs:
+        if "=" not in pair:
+            raise ValueError(f"context entry must be KEY=VALUE, got {pair!r}")
+        key, val = pair.split("=", 1)
+        out[key.strip()] = val.strip()
+    return out
+
+
+def cmd_compare(args) -> int:
+    """Baseline vs follow-up comparison: lexical alignment (no API calls),
+    use-case rubric for gated changes, paired-photo delta report.
+    See docs/08-compare.md."""
+    from .compare import (compare_inventories, get_rubric_backend, _item_ages,
+                          load_inventory_arg, render_comparison)
+    from .describe import FatalBackendError
+    from .usecases import get_use_case, use_case_for
+
+    try:
+        checkin, checkin_dir, checkin_raw = load_inventory_arg(Path(args.checkin))
+        checkout, checkout_dir, _ = load_inventory_arg(Path(args.checkout))
+    except FileNotFoundError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+
+    if args.use_case:
+        uc = get_use_case(args.use_case)
+    else:
+        ci_uc, co_uc = use_case_for(checkin), use_case_for(checkout)
+        if ci_uc.key != co_uc.key:
+            print(f"error: use_case mismatch — check-in has {ci_uc.key!r}, "
+                  f"check-out has {co_uc.key!r}; pass --use-case explicitly.",
+                  file=sys.stderr)
+            return 2
+        uc = ci_uc
+    spec = uc.comparison
+    if spec is None:
+        print(f"error: use case {uc.key!r} has no comparison profile",
+              file=sys.stderr)
+        return 2
+
+    try:
+        context = _parse_context_kv(args.context)
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+    if args.tenancy_months is not None:
+        context.setdefault("tenancy_months", args.tenancy_months)
+    if args.occupancy:
+        context.setdefault("occupancy", args.occupancy)
+
+    try:
+        rubric = get_rubric_backend(args.backend, spec, model=args.model,
+                                    base_url=args.base_url)
+    except FatalBackendError as e:
+        print(f"error: {e}\nhint: --backend offline compares without "
+              "classification (changes stay 'unclassified').", file=sys.stderr)
+        return 2
+
+    try:
+        result = compare_inventories(
+            checkin, checkout, rubric=rubric, use_case=uc, context=context,
+            item_ages=_item_ages(checkin_raw))
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+
+    outputs = render_comparison(result, checkin, checkout, checkin_dir,
+                                checkout_dir, Path(args.out),
+                                pdf=not args.no_pdf)
+    labels = result["labels"]
+    t = result["totals"]
+    print(f"\n{t['matched']} items matched ({t['changed']} changed, "
+          f"{t['unchanged']} unchanged), {t['removed']} not located at "
+          f"{labels['followup'].lower()}, {t['added']} new at "
+          f"{labels['followup'].lower()}.")
+    if result["usage"].get("prompt_tokens"):
+        u = result["usage"]
+        print(f"classification tokens: {u['prompt_tokens']} in / "
+              f"{u['completion_tokens']} out ({result['params']['model']})")
+    for kind, path in outputs.items():
+        print(f"  {kind:5} {path}")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
+    from .usecases import REGISTRY
+    use_cases = sorted(REGISTRY)
+
     parser = argparse.ArgumentParser(prog="homeinventory",
                                      description="AI property inventory reports")
     parser.add_argument("-v", "--verbose", action="store_true")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("guide", help="print the photo capture checklist") \
-       .set_defaults(func=cmd_guide)
+    g = sub.add_parser("guide", help="print the photo capture checklist")
+    g.add_argument("--use-case", choices=use_cases, default=None,
+                   help="use-case profile (default: tenancy)")
+    g.set_defaults(func=cmd_guide)
 
     b = sub.add_parser("build", help="build a report from a capture folder")
     b.add_argument("capture_dir")
@@ -403,6 +565,12 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--tenant", help="tenant name(s) for the cover page")
     b.add_argument("--landlord", help="landlord or agent name for the cover page")
     b.add_argument("--report-ref", help="report reference number")
+    b.add_argument("--use-case", choices=use_cases, default=None,
+                   help="use-case profile (default: prior inventory's use_case "
+                        "when rebuilding, else tenancy)")
+    b.add_argument("--party", action="append", default=[], metavar="KEY=NAME",
+                   help="party name for cover/signing (repeatable; e.g. "
+                        "customer_name=Jane Doe)")
     b.add_argument("--notes", help="general notes for the report front matter")
     b.add_argument("--room", help="only (re)build these rooms, comma-separated; "
                                   "other rooms are kept from the existing inventory.json")
@@ -412,6 +580,24 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--resume", action="store_true",
                    help="reuse per-room checkpoints from a previous run "
                         "(retries only rooms that failed or were not described)")
+    b.add_argument("--trim-lead", type=float, default=0.0, metavar="SECONDS",
+                   help="skip the first SECONDS of each room video — use ~2.0 "
+                        "when room segments were cut from one continuous "
+                        "walkthrough, so the previous room's tail frames don't "
+                        "bleed into this room's schedule")
+    b.add_argument("--no-segment", action="store_true",
+                   help="skip VLM room segmentation for root walkthrough videos "
+                        "(treat as one General room)")
+    b.add_argument("--segment-model", default="gemini-3.5-flash",
+                   help="VLM for walkthrough segmentation (default: "
+                        "gemini-3.5-flash)")
+    b.add_argument("--segment-every", type=float, default=5.0,
+                   help="thumbnail strip interval in seconds for segmentation")
+    b.add_argument("--segments-json", default=None,
+                   help="reuse a pre-computed segments.json (skips the VLM "
+                        "segmentation call)")
+    b.add_argument("--progress-file", default=None,
+                   help="write staged build progress JSON for the web UI")
     b.add_argument("--no-detect", action="store_true",
                    help="skip YOLOE detection (no crops / hints)")
     _add_detect_args(b)
@@ -419,9 +605,21 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--no-pdf", action="store_true")
     b.set_defaults(func=cmd_build)
 
+    co = sub.add_parser("curate-only",
+                        help="re-run hero curation on an existing build "
+                             "(no describe/detect API cost)")
+    co.add_argument("capture_dir")
+    co.add_argument("-o", "--out", default="report")
+    co.add_argument("--use-case", choices=use_cases, default=None,
+                    help="override use-case profile when rendering")
+    co.add_argument("--no-pdf", action="store_true")
+    co.set_defaults(func=cmd_curate_only)
+
     r = sub.add_parser("render", help="re-render report from edited inventory.json")
     r.add_argument("capture_dir")
     r.add_argument("-o", "--out", default="report")
+    r.add_argument("--use-case", choices=use_cases, default=None,
+                   help="override use-case profile when rendering")
     r.add_argument("--no-pdf", action="store_true")
     r.set_defaults(func=cmd_render)
 
@@ -440,6 +638,12 @@ def main(argv: list[str] | None = None) -> int:
     rv.add_argument("--base-url", default=None)
     rv.add_argument("--no-open", action="store_true",
                     help="don't open the browser automatically")
+    rv.add_argument("--no-detect", action="store_true",
+                    help="server-spawned builds (start-page build, "
+                         "re-describe) skip YOLOE detection")
+    rv.add_argument("--use-case", choices=use_cases, default=None,
+                   help="use-case profile when no inventory.json yet (default: "
+                        "tenancy; overridden by inventory.json or project.json)")
     rv.set_defaults(func=cmd_review)
 
     ck = sub.add_parser("check",
@@ -452,12 +656,43 @@ def main(argv: list[str] | None = None) -> int:
     ck.add_argument("--det-conf", type=float, default=0.25)
     ck.set_defaults(func=cmd_check)
 
-    c = sub.add_parser("compare", help="check-in vs check-out comparison (v2)")
-    c.add_argument("checkin_dir", nargs="?")
-    c.add_argument("checkout_dir", nargs="?")
+    c = sub.add_parser("compare",
+                       help="baseline vs follow-up comparison: aligned item "
+                            "deltas, use-case classification, paired photo "
+                            "evidence")
+    c.add_argument("checkin", metavar="BASELINE",
+                   help="baseline report dir (or inventory.json path)")
+    c.add_argument("checkout", metavar="FOLLOWUP",
+                   help="follow-up report dir (or inventory.json path)")
+    c.add_argument("-o", "--out", default="compare",
+                   help="output dir for compare.json/.html/.pdf")
+    c.add_argument("--use-case", choices=use_cases, default=None,
+                   help="use-case profile (default: derived from inventories; "
+                        "error if they disagree)")
+    c.add_argument("--context", action="append", default=[], metavar="KEY=VALUE",
+                   help="comparison context for the rubric (repeatable; e.g. "
+                        "tenancy_months=12, scope='full deep clean')")
+    c.add_argument("--backend", choices=["openai", "offline"], default="openai",
+                   help="classification rubric backend; offline skips "
+                        "classification (everything 'unclassified')")
+    c.add_argument("--model", default=None,
+                   help="rubric model for --backend openai "
+                        "(default gpt-5.4-mini, the model the rubric's IMS "
+                        "agreement was measured on — docs/08-compare.md)")
+    c.add_argument("--base-url", default=None,
+                   help="override the API base URL for --backend openai")
+    c.add_argument("--tenancy-months", type=int, default=None,
+                   help="tenancy length in months (tenancy use-case; folded "
+                        "into --context; omitted = 'not provided')")
+    c.add_argument("--occupancy", default=None,
+                   help="occupancy description (tenancy use-case; folded into "
+                        "--context; omitted = 'not provided')")
+    c.add_argument("--no-pdf", action="store_true")
     c.set_defaults(func=cmd_compare)
 
     args = parser.parse_args(argv)
+    from .dotenv import load_dotenv
+    load_dotenv()
     logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO,
                         format="%(levelname)s %(message)s")
     return args.func(args)

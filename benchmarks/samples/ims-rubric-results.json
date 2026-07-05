@@ -1,0 +1,343 @@
+{
+  "model": "gpt-5.4-mini",
+  "labels": "benchmarks/samples/ims-checkout-labels.json",
+  "context": {
+    "tenancy_months": 8,
+    "tenancy_months_basis": "report p.3: tenancy from 03/01/2013; check-out photos (p.6) timestamped 11/09/2013",
+    "occupancy": null
+  },
+  "scored_entries": 28,
+  "excluded_entries": [
+    {
+      "id": "8a",
+      "reason": "clerk made no call — confirmation required"
+    },
+    {
+      "id": "34",
+      "reason": "neutral note, no liability call"
+    },
+    {
+      "id": "62b",
+      "reason": "clerk made no call — confirmation required"
+    },
+    {
+      "id": "67",
+      "reason": "clerk made no call — confirmation required"
+    },
+    {
+      "id": "130",
+      "reason": "neutral note, no liability call"
+    },
+    {
+      "id": "131",
+      "reason": "clerk made no call — confirmation required"
+    },
+    {
+      "id": "133",
+      "reason": "clerk made no call — confirmation required (general condition note p.2 repeats the tenant's denial)"
+    }
+  ],
+  "per_class": {
+    "cleaning": {
+      "n": 10,
+      "agree": 9,
+      "agreement_pct": 90.0,
+      "rubric_said": {
+        "cleaning": 9,
+        "fair_wear_and_tear": 1
+      }
+    },
+    "damage": {
+      "n": 2,
+      "agree": 2,
+      "agreement_pct": 100.0,
+      "rubric_said": {
+        "damage": 2
+      }
+    },
+    "fair_wear_and_tear": {
+      "n": 9,
+      "agree": 5,
+      "agreement_pct": 55.6,
+      "rubric_said": {
+        "fair_wear_and_tear": 5,
+        "damage": 3,
+        "cleaning": 1
+      }
+    },
+    "landlord_responsibility": {
+      "n": 7,
+      "agree": 6,
+      "agreement_pct": 85.7,
+      "rubric_said": {
+        "landlord_responsibility": 6,
+        "damage": 1
+      }
+    }
+  },
+  "overall_agreement_pct": 78.6,
+  "usage": {
+    "prompt_tokens": 23754,
+    "completion_tokens": 2090
+  },
+  "cost_usd": 0.0272,
+  "price_per_mtok_usd": {
+    "input": 0.75,
+    "output": 4.5
+  },
+  "per_entry": [
+    {
+      "id": "3",
+      "item": "Refuse — recycling boxes",
+      "clerk_code": "CC",
+      "clerk_class": "cleaning",
+      "rubric_class": "cleaning",
+      "agree": true,
+      "rationale": "The recycling boxes are recorded as full at check-out, which indicates a cleanliness/emptying issue rather than physical deterioration or loss. With an 8-month tenancy and no item age provided, there is no basis to treat this as damage or fair wear and tear."
+    },
+    {
+      "id": "5",
+      "item": "Side garden",
+      "clerk_code": "MI-LC",
+      "clerk_class": "landlord_responsibility",
+      "rubric_class": "landlord_responsibility",
+      "agree": true,
+      "rationale": "The check-out condition is identical to the check-in record, which already noted weeds and rubbish. This is a pre-existing condition rather than a tenant-caused change."
+    },
+    {
+      "id": "7a",
+      "item": "Integral outbuilding — grey handle brush",
+      "clerk_code": "FWT",
+      "clerk_class": "fair_wear_and_tear",
+      "rubric_class": "fair_wear_and_tear",
+      "agree": true,
+      "rationale": "The grey handle brush was recorded at check-in but not located at check-out, indicating a missing minor contents item. On the provided facts, and with no item age given, this is a low-value item with no shown residual value, so the loss is treated as fair wear and tear rather than a chargeable loss."
+    },
+    {
+      "id": "7b",
+      "item": "Integral outbuilding — swing bin",
+      "clerk_code": "FWT",
+      "clerk_class": "fair_wear_and_tear",
+      "rubric_class": "fair_wear_and_tear",
+      "agree": true,
+      "rationale": "The swing bin was not located at check-out, but the check-in record shows only a standard swing bin and no item age or occupancy is provided to show a chargeable loss. On the provided evidence, this is best treated as fair wear and tear rather than a deductible loss."
+    },
+    {
+      "id": "8b",
+      "item": "Side outbuilding — folding chairs",
+      "clerk_code": "FWT",
+      "clerk_class": "fair_wear_and_tear",
+      "rubric_class": "fair_wear_and_tear",
+      "agree": true,
+      "rationale": "The folding chairs were already recorded at check-in as below average and tired/worn with numerous marks, so they had little residual value. With only 8 months' tenancy and no item age provided, the evidence does not support a chargeable loss for not locating items that were already worn."
+    },
+    {
+      "id": "12",
+      "item": "Refuse — wheelie bins",
+      "clerk_code": "CC",
+      "clerk_class": "cleaning",
+      "rubric_class": "cleaning",
+      "agree": true,
+      "rationale": "The wheelie bins are recorded as full at check-out, which indicates a cleanliness/emptying issue rather than physical deterioration or loss. On the information provided, this is a removable condition and not damage."
+    },
+    {
+      "id": "19",
+      "item": "Skirting",
+      "clerk_code": "LL-CC",
+      "clerk_class": "landlord_responsibility",
+      "rubric_class": "landlord_responsibility",
+      "agree": true,
+      "rationale": "The skirting was recorded as dirty at check-in and the same at check-out, so there is no tenant-caused deterioration beyond a pre-existing state. No tenancy length, occupancy, or item age is provided to indicate any chargeable change."
+    },
+    {
+      "id": "20a",
+      "item": "Flooring — carpet",
+      "clerk_code": "CC",
+      "clerk_class": "cleaning",
+      "rubric_class": "fair_wear_and_tear",
+      "agree": false,
+      "rationale": "The carpet was checked out as cleaned by the tenant, so the remaining issue is a greying appearance rather than removable dirt. With an 8-month tenancy and no evidence of a specific stain or damage, this is consistent with ordinary wear rather than a chargeable defect."
+    },
+    {
+      "id": "20b",
+      "item": "Coir doormat",
+      "clerk_code": "FWT",
+      "clerk_class": "fair_wear_and_tear",
+      "rubric_class": "damage",
+      "agree": false,
+      "rationale": "The check-out record shows the original coir doormat was replaced with a different ribbed doormat, which indicates the original item was lost or removed rather than simply worn. A doormat is a low-value item, but replacement with another item is still a tenant-chargeable loss if the original is no longer present and no pre-existing issue is recorded."
+    },
+    {
+      "id": "28",
+      "item": "Skirting",
+      "clerk_code": "LL-CC",
+      "clerk_class": "landlord_responsibility",
+      "rubric_class": "landlord_responsibility",
+      "agree": true,
+      "rationale": "The check-out record says the skirting was dirty in places, but that state was recorded the same on the check-in inventory, so it is pre-existing rather than a tenant change. No tenancy length, occupancy, or item age is needed to reach that conclusion."
+    },
+    {
+      "id": "36",
+      "item": "Miscellaneous — candle holder",
+      "clerk_code": "FWT",
+      "clerk_class": "fair_wear_and_tear",
+      "rubric_class": "fair_wear_and_tear",
+      "agree": true,
+      "rationale": "The candle holder was not located at check-out, but the check-in record describes a small miscellaneous decorative item rather than something of substantial residual value. With an 8-month tenancy and no provided evidence of age or value, the evidence is insufficient to prove a chargeable loss, so this is treated as fair wear and tear rather than damage."
+    },
+    {
+      "id": "50",
+      "item": "Skirting",
+      "clerk_code": "CC",
+      "clerk_class": "cleaning",
+      "rubric_class": "cleaning",
+      "agree": true,
+      "rationale": "The skirting is recorded as white gloss painted at check-in and only as not thoroughly cleaned at check-out, which indicates a removable dirt/cleanliness issue rather than physical deterioration. No tenancy-length or item-age factors are provided to suggest wear beyond cleaning."
+    },
+    {
+      "id": "57",
+      "item": "Kitchen units",
+      "clerk_code": "FWT",
+      "clerk_class": "fair_wear_and_tear",
+      "rubric_class": "fair_wear_and_tear",
+      "agree": true,
+      "rationale": "The change is a small chip to the drawer veneer, which is a minor localised mark rather than a functional breakage. With a tenancy length of 8 months and no evidence of unusual occupancy or pre-existing issues provided, this is best treated as fair wear and tear."
+    },
+    {
+      "id": "58a",
+      "item": "Fridge freezer",
+      "clerk_code": "CC",
+      "clerk_class": "cleaning",
+      "rubric_class": "cleaning",
+      "agree": true,
+      "rationale": "The fridge freezer is recorded as not thoroughly cleaned on top at check-out, which is a cleanliness issue rather than deterioration of the item itself. On the provided evidence, this is removable dirt and falls to cleaning rather than damage or fair wear and tear."
+    },
+    {
+      "id": "58b",
+      "item": "Extractor hood",
+      "clerk_code": "CC",
+      "clerk_class": "cleaning",
+      "rubric_class": "cleaning",
+      "agree": true,
+      "rationale": "The extractor hood’s outer casing was recorded as not thoroughly cleaned at check-out, which is a removable dirt/cleanliness issue rather than physical deterioration. The tenancy length of 8 months does not change that classification, and no other evidence indicates damage or landlord responsibility."
+    },
+    {
+      "id": "58c",
+      "item": "Oven",
+      "clerk_code": "FWT",
+      "clerk_class": "fair_wear_and_tear",
+      "rubric_class": "cleaning",
+      "agree": false,
+      "rationale": "The oven is recorded as cleaned but with a few burnt-on marks still remaining on the grill pan and oven bottom, so the issue is residual soiling rather than physical damage. On the information provided, this is a cleaning matter and the item appears better than at check-in."
+    },
+    {
+      "id": "62a",
+      "item": "Knife block",
+      "clerk_code": "MI-TC",
+      "clerk_class": "damage",
+      "rubric_class": "damage",
+      "agree": true,
+      "rationale": "The knife block and knives were recorded at check-in but were not located at check-out, so the item has been lost rather than merely worn or left dirty. With no evidence of age or pre-existing low value, this is a chargeable loss rather than fair wear and tear."
+    },
+    {
+      "id": "66",
+      "item": "Walls",
+      "clerk_code": "FWT",
+      "clerk_class": "fair_wear_and_tear",
+      "rubric_class": "damage",
+      "agree": false,
+      "rationale": "The utility room wall was recorded at check-in as painted cream, but at check-out it has a door-handle dent to the left-hand wall. This is a physical impact mark beyond ordinary cleaning or normal wear and tear for an 8-month tenancy, and no evidence suggests it was pre-existing."
+    },
+    {
+      "id": "68",
+      "item": "Skirting",
+      "clerk_code": "CC",
+      "clerk_class": "cleaning",
+      "rubric_class": "cleaning",
+      "agree": true,
+      "rationale": "The skirting is recorded as white gloss painted at check-in and dirty behind the door at check-out, which indicates removable surface dirt rather than physical deterioration. With tenancy length of 8 months and no item age provided, this is a cleaning issue, not damage."
+    },
+    {
+      "id": "71a",
+      "item": "Washing machine — door seal",
+      "clerk_code": "LL-CC",
+      "clerk_class": "landlord_responsibility",
+      "rubric_class": "landlord_responsibility",
+      "agree": true,
+      "rationale": "The door seal was already recorded as stained at check-in and the check-out record is the same, so there is no tenant-caused change to apportion. Pre-existing condition is the landlord's matter, not a chargeable change."
+    },
+    {
+      "id": "71b",
+      "item": "Washing machine — detergent drawer",
+      "clerk_code": "CC",
+      "clerk_class": "cleaning",
+      "rubric_class": "cleaning",
+      "agree": true,
+      "rationale": "The change is that the detergent drawer is gunged with powder residue, which is removable dirt rather than physical deterioration. With no evidence of breakage or inherent failure, this is a cleaning issue for the tenant."
+    },
+    {
+      "id": "91",
+      "item": "Flooring — carpet",
+      "clerk_code": "CC",
+      "clerk_class": "cleaning",
+      "rubric_class": "cleaning",
+      "agree": true,
+      "rationale": "The check-out record says the carpet was cleaned but a long grey line mark remains in the doorway, so the issue is a remaining mark rather than a clean item. On the provided 8-month tenancy, this is best treated as a cleaning matter unless the mark is shown to be permanent damage."
+    },
+    {
+      "id": "110",
+      "item": "Miscellaneous — bedding left in cupboard",
+      "clerk_code": "LL-CC?",
+      "clerk_class": "landlord_responsibility",
+      "rubric_class": "landlord_responsibility",
+      "agree": true,
+      "rationale": "The bedding was not recorded on the check-in inventory, so it is pre-existing/not proven to be the tenant's item. With no evidence from the provided context that the tenant brought it in or that it had residual value to be lost, this is treated as a landlord matter rather than a tenant charge."
+    },
+    {
+      "id": "111",
+      "item": "Door",
+      "clerk_code": "FWT",
+      "clerk_class": "fair_wear_and_tear",
+      "rubric_class": "damage",
+      "agree": false,
+      "rationale": "The check-out record shows an unauthorised alteration to the door by adding 2 hooks to the reverse, which goes beyond normal wear and tear. The tenancy length is only 8 months, so there is little basis to treat this as ordinary deterioration."
+    },
+    {
+      "id": "114",
+      "item": "Walls",
+      "clerk_code": "MI-LC",
+      "clerk_class": "landlord_responsibility",
+      "rubric_class": "damage",
+      "agree": false,
+      "rationale": "The check-out record shows the bedroom walls were redecorated by the tenant to cream with one brown wall, which is an unauthorised alteration rather than ordinary wear. On the provided 8-month tenancy, this is a chargeable change to the decoration, and the receipt indicates a tenant-conducted redecoration rather than a landlord repair issue."
+    },
+    {
+      "id": "118",
+      "item": "Flooring — carpet",
+      "clerk_code": "TC?",
+      "clerk_class": "damage",
+      "rubric_class": "damage",
+      "agree": true,
+      "rationale": "The check-out record describes a rough patch/burn mark in the doorway, which is a physical deterioration beyond ordinary use and is chargeable as damage unless shown to be pre-existing. Although the tenant says it was existing, the check-in record only notes a brown carpet and does not record the burn or rough patch, so on the provided evidence this is a tenant-liable change."
+    },
+    {
+      "id": "139a",
+      "item": "Toilet",
+      "clerk_code": "CC",
+      "clerk_class": "cleaning",
+      "rubric_class": "cleaning",
+      "agree": true,
+      "rationale": "The toilet itself is recorded as present, but the check-out notes it was not thoroughly cleaned around the rim, which is a removable dirt issue rather than physical deterioration. No tenancy-length, occupancy, or item-age facts suggest otherwise, and those are the only provided context values."
+    },
+    {
+      "id": "139b",
+      "item": "Toilet seat",
+      "clerk_code": "MI-LC",
+      "clerk_class": "landlord_responsibility",
+      "rubric_class": "landlord_responsibility",
+      "agree": true,
+      "rationale": "The change is a loose toilet seat hinge, which is a mechanical fault rather than dirt or obvious tenant damage. With item age and occupancy not provided, and no evidence of breakage or misuse beyond a repair issue, this is best treated as the landlord's repairing responsibility."
+    }
+  ],
+  "rubric_version": "v2 (one iteration after v1: de-minimis / low-residual-value principle added — docs/08-compare.md)"
+}

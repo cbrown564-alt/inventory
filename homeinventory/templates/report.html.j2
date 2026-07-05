@@ -6,18 +6,19 @@
 <title>{{ inv.report_type }} — {{ inv.property_address or "Property" }}</title>
 <style>
   :root {
-    --ink: #1a1a1a; --muted: #5a5f6a; --rule: #d8dbe0; --accent: #15406b;
-    --band: #f3f5f8; --paper: #ffffff;
+    --ink: #21252c; --muted: #5c626d; --rule: #ded8ca; --accent: #262c36;
+    --brass: #9a7729; --band: #f5f2ea; --paper: #fffdf9;
     /* review instrument palette */
     --confirm: #0e6b46; --confirm-soft: #e7f3ed;
     --reject: #a3231f; --reject-soft: #f9ecec;
     --pend: #8a6d1f; --pend-soft: #faf4e3;
-    --ui: "Segoe UI Variable Text", "Segoe UI", "Avenir Next", "Helvetica Neue", sans-serif;
-    --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+    --serif: "New York", "Iowan Old Style", "Palatino", Charter, Georgia, "Times New Roman", serif;
+    --ui: "Avenir Next", Avenir, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, "Cascadia Code", Consolas, "Liberation Mono", monospace;
   }
   * { box-sizing: border-box; }
   body {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: var(--serif);
     color: var(--ink); margin: 0; font-size: 11pt; line-height: 1.45;
     background: var(--paper);
   }
@@ -26,31 +27,43 @@
   .cover {
     text-align: center; padding: 120px 24px 60px; page-break-after: always;
   }
-  .cover h1 { font-size: 26pt; margin-bottom: 4px; }
+  .cover h1 { font-size: 27pt; margin-bottom: 4px; }
+  .cover h1::after { content: ""; display: block; width: 72px;
+    border-bottom: 2px solid var(--brass); margin: 18px auto 0; }
   .cover .addr { font-size: 16pt; margin: 18px 0 40px; }
   .cover table { margin: 0 auto; border-collapse: collapse; font-size: 11pt; }
   .cover td { padding: 5px 14px; text-align: left; }
   .cover td:first-child { color: var(--muted); }
-  .kicker { letter-spacing: .22em; text-transform: uppercase; font-size: 9pt;
-            color: var(--muted); }
+  .kicker { letter-spacing: .3em; text-transform: uppercase; font-size: 9pt;
+            color: var(--brass); font-family: var(--ui); font-weight: 600; }
   section.room { page-break-before: always; }
-  h2 { font-size: 15pt; border-bottom: 2px solid var(--accent);
+  h2 { font-size: 15pt; border-bottom: 2px solid var(--brass);
        padding-bottom: 4px; margin-top: 28px; }
   .summary { background: var(--band); padding: 10px 14px; border-left: 3px solid
-             var(--accent); margin: 12px 0 18px; }
+             var(--brass); margin: 12px 0 18px; }
   table.items { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
   table.items th {
-    text-align: left; background: var(--accent); color: #fff; padding: 6px 8px;
-    font-weight: 600;
+    text-align: left; background: var(--band); color: var(--ink);
+    padding: 6px 8px; font: 600 8.5pt var(--ui); letter-spacing: .05em;
+    text-transform: uppercase; border-bottom: 2px solid var(--brass);
   }
   table.items td { border-bottom: 1px solid var(--rule); padding: 6px 8px;
                    vertical-align: top; }
   table.items tr { page-break-inside: avoid; }
-  .grade { white-space: nowrap; font-variant: small-caps; }
-  .grade.poor { color: #a3231f; font-weight: 700; }
-  .grade.fair { color: #9a6200; }
+  /* detector close-up beside the item name (docs/15 M4) */
+  .item-thumb { display: block; width: 100%; max-width: 96px; height: 44px;
+                object-fit: cover; border: 1px solid var(--rule);
+                border-radius: 2px; margin-bottom: 3px; }
+  /* grades wear small-caps; defect text stays sentence case */
+  .grade-word { white-space: nowrap; font-variant: small-caps; }
+  .grade-word.poor { color: #a3231f; font-weight: 700; }
+  .grade-word.fair { color: #9a6200; }
   .defects { color: var(--reject); }
   .defects li { margin: 0; }
+  .cond-cell .defects { margin-top: 3px; font-size: 8.5pt; }
+  .ev-refs { font-family: var(--mono); font-size: 7.5pt; color: var(--muted);
+             margin-top: 4px; }
+  .addr-missing { color: var(--muted); font-style: italic; }
   ul { margin: 2px 0 2px 16px; padding: 0; }
   .photos { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
   .photos figure { margin: 0; width: 31%; page-break-inside: avoid; }
@@ -59,6 +72,19 @@
                 border: 1px solid var(--rule); }
   .photos figcaption { font-size: 8pt; color: var(--muted);
                        font-family: var(--mono); }
+  /* curation (docs/15 M2): the cover hero heads the room; the disclosed
+     tier sits behind a quiet summary line */
+  .room-cover { margin: 14px 0 4px; }
+  .room-cover .frame { position: relative; }
+  .room-cover img { width: 100%; height: auto; max-height: 340px;
+                    object-fit: cover; display: block;
+                    border: 1px solid var(--rule); }
+  .room-cover figcaption { font-size: 8pt; color: var(--muted);
+                           font-family: var(--mono); margin-top: 3px; }
+  details.more-frames { margin: 4px 0 16px; }
+  details.more-frames summary { cursor: pointer; list-style-position: outside;
+    font: 500 9.5pt var(--ui); color: var(--muted); padding: 4px 0; }
+  details.more-frames summary:hover { color: var(--brass); }
   .region { position: absolute; border: 2px solid var(--reject);
             background: rgba(163,35,31,.08); pointer-events: none; }
   .region::after {
@@ -68,6 +94,94 @@
     overflow: hidden; text-overflow: ellipsis;
   }
   .meta { color: var(--muted); font-size: 9pt; }
+
+  /* ---------- docs/16: the schedule as catalogue entries (screen) --------
+     One markup, three renderings: the review layer grafts onto these cells
+     by class and WeasyPrint needs real table semantics, so the table stays
+     and the entry layout is screen-media only — print CSS is untouched. */
+  @media screen {
+    section.room table.items,
+    section.room table.items tbody { display: block; width: 100%; }
+    section.room table.items thead { display: none; }
+    section.room table.items td { border: 0; padding: 0; }
+    section.room tr.category-row { display: block; margin: 26px 0 2px; }
+    section.room tr.category-row td { display: block; background: none;
+      border-bottom: 1px solid var(--rule); padding: 0 0 3px;
+      font: 600 8.5pt var(--ui); letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted); }
+    section.room tr.item-row {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) minmax(132px, 168px);
+      grid-template-areas:
+        "ref name  cond"
+        "ref desc  clean"
+        "ref def   def"
+        "ref photo photo";
+      column-gap: 20px; row-gap: 4px; align-items: start;
+      padding: 14px 4px 15px; border-bottom: 1px solid var(--rule);
+    }
+    section.room .ref-cell { grid-area: ref; align-self: start;
+      display: flex; flex-direction: column; gap: 4px;
+      padding-top: 2px; min-width: 0; }
+    section.room .ref-cell > .ref-mono { display: block; font-size: 9pt; }
+    section.room .ref-cell .ref-internal { display: block; font-size: 7.5pt;
+      line-height: 1.35; }
+    section.room .name-cell { grid-area: name; display: flex;
+      align-items: center; gap: 10px; flex-wrap: wrap; min-width: 0; }
+    section.room .name-cell .review-flag { flex-shrink: 0; }
+    section.room .name-cell .item-name { font-size: 11.5pt; }
+    section.room .name-cell .item-thumb { order: 9; margin: 0 0 0 auto;
+      width: 46px; height: 46px; max-width: none; border-radius: 2px; }
+    section.room .desc-cell { grid-area: desc; max-width: 62ch;
+      font-size: 10pt; line-height: 1.5; padding-top: 2px; min-width: 0; }
+    section.room .cond-cell { grid-area: cond; text-align: right;
+      padding-top: 2px; min-width: 0; }
+    section.room .cond-cell .grade-word { font-size: 10.5pt;
+      letter-spacing: .02em; }
+    section.room .clean-cell { grid-area: clean; text-align: right;
+      font: 8.5pt/1.45 var(--ui); color: var(--muted); min-width: 0; }
+    section.room .def-cell { grid-area: def; margin-top: 7px; }
+    /* absence says "none noted" on screen; print keeps the words */
+    section.room .def-cell > .meta { display: none; }
+    section.room .def-cell .defects { list-style: none; margin: 0;
+      padding: 1px 0 1px 10px; border-left: 2px solid var(--reject);
+      max-width: 62ch; font-size: 9.5pt; line-height: 1.45; }
+    section.room .photo-cell { grid-area: photo; margin-top: 8px;
+      font-size: 8pt; min-width: 0; }
+    section.room .photo-cell:not(:empty)::before { content: "Evidence";
+      font: 600 7pt var(--ui); letter-spacing: .12em;
+      text-transform: uppercase; color: var(--muted); margin-right: 7px; }
+    section.room tr.comment-row { display: block; margin: 0 0 2px 92px; }
+    section.room tr.comment-row td { display: block; }
+    section.room tr.comment-row td:first-child { display: none; }
+    section.room tr.rv-evidence { display: block; margin: 2px 0 10px; }
+    section.room tr.rv-evidence td { display: block; }
+    /* review-mode chrome, restated for the grid (row ring, not cell rims) */
+    body.reviewing section.room tr.item-row.active td { background: none;
+      border: none; }
+    body.reviewing section.room tr.item-row.active { background: #f6f9fc;
+      box-shadow: inset 0 0 0 1px var(--accent); border-radius: 4px; }
+    /* the frame around the entries (docs/16 R2) */
+    .room-meta { font: 500 8.5pt var(--ui); letter-spacing: .08em;
+      text-transform: uppercase; color: var(--muted); margin: 8px 0 14px; }
+    section.room .summary, .summary { background: none;
+      border-left: 2px solid var(--brass); padding: 2px 0 2px 14px;
+      font-style: italic; font-size: 10.5pt; line-height: 1.55; }
+    section.room h3 { font: 600 8.5pt var(--ui); letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid var(--rule); padding-bottom: 3px;
+      margin: 30px 0 10px; }
+  }
+  @media screen and (max-width: 640px) {
+    section.room tr.item-row {
+      grid-template-columns: 56px minmax(0, 1fr);
+      grid-template-areas:
+        "ref name" "ref cond" "ref clean" "ref desc" "ref def" "ref photo";
+      column-gap: 14px; padding-inline: 0;
+    }
+    section.room .cond-cell, section.room .clean-cell { text-align: left; }
+  }
+
   .appendix table { width: 100%; border-collapse: collapse; font-size: 8pt;
                     font-family: var(--mono); }
   .appendix td, .appendix th { border-bottom: 1px solid var(--rule);
@@ -82,13 +196,33 @@
   footer { color: var(--muted); font-size: 8pt; text-align: center;
            margin-top: 40px; }
 
+  /* mobile: full-bleed document, no side gutters */
+  @media (max-width: 640px) {
+    main { max-width: none; margin: 0; padding: 16px 12px 40px; }
+    .cover { padding: 72px 12px 36px; }
+    .app-header { padding: 8px 12px; gap: 8px; }
+    .app-header .shell-addr { display: none; }
+    .app-nav { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none;
+               -webkit-overflow-scrolling: touch; }
+    .app-nav::-webkit-scrollbar { display: none; }
+    .app-nav a { flex-shrink: 0; }
+    .photos figure { width: 48%; }
+    body.reviewing main { padding-bottom: 88px; }
+    #docket .bar { padding: 8px 12px; gap: 8px; }
+    #docket .brand { display: none; }
+  }
+  @media (max-width: 480px) {
+    main { padding: 12px 10px 32px; }
+    .cover { padding: 56px 10px 28px; }
+    .cover h1 { font-size: 22pt; }
+  }
+
   /* ---------- PDF / clerk layout (WeasyPrint) ---------- */
   .print-only { display: none; }
   .screen-only { }
   .page-break { page-break-before: always; }
-  .cover-logo { max-height: 52px; margin: 0 auto 20px; display: block; }
   .agent-name { font: 600 11pt var(--ui); letter-spacing: .08em;
-                text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+                text-transform: uppercase; color: var(--brass); margin-bottom: 8px; }
   .property-type { font-size: 12pt; color: var(--muted); margin: 8px 0 24px; }
   .toc-list { list-style: none; padding: 0; margin: 16px 0; }
   .toc-list li { display: flex; justify-content: space-between; gap: 12px;
@@ -99,12 +233,43 @@
   .cond-merged { white-space: pre-line; line-height: 1.35; }
   .photo-sheet { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; }
   .photo-sheet figure { margin: 0; page-break-inside: avoid; }
+  .photo-sheet .frame { position: relative; display: block; }
   .photo-sheet img { width: 100%; height: auto; max-height: 170px; object-fit: contain;
                      border: 1px solid var(--rule); display: block; background: #fff; }
+  /* annotated photos keep their natural aspect so the normalised defect
+     regions land exactly on the image, not on letterbox padding */
+  .photo-sheet figure.annotated img { max-height: none; }
   .photo-sheet figcaption { font: 8pt var(--ui); text-align: center; margin-top: 3px; }
-  .photo-sheet .ref-tag { font-weight: 600; }
+  .photo-sheet .ref-tag { font-weight: 600; font-family: var(--mono); }
+  .appendix td.hash { word-break: break-all; font-size: 6.5pt; }
   .initials-note { font-size: 9pt; color: var(--muted); margin-top: 18px; }
   .pdf-brand { font: 7.5pt var(--ui); color: var(--muted); text-align: center; }
+
+  /* ---------- the one-app shell (paper mood; see _shell.html.j2) -------- */
+  .app-header { display: flex; align-items: center; gap: 14px;
+    padding: 9px 20px; background: var(--paper);
+    border-bottom: 1px solid var(--rule); position: sticky; top: 0;
+    z-index: 45; font-family: var(--ui); flex-wrap: wrap; }
+  .wordmark { font: 600 12px/1 var(--serif); letter-spacing: .34em;
+    text-transform: uppercase; color: var(--brass); white-space: nowrap;
+    text-decoration: none; }
+  .wordmark::after { content: "."; color: var(--muted); letter-spacing: 0; }
+  .app-nav { display: flex; gap: 2px; }
+  .app-nav a { font: 500 13px var(--ui); color: var(--muted);
+    text-decoration: none; padding: 5px 11px; border-radius: 6px; }
+  .app-nav a:hover { color: var(--ink); background: var(--band); }
+  .app-nav a[aria-current="page"] { color: var(--brass);
+    background: var(--band); }
+  .app-header .shell-addr { margin-left: auto; font: 11px var(--mono);
+    color: var(--muted); overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap; max-width: 40%; }
+  .ref-internal[href] { color: var(--muted); text-decoration: none;
+    border-bottom: 1px dotted var(--rule); }
+  .ref-internal[href]:hover { color: var(--brass); border-bottom-color:
+    var(--brass); }
+  .moment-link { color: inherit; text-decoration: none;
+    border-bottom: 1px dotted var(--rule); }
+  .moment-link:hover { color: var(--brass); border-bottom-color: var(--brass); }
 
   @page {
     size: A4;
@@ -126,15 +291,17 @@
 
   @media print {
     body { font-size: 10pt; }
+    .item-thumb { height: 34px; max-width: 72px; }
     main { max-width: none; padding: 0; }
     .cover { min-height: 297mm; padding: 90px 24px 60px; }
     .screen-only, .review-flag, tr.comment-row, footer .tool-meta,
     tr.item-rejected, #docket, #toast, tr.rv-evidence { display: none !important; }
     .print-only { display: block !important; }
     table.items { font-family: var(--ui); font-size: 9pt; }
-    table.items th { background: #e8ebf0; color: var(--ink); border: 1px solid var(--rule); }
+    table.items th { background: var(--band); color: var(--ink); border: 1px solid var(--rule); }
     table.items td { border: 1px solid var(--rule); }
     h2 { font-family: var(--ui); font-size: 13pt; border-bottom: 1px solid var(--ink); }
+    h3 { font-family: var(--ui); }
     .photos.screen-only { display: none !important; }
     .photo-sheet { page-break-inside: auto; }
     .photo-sheet .sheet-break { page-break-after: always; }
@@ -148,9 +315,10 @@
   /* ---------- static review-state rendering ---------- */
   tr.item-rejected td, tr.item-rejected .defects { color: var(--muted); }
   tr.item-rejected td.name-cell .item-name { text-decoration: line-through; }
-  .review-flag { display: inline-block; font-family: var(--ui); font-size: 7.5pt;
-                 letter-spacing: .08em; text-transform: uppercase;
-                 padding: 1px 6px; border-radius: 2px; vertical-align: 1px; }
+  .review-flag { display: inline-block; font-family: var(--ui); font-size: 7pt;
+                 font-weight: 600; letter-spacing: .07em;
+                 text-transform: uppercase; padding: 2px 7px; border-radius: 999px;
+                 line-height: 1.35; white-space: nowrap; }
   .review-flag.ok { color: var(--confirm); background: var(--confirm-soft); }
   .review-flag.no { color: var(--reject); background: var(--reject-soft); }
   .review-flag.pending { color: var(--pend); background: var(--pend-soft); }
@@ -197,7 +365,7 @@
                background: transparent; }
   #dirty-dot.dirty { background: var(--pend); }
   .kbd-hint { font-size: 10px; color: var(--muted); }
-  @media (max-width: 1100px) { #docket .kbd-hint { display: none; } }
+  @media (hover: none), (pointer: coarse) { .kbd-hint { display: none; } }
   .kbd-hint kbd { font-family: var(--mono); background: #eef0f3;
                   border: 1px solid #d4d8de; border-radius: 2px;
                   padding: 0 4px; font-size: 10px; }
@@ -264,23 +432,65 @@
   }
   #toast.show { opacity: .96; transform: translateX(-50%) translateY(0); }
 
+  /* ---------- shared modal styles (screen-only instrument chrome) ------- */
+  .btn { border: 1px solid #c9cdd4; background: #fff; color: #20242b;
+         border-radius: 6px; padding: 7px 14px; font: 500 13px var(--ui);
+         cursor: pointer; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent);
+                 color: #fff; }
+  .btn.ghost { border-color: transparent; color: var(--muted); }
+  .btn.ghost:hover { border-color: #c9cdd4; color: #20242b; }
+  .ui-modal-backdrop { position: fixed; inset: 0; z-index: 90;
+    background: rgba(28,36,48,.45); display: flex; align-items: center;
+    justify-content: center; padding: 16px; font-family: var(--ui); }
+  .ui-modal { background: #fff; border: 1px solid #d8dbe0;
+    border-radius: 10px; width: 460px; max-width: 100%; max-height: 90vh;
+    overflow: auto; box-shadow: 0 24px 60px -20px rgba(15,29,46,.5); }
+  .ui-modal .ui-title { padding: 18px 20px 0; font: 600 15px var(--ui); }
+  .ui-modal .ui-body { padding: 10px 20px 4px; font: 14px/1.5 var(--ui); }
+  .ui-modal .ui-body .note { color: var(--muted); font-size: 13px; }
+  .ui-modal .ui-actions { display: flex; justify-content: flex-end; gap: 8px;
+                          padding: 12px 20px 16px; }
+  .ui-field { margin: 10px 0; }
+  .ui-field label { display: block; font: 600 11px var(--ui);
+    letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px; }
+  .ui-field input, .ui-field select { width: 100%; font: 14px var(--ui);
+    padding: 8px 10px; border: 1px solid #c9cdd4; border-radius: 6px; }
+
   @media print {
     .photos img { height: 130px; }
-    #docket, #toast, tr.rv-evidence { display: none !important; }
+    #docket, #toast, tr.rv-evidence, .ui-modal-backdrop { display: none !important; }
     body.reviewing main { padding-bottom: 0; }
   }
 </style>
 </head>
 <body>
+{% if not final %}
+<header class="app-header screen-only" id="app-shell">
+  {% set shell_base = "./" %}{% set shell_active = "report" %}
+  {%- include "_shell.html.j2" %}
+  <span class="shell-addr">{{ inv.property_address or "" }}</span>
+</header>
+{% endif %}
+<main>
 <div class="cover">
   {% if inv.agent_name %}<div class="agent-name">{{ inv.agent_name }}</div>{% endif %}
   <div class="kicker">Property Inventory</div>
   <h1>{{ inv.report_type }}</h1>
-  <div class="addr">{{ inv.property_address or "Address not specified" }}</div>
+  {% if inv.property_address %}
+  <div class="addr">{{ inv.property_address }}</div>
+  {% else %}
+  <div class="addr addr-missing">Address not yet specified</div>
+  {% if not final %}<div class="meta screen-only"><a href="./#finish">Add address</a> in Review</div>{% endif %}
+  {% endif %}
   {% if inv.property_type %}<div class="property-type">{{ inv.property_type }}</div>{% endif %}
   <table>
-    <tr><td>Date of inspection</td><td><strong>{{ inv.inspected_at }}</strong></td></tr>
-    <tr><td>Prepared by</td><td><strong>{{ inv.inspected_by or "—" }}</strong></td></tr>
+    <tr><td>Date of inspection</td><td><strong>{{ inv.inspected_at | human_date }}</strong></td></tr>
+    {% if inv.inspected_by %}
+    <tr><td>Prepared by</td><td><strong>{{ inv.inspected_by }}</strong></td></tr>
+    {% endif %}
     {% if inv.landlord_name %}
     <tr><td>Landlord / agent</td><td><strong>{{ inv.landlord_name }}</strong></td></tr>
     {% endif %}
@@ -292,7 +502,7 @@
     {% endif %}
     <tr><td>Rooms inspected</td><td><strong>{{ inv.rooms | length }}</strong></td></tr>
     <tr><td>Items recorded</td><td><strong>{{ total_items }}</strong></td></tr>
-    <tr><td>Photographs</td><td><strong>{{ total_photos }}</strong></td></tr>
+    <tr><td>Photographs</td><td><strong>{{ total_photos }}</strong>{% if hero_total and hero_total < total_photos %}<span class="screen-only meta"> — {{ hero_total }} shown, every frame analysed &amp; hashed in Appendix A</span>{% endif %}</td></tr>
     {% if reviewed_items %}
     <tr class="screen-only"><td>Human-reviewed</td><td><strong>{{ reviewed_items }} of {{ total_items }} items</strong></td></tr>
     {% endif %}
@@ -302,18 +512,19 @@
 <section class="toc page-break">
   <h2>Contents</h2>
   <ol class="toc-list">
-    <li><span>1. Schedule of Condition</span></li>
+    <li><a href="#schedule">1. Schedule of Condition</a></li>
     {% for section in room_sections %}
     <li><a href="#room-{{ section.number }}">{{ section.number }}. {{ section.name }}</a></li>
     {% endfor %}
-    <li><span>Appendix A — Photographic evidence manifest</span></li>
-    <li><span>Appendix B — Room photographs</span></li>
-    <li><span>Declaration</span></li>
+    <li><a href="#appendix-manifest">Appendix A — Photographic evidence manifest</a></li>
+    {% if total_photos %}
+    <li><a href="#appendix-photos">Appendix B — Room photographs</a></li>
+    {% endif %}
+    <li><a href="#declaration">Declaration</a></li>
   </ol>
 </section>
 
-<main>
-<h2>Contents &amp; condition key</h2>
+<h2>Condition key &amp; basis of this report</h2>
 <p><strong>Condition:</strong> New &middot; Excellent &middot; Good (sound, light wear)
 &middot; Fair (visible wear or marks) &middot; Poor (damaged or heavily worn).
 Items the inspection could not assess are marked <em>not tested</em> or
@@ -341,9 +552,34 @@ rather than silently deleted.</p>
   </table>
 </section>
 
+{% macro photo_figure(photo, cls="") -%}
+    <figure id="photo-{{ photo.id }}" data-photo-id="{{ photo.id }}"{% if cls %} class="{{ cls }}"{% endif %}>
+      <div class="frame">
+        <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}" loading="lazy">
+        {% for reg in regions_by_photo.get(photo.id, []) %}
+          <span class="region" data-label="{{ reg.item_id }} · {{ reg.defect }}"
+                style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
+        {% endfor %}
+      </div>
+      <figcaption>{{ photo.id }}{% if photo.captured_at %} &middot; {{ photo.captured_at }}{% endif %}
+        {%- if photo_time.get(photo.id) %} &middot;
+          {%- if final %} seen at {{ photo_time[photo.id].t | timecode }} in {{ photo.source_video | basename }}
+          {%- else %} <a class="moment-link deep-link" href="./#moment={{ photo.id }}"
+             title="Play this moment of the walkthrough in the review app">seen at {{ photo_time[photo.id].t | timecode }}</a> in {{ photo.source_video | basename }}{% endif %}
+        {%- elif photo.source_video %} &middot; frame of {{ photo.source_video | basename }}{% endif %}</figcaption>
+    </figure>
+{%- endmacro %}
+
 {% for section in room_sections %}
 <section class="room" id="room-{{ section.number }}" data-room="{{ section.name }}">
   <h2>{{ section.number }}. {{ section.name }}</h2>
+  {% set n_items = section.groups | map(attribute="rows") | map("length") | sum %}
+  <p class="room-meta screen-only">{{ n_items }} item{{ "s" if n_items != 1 }} recorded
+    &middot; {{ section.photos | length }} frame{{ "s" if section.photos | length != 1 }} analysed{% if section.more_photos %}, {{ section.hero_photos | length }} shown{% endif %}
+    {%- if section.cover and section.cover.source_video %} &middot; footage {{ section.cover.source_video | basename }}{% endif %}</p>
+  {% if section.cover and photo_src.get(section.cover.id) %}
+  {{ photo_figure(section.cover, "room-cover screen-only") }}
+  {% endif %}
   {% if section.summary %}<div class="summary">{{ section.summary }}</div>{% endif %}
 
   <table class="items">
@@ -364,21 +600,38 @@ rather than silently deleted.</p>
       <tr class="item-row{% if item.rejected %} item-rejected{% endif %}"
           data-item-id="{{ item.id }}" data-ref="{{ row.ref }}" data-room="{{ section.name }}">
         <td class="ref-cell"><span class="ref-mono">{{ row.ref }}</span>
-          <span class="screen-only ref-internal ref-mono">{{ item.id }}</span>
-          {% if item.rejected %}<br><span class="review-flag no">rejected</span>
-          {% elif item.reviewed %}<br><span class="review-flag ok">reviewed</span>
-          {% elif reviewed_items %}<br><span class="review-flag pending">unreviewed</span>{% endif %}
-          {% if item.added_by %}<br><span class="meta">added by {{ item.added_by }}</span>{% endif %}
+          {% if final %}<span class="screen-only ref-internal ref-mono">{{ item.id }}</span>
+          {% else %}<a class="screen-only ref-internal ref-mono deep-link"
+             href="./#item-{{ item.id }}" title="Open this item in the review app">{{ item.id }}</a>{% endif %}
+          {% if item.added_by %}<span class="meta">added by {{ item.added_by }}</span>{% endif %}
         </td>
-        <td class="name-cell"><strong class="item-name">{{ item.name }}</strong>{% if item.quantity > 1 %} &times;{{ item.quantity }}{% endif %}
+        <td class="name-cell">{% if item.rejected %}<span class="review-flag no">rejected</span>
+          {% elif final %}
+          {% elif item.reviewed %}<span class="review-flag ok">reviewed</span>
+          {% elif reviewed_items %}<span class="review-flag pending">unreviewed</span>{% endif -%}
+          {% if crop_src.get(item.id) %}<img class="item-thumb"
+            src="{{ crop_src[item.id] }}" alt="" loading="lazy">{% endif -%}
+          <strong class="item-name">{{ item.name }}</strong>{% if item.quantity > 1 %} &times;{{ item.quantity }}{% endif %}
           {% if item.rejected %}<br><span class="meta">AI suggested — reviewer rejected</span>{% endif %}
         </td>
-        <td class="desc-cell">{{ item.description }}</td>
-        <td class="cond-cell grade {{ item.condition or '' }}">
-          <span class="screen-only">{{ item.not_inspected or item.condition or "—" }}</span>
-          <span class="print-only cond-merged">{{ row.condition_text }}</span>
+        <td class="desc-cell"><span class="desc-text">{{ item.description }}</span>
+          {%- if item.photo_ids %}
+          <div class="ev-refs print-only">Evidence: {{ item.photo_ids | join(", ") }}</div>
+          {%- endif %}
         </td>
-        <td class="clean-cell screen-only grade">{{ item.cleanliness or "—" }}</td>
+        <td class="cond-cell">
+          <span class="screen-only grade-word {{ item.condition or '' }}">{{ item.not_inspected or item.condition or "—" }}</span>
+          <div class="print-only">
+            <span class="grade-word {{ item.condition or '' }}">{{ row.grades_line }}</span>
+            {%- if item.defects or item.rejected_defects %}
+            <ul class="defects">
+              {% for d in item.defects %}<li>{{ d }}</li>{% endfor %}
+              {% for d in item.rejected_defects %}<li class="struck">{{ d }}</li>{% endfor %}
+            </ul>
+            {%- endif %}
+          </div>
+        </td>
+        <td class="clean-cell screen-only">{{ item.cleanliness or "—" }}</td>
         <td class="def-cell screen-only">
           {% if item.defects or item.rejected_defects %}<ul class="defects">
             {% for d in item.defects %}<li>{{ d }}</li>{% endfor %}
@@ -400,65 +653,86 @@ rather than silently deleted.</p>
   </table>
 
   {% if section.photos %}
+  {% set cover_id = section.cover.id if section.cover else none %}
+  {% set strip_photos = section.hero_photos | rejectattr("id", "equalto", cover_id) | list %}
   <h3 class="screen-only">Photographs — {{ section.name }}</h3>
+  {% if strip_photos %}
   <div class="photos screen-only">
-    {% for photo in section.photos %}
-    <figure id="photo-{{ photo.id }}" data-photo-id="{{ photo.id }}">
-      <div class="frame">
-        <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}" loading="lazy">
-        {% for group in section.groups %}{% for row in group.rows %}{% set it = row.item %}{% for reg in it.defect_regions %}
-          {% if reg.photo_id == photo.id %}
-          <span class="region" data-label="{{ it.id }} · {{ reg.defect }}"
-                style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
-          {% endif %}
-        {% endfor %}{% endfor %}{% endfor %}
-      </div>
-      <figcaption>{{ photo.id }}{% if photo.captured_at %} &middot; {{ photo.captured_at }}{% endif %}
-        {% if photo.source_video %}&middot; frame of {{ photo.source_video }}{% endif %}</figcaption>
-    </figure>
-    {% endfor %}
+    {% for photo in strip_photos %}{{ photo_figure(photo) }}{% endfor %}
   </div>
+  {% endif %}
+  {% if section.more_photos %}
+  <details class="more-frames screen-only">
+    <summary>All {{ section.photos | length }} frames — every angle the
+      walkthrough captured, blurred passes included</summary>
+    <div class="photos">
+      {% for photo in section.more_photos %}{{ photo_figure(photo) }}{% endfor %}
+    </div>
+  </details>
+  {% endif %}
   {% endif %}
 </section>
 {% endfor %}
 
-{% if total_photos %}
-<section class="room appendix-photos print-only page-break" id="appendix-photos">
-  <h2>Appendix B — Room photographs</h2>
-  {% for section in room_sections %}
-  {% if section.photos %}
-  <h3>{{ section.number }}. {{ section.name }}</h3>
-  <div class="photo-sheet">
-    {% for photo in section.photos %}
-    <figure id="pdf-photo-{{ photo.id }}" data-photo-id="{{ photo.id }}"
-            {% if loop.index % 12 == 0 %}class="sheet-break"{% endif %}>
-      <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}">
-      <figcaption>
-        <div class="ref-tag">Ref #{{ section.number }}</div>
-        <div>{{ photo.captured_at or inv.inspected_at }}</div>
-      </figcaption>
-    </figure>
-    {% endfor %}
-  </div>
-  {% endif %}
-  {% endfor %}
-</section>
-{% endif %}
-
-<section class="room appendix page-break">
+<section class="room appendix page-break" id="appendix-manifest">
   <h2>Appendix A — Photographic evidence manifest (SHA-256)</h2>
+  <p class="meta">Paths are relative to the capture folder. Frames extracted
+  from a walkthrough video are hashed as extracted and name their source
+  video; the original video files are hashed in <code>manifest.json</code>.</p>
   <table>
     <thead><tr><th>ID</th><th>Room</th><th>File</th><th>Captured</th><th>SHA-256</th></tr></thead>
     <tbody>
     {% for room in inv.rooms %}{% for photo in room.photos %}
-      <tr><td>{{ photo.id }}</td><td>{{ room.name }}</td><td>{{ photo.path }}</td>
-          <td>{{ photo.captured_at or "—" }}</td><td>{{ photo.sha256[:32] }}&hellip;</td></tr>
+      <tr><td>{{ photo.id }}</td><td>{{ room.name }}</td>
+          <td>{{ photo_display_path[photo.id] }}{% if photo.source_video %}<br>
+            <span class="meta">{% if photo_time.get(photo.id) %}at {{ photo_time[photo.id].t | timecode }} in {% else %}frame of {% endif %}{{ photo.source_video | basename }}</span>{% endif %}</td>
+          <td>{{ photo.captured_at or "—" }}</td>
+          <td class="hash">{{ photo.sha256 or "—" }}</td></tr>
     {% endfor %}{% endfor %}
     </tbody>
   </table>
 </section>
 
-<section class="declaration page-break">
+{% if total_photos %}
+<section class="room appendix-photos print-only page-break" id="appendix-photos">
+  <h2>Appendix B — Room photographs</h2>
+  {% for section in room_sections %}
+  {% if section.appendix_photos %}
+  <h3>{{ section.number }}. {{ section.name }}</h3>
+  <div class="photo-sheet">
+    {% for photo in section.appendix_photos %}
+    <figure id="pdf-photo-{{ photo.id }}" data-photo-id="{{ photo.id }}"
+            class="{% if regions_by_photo.get(photo.id) %}annotated {% endif %}{% if loop.index % 12 == 0 %}sheet-break{% endif %}">
+      <span class="frame">
+        <img src="{{ photo_print_src[photo.id] }}" alt="{{ photo.id }}">
+        {% for reg in regions_by_photo.get(photo.id, []) %}
+          <span class="region" data-label="{{ reg.item_id }} · {{ reg.defect }}"
+                style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
+        {% endfor %}
+      </span>
+      <figcaption>
+        <div class="ref-tag">{{ photo.id }} — Ref {{ section.number }}</div>
+        <div>{% if photo.captured_at %}{{ photo.captured_at | human_date }}
+          {%- elif photo_time.get(photo.id) %}seen at {{ photo_time[photo.id].t | timecode }} in {{ photo.source_video | basename }}
+          {%- elif photo.source_video %}frame of {{ photo.source_video | basename }}
+          {%- else %}{{ inv.inspected_at | human_date }}{% endif %}</div>
+      </figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+  {% if section.appendix_pruned %}
+  <p class="meta">{{ section.appendix_pruned }} further
+  frame{{ "s" if section.appendix_pruned != 1 }} of this room
+  {{ "was" if section.appendix_pruned == 1 else "were" }} analysed but not
+  reproduced here (near-duplicate or lower-quality walkthrough frames cited
+  by no item); every file remains listed with its checksum in Appendix A.</p>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+</section>
+{% endif %}
+
+<section class="declaration page-break" id="declaration">
   <h3>Declaration</h3>
   <p>This inventory was prepared with AI assistance and has been reviewed for
   accuracy by the undersigned. It provides a fair and accurate record of the
@@ -489,111 +763,41 @@ rather than silently deleted.</p>
 <footer class="doc-footer">
   <div class="pdf-brand print-only">{{ agent_display }}{% if inv.agent_phone %} &middot; {{ inv.agent_phone }}{% endif %}</div>
   <span class="tool-meta screen-only">Generated by homeinventory v{{ inv.tool_version }}
-  ({{ inv.describe_backend }} backend) &middot; {{ inv.inspected_at }}</span>
+  &middot; AI drafting: {{ inv.describe_backend or "none" }}
+  &middot; {{ inv.inspected_at | human_date }}</span>
 </footer>
 </main>
 
-<div id="docket" aria-label="Review controls">
+{% if not final %}
+<div id="docket" aria-label="Review progress">
   <div class="bar">
-    <span class="brand">Review docket</span>
-    <button class="dk-btn" id="btn-review" aria-pressed="false">Review mode</button>
+    <span class="brand">Review progress</span>
     <div id="progress">
       <div class="label"><span id="prog-n">0</span> of <span id="prog-d">0</span> items confirmed</div>
       <div class="track"><div class="fill" id="prog-fill"></div></div>
     </div>
-    <span class="kbd-hint"><kbd>j</kbd>/<kbd>k</kbd> item &nbsp;<kbd>space</kbd> confirm
-      &nbsp;<kbd>x</kbd> reject &nbsp;<kbd>1–5</kbd> grade</span>
-    <span id="dirty-dot" title="Unsaved review changes"></span>
-    <button class="dk-btn" id="btn-sign">Sign</button>
-    <button class="dk-btn primary" id="btn-export">Download reviewed inventory.json</button>
+    <a class="dk-btn primary deep-link" id="btn-continue-review" href="./#overview">Continue in Review</a>
   </div>
 </div>
 <div id="toast" role="status"></div>
 
 <script type="application/json" id="hi-data">{{ payload | tojson }}</script>
 <script>
+{% include "_ui.js.j2" %}
+</script>
+<script>
 "use strict";
-/* Level 1 review layer (docs/05-review-experience.md).
-   The report degrades to a plain document with JS off; everything below only
-   decorates the static HTML and serialises edits back to inventory.json. */
+/* Read-only review progress (docs/17 X3). Grading lives in the review app only. */
 (function () {
   var dataEl = document.getElementById("hi-data");
   if (!dataEl) return;
   var payload = JSON.parse(dataEl.textContent);
   var inv = payload.inventory;
-  var photoSrc = payload.photo_src || {};
-
-  var CONDITIONS = ["new", "excellent", "good", "fair", "poor"];
-  var CLEANS = ["professionally cleaned", "cleaned to domestic standard",
-                "requires cleaning"];
-  var NOT_INSPECTED = ["not tested", "not visible"];
-
-  /* ---- state ---- */
   var itemsById = {};
-  var photosById = {};
   inv.rooms.forEach(function (room) {
     (room.items || []).forEach(function (it) { itemsById[it.id] = it; });
-    (room.photos || []).forEach(function (p) { photosById[p.id] = p; });
   });
-  var reviewing = false;
-  var dirty = false;
-  var activeId = null;
 
-  var storeKey = "hi-review:" + (inv.property_address || "?") + ":" +
-    (inv.inspected_at || "?") + ":" + Object.keys(itemsById).sort().join(",");
-
-  /* ---- tiny dom helpers ---- */
-  function el(tag, attrs, children) {
-    var n = document.createElement(tag);
-    Object.keys(attrs || {}).forEach(function (k) {
-      if (k === "text") n.textContent = attrs[k];
-      else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]);
-      else n.setAttribute(k, attrs[k]);
-    });
-    (children || []).forEach(function (c) { n.appendChild(c); });
-    return n;
-  }
-  function toast(msg) {
-    var t = document.getElementById("toast");
-    t.textContent = msg;
-    t.classList.add("show");
-    clearTimeout(toast._t);
-    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2200);
-  }
-  function markDirty() {
-    dirty = true;
-    document.getElementById("dirty-dot").classList.add("dirty");
-    try { localStorage.setItem(storeKey, JSON.stringify(inv)); } catch (e) {}
-    updateProgress();
-  }
-
-  /* ---- restore an in-progress review from localStorage ---- */
-  (function restore() {
-    var saved = null;
-    try { saved = localStorage.getItem(storeKey); } catch (e) {}
-    if (!saved) return;
-    try {
-      var prev = JSON.parse(saved);
-      var ids = [];
-      prev.rooms.forEach(function (r) {
-        (r.items || []).forEach(function (i) { ids.push(i.id); });
-      });
-      // only restore when it is clearly the same inventory shape
-      if (ids.sort().join(",") !== Object.keys(itemsById).sort().join(",")) return;
-      inv = prev;
-      itemsById = {};
-      photosById = {};
-      inv.rooms.forEach(function (room) {
-        (room.items || []).forEach(function (it) { itemsById[it.id] = it; });
-        (room.photos || []).forEach(function (p) { photosById[p.id] = p; });
-      });
-      dirty = true;
-      document.getElementById("dirty-dot").classList.add("dirty");
-      toast("Restored review in progress — export when done");
-    } catch (e) { /* corrupt save: ignore */ }
-  })();
-
-  /* ---- progress ---- */
   function counts() {
     var total = 0, done = 0;
     Object.keys(itemsById).forEach(function (id) {
@@ -608,422 +812,29 @@ rather than silently deleted.</p>
     document.getElementById("prog-d").textContent = c.total;
     document.getElementById("prog-fill").style.width =
       c.total ? (100 * c.done / c.total) + "%" : "0";
+    var link = document.getElementById("btn-continue-review");
+    if (link && c.done < c.total) {
+      link.setAttribute("href", "./#items");
+    }
   }
 
-  /* ---- static cell renderers (used after edits & when leaving review mode) ---- */
-  function renderStaticRow(tr, it) {
-    tr.classList.toggle("item-rejected", !!it.rejected);
-    var ref = tr.querySelector(".ref-cell");
-    ref.innerHTML = "";
-    var displayRef = tr.getAttribute("data-ref") || it.id;
-    ref.appendChild(el("span", { "class": "ref-mono", text: displayRef }));
-    var flag = it.rejected ? ["no", "rejected"] :
-               it.reviewed ? ["ok", "reviewed"] : null;
-    if (flag) {
-      ref.appendChild(document.createElement("br"));
-      ref.appendChild(el("span", { "class": "review-flag " + flag[0], text: flag[1] }));
-    }
-    if (it.added_by) {
-      ref.appendChild(document.createElement("br"));
-      ref.appendChild(el("span", { "class": "meta", text: "added by " + it.added_by }));
-    }
-    var name = tr.querySelector(".name-cell");
-    name.innerHTML = "";
-    name.appendChild(el("strong", { "class": "item-name", text: it.name }));
-    if ((it.quantity || 1) > 1) {
-      name.appendChild(document.createTextNode(" ×" + it.quantity));
-    }
-    if (it.rejected) {
-      name.appendChild(document.createElement("br"));
-      name.appendChild(el("span", { "class": "meta",
-        text: "AI suggested — reviewer rejected" }));
-    }
-    tr.querySelector(".desc-cell").textContent = it.description || "";
-    var cond = tr.querySelector(".cond-cell");
-    cond.textContent = it.not_inspected || it.condition || "—";
-    cond.className = "cond-cell grade " + (it.condition || "");
-    tr.querySelector(".clean-cell").textContent = it.cleanliness || "—";
-    renderDefectsStatic(tr.querySelector(".def-cell"), it);
-    tr.querySelector(".photo-cell").textContent = (it.photo_ids || []).join(", ");
-  }
-  function renderDefectsStatic(td, it) {
-    td.innerHTML = "";
-    var live = it.defects || [], dead = it.rejected_defects || [];
-    if (!live.length && !dead.length) {
-      td.appendChild(el("span", { "class": "meta", text: "None noted" }));
-      return;
-    }
-    var ul = el("ul", { "class": "defects" });
-    live.forEach(function (d) { ul.appendChild(el("li", { text: d })); });
-    dead.forEach(function (d) { ul.appendChild(el("li", { "class": "struck", text: d })); });
-    td.appendChild(ul);
-  }
-
-  /* ---- review-mode cell renderers ---- */
-  function gradeSelect(it, kind) {
-    var opts, current;
-    if (kind === "condition") {
-      opts = CONDITIONS.concat(NOT_INSPECTED);
-      current = it.not_inspected || it.condition || "";
-    } else {
-      opts = CLEANS;
-      current = it.cleanliness || "";
-    }
-    var sel = el("select", { "class": "rv-select" });
-    sel.appendChild(el("option", { value: "", text: "—" }));
-    opts.forEach(function (o) {
-      var op = el("option", { value: o, text: o });
-      if (o === current) op.setAttribute("selected", "");
-      sel.appendChild(op);
-    });
-    sel.addEventListener("change", function () {
-      var v = sel.value || null;
-      if (kind === "condition") {
-        if (v && NOT_INSPECTED.indexOf(v) >= 0) {
-          it.not_inspected = v; it.condition = null;
-        } else { it.condition = v; it.not_inspected = null; }
-      } else { it.cleanliness = v; }
-      markDirty();
-    });
-    sel.addEventListener("click", function (e) { e.stopPropagation(); });
-    return sel;
-  }
-  function defectChips(td, it) {
-    td.innerHTML = "";
-    function chip(text, struck) {
-      var c = el("span", { "class": "chip" + (struck ? " struck" : ""),
-                           title: struck ? "Click to restore" :
-                                  "Click to strike — kept as “reviewer rejected”" });
-      c.appendChild(el("span", { text: text }));
-      c.appendChild(el("span", { "class": "x", text: struck ? "↩" : "✕" }));
-      c.addEventListener("click", function (e) {
-        e.stopPropagation();
-        var from = struck ? it.rejected_defects : it.defects;
-        var to = struck ? it.defects : it.rejected_defects;
-        var i = from.indexOf(text);
-        if (i >= 0) { from.splice(i, 1); to.push(text); }
-        defectChips(td, it);
-        markDirty();
-      });
-      return c;
-    }
-    it.defects = it.defects || [];
-    it.rejected_defects = it.rejected_defects || [];
-    it.defects.forEach(function (d) { td.appendChild(chip(d, false)); });
-    it.rejected_defects.forEach(function (d) { td.appendChild(chip(d, true)); });
-    var add = el("span", { "class": "chip chip-add", text: "+ defect" });
-    add.addEventListener("click", function (e) {
-      e.stopPropagation();
-      var t = prompt("Defect noted (e.g. “scuff to lower left door panel”):");
-      if (t && t.trim()) { it.defects.push(t.trim()); defectChips(td, it); markDirty(); }
-    });
-    td.appendChild(add);
-  }
-  function editable(node, get, set) {
-    node.setAttribute("contenteditable", "true");
-    node.classList.add("rv-edit");
-    node.addEventListener("click", function (e) { e.stopPropagation(); });
-    node.addEventListener("blur", function () {
-      var v = node.textContent.trim();
-      if (v !== get()) { set(v); markDirty(); }
-    });
-    node.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") { e.preventDefault(); node.blur(); }
-    });
-  }
-  function renderReviewRow(tr, it) {
-    renderStaticRow(tr, it);  // base, then graft controls on top
-    var name = tr.querySelector(".item-name");
-    editable(name, function () { return it.name; },
-             function (v) { it.name = v; });
-    var desc = tr.querySelector(".desc-cell");
-    editable(desc, function () { return it.description || ""; },
-             function (v) { it.description = v; });
-    var cond = tr.querySelector(".cond-cell");
-    cond.innerHTML = ""; cond.appendChild(gradeSelect(it, "condition"));
-    var clean = tr.querySelector(".clean-cell");
-    clean.innerHTML = ""; clean.appendChild(gradeSelect(it, "cleanliness"));
-    defectChips(tr.querySelector(".def-cell"), it);
-    var pc = tr.querySelector(".photo-cell");
-    pc.innerHTML = "";
-    (it.photo_ids || []).forEach(function (pid, i) {
-      if (i) pc.appendChild(document.createTextNode(", "));
-      var a = el("a", { href: "#photo-" + pid, text: pid });
-      a.addEventListener("click", function (e) {
-        e.preventDefault(); e.stopPropagation(); flashPhoto(pid);
-      });
-      pc.appendChild(a);
-    });
-    markRow(tr, it);
-  }
-  function markRow(tr, it) {
-    tr.classList.toggle("done-mark", !!it.reviewed && !it.rejected);
-    tr.classList.toggle("reject-mark", !!it.rejected);
-    tr.classList.toggle("pending-mark", !it.reviewed && !it.rejected);
-  }
-  function flashPhoto(pid) {
-    var fig = document.getElementById("photo-" + pid);
-    if (!fig) { toast(pid + " — photo not embedded in this report"); return; }
-    fig.scrollIntoView({ behavior: "smooth", block: "center" });
-    fig.classList.remove("flash");
-    void fig.offsetWidth;  // restart the animation
-    fig.classList.add("flash");
-  }
-
-  /* ---- the evidence drawer under the active row ---- */
-  function closeDrawer() {
-    var d = document.querySelector("tr.rv-evidence");
-    if (d) d.parentNode.removeChild(d);
-    var a = document.querySelector("tr.item-row.active");
-    if (a) a.classList.remove("active");
-    activeId = null;
-  }
-  function openDrawer(tr) {
-    var it = itemsById[tr.getAttribute("data-item-id")];
-    if (!it) return;
-    closeDrawer();
-    tr.classList.add("active");
-    activeId = it.id;
-    var td = el("td", { colspan: "7" });
-
-    var actions = el("div", { "class": "rv-actions" });
-    function actBtn(label, primary, fn) {
-      var b = el("button", { "class": "dk-btn" + (primary ? " primary" : ""),
-                             text: label });
-      b.addEventListener("click", function (e) { e.stopPropagation(); fn(); });
-      return b;
-    }
-    actions.appendChild(actBtn(it.reviewed ? "✓ Confirmed" : "✓ Confirm", true,
-      function () {
-        it.reviewed = true; it.rejected = false;
-        markDirty(); renderReviewRow(tr, it);
-        stepRow(1);  // openDrawer() on the next row closes this drawer
-      }));
-    actions.appendChild(actBtn(it.rejected ? "Restore item" : "✕ Reject item", false,
-      function () {
-        it.rejected = !it.rejected;
-        if (it.rejected) it.reviewed = false;
-        markDirty(); renderReviewRow(tr, it); closeDrawer();
-      }));
-    actions.appendChild(el("span", { "class": "spacer" }));
-    if (typeof it.confidence === "number") {
-      actions.appendChild(el("span", { "class": "kbd-hint",
-        text: "model confidence " + Math.round(it.confidence * 100) + "%" }));
-    }
-    td.appendChild(actions);
-
-    var strip = el("div", { "class": "ev-strip" });
-    var shown = 0;
-    (it.photo_ids || []).forEach(function (pid) {
-      var src = photoSrc[pid];
-      if (!src) return;
-      shown += 1;
-      var a = el("a", { href: "#photo-" + pid });
-      a.addEventListener("click", function (e) {
-        e.preventDefault(); e.stopPropagation(); flashPhoto(pid);
-      });
-      a.appendChild(el("img", { src: src, alt: pid, loading: "lazy" }));
-      a.appendChild(el("span", { "class": "pid", text: pid }));
-      strip.appendChild(a);
-    });
-    if (!shown) {
-      strip.appendChild(el("span", { "class": "ev-none",
-        text: "No evidence photos cited — treat this claim with suspicion." }));
-    }
-    td.appendChild(strip);
-
-    var cwrap = el("div", { "class": "rv-comments" });
-    (it.comments || []).forEach(function (c) {
-      var line = el("div", { "class": "c" });
-      line.appendChild(el("span", { "class": "who",
-        text: (c.author || "?") + " (" + (c.role || "reviewer") + "): " }));
-      line.appendChild(document.createTextNode(c.text || ""));
-      cwrap.appendChild(line);
-    });
-    var box = el("div", { "class": "rv-comment-box" });
-    var input = el("input", { type: "text",
-      placeholder: "Add a comment on this item…" });
-    input.addEventListener("click", function (e) { e.stopPropagation(); });
-    input.addEventListener("keydown", function (e) {
-      if (e.key !== "Enter") { e.stopPropagation(); return; }
-      e.stopPropagation();
-      var t = input.value.trim();
-      if (!t) return;
-      it.comments = it.comments || [];
-      it.comments.push({ author: inv.inspected_by || "reviewer",
-        role: "landlord", text: t, at: new Date().toISOString() });
-      input.value = "";
-      markDirty(); openDrawer(tr);
-    });
-    box.appendChild(input);
-    cwrap.appendChild(box);
-    td.appendChild(cwrap);
-
-    var drawer = el("tr", { "class": "rv-evidence" }, [td]);
-    drawer.addEventListener("click", function (e) { e.stopPropagation(); });
-    tr.parentNode.insertBefore(drawer, tr.nextSibling);
-  }
-
-  function allRows() {
-    return Array.prototype.slice.call(
-      document.querySelectorAll("tr.item-row"));
-  }
-  function stepRow(delta) {
-    var rows = allRows();
-    if (!rows.length) return;
-    var idx = -1;
-    rows.forEach(function (r, i) {
-      if (r.getAttribute("data-item-id") === activeId) idx = i;
-    });
-    var next = rows[Math.max(0, Math.min(rows.length - 1, idx + delta))];
-    if (idx === -1) next = rows[0];
-    next.scrollIntoView({ behavior: "smooth", block: "center" });
-    openDrawer(next);
-  }
-
-  /* ---- review mode toggle ---- */
-  function setReviewing(on) {
-    reviewing = on;
-    document.body.classList.toggle("reviewing", on);
-    document.getElementById("btn-review")
-      .setAttribute("aria-pressed", on ? "true" : "false");
-    closeDrawer();
-    allRows().forEach(function (tr) {
-      var it = itemsById[tr.getAttribute("data-item-id")];
-      if (!it) return;
-      if (on) renderReviewRow(tr, it);
-      else {
-        renderStaticRow(tr, it);
-        tr.classList.remove("done-mark", "reject-mark", "pending-mark");
-      }
-    });
-    if (on) toast("Review mode — click an item, or use j / k");
-  }
-
-  /* ---- export ---- */
-  function exportJson() {
-    var blob = new Blob([JSON.stringify(inv, null, 2)],
-                        { type: "application/json" });
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "inventory.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
-    dirty = false;
-    document.getElementById("dirty-dot").classList.remove("dirty");
-    try { localStorage.removeItem(storeKey); } catch (e) {}
-    var c = counts();
-    toast("Saved — drop it in the report folder and run: homeinventory render" +
-          (c.done < c.total ? " (" + (c.total - c.done) + " items unreviewed)" : ""));
-  }
-
-  /* ---- signing (landlord/agent side; tenant countersigns via Level 3) ---- */
-  function canonicalHash(obj) {
-    // sha256 over the same canonical form as Inventory.content_sha256()
-    function sortKeys(v) {
-      if (Array.isArray(v)) return v.map(sortKeys);
-      if (v && typeof v === "object") {
-        var out = {};
-        Object.keys(v).sort().forEach(function (k) { out[k] = sortKeys(v[k]); });
-        return out;
-      }
-      return v;
-    }
-    var body = sortKeys(JSON.parse(JSON.stringify(obj)));
-    delete body.signatures;
-    var text = JSON.stringify(body);
-    if (!(window.crypto && crypto.subtle)) {
-      return Promise.resolve("");
-    }
-    return crypto.subtle.digest("SHA-256",
-        new TextEncoder().encode(text))
-      .then(function (buf) {
-        return Array.prototype.map.call(new Uint8Array(buf), function (b) {
-          return b.toString(16).padStart(2, "0");
-        }).join("");
+  /* file://: strip shell links that would dead-end */
+  if (location.protocol === "file:") {
+    var shell = document.getElementById("app-shell");
+    if (shell) shell.remove();
+    Array.prototype.forEach.call(
+      document.querySelectorAll("a.deep-link"), function (a) {
+        var span = document.createElement("span");
+        span.className = a.className.replace("deep-link", "").trim();
+        span.textContent = a.textContent;
+        a.parentNode.replaceChild(span, a);
       });
   }
-  function sign() {
-    var c = counts();
-    if (c.done < c.total &&
-        !confirm(c.total - c.done + " items are still unreviewed. Sign anyway?")) {
-      return;
-    }
-    var name = prompt("Sign as (full name):", inv.inspected_by || "");
-    if (!name || !name.trim()) return;
-    var role = prompt('Role — "landlord" or "agent":', "landlord");
-    if (!role || !role.trim()) return;
-    canonicalHash(inv).then(function (hash) {
-      inv.signatures = inv.signatures || [];
-      inv.signatures.push({
-        role: role.trim().toLowerCase(), name: name.trim(),
-        signed_at: new Date().toISOString(),
-        inventory_sha256: hash, via: "interactive report (level 1)"
-      });
-      markDirty();
-      var holder = document.getElementById("signatures");
-      var s = inv.signatures[inv.signatures.length - 1];
-      var card = el("div", { "class": "sigcard" });
-      card.appendChild(el("strong", { text: s.name }));
-      card.appendChild(document.createTextNode(
-        " — " + s.role + " — signed " + s.signed_at + " "));
-      if (s.inventory_sha256) {
-        card.appendChild(el("div", { "class": "hash",
-          text: "attests content sha256 " + s.inventory_sha256 }));
-      }
-      holder.appendChild(card);
-      toast("Signed. Export the reviewed JSON to make it permanent.");
-    });
-  }
 
-  /* ---- wire-up ---- */
   document.getElementById("docket").classList.add("on");
-  document.getElementById("btn-review").addEventListener("click", function () {
-    setReviewing(!reviewing);
-  });
-  document.getElementById("btn-export").addEventListener("click", exportJson);
-  document.getElementById("btn-sign").addEventListener("click", sign);
-  document.addEventListener("click", function (e) {
-    if (!reviewing) return;
-    var tr = e.target.closest ? e.target.closest("tr.item-row") : null;
-    if (tr) {
-      if (tr.classList.contains("active")) closeDrawer();
-      else openDrawer(tr);
-    }
-  });
-  document.addEventListener("keydown", function (e) {
-    if (!reviewing) return;
-    var t = e.target;
-    if (t && (t.tagName === "INPUT" || t.tagName === "SELECT" ||
-              t.isContentEditable)) return;
-    var it = activeId ? itemsById[activeId] : null;
-    var tr = activeId ? document.querySelector(
-      'tr.item-row[data-item-id="' + activeId + '"]') : null;
-    if (e.key === "j") { e.preventDefault(); stepRow(1); }
-    else if (e.key === "k") { e.preventDefault(); stepRow(-1); }
-    else if (e.key === " " && it && tr) {
-      e.preventDefault();
-      it.reviewed = true; it.rejected = false;
-      markDirty(); renderReviewRow(tr, it); stepRow(1);
-    } else if (e.key === "x" && it && tr) {
-      e.preventDefault();
-      it.rejected = !it.rejected;
-      if (it.rejected) it.reviewed = false;
-      markDirty(); renderReviewRow(tr, it);
-    } else if (it && tr && "12345".indexOf(e.key) >= 0) {
-      e.preventDefault();
-      it.condition = CONDITIONS[Number(e.key) - 1];
-      it.not_inspected = null;
-      markDirty(); renderReviewRow(tr, it);
-    }
-  });
-  window.addEventListener("beforeunload", function (e) {
-    if (dirty) { e.preventDefault(); e.returnValue = ""; }
-  });
   updateProgress();
 })();
 </script>
+{% endif %}
 </body>
 </html>

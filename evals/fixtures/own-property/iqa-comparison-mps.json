@@ -1,0 +1,2380 @@
+{
+  "report_dir": "report",
+  "n_rooms": 10,
+  "n_frames": 260,
+  "timing": {
+    "classical": {
+      "infer_s": 2.39,
+      "ms_per_frame": 9.2
+    },
+    "musiq": {
+      "load_s": 6.35,
+      "infer_s": 238.36,
+      "ms_per_frame": 916.8
+    },
+    "clipiqa": {
+      "load_s": 9.1,
+      "infer_s": 210.28,
+      "ms_per_frame": 808.8
+    }
+  },
+  "spearman": {
+    "classical~musiq": {
+      "per_room": {
+        "Hallway": -0.046,
+        "Living Room": 0.711,
+        "Kitchen": 0.695,
+        "Bedroom 1": 0.845,
+        "Loft Bedroom": 0.704,
+        "Bathroom": 0.706,
+        "En-suite Shower Room": 0.677,
+        "Loft Office": 0.757,
+        "Loft Shower Room": 0.865,
+        "Stairs and Landing": 0.673
+      },
+      "mean": 0.659
+    },
+    "classical~clipiqa": {
+      "per_room": {
+        "Hallway": -0.036,
+        "Living Room": 0.388,
+        "Kitchen": 0.383,
+        "Bedroom 1": 0.347,
+        "Loft Bedroom": 0.045,
+        "Bathroom": -0.248,
+        "En-suite Shower Room": -0.103,
+        "Loft Office": 0.558,
+        "Loft Shower Room": 0.239,
+        "Stairs and Landing": 0.044
+      },
+      "mean": 0.162
+    },
+    "musiq~clipiqa": {
+      "per_room": {
+        "Hallway": 0.71,
+        "Living Room": 0.72,
+        "Kitchen": 0.703,
+        "Bedroom 1": 0.467,
+        "Loft Bedroom": 0.269,
+        "Bathroom": 0.24,
+        "En-suite Shower Room": 0.234,
+        "Loft Office": 0.679,
+        "Loft Shower Room": 0.52,
+        "Stairs and Landing": 0.571
+      },
+      "mean": 0.511
+    }
+  },
+  "scores": {
+    "classical": {
+      "Hallway": [
+        274.9925,
+        334.2945,
+        538.4743,
+        999.3597,
+        403.2162,
+        203.406,
+        295.5055,
+        147.7853,
+        275.104,
+        690.5238,
+        667.0818,
+        1547.1956,
+        343.7239,
+        337.5394,
+        400.199,
+        199.5861,
+        207.138,
+        114.9465,
+        374.4124,
+        343.9528,
+        477.6965,
+        457.4769,
+        427.026,
+        303.4525
+      ],
+      "Living Room": [
+        92.1786,
+        227.2663,
+        539.5085,
+        471.3564,
+        466.7679,
+        350.676,
+        294.1552,
+        458.8829,
+        599.1869,
+        592.833,
+        324.7656,
+        400.2439,
+        338.6457,
+        396.5084,
+        480.885,
+        453.3524,
+        215.4651,
+        293.2015,
+        379.5376,
+        400.8261,
+        662.6399,
+        548.7184,
+        387.3615,
+        196.0822
+      ],
+      "Kitchen": [
+        872.5141,
+        439.4115,
+        402.5197,
+        487.1482,
+        404.7457,
+        421.7615,
+        191.6552,
+        554.2656,
+        264.8466,
+        447.9137,
+        168.447,
+        99.1779,
+        439.5942,
+        283.8633,
+        314.5353,
+        638.0649,
+        698.2727,
+        731.3197,
+        825.9237,
+        789.6629,
+        276.1131,
+        156.8484,
+        492.4428,
+        117.7346
+      ],
+      "Bedroom 1": [
+        105.0378,
+        256.1906,
+        235.34,
+        227.5704,
+        365.969,
+        512.9917,
+        496.6038,
+        247.9228,
+        118.239,
+        81.2616,
+        213.6801,
+        195.4626,
+        258.9217,
+        134.4368,
+        195.6365,
+        175.2153,
+        116.4286,
+        108.4803,
+        112.0158,
+        144.013,
+        259.2979,
+        266.0468,
+        642.1337,
+        92.13,
+        62.4687,
+        66.1737,
+        106.0673,
+        70.3864,
+        185.6575,
+        154.6289,
+        231.325,
+        318.7328,
+        446.4973,
+        585.8271,
+        154.3054,
+        100.8957,
+        84.2112
+      ],
+      "Loft Bedroom": [
+        160.5044,
+        169.7908,
+        172.0131,
+        154.9714,
+        102.3093,
+        72.6246,
+        192.1606,
+        246.2809,
+        170.5041,
+        202.0427,
+        655.796,
+        352.2875,
+        507.5068,
+        664.3316,
+        1090.4427,
+        413.3031,
+        206.004,
+        512.3503,
+        420.054,
+        71.8849,
+        114.5623,
+        58.1404,
+        213.8824,
+        296.5513,
+        85.4111,
+        58.0885,
+        54.1008,
+        33.8442,
+        37.9092,
+        43.8724,
+        52.6597,
+        155.0749,
+        159.3941
+      ],
+      "Bathroom": [
+        297.6702,
+        236.0665,
+        97.4717,
+        318.7255,
+        329.9217,
+        197.3838,
+        117.9094,
+        45.0352,
+        63.1477,
+        90.2158,
+        248.9947,
+        241.7432,
+        61.3911,
+        31.189,
+        62.176,
+        186.1542,
+        524.5144,
+        415.1242,
+        86.1208,
+        404.8719,
+        251.2851,
+        155.0473,
+        722.9918,
+        517.0527
+      ],
+      "En-suite Shower Room": [
+        70.5154,
+        164.8865,
+        120.9738,
+        73.8864,
+        73.429,
+        173.4624,
+        93.966,
+        149.8152,
+        79.632,
+        71.5477,
+        103.6299,
+        250.1695,
+        247.5559,
+        118.3617,
+        52.5814,
+        30.6264,
+        84.2049,
+        28.9807,
+        104.9286,
+        174.1609,
+        354.6547,
+        480.0436,
+        833.5265
+      ],
+      "Loft Office": [
+        327.0441,
+        294.7046,
+        206.5047,
+        151.5419,
+        200.6408,
+        153.9989,
+        121.311,
+        149.3204,
+        69.8488,
+        96.8022,
+        57.9049,
+        323.9654,
+        58.4757,
+        230.9344,
+        140.0104,
+        97.755,
+        71.4039,
+        87.2013,
+        208.2753,
+        230.8748,
+        300.891,
+        263.1937,
+        488.7809,
+        70.0096
+      ],
+      "Loft Shower Room": [
+        116.6078,
+        161.7716,
+        47.7577,
+        90.0265,
+        173.0188,
+        415.8355,
+        260.199,
+        211.0475,
+        95.3352,
+        191.6388,
+        198.6392,
+        103.1241,
+        57.4239,
+        28.1128,
+        34.5753,
+        109.4018,
+        155.0624,
+        61.7185,
+        315.425,
+        274.8968,
+        86.5873,
+        62.4155,
+        94.3048,
+        122.2785
+      ],
+      "Stairs and Landing": [
+        51.2996,
+        228.6916,
+        96.905,
+        146.5567,
+        49.0523,
+        102.8453,
+        129.5482,
+        93.4412,
+        89.7209,
+        26.3722,
+        185.0295,
+        79.9918,
+        62.3995,
+        83.2893,
+        61.2003,
+        163.3525,
+        152.1568,
+        217.7145,
+        107.5559,
+        220.7476,
+        160.9595,
+        91.5936,
+        83.7272
+      ]
+    },
+    "musiq": {
+      "Hallway": [
+        40.6872,
+        35.1383,
+        34.2651,
+        46.5371,
+        22.4625,
+        41.5834,
+        54.6716,
+        26.1838,
+        31.7866,
+        33.3391,
+        25.5442,
+        47.5372,
+        24.733,
+        55.1936,
+        50.6904,
+        48.5672,
+        52.7724,
+        39.6309,
+        33.1216,
+        34.6846,
+        53.0327,
+        48.3648,
+        49.3929,
+        40.4435
+      ],
+      "Living Room": [
+        25.1637,
+        21.571,
+        43.5777,
+        41.8007,
+        55.531,
+        38.803,
+        34.4422,
+        47.5896,
+        59.3703,
+        57.1643,
+        38.0251,
+        49.5891,
+        43.6518,
+        53.7089,
+        57.9987,
+        56.3111,
+        59.0334,
+        23.8189,
+        34.2961,
+        36.2137,
+        64.1305,
+        56.4215,
+        47.4309,
+        16.6329
+      ],
+      "Kitchen": [
+        60.9238,
+        43.6298,
+        55.4985,
+        66.8944,
+        57.8605,
+        55.4126,
+        26.5693,
+        47.1538,
+        30.3594,
+        51.761,
+        21.1039,
+        21.3174,
+        43.2045,
+        26.9485,
+        37.8078,
+        57.3929,
+        55.2548,
+        50.3046,
+        38.4285,
+        49.9024,
+        24.6559,
+        27.3461,
+        53.6486,
+        24.6798
+      ],
+      "Bedroom 1": [
+        23.0463,
+        22.9655,
+        42.0156,
+        37.6276,
+        41.3118,
+        46.0275,
+        45.0091,
+        22.2181,
+        16.9886,
+        19.1332,
+        32.2947,
+        33.2749,
+        42.7018,
+        23.4686,
+        31.4051,
+        37.4936,
+        25.8108,
+        29.8715,
+        28.5116,
+        31.6835,
+        45.3579,
+        45.5098,
+        49.9591,
+        23.7241,
+        14.5492,
+        14.7714,
+        21.7891,
+        15.5102,
+        42.4921,
+        30.3463,
+        32.8487,
+        35.138,
+        38.6003,
+        40.0942,
+        26.72,
+        19.7624,
+        14.1664
+      ],
+      "Loft Bedroom": [
+        37.5386,
+        35.13,
+        40.3099,
+        43.7462,
+        25.5745,
+        21.3883,
+        22.9226,
+        35.867,
+        21.4516,
+        45.9285,
+        57.7679,
+        37.3564,
+        43.1114,
+        34.0693,
+        52.5655,
+        52.2258,
+        56.9263,
+        55.7191,
+        38.1993,
+        27.4767,
+        18.5363,
+        14.5196,
+        30.6422,
+        48.1485,
+        29.5324,
+        17.6188,
+        17.7656,
+        33.1549,
+        29.2181,
+        20.905,
+        19.4205,
+        49.1686,
+        43.2693
+      ],
+      "Bathroom": [
+        42.8026,
+        36.4534,
+        16.013,
+        47.0954,
+        36.9087,
+        29.9276,
+        39.2671,
+        37.1424,
+        39.8788,
+        34.7671,
+        34.8755,
+        32.6408,
+        27.1406,
+        26.247,
+        22.6376,
+        31.8231,
+        45.3589,
+        44.9707,
+        24.2023,
+        48.7332,
+        31.4433,
+        25.4273,
+        59.696,
+        48.4657
+      ],
+      "En-suite Shower Room": [
+        21.2094,
+        31.0053,
+        22.2358,
+        14.2588,
+        17.6657,
+        37.4633,
+        25.6143,
+        26.6712,
+        23.4581,
+        22.9264,
+        16.5707,
+        49.0115,
+        52.8154,
+        46.8595,
+        36.3224,
+        23.2968,
+        17.6536,
+        17.6193,
+        20.7349,
+        24.3177,
+        35.5644,
+        46.0796,
+        55.0995
+      ],
+      "Loft Office": [
+        50.1279,
+        47.3429,
+        38.1629,
+        28.882,
+        38.6295,
+        25.2881,
+        40.6131,
+        38.6696,
+        25.1458,
+        32.5038,
+        34.707,
+        47.455,
+        17.1382,
+        44.6266,
+        43.9772,
+        27.9715,
+        19.2418,
+        18.8375,
+        53.1662,
+        33.9828,
+        40.9735,
+        34.3794,
+        45.2451,
+        13.9741
+      ],
+      "Loft Shower Room": [
+        32.6753,
+        43.744,
+        16.7277,
+        29.9879,
+        51.1,
+        57.1101,
+        47.5189,
+        51.1136,
+        22.1465,
+        37.5851,
+        34.7661,
+        23.1039,
+        24.798,
+        15.97,
+        25.288,
+        29.6256,
+        31.7314,
+        18.2033,
+        35.9371,
+        34.9576,
+        21.652,
+        17.6787,
+        14.9283,
+        33.4983
+      ],
+      "Stairs and Landing": [
+        19.8295,
+        31.3566,
+        38.5853,
+        33.7678,
+        21.7032,
+        21.9525,
+        44.3221,
+        36.1709,
+        30.0467,
+        28.4908,
+        38.2232,
+        14.752,
+        18.3427,
+        30.8289,
+        29.2996,
+        44.4261,
+        42.2431,
+        45.2523,
+        32.0943,
+        46.3698,
+        48.0243,
+        49.8122,
+        42.8054
+      ]
+    },
+    "clipiqa": {
+      "Hallway": [
+        0.2093,
+        0.217,
+        0.2478,
+        0.2926,
+        0.1997,
+        0.3715,
+        0.4784,
+        0.2874,
+        0.3236,
+        0.3057,
+        0.2478,
+        0.4576,
+        0.1849,
+        0.463,
+        0.339,
+        0.2915,
+        0.5083,
+        0.2598,
+        0.1966,
+        0.2189,
+        0.2913,
+        0.3246,
+        0.2884,
+        0.2591
+      ],
+      "Living Room": [
+        0.3794,
+        0.163,
+        0.2986,
+        0.2588,
+        0.2892,
+        0.2301,
+        0.1638,
+        0.2812,
+        0.4471,
+        0.4745,
+        0.4004,
+        0.3272,
+        0.3396,
+        0.4758,
+        0.5654,
+        0.6315,
+        0.5493,
+        0.2678,
+        0.3456,
+        0.3701,
+        0.4541,
+        0.4175,
+        0.302,
+        0.1262
+      ],
+      "Kitchen": [
+        0.4913,
+        0.4655,
+        0.4237,
+        0.5027,
+        0.5605,
+        0.4575,
+        0.2366,
+        0.2813,
+        0.2324,
+        0.4328,
+        0.267,
+        0.4614,
+        0.4131,
+        0.2118,
+        0.4658,
+        0.4821,
+        0.5627,
+        0.3527,
+        0.2421,
+        0.3149,
+        0.2859,
+        0.3021,
+        0.4404,
+        0.2337
+      ],
+      "Bedroom 1": [
+        0.2958,
+        0.272,
+        0.2871,
+        0.2285,
+        0.2885,
+        0.3105,
+        0.3032,
+        0.2534,
+        0.2127,
+        0.1668,
+        0.2381,
+        0.2201,
+        0.3615,
+        0.1864,
+        0.2839,
+        0.2794,
+        0.2412,
+        0.2206,
+        0.2215,
+        0.2072,
+        0.3768,
+        0.405,
+        0.2386,
+        0.2847,
+        0.3193,
+        0.2512,
+        0.2769,
+        0.2735,
+        0.4355,
+        0.3086,
+        0.2885,
+        0.2447,
+        0.2548,
+        0.2626,
+        0.2235,
+        0.2072,
+        0.2025
+      ],
+      "Loft Bedroom": [
+        0.2433,
+        0.4146,
+        0.311,
+        0.3957,
+        0.4087,
+        0.3334,
+        0.3069,
+        0.4659,
+        0.3055,
+        0.4138,
+        0.3315,
+        0.3083,
+        0.2324,
+        0.2822,
+        0.3573,
+        0.3216,
+        0.6391,
+        0.4553,
+        0.3281,
+        0.2628,
+        0.2983,
+        0.2874,
+        0.4464,
+        0.4597,
+        0.2601,
+        0.2919,
+        0.3385,
+        0.3603,
+        0.4492,
+        0.4024,
+        0.3985,
+        0.3152,
+        0.2995
+      ],
+      "Bathroom": [
+        0.2527,
+        0.2122,
+        0.21,
+        0.358,
+        0.2009,
+        0.2339,
+        0.4493,
+        0.4213,
+        0.4967,
+        0.3078,
+        0.2922,
+        0.3432,
+        0.4412,
+        0.4258,
+        0.297,
+        0.3325,
+        0.4244,
+        0.4174,
+        0.3096,
+        0.4294,
+        0.2482,
+        0.3927,
+        0.3106,
+        0.2517
+      ],
+      "En-suite Shower Room": [
+        0.1681,
+        0.251,
+        0.2421,
+        0.2826,
+        0.364,
+        0.4513,
+        0.2689,
+        0.1891,
+        0.3073,
+        0.2553,
+        0.2613,
+        0.56,
+        0.5184,
+        0.5037,
+        0.485,
+        0.4999,
+        0.4057,
+        0.5415,
+        0.3028,
+        0.2446,
+        0.2982,
+        0.3804,
+        0.2535
+      ],
+      "Loft Office": [
+        0.4141,
+        0.3972,
+        0.2815,
+        0.3507,
+        0.3947,
+        0.3439,
+        0.4212,
+        0.2994,
+        0.2699,
+        0.362,
+        0.3902,
+        0.5599,
+        0.2569,
+        0.4872,
+        0.3685,
+        0.4752,
+        0.232,
+        0.3314,
+        0.4129,
+        0.3989,
+        0.3479,
+        0.3835,
+        0.4032,
+        0.3203
+      ],
+      "Loft Shower Room": [
+        0.3275,
+        0.3099,
+        0.231,
+        0.2352,
+        0.4201,
+        0.5371,
+        0.5116,
+        0.5959,
+        0.3044,
+        0.4027,
+        0.3217,
+        0.2306,
+        0.3659,
+        0.451,
+        0.4251,
+        0.1758,
+        0.3367,
+        0.3057,
+        0.2142,
+        0.3109,
+        0.2488,
+        0.2342,
+        0.221,
+        0.3113
+      ],
+      "Stairs and Landing": [
+        0.2887,
+        0.2898,
+        0.4253,
+        0.3964,
+        0.2677,
+        0.2345,
+        0.4867,
+        0.4886,
+        0.4962,
+        0.5566,
+        0.3308,
+        0.2328,
+        0.3712,
+        0.4234,
+        0.3915,
+        0.4503,
+        0.4551,
+        0.4555,
+        0.4488,
+        0.396,
+        0.4674,
+        0.5166,
+        0.4722
+      ]
+    }
+  },
+  "frames": {
+    "Hallway": [
+      {
+        "id": "P085",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000036.jpg"
+      },
+      {
+        "id": "P086",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000063.jpg"
+      },
+      {
+        "id": "P087",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000099.jpg"
+      },
+      {
+        "id": "P088",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000126.jpg"
+      },
+      {
+        "id": "P089",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000153.jpg"
+      },
+      {
+        "id": "P090",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000225.jpg"
+      },
+      {
+        "id": "P091",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000261.jpg"
+      },
+      {
+        "id": "P092",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000279.jpg"
+      },
+      {
+        "id": "P093",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000333.jpg"
+      },
+      {
+        "id": "P094",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000369.jpg"
+      },
+      {
+        "id": "P095",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000414.jpg"
+      },
+      {
+        "id": "P096",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000423.jpg"
+      },
+      {
+        "id": "P097",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000459.jpg"
+      },
+      {
+        "id": "P098",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000504.jpg"
+      },
+      {
+        "id": "P099",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000558.jpg"
+      },
+      {
+        "id": "P100",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000576.jpg"
+      },
+      {
+        "id": "P101",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000648.jpg"
+      },
+      {
+        "id": "P102",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000666.jpg"
+      },
+      {
+        "id": "P103",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000711.jpg"
+      },
+      {
+        "id": "P104",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000756.jpg"
+      },
+      {
+        "id": "P105",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000792.jpg"
+      },
+      {
+        "id": "P106",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000837.jpg"
+      },
+      {
+        "id": "P107",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000855.jpg"
+      },
+      {
+        "id": "P108",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000900.jpg"
+      }
+    ],
+    "Living Room": [
+      {
+        "id": "P133",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000009.jpg"
+      },
+      {
+        "id": "P134",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000135.jpg"
+      },
+      {
+        "id": "P135",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000198.jpg"
+      },
+      {
+        "id": "P136",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000252.jpg"
+      },
+      {
+        "id": "P137",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000306.jpg"
+      },
+      {
+        "id": "P138",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000405.jpg"
+      },
+      {
+        "id": "P139",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000432.jpg"
+      },
+      {
+        "id": "P140",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000531.jpg"
+      },
+      {
+        "id": "P141",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000630.jpg"
+      },
+      {
+        "id": "P142",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000639.jpg"
+      },
+      {
+        "id": "P143",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000738.jpg"
+      },
+      {
+        "id": "P144",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000846.jpg"
+      },
+      {
+        "id": "P145",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000864.jpg"
+      },
+      {
+        "id": "P146",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000990.jpg"
+      },
+      {
+        "id": "P147",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001026.jpg"
+      },
+      {
+        "id": "P148",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001062.jpg"
+      },
+      {
+        "id": "P149",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001143.jpg"
+      },
+      {
+        "id": "P150",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001269.jpg"
+      },
+      {
+        "id": "P151",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001341.jpg"
+      },
+      {
+        "id": "P152",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001350.jpg"
+      },
+      {
+        "id": "P153",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001467.jpg"
+      },
+      {
+        "id": "P154",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001548.jpg"
+      },
+      {
+        "id": "P155",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001557.jpg"
+      },
+      {
+        "id": "P156",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001665.jpg"
+      }
+    ],
+    "Kitchen": [
+      {
+        "id": "P109",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f000009.jpg"
+      },
+      {
+        "id": "P110",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f000495.jpg"
+      },
+      {
+        "id": "P111",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f000954.jpg"
+      },
+      {
+        "id": "P112",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f000981.jpg"
+      },
+      {
+        "id": "P113",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f001584.jpg"
+      },
+      {
+        "id": "P114",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f001845.jpg"
+      },
+      {
+        "id": "P115",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f002232.jpg"
+      },
+      {
+        "id": "P116",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f002529.jpg"
+      },
+      {
+        "id": "P117",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f002817.jpg"
+      },
+      {
+        "id": "P118",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f002916.jpg"
+      },
+      {
+        "id": "P119",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f003258.jpg"
+      },
+      {
+        "id": "P120",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f003762.jpg"
+      },
+      {
+        "id": "P121",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f004059.jpg"
+      },
+      {
+        "id": "P122",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f004455.jpg"
+      },
+      {
+        "id": "P123",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f004608.jpg"
+      },
+      {
+        "id": "P124",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f005067.jpg"
+      },
+      {
+        "id": "P125",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f005292.jpg"
+      },
+      {
+        "id": "P126",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f005517.jpg"
+      },
+      {
+        "id": "P127",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f006030.jpg"
+      },
+      {
+        "id": "P128",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f006210.jpg"
+      },
+      {
+        "id": "P129",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f006471.jpg"
+      },
+      {
+        "id": "P130",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f006723.jpg"
+      },
+      {
+        "id": "P131",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f007164.jpg"
+      },
+      {
+        "id": "P132",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f007425.jpg"
+      }
+    ],
+    "Bedroom 1": [
+      {
+        "id": "P025",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000000.jpg"
+      },
+      {
+        "id": "P026",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000036.jpg"
+      },
+      {
+        "id": "P027",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000054.jpg"
+      },
+      {
+        "id": "P028",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000090.jpg"
+      },
+      {
+        "id": "P029",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000117.jpg"
+      },
+      {
+        "id": "P030",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000153.jpg"
+      },
+      {
+        "id": "P031",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000162.jpg"
+      },
+      {
+        "id": "P032",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000207.jpg"
+      },
+      {
+        "id": "P033",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000225.jpg"
+      },
+      {
+        "id": "P034",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000243.jpg"
+      },
+      {
+        "id": "P035",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000261.jpg"
+      },
+      {
+        "id": "P036",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000288.jpg"
+      },
+      {
+        "id": "P037",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000333.jpg"
+      },
+      {
+        "id": "P038",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000351.jpg"
+      },
+      {
+        "id": "P039",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000387.jpg"
+      },
+      {
+        "id": "P040",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000405.jpg"
+      },
+      {
+        "id": "P041",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000423.jpg"
+      },
+      {
+        "id": "P042",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000450.jpg"
+      },
+      {
+        "id": "P043",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000468.jpg"
+      },
+      {
+        "id": "P044",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000495.jpg"
+      },
+      {
+        "id": "P045",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000540.jpg"
+      },
+      {
+        "id": "P046",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_a_f000576.jpg"
+      },
+      {
+        "id": "P047",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000000.jpg"
+      },
+      {
+        "id": "P048",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000027.jpg"
+      },
+      {
+        "id": "P049",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000054.jpg"
+      },
+      {
+        "id": "P050",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000081.jpg"
+      },
+      {
+        "id": "P051",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000108.jpg"
+      },
+      {
+        "id": "P052",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000117.jpg"
+      },
+      {
+        "id": "P053",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000153.jpg"
+      },
+      {
+        "id": "P054",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000162.jpg"
+      },
+      {
+        "id": "P055",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000189.jpg"
+      },
+      {
+        "id": "P056",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000207.jpg"
+      },
+      {
+        "id": "P057",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000243.jpg"
+      },
+      {
+        "id": "P058",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000261.jpg"
+      },
+      {
+        "id": "P059",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000270.jpg"
+      },
+      {
+        "id": "P060",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000297.jpg"
+      },
+      {
+        "id": "P061",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000324.jpg"
+      }
+    ],
+    "Loft Bedroom": [
+      {
+        "id": "P157",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f000090.jpg"
+      },
+      {
+        "id": "P158",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f000360.jpg"
+      },
+      {
+        "id": "P159",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f000432.jpg"
+      },
+      {
+        "id": "P160",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f000720.jpg"
+      },
+      {
+        "id": "P161",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f000801.jpg"
+      },
+      {
+        "id": "P162",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f001143.jpg"
+      },
+      {
+        "id": "P163",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f001224.jpg"
+      },
+      {
+        "id": "P164",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f001404.jpg"
+      },
+      {
+        "id": "P165",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f001719.jpg"
+      },
+      {
+        "id": "P166",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f001818.jpg"
+      },
+      {
+        "id": "P167",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f002052.jpg"
+      },
+      {
+        "id": "P168",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f002214.jpg"
+      },
+      {
+        "id": "P169",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f002367.jpg"
+      },
+      {
+        "id": "P170",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f002718.jpg"
+      },
+      {
+        "id": "P171",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f002736.jpg"
+      },
+      {
+        "id": "P172",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f003078.jpg"
+      },
+      {
+        "id": "P173",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f003294.jpg"
+      },
+      {
+        "id": "P174",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f003465.jpg"
+      },
+      {
+        "id": "P175",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f003519.jpg"
+      },
+      {
+        "id": "P176",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f003789.jpg"
+      },
+      {
+        "id": "P177",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f003969.jpg"
+      },
+      {
+        "id": "P178",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f004149.jpg"
+      },
+      {
+        "id": "P179",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f004338.jpg"
+      },
+      {
+        "id": "P180",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f004491.jpg"
+      },
+      {
+        "id": "P181",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000000.jpg"
+      },
+      {
+        "id": "P182",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000036.jpg"
+      },
+      {
+        "id": "P183",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000045.jpg"
+      },
+      {
+        "id": "P184",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000072.jpg"
+      },
+      {
+        "id": "P185",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000090.jpg"
+      },
+      {
+        "id": "P186",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000117.jpg"
+      },
+      {
+        "id": "P187",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000144.jpg"
+      },
+      {
+        "id": "P188",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000171.jpg"
+      },
+      {
+        "id": "P189",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000180.jpg"
+      }
+    ],
+    "Bathroom": [
+      {
+        "id": "P001",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000027.jpg"
+      },
+      {
+        "id": "P002",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000045.jpg"
+      },
+      {
+        "id": "P003",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000090.jpg"
+      },
+      {
+        "id": "P004",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000135.jpg"
+      },
+      {
+        "id": "P005",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000180.jpg"
+      },
+      {
+        "id": "P006",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000207.jpg"
+      },
+      {
+        "id": "P007",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000243.jpg"
+      },
+      {
+        "id": "P008",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000288.jpg"
+      },
+      {
+        "id": "P009",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000333.jpg"
+      },
+      {
+        "id": "P010",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000360.jpg"
+      },
+      {
+        "id": "P011",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000405.jpg"
+      },
+      {
+        "id": "P012",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000432.jpg"
+      },
+      {
+        "id": "P013",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000468.jpg"
+      },
+      {
+        "id": "P014",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000513.jpg"
+      },
+      {
+        "id": "P015",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000549.jpg"
+      },
+      {
+        "id": "P016",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000612.jpg"
+      },
+      {
+        "id": "P017",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000648.jpg"
+      },
+      {
+        "id": "P018",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000657.jpg"
+      },
+      {
+        "id": "P019",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000693.jpg"
+      },
+      {
+        "id": "P020",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000747.jpg"
+      },
+      {
+        "id": "P021",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000774.jpg"
+      },
+      {
+        "id": "P022",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000810.jpg"
+      },
+      {
+        "id": "P023",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000864.jpg"
+      },
+      {
+        "id": "P024",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000882.jpg"
+      }
+    ],
+    "En-suite Shower Room": [
+      {
+        "id": "P062",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000000.jpg"
+      },
+      {
+        "id": "P063",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000045.jpg"
+      },
+      {
+        "id": "P064",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000099.jpg"
+      },
+      {
+        "id": "P065",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000153.jpg"
+      },
+      {
+        "id": "P066",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000171.jpg"
+      },
+      {
+        "id": "P067",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000207.jpg"
+      },
+      {
+        "id": "P068",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000261.jpg"
+      },
+      {
+        "id": "P069",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000288.jpg"
+      },
+      {
+        "id": "P070",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000342.jpg"
+      },
+      {
+        "id": "P071",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000351.jpg"
+      },
+      {
+        "id": "P072",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000387.jpg"
+      },
+      {
+        "id": "P073",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000441.jpg"
+      },
+      {
+        "id": "P074",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000468.jpg"
+      },
+      {
+        "id": "P075",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000504.jpg"
+      },
+      {
+        "id": "P076",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000540.jpg"
+      },
+      {
+        "id": "P077",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000603.jpg"
+      },
+      {
+        "id": "P078",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000630.jpg"
+      },
+      {
+        "id": "P079",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000675.jpg"
+      },
+      {
+        "id": "P080",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000729.jpg"
+      },
+      {
+        "id": "P081",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000765.jpg"
+      },
+      {
+        "id": "P082",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000801.jpg"
+      },
+      {
+        "id": "P083",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000810.jpg"
+      },
+      {
+        "id": "P084",
+        "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000873.jpg"
+      }
+    ],
+    "Loft Office": [
+      {
+        "id": "P190",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000072.jpg"
+      },
+      {
+        "id": "P191",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000117.jpg"
+      },
+      {
+        "id": "P192",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000180.jpg"
+      },
+      {
+        "id": "P193",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000288.jpg"
+      },
+      {
+        "id": "P194",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000360.jpg"
+      },
+      {
+        "id": "P195",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000432.jpg"
+      },
+      {
+        "id": "P196",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000567.jpg"
+      },
+      {
+        "id": "P197",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000639.jpg"
+      },
+      {
+        "id": "P198",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000720.jpg"
+      },
+      {
+        "id": "P199",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000756.jpg"
+      },
+      {
+        "id": "P200",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000828.jpg"
+      },
+      {
+        "id": "P201",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f000972.jpg"
+      },
+      {
+        "id": "P202",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001026.jpg"
+      },
+      {
+        "id": "P203",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001080.jpg"
+      },
+      {
+        "id": "P204",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001179.jpg"
+      },
+      {
+        "id": "P205",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001224.jpg"
+      },
+      {
+        "id": "P206",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001350.jpg"
+      },
+      {
+        "id": "P207",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001440.jpg"
+      },
+      {
+        "id": "P208",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001539.jpg"
+      },
+      {
+        "id": "P209",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001602.jpg"
+      },
+      {
+        "id": "P210",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001647.jpg"
+      },
+      {
+        "id": "P211",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001719.jpg"
+      },
+      {
+        "id": "P212",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001827.jpg"
+      },
+      {
+        "id": "P213",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Office/loft_office_f001872.jpg"
+      }
+    ],
+    "Loft Shower Room": [
+      {
+        "id": "P214",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000090.jpg"
+      },
+      {
+        "id": "P215",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000162.jpg"
+      },
+      {
+        "id": "P216",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000225.jpg"
+      },
+      {
+        "id": "P217",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000306.jpg"
+      },
+      {
+        "id": "P218",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000459.jpg"
+      },
+      {
+        "id": "P219",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000522.jpg"
+      },
+      {
+        "id": "P220",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000639.jpg"
+      },
+      {
+        "id": "P221",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000666.jpg"
+      },
+      {
+        "id": "P222",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000828.jpg"
+      },
+      {
+        "id": "P223",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000918.jpg"
+      },
+      {
+        "id": "P224",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f000999.jpg"
+      },
+      {
+        "id": "P225",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001125.jpg"
+      },
+      {
+        "id": "P226",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001170.jpg"
+      },
+      {
+        "id": "P227",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001260.jpg"
+      },
+      {
+        "id": "P228",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001386.jpg"
+      },
+      {
+        "id": "P229",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001440.jpg"
+      },
+      {
+        "id": "P230",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001593.jpg"
+      },
+      {
+        "id": "P231",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001656.jpg"
+      },
+      {
+        "id": "P232",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001728.jpg"
+      },
+      {
+        "id": "P233",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001800.jpg"
+      },
+      {
+        "id": "P234",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001962.jpg"
+      },
+      {
+        "id": "P235",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f002070.jpg"
+      },
+      {
+        "id": "P236",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f002160.jpg"
+      },
+      {
+        "id": "P237",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f002232.jpg"
+      }
+    ],
+    "Stairs and Landing": [
+      {
+        "id": "P238",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000045.jpg"
+      },
+      {
+        "id": "P239",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000126.jpg"
+      },
+      {
+        "id": "P240",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000243.jpg"
+      },
+      {
+        "id": "P241",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000279.jpg"
+      },
+      {
+        "id": "P242",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000387.jpg"
+      },
+      {
+        "id": "P243",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000459.jpg"
+      },
+      {
+        "id": "P244",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000549.jpg"
+      },
+      {
+        "id": "P245",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000603.jpg"
+      },
+      {
+        "id": "P246",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000675.jpg"
+      },
+      {
+        "id": "P247",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000747.jpg"
+      },
+      {
+        "id": "P248",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000891.jpg"
+      },
+      {
+        "id": "P249",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000972.jpg"
+      },
+      {
+        "id": "P250",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000981.jpg"
+      },
+      {
+        "id": "P251",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f001134.jpg"
+      },
+      {
+        "id": "P252",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f001251.jpg"
+      },
+      {
+        "id": "P253",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f001359.jpg"
+      },
+      {
+        "id": "P254",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f001458.jpg"
+      },
+      {
+        "id": "P255",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f001485.jpg"
+      },
+      {
+        "id": "P256",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f001548.jpg"
+      },
+      {
+        "id": "P257",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f001701.jpg"
+      },
+      {
+        "id": "P258",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f001737.jpg"
+      },
+      {
+        "id": "P259",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f001836.jpg"
+      },
+      {
+        "id": "P260",
+        "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f001881.jpg"
+      }
+    ]
+  },
+  "top_disagreements": [
+    {
+      "metric": "clipiqa",
+      "room": "Stairs and Landing",
+      "id": "P247",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000747.jpg",
+      "classical_rank": 1.0,
+      "clipiqa_rank": 23.0,
+      "of": 23,
+      "gap": 1.0
+    },
+    {
+      "metric": "clipiqa",
+      "room": "En-suite Shower Room",
+      "id": "P079",
+      "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000675.jpg",
+      "classical_rank": 1.0,
+      "clipiqa_rank": 22.0,
+      "of": 23,
+      "gap": 0.955
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Loft Shower Room",
+      "id": "P232",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001728.jpg",
+      "classical_rank": 23.0,
+      "clipiqa_rank": 2.0,
+      "of": 24,
+      "gap": -0.913
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Bedroom 1",
+      "id": "P049",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000054.jpg",
+      "classical_rank": 1.0,
+      "clipiqa_rank": 33.0,
+      "of": 37,
+      "gap": 0.889
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Loft Bedroom",
+      "id": "P169",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f002367.jpg",
+      "classical_rank": 29.0,
+      "clipiqa_rank": 1.0,
+      "of": 33,
+      "gap": -0.875
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Loft Shower Room",
+      "id": "P227",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001260.jpg",
+      "classical_rank": 1.0,
+      "clipiqa_rank": 21.0,
+      "of": 24,
+      "gap": 0.87
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Loft Bedroom",
+      "id": "P170",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_a_f002718.jpg",
+      "classical_rank": 32.0,
+      "clipiqa_rank": 5.0,
+      "of": 33,
+      "gap": -0.844
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Loft Bedroom",
+      "id": "P185",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000090.jpg",
+      "classical_rank": 2.0,
+      "clipiqa_rank": 29.0,
+      "of": 33,
+      "gap": 0.844
+    },
+    {
+      "metric": "musiq",
+      "room": "Living Room",
+      "id": "P149",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001143.jpg",
+      "classical_rank": 3.0,
+      "musiq_rank": 22.0,
+      "of": 24,
+      "gap": 0.826
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Hallway",
+      "id": "P101",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000648.jpg",
+      "classical_rank": 5.0,
+      "clipiqa_rank": 24.0,
+      "of": 24,
+      "gap": 0.826
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Living Room",
+      "id": "P149",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f001143.jpg",
+      "classical_rank": 3.0,
+      "clipiqa_rank": 22.0,
+      "of": 24,
+      "gap": 0.826
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Bathroom",
+      "id": "P009",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000333.jpg",
+      "classical_rank": 5.0,
+      "clipiqa_rank": 24.0,
+      "of": 24,
+      "gap": 0.826
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Bathroom",
+      "id": "P013",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000468.jpg",
+      "classical_rank": 3.0,
+      "clipiqa_rank": 22.0,
+      "of": 24,
+      "gap": 0.826
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Bathroom",
+      "id": "P014",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000513.jpg",
+      "classical_rank": 1.0,
+      "clipiqa_rank": 20.0,
+      "of": 24,
+      "gap": 0.826
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Stairs and Landing",
+      "id": "P239",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000126.jpg",
+      "classical_rank": 23.0,
+      "clipiqa_rank": 5.0,
+      "of": 23,
+      "gap": -0.818
+    },
+    {
+      "metric": "musiq",
+      "room": "Hallway",
+      "id": "P095",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000414.jpg",
+      "classical_rank": 21.0,
+      "musiq_rank": 3.0,
+      "of": 24,
+      "gap": -0.783
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Kitchen",
+      "id": "P127",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f006030.jpg",
+      "classical_rank": 23.0,
+      "clipiqa_rank": 5.0,
+      "of": 24,
+      "gap": -0.783
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Bathroom",
+      "id": "P005",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000180.jpg",
+      "classical_rank": 19.0,
+      "clipiqa_rank": 1.0,
+      "of": 24,
+      "gap": -0.783
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Loft Shower Room",
+      "id": "P228",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Loft Shower Room/loft_shower_f001386.jpg",
+      "classical_rank": 2.0,
+      "clipiqa_rank": 20.0,
+      "of": 24,
+      "gap": 0.783
+    },
+    {
+      "metric": "clipiqa",
+      "room": "En-suite Shower Room",
+      "id": "P077",
+      "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000603.jpg",
+      "classical_rank": 2.0,
+      "clipiqa_rank": 19.0,
+      "of": 23,
+      "gap": 0.773
+    },
+    {
+      "metric": "clipiqa",
+      "room": "En-suite Shower Room",
+      "id": "P084",
+      "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000873.jpg",
+      "classical_rank": 23.0,
+      "clipiqa_rank": 6.0,
+      "of": 23,
+      "gap": -0.773
+    },
+    {
+      "metric": "musiq",
+      "room": "Hallway",
+      "id": "P101",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000648.jpg",
+      "classical_rank": 5.0,
+      "musiq_rank": 21.0,
+      "of": 24,
+      "gap": 0.696
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Hallway",
+      "id": "P090",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000225.jpg",
+      "classical_rank": 4.0,
+      "clipiqa_rank": 20.0,
+      "of": 24,
+      "gap": 0.696
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Kitchen",
+      "id": "P120",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Kitchen/kitchen_f003762.jpg",
+      "classical_rank": 1.0,
+      "clipiqa_rank": 17.0,
+      "of": 24,
+      "gap": 0.696
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Bathroom",
+      "id": "P008",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000288.jpg",
+      "classical_rank": 2.0,
+      "clipiqa_rank": 18.0,
+      "of": 24,
+      "gap": 0.696
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Bathroom",
+      "id": "P024",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000882.jpg",
+      "classical_rank": 22.0,
+      "clipiqa_rank": 6.0,
+      "of": 24,
+      "gap": -0.696
+    },
+    {
+      "metric": "clipiqa",
+      "room": "En-suite Shower Room",
+      "id": "P076",
+      "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000540.jpg",
+      "classical_rank": 3.0,
+      "clipiqa_rank": 18.0,
+      "of": 23,
+      "gap": 0.682
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Bedroom 1",
+      "id": "P047",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Bedroom 1/bedroom1_b_f000000.jpg",
+      "classical_rank": 37.0,
+      "clipiqa_rank": 13.0,
+      "of": 37,
+      "gap": -0.667
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Loft Bedroom",
+      "id": "P186",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000117.jpg",
+      "classical_rank": 3.0,
+      "clipiqa_rank": 24.0,
+      "of": 33,
+      "gap": 0.656
+    },
+    {
+      "metric": "musiq",
+      "room": "Hallway",
+      "id": "P089",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000153.jpg",
+      "classical_rank": 16.0,
+      "musiq_rank": 1.0,
+      "of": 24,
+      "gap": -0.652
+    },
+    {
+      "metric": "musiq",
+      "room": "Hallway",
+      "id": "P091",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000261.jpg",
+      "classical_rank": 8.0,
+      "musiq_rank": 23.0,
+      "of": 24,
+      "gap": 0.652
+    },
+    {
+      "metric": "musiq",
+      "room": "Hallway",
+      "id": "P094",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000369.jpg",
+      "classical_rank": 22.0,
+      "musiq_rank": 7.0,
+      "of": 24,
+      "gap": -0.652
+    },
+    {
+      "metric": "musiq",
+      "room": "Hallway",
+      "id": "P100",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000576.jpg",
+      "classical_rank": 3.0,
+      "musiq_rank": 18.0,
+      "of": 24,
+      "gap": 0.652
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Hallway",
+      "id": "P091",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Hallway/hallway_f000261.jpg",
+      "classical_rank": 8.0,
+      "clipiqa_rank": 23.0,
+      "of": 24,
+      "gap": 0.652
+    },
+    {
+      "metric": "musiq",
+      "room": "En-suite Shower Room",
+      "id": "P076",
+      "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000540.jpg",
+      "classical_rank": 3.0,
+      "musiq_rank": 17.0,
+      "of": 23,
+      "gap": 0.636
+    },
+    {
+      "metric": "clipiqa",
+      "room": "En-suite Shower Room",
+      "id": "P081",
+      "path": "/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room/ensuite_f000765.jpg",
+      "classical_rank": 18.0,
+      "clipiqa_rank": 4.0,
+      "of": 23,
+      "gap": -0.636
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Stairs and Landing",
+      "id": "P248",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Stairs and Landing/stairs_f000891.jpg",
+      "classical_rank": 20.0,
+      "clipiqa_rank": 6.0,
+      "of": 23,
+      "gap": -0.636
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Loft Bedroom",
+      "id": "P184",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Loft Bedroom/loft_bedroom_b_f000072.jpg",
+      "classical_rank": 1.0,
+      "clipiqa_rank": 21.0,
+      "of": 33,
+      "gap": 0.625
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Living Room",
+      "id": "P133",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Living Room/living_f000009.jpg",
+      "classical_rank": 1.0,
+      "clipiqa_rank": 15.0,
+      "of": 24,
+      "gap": 0.609
+    },
+    {
+      "metric": "clipiqa",
+      "room": "Bathroom",
+      "id": "P007",
+      "path": "/Users/cobro/code/inventory/report/work/frames/Bathroom/bathroom_f000243.jpg",
+      "classical_rank": 9.0,
+      "clipiqa_rank": 23.0,
+      "of": 24,
+      "gap": 0.609
+    }
+  ]
+}

@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset='utf-8'>
+<title>ML-E19 shot-scale contact sheet</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:1rem;background:#111;color:#eee}
+h1,h2{margin:0.5rem 0}
+.summary{background:#222;padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.cell{background:#222;border-radius:8px;overflow:hidden;border:2px solid #333}
+.cell.pick{border-color:#f5c518}
+.cell img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;background:#000}
+.meta{padding:8px;font-size:12px;line-height:1.4}
+.star{color:#f5c518;font-weight:bold}
+.metrics{color:#aaa}
+</style></head><body>
+<h1>ML-E19 — shot-scale (long vs close-up)</h1>
+<p>Report: /Users/cobro/code/inventory/report</p>
+<p>CLIP zero-shot margin: mean(long-shot prompts) − mean(close-up prompts). Pass bar: mean Spearman ρ vs hero-gold ≥ E5 cover scorer (classical baseline). Report: report</p>
+<div class='summary'><h2>Metrics</h2><pre>
+{
+  &quot;per_room&quot;: {
+    &quot;Hallway&quot;: {
+      &quot;n_frames&quot;: 8,
+      &quot;spearman_shot_scale&quot;: 0.6,
+      &quot;spearman_cover_e5&quot;: 0.4,
+      &quot;top1_hit_cover_e5&quot;: true,
+      &quot;top3_hit_cover_e5&quot;: true,
+      &quot;top1_hit_shot_scale&quot;: false,
+      &quot;top3_hit_shot_scale&quot;: true
+    },
+    &quot;Living Room&quot;: {
+      &quot;n_frames&quot;: 9,
+      &quot;spearman_shot_scale&quot;: -0.6,
+      &quot;spearman_cover_e5&quot;: 0.4,
+      &quot;top1_hit_cover_e5&quot;: true,
+      &quot;top3_hit_cover_e5&quot;: true,
+      &quot;top1_hit_shot_scale&quot;: false,
+      &quot;top3_hit_shot_scale&quot;: true
+    },
+    &quot;Kitchen&quot;: {
+      &quot;n_frames&quot;: 24,
+      &quot;spearman_shot_scale&quot;: 0.9,
+      &quot;spearman_cover_e5&quot;: 0.2,
+      &quot;top1_hit_cover_e5&quot;: false,
+      &quot;top3_hit_cover_e5&quot;: false,
+      &quot;top1_hit_shot_scale&quot;: false,
+      &quot;top3_hit_shot_scale&quot;: true
+    },
+    &quot;Bedroom 1&quot;: {
+      &quot;n_frames&quot;: 8,
+      &quot;spearman_shot_scale&quot;: -0.6,
+      &quot;spearman_cover_e5&quot;: 0.6,
+      &quot;top1_hit_cover_e5&quot;: false,
+      &quot;top3_hit_cover_e5&quot;: true,
+      &quot;top1_hit_shot_scale&quot;: false,
+      &quot;top3_hit_shot_scale&quot;: true
+    },
+    &quot;Loft Bedroom&quot;: {
+      &quot;n_frames&quot;: 22,
+      &quot;spearman_shot_scale&quot;: 0.3,
+      &quot;spearman_cover_e5&quot;: 0.7,
+      &quot;top1_hit_cover_e5&quot;: true,
+      &quot;top3_hit_cover_e5&quot;: true,
+      &quot;top1_hit_shot_scale&quot;: false,
+      &quot;top3_hit_shot_scale&quot;: true
+    },
+    &quot;Bathroom&quot;: {
+      &quot;n_frames&quot;: 4,
+      &quot;spearman_shot_scale&quot;: null,
+      &quot;spearman_cover_e5&quot;: null,
+      &quot;top1_hit_shot_scale&quot;: false,
+      &quot;top3_hit_shot_scale&quot;: true
+    },
+    &quot;En-suite Shower Room&quot;: {
+      &quot;n_frames&quot;: 4,
+      &quot;spearman_shot_scale&quot;: null,
+      &quot;spearman_cover_e5&quot;: null,
+      &quot;top1_hit_shot_scale&quot;: false,
+      &quot;top3_hit_shot_scale&quot;: true
+    },
+    &quot;Loft Shower Room&quot;: {
+      &quot;n_frames&quot;: 8,
+      &quot;spearman_shot_scale&quot;: -0.3,
+      &quot;spearman_cover_e5&quot;: 0.9,
+      &quot;top1_hit_cover_e5&quot;: true,
+      &quot;top3_hit_cover_e5&quot;: true,
+      &quot;top1_hit_shot_scale&quot;: false,
+      &quot;top3_hit_shot_scale&quot;: true
+    },
+    &quot;Stairs and Landing&quot;: {
+      &quot;n_frames&quot;: 6,
+      &quot;spearman_shot_scale&quot;: 0.2,
+      &quot;spearman_cover_e5&quot;: -0.1,
+      &quot;top1_hit_cover_e5&quot;: false,
+      &quot;top3_hit_cover_e5&quot;: true,
+      &quot;top1_hit_shot_scale&quot;: true,
+      &quot;top3_hit_shot_scale&quot;: true
+    }
+  },
+  &quot;n_rooms&quot;: 9,
+  &quot;mean_spearman_shot_scale&quot;: 0.071,
+  &quot;mean_spearman_cover_e5&quot;: 0.443,
+  &quot;pass_bar&quot;: false,
+  &quot;top1_hit_rate_shot_scale&quot;: 14.3,
+  &quot;timing&quot;: {
+    &quot;infer_s&quot;: 53.88,
+    &quot;ms_per_frame&quot;: 579.3,
+    &quot;backend&quot;: &quot;open_clip&quot;
+  },
+  &quot;prompts&quot;: {
+    &quot;long_shot&quot;: [
+      &quot;long shot of a room interior&quot;,
+      &quot;wide establishing shot showing the full room&quot;,
+      &quot;long shot showing floor walls and ceiling&quot;,
+      &quot;full room overview photograph&quot;
+    ],
+    &quot;close_up&quot;: [
+      &quot;close-up shot of an object or fixture&quot;,
+      &quot;extreme close-up detail photograph&quot;,
+      &quot;macro close-up of a household item&quot;,
+      &quot;tight crop filling the frame with one surface&quot;
+    ]
+  }
+}
+</pre></div>
+<h2>Hallway</h2>
+<p><em>Wide hallway with floor and floral wallpaper; avoid door-edge close-ups</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000045.jpg' alt='IMG_5512_f000045.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000045.jpg</strong><br>
+<span class='metrics'>
+margin=0.071 long=1.00 shot=1 hero=3 gold=3
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000009.jpg' alt='IMG_5512_f000009.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000009.jpg</strong><br>
+<span class='metrics'>
+margin=0.069 long=1.00 shot=2 hero=— gold=2
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f009738.jpg' alt='IMG_5512_f009738.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f009738.jpg</strong><br>
+<span class='metrics'>
+margin=0.061 long=1.00 shot=3 hero=1 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000081.jpg' alt='IMG_5512_f000081.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000081.jpg</strong><br>
+<span class='metrics'>
+margin=0.055 long=1.00 shot=4 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f009432.jpg' alt='IMG_5512_f009432.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f009432.jpg</strong><br>
+<span class='metrics'>
+margin=0.051 long=0.99 shot=5 hero=2 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000144.jpg' alt='IMG_5512_f000144.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000144.jpg</strong><br>
+<span class='metrics'>
+margin=0.041 long=0.98 shot=6 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f010341.jpg' alt='IMG_5512_f010341.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010341.jpg</strong><br>
+<span class='metrics'>
+margin=0.037 long=0.98 shot=7 hero=— gold=7
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f010071.jpg' alt='IMG_5512_f010071.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010071.jpg</strong><br>
+<span class='metrics'>
+margin=0.036 long=0.97 shot=8 hero=— gold=8
+</span></div></div>
+</div>
+<h2>Living Room</h2>
+<p><em>Sofa grouping and windows visible; avoid early doorway blur passes</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg01/IMG_5512_f000243.jpg' alt='IMG_5512_f000243.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000243.jpg</strong><br>
+<span class='metrics'>
+margin=0.048 long=0.99 shot=1 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg01/IMG_5512_f000297.jpg' alt='IMG_5512_f000297.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000297.jpg</strong><br>
+<span class='metrics'>
+margin=0.047 long=0.99 shot=2 hero=— gold=8
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f008496.jpg' alt='IMG_5512_f008496.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f008496.jpg</strong><br>
+<span class='metrics'>
+margin=0.046 long=0.99 shot=3 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f009063.jpg' alt='IMG_5512_f009063.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f009063.jpg</strong><br>
+<span class='metrics'>
+margin=0.041 long=0.98 shot=4 hero=— gold=3
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg01/IMG_5512_f000216.jpg' alt='IMG_5512_f000216.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000216.jpg</strong><br>
+<span class='metrics'>
+margin=0.040 long=0.98 shot=5 hero=— gold=9
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f007839.jpg' alt='IMG_5512_f007839.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f007839.jpg</strong><br>
+<span class='metrics'>
+margin=0.034 long=0.97 shot=6 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f009126.jpg' alt='IMG_5512_f009126.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f009126.jpg</strong><br>
+<span class='metrics'>
+margin=0.032 long=0.96 shot=7 hero=1 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f008676.jpg' alt='IMG_5512_f008676.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f008676.jpg</strong><br>
+<span class='metrics'>
+margin=0.025 long=0.92 shot=8 hero=3 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f008280.jpg' alt='IMG_5512_f008280.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f008280.jpg</strong><br>
+<span class='metrics'>
+margin=0.016 long=0.83 shot=9 hero=2 gold=2
+</span></div></div>
+</div>
+<h2>Kitchen</h2>
+<p><em>Need hob and cabinets visible; avoid drawer/bread-bin close-ups and hob-surface fill</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f000495.jpg' alt='IMG_5512_f000495.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000495.jpg</strong><br>
+<span class='metrics'>
+margin=0.025 long=0.92 shot=1 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f007182.jpg' alt='IMG_5512_f007182.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f007182.jpg</strong><br>
+<span class='metrics'>
+margin=0.018 long=0.86 shot=2 hero=5 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f004023.jpg' alt='IMG_5512_f004023.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004023.jpg</strong><br>
+<span class='metrics'>
+margin=0.015 long=0.82 shot=3 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f001503.jpg' alt='IMG_5512_f001503.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f001503.jpg</strong><br>
+<span class='metrics'>
+margin=0.013 long=0.78 shot=4 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f000684.jpg' alt='IMG_5512_f000684.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000684.jpg</strong><br>
+<span class='metrics'>
+margin=0.008 long=0.69 shot=5 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f006579.jpg' alt='IMG_5512_f006579.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006579.jpg</strong><br>
+<span class='metrics'>
+margin=0.007 long=0.67 shot=6 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f004374.jpg' alt='IMG_5512_f004374.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004374.jpg</strong><br>
+<span class='metrics'>
+margin=0.004 long=0.60 shot=7 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f002898.jpg' alt='IMG_5512_f002898.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002898.jpg</strong><br>
+<span class='metrics'>
+margin=0.003 long=0.58 shot=8 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f000981.jpg' alt='IMG_5512_f000981.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f000981.jpg</strong><br>
+<span class='metrics'>
+margin=0.003 long=0.58 shot=9 hero=1 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f002529.jpg' alt='IMG_5512_f002529.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002529.jpg</strong><br>
+<span class='metrics'>
+margin=0.000 long=0.51 shot=10 hero=7 gold=3
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f004914.jpg' alt='IMG_5512_f004914.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004914.jpg</strong><br>
+<span class='metrics'>
+margin=-0.000 long=0.50 shot=11 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f001584.jpg' alt='IMG_5512_f001584.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f001584.jpg</strong><br>
+<span class='metrics'>
+margin=-0.003 long=0.43 shot=12 hero=— gold=2
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f001854.jpg' alt='IMG_5512_f001854.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f001854.jpg</strong><br>
+<span class='metrics'>
+margin=-0.004 long=0.41 shot=13 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f002376.jpg' alt='IMG_5512_f002376.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002376.jpg</strong><br>
+<span class='metrics'>
+margin=-0.004 long=0.41 shot=14 hero=6 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f006300.jpg' alt='IMG_5512_f006300.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006300.jpg</strong><br>
+<span class='metrics'>
+margin=-0.006 long=0.36 shot=15 hero=4 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f005292.jpg' alt='IMG_5512_f005292.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f005292.jpg</strong><br>
+<span class='metrics'>
+margin=-0.008 long=0.32 shot=16 hero=3 gold=23
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f003393.jpg' alt='IMG_5512_f003393.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f003393.jpg</strong><br>
+<span class='metrics'>
+margin=-0.015 long=0.18 shot=17 hero=— gold=24
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f006948.jpg' alt='IMG_5512_f006948.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006948.jpg</strong><br>
+<span class='metrics'>
+margin=-0.015 long=0.18 shot=18 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f005625.jpg' alt='IMG_5512_f005625.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f005625.jpg</strong><br>
+<span class='metrics'>
+margin=-0.016 long=0.17 shot=19 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f003762.jpg' alt='IMG_5512_f003762.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f003762.jpg</strong><br>
+<span class='metrics'>
+margin=-0.017 long=0.15 shot=20 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f003528.jpg' alt='IMG_5512_f003528.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f003528.jpg</strong><br>
+<span class='metrics'>
+margin=-0.024 long=0.09 shot=21 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f004977.jpg' alt='IMG_5512_f004977.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004977.jpg</strong><br>
+<span class='metrics'>
+margin=-0.024 long=0.08 shot=22 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f007686.jpg' alt='IMG_5512_f007686.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f007686.jpg</strong><br>
+<span class='metrics'>
+margin=-0.028 long=0.06 shot=23 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f006039.jpg' alt='IMG_5512_f006039.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006039.jpg</strong><br>
+<span class='metrics'>
+margin=-0.044 long=0.01 shot=24 hero=2 gold=—
+</span></div></div>
+</div>
+<h2>Bedroom 1</h2>
+<p><em>Full bed and walls in frame; avoid bedside-table close-ups</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f011250.jpg' alt='IMG_5512_f011250.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011250.jpg</strong><br>
+<span class='metrics'>
+margin=0.043 long=0.99 shot=1 hero=2 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f013023.jpg' alt='IMG_5512_f013023.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013023.jpg</strong><br>
+<span class='metrics'>
+margin=0.037 long=0.98 shot=2 hero=— gold=7
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f011430.jpg' alt='IMG_5512_f011430.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011430.jpg</strong><br>
+<span class='metrics'>
+margin=0.034 long=0.97 shot=3 hero=4 gold=8
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f012843.jpg' alt='IMG_5512_f012843.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012843.jpg</strong><br>
+<span class='metrics'>
+margin=0.029 long=0.95 shot=4 hero=3 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f011700.jpg' alt='IMG_5512_f011700.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011700.jpg</strong><br>
+<span class='metrics'>
+margin=0.019 long=0.87 shot=5 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f012735.jpg' alt='IMG_5512_f012735.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f012735.jpg</strong><br>
+<span class='metrics'>
+margin=0.019 long=0.87 shot=6 hero=1 gold=2
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f012906.jpg' alt='IMG_5512_f012906.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012906.jpg</strong><br>
+<span class='metrics'>
+margin=0.013 long=0.78 shot=7 hero=— gold=1
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f012042.jpg' alt='IMG_5512_f012042.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012042.jpg</strong><br>
+<span class='metrics'>
+margin=0.008 long=0.68 shot=8 hero=— gold=3
+</span></div></div>
+</div>
+<h2>Loft Bedroom</h2>
+<p><em>Loft eaves and bed visible; avoid wardrobe interior fill</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f017658.jpg' alt='IMG_5512_f017658.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017658.jpg</strong><br>
+<span class='metrics'>
+margin=0.071 long=1.00 shot=1 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f018468.jpg' alt='IMG_5512_f018468.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f018468.jpg</strong><br>
+<span class='metrics'>
+margin=0.061 long=1.00 shot=2 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f017469.jpg' alt='IMG_5512_f017469.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017469.jpg</strong><br>
+<span class='metrics'>
+margin=0.053 long=0.99 shot=3 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f016461.jpg' alt='IMG_5512_f016461.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016461.jpg</strong><br>
+<span class='metrics'>
+margin=0.048 long=0.99 shot=4 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f018801.jpg' alt='IMG_5512_f018801.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f018801.jpg</strong><br>
+<span class='metrics'>
+margin=0.039 long=0.98 shot=5 hero=3 gold=2
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f018756.jpg' alt='IMG_5512_f018756.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f018756.jpg</strong><br>
+<span class='metrics'>
+margin=0.036 long=0.97 shot=6 hero=4 gold=21
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f019107.jpg' alt='IMG_5512_f019107.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f019107.jpg</strong><br>
+<span class='metrics'>
+margin=0.034 long=0.97 shot=7 hero=5 gold=3
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f015174.jpg' alt='IMG_5512_f015174.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f015174.jpg</strong><br>
+<span class='metrics'>
+margin=0.032 long=0.96 shot=8 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f016038.jpg' alt='IMG_5512_f016038.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016038.jpg</strong><br>
+<span class='metrics'>
+margin=0.030 long=0.95 shot=9 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f020196.jpg' alt='IMG_5512_f020196.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f020196.jpg</strong><br>
+<span class='metrics'>
+margin=0.024 long=0.91 shot=10 hero=6 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f016164.jpg' alt='IMG_5512_f016164.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016164.jpg</strong><br>
+<span class='metrics'>
+margin=0.018 long=0.85 shot=11 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f016695.jpg' alt='IMG_5512_f016695.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016695.jpg</strong><br>
+<span class='metrics'>
+margin=0.016 long=0.83 shot=12 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f015246.jpg' alt='IMG_5512_f015246.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f015246.jpg</strong><br>
+<span class='metrics'>
+margin=0.010 long=0.73 shot=13 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f021150.jpg' alt='IMG_5512_f021150.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f021150.jpg</strong><br>
+<span class='metrics'>
+margin=0.010 long=0.73 shot=14 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f020295.jpg' alt='IMG_5512_f020295.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f020295.jpg</strong><br>
+<span class='metrics'>
+margin=0.008 long=0.70 shot=15 hero=1 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f019476.jpg' alt='IMG_5512_f019476.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f019476.jpg</strong><br>
+<span class='metrics'>
+margin=-0.002 long=0.46 shot=16 hero=2 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f017100.jpg' alt='IMG_5512_f017100.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017100.jpg</strong><br>
+<span class='metrics'>
+margin=-0.003 long=0.42 shot=17 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f021177.jpg' alt='IMG_5512_f021177.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f021177.jpg</strong><br>
+<span class='metrics'>
+margin=-0.005 long=0.39 shot=18 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f020754.jpg' alt='IMG_5512_f020754.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f020754.jpg</strong><br>
+<span class='metrics'>
+margin=-0.008 long=0.32 shot=19 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f019683.jpg' alt='IMG_5512_f019683.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f019683.jpg</strong><br>
+<span class='metrics'>
+margin=-0.010 long=0.27 shot=20 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f015777.jpg' alt='IMG_5512_f015777.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f015777.jpg</strong><br>
+<span class='metrics'>
+margin=-0.011 long=0.25 shot=21 hero=— gold=22
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f017883.jpg' alt='IMG_5512_f017883.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017883.jpg</strong><br>
+<span class='metrics'>
+margin=-0.013 long=0.21 shot=22 hero=— gold=—
+</span></div></div>
+</div>
+<h2>Bathroom</h2>
+<p><em>Vanity and bath suite overview; avoid motion-blurred pan frames</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f010854.jpg' alt='IMG_5512_f010854.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010854.jpg</strong><br>
+<span class='metrics'>
+margin=0.025 long=0.93 shot=1 hero=2 gold=2
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f011070.jpg' alt='IMG_5512_f011070.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f011070.jpg</strong><br>
+<span class='metrics'>
+margin=0.021 long=0.89 shot=2 hero=1 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f010629.jpg' alt='IMG_5512_f010629.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010629.jpg</strong><br>
+<span class='metrics'>
+margin=0.020 long=0.88 shot=3 hero=— gold=3
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f010593.jpg' alt='IMG_5512_f010593.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010593.jpg</strong><br>
+<span class='metrics'>
+margin=0.017 long=0.84 shot=4 hero=3 gold=4
+</span></div></div>
+</div>
+<h2>En-suite Shower Room</h2>
+<p><em>Shower room overview; avoid shower-head and tray close-ups</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012213.jpg' alt='IMG_5512_f012213.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012213.jpg</strong><br>
+<span class='metrics'>
+margin=0.032 long=0.96 shot=1 hero=— gold=3
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012492.jpg' alt='IMG_5512_f012492.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012492.jpg</strong><br>
+<span class='metrics'>
+margin=0.023 long=0.91 shot=2 hero=2 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012564.jpg' alt='IMG_5512_f012564.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f012564.jpg</strong><br>
+<span class='metrics'>
+margin=0.011 long=0.75 shot=3 hero=1 gold=4
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012141.jpg' alt='IMG_5512_f012141.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012141.jpg</strong><br>
+<span class='metrics'>
+margin=0.010 long=0.72 shot=4 hero=3 gold=2
+</span></div></div>
+</div>
+<h2>Loft Shower Room</h2>
+<p><em>Full shower enclosure visible; avoid tray and fitting close-ups</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f022194.jpg' alt='IMG_5512_f022194.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f022194.jpg</strong><br>
+<span class='metrics'>
+margin=0.015 long=0.81 shot=1 hero=— gold=2
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f023724.jpg' alt='IMG_5512_f023724.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f023724.jpg</strong><br>
+<span class='metrics'>
+margin=0.015 long=0.81 shot=2 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f021726.jpg' alt='IMG_5512_f021726.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f021726.jpg</strong><br>
+<span class='metrics'>
+margin=0.003 long=0.57 shot=3 hero=3 gold=7
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f023022.jpg' alt='IMG_5512_f023022.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f023022.jpg</strong><br>
+<span class='metrics'>
+margin=-0.005 long=0.37 shot=4 hero=— gold=8
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f023526.jpg' alt='IMG_5512_f023526.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f023526.jpg</strong><br>
+<span class='metrics'>
+margin=-0.006 long=0.35 shot=5 hero=— gold=3
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f021879.jpg' alt='IMG_5512_f021879.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f021879.jpg</strong><br>
+<span class='metrics'>
+margin=-0.013 long=0.21 shot=6 hero=1 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f022833.jpg' alt='IMG_5512_f022833.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f022833.jpg</strong><br>
+<span class='metrics'>
+margin=-0.013 long=0.21 shot=7 hero=2 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f022626.jpg' alt='IMG_5512_f022626.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f022626.jpg</strong><br>
+<span class='metrics'>
+margin=-0.016 long=0.17 shot=8 hero=— gold=—
+</span></div></div>
+</div>
+<h2>Stairs and Landing</h2>
+<p><em>Staircase and landing walls visible; avoid motion-blurred passes</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f014904.jpg' alt='IMG_5512_f014904.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f014904.jpg</strong><br>
+<span class='metrics'>
+margin=0.065 long=1.00 shot=1 hero=1 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f013176.jpg' alt='IMG_5512_f013176.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013176.jpg</strong><br>
+<span class='metrics'>
+margin=0.043 long=0.99 shot=2 hero=— gold=5
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f014274.jpg' alt='IMG_5512_f014274.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f014274.jpg</strong><br>
+<span class='metrics'>
+margin=0.026 long=0.93 shot=3 hero=4 gold=6
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f013482.jpg' alt='IMG_5512_f013482.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013482.jpg</strong><br>
+<span class='metrics'>
+margin=0.026 long=0.93 shot=4 hero=3 gold=2
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f013896.jpg' alt='IMG_5512_f013896.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013896.jpg</strong><br>
+<span class='metrics'>
+margin=0.012 long=0.77 shot=5 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f014382.jpg' alt='IMG_5512_f014382.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f014382.jpg</strong><br>
+<span class='metrics'>
+margin=0.010 long=0.72 shot=6 hero=2 gold=3
+</span></div></div>
+</div>
+</body></html>

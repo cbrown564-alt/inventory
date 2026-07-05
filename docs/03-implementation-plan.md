@@ -47,7 +47,14 @@ and compare our output against the human-written report.
 
 ## Milestone 2 — First real property run (the user's own tenancy)
 
-- [ ] Run `guide`, capture own property (~15–25 photos/room), run `build --backend claude`
+- [x] Run `guide`, capture own property (~15–25 photos/room), run `build --backend claude`
+      — done 3 Jul 2026, with a deviation from the plan's wording: capture was a
+      single 13-minute 1080p walkthrough **video** split into 10 per-room segments,
+      not 15–25 photos/room (the `guide` checklist was consulted, not followed
+      shot-by-shot). Raw output frozen at `report/pristine/` before review edits;
+      boundary-bleed scan of all 10 rooms, reviewed-copy cleanup, `--trim-lead`
+      ingest fix and derived run cost (~$3.30–3.90) in
+      [`docs/07`](07-own-property-run.md)
 - [x] Review-loop ergonomics: `--room` partial rebuild, `inventory.json` hand-edits
       preserved on rebuild (`--from-json`)
 - [ ] Tune the describe prompt on real failures (materials, defect localisation) —
@@ -105,15 +112,59 @@ and compare our output against the human-written report.
 
 ## Milestone 4 — Comparison reports (v2 feature)
 
-- [ ] `compare`: align items across two `inventory.json` files (room + name embedding
-      match), produce paired-photo delta report
-- [ ] Wear-and-tear vs damage classification (prompted rubric, cites TDS guidance)
-- [ ] Grade-delta summary table → suggested deduction discussion sheet
+- [x] `compare`: align items across two `inventory.json` files (room + name embedding
+      match), produce paired-photo delta report — done 3 Jul 2026 with a deviation
+      from the plan's wording: alignment is room match + **lexical head-noun
+      matching** (reusing `merge.py`'s `_head_nouns`/containment, zero API calls);
+      the embedding match was **not built** — no fixture showed the synonym-rename
+      failure embeddings would solve, while descriptor renames are handled
+      lexically (see [`docs/08`](08-compare.md) §1). Numbering drift: docs/05
+      calls this comparison milestone "M3" — docs/05 "M3" = this docs/03 "M4".
+- [x] Wear-and-tear vs damage classification (prompted rubric, cites TDS guidance)
+      — text-only rubric (gpt-5.4-mini via the openai backend; offline →
+      `unclassified`), `--tenancy-months`/`--occupancy`/per-item age inputs;
+      per-class agreement vs the IMS sample clerk: cleaning 90.0, damage 100.0,
+      fair wear and tear 55.6, landlord 85.7 (overall 78.6, n=28, one rubric
+      iteration after v1's below-coin-flip FWT class — [`docs/08`](08-compare.md) §4)
+- [x] Grade-delta summary table → suggested deduction discussion sheet — item /
+      grades / Δ / classification / evidence refs; deliberately **no £ amounts**
+      (monetary valuation stays a non-goal; test-enforced — [`docs/08`](08-compare.md) §5)
 
 ## Milestone 5 — Productisation (only if wanted)
 
-- [ ] Web UI (upload, review/edit items inline, export PDF)
-- [ ] Mobile guided capture (per-room shot list with live checklist)
+> **Scope decision, recorded 3 Jul 2026** — user's answer: *"yes you should
+> build the web UI and mobile guided capture for now."* Web UI and mobile
+> guided capture enter planning (acceptance criteria settled the same day,
+> implementer/adversarial-reviewer debate); C2PA/e-signature and
+> multi-property management stay deferred — unchecked, reopenable on request.
+
+- [x] Web UI (upload, review/edit items inline, export PDF) — M5a landed
+      3 Jul 2026 (see [`docs/09`](09-web-ui-and-capture.md)): upload
+      (`POST /api/photos`, magic-byte-sniffed extensions, 64 MiB cap),
+      build-from-browser (`POST /api/build`, `{"confirm": backend}` spend
+      guard), PDF export routes, redescribe spend-guard retrofit.
+      **Re-opened and re-closed the same day by the product-quality pass
+      ([`docs/10`](10-product-quality-review.md))** — the original box shipped
+      `/api/pdf` with no UI control reaching it and a PDF whose evidence
+      chain was broken; definition-of-done lesson recorded in docs/10 §6
+- [x] Product-quality pass on web UI + PDF flow, 3 Jul 2026
+      ([`docs/10`](10-product-quality-review.md)) — evidence chain repaired in
+      print (item→photo refs, Appendix B photo IDs, printed defect pins,
+      relative paths + full hashes); report-details editor + report/PDF
+      navigation; one design system (shared `_theme.css.j2`/`_ui.js.j2`, no
+      CDN fonts, real modals, de-jargoned copy); autosave + undo; PDF export
+      as a background job with a visible button; evidence lightbox with
+      zoom + full-res pinning; mobile layout fix; drag-and-drop parallel
+      uploads incl. **video** (`POST /api/upload`, streamed, 2 GiB cap);
+      Jinja autoescape enabled everywhere (was silently off — `.html.j2`
+      never matched `select_autoescape(["html"])`)
+- [x] ~~Mobile guided capture (per-room shot list with live checklist)~~ —
+      **closed as REMOVED, 4 Jul 2026.** Implementation completed 3 Jul; the
+      real-device test happened and the user killed the feature: the guided
+      per-room photo flow was a bad experience on a phone. Product pivot
+      recorded the same day: the primary capture path is **one walkthrough
+      video uploaded in the browser**, with room segmentation handled by the
+      pipeline. Retirement note in [`docs/09`](09-web-ui-and-capture.md) §M5b
 - [ ] C2PA / signed manifests; e-signature integration
 - [ ] Multi-property management, tenancy metadata, scheme-specific templates
 

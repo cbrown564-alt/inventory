@@ -1,0 +1,833 @@
+{
+  "reviewer": "claude-sonnet-5",
+  "pass": 2,
+  "verdicts": [
+    {
+      "id": "bathroom-bath-p14_i00",
+      "verdict": "accept",
+      "note": "Box tightly frames the full bathtub including front panel and glass screen.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-bath-p14_i03",
+      "verdict": "reject",
+      "note": "Box shows only ceiling corner and shower glass hinge/hardware; no bathtub visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-bath-p14_i07",
+      "verdict": "relocate",
+      "note": "Bathtub rim and basin correctly identified but bottom portion of box drifts onto checkered floor tile.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-bath-p14_i11",
+      "verdict": "accept",
+      "note": "Wide, clean capture of the bathtub basin, rim, and overflow drain.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-bath-p15_i02",
+      "verdict": "reject",
+      "note": "Box captures a handheld shower hose and wall/rim sliver; no bathtub body visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-ceiling-p14_i03",
+      "verdict": "reject",
+      "note": "Tiny indistinct crop does not localize a recognizable ceiling feature.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i00",
+      "verdict": "accept",
+      "note": "Box cleanly frames the marble-clad mirrored medicine cabinet with mirror door.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i01",
+      "verdict": "relocate",
+      "note": "Correctly on the open mirror door, but box is loose with excess wall/tile in the corners.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i03",
+      "verdict": "accept",
+      "note": "Box aligns with a mirror pane of the cabinet showing a person's reflection.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i04",
+      "verdict": "reject",
+      "note": "Narrow vertical strip of door frame/wall; no cabinet visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i02",
+      "verdict": "reject",
+      "note": "Full-frame box captures a shower hose against tile; no cabinet present.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i03",
+      "verdict": "reject",
+      "note": "Thin sliver of shower glass hinge hardware; not a mirrored cabinet.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i08",
+      "verdict": "accept",
+      "note": "Box shows the open mirrored cabinet interior with shelving and integrated lit mirror.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i09",
+      "verdict": "accept",
+      "note": "Box shows the open illuminated cabinet shelving, consistent with the mirrored cabinet unit.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i10",
+      "verdict": "relocate",
+      "note": "Cabinet interior correctly identified, but left edge of box bleeds into the sink/tub area.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-recessed-spotlights-p15_i01",
+      "verdict": "reject",
+      "note": "Box frames a chrome cylindrical hook/knob, not a recessed spotlight.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-recessed-spotlights-p15_i04",
+      "verdict": "reject",
+      "note": "Box frames a circular extractor vent, not a recessed spotlight.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-sink-p14_i00",
+      "verdict": "relocate",
+      "note": "Sink basin mostly captured but left edge of box extends into the bathtub area.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-sink-p14_i01",
+      "verdict": "relocate",
+      "note": "Box captures sink underside/front but drifts toward the bathtub corner rather than the basin top.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-sink-p14_i08",
+      "verdict": "reject",
+      "note": "Thin horizontal strip of tub rim; no basin, faucet, or sink feature visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-sink-p15_i07",
+      "verdict": "accept",
+      "note": "Tight, clean box on the rectangular sink basin and faucet.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-sink-p15_i08",
+      "verdict": "reject",
+      "note": "Box localizes a circular illuminated vanity mirror in cabinet shelving, not a sink.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-sink-p15_i10",
+      "verdict": "relocate",
+      "note": "Box centers on a wall fixture/handle and marble counter; basin is just outside the box.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-smoke-alarm-p14_i03",
+      "verdict": "accept",
+      "note": "Tiny but plausible circular ceiling-mounted smoke alarm shape; consistent with label.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-toilet-p14_i02",
+      "verdict": "accept",
+      "note": "Box correctly localizes the toilet bowl and lid from a side angle.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "bathroom-toilet-p16_i02",
+      "verdict": "accept",
+      "note": "Clean, tight box around the full toilet with lid raised.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p25_i10",
+      "verdict": "reject",
+      "note": "Box shows a fixed upper window with handle overlooking a construction site; no floor-level door threshold.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i01",
+      "verdict": "reject",
+      "note": "Elevated window opening onto a building facade; no door threshold or floor visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i06",
+      "verdict": "accept",
+      "note": "Box shows closed pleated blind over full door frame down to floor, with balcony railing visible above; consistent with balcony door.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i07",
+      "verdict": "relocate",
+      "note": "Only the upper door/blind corner is captured; box should extend down to the threshold.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i00",
+      "verdict": "relocate",
+      "note": "Chair back is present but box clips the top of the backrest and leg tips.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i01",
+      "verdict": "relocate",
+      "note": "Chair only partially visible at the left edge; box is dominated by the table surface above it.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i02",
+      "verdict": "relocate",
+      "note": "Box shows only the left half of the chair back; right half is cut off.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i04",
+      "verdict": "relocate",
+      "note": "Chair correctly identified but box includes a large area of table surface, clipping the chair legs.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i05",
+      "verdict": "accept",
+      "note": "Box captures the complete accent chair including legs and frame with minimal clipping; tighter than pass-1 assessed.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i08",
+      "verdict": "accept",
+      "note": "Close-up on upholstered chair back fabric, consistent with a dining/accent chair seat.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i04",
+      "verdict": "relocate",
+      "note": "Chair frame and cushion visible but over half the box is window glass/reflection; clips the chair top.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i07",
+      "verdict": "reject",
+      "note": "Box captures a textured area rug pattern; no chair visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i10",
+      "verdict": "relocate",
+      "note": "Only a faint diagonal shadow/leg fragment on wood floor is visible; too small to confirm without a wider box.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p28_i04",
+      "verdict": "reject",
+      "note": "Box shows a close-up chrome faucet/tap base, not a chair.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p30_i03",
+      "verdict": "reject",
+      "note": "Box shows a dark appliance vent/grille pattern, not a chair.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p30_i09",
+      "verdict": "reject",
+      "note": "Box shows a frying pan and cooling rack on a cabinet shelf; no chair present.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p31_i04",
+      "verdict": "uncertain",
+      "note": "Heavy motion blur obscures whether this is a chair; shape is plausible but unconfirmable.",
+      "pass1_verdict": "uncertain",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i00",
+      "verdict": "reject",
+      "note": "Tiny indistinct crop; plausible wall control panel rather than a ceiling feature.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i02",
+      "verdict": "reject",
+      "note": "Tiny indistinct crop consistent with a wall switch/plaque, not ceiling.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i03",
+      "verdict": "reject",
+      "note": "Tiny indistinct crop consistent with a small countertop object, not ceiling.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i06",
+      "verdict": "uncertain",
+      "note": "Extremely small, indistinct crop; cannot confirm ceiling content either way.",
+      "pass1_verdict": "uncertain",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p30_i09",
+      "verdict": "uncertain",
+      "note": "Tiny blurry sliver; likely a fixture fragment but too small to confirm.",
+      "pass1_verdict": "uncertain",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p31_i05",
+      "verdict": "reject",
+      "note": "Box shows a round vent/detector grille pattern, not a ceiling surface.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i00",
+      "verdict": "accept",
+      "note": "Clean tight box on the round wooden coffee table with metal legs.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i05",
+      "verdict": "relocate",
+      "note": "Only a narrow vertical sliver of the table edge is captured against the window.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-dining-table-p25_i00",
+      "verdict": "reject",
+      "note": "Box is centered on a dining chair; only a small table-edge sliver is visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-dining-table-p25_i04",
+      "verdict": "relocate",
+      "note": "Round marble table well captured but box extends to include chair backs on both sides.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p28_i08",
+      "verdict": "reject",
+      "note": "Box shows pull-out waste bin organizers inside a cabinet drawer, not a fridge/freezer.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p30_i01",
+      "verdict": "reject",
+      "note": "Box shows an angled cabinet door edge/divider; no fridge visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i01",
+      "verdict": "accept",
+      "note": "Clean box around the full open built-in refrigerator interior with shelves.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i04",
+      "verdict": "reject",
+      "note": "Box shows a door hinge/latch mechanism on a plain door; not a fridge/freezer.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i00",
+      "verdict": "relocate",
+      "note": "Only a narrow cabinet edge is captured; box needs to widen to include the full unit.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i01",
+      "verdict": "relocate",
+      "note": "Cabinet door is the main subject but box is loosely fit around it.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i02",
+      "verdict": "accept",
+      "note": "Clean box around a column of cabinet drawer fronts.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i03",
+      "verdict": "relocate",
+      "note": "Sideboard correctly identified but box overlaps an armchair and cuts the unit's legs.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i04",
+      "verdict": "relocate",
+      "note": "Only a narrow vertical slice of the shelving unit corner is captured.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i05",
+      "verdict": "relocate",
+      "note": "Marble sideboard mostly captured but right section appears cut off.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i06",
+      "verdict": "accept",
+      "note": "Dark integrated cabinet/appliance panel reasonably framed.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p26_i09",
+      "verdict": "relocate",
+      "note": "Sideboard drawer front and leg visible but box only captures a partial vertical slice.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p26_i11",
+      "verdict": "reject",
+      "note": "Box shows a plain door corner meeting the floor; no kitchen unit feature visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p27_i06",
+      "verdict": "reject",
+      "note": "Box shows a dark diagonal door/wall junction; no kitchen unit visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i05",
+      "verdict": "accept",
+      "note": "Solid dark cabinet/appliance front panel, consistent with a kitchen unit.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i09",
+      "verdict": "accept",
+      "note": "Box shows an angled cabinet unit corner with drawer fronts.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i00",
+      "verdict": "accept",
+      "note": "Open utensil drawer insert inside a kitchen unit, reasonably framed.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i01",
+      "verdict": "accept",
+      "note": "Open base cabinet interior with shelves and cookware clearly visible.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p31_i01",
+      "verdict": "reject",
+      "note": "Box shows a refrigerator interior with shelving, not kitchen cabinetry.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p25_i01",
+      "verdict": "reject",
+      "note": "Box shows tall integrated fridge-freezer door panels; no flooring visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p25_i05",
+      "verdict": "reject",
+      "note": "Box shows a closed white interior door; not flooring.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p30_i01",
+      "verdict": "reject",
+      "note": "Box shows an open cabinet door with food containers inside; not flooring.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p31_i01",
+      "verdict": "reject",
+      "note": "Box shows a refrigerator door interior shelving; not flooring.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i00",
+      "verdict": "accept",
+      "note": "Reflective panel above the sink shows a sharp reflection of the hanging pendant lights, consistent with a mirror splashback rather than a plain backsplash.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i05",
+      "verdict": "reject",
+      "note": "Surface shows a plain door with handle, not a mirror pane.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i06",
+      "verdict": "accept",
+      "note": "Full-height black-framed floor mirror cleanly captured, reflecting the hallway.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i09",
+      "verdict": "relocate",
+      "note": "Box shows the black-framed glass base/corner of a leaning floor mirror on wood flooring; genuine mirror fragment, box just needs widening to capture the full piece.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i10",
+      "verdict": "reject",
+      "note": "Box shows wood flooring and a diagonal brass furniture leg/rod; no mirror visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p28_i07",
+      "verdict": "reject",
+      "note": "Box shows an empty open kitchen cabinet interior, not a mirror.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p31_i00",
+      "verdict": "reject",
+      "note": "Box shows an empty open wall cabinet interior, not a mirror.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p31_i04",
+      "verdict": "relocate",
+      "note": "Blurred mirror edge reflecting a chair is visible but box only captures a small corner fragment.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i02",
+      "verdict": "relocate",
+      "note": "Built-in oven column visible but box is shifted, clipping the right edge of the appliance.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p29_i03",
+      "verdict": "reject",
+      "note": "Box shows the lid and knob of an electric kettle, not an oven.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i03",
+      "verdict": "accept",
+      "note": "Excellent clean box on the fully open oven cavity with racks.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i04",
+      "verdict": "accept",
+      "note": "Box shows oven interior racks and manufacturer label, consistent with oven cavity.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i07",
+      "verdict": "reject",
+      "note": "Box shows the interior of a microwave with turntable and mesh vents, not an oven.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p31_i10",
+      "verdict": "reject",
+      "note": "Box shows a washing machine drum interior with door seal and a hand; not an oven.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i05",
+      "verdict": "reject",
+      "note": "Box shows a long rectangular HVAC ceiling vent/grille, not pendant lights.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p27_i03",
+      "verdict": "reject",
+      "note": "Box shows a window/balcony door corner looking out onto decking; no blind fabric visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p30_i09",
+      "verdict": "reject",
+      "note": "Narrow indistinct vertical crop; no clear blind slats or fabric visible.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i00",
+      "verdict": "reject",
+      "note": "Tiny indistinct thin object on countertop; not a sink.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i02",
+      "verdict": "relocate",
+      "note": "Small dark object at frame edge; plausible partial sink/bottle but box needs to shift toward the basin.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i03",
+      "verdict": "accept",
+      "note": "Clean box around the full stainless steel sink basin with faucet.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i04",
+      "verdict": "accept",
+      "note": "Box captures a good portion of the stainless sink basin corner with overflow slot.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i06",
+      "verdict": "reject",
+      "note": "Box shows a microwave turntable glass plate, not a sink.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i07",
+      "verdict": "reject",
+      "note": "Box shows a microwave turntable glass plate, not a sink.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i08",
+      "verdict": "relocate",
+      "note": "Stainless counter/sink surface visible with a thin wire, but no basin depression; box likely needs to shift onto the actual basin.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i10",
+      "verdict": "reject",
+      "note": "Box shows the rim of a plate or bowl on a shelf, not a sink.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i01",
+      "verdict": "accept",
+      "note": "Good capture of a large section of the grey velvet sofa.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i03",
+      "verdict": "accept",
+      "note": "Sofa back cushions and armrest reasonably captured.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i04",
+      "verdict": "relocate",
+      "note": "Sofa cushion visible but box extends down into a counter/bottles area in the foreground.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i05",
+      "verdict": "relocate",
+      "note": "Sofa armrest/cushion visible but box spans a large area of floor and coffee table.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i06",
+      "verdict": "reject",
+      "note": "Box shows a dark kettle/appliance silhouette on a counter, not a sofa.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p26_i04",
+      "verdict": "relocate",
+      "note": "Tufted sofa cushions well captured but box clips the top cushions and includes window glare at the top edge.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p30_i08",
+      "verdict": "reject",
+      "note": "Blurry indistinct dark object resembling a countertop appliance, not a sofa.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p25_i05",
+      "verdict": "reject",
+      "note": "Box shows a white closet/cabinet door, not a washing machine.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p30_i08",
+      "verdict": "reject",
+      "note": "Box shows the stainless interior of a microwave, not a washing machine.",
+      "pass1_verdict": "reject",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p32_i01",
+      "verdict": "relocate",
+      "note": "Washing machine door/drum is correctly identified but only the bottom-right quadrant is captured.",
+      "pass1_verdict": "relocate",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i01",
+      "verdict": "accept",
+      "note": "Box cleanly frames a stacked built-in oven/microwave unit.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p31_i02",
+      "verdict": "accept",
+      "note": "Recessed ceiling downlight fixture cleanly captured.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i03",
+      "verdict": "accept",
+      "note": "Full floor mirror with dark frame cleanly captured, reflecting the kitchen sink area.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i06",
+      "verdict": "accept",
+      "note": "Stacked built-in oven unit with visible branding, cleanly framed.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i00",
+      "verdict": "accept",
+      "note": "Full grey sofa cleanly captured including cushions, arm, and legs.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i06",
+      "verdict": "accept",
+      "note": "Undermount sink basin with faucet cleanly captured.",
+      "pass1_verdict": "accept",
+      "disagrees_with_pass1": false
+    }
+  ],
+  "summary": {
+    "reviewed": 117,
+    "accept": 35,
+    "reject": 49,
+    "relocate": 30,
+    "uncertain": 3,
+    "disagreements_with_pass1": 3
+  }
+}

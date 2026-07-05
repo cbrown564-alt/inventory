@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ML-E11 bbox review</title>
+<style>
+  :root {
+    --bg: #0c0e12;
+    --panel: #151922;
+    --border: #2a3142;
+    --text: #e8ecf4;
+    --muted: #8b95a8;
+    --accent: #5b9cff;
+    --keep: #2ecc71;
+    --drop: #e74c3c;
+    --redraw: #f39c12;
+    --unsure: #9b59b6;
+    --skip: #555;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: "SF Pro Display", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  header h1 { font-size: 1rem; font-weight: 600; white-space: nowrap; }
+  .progress-wrap { flex: 1; min-width: 120px; }
+  .progress-bar {
+    height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--accent); transition: width 0.2s;
+  }
+  .progress-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+  .counter { font-size: 1.25rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .filter-select, .btn-sm {
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 0.4rem 0.75rem; border-radius: 6px; font-size: 0.85rem; cursor: pointer;
+  }
+  .btn-sm:hover { border-color: var(--accent); }
+
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    min-height: 0;
+  }
+  .pane {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .pane-label {
+    padding: 0.5rem 1rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    background: var(--panel);
+    flex-shrink: 0;
+  }
+  .img-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    min-height: 0;
+    background: #000;
+  }
+  .img-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  aside.meta {
+    background: var(--panel);
+    border-left: 1px solid var(--border);
+    width: 340px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .meta-inner { padding: 1.25rem; }
+  .meta h2 { font-size: 1.35rem; margin-bottom: 0.25rem; }
+  .meta .room { color: var(--muted); font-size: 0.85rem; margin-bottom: 1rem; }
+  .meta dl { display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 1rem; }
+  .meta dt { color: var(--muted); }
+  .meta dd { word-break: break-word; }
+  .flags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 0.5rem; }
+  .flag {
+    font-size: 0.65rem; padding: 2px 6px; border-radius: 4px;
+    background: #2a2030; color: #c9a0ff;
+  }
+  .flag.warn { background: #302520; color: #ffb347; }
+  .agent-block {
+    margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);
+  }
+  .agent-block h3 { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .verdict-chip {
+    display: inline-block; font-size: 0.7rem; padding: 2px 8px;
+    border-radius: 4px; margin-right: 6px; font-weight: 600;
+  }
+  .verdict-chip.accept, .verdict-chip.keep { background: #1a3d2a; color: var(--keep); }
+  .verdict-chip.reject, .verdict-chip.drop { background: #3d1a1a; color: var(--drop); }
+  .verdict-chip.relocate, .verdict-chip.redraw { background: #3d301a; color: var(--redraw); }
+  .verdict-chip.uncertain, .verdict-chip.unsure { background: #2a1a3d; color: var(--unsure); }
+  .agent-note { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+  .disagree { color: #ff6b6b; font-weight: 600; font-size: 0.75rem; margin-top: 0.5rem; }
+
+  .layout-body { flex: 1; display: flex; min-height: 0; }
+
+  footer {
+    background: var(--panel);
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+  .actions { display: flex; gap: 0.75rem; flex: 1; }
+  .btn {
+    flex: 1;
+    max-width: 200px;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.1s, filter 0.1s;
+  }
+  .btn:hover { filter: brightness(1.1); }
+  .btn:active { transform: scale(0.98); }
+  .btn-keep { background: var(--keep); color: #0a1a10; }
+  .btn-drop { background: var(--drop); color: #fff; }
+  .btn-redraw { background: var(--redraw); color: #1a1000; }
+  .btn-unsure { background: var(--unsure); color: #fff; }
+  .btn-nav {
+    flex: 0; max-width: 56px; background: var(--bg); border: 1px solid var(--border);
+    color: var(--text); font-size: 1.25rem;
+  }
+  .note-input {
+    flex: 1; max-width: 400px;
+    background: var(--bg); border: 1px solid var(--border); color: var(--text);
+    padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.9rem;
+  }
+  .kbd { font-size: 0.65rem; opacity: 0.7; margin-left: 6px; }
+  .human-verdict {
+    margin-top: 1rem; padding: 0.75rem; border-radius: 8px;
+    background: var(--bg); border: 1px solid var(--border);
+  }
+  .human-verdict.set { border-color: var(--accent); }
+  .strip {
+    display: flex; gap: 3px; padding: 0.5rem 1.5rem; background: var(--panel);
+    border-top: 1px solid var(--border); overflow-x: auto; flex-shrink: 0;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    background: var(--border); cursor: pointer;
+  }
+  .dot.keep { background: var(--keep); }
+  .dot.drop { background: var(--drop); }
+  .dot.redraw { background: var(--redraw); }
+  .dot.unsure { background: var(--unsure); }
+  .dot.current { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .shortcuts {
+    font-size: 0.7rem; color: var(--muted); white-space: nowrap;
+  }
+  @media (max-width: 1200px) {
+    main { grid-template-columns: 1fr; }
+    aside.meta { width: 100%; max-height: 200px; border-left: none; border-top: 1px solid var(--border); }
+    .layout-body { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>ML-E11 bbox review</h1>
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 0 reviewed</div>
+  </div>
+  <div class="counter" id="counter">1 / 124</div>
+  <select class="filter-select" id="filterMode" title="Filter queue">
+    <option value="all">All boxes</option>
+    <option value="queue" selected>Adjudication queue</option>
+    <option value="shortlist">Shortlist first</option>
+    <option value="unreviewed">Unreviewed only</option>
+    <option value="disagree">Agent disagreements</option>
+  </select>
+  <button class="btn-sm" id="exportBtn" title="Download your verdicts">Export JSON</button>
+  <button class="btn-sm" id="importBtn" title="Import verdicts JSON">Import</button>
+  <input type="file" id="importFile" accept=".json" hidden>
+</header>
+
+<div class="layout-body">
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+    <main>
+      <div class="pane">
+        <div class="pane-label">Crop — red box is proposal</div>
+        <div class="img-wrap"><img id="cropImg" alt="crop"></div>
+      </div>
+      <div class="pane">
+        <div class="pane-label">Full photo — green box overlay</div>
+        <div class="img-wrap"><img id="fullImg" alt="full photo"></div>
+      </div>
+    </main>
+    <div class="strip" id="dotStrip"></div>
+  </div>
+  <aside class="meta">
+    <div class="meta-inner" id="metaPanel"></div>
+  </aside>
+</div>
+
+<footer>
+  <button class="btn btn-nav" id="prevBtn" title="Previous (←)">‹</button>
+  <div class="actions">
+    <button class="btn btn-keep" id="keepBtn">Keep<span class="kbd">K</span></button>
+    <button class="btn btn-drop" id="dropBtn">Drop<span class="kbd">D</span></button>
+    <button class="btn btn-redraw" id="redrawBtn">Redraw<span class="kbd">R</span></button>
+    <button class="btn btn-unsure" id="unsureBtn">Unsure<span class="kbd">U</span></button>
+  </div>
+  <input class="note-input" id="noteInput" placeholder="Optional note…" type="text">
+  <button class="btn btn-nav" id="nextBtn" title="Next (→)">›</button>
+  <div class="shortcuts">← → navigate · K D R U verdict</div>
+</footer>
+
+<script id="review-data" type="application/json">__REVIEW_DATA__</script>
+<script>
+const STORAGE_KEY = 'ml-e11-bbox-human-review-v1';
+const DATA = JSON.parse(document.getElementById('review-data').textContent);
+
+let items = [];
+let index = 0;
+let verdicts = loadVerdicts();
+
+function loadVerdicts() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
+}
+function saveVerdicts() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(verdicts));
+}
+
+function buildItems(filter) {
+  let list = [...DATA.items];
+  if (filter === 'queue') list = list.filter(i => i.in_queue);
+  if (filter === 'unreviewed') list = list.filter(i => !verdicts[i.id]);
+  if (filter === 'disagree') list = list.filter(i => i.disagreement);
+  if (filter === 'shortlist') {
+    const prio = new Set(DATA.shortlist_ids || []);
+    list.sort((a, b) => (prio.has(b.id) - prio.has(a.id)) || (b.priority - a.priority));
+  } else {
+    list.sort((a, b) => (b.priority - a.priority) || a.id.localeCompare(b.id));
+  }
+  return list;
+}
+
+function applyFilter() {
+  const f = document.getElementById('filterMode').value;
+  items = buildItems(f);
+  index = Math.min(index, Math.max(0, items.length - 1));
+  renderDots();
+  show(index);
+}
+
+function show(i) {
+  if (!items.length) {
+    document.getElementById('metaPanel').innerHTML = '<p>No items match filter.</p>';
+    return;
+  }
+  index = Math.max(0, Math.min(i, items.length - 1));
+  const item = items[index];
+  document.getElementById('cropImg').src = item.crop_path;
+  document.getElementById('fullImg').src = item.full_path;
+  document.getElementById('counter').textContent = `${index + 1} / ${items.length}`;
+  document.getElementById('noteInput').value = (verdicts[item.id] && verdicts[item.id].note) || '';
+
+  const v = verdicts[item.id];
+  const flags = (item.risk_flags || []).map(f =>
+    `<span class="flag ${f.includes('conf') || f === 'label_mismatch' ? 'warn' : ''}">${f}</span>`
+  ).join('');
+  const disagree = item.pass1_verdict && item.pass2_verdict &&
+    item.pass1_verdict !== item.pass2_verdict && item.pass1_verdict !== 'missing';
+
+  document.getElementById('metaPanel').innerHTML = `
+    <h2>${esc(item.gold_item)}</h2>
+    <div class="room">${esc(item.room)} · ${esc(item.photo)}</div>
+    <dl>
+      <dt>ID</dt><dd><code style="font-size:0.75rem">${esc(item.id)}</code></dt>
+      <dt>YOLOE</dt><dd>${esc(item.det_label)} @ ${item.det_confidence}</dd>
+      <dt>Box</dt><dd>[${item.box_xyxy.join(', ')}]</dd>
+      <dt>Flags</dt><dd><div class="flags">${flags || '—'}</div></dd>
+    </dl>
+    <div class="agent-block">
+      <h3>Agent reviews</h3>
+      <div><span class="verdict-chip ${item.pass1_verdict}">P1 ${item.pass1_verdict || '—'}</span>
+           <span class="verdict-chip ${item.pass2_verdict}">P2 ${item.pass2_verdict || '—'}</span></div>
+      ${disagree ? '<div class="disagree">⚠ Agents disagree</div>' : ''}
+      <div class="agent-note">${esc(item.pass1_note || '')}</div>
+      <div class="agent-note">${esc(item.pass2_note || '')}</div>
+    </div>
+    <div class="human-verdict ${v ? 'set' : ''}" id="humanBlock">
+      <strong>Your verdict:</strong> ${v ? `<span class="verdict-chip ${v.verdict}">${v.verdict}</span>` : '<span style="color:var(--muted)">not set</span>'}
+    </div>`;
+
+  updateProgress();
+  renderDots();
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+
+function setVerdict(verdict) {
+  if (!items.length) return;
+  const item = items[index];
+  verdicts[item.id] = {
+    id: item.id,
+    verdict,
+    note: document.getElementById('noteInput').value.trim(),
+    reviewed_at: new Date().toISOString(),
+  };
+  saveVerdicts();
+  show(index);
+  if (index < items.length - 1) setTimeout(() => show(index + 1), 120);
+}
+
+function updateProgress() {
+  const all = DATA.items.length;
+  const done = Object.keys(verdicts).length;
+  const pct = all ? (100 * done / all) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent =
+    `${done} / ${all} reviewed (${items.length} in current filter)`;
+}
+
+function renderDots() {
+  const strip = document.getElementById('dotStrip');
+  strip.innerHTML = items.map((it, i) => {
+    const v = verdicts[it.id];
+    const cls = ['dot', v ? v.verdict : '', i === index ? 'current' : ''].filter(Boolean).join(' ');
+    return `<div class="${cls}" data-i="${i}" title="${it.id}"></div>`;
+  }).join('');
+  strip.querySelectorAll('.dot').forEach(el => {
+    el.onclick = () => show(+el.dataset.i);
+  });
+}
+
+function exportJson() {
+  const out = {
+    schema_version: 1,
+    exported_at: new Date().toISOString(),
+    reviewer: 'human',
+    verdicts: Object.values(verdicts),
+    summary: summarize(),
+  };
+  const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `human-bbox-review-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+}
+
+function summarize() {
+  const counts = {};
+  for (const v of Object.values(verdicts)) counts[v.verdict] = (counts[v.verdict] || 0) + 1;
+  return counts;
+}
+
+document.getElementById('keepBtn').onclick = () => setVerdict('keep');
+document.getElementById('dropBtn').onclick = () => setVerdict('drop');
+document.getElementById('redrawBtn').onclick = () => setVerdict('redraw');
+document.getElementById('unsureBtn').onclick = () => setVerdict('unsure');
+document.getElementById('prevBtn').onclick = () => show(index - 1);
+document.getElementById('nextBtn').onclick = () => show(index + 1);
+document.getElementById('filterMode').onchange = applyFilter;
+document.getElementById('exportBtn').onclick = exportJson;
+document.getElementById('importBtn').onclick = () => document.getElementById('importFile').click();
+document.getElementById('importFile').onchange = e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      for (const v of (data.verdicts || [])) verdicts[v.id] = v;
+      saveVerdicts();
+      applyFilter();
+    } catch (err) { alert('Invalid JSON: ' + err.message); }
+  };
+  r.readAsText(f);
+};
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowLeft') { e.preventDefault(); show(index - 1); }
+  if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
+  if (e.key === 'k' || e.key === 'K') { e.preventDefault(); setVerdict('keep'); }
+  if (e.key === 'd' || e.key === 'D') { e.preventDefault(); setVerdict('drop'); }
+  if (e.key === 'r' || e.key === 'R') { e.preventDefault(); setVerdict('redraw'); }
+  if (e.key === 'u' || e.key === 'U') { e.preventDefault(); setVerdict('unsure'); }
+});
+
+applyFilter();
+</script>
+</body>
+</html>

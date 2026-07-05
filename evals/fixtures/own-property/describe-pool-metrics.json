@@ -1,0 +1,42 @@
+{
+  "experiment": "ML-E3",
+  "run_date": "2026-07-05",
+  "report_dir": "examples/videos/IMG_5278.mov (offline build, 1 room, 19 frames)",
+  "report_note": "IMG_5512 own-property report (~260 frames, 9 rooms) not in repo; proxy run on committed pan video pending full re-run",
+  "note": "describe pool not gated in production — eval estimate only",
+  "two_tier_flags": {
+    "describe_eligible": "permissive (all frames True in curate)",
+    "presentation_eligible": "strict E4 cover gates"
+  },
+  "pool_drop": {
+    "decile": 0.1,
+    "n_frames": 19,
+    "would_drop_bottom_decile": 1,
+    "would_keep": 18,
+    "drop_fraction": 0.053,
+    "drop_pct": 5.3,
+    "presentation_eligible_count": 10,
+    "presentation_eligible_pct": 52.6,
+    "per_room": {
+      "Kitchen": {
+        "n_frames": 19,
+        "decile_threshold": 125.29,
+        "would_drop": 1,
+        "would_keep": 18,
+        "drop_pct": 5.3
+      }
+    }
+  },
+  "token_savings_estimate": {
+    "tokens_per_frame_assumption": 800,
+    "baseline_tokens": 15200,
+    "estimated_saved_tokens": 805,
+    "estimated_remaining_tokens": 14395,
+    "saved_pct": 5.3
+  },
+  "pass_bar": {
+    "token_drop_pct_g4": 15.0,
+    "describe_recall_unchanged": "not measured — deferred per docs/19 §1.2"
+  },
+  "pass": false
+}

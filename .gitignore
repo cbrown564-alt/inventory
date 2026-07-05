@@ -19,6 +19,27 @@ capture/
 # (capture/ above already excludes the extracted benchmark photos — regenerate
 # both with benchmarks/extract_inventoryflex.py + a build)
 benchmarks/*/report-*/photos/
+benchmarks/*/report-*/work/crops/
+benchmarks/*/report-*/inventory.pdf
+benchmarks/*/report-*/inventory-issue.html
+
+# local smoke-test capture from docs/09 (regenerate with homeinventory capture)
+capture-smoke/
 
 # build/run logs (stdout captures from background builds)
 *.log
+
+# own-property eval fixture (personal data; local by default per docs/07)
+evals/fixtures/ownproperty/
+
+# own-property walkthrough source video (personal data, 1.3 GB) + Finder junk
+examples/videos/IMG_5512.MOV
+.DS_Store
+
+# segmentation spike outputs (personal frames)
+segment-spike*/
+
+# Tier A external dataset cache (see evals/external/README.md)
+evals/external/data/
+evals/fixtures/own-property/segment-embed-strip/
+evals/fixtures/own-property/shotscale-smoke-report/

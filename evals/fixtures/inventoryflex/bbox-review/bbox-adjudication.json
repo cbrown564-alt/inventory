@@ -1,0 +1,2572 @@
+{
+  "schema_version": 1,
+  "description": "Boxes needing human adjudication after agent review passes",
+  "total_reviewed": 124,
+  "needs_adjudication": 111,
+  "queue": [
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p25_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i10.jpg",
+      "gold_item": "balcony door",
+      "det_label": "window",
+      "det_confidence": 0.259,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box",
+        "huge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-balcony-door-p25_i10.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i10.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Fixed window with handle; not floor-level balcony door",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a fixed upper window with handle overlooking a construction site; no floor-level door threshold.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,label_mismatch,edge_box,huge_box"
+      ],
+      "priority": 8
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i07.jpg",
+      "gold_item": "oven",
+      "det_label": "stove",
+      "det_confidence": 0.454,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box",
+        "huge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p30_i07.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i07.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Microwave interior, not oven",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows the interior of a microwave with turntable and mesh vents, not an oven.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch,edge_box,huge_box"
+      ],
+      "priority": 8
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p31_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i10.jpg",
+      "gold_item": "oven",
+      "det_label": "stove",
+      "det_confidence": 0.263,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box",
+        "huge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p31_i10.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i10.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Washing-machine drum, not oven",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a washing machine drum interior with door seal and a hand; not an oven.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,label_mismatch,edge_box,huge_box"
+      ],
+      "priority": 8
+    },
+    {
+      "id": "bathroom-bath-p14_i03",
+      "room": "Bathroom",
+      "photo": "p14_i03.jpg",
+      "gold_item": "bath",
+      "det_label": "shower",
+      "det_confidence": 0.271,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-bath-p14_i03.jpg",
+      "full_path": "full/bathroom/p14_i03.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Box frames shower glass partition and ceiling, not the bathtub.",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows only ceiling corner and shower glass hinge/hardware; no bathtub visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,label_mismatch,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i02",
+      "room": "Bathroom",
+      "photo": "p15_i02.jpg",
+      "gold_item": "mirrored cabinet",
+      "det_label": "mirror",
+      "det_confidence": 0.349,
+      "risk_flags": [
+        "low_conf",
+        "edge_box",
+        "huge_box"
+      ],
+      "crop_path": "crops/bathroom-mirrored-cabinet-p15_i02.jpg",
+      "full_path": "full/bathroom/p15_i02.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Full-frame box captures shower hose and tiles, not a mirrored cabinet.",
+      "pass2_verdict": "reject",
+      "pass2_note": "Full-frame box captures a shower hose against tile; no cabinet present.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,edge_box,huge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i01.jpg",
+      "gold_item": "balcony door",
+      "det_label": "window",
+      "det_confidence": 0.384,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-balcony-door-p26_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i01.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Elevated window opening; no door threshold",
+      "pass2_verdict": "reject",
+      "pass2_note": "Elevated window opening onto a building facade; no door threshold or floor visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i07.jpg",
+      "gold_item": "balcony door",
+      "det_label": "window",
+      "det_confidence": 0.271,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-balcony-door-p26_i07.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i07.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Balcony door corner only; box too small",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Only the upper door/blind corner is captured; box should extend down to the threshold.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:low_conf,label_mismatch,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p30_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i09.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.455,
+      "risk_flags": [
+        "med_conf",
+        "tiny_box",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p30_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i09.jpg",
+      "pass1_verdict": "uncertain",
+      "pass1_note": "Tiny blurry blob; likely ceiling fixture not whole ceiling",
+      "pass2_verdict": "uncertain",
+      "pass2_note": "Tiny blurry sliver; likely a fixture fragment but too small to confirm.",
+      "reasons": [
+        "pass1:uncertain",
+        "pass2:uncertain",
+        "risk:med_conf,tiny_box,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p30_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i01.jpg",
+      "gold_item": "fridge freezer",
+      "det_label": "refrigerator",
+      "det_confidence": 0.496,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-fridge-freezer-p30_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i01.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Cabinet divider edge, not fridge",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows an angled cabinet door edge/divider; no fridge visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i04.jpg",
+      "gold_item": "fridge freezer",
+      "det_label": "refrigerator",
+      "det_confidence": 0.372,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-fridge-freezer-p31_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i04.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Interior door edge with damage",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a door hinge/latch mechanism on a plain door; not a fridge/freezer.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.304,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Cabinet edge only; needs wider box",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Only a narrow cabinet edge is captured; box needs to widen to include the full unit.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:low_conf,label_mismatch,tiny_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p26_i11",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i11.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.302,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p26_i11.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i11.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Interior door corner and floor",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a plain door corner meeting the floor; no kitchen unit feature visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,label_mismatch,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p27_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i06.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.371,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p27_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p27_i06.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Dark door and wall junction",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a dark diagonal door/wall junction; no kitchen unit visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p30_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i01.jpg",
+      "gold_item": "laminate flooring",
+      "det_label": "door",
+      "det_confidence": 0.354,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-laminate-flooring-p30_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i01.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Open cabinet door, not flooring",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows an open cabinet door with food containers inside; not flooring.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p31_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i01.jpg",
+      "gold_item": "laminate flooring",
+      "det_label": "door",
+      "det_confidence": 0.472,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-laminate-flooring-p31_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i01.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Refrigerator door interior",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a refrigerator door interior shelving; not flooring.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i09.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.425,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p27_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p27_i09.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Table/chair metal leg base",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Box shows the black-framed glass base/corner of a leaning floor mirror on wood flooring; genuine mirror fragment, box just needs widening to capture the full piece.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:relocate",
+        "disagreement",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p28_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i07.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.3,
+      "risk_flags": [
+        "low_conf",
+        "edge_box",
+        "huge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p28_i07.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p28_i07.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Empty kitchen cabinet, not mirror",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows an empty open kitchen cabinet interior, not a mirror.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,edge_box,huge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p29_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p29_i03.jpg",
+      "gold_item": "oven",
+      "det_label": "stove",
+      "det_confidence": 0.397,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p29_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p29_i03.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Electric kettle top, not oven",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows the lid and knob of an electric kettle, not an oven.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "gold_item": "sofa",
+      "det_label": "kettle",
+      "det_confidence": 0.438,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i06.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Kettle on counter, not sofa",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a dark kettle/appliance silhouette on a counter, not a sofa.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch,tiny_box"
+      ],
+      "priority": 7
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i04",
+      "room": "Bathroom",
+      "photo": "p14_i04.jpg",
+      "gold_item": "mirrored cabinet",
+      "det_label": "mirror",
+      "det_confidence": 0.325,
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-mirrored-cabinet-p14_i04.jpg",
+      "full_path": "full/bathroom/p14_i04.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Narrow edge strip of wall/door frame with reflection, not the cabinet.",
+      "pass2_verdict": "reject",
+      "pass2_note": "Narrow vertical strip of door frame/wall; no cabinet visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i03",
+      "room": "Bathroom",
+      "photo": "p15_i03.jpg",
+      "gold_item": "mirrored cabinet",
+      "det_label": "mirror",
+      "det_confidence": 0.361,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-mirrored-cabinet-p15_i03.jpg",
+      "full_path": "full/bathroom/p15_i03.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Thin vertical sliver of shower glass hardware, not a mirrored cabinet.",
+      "pass2_verdict": "reject",
+      "pass2_note": "Thin sliver of shower glass hinge hardware; not a mirrored cabinet.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i10",
+      "room": "Bathroom",
+      "photo": "p15_i10.jpg",
+      "gold_item": "mirrored cabinet",
+      "det_label": "cabinet",
+      "det_confidence": 0.369,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-mirrored-cabinet-p15_i10.jpg",
+      "full_path": "full/bathroom/p15_i10.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Cabinet interior is correct but left edge bleeds into the sink area.",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Cabinet interior correctly identified, but left edge of box bleeds into the sink/tub area.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "bathroom-sink-p14_i01",
+      "room": "Bathroom",
+      "photo": "p14_i01.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.481,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-sink-p14_i01.jpg",
+      "full_path": "full/bathroom/p14_i01.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Box spans sink and bathtub corner instead of the sink alone.",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Box captures sink underside/front but drifts toward the bathtub corner rather than the basin top.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "bathroom-sink-p14_i08",
+      "room": "Bathroom",
+      "photo": "p14_i08.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.301,
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-sink-p14_i08.jpg",
+      "full_path": "full/bathroom/p14_i08.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Thin horizontal strip of tub rim and glass, not a sink.",
+      "pass2_verdict": "reject",
+      "pass2_note": "Thin horizontal strip of tub rim; no basin, faucet, or sink feature visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "bathroom-sink-p15_i10",
+      "room": "Bathroom",
+      "photo": "p15_i10.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.386,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-sink-p15_i10.jpg",
+      "full_path": "full/bathroom/p15_i10.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Box centers on faucet handle and marble tile, missing the basin.",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Box centers on a wall fixture/handle and marble counter; basin is just outside the box.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i07.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.287,
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p26_i07.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i07.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Area rug, not bar chair",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box captures a textured area rug pattern; no chair visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i10.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.482,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p26_i10.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i10.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Stool leg fragment only",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Only a faint diagonal shadow/leg fragment on wood floor is visible; too small to confirm without a wider box.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p28_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i04.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.253,
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p28_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p28_i04.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Kitchen faucet base, not chair",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a close-up chrome faucet/tap base, not a chair.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p30_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i03.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.355,
+      "risk_flags": [
+        "med_conf",
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p30_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i03.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Appliance vent grille",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a dark appliance vent/grille pattern, not a chair.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,tiny_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.277,
+      "risk_flags": [
+        "low_conf",
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Appliance control buttons on wall/unit",
+      "pass2_verdict": "reject",
+      "pass2_note": "Tiny indistinct crop; plausible wall control panel rather than a ceiling feature.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,tiny_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.497,
+      "risk_flags": [
+        "med_conf",
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p25_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i02.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Wall switch/plaque, not ceiling",
+      "pass2_verdict": "reject",
+      "pass2_note": "Tiny indistinct crop consistent with a wall switch/plaque, not ceiling.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,tiny_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.491,
+      "risk_flags": [
+        "med_conf",
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p25_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i03.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Small countertop appliance, not ceiling",
+      "pass2_verdict": "reject",
+      "pass2_note": "Tiny indistinct crop consistent with a small countertop object, not ceiling.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,tiny_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p28_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i08.jpg",
+      "gold_item": "fridge freezer",
+      "det_label": "refrigerator",
+      "det_confidence": 0.359,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-fridge-freezer-p28_i08.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p28_i08.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Pull-out waste bins in drawer",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows pull-out waste bin organizers inside a cabinet drawer, not a fridge/freezer.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p31_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i01.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.25,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p31_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i01.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Refrigerator interior, not kitchen units",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a refrigerator interior with shelving, not kitchen cabinetry.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,label_mismatch"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "gold_item": "laminate flooring",
+      "det_label": "door",
+      "det_confidence": 0.3,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-laminate-flooring-p25_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i01.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Integrated fridge-freezer panels",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows tall integrated fridge-freezer door panels; no flooring visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,label_mismatch"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "laminate flooring",
+      "det_label": "door",
+      "det_confidence": 0.384,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-laminate-flooring-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Interior door, not flooring",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a closed white interior door; not flooring.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,label_mismatch"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i10.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.362,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p27_i10.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p27_i10.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Furniture leg corner on floor",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows wood flooring and a diagonal brass furniture leg/rod; no mirror visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p31_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i04.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.349,
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p31_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i04.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Mirror frame corner only; box too tight",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Blurred mirror edge reflecting a chair is visible but box only captures a small corner fragment.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:low_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "pendant light fittings",
+      "det_label": "light fitting",
+      "det_confidence": 0.402,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-pendant-light-fittings-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "HVAC vent grille, not pendant light",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a long rectangular HVAC ceiling vent/grille, not pendant lights.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p27_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i03.jpg",
+      "gold_item": "roller blinds",
+      "det_label": "blinds",
+      "det_confidence": 0.398,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-roller-blinds-p27_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p27_i03.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Balcony door frame corner, no blind",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a window/balcony door corner looking out onto decking; no blind fabric visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p30_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i09.jpg",
+      "gold_item": "roller blinds",
+      "det_label": "blinds",
+      "det_confidence": 0.307,
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-roller-blinds-p30_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i09.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Narrow glass sidelight, not roller blind",
+      "pass2_verdict": "reject",
+      "pass2_note": "Narrow indistinct vertical crop; no clear blind slats or fabric visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i10.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.298,
+      "risk_flags": [
+        "low_conf",
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p30_i10.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i10.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Plate and bowl on shelf",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows the rim of a plate or bowl on a shelf, not a sink.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,tiny_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.444,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i04.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Sofa cushions plus kitchen counter in box",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Sofa cushion visible but box extends down into a counter/bottles area in the foreground.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.329,
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Sofa present but box spans floor and rug",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Sofa armrest/cushion visible but box spans a large area of floor and coffee table.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:low_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p30_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i08.jpg",
+      "gold_item": "sofa",
+      "det_label": "kettle",
+      "det_confidence": 0.284,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p30_i08.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i08.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Blurry countertop appliance, not sofa",
+      "pass2_verdict": "reject",
+      "pass2_note": "Blurry indistinct dark object resembling a countertop appliance, not a sofa.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,label_mismatch"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "washing machine",
+      "det_label": "dishwasher",
+      "det_confidence": 0.306,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-washing-machine-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "White cabinet door in closet, not washer",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a white closet/cabinet door, not a washing machine.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf,label_mismatch"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p30_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i08.jpg",
+      "gold_item": "washing machine",
+      "det_label": "washing machine",
+      "det_confidence": 0.355,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-washing-machine-p30_i08.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i08.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Microwave interior, not washing machine",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows the stainless interior of a microwave, not a washing machine.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 6
+    },
+    {
+      "id": "bathroom-sink-p14_i00",
+      "room": "Bathroom",
+      "photo": "p14_i00.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.336,
+      "risk_flags": [
+        "low_conf"
+      ],
+      "crop_path": "crops/bathroom-sink-p14_i00.jpg",
+      "full_path": "full/bathroom/p14_i00.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Sink is partially boxed but left side includes a large bathtub section.",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Sink basin mostly captured but left edge of box extends into the bathtub area.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:low_conf"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "bathroom-sink-p15_i08",
+      "room": "Bathroom",
+      "photo": "p15_i08.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.265,
+      "risk_flags": [
+        "low_conf"
+      ],
+      "crop_path": "crops/bathroom-sink-p15_i08.jpg",
+      "full_path": "full/bathroom/p15_i08.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Box localizes a circular cabinet mirror/light, not a sink.",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box localizes a circular illuminated vanity mirror in cabinet shelving, not a sink.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i06.jpg",
+      "gold_item": "balcony door",
+      "det_label": "window",
+      "det_confidence": 0.485,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-balcony-door-p26_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i06.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Glass door to balcony decking",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box shows closed pleated blind over full door frame down to floor, with balcony railing visible above; consistent with balcony door.",
+      "reasons": [
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i08.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.476,
+      "risk_flags": [
+        "med_conf",
+        "edge_box",
+        "huge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i08.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i08.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Upholstered bar/dining chair seat",
+      "pass2_verdict": "accept",
+      "pass2_note": "Close-up on upholstered chair back fabric, consistent with a dining/accent chair seat.",
+      "reasons": [
+        "risk:med_conf,edge_box,huge_box"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p30_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i09.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.32,
+      "risk_flags": [
+        "low_conf"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p30_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i09.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Cabinet shelf with pans, no chair",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a frying pan and cooling rack on a cabinet shelf; no chair present.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "coffee table",
+      "det_label": "coffee table",
+      "det_confidence": 0.678,
+      "risk_flags": [
+        "tiny_box",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-coffee-table-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Narrow vertical sliver of table edge only",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Only a narrow vertical sliver of the table edge is captured against the window.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:tiny_box,edge_box"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-dining-table-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "dining table",
+      "det_label": "dining table",
+      "det_confidence": 0.291,
+      "risk_flags": [
+        "low_conf"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-dining-table-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Box on dining chair, not table",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box is centered on a dining chair; only a small table-edge sliver is visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:low_conf"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i01.jpg",
+      "gold_item": "fridge freezer",
+      "det_label": "refrigerator",
+      "det_confidence": 0.389,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-fridge-freezer-p31_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i01.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Open built-in refrigerator",
+      "pass2_verdict": "accept",
+      "pass2_note": "Clean box around the full open built-in refrigerator interior with shelves.",
+      "reasons": [
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.689,
+      "risk_flags": [
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i04.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Narrow vertical slice of unit",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Only a narrow vertical slice of the shelving unit corner is captured.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:label_mismatch,edge_box"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.609,
+      "risk_flags": [
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Sideboard correct but cuts off right section",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Marble sideboard mostly captured but right section appears cut off.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:label_mismatch,edge_box"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p26_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i09.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.686,
+      "risk_flags": [
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p26_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i09.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Narrow vertical slice of sideboard",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Sideboard drawer front and leg visible but box only captures a partial vertical slice.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:label_mismatch,edge_box"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p29_i05.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.36,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p29_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p29_i05.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Dark cabinet/appliance front panel",
+      "pass2_verdict": "accept",
+      "pass2_note": "Solid dark cabinet/appliance front panel, consistent with a kitchen unit.",
+      "reasons": [
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p29_i09.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.373,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p29_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p29_i09.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Closed drawer/cabinet unit front",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box shows an angled cabinet unit corner with drawer fronts.",
+      "reasons": [
+        "risk:med_conf,label_mismatch,edge_box"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i01.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.25,
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p30_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i01.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Open base cabinet with shelves",
+      "pass2_verdict": "accept",
+      "pass2_note": "Open base cabinet interior with shelves and cookware clearly visible.",
+      "reasons": [
+        "risk:low_conf,label_mismatch,edge_box"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.251,
+      "risk_flags": [
+        "low_conf"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Backsplash/shelving panel, not mirror",
+      "pass2_verdict": "accept",
+      "pass2_note": "Reflective panel above the sink shows a sharp reflection of the hanging pendant lights, consistent with a mirror splashback rather than a plain backsplash.",
+      "reasons": [
+        "pass1:reject",
+        "disagreement",
+        "risk:low_conf"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p26_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i04.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.321,
+      "risk_flags": [
+        "low_conf"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p26_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i04.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Clips cushion tops and right armrest",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Tufted sofa cushions well captured but box clips the top cushions and includes window glare at the top edge.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:low_conf"
+      ],
+      "priority": 5
+    },
+    {
+      "id": "bathroom-bath-p14_i07",
+      "room": "Bathroom",
+      "photo": "p14_i07.jpg",
+      "gold_item": "bath",
+      "det_label": "bathtub",
+      "det_confidence": 0.782,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-bath-p14_i07.jpg",
+      "full_path": "full/bathroom/p14_i07.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Bathtub is correct but lower third of box is checkered floor.",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Bathtub rim and basin correctly identified but bottom portion of box drifts onto checkered floor tile.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "bathroom-bath-p15_i02",
+      "room": "Bathroom",
+      "photo": "p15_i02.jpg",
+      "gold_item": "bath",
+      "det_label": "bathtub",
+      "det_confidence": 0.69,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-bath-p15_i02.jpg",
+      "full_path": "full/bathroom/p15_i02.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Horizontal slice of hose, wall, and tub rim misses the bathtub body.",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box captures a handheld shower hose and wall/rim sliver; no bathtub body visible.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "bathroom-ceiling-p14_i03",
+      "room": "Bathroom",
+      "photo": "p14_i03.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.539,
+      "risk_flags": [
+        "tiny_box"
+      ],
+      "crop_path": "crops/bathroom-ceiling-p14_i03.jpg",
+      "full_path": "full/bathroom/p14_i03.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Tiny box on one ceiling fixture does not localize the ceiling item.",
+      "pass2_verdict": "reject",
+      "pass2_note": "Tiny indistinct crop does not localize a recognizable ceiling feature.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:tiny_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i01",
+      "room": "Bathroom",
+      "photo": "p14_i01.jpg",
+      "gold_item": "mirrored cabinet",
+      "det_label": "mirror",
+      "det_confidence": 0.594,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-mirrored-cabinet-p14_i01.jpg",
+      "full_path": "full/bathroom/p14_i01.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Mirror door is correct but box is loose with excess surrounding wall.",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Correctly on the open mirror door, but box is loose with excess wall/tile in the corners.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i08",
+      "room": "Bathroom",
+      "photo": "p15_i08.jpg",
+      "gold_item": "mirrored cabinet",
+      "det_label": "cabinet",
+      "det_confidence": 0.38,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-mirrored-cabinet-p15_i08.jpg",
+      "full_path": "full/bathroom/p15_i08.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Box covers the open mirrored cabinet interior and shelves.",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box shows the open mirrored cabinet interior with shelving and integrated lit mirror.",
+      "reasons": [
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p15_i09",
+      "room": "Bathroom",
+      "photo": "p15_i09.jpg",
+      "gold_item": "mirrored cabinet",
+      "det_label": "cabinet",
+      "det_confidence": 0.469,
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-mirrored-cabinet-p15_i09.jpg",
+      "full_path": "full/bathroom/p15_i09.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Box tightly frames the illuminated cabinet shelving unit.",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box shows the open illuminated cabinet shelving, consistent with the mirrored cabinet unit.",
+      "reasons": [
+        "risk:med_conf,edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "bathroom-recessed-spotlights-p15_i01",
+      "room": "Bathroom",
+      "photo": "p15_i01.jpg",
+      "gold_item": "recessed spotlights",
+      "det_label": "light fitting",
+      "det_confidence": 0.536,
+      "risk_flags": [
+        "label_mismatch"
+      ],
+      "crop_path": "crops/bathroom-recessed-spotlights-p15_i01.jpg",
+      "full_path": "full/bathroom/p15_i01.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Box frames a chrome wall hook/handle, not recessed spotlights.",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box frames a chrome cylindrical hook/knob, not a recessed spotlight.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:label_mismatch"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "bathroom-recessed-spotlights-p15_i04",
+      "room": "Bathroom",
+      "photo": "p15_i04.jpg",
+      "gold_item": "recessed spotlights",
+      "det_label": "light fitting",
+      "det_confidence": 0.576,
+      "risk_flags": [
+        "label_mismatch"
+      ],
+      "crop_path": "crops/bathroom-recessed-spotlights-p15_i04.jpg",
+      "full_path": "full/bathroom/p15_i04.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Box frames a circular exhaust vent, not recessed spotlights.",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box frames a circular extractor vent, not a recessed spotlight.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:label_mismatch"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "bathroom-smoke-alarm-p14_i03",
+      "room": "Bathroom",
+      "photo": "p14_i03.jpg",
+      "gold_item": "smoke alarm",
+      "det_label": "smoke alarm",
+      "det_confidence": 0.312,
+      "risk_flags": [
+        "low_conf",
+        "tiny_box"
+      ],
+      "crop_path": "crops/bathroom-smoke-alarm-p14_i03.jpg",
+      "full_path": "full/bathroom/p14_i03.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Tight box on the ceiling-mounted circular smoke alarm.",
+      "pass2_verdict": "accept",
+      "pass2_note": "Tiny but plausible circular ceiling-mounted smoke alarm shape; consistent with label.",
+      "reasons": [
+        "risk:low_conf,tiny_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.61,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i02.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Cuts off left half of chair",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Box shows only the left half of the chair back; right half is cut off.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i04.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.519,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p26_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i04.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Includes window; clips chair top",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Chair frame and cushion visible but over half the box is window glass/reflection; clips the chair top.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p31_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i04.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.791,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p31_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i04.jpg",
+      "pass1_verdict": "uncertain",
+      "pass1_note": "Heavy motion blur",
+      "pass2_verdict": "uncertain",
+      "pass2_note": "Heavy motion blur obscures whether this is a chair; shape is plausible but unconfirmable.",
+      "reasons": [
+        "pass1:uncertain",
+        "pass2:uncertain",
+        "risk:edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.592,
+      "risk_flags": [
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p25_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i06.jpg",
+      "pass1_verdict": "uncertain",
+      "pass1_note": "Tiny indistinct crop",
+      "pass2_verdict": "uncertain",
+      "pass2_note": "Extremely small, indistinct crop; cannot confirm ceiling content either way.",
+      "reasons": [
+        "pass1:uncertain",
+        "pass2:uncertain",
+        "risk:tiny_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p31_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i05.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.534,
+      "risk_flags": [
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p31_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i05.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Smoke detector, not ceiling",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a round vent/detector grille pattern, not a ceiling surface.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:tiny_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.735,
+      "risk_flags": [
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i01.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Cabinet door; loose fit",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Cabinet door is the main subject but box is loosely fit around it.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:label_mismatch"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.658,
+      "risk_flags": [
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i03.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Cuts legs; overlaps chair",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Sideboard correctly identified but box overlaps an armchair and cuts the unit's legs.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:label_mismatch"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.423,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i06.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Dark integrated cabinet/appliance panel",
+      "pass2_verdict": "accept",
+      "pass2_note": "Dark integrated cabinet/appliance panel reasonably framed.",
+      "reasons": [
+        "risk:med_conf,label_mismatch"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i00.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.43,
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p30_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i00.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Utensil drawer insert in kitchen unit",
+      "pass2_verdict": "accept",
+      "pass2_note": "Open utensil drawer insert inside a kitchen unit, reasonably framed.",
+      "reasons": [
+        "risk:med_conf,label_mismatch"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "gold_item": "oven",
+      "det_label": "oven",
+      "det_confidence": 0.635,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p25_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i02.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Shifted left; clips oven right edge",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Built-in oven column visible but box is shifted, clipping the right edge of the appliance.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i04.jpg",
+      "gold_item": "oven",
+      "det_label": "oven",
+      "det_confidence": 0.348,
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p30_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i04.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Miele oven interior cavity",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box shows oven interior racks and manufacturer label, consistent with oven cavity.",
+      "reasons": [
+        "risk:low_conf,edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.631,
+      "risk_flags": [
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Tiny pen-like object, not sink",
+      "pass2_verdict": "reject",
+      "pass2_note": "Tiny indistinct thin object on countertop; not a sink.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject",
+        "risk:tiny_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.714,
+      "risk_flags": [
+        "tiny_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p25_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i02.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Shifted left; includes bottle",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Small dark object at frame edge; plausible partial sink/bottle but box needs to shift toward the basin.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:tiny_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i04.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.307,
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p28_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p28_i04.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Stainless sink corner with overflow",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box captures a good portion of the stainless sink basin corner with overflow slot.",
+      "reasons": [
+        "risk:low_conf,edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i08.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.542,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p30_i08.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i08.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Partial sink corner only",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Stainless counter/sink surface visible with a thin wire, but no basin depression; box likely needs to shift onto the actual basin.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p32_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p32_i01.jpg",
+      "gold_item": "washing machine",
+      "det_label": "washing machine",
+      "det_confidence": 0.755,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-washing-machine-p32_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p32_i01.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Bottom-right quadrant of washer only",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Washing machine door/drum is correctly identified but only the bottom-right quadrant is captured.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate",
+        "risk:edge_box"
+      ],
+      "priority": 4
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i00",
+      "room": "Bathroom",
+      "photo": "p14_i00.jpg",
+      "gold_item": "mirrored cabinet",
+      "det_label": "mirror",
+      "det_confidence": 0.433,
+      "risk_flags": [
+        "med_conf"
+      ],
+      "crop_path": "crops/bathroom-mirrored-cabinet-p14_i00.jpg",
+      "full_path": "full/bathroom/p14_i00.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Box cleanly frames the three-panel mirrored medicine cabinet.",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box cleanly frames the marble-clad mirrored medicine cabinet with mirror door.",
+      "reasons": [
+        "risk:med_conf"
+      ],
+      "priority": 3
+    },
+    {
+      "id": "bathroom-sink-p15_i07",
+      "room": "Bathroom",
+      "photo": "p15_i07.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.286,
+      "risk_flags": [
+        "low_conf"
+      ],
+      "crop_path": "crops/bathroom-sink-p15_i07.jpg",
+      "full_path": "full/bathroom/p15_i07.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Tight box on the rectangular sink basin and rim.",
+      "pass2_verdict": "accept",
+      "pass2_note": "Tight, clean box on the rectangular sink basin and faucet.",
+      "reasons": [
+        "risk:low_conf"
+      ],
+      "priority": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i03.jpg",
+      "gold_item": "oven",
+      "det_label": "oven",
+      "det_confidence": 0.309,
+      "risk_flags": [
+        "low_conf"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p30_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i03.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Open oven cavity",
+      "pass2_verdict": "accept",
+      "pass2_note": "Excellent clean box on the fully open oven cavity with racks.",
+      "reasons": [
+        "risk:low_conf"
+      ],
+      "priority": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i03.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.373,
+      "risk_flags": [
+        "med_conf"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p28_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p28_i03.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Sink basin well framed",
+      "pass2_verdict": "accept",
+      "pass2_note": "Clean box around the full stainless steel sink basin with faucet.",
+      "reasons": [
+        "risk:med_conf"
+      ],
+      "priority": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.451,
+      "risk_flags": [
+        "med_conf"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i03.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Sofa back cushions",
+      "pass2_verdict": "accept",
+      "pass2_note": "Sofa back cushions and armrest reasonably captured.",
+      "reasons": [
+        "risk:med_conf"
+      ],
+      "priority": 3
+    },
+    {
+      "id": "bathroom-bath-p14_i00",
+      "room": "Bathroom",
+      "photo": "p14_i00.jpg",
+      "gold_item": "bath",
+      "det_label": "bathtub",
+      "det_confidence": 0.838,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-bath-p14_i00.jpg",
+      "full_path": "full/bathroom/p14_i00.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Box covers the full bathtub including glass screen and tiled front.",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box tightly frames the full bathtub including front panel and glass screen.",
+      "reasons": [
+        "risk:edge_box"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "bathroom-bath-p14_i11",
+      "room": "Bathroom",
+      "photo": "p14_i11.jpg",
+      "gold_item": "bath",
+      "det_label": "bathtub",
+      "det_confidence": 0.818,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-bath-p14_i11.jpg",
+      "full_path": "full/bathroom/p14_i11.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Box captures the bathtub basin and rim with acceptable tightness.",
+      "pass2_verdict": "accept",
+      "pass2_note": "Wide, clean capture of the bathtub basin, rim, and overflow drain.",
+      "reasons": [
+        "risk:edge_box"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "bathroom-mirrored-cabinet-p14_i03",
+      "room": "Bathroom",
+      "photo": "p14_i03.jpg",
+      "gold_item": "mirrored cabinet",
+      "det_label": "mirror",
+      "det_confidence": 0.64,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-mirrored-cabinet-p14_i03.jpg",
+      "full_path": "full/bathroom/p14_i03.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Box aligns with a single mirror pane of the cabinet unit.",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box aligns with a mirror pane of the cabinet showing a person's reflection.",
+      "reasons": [
+        "risk:edge_box"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "bathroom-toilet-p14_i02",
+      "room": "Bathroom",
+      "photo": "p14_i02.jpg",
+      "gold_item": "toilet",
+      "det_label": "toilet",
+      "det_confidence": 0.881,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-toilet-p14_i02.jpg",
+      "full_path": "full/bathroom/p14_i02.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Box correctly localizes the toilet bowl and lid.",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box correctly localizes the toilet bowl and lid from a side angle.",
+      "reasons": [
+        "risk:edge_box"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "bathroom-toilet-p16_i02",
+      "room": "Bathroom",
+      "photo": "p16_i02.jpg",
+      "gold_item": "toilet",
+      "det_label": "toilet",
+      "det_confidence": 0.953,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/bathroom-toilet-p16_i02.jpg",
+      "full_path": "full/bathroom/p16_i02.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Tight box around the full toilet with lid raised.",
+      "pass2_verdict": "accept",
+      "pass2_note": "Clean, tight box around the full toilet with lid raised.",
+      "reasons": [
+        "risk:edge_box"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.667,
+      "risk_flags": [],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Clips backrest top and leg tips",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Chair back is present but box clips the top of the backrest and leg tips.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.615,
+      "risk_flags": [],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i01.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Includes table surface and leg",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Chair only partially visible at the left edge; box is dominated by the table surface above it.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.655,
+      "risk_flags": [],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i04.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Includes table; clips chair legs",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Chair correctly identified but box includes a large area of table surface, clipping the chair legs.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.889,
+      "risk_flags": [],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Clips backrest and leg feet",
+      "pass2_verdict": "accept",
+      "pass2_note": "Box captures the complete accent chair including legs and frame with minimal clipping; tighter than pass-1 assessed.",
+      "reasons": [
+        "pass1:relocate",
+        "disagreement"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "coffee table",
+      "det_label": "coffee table",
+      "det_confidence": 0.75,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-coffee-table-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Round coffee table",
+      "pass2_verdict": "accept",
+      "pass2_note": "Clean tight box on the round wooden coffee table with metal legs.",
+      "reasons": [
+        "risk:edge_box"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-dining-table-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "gold_item": "dining table",
+      "det_label": "dining table",
+      "det_confidence": 0.568,
+      "risk_flags": [],
+      "crop_path": "crops/reception-open-plan-kitchen-dining-table-p25_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i04.jpg",
+      "pass1_verdict": "relocate",
+      "pass1_note": "Table correct but includes chair backs",
+      "pass2_verdict": "relocate",
+      "pass2_note": "Round marble table well captured but box extends to include chair backs on both sides.",
+      "reasons": [
+        "pass1:relocate",
+        "pass2:relocate"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.536,
+      "risk_flags": [
+        "label_mismatch"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i02.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Cabinet drawer column",
+      "pass2_verdict": "accept",
+      "pass2_note": "Clean box around a column of cabinet drawer fronts.",
+      "reasons": [
+        "risk:label_mismatch"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.64,
+      "risk_flags": [],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Door with handle, not mirror",
+      "pass2_verdict": "reject",
+      "pass2_note": "Surface shows a plain door with handle, not a mirror pane.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i06.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.875,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p27_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p27_i06.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Floor mirror full height",
+      "pass2_verdict": "accept",
+      "pass2_note": "Full-height black-framed floor mirror cleanly captured, reflecting the hallway.",
+      "reasons": [
+        "risk:edge_box"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p31_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i00.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.847,
+      "risk_flags": [],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p31_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i00.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Open wall cabinet interior",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows an empty open wall cabinet interior, not a mirror.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i06.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.607,
+      "risk_flags": [],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p30_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i06.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Microwave turntable, not sink",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a microwave turntable glass plate, not a sink.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i07.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.766,
+      "risk_flags": [],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p30_i07.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i07.jpg",
+      "pass1_verdict": "reject",
+      "pass1_note": "Microwave turntable, not sink",
+      "pass2_verdict": "reject",
+      "pass2_note": "Box shows a microwave turntable glass plate, not a sink.",
+      "reasons": [
+        "pass1:reject",
+        "pass2:reject"
+      ],
+      "priority": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.668,
+      "risk_flags": [
+        "edge_box"
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i01.jpg",
+      "pass1_verdict": "accept",
+      "pass1_note": "Sofa right section",
+      "pass2_verdict": "accept",
+      "pass2_note": "Good capture of a large section of the grey velvet sofa.",
+      "reasons": [
+        "risk:edge_box"
+      ],
+      "priority": 2
+    }
+  ]
+}

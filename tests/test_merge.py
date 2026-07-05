@@ -1,9 +1,36 @@
-from homeinventory.merge import merge_items, merge_room_with_prior, room_code
+from homeinventory.detect import Detection
+from homeinventory.merge import (attach_detector_crops, merge_items,
+                                 merge_room_with_prior, room_code)
 from homeinventory.schema import Item, Photo, Room
 
 
 def make(name, **kw):
     return Item(id="", name=name, **kw)
+
+
+def test_attach_detector_crops_is_conservative():
+    """docs/15 M4: a VLM item borrows a YOLOE close-up only when the label's
+    words all appear in its name AND the detection is in a photo it cites."""
+    items = [
+        Item(id="K-001", name="Three-seat sofa", photo_ids=["P001"]),
+        Item(id="K-002", name="Coffee table", photo_ids=["P002"]),
+        Item(id="K-003", name="Radiator", photo_ids=["P001"],
+             crop_path="mine.jpg"),
+    ]
+    dets = {"P001": [
+        Detection(label="sofa", confidence=0.6, box=(0, 0, 9, 9),
+                  crop_path="weak-sofa.jpg"),
+        Detection(label="sofa", confidence=0.9, box=(0, 0, 9, 9),
+                  crop_path="best-sofa.jpg"),
+        Detection(label="table", confidence=0.9, box=(0, 0, 9, 9),
+                  crop_path="table.jpg"),
+        Detection(label="radiator", confidence=0.9, box=(0, 0, 9, 9),
+                  crop_path="radiator.jpg"),
+    ]}
+    attach_detector_crops(items, dets)
+    assert items[0].crop_path == "best-sofa.jpg"   # highest confidence match
+    assert items[1].crop_path is None    # "table" seen only in an uncited photo
+    assert items[2].crop_path == "mine.jpg"        # never overwritten
 
 
 def test_merge_duplicates_worst_grade_and_union():

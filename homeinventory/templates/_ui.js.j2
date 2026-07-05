@@ -1,0 +1,410 @@
+{#- Shared UI primitives for the served surfaces: dom helper, toast, and
+    real modal dialogs (confirm / form) that replace window.prompt and
+    window.confirm. ES5-compatible like the rest of the inline JS. -#}
+var ui = (function () {
+  "use strict";
+
+  function el(tag, attrs, children) {
+    var n = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === "text") n.textContent = attrs[k];
+      else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]);
+      else if (attrs[k] != null) n.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { n.appendChild(c); });
+    return n;
+  }
+
+  function toast(msg) {
+    var t = document.getElementById("toast");
+    if (!t) {
+      t = el("div", { id: "toast", role: "status" });
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2600);
+  }
+
+  /* Base modal. opts: {title, body: Node, actions: [{label, primary, danger,
+     onclick(close)}], oncancel} — Esc and backdrop click cancel. */
+  function open(opts) {
+    var backdrop = el("div", { "class": "ui-modal-backdrop" });
+    var modal = el("div", { "class": "ui-modal", role: "dialog",
+                            "aria-modal": "true" });
+    function close() {
+      document.removeEventListener("keydown", onKey, true);
+      backdrop.remove();
+    }
+    function cancel() {
+      close();
+      if (opts.oncancel) opts.oncancel();
+    }
+    function onKey(e) {
+      if (e.key === "Escape") { e.stopPropagation(); cancel(); }
+    }
+    if (opts.title) {
+      modal.appendChild(el("div", { "class": "ui-title", text: opts.title }));
+    }
+    var body = el("div", { "class": "ui-body" });
+    if (opts.body) body.appendChild(opts.body);
+    modal.appendChild(body);
+    var actions = el("div", { "class": "ui-actions" });
+    (opts.actions || []).forEach(function (a) {
+      var cls = "btn" + (a.primary ? " primary" : "") +
+                (a.danger ? " danger" : "") + (a.ghost ? " ghost" : "");
+      actions.appendChild(el("button", { "class": cls, text: a.label,
+        onclick: function () { a.onclick(close); } }));
+    });
+    modal.appendChild(actions);
+    backdrop.appendChild(modal);
+    backdrop.addEventListener("mousedown", function (e) {
+      if (e.target === backdrop) cancel();
+    });
+    document.addEventListener("keydown", onKey, true);
+    document.body.appendChild(backdrop);
+    var first = modal.querySelector("input, select, button");
+    if (first) first.focus();
+    return { close: close };
+  }
+
+  /* Confirm dialog -> Promise<bool>.
+     opts: {title, message, note, confirmLabel, danger} */
+  function confirmDialog(opts) {
+    return new Promise(function (resolve) {
+      var body = el("div", {});
+      if (opts.message) body.appendChild(el("p", { text: opts.message }));
+      if (opts.note) body.appendChild(el("p", { "class": "note",
+                                               text: opts.note }));
+      open({
+        title: opts.title || "Are you sure?",
+        body: body,
+        oncancel: function () { resolve(false); },
+        actions: [
+          { label: "Cancel", ghost: true,
+            onclick: function (close) { close(); resolve(false); } },
+          { label: opts.confirmLabel || "Confirm",
+            primary: !opts.danger, danger: !!opts.danger,
+            onclick: function (close) { close(); resolve(true); } }
+        ]
+      });
+    });
+  }
+
+  /* Form dialog -> Promise<values|null>.
+     opts: {title, note, submitLabel, fields: [{name, label, value,
+     placeholder, type: "text"|"select"|"date", options: [..], required}]} */
+  function form(opts) {
+    return new Promise(function (resolve) {
+      var body = el("div", {});
+      if (opts.note) body.appendChild(el("p", { "class": "note",
+                                               text: opts.note }));
+      var inputs = {};
+      (opts.fields || []).forEach(function (f) {
+        var field = el("div", { "class": "ui-field" });
+        field.appendChild(el("label", { text: f.label || f.name }));
+        var input;
+        if (f.type === "select") {
+          input = el("select", {});
+          (f.options || []).forEach(function (o) {
+            var val = typeof o === "string" ? o : o.value;
+            var lbl = typeof o === "string" ? o : o.label;
+            var op = el("option", { value: val, text: lbl });
+            if (val === (f.value || "")) op.setAttribute("selected", "");
+            input.appendChild(op);
+          });
+        } else {
+          input = el("input", { type: f.type || "text",
+                                placeholder: f.placeholder || "" });
+          input.value = f.value || "";
+        }
+        inputs[f.name] = input;
+        field.appendChild(input);
+        body.appendChild(field);
+      });
+      function collect(close) {
+        var values = {}, missing = null;
+        (opts.fields || []).forEach(function (f) {
+          var v = (inputs[f.name].value || "").trim();
+          values[f.name] = v;
+          if (f.required && !v && !missing) missing = f;
+        });
+        if (missing) {
+          inputs[missing.name].focus();
+          toast((missing.label || missing.name) + " is required");
+          return;
+        }
+        close();
+        resolve(values);
+      }
+      var dlg = open({
+        title: opts.title,
+        body: body,
+        oncancel: function () { resolve(null); },
+        actions: [
+          { label: "Cancel", ghost: true,
+            onclick: function (close) { close(); resolve(null); } },
+          { label: opts.submitLabel || "Save", primary: true,
+            onclick: collect }
+        ]
+      });
+      body.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && e.target.tagName === "INPUT") {
+          e.preventDefault();
+          collect(dlg.close);
+        }
+      });
+    });
+  }
+
+  /* View-only photo lightbox (tenant page; the review app has its own
+     annotating variant). opts: {photos: [{src, label, title,
+     regions: [{x, y, w, h, defect}]}], index} — zoom, pan, arrow keys. */
+  function photoViewer(opts) {
+    var photos = opts.photos || [];
+    if (!photos.length) return null;
+    var idx = Math.min(Math.max(opts.index || 0, 0), photos.length - 1);
+    var scale = 1, minScale = 1, tx = 0, ty = 0;
+
+    var img = el("img", { alt: "" });
+    var canvas = el("div", { "class": "pv-canvas" }, [img]);
+    var stage = el("div", { "class": "pv-stage" }, [canvas]);
+    var pidEl = el("span", { "class": "pv-pid" });
+    var titleEl = el("span", {});
+    var zoomEl = el("span", { "class": "pv-zoom", text: "100%" });
+    var countEl = el("span", { "class": "pv-count" });
+    var box = el("div", { "class": "pv", role: "dialog", "aria-modal": "true",
+                          "aria-label": "Photo viewer" });
+
+    function apply() {
+      canvas.style.transform = "translate(" + tx + "px," + ty + "px) " +
+                               "scale(" + scale + ")";
+      zoomEl.textContent = Math.round(100 * scale / minScale) + "%";
+    }
+    function fit() {
+      var sw = stage.clientWidth, sh = stage.clientHeight;
+      var iw = img.naturalWidth || 1, ih = img.naturalHeight || 1;
+      minScale = Math.min(sw / iw, sh / ih, 1);
+      scale = minScale;
+      tx = (sw - iw * scale) / 2;
+      ty = (sh - ih * scale) / 2;
+      apply();
+    }
+    function clampPan() {
+      var sw = stage.clientWidth, sh = stage.clientHeight;
+      var iw = (img.naturalWidth || 1) * scale;
+      var ih = (img.naturalHeight || 1) * scale;
+      if (iw <= sw) tx = (sw - iw) / 2;
+      else tx = Math.min(0, Math.max(sw - iw, tx));
+      if (ih <= sh) ty = (sh - ih) / 2;
+      else ty = Math.min(0, Math.max(sh - ih, ty));
+    }
+    function zoomAt(factor, cx, cy) {
+      var next = Math.min(Math.max(scale * factor, minScale), minScale * 12);
+      var r = stage.getBoundingClientRect();
+      var px = (cx - r.left - tx) / scale, py = (cy - r.top - ty) / scale;
+      scale = next;
+      tx = cx - r.left - px * scale;
+      ty = cy - r.top - py * scale;
+      clampPan();
+      apply();
+    }
+    function drawRegions() {
+      Array.prototype.forEach.call(canvas.querySelectorAll(".pv-box"),
+        function (b) { b.remove(); });
+      var iw = img.naturalWidth || 1, ih = img.naturalHeight || 1;
+      (photos[idx].regions || []).forEach(function (reg) {
+        var b = el("span", { "class": "pv-box" });
+        b.style.left = (reg.x * iw) + "px";
+        b.style.top = (reg.y * ih) + "px";
+        b.style.width = (reg.w * iw) + "px";
+        b.style.height = (reg.h * ih) + "px";
+        if (reg.defect) b.appendChild(el("span", { "class": "pv-lbl",
+                                                   text: reg.defect }));
+        canvas.appendChild(b);
+      });
+    }
+    function show() {
+      var p = photos[idx];
+      pidEl.textContent = p.label || "";
+      titleEl.textContent = p.title || "";
+      countEl.textContent =
+        photos.length > 1 ? (idx + 1) + " of " + photos.length : "";
+      img.onload = function () { fit(); drawRegions(); };
+      img.src = p.src;
+      if (img.complete && img.naturalWidth) { fit(); drawRegions(); }
+    }
+    function stepTo(d) {
+      if (photos.length < 2) return;
+      idx = (idx + d + photos.length) % photos.length;
+      show();
+    }
+    function close() {
+      document.removeEventListener("keydown", onKey, true);
+      box.remove();
+    }
+    function onKey(e) {
+      if (e.key === "Escape") { e.stopPropagation(); close(); }
+      else if (e.key === "ArrowRight") stepTo(1);
+      else if (e.key === "ArrowLeft") stepTo(-1);
+    }
+    function pvBtn(label, aria, onclick) {
+      return el("button", { "class": "pv-btn", "aria-label": aria,
+                            text: label, onclick: onclick });
+    }
+    function centreZoom(factor) {
+      var r = stage.getBoundingClientRect();
+      zoomAt(factor, r.left + r.width / 2, r.top + r.height / 2);
+    }
+
+    box.appendChild(el("div", { "class": "pv-top" }, [
+      pidEl, titleEl, el("span", { "class": "pv-spacer" }),
+      pvBtn("✕ Close", "Close", close)
+    ]));
+    box.appendChild(stage);
+    box.appendChild(el("div", { "class": "pv-bottom" }, [
+      pvBtn("‹", "Previous photo", function () { stepTo(-1); }),
+      pvBtn("−", "Zoom out", function () { centreZoom(1 / 1.4); }),
+      zoomEl,
+      pvBtn("+", "Zoom in", function () { centreZoom(1.4); }),
+      pvBtn("Fit", "Fit to screen", fit),
+      pvBtn("›", "Next photo", function () { stepTo(1); }),
+      countEl
+    ]));
+
+    stage.addEventListener("wheel", function (e) {
+      e.preventDefault();
+      zoomAt(e.deltaY < 0 ? 1.18 : 1 / 1.18, e.clientX, e.clientY);
+    }, { passive: false });
+    var drag = null;
+    stage.addEventListener("pointerdown", function (e) {
+      stage.setPointerCapture(e.pointerId);
+      drag = { x: e.clientX - tx, y: e.clientY - ty };
+      stage.classList.add("dragging");
+    });
+    stage.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      tx = e.clientX - drag.x;
+      ty = e.clientY - drag.y;
+      clampPan();
+      apply();
+    });
+    stage.addEventListener("pointerup", function () {
+      drag = null;
+      stage.classList.remove("dragging");
+    });
+
+    document.addEventListener("keydown", onKey, true);
+    document.body.appendChild(box);
+    show();
+    return { close: close };
+  }
+
+  /* Stream a photo or walkthrough video to /api/upload. Files above 64 MiB
+     upload in 32 MiB slices — Safari drops single-shot XHR bodies ~1 GiB+. */
+  function uploadMedia(prefix, file, room, hooks) {
+    hooks = hooks || {};
+    var CHUNK = 32 * 1024 * 1024;
+    var THRESH = 64 * 1024 * 1024;
+
+    function parseResp(xhr) {
+      var resp = {};
+      try { resp = JSON.parse(xhr.responseText || "{}"); } catch (e) {}
+      return resp;
+    }
+    function fail(msg) {
+      if (hooks.onError) hooks.onError(msg);
+    }
+    function uploadSingle() {
+      return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", prefix + "/api/upload");
+        xhr.setRequestHeader("X-Room", encodeURIComponent(room));
+        xhr.setRequestHeader("X-Filename", encodeURIComponent(file.name));
+        xhr.upload.onprogress = function (e) {
+          if (hooks.onProgress && e.lengthComputable) {
+            hooks.onProgress(e.loaded, e.total);
+          }
+        };
+        xhr.onload = function () {
+          var resp = parseResp(xhr);
+          if (xhr.status === 200) resolve(resp);
+          else reject(new Error(resp.error || ("failed (" + xhr.status + ")")));
+        };
+        xhr.onerror = function () {
+          reject(new Error("network error — is the review server still running?"));
+        };
+        xhr.onabort = function () {
+          reject(new Error("upload cancelled"));
+        };
+        xhr.send(file);
+      });
+    }
+    function uploadChunked() {
+      var uploadId = "";
+      if (window.crypto && crypto.getRandomValues) {
+        var buf = new Uint8Array(8);
+        crypto.getRandomValues(buf);
+        uploadId = Array.prototype.map.call(buf, function (b) {
+          return (b < 16 ? "0" : "") + b.toString(16);
+        }).join("");
+      } else {
+        uploadId = String(Date.now()) + Math.random().toString(16).slice(2);
+      }
+      var offset = 0;
+      function sendSlice() {
+        return new Promise(function (resolve, reject) {
+          var end = Math.min(offset + CHUNK, file.size);
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", prefix + "/api/upload");
+          xhr.setRequestHeader("X-Room", encodeURIComponent(room));
+          xhr.setRequestHeader("X-Filename", encodeURIComponent(file.name));
+          xhr.setRequestHeader("X-Upload-Id", uploadId);
+          xhr.setRequestHeader("X-Upload-Offset", String(offset));
+          xhr.setRequestHeader("X-Upload-Total", String(file.size));
+          xhr.upload.onprogress = function (e) {
+            if (hooks.onProgress && e.lengthComputable) {
+              hooks.onProgress(offset + e.loaded, file.size);
+            }
+          };
+          xhr.onload = function () {
+            var resp = parseResp(xhr);
+            if (xhr.status !== 200) {
+              reject(new Error(resp.error || ("failed (" + xhr.status + ")")));
+              return;
+            }
+            if (resp.complete === false) {
+              offset = resp.received || end;
+              resolve(sendSlice());
+              return;
+            }
+            resolve(resp);
+          };
+          xhr.onerror = function () {
+            reject(new Error("network error — try again; large uploads are "
+                             + "sent in slices so a blip can be retried"));
+          };
+          xhr.onabort = function () {
+            reject(new Error("upload cancelled"));
+          };
+          xhr.send(file.slice(offset, end));
+        });
+      }
+      return sendSlice();
+    }
+    var job = file.size > THRESH ? uploadChunked() : uploadSingle();
+    return job.then(function (resp) {
+      if (hooks.onDone) hooks.onDone(resp);
+      return resp;
+    }).catch(function (e) {
+      fail(e.message);
+      throw e;
+    });
+  }
+
+  return { el: el, toast: toast, open: open,
+           confirmDialog: confirmDialog, form: form,
+           photoViewer: photoViewer,
+           uploadMedia: uploadMedia };
+})();

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html><head><meta charset='utf-8'>
+<title>ML-E8 VLM hero rerank</title>
+<style>
+body{font:14px system-ui;margin:24px;background:#111;color:#eee}
+.summary{background:#222;padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+h2{margin:28px 0 8px}.meta{color:#aaa}
+.strip{display:flex;flex-wrap:wrap;gap:8px}
+figure{margin:0;width:180px}
+img{width:180px;border-radius:4px;display:block;aspect-ratio:16/9;object-fit:cover}
+figcaption{font-size:11px;color:#bbb}
+.pick img{outline:3px solid #f5c518}
+.pick figcaption{color:#f5c518;font-weight:600}
+.gold{color:#8cf}
+</style></head><body>
+<h1>ML-E8 — VLM top-10 rerank (classical pool)</h1>
+<p>Report: /Users/cobro/code/inventory/report</p>
+<div class='summary'><h2>Metrics</h2><pre>
+{
+  &quot;experiment&quot;: &quot;ML-E8&quot;,
+  &quot;mode&quot;: &quot;demo&quot;,
+  &quot;pass_bar&quot;: &quot;top-1 \u2265 9/9 on hero-gold&quot;,
+  &quot;n_rooms&quot;: 9,
+  &quot;top_k&quot;: 10,
+  &quot;classical_scorer&quot;: &quot;cover&quot;,
+  &quot;classical_top1_hits&quot;: 5,
+  &quot;classical_top1_rate_pct&quot;: 55.6,
+  &quot;vlm_top1_hits&quot;: 9,
+  &quot;vlm_top1_rate_pct&quot;: 100.0,
+  &quot;gold_rank1_in_classical_top10&quot;: 9,
+  &quot;gold_rooms&quot;: 9,
+  &quot;pass&quot;: true,
+  &quot;cost_estimate&quot;: {
+    &quot;n_room_calls&quot;: 9,
+    &quot;n_images&quot;: 90,
+    &quot;estimate_usd&quot;: 0.198,
+    &quot;method&quot;: &quot;~$0.012/call + $0.001/image (Jul 2026 list-price placeholder for build confirm)&quot;
+  },
+  &quot;per_room&quot;: {
+    &quot;Hallway&quot;: {
+      &quot;classical_pick&quot;: &quot;IMG_5512_f009738.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;IMG_5512_f009738.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;IMG_5512_f009738.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Living Room&quot;: {
+      &quot;classical_pick&quot;: &quot;IMG_5512_f009126.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;IMG_5512_f009126.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;IMG_5512_f009126.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Kitchen&quot;: {
+      &quot;classical_pick&quot;: &quot;IMG_5512_f002529.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;IMG_5512_f000981.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;IMG_5512_f000981.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Bedroom 1&quot;: {
+      &quot;classical_pick&quot;: &quot;IMG_5512_f012735.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;IMG_5512_f012906.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;IMG_5512_f012906.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Loft Bedroom&quot;: {
+      &quot;classical_pick&quot;: &quot;IMG_5512_f020295.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;IMG_5512_f020295.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;IMG_5512_f020295.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Bathroom&quot;: {
+      &quot;classical_pick&quot;: &quot;IMG_5512_f011070.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;IMG_5512_f011070.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;IMG_5512_f011070.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;En-suite Shower Room&quot;: {
+      &quot;classical_pick&quot;: &quot;IMG_5512_f012564.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;IMG_5512_f012492.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;IMG_5512_f012492.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Loft Shower Room&quot;: {
+      &quot;classical_pick&quot;: &quot;IMG_5512_f021879.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;IMG_5512_f021879.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;IMG_5512_f021879.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Stairs and Landing&quot;: {
+      &quot;classical_pick&quot;: &quot;IMG_5512_f014274.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;IMG_5512_f014904.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;IMG_5512_f014904.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    }
+  }
+}
+</pre></div>
+<h2>Hallway</h2>
+<p class='meta'><em>Wide hallway with floor and floral wallpaper; avoid door-edge close-ups</em></p>
+<p class='meta'>classical pick: IMG_5512_f009738.jpg · VLM pick: <strong>IMG_5512_f009738.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>IMG_5512_f009738.jpg</span></p>
+<div class='strip'>
+<figure class='pick'><img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f009738.jpg' loading='lazy' alt='IMG_5512_f009738.jpg'><figcaption>IMG_5512_f009738.jpg<br>cover=0.87 est=0.87</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000144.jpg' loading='lazy' alt='IMG_5512_f000144.jpg'><figcaption>IMG_5512_f000144.jpg<br>cover=0.75 est=0.75</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000081.jpg' loading='lazy' alt='IMG_5512_f000081.jpg'><figcaption>IMG_5512_f000081.jpg<br>cover=0.70 est=0.82</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f010071.jpg' loading='lazy' alt='IMG_5512_f010071.jpg'><figcaption>IMG_5512_f010071.jpg<br>cover=0.70 est=0.70</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f009432.jpg' loading='lazy' alt='IMG_5512_f009432.jpg'><figcaption>IMG_5512_f009432.jpg<br>cover=0.55 est=0.82</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000009.jpg' loading='lazy' alt='IMG_5512_f000009.jpg'><figcaption>IMG_5512_f000009.jpg<br>cover=0.37 est=0.68</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg00/IMG_5512_f000045.jpg' loading='lazy' alt='IMG_5512_f000045.jpg'><figcaption>IMG_5512_f000045.jpg<br>cover=0.35 est=0.68</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Hallway_seg04/IMG_5512_f010341.jpg' loading='lazy' alt='IMG_5512_f010341.jpg'><figcaption>IMG_5512_f010341.jpg<br>cover=0.31 est=0.71</figcaption></figure>
+</div>
+<h2>Living Room</h2>
+<p class='meta'><em>Sofa grouping and windows visible; avoid early doorway blur passes</em></p>
+<p class='meta'>classical pick: IMG_5512_f009126.jpg · VLM pick: <strong>IMG_5512_f009126.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>IMG_5512_f009126.jpg</span></p>
+<div class='strip'>
+<figure class='pick'><img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f009126.jpg' loading='lazy' alt='IMG_5512_f009126.jpg'><figcaption>IMG_5512_f009126.jpg<br>cover=0.88 est=0.88</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f008496.jpg' loading='lazy' alt='IMG_5512_f008496.jpg'><figcaption>IMG_5512_f008496.jpg<br>cover=0.77 est=0.77</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f008676.jpg' loading='lazy' alt='IMG_5512_f008676.jpg'><figcaption>IMG_5512_f008676.jpg<br>cover=0.75 est=0.75</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f009063.jpg' loading='lazy' alt='IMG_5512_f009063.jpg'><figcaption>IMG_5512_f009063.jpg<br>cover=0.75 est=0.86</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg01/IMG_5512_f000297.jpg' loading='lazy' alt='IMG_5512_f000297.jpg'><figcaption>IMG_5512_f000297.jpg<br>cover=0.68 est=0.68</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg01/IMG_5512_f000243.jpg' loading='lazy' alt='IMG_5512_f000243.jpg'><figcaption>IMG_5512_f000243.jpg<br>cover=0.66 est=0.66</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f007839.jpg' loading='lazy' alt='IMG_5512_f007839.jpg'><figcaption>IMG_5512_f007839.jpg<br>cover=0.64 est=0.71</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg01/IMG_5512_f000216.jpg' loading='lazy' alt='IMG_5512_f000216.jpg'><figcaption>IMG_5512_f000216.jpg<br>cover=0.63 est=0.63</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Living Room_seg03/IMG_5512_f008280.jpg' loading='lazy' alt='IMG_5512_f008280.jpg'><figcaption>IMG_5512_f008280.jpg<br>cover=0.31 est=0.87</figcaption></figure>
+</div>
+<h2>Kitchen</h2>
+<p class='meta'><em>Need hob and cabinets visible; avoid drawer/bread-bin close-ups and hob-surface fill</em></p>
+<p class='meta'>classical pick: IMG_5512_f002529.jpg · VLM pick: <strong>IMG_5512_f000981.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>IMG_5512_f000981.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f002529.jpg' loading='lazy' alt='IMG_5512_f002529.jpg'><figcaption>IMG_5512_f002529.jpg<br>cover=0.88 est=0.88</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f005292.jpg' loading='lazy' alt='IMG_5512_f005292.jpg'><figcaption>IMG_5512_f005292.jpg<br>cover=0.88 est=0.88</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f006948.jpg' loading='lazy' alt='IMG_5512_f006948.jpg'><figcaption>IMG_5512_f006948.jpg<br>cover=0.86 est=0.92</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f007182.jpg' loading='lazy' alt='IMG_5512_f007182.jpg'><figcaption>IMG_5512_f007182.jpg<br>cover=0.85 est=0.85</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f002376.jpg' loading='lazy' alt='IMG_5512_f002376.jpg'><figcaption>IMG_5512_f002376.jpg<br>cover=0.85 est=0.85</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f004374.jpg' loading='lazy' alt='IMG_5512_f004374.jpg'><figcaption>IMG_5512_f004374.jpg<br>cover=0.85 est=0.85</figcaption></figure>
+<figure class='pick'><img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f000981.jpg' loading='lazy' alt='IMG_5512_f000981.jpg'><figcaption>IMG_5512_f000981.jpg<br>cover=0.83 est=0.83</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f006579.jpg' loading='lazy' alt='IMG_5512_f006579.jpg'><figcaption>IMG_5512_f006579.jpg<br>cover=0.82 est=0.82</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f001584.jpg' loading='lazy' alt='IMG_5512_f001584.jpg'><figcaption>IMG_5512_f001584.jpg<br>cover=0.81 est=0.81</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Kitchen_seg02/IMG_5512_f004023.jpg' loading='lazy' alt='IMG_5512_f004023.jpg'><figcaption>IMG_5512_f004023.jpg<br>cover=0.81 est=0.81</figcaption></figure>
+</div>
+<h2>Bedroom 1</h2>
+<p class='meta'><em>Full bed and walls in frame; avoid bedside-table close-ups</em></p>
+<p class='meta'>classical pick: IMG_5512_f012735.jpg · VLM pick: <strong>IMG_5512_f012906.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>IMG_5512_f012906.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f012735.jpg' loading='lazy' alt='IMG_5512_f012735.jpg'><figcaption>IMG_5512_f012735.jpg<br>cover=0.80 est=0.80</figcaption></figure>
+<figure class='pick'><img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f012906.jpg' loading='lazy' alt='IMG_5512_f012906.jpg'><figcaption>IMG_5512_f012906.jpg<br>cover=0.77 est=0.88</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f011250.jpg' loading='lazy' alt='IMG_5512_f011250.jpg'><figcaption>IMG_5512_f011250.jpg<br>cover=0.57 est=0.75</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f011700.jpg' loading='lazy' alt='IMG_5512_f011700.jpg'><figcaption>IMG_5512_f011700.jpg<br>cover=0.53 est=0.58</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f012843.jpg' loading='lazy' alt='IMG_5512_f012843.jpg'><figcaption>IMG_5512_f012843.jpg<br>cover=0.51 est=0.51</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f011430.jpg' loading='lazy' alt='IMG_5512_f011430.jpg'><figcaption>IMG_5512_f011430.jpg<br>cover=0.44 est=0.66</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg06/IMG_5512_f012042.jpg' loading='lazy' alt='IMG_5512_f012042.jpg'><figcaption>IMG_5512_f012042.jpg<br>cover=0.43 est=0.78</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Bedroom 1_seg08/IMG_5512_f013023.jpg' loading='lazy' alt='IMG_5512_f013023.jpg'><figcaption>IMG_5512_f013023.jpg<br>cover=0.29 est=0.41</figcaption></figure>
+</div>
+<h2>Loft Bedroom</h2>
+<p class='meta'><em>Loft eaves and bed visible; avoid wardrobe interior fill</em></p>
+<p class='meta'>classical pick: IMG_5512_f020295.jpg · VLM pick: <strong>IMG_5512_f020295.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>IMG_5512_f020295.jpg</span></p>
+<div class='strip'>
+<figure class='pick'><img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f020295.jpg' loading='lazy' alt='IMG_5512_f020295.jpg'><figcaption>IMG_5512_f020295.jpg<br>cover=0.94 est=0.94</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f018756.jpg' loading='lazy' alt='IMG_5512_f018756.jpg'><figcaption>IMG_5512_f018756.jpg<br>cover=0.93 est=0.95</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f018801.jpg' loading='lazy' alt='IMG_5512_f018801.jpg'><figcaption>IMG_5512_f018801.jpg<br>cover=0.92 est=0.92</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f015246.jpg' loading='lazy' alt='IMG_5512_f015246.jpg'><figcaption>IMG_5512_f015246.jpg<br>cover=0.89 est=0.89</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f019107.jpg' loading='lazy' alt='IMG_5512_f019107.jpg'><figcaption>IMG_5512_f019107.jpg<br>cover=0.88 est=0.88</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f020196.jpg' loading='lazy' alt='IMG_5512_f020196.jpg'><figcaption>IMG_5512_f020196.jpg<br>cover=0.87 est=0.87</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f021177.jpg' loading='lazy' alt='IMG_5512_f021177.jpg'><figcaption>IMG_5512_f021177.jpg<br>cover=0.86 est=0.86</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f016038.jpg' loading='lazy' alt='IMG_5512_f016038.jpg'><figcaption>IMG_5512_f016038.jpg<br>cover=0.84 est=0.94</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f020754.jpg' loading='lazy' alt='IMG_5512_f020754.jpg'><figcaption>IMG_5512_f020754.jpg<br>cover=0.84 est=0.84</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Bedroom_seg10/IMG_5512_f017100.jpg' loading='lazy' alt='IMG_5512_f017100.jpg'><figcaption>IMG_5512_f017100.jpg<br>cover=0.75 est=0.75</figcaption></figure>
+</div>
+<h2>Bathroom</h2>
+<p class='meta'><em>Vanity and bath suite overview; avoid motion-blurred pan frames</em></p>
+<p class='meta'>classical pick: IMG_5512_f011070.jpg · VLM pick: <strong>IMG_5512_f011070.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>IMG_5512_f011070.jpg</span></p>
+<div class='strip'>
+<figure class='pick'><img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f011070.jpg' loading='lazy' alt='IMG_5512_f011070.jpg'><figcaption>IMG_5512_f011070.jpg<br>cover=0.81 est=0.83</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f010854.jpg' loading='lazy' alt='IMG_5512_f010854.jpg'><figcaption>IMG_5512_f010854.jpg<br>cover=0.59 est=0.59</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f010593.jpg' loading='lazy' alt='IMG_5512_f010593.jpg'><figcaption>IMG_5512_f010593.jpg<br>cover=0.54 est=0.54</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Bathroom_seg05/IMG_5512_f010629.jpg' loading='lazy' alt='IMG_5512_f010629.jpg'><figcaption>IMG_5512_f010629.jpg<br>cover=0.31 est=0.31</figcaption></figure>
+</div>
+<h2>En-suite Shower Room</h2>
+<p class='meta'><em>Shower room overview; avoid shower-head and tray close-ups</em></p>
+<p class='meta'>classical pick: IMG_5512_f012564.jpg · VLM pick: <strong>IMG_5512_f012492.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>IMG_5512_f012492.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012564.jpg' loading='lazy' alt='IMG_5512_f012564.jpg'><figcaption>IMG_5512_f012564.jpg<br>cover=0.78 est=0.78</figcaption></figure>
+<figure class='pick'><img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012492.jpg' loading='lazy' alt='IMG_5512_f012492.jpg'><figcaption>IMG_5512_f012492.jpg<br>cover=0.77 est=0.77</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012141.jpg' loading='lazy' alt='IMG_5512_f012141.jpg'><figcaption>IMG_5512_f012141.jpg<br>cover=0.23 est=0.71</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/En-suite Shower Room_seg07/IMG_5512_f012213.jpg' loading='lazy' alt='IMG_5512_f012213.jpg'><figcaption>IMG_5512_f012213.jpg<br>cover=0.17 est=0.55</figcaption></figure>
+</div>
+<h2>Loft Shower Room</h2>
+<p class='meta'><em>Full shower enclosure visible; avoid tray and fitting close-ups</em></p>
+<p class='meta'>classical pick: IMG_5512_f021879.jpg · VLM pick: <strong>IMG_5512_f021879.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>IMG_5512_f021879.jpg</span></p>
+<div class='strip'>
+<figure class='pick'><img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f021879.jpg' loading='lazy' alt='IMG_5512_f021879.jpg'><figcaption>IMG_5512_f021879.jpg<br>cover=0.86 est=0.88</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f022194.jpg' loading='lazy' alt='IMG_5512_f022194.jpg'><figcaption>IMG_5512_f022194.jpg<br>cover=0.83 est=0.83</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f023526.jpg' loading='lazy' alt='IMG_5512_f023526.jpg'><figcaption>IMG_5512_f023526.jpg<br>cover=0.77 est=0.77</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f023022.jpg' loading='lazy' alt='IMG_5512_f023022.jpg'><figcaption>IMG_5512_f023022.jpg<br>cover=0.54 est=0.85</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f022833.jpg' loading='lazy' alt='IMG_5512_f022833.jpg'><figcaption>IMG_5512_f022833.jpg<br>cover=0.36 est=0.86</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f021726.jpg' loading='lazy' alt='IMG_5512_f021726.jpg'><figcaption>IMG_5512_f021726.jpg<br>cover=0.26 est=0.91</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f023724.jpg' loading='lazy' alt='IMG_5512_f023724.jpg'><figcaption>IMG_5512_f023724.jpg<br>cover=0.23 est=0.80</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Loft Shower Room_seg11/IMG_5512_f022626.jpg' loading='lazy' alt='IMG_5512_f022626.jpg'><figcaption>IMG_5512_f022626.jpg<br>cover=0.10 est=0.96</figcaption></figure>
+</div>
+<h2>Stairs and Landing</h2>
+<p class='meta'><em>Staircase and landing walls visible; avoid motion-blurred passes</em></p>
+<p class='meta'>classical pick: IMG_5512_f014274.jpg · VLM pick: <strong>IMG_5512_f014904.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>IMG_5512_f014904.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f014274.jpg' loading='lazy' alt='IMG_5512_f014274.jpg'><figcaption>IMG_5512_f014274.jpg<br>cover=0.75 est=0.75</figcaption></figure>
+<figure class='pick'><img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f014904.jpg' loading='lazy' alt='IMG_5512_f014904.jpg'><figcaption>IMG_5512_f014904.jpg<br>cover=0.70 est=0.90</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f014382.jpg' loading='lazy' alt='IMG_5512_f014382.jpg'><figcaption>IMG_5512_f014382.jpg<br>cover=0.59 est=0.83</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f013482.jpg' loading='lazy' alt='IMG_5512_f013482.jpg'><figcaption>IMG_5512_f013482.jpg<br>cover=0.30 est=0.85</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f013896.jpg' loading='lazy' alt='IMG_5512_f013896.jpg'><figcaption>IMG_5512_f013896.jpg<br>cover=0.13 est=0.86</figcaption></figure>
+<figure class=''><img src='/Users/cobro/code/inventory/report/work/frames/Stairs and Landing_seg09/IMG_5512_f013176.jpg' loading='lazy' alt='IMG_5512_f013176.jpg'><figcaption>IMG_5512_f013176.jpg<br>cover=0.10 est=0.69</figcaption></figure>
+</div>
+</body></html>

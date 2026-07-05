@@ -1,0 +1,34 @@
+{
+  "experiment": "ML-E17",
+  "licence": "MIT",
+  "target": "koniq_mos",
+  "target_note": "KonIQ-10k MOS (research download) \u2014 distilled linear head on classical PIL features (KonCept512-style spike simplified)",
+  "features": [
+    "bias",
+    "log_sharpness",
+    "smooth",
+    "log_cbr",
+    "clipped",
+    "establishing",
+    "cover"
+  ],
+  "weights": [
+    -25.652136,
+    10.271248,
+    15.285007,
+    0.566302,
+    -3.069676,
+    -2.544919,
+    2.860642
+  ],
+  "training": {
+    "fixture": "evals/fixtures/own-property/iqa-comparison-mps.json",
+    "koniq_dir": "evals/external/data/koniq10k",
+    "mode": "own-property-features",
+    "n_resolved_frames": 260,
+    "ridge_alpha": 1.0,
+    "max_samples": 512,
+    "n_samples": 260,
+    "spearman_pred_vs_musiq": 0.744
+  }
+}
