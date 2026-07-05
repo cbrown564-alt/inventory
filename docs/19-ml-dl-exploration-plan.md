@@ -497,16 +497,16 @@ standard as docs/11 and docs/18.
 
 | ID | Task | Method | Pass bar | Status | Artifact |
 |---|---|---|---|---|---|
-| **ML-E1** | Segmentation | DINOv2/CLIP embedding changepoint | ≤3 s mean error vs manual on IMG_5512 | fail ([log](20-ml-dl-experiment-log.md#ml-e1--embedding-changepoint-segmentation)) | `evals/fixtures/own-property/segment-embed.html` |
+| **ML-E1** | Segmentation | DINOv2/CLIP embedding changepoint | ≤3 s mean error vs manual on IMG_5512 | fail ([log](21-ml-dl-experiment-log.md#ml-e1--embedding-changepoint-segmentation)) | `evals/fixtures/own-property/segment-embed.html` |
 | **ML-E2** | Segmentation | VLM refine ±30 s windows | Bleed items ↓ vs baseline | not started | segment JSON + bleed recount |
 | **ML-E3** | Pre-process | Two-tier describe vs presentation pools | Describe recall unchanged; token count ↓ | harness ready | `evals/eval_describe_pool.py` |
 | **ML-E4** | Relevance | SigLIP margin establishing vs close-up | ρ vs hero-gold ≥ E5 | harness ready | `hero-contact-siglip.html` |
 | **ML-E5** | Pre-process | Multi-scale Laplacian ratio | top-3 hit ≥ E5 | harness ready | `hero-contact-mslap.html` |
-| **ML-E6** | IQA | Linear model → MUSIQ rank | top-1 ≥ 8/9 | results ([log](20-ml-dl-experiment-log.md#ml-e6--linear-model--musiq-rank)) | `iqa-linear-weights.json` |
+| **ML-E6** | IQA | Linear model → MUSIQ rank | top-1 ≥ 8/9 | results ([log](21-ml-dl-experiment-log.md#ml-e6--linear-model--musiq-rank)) | `iqa-linear-weights.json` |
 | **ML-E7** | IQA | CLIP prompt pairs (licence-clean) | top-1 ≥ 7/9, latency <100 ms/frame | harness ready | `hero-contact-clip.html` |
 | **ML-E8** | Cover | VLM top-10 rerank | top-1 = 9/9 or unanimous eyeball | not started | cost log + contact sheet |
 | **ML-E9** | Capture | Optical-flow pause detection | Pause frames in gold top-3 ≥80% | not started | timeline HTML |
-| **ML-E10** | Detection | Grounding DINO vs YOLOE text | Recall ↑ with noise ≤ text mode | fail ([log](20-ml-dl-experiment-log.md#ml-e10--grounding-dino-vs-yoloe-text)) | `detect-comparison-gdino.json` |
+| **ML-E10** | Detection | Grounding DINO vs YOLOE text | Recall ↑ with noise ≤ text mode | fail ([log](21-ml-dl-experiment-log.md#ml-e10--grounding-dino-vs-yoloe-text)) | `detect-comparison-gdino.json` |
 | **ML-E11** | Data | 100 bbox labels, 2 rooms | JSON in evals/fixtures | harness ready | `labels_boxes.json` |
 | **ML-E12** | Detection | Fine-tune probe on ML-E11 subset | +10 pp recall @0.5 IoU | not started | weights + eval |
 | **ML-E13** | Segmentation | SegFormer floor+wall fraction | ρ with establishing gold | not started | scatter plot |
@@ -515,10 +515,10 @@ standard as docs/11 and docs/18.
 | **ML-E16** | Room type | Fine-tune Indoor67→10 classes | Wrong-room bleed ↓ on audit | not started | `room-clf-eval.json` |
 | **ML-E17** | IQA | KonIQ-10k pretrain → ONNX distill | top-1 ≥ ML-E6 on hero-gold | not started | `iqa-koniq-onnx.html` |
 | **ML-E18** | Detection | OI V7 household subset pretrain | Recall ↑ vs ML-E10 baseline | not started | `detect-comparison-oi.json` |
-| **ML-E19** | Cover | Shot-scale classifier transfer | ρ vs hero-gold ≥ classical | fail ([log](20-ml-dl-experiment-log.md#ml-e19--shot-scale-long-vs-close-up)) | `hero-contact-shotscale.html` |
+| **ML-E19** | Cover | Shot-scale classifier transfer | ρ vs hero-gold ≥ classical | fail ([log](21-ml-dl-experiment-log.md#ml-e19--shot-scale-long-vs-close-up)) | `hero-contact-shotscale.html` |
 | **ML-E20** | Defect | StructDamage/BD3 pretrain pre-filter | FP <10% on IFlex | not started | `defect-pretrain-report.json` |
 
-Status values and committed metrics: **docs/20-ml-dl-experiment-log.md**.
+Status values and committed metrics: **docs/21-ml-dl-experiment-log.md**.
 
 ### Recommended sequence
 
@@ -638,7 +638,7 @@ ML pre-filters are enabled — gate on InventoryFlex before ship.
 | `evals/eval_hero_cover.py` | Cover contact sheets |
 | `evals/eval_iqa.py` | MUSIQ oracle (eval only) |
 | `evals/eval_detect.py` | Detection comparison |
-| `docs/20-ml-dl-experiment-log.md` | ML-E1–E20 status and artifacts |
+| `docs/21-ml-dl-experiment-log.md` | ML-E1–E20 status and artifacts |
 
 ---
 
@@ -656,4 +656,4 @@ ML pre-filters are enabled — gate on InventoryFlex before ship.
   — download URLs documented in `evals/external/README.md`
 
 This document is the **plan**; spike progress is tracked in
-**docs/20-ml-dl-experiment-log.md** (status, pass/fail, blockers).
+**docs/21-ml-dl-experiment-log.md** (status, pass/fail, blockers).

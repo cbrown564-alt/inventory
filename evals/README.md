@@ -174,7 +174,7 @@ Metrics and v1 targets: table above. See `docs/01-scope-and-architecture.md` §5
 
 Reference fixtures: `evals/fixtures/inventoryflex/detect-comparison.json`,
 `detect-comparison-gdino.json`. Findings: `docs/13-yoloe-detection.md`,
-`docs/20-ml-dl-experiment-log.md`.
+`docs/21-ml-dl-experiment-log.md`.
 
 Extract InventoryFlex photos first: `uv run python benchmarks/extract_inventoryflex.py`.
 
@@ -182,7 +182,7 @@ Extract InventoryFlex photos first: `uv run python benchmarks/extract_inventoryf
 
 Requires a walkthrough build output dir (`report/` or similar) with
 `inventory.json` and frame paths. Video not committed — see
-`docs/20-ml-dl-experiment-log.md` blockers.
+`docs/21-ml-dl-experiment-log.md` blockers.
 
 | Script | ML-E | Purpose | Typical command |
 |---|---|---|---|
@@ -198,7 +198,7 @@ Requires a walkthrough build output dir (`report/` or similar) with
 `mslap`, `relevance`, `clip`, `linear-musiq`.
 
 Gold fixture: `evals/fixtures/own-property/hero-gold.json`. Experiment log:
-`docs/20-ml-dl-experiment-log.md`.
+`docs/21-ml-dl-experiment-log.md`.
 
 ### Segmentation and pre-process
 
