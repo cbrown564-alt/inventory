@@ -94,6 +94,92 @@
     overflow: hidden; text-overflow: ellipsis;
   }
   .meta { color: var(--muted); font-size: 9pt; }
+
+  /* ---------- docs/16: the schedule as catalogue entries (screen) --------
+     One markup, three renderings: the review layer grafts onto these cells
+     by class and WeasyPrint needs real table semantics, so the table stays
+     and the entry layout is screen-media only — print CSS is untouched. */
+  @media screen {
+    section.room table.items,
+    section.room table.items tbody { display: block; width: 100%; }
+    section.room table.items thead { display: none; }
+    section.room table.items td { border: 0; padding: 0; }
+    section.room tr.category-row { display: block; margin: 26px 0 2px; }
+    section.room tr.category-row td { display: block; background: none;
+      border-bottom: 1px solid var(--rule); padding: 0 0 3px;
+      font: 600 8.5pt var(--ui); letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted); }
+    section.room tr.item-row {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) 170px;
+      grid-template-areas:
+        "ref name  cond"
+        "ref desc  clean"
+        "ref def   def"
+        "ref photo photo";
+      column-gap: 16px; row-gap: 1px; align-items: start;
+      padding: 12px 0 13px; border-bottom: 1px solid var(--rule);
+    }
+    section.room .ref-cell { grid-area: ref; align-self: stretch;
+      padding-top: 3px; }
+    section.room .ref-cell > .ref-mono { display: block; font-size: 9pt; }
+    section.room .ref-cell .ref-internal { font-size: 7.5pt; }
+    section.room .name-cell { grid-area: name; display: flex;
+      align-items: center; gap: 12px; }
+    section.room .name-cell .item-name { font-size: 11.5pt; }
+    section.room .name-cell .item-thumb { order: 9; margin: 0 0 0 auto;
+      width: 46px; height: 46px; max-width: none; border-radius: 2px; }
+    section.room .desc-cell { grid-area: desc; max-width: 62ch;
+      font-size: 10pt; line-height: 1.5; padding-top: 1px; }
+    section.room .cond-cell { grid-area: cond; text-align: right;
+      padding-top: 2px; }
+    section.room .cond-cell .grade-word { font-size: 10.5pt;
+      letter-spacing: .02em; }
+    section.room .clean-cell { grid-area: clean; text-align: right;
+      font: 8.5pt var(--ui); color: var(--muted); }
+    section.room .def-cell { grid-area: def; margin-top: 7px; }
+    /* absence says "none noted" on screen; print keeps the words */
+    section.room .def-cell > .meta { display: none; }
+    section.room .def-cell .defects { list-style: none; margin: 0;
+      padding: 1px 0 1px 10px; border-left: 2px solid var(--reject);
+      max-width: 62ch; font-size: 9.5pt; line-height: 1.45; }
+    section.room .photo-cell { grid-area: photo; margin-top: 6px;
+      font-size: 8pt; }
+    section.room .photo-cell:not(:empty)::before { content: "Evidence";
+      font: 600 7pt var(--ui); letter-spacing: .12em;
+      text-transform: uppercase; color: var(--muted); margin-right: 7px; }
+    section.room tr.comment-row { display: block; margin: 0 0 2px 80px; }
+    section.room tr.comment-row td { display: block; }
+    section.room tr.comment-row td:first-child { display: none; }
+    section.room tr.rv-evidence { display: block; margin: 2px 0 10px; }
+    section.room tr.rv-evidence td { display: block; }
+    /* review-mode chrome, restated for the grid (row ring, not cell rims) */
+    body.reviewing section.room tr.item-row.active td { background: none;
+      border: none; }
+    body.reviewing section.room tr.item-row.active { background: #f6f9fc;
+      box-shadow: 0 0 0 1px var(--accent); border-radius: 4px;
+      padding-left: 10px; padding-right: 10px; }
+    /* the frame around the entries (docs/16 R2) */
+    .room-meta { font: 500 8.5pt var(--ui); letter-spacing: .08em;
+      text-transform: uppercase; color: var(--muted); margin: 8px 0 14px; }
+    section.room .summary, .summary { background: none;
+      border-left: 2px solid var(--brass); padding: 2px 0 2px 14px;
+      font-style: italic; font-size: 10.5pt; line-height: 1.55; }
+    section.room h3 { font: 600 8.5pt var(--ui); letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid var(--rule); padding-bottom: 3px;
+      margin: 30px 0 10px; }
+  }
+  @media screen and (max-width: 640px) {
+    section.room tr.item-row {
+      grid-template-columns: 52px minmax(0, 1fr);
+      grid-template-areas:
+        "ref name" "ref cond" "ref clean" "ref desc" "ref def" "ref photo";
+      column-gap: 12px;
+    }
+    section.room .cond-cell, section.room .clean-cell { text-align: left; }
+  }
+
   .appendix table { width: 100%; border-collapse: collapse; font-size: 8pt;
                     font-family: var(--mono); }
   .appendix td, .appendix th { border-bottom: 1px solid var(--rule);
@@ -463,6 +549,10 @@ rather than silently deleted.</p>
 {% for section in room_sections %}
 <section class="room" id="room-{{ section.number }}" data-room="{{ section.name }}">
   <h2>{{ section.number }}. {{ section.name }}</h2>
+  {% set n_items = section.groups | map(attribute="rows") | map("length") | sum %}
+  <p class="room-meta screen-only">{{ n_items }} item{{ "s" if n_items != 1 }} recorded
+    &middot; {{ section.photos | length }} frame{{ "s" if section.photos | length != 1 }} analysed{% if section.more_photos %}, {{ section.hero_photos | length }} shown{% endif %}
+    {%- if section.cover and section.cover.source_video %} &middot; footage {{ section.cover.source_video | basename }}{% endif %}</p>
   {% if section.cover and photo_src.get(section.cover.id) %}
   {{ photo_figure(section.cover, "room-cover screen-only") }}
   {% endif %}
