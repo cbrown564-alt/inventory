@@ -11,6 +11,7 @@ import hashlib
 import json
 import logging
 import re
+import secrets
 import socket
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
@@ -206,24 +207,13 @@ class BaseHandler(BaseHTTPRequestHandler):
         raw = self.rfile.read(n) if n else b"{}"
         return json.loads(raw.decode("utf-8"))
 
-    def _upload_stream_common(self, capture_dir: Path, lock) -> Optional[dict]:
-        """Streamed binary upload (photos AND videos): raw file bytes as the
-        body, room/filename in URL-encoded X-Room / X-Filename headers.
-        Bytes stream to a temp file in 1 MiB chunks (the state lock is only
-        held for the final no-clobber rename, never while a multi-GB video
-        streams). Same guarantees as store_photo: magic-byte extension,
-        traversal rejection, never clobber, bytes stored unmodified."""
-        from urllib.parse import unquote
-        import secrets
-
-        room = unquote(self.headers.get("X-Room") or "").strip()
-        filename = unquote(self.headers.get("X-Filename") or "").strip()
-        n = int(self.headers.get("Content-Length") or 0)
+    def _upload_room_dir(self, capture_dir: Path, room: str,
+                         filename: str) -> Optional[Path]:
+        """Validate upload target; return room_dir or send 400/413 and None."""
         at_root = room == WALKTHROUGH_ROOM
-        if not filename or n <= 0 or (not room and not at_root):
+        if not filename or (not room and not at_root):
             self.close_connection = True
-            self._err(400, "X-Room and X-Filename headers and a non-empty "
-                           "body are required")
+            self._err(400, "X-Room and X-Filename headers are required")
             return None
         if at_root:
             if not _safe_component(filename):
@@ -235,14 +225,176 @@ class BaseHandler(BaseHTTPRequestHandler):
             self._err(400, "room and filename must be plain names — no "
                            "path separators, '..' or leading dots")
             return None
-        if n > _VIDEO_CAP:
-            self.close_connection = True
-            self._err(413, "upload too large — videos are capped at 2 GiB")
-            return None
         room_dir = capture_dir if at_root else capture_dir / room
         if not at_root and room_dir.resolve().parent != capture_dir.resolve():
             self.close_connection = True
             self._err(400, "room escapes the capture folder")
+            return None
+        return room_dir
+
+    def _upload_finalize(self, tmp: Path, room_dir: Path, filename: str,
+                         ext: str, lock) -> Path:
+        """No-clobber rename of a completed temp upload."""
+        with lock:
+            stem = Path(filename).stem or "upload"
+            dest, k = room_dir / f"{stem}{ext}", 1
+            while dest.exists():
+                dest = room_dir / f"{stem}-{k}{ext}"
+                k += 1
+            tmp.rename(dest)
+        return dest
+
+    def _upload_digest(self, path: Path) -> str:
+        digest = hashlib.sha256()
+        with open(path, "rb") as f:
+            while True:
+                chunk = f.read(_STREAM_CHUNK)
+                if not chunk:
+                    break
+                digest.update(chunk)
+        return digest.hexdigest()
+
+    def _upload_chunked(self, capture_dir: Path, lock, room: str,
+                        filename: str, upload_id: str, offset: int,
+                        total: int, n: int) -> Optional[dict]:
+        """Resume-friendly chunked upload for large walkthrough videos.
+
+        Safari/WebKit often drops single-shot XHR uploads above ~1 GiB; the
+        browser sends 32 MiB slices with X-Upload-Id/Offset/Total instead."""
+        if not re.fullmatch(r"[\w\-]{8,64}", upload_id):
+            self.close_connection = True
+            self._err(400, "X-Upload-Id must be 8–64 word characters")
+            return None
+        if total <= 0 or total > _VIDEO_CAP:
+            self.close_connection = True
+            self._err(413 if total > _VIDEO_CAP else 400,
+                      "upload too large — videos are capped at 2 GiB"
+                      if total > _VIDEO_CAP else "invalid X-Upload-Total")
+            return None
+        if offset < 0 or n <= 0 or offset + n > total:
+            self.close_connection = True
+            self._err(400, "chunk range exceeds declared upload size")
+            return None
+        room_dir = self._upload_room_dir(capture_dir, room, filename)
+        if room_dir is None:
+            return None
+        room_dir.mkdir(parents=True, exist_ok=True)
+        tmp = room_dir / f".upload-{upload_id}.part"
+        meta_path = room_dir / f".upload-{upload_id}.meta.json"
+        at_root = room == WALKTHROUGH_ROOM
+
+        if offset == 0:
+            head = self.rfile.read(n)
+            if len(head) != n:
+                self.close_connection = True
+                self._err(400, "body ended early")
+                return None
+            ext = sniff_media_extension(head[:64])
+            if ext is None:
+                self.close_connection = True
+                self._err(400, "unrecognised bytes — photos (JPEG, PNG, HEIC) "
+                               "or videos (MP4, MOV, MKV, WebM, AVI) only")
+                return None
+            if ext in (".jpg", ".png", ".heic") and total > _UPLOAD_CAP:
+                self.close_connection = True
+                self._err(413, "upload too large — photos are capped at 64 MiB")
+                return None
+            meta_path.write_text(json.dumps(
+                {"total": total, "ext": ext, "filename": filename}),
+                encoding="utf-8")
+            with open(tmp, "wb") as f:
+                f.write(head)
+        else:
+            if not meta_path.is_file() or not tmp.is_file():
+                self.close_connection = True
+                self._err(409, "no in-progress upload for this id — restart")
+                return None
+            if tmp.stat().st_size != offset:
+                self.close_connection = True
+                self._err(409, f"expected offset {tmp.stat().st_size}, "
+                               f"got {offset}")
+                return None
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            ext = meta["ext"]
+            with open(tmp, "ab") as f:
+                got = 0
+                while got < n:
+                    chunk = self.rfile.read(min(_STREAM_CHUNK, n - got))
+                    if not chunk:
+                        self.close_connection = True
+                        self._err(400, "body ended early")
+                        return None
+                    f.write(chunk)
+                    got += len(chunk)
+
+        if tmp.stat().st_size < total:
+            return {"ok": True, "complete": False,
+                    "received": tmp.stat().st_size}
+
+        if tmp.stat().st_size != total:
+            tmp.unlink(missing_ok=True)
+            meta_path.unlink(missing_ok=True)
+            self.close_connection = True
+            self._err(400, "upload size mismatch")
+            return None
+        try:
+            dest = self._upload_finalize(tmp, room_dir, filename, ext, lock)
+            digest = self._upload_digest(dest)
+        except Exception as e:
+            tmp.unlink(missing_ok=True)
+            self.close_connection = True
+            self._err(400, f"upload failed: {e}")
+            return None
+        finally:
+            meta_path.unlink(missing_ok=True)
+        is_image = ext in (".jpg", ".png", ".heic")
+        return {"ok": True, "complete": True, "room": "" if at_root else room,
+                "stored_as": dest.name,
+                "path": dest.name if at_root else f"{room}/{dest.name}",
+                "kind": "photo" if is_image else "video",
+                "sha256": digest, "bytes": total}
+
+    def _upload_stream_common(self, capture_dir: Path, lock) -> Optional[dict]:
+        """Streamed binary upload (photos AND videos): raw file bytes as the
+        body, room/filename in URL-encoded X-Room / X-Filename headers.
+        Bytes stream to a temp file in 1 MiB chunks (the state lock is only
+        held for the final no-clobber rename, never while a multi-GB video
+        streams). Same guarantees as store_photo: magic-byte extension,
+        traversal rejection, never clobber, bytes stored unmodified.
+
+        Large videos use chunked mode: X-Upload-Id, X-Upload-Offset and
+        X-Upload-Total accompany each slice (see _upload_chunked)."""
+        from urllib.parse import unquote
+
+        room = unquote(self.headers.get("X-Room") or "").strip()
+        filename = unquote(self.headers.get("X-Filename") or "").strip()
+        n = int(self.headers.get("Content-Length") or 0)
+        upload_id = (self.headers.get("X-Upload-Id") or "").strip()
+        offset_raw = self.headers.get("X-Upload-Offset")
+        total_raw = self.headers.get("X-Upload-Total")
+        if upload_id or offset_raw is not None or total_raw is not None:
+            if not (upload_id and offset_raw is not None
+                    and total_raw is not None):
+                self.close_connection = True
+                self._err(400, "chunked uploads require X-Upload-Id, "
+                               "X-Upload-Offset and X-Upload-Total")
+                return None
+            return self._upload_chunked(
+                capture_dir, lock, room, filename, upload_id,
+                int(offset_raw), int(total_raw), n)
+
+        at_root = room == WALKTHROUGH_ROOM
+        if not filename or n <= 0 or (not room and not at_root):
+            self.close_connection = True
+            self._err(400, "X-Room and X-Filename headers and a non-empty "
+                           "body are required")
+            return None
+        if n > _VIDEO_CAP:
+            self.close_connection = True
+            self._err(413, "upload too large — videos are capped at 2 GiB")
+            return None
+        room_dir = self._upload_room_dir(capture_dir, room, filename)
+        if room_dir is None:
             return None
 
         head = self.rfile.read(min(n, _STREAM_CHUNK))
@@ -272,13 +424,7 @@ class BaseHandler(BaseHTTPRequestHandler):
                     digest.update(chunk)
                     f.write(chunk)
                     got += len(chunk)
-            with lock:                     # no-clobber pick + rename only
-                stem = Path(filename).stem or "upload"
-                dest, k = room_dir / f"{stem}{ext}", 1
-                while dest.exists():
-                    dest = room_dir / f"{stem}-{k}{ext}"
-                    k += 1
-                tmp.rename(dest)
+            dest = self._upload_finalize(tmp, room_dir, filename, ext, lock)
         except Exception as e:
             tmp.unlink(missing_ok=True)
             self.close_connection = True

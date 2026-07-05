@@ -1146,6 +1146,9 @@ class ReviewHandler(BaseHandler):
                 payload = self._upload_stream_common(st.capture_dir, st.lock)
                 if payload is None:
                     return
+                if payload.get("complete") is False:
+                    self._json(payload)
+                    return
                 st.ack("reviewer", st.uc.owner_role.key, "upload_media",
                        payload["path"])
                 self._json(payload)

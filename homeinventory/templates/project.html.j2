@@ -95,6 +95,9 @@ are built, the comparison sheet appears automatically.</p>
 </section>
 
 <script>
+{% include "_ui.js.j2" %}
+</script>
+<script>
 "use strict";
 (function () {
   var WALK = "__walkthrough__";
@@ -102,26 +105,16 @@ are built, the comparison sheet appears automatically.</p>
   function upload(prefix, file, statusEl, dropEl) {
     statusEl.textContent = "Uploading…";
     statusEl.className = "up-status";
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", prefix + "/api/upload");
-    xhr.setRequestHeader("X-Room", encodeURIComponent(WALK));
-    xhr.setRequestHeader("X-Filename", encodeURIComponent(file.name));
-    xhr.onload = function () {
-      if (xhr.status === 200) {
+    ui.uploadMedia(prefix, file, WALK, {
+      onDone: function () {
         statusEl.textContent = "Uploaded — open the session to build.";
         statusEl.className = "up-status ok";
-      } else {
-        var resp = {};
-        try { resp = JSON.parse(xhr.responseText || "{}"); } catch (e) {}
-        statusEl.textContent = resp.error || "Upload failed";
+      },
+      onError: function (msg) {
+        statusEl.textContent = msg;
         statusEl.className = "up-status err";
       }
-    };
-    xhr.onerror = function () {
-      statusEl.textContent = "Network error";
-      statusEl.className = "up-status err";
-    };
-    xhr.send(file);
+    }).catch(function () {});
   }
 
   document.querySelectorAll(".slot").forEach(function (slot) {

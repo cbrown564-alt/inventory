@@ -263,35 +263,23 @@
   function startUpload(job) {
     active += 1;
     job.st.textContent = "uploading";
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", PREFIX + "/api/upload");
-    xhr.setRequestHeader("X-Room", encodeURIComponent(WALKTHROUGH));
-    xhr.setRequestHeader("X-Filename", encodeURIComponent(job.file.name));
-    xhr.upload.onprogress = function (e) {
-      if (e.lengthComputable) {
-        job.fill.style.width = Math.round(100 * e.loaded / e.total) + "%";
-      }
-    };
-    xhr.onload = function () {
-      active -= 1;
-      var resp = {};
-      try { resp = JSON.parse(xhr.responseText || "{}"); } catch (e) {}
-      if (xhr.status === 200) {
+    ui.uploadMedia(PREFIX, job.file, WALKTHROUGH, {
+      onProgress: function (loaded, total) {
+        job.fill.style.width = Math.round(100 * loaded / total) + "%";
+      },
+      onDone: function () {
+        active -= 1;
         job.fill.style.width = "100%";
         job.st.textContent = "done";
         job.st.className = "st ok";
         if (bBtn) bBtn.disabled = false;
-      } else {
-        job.st.textContent = resp.error || ("failed (" + xhr.status + ")");
+      },
+      onError: function (msg) {
+        active -= 1;
+        job.st.textContent = msg;
         job.st.className = "st err";
       }
-    };
-    xhr.onerror = function () {
-      active -= 1;
-      job.st.textContent = "network error";
-      job.st.className = "st err";
-    };
-    xhr.send(job.file);
+    }).catch(function () {});
   }
 
   function addFiles(files) {

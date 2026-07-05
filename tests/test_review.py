@@ -391,12 +391,19 @@ def _heic_bytes() -> bytes:
     return b"\x00\x00\x00\x18ftypheic\x00\x00\x00\x00heicmif1" + b"\x00" * 64
 
 
-def _upload(base, room, filename, data: bytes, url_prefix: str = ""):
+def _upload(base, room, filename, data: bytes, url_prefix: str = "",
+            *, upload_id: str | None = None, offset: int | None = None,
+            total: int | None = None):
     from urllib.parse import quote
+    headers = {"Content-Type": "application/octet-stream",
+               "X-Room": quote(room), "X-Filename": quote(filename)}
+    if upload_id is not None:
+        headers["X-Upload-Id"] = upload_id
+        headers["X-Upload-Offset"] = str(offset or 0)
+        headers["X-Upload-Total"] = str(total if total is not None else len(data))
     req = urllib.request.Request(
         base + url_prefix + "/api/upload", data=data, method="POST",
-        headers={"Content-Type": "application/octet-stream",
-                 "X-Room": quote(room), "X-Filename": quote(filename)})
+        headers=headers)
     try:
         with urllib.request.urlopen(req) as r:
             return r.status, json.loads(r.read().decode("utf-8") or "{}")
@@ -787,6 +794,32 @@ def test_stream_upload_walkthrough_video_lands_at_capture_root(fresh_server):
     # and the capture summary counts it (enables the build button)
     status, body = _req("GET", base + "/api/rooms")
     assert status == 200 and body["walkthrough_videos"] == 1
+
+
+def test_chunked_upload_large_walkthrough_video(fresh_server):
+    """Safari-safe chunked upload: many slices reassemble to one file."""
+    base, _state, _out, cap = fresh_server
+    head = _mp4_bytes()
+    body = head + b"\x00" * (512 * 1024 - len(head))
+    upload_id = "chunktest1"
+    chunk = 128 * 1024
+    offset = 0
+    while offset < len(body):
+        piece = body[offset:offset + chunk]
+        status, resp = _upload(
+            base, "__walkthrough__", "big.bin", piece,
+            upload_id=upload_id, offset=offset, total=len(body))
+        assert status == 200, resp
+        offset += len(piece)
+        if offset < len(body):
+            assert resp.get("complete") is False
+            assert resp["received"] == offset
+        else:
+            assert resp.get("complete") is True
+            assert resp["stored_as"] == "big.mp4"
+    on_disk = cap / "big.mp4"
+    assert on_disk.read_bytes() == body
+    assert hashlib.sha256(body).hexdigest() == resp["sha256"]
 
 
 def test_api_rooms_lists_counts(fresh_server):

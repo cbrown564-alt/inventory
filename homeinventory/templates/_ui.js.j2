@@ -301,7 +301,110 @@ var ui = (function () {
     return { close: close };
   }
 
+  /* Stream a photo or walkthrough video to /api/upload. Files above 64 MiB
+     upload in 32 MiB slices — Safari drops single-shot XHR bodies ~1 GiB+. */
+  function uploadMedia(prefix, file, room, hooks) {
+    hooks = hooks || {};
+    var CHUNK = 32 * 1024 * 1024;
+    var THRESH = 64 * 1024 * 1024;
+
+    function parseResp(xhr) {
+      var resp = {};
+      try { resp = JSON.parse(xhr.responseText || "{}"); } catch (e) {}
+      return resp;
+    }
+    function fail(msg) {
+      if (hooks.onError) hooks.onError(msg);
+    }
+    function uploadSingle() {
+      return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", prefix + "/api/upload");
+        xhr.setRequestHeader("X-Room", encodeURIComponent(room));
+        xhr.setRequestHeader("X-Filename", encodeURIComponent(file.name));
+        xhr.upload.onprogress = function (e) {
+          if (hooks.onProgress && e.lengthComputable) {
+            hooks.onProgress(e.loaded, e.total);
+          }
+        };
+        xhr.onload = function () {
+          var resp = parseResp(xhr);
+          if (xhr.status === 200) resolve(resp);
+          else reject(new Error(resp.error || ("failed (" + xhr.status + ")")));
+        };
+        xhr.onerror = function () {
+          reject(new Error("network error — is the review server still running?"));
+        };
+        xhr.onabort = function () {
+          reject(new Error("upload cancelled"));
+        };
+        xhr.send(file);
+      });
+    }
+    function uploadChunked() {
+      var uploadId = "";
+      if (window.crypto && crypto.getRandomValues) {
+        var buf = new Uint8Array(8);
+        crypto.getRandomValues(buf);
+        uploadId = Array.prototype.map.call(buf, function (b) {
+          return (b < 16 ? "0" : "") + b.toString(16);
+        }).join("");
+      } else {
+        uploadId = String(Date.now()) + Math.random().toString(16).slice(2);
+      }
+      var offset = 0;
+      function sendSlice() {
+        return new Promise(function (resolve, reject) {
+          var end = Math.min(offset + CHUNK, file.size);
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", prefix + "/api/upload");
+          xhr.setRequestHeader("X-Room", encodeURIComponent(room));
+          xhr.setRequestHeader("X-Filename", encodeURIComponent(file.name));
+          xhr.setRequestHeader("X-Upload-Id", uploadId);
+          xhr.setRequestHeader("X-Upload-Offset", String(offset));
+          xhr.setRequestHeader("X-Upload-Total", String(file.size));
+          xhr.upload.onprogress = function (e) {
+            if (hooks.onProgress && e.lengthComputable) {
+              hooks.onProgress(offset + e.loaded, file.size);
+            }
+          };
+          xhr.onload = function () {
+            var resp = parseResp(xhr);
+            if (xhr.status !== 200) {
+              reject(new Error(resp.error || ("failed (" + xhr.status + ")")));
+              return;
+            }
+            if (resp.complete === false) {
+              offset = resp.received || end;
+              resolve(sendSlice());
+              return;
+            }
+            resolve(resp);
+          };
+          xhr.onerror = function () {
+            reject(new Error("network error — try again; large uploads are "
+                             + "sent in slices so a blip can be retried"));
+          };
+          xhr.onabort = function () {
+            reject(new Error("upload cancelled"));
+          };
+          xhr.send(file.slice(offset, end));
+        });
+      }
+      return sendSlice();
+    }
+    var job = file.size > THRESH ? uploadChunked() : uploadSingle();
+    return job.then(function (resp) {
+      if (hooks.onDone) hooks.onDone(resp);
+      return resp;
+    }).catch(function (e) {
+      fail(e.message);
+      throw e;
+    });
+  }
+
   return { el: el, toast: toast, open: open,
            confirmDialog: confirmDialog, form: form,
-           photoViewer: photoViewer };
+           photoViewer: photoViewer,
+           uploadMedia: uploadMedia };
 })();
