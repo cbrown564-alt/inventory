@@ -100,25 +100,25 @@ Plan of record: `docs/19-ml-dl-exploration-plan.md`. External Tier A datasets:
 | ID | Task | Harness | Example command | Artifact |
 |---|---|---|---|---|
 | **ML-E1** | Segmentation — embedding changepoint | `evals/eval_segment_embed.py` | `python3 evals/eval_segment_embed.py examples/videos/IMG_5512.MOV` | `evals/fixtures/own-property/segment-embed.html` |
-| **ML-E2** | Segmentation — VLM refine ±30 s | (pipeline spike) | Re-run `homeinventory segment` with refine windows | segment JSON + bleed recount |
+| **ML-E2** | Segmentation — VLM refine ±30 s | `evals/eval_segment_vlm_refine.py` | `uv run python evals/eval_segment_vlm_refine.py --demo` | `segment-vlm-refine.json` |
 | **ML-E3** | Pre-process — two-tier describe vs presentation pools | `evals/eval_describe_pool.py` | `python3 evals/eval_describe_pool.py report` | describe-pool metrics JSON |
 | **ML-E4** | Relevance — SigLIP establishing margin | `evals/eval_relevance_siglip.py` | `python3 evals/eval_relevance_siglip.py report --gold evals/fixtures/own-property/hero-gold.json` | `hero-contact-siglip.html` |
 | **ML-E5** | Pre-process — multi-scale Laplacian ratio | `evals/eval_mslap_cover.py` | `python3 evals/eval_mslap_cover.py report` | `hero-contact-mslap.html` |
 | **ML-E6** | IQA — linear model → MUSIQ rank | `evals/train_iqa_linear.py` | `python3 evals/train_iqa_linear.py train` | `iqa-linear-weights.json` |
 | **ML-E7** | IQA — CLIP prompt pairs | `evals/eval_hero_cover.py` | `python3 evals/eval_hero_cover.py report --scorer clip` | hero contact sheet |
-| **ML-E8** | Cover — VLM top-10 rerank | (manual spike) | Top-k VLM rerank via describe backend | cost log + contact sheet |
-| **ML-E9** | Capture — optical-flow pause detection | (planned) | Pause detector on walkthrough timeline | timeline HTML |
+| **ML-E8** | Cover — VLM top-10 rerank | `evals/eval_vlm_rerank.py` | `uv run python evals/eval_vlm_rerank.py report --demo --gold evals/fixtures/own-property/hero-gold.json` | `hero-vlm-rerank.html`, `hero-vlm-rerank-metrics.json` |
+| **ML-E9** | Capture — optical-flow pause detection | `evals/eval_pause_detect.py` | `python3 evals/eval_pause_detect.py examples/videos/IMG_5512.MOV report` | `pause-timeline.html`, `pause-detect-metrics.json` |
 | **ML-E10** | Detection — Grounding DINO vs YOLOE | `evals/eval_detect_gdino.py` | `python3 evals/eval_detect_gdino.py benchmarks/inventoryflex/capture evals/fixtures/inventoryflex/labels.json` | `detect-comparison-gdino.json` |
 | **ML-E11** | Data — bbox labels (2 rooms) | `evals/label_boxes.py` | `uv run python evals/label_boxes.py bootstrap benchmarks/inventoryflex/capture evals/fixtures/inventoryflex/labels.json` | `labels_boxes.json`, `bbox-gallery.html` |
 | **ML-E12** | Detection — fine-tune on ML-E11 subset | `evals/eval_finetune_detect.py` | `python3 evals/eval_finetune_detect.py benchmarks/inventoryflex/capture` | `detect-finetune-eval.json`, `detect-finetune-probe.json` |
-| **ML-E13** | Segmentation — SegFormer floor+wall | (planned) | SegFormer spike on hero candidates | scatter plot |
-| **ML-E14** | Compare — Siamese pairs | (planned; needs paired fixture) | Embedding distance on check-in/out pairs | paired eval JSON |
-| **ML-E15** | Defect — anomaly pre-filter zero-shot | (planned) | Zero-shot defect scorer on InventoryFlex | `defect-filter-report.json` |
+| **ML-E13** | Segmentation — SegFormer floor+wall | `evals/eval_segformer_surface.py` | `python3 evals/eval_segformer_surface.py report --demo` | `segformer-surface.html`, `segformer-surface-metrics.json` |
+| **ML-E14** | Compare — Siamese pairs | `evals/eval_siamese_compare.py` | `uv run python evals/eval_siamese_compare.py --demo` | `siamese-compare-demo.json` |
+| **ML-E15** | Defect — anomaly pre-filter zero-shot | `evals/eval_defect_zeroshot.py` | `uv run python evals/eval_defect_zeroshot.py benchmarks/inventoryflex/capture` | `defect-filter-report.json` |
 | **ML-E16** | Room type — Indoor67→10 classes | (planned) | Fine-tune on `evals/external/data/indoor-scene` | `room-clf-eval.json` |
 | **ML-E17** | IQA — KonIQ-10k pretrain → ONNX | `evals/export_onnx.py` + train spike | Download KonIQ; train/distil; `python3 evals/export_onnx.py` | `iqa-koniq-onnx.html` |
 | **ML-E18** | Detection — OI V7 household pretrain | `evals/eval_detect_oi_pretrain.py` | `python3 evals/eval_detect_oi_pretrain.py benchmarks/inventoryflex/capture evals/fixtures/inventoryflex/labels.json` | `detect-comparison-oi.json` |
 | **ML-E19** | Cover — shot-scale transfer | `evals/eval_shot_scale.py` | `python3 evals/eval_shot_scale.py report --gold evals/fixtures/own-property/hero-gold.json` | `hero-contact-shotscale.html` |
-| **ML-E20** | Defect — StructDamage/BD3 pre-filter | (planned) | Pretrain on Tier C set; FP rate on IFlex | `defect-pretrain-report.json` |
+| **ML-E20** | Defect — StructDamage/BD3 pre-filter | `evals/eval_defect_pretrain.py` | `uv run python evals/eval_defect_pretrain.py --demo` | `defect-pretrain-report.json` |
 
 InventoryFlex capture for detection evals:
 

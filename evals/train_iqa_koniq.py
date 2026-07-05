@@ -161,7 +161,18 @@ def main() -> int:
             if xs:
                 mode = hf_mode
 
-    if not xs or args.bootstrap_scores:
+    if args.bootstrap_scores:
+        xs, ys = bootstrap_from_scores(args.fixture)
+        mode = "bootstrap-musiq-proxy"
+        disclaimer = (
+            "DISCLAIMER: KonIQ-10k images/scores not present under "
+            f"{KONIQ_DIR.relative_to(ROOT)}. Trained classical→MUSIQ "
+            "proxy from iqa-comparison-mps.json — NOT true KonIQ pretrain. "
+            "Register at https://database.mmsp-kn.de/koniq-10k-database.html "
+            "and unpack to evals/external/data/koniq10k/ for real MOS targets."
+        )
+        n_resolved = len(xs)
+    elif not xs:
         xs, ys, n_resolved = load_training_rows(args.fixture, args.report)
         mode = "own-property-features"
         if not xs:

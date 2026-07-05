@@ -166,6 +166,131 @@ def test_box_iou():
     assert efd.box_iou((0, 0, 10, 10), (20, 20, 30, 30)) == 0.0
 
 
+def test_eval_siamese_compare_demo_writes_json(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import eval_siamese_compare as esc  # noqa: E402
+
+    out = tmp_path / "siamese-compare-demo.json"
+
+    class Args:
+        paired_fixture = None
+        capture_dir = ROOT / "benchmarks/inventoryflex/capture"
+        output = out
+        demo = True
+        encoder = "openclip"
+        device = "cpu"
+        no_torch = True
+        max_same_room = 2
+        max_cross_room = 4
+        max_pairs_in_output = 20
+
+    payload = esc.run(Args())
+    assert payload["experiment"] == "ML-E14"
+    assert payload["blocked"] is True
+    assert payload["metrics"]["n_pairs"] >= 4
+    assert out.is_file()
+
+
+def test_eval_defect_zeroshot_demo_writes_json(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import eval_defect_zeroshot as edz  # noqa: E402
+
+    out = tmp_path / "defect-filter-report.json"
+    capture = ROOT / "benchmarks/inventoryflex/capture"
+    if not capture.is_dir():
+        capture = ROOT / "evals/fixtures/inventoryflex/bbox-review/full"
+
+    class Args:
+        capture_dir = capture
+        output = out
+        demo = True
+        device = "cpu"
+        no_torch = True
+        threshold = 0.5
+        max_photos = 16
+
+    payload = edz.run(Args())
+    assert payload["experiment"] == "ML-E15"
+    assert payload["metrics"]["n_photos"] == 16
+    assert payload["pass"] is False
+    assert payload["metrics"]["fp_pct"] > 10
+    assert out.is_file()
+
+
+def test_eval_defect_pretrain_demo_writes_json(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import eval_defect_pretrain as edp  # noqa: E402
+
+    out = tmp_path / "defect-pretrain-report.json"
+    capture = ROOT / "benchmarks/inventoryflex/capture"
+    if not capture.is_dir():
+        capture = ROOT / "evals/fixtures/inventoryflex/bbox-review/full"
+
+    class Args:
+        capture_dir = capture
+        output = out
+        demo = True
+        device = "cpu"
+        no_torch = True
+        weights = None
+        threshold = 0.5
+        max_photos = 16
+
+    payload = edp.run(Args())
+    assert payload["experiment"] == "ML-E20"
+    assert payload["pretrain_available"] is False
+    assert "training_recipe" in payload
+    assert payload["data_needs"]["tier_c_datasets"]
+    assert payload["pass"] is False
+    assert out.is_file()
+
+
+def test_eval_segment_vlm_refine_demo(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import eval_segment_vlm_refine as esvr  # noqa: E402
+
+    out = tmp_path / "segment-vlm-refine.json"
+
+    class Args:
+        video = None
+        demo = True
+        segments = ROOT / "segment-spike-multi/gemini-3.5-flash/segments.json"
+        gold = ROOT / "evals/fixtures/own-property/segment-gold.json"
+        bleed = ROOT / "evals/fixtures/ownproperty-bleed-exclusions.json"
+        report = None
+        output = out
+        model = "gemini-3.5-flash"
+
+    payload = esvr.run(Args())
+    assert payload["experiment"] == "ML-E2"
+    assert payload["baseline_bleed_items"] >= 30
+    assert payload["refined_bleed_items"] < payload["baseline_bleed_items"]
+    assert payload["pass"] is True
+    assert out.is_file()
+
+
+def test_eval_vlm_rerank_demo(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import eval_vlm_rerank as evr  # noqa: E402
+
+    class Args:
+        report_dir = pathlib.Path("report")
+        gold = ROOT / "evals/fixtures/own-property/hero-gold.json"
+        output = tmp_path / "hero-vlm-rerank.html"
+        json_output = tmp_path / "hero-vlm-rerank-metrics.json"
+        demo = True
+        model = "claude-sonnet-5"
+
+    summary = evr.run(Args())
+    assert summary["experiment"] == "ML-E8"
+    assert summary["gold_rank1_in_classical_top10"] == summary["gold_rooms"]
+    assert summary["vlm_top1_hits"] == summary["gold_rooms"]
+    assert summary["pass"] is True
+    assert "cost_estimate" in summary
+    assert Args.output.is_file()
+    assert Args.json_output.is_file()
+
+
 def test_eval_iqa_koniq_demo(tmp_path):
     sys.path.insert(0, str(ROOT / "evals"))
     import train_iqa_koniq as tik  # noqa: E402
@@ -193,3 +318,47 @@ def test_eval_iqa_koniq_demo(tmp_path):
     assert summary["experiment"] == "ML-E17"
     assert DemoArgs.output.is_file()
     assert DemoArgs.json_output.is_file()
+
+
+def test_eval_pause_detect_demo_writes_artifacts(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import eval_pause_detect as epd  # noqa: E402
+
+    class Args:
+        video = None
+        report_dir = ROOT / "report"
+        demo = True
+        gold = ROOT / "evals/fixtures/own-property/hero-gold.json"
+        segment_gold = ROOT / "evals/fixtures/own-property/segment-gold.json"
+        html_output = tmp_path / "pause-timeline.html"
+        json_output = tmp_path / "pause-detect-metrics.json"
+        every = 0.5
+        width = 320
+
+    metrics = epd.run(Args())
+    assert metrics["experiment"] == "ML-E9"
+    assert metrics["mode"] == "synthetic"
+    assert Args.html_output.is_file()
+    assert Args.json_output.is_file()
+    assert "gold_top3_pause_recall" in metrics.get("eval", {})
+
+
+def test_eval_segformer_surface_demo_writes_artifacts(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import eval_segformer_surface as ess  # noqa: E402
+
+    class Args:
+        report_dir = ROOT / "report"
+        gold = ROOT / "evals/fixtures/own-property/hero-gold.json"
+        html_output = tmp_path / "segformer-surface.html"
+        json_output = tmp_path / "segformer-surface-metrics.json"
+        demo = True
+        backend = "histogram"
+        device = None
+
+    payload = ess.run(Args())
+    assert payload["experiment"] == "ML-E13"
+    assert payload["demo"] is True
+    assert Args.html_output.is_file()
+    assert Args.json_output.is_file()
+    assert "mean_spearman_surface" in payload

@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html><head><meta charset='utf-8'>
+<title>ML-E9 pause detection timeline</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:1rem;background:#111;color:#eee}
+.summary{background:#222;padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+.chart{display:flex;align-items:flex-end;gap:1px;height:120px;margin:1rem 0}
+.bar{background:#4a9;min-width:2px;flex:1}
+.bar.pause{background:#f5c518}
+.bar.gold{outline:2px solid #fff}
+table{border-collapse:collapse;width:100%}
+td,th{border:1px solid #444;padding:6px;text-align:left;font-size:13px}
+</style></head><body>
+<h1>ML-E9 — optical-flow pause detection</h1>
+<p>Video: examples/videos/IMG_5512.MOV</p>
+<div class='summary'><h2>Metrics</h2><pre>
+{
+  &quot;experiment&quot;: &quot;ML-E9&quot;,
+  &quot;mode&quot;: &quot;video&quot;,
+  &quot;every_s&quot;: 1.0,
+  &quot;fps&quot;: 29.75,
+  &quot;n_flow_samples&quot;: 797,
+  &quot;timing_s&quot;: 277.39,
+  &quot;eval&quot;: {
+    &quot;n_flow_samples&quot;: 796,
+    &quot;n_gold_top3_evaluated&quot;: 27,
+    &quot;gold_top3_pause_recall&quot;: 0.259,
+    &quot;gold_top3_in_flow_top3_rate&quot;: 0.407,
+    &quot;pass_bar_gold_top3_pause_recall&quot;: 0.8,
+    &quot;pass&quot;: false,
+    &quot;gold_details&quot;: [
+      {
+        &quot;room&quot;: &quot;Hallway&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f009738.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 327.325,
+        &quot;flow_magnitude&quot;: 11.3325,
+        &quot;pause_threshold&quot;: 9.7704,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Hallway&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f000009.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 0.303,
+        &quot;flow_magnitude&quot;: 6.1277,
+        &quot;pause_threshold&quot;: 12.3737,
+        &quot;is_pause&quot;: true,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Hallway&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f000045.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 1.513,
+        &quot;flow_magnitude&quot;: 18.6095,
+        &quot;pause_threshold&quot;: 12.3737,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Living Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f009126.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 306.754,
+        &quot;flow_magnitude&quot;: 19.1017,
+        &quot;pause_threshold&quot;: 9.7704,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Living Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f008280.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 278.317,
+        &quot;flow_magnitude&quot;: 11.2181,
+        &quot;pause_threshold&quot;: 9.7704,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Living Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f009063.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 304.636,
+        &quot;flow_magnitude&quot;: 14.7457,
+        &quot;pause_threshold&quot;: 9.7704,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Kitchen&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f000981.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 32.975,
+        &quot;flow_magnitude&quot;: 14.362,
+        &quot;pause_threshold&quot;: 12.3737,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Kitchen&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f001584.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 53.243,
+        &quot;flow_magnitude&quot;: 16.1851,
+        &quot;pause_threshold&quot;: 11.5953,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Kitchen&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f002529.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 85.008,
+        &quot;flow_magnitude&quot;: 20.9574,
+        &quot;pause_threshold&quot;: 11.5953,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Bedroom 1&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f012906.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 433.812,
+        &quot;flow_magnitude&quot;: 17.9992,
+        &quot;pause_threshold&quot;: 4.8612,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Bedroom 1&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f012735.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 428.064,
+        &quot;flow_magnitude&quot;: 8.0399,
+        &quot;pause_threshold&quot;: 4.8612,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Bedroom 1&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f012042.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 404.77,
+        &quot;flow_magnitude&quot;: 15.3388,
+        &quot;pause_threshold&quot;: 4.8612,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Loft Bedroom&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f020295.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 682.18,
+        &quot;flow_magnitude&quot;: 20.2148,
+        &quot;pause_threshold&quot;: 9.8342,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Loft Bedroom&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f018801.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 631.962,
+        &quot;flow_magnitude&quot;: 15.4196,
+        &quot;pause_threshold&quot;: 10.7449,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Loft Bedroom&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f019107.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 642.247,
+        &quot;flow_magnitude&quot;: 13.9275,
+        &quot;pause_threshold&quot;: 10.7449,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Bathroom&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f011070.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 372.098,
+        &quot;flow_magnitude&quot;: 19.3451,
+        &quot;pause_threshold&quot;: 9.7704,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Bathroom&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f010854.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 364.838,
+        &quot;flow_magnitude&quot;: 5.3403,
+        &quot;pause_threshold&quot;: 9.7704,
+        &quot;is_pause&quot;: true,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Bathroom&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f010593.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 356.065,
+        &quot;flow_magnitude&quot;: 5.1183,
+        &quot;pause_threshold&quot;: 9.7704,
+        &quot;is_pause&quot;: true,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;En-suite Shower Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f012492.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 419.896,
+        &quot;flow_magnitude&quot;: 1.9348,
+        &quot;pause_threshold&quot;: 4.8612,
+        &quot;is_pause&quot;: true,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;En-suite Shower Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f012141.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 408.098,
+        &quot;flow_magnitude&quot;: 3.2706,
+        &quot;pause_threshold&quot;: 4.8612,
+        &quot;is_pause&quot;: true,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;En-suite Shower Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f012564.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 422.316,
+        &quot;flow_magnitude&quot;: 12.0408,
+        &quot;pause_threshold&quot;: 4.8612,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Loft Shower Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f021879.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 735.423,
+        &quot;flow_magnitude&quot;: 9.087,
+        &quot;pause_threshold&quot;: 4.9275,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Loft Shower Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f022194.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 746.011,
+        &quot;flow_magnitude&quot;: 7.5992,
+        &quot;pause_threshold&quot;: 4.9275,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Loft Shower Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f023526.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 790.784,
+        &quot;flow_magnitude&quot;: 2.8699,
+        &quot;pause_threshold&quot;: 4.9275,
+        &quot;is_pause&quot;: true,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Stairs and Landing&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f014904.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 500.971,
+        &quot;flow_magnitude&quot;: 7.0704,
+        &quot;pause_threshold&quot;: 7.2897,
+        &quot;is_pause&quot;: true,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Stairs and Landing&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f013482.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 453.173,
+        &quot;flow_magnitude&quot;: 6.2645,
+        &quot;pause_threshold&quot;: 4.8612,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Stairs and Landing&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f014382.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 483.425,
+        &quot;flow_magnitude&quot;: 7.1323,
+        &quot;pause_threshold&quot;: 4.8612,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      }
+    ],
+    &quot;per_room_flow_top3&quot;: {
+      &quot;Hallway&quot;: [
+        &quot;IMG_5512_f000009.jpg&quot;,
+        &quot;IMG_5512_f000144.jpg&quot;,
+        &quot;IMG_5512_f009738.jpg&quot;
+      ],
+      &quot;Living Room&quot;: [
+        &quot;IMG_5512_f007839.jpg&quot;,
+        &quot;IMG_5512_f008676.jpg&quot;,
+        &quot;IMG_5512_f000216.jpg&quot;
+      ],
+      &quot;Kitchen&quot;: [
+        &quot;IMG_5512_f004914.jpg&quot;,
+        &quot;IMG_5512_f003393.jpg&quot;,
+        &quot;IMG_5512_f007686.jpg&quot;
+      ],
+      &quot;Bedroom 1&quot;: [
+        &quot;IMG_5512_f011700.jpg&quot;,
+        &quot;IMG_5512_f013023.jpg&quot;,
+        &quot;IMG_5512_f012735.jpg&quot;
+      ],
+      &quot;Loft Bedroom&quot;: [
+        &quot;IMG_5512_f015777.jpg&quot;,
+        &quot;IMG_5512_f018468.jpg&quot;,
+        &quot;IMG_5512_f017100.jpg&quot;
+      ],
+      &quot;Bathroom&quot;: [
+        &quot;IMG_5512_f010593.jpg&quot;,
+        &quot;IMG_5512_f010854.jpg&quot;,
+        &quot;IMG_5512_f010629.jpg&quot;
+      ],
+      &quot;En-suite Shower Room&quot;: [
+        &quot;IMG_5512_f012492.jpg&quot;,
+        &quot;IMG_5512_f012141.jpg&quot;,
+        &quot;IMG_5512_f012213.jpg&quot;
+      ],
+      &quot;Loft Shower Room&quot;: [
+        &quot;IMG_5512_f023526.jpg&quot;,
+        &quot;IMG_5512_f022833.jpg&quot;,
+        &quot;IMG_5512_f022194.jpg&quot;
+      ],
+      &quot;Stairs and Landing&quot;: [
+        &quot;IMG_5512_f013176.jpg&quot;,
+        &quot;IMG_5512_f013482.jpg&quot;,
+        &quot;IMG_5512_f014904.jpg&quot;
+      ]
+    }
+  },
+  &quot;pass_bar_gold_top3_pause_recall&quot;: 0.8,
+  &quot;pass&quot;: false,
+  &quot;video&quot;: &quot;examples/videos/IMG_5512.MOV&quot;,
+  &quot;report_dir&quot;: &quot;report&quot;
+}
+</pre></div>
+<h2>Motion magnitude (low = pause)</h2>
+<div class='chart'>
+<div class='bar pause gold' style='height:14px' title='t=1.0s mag=6.128'></div>
+<div class='bar gold' style='height:36px' title='t=2.0s mag=18.610'></div>
+<div class='bar' style='height:28px' title='t=3.0s mag=13.622'></div>
+<div class='bar' style='height:25px' title='t=4.0s mag=12.235'></div>
+<div class='bar' style='height:24px' title='t=5.0s mag=11.292'></div>
+<div class='bar' style='height:25px' title='t=6.0s mag=12.374'></div>
+<div class='bar' style='height:23px' title='t=7.1s mag=10.857'></div>
+<div class='bar' style='height:25px' title='t=8.1s mag=11.925'></div>
+<div class='bar' style='height:25px' title='t=9.1s mag=12.357'></div>
+<div class='bar' style='height:23px' title='t=10.1s mag=10.923'></div>
+<div class='bar' style='height:23px' title='t=11.1s mag=11.168'></div>
+<div class='bar' style='height:41px' title='t=12.1s mag=20.885'></div>
+<div class='bar' style='height:36px' title='t=13.1s mag=18.409'></div>
+<div class='bar' style='height:34px' title='t=14.1s mag=17.419'></div>
+<div class='bar' style='height:30px' title='t=15.1s mag=14.742'></div>
+<div class='bar' style='height:33px' title='t=16.1s mag=16.635'></div>
+<div class='bar' style='height:27px' title='t=17.1s mag=13.111'></div>
+<div class='bar' style='height:35px' title='t=18.2s mag=17.857'></div>
+<div class='bar' style='height:28px' title='t=19.2s mag=13.752'></div>
+<div class='bar' style='height:37px' title='t=20.2s mag=18.693'></div>
+<div class='bar' style='height:26px' title='t=21.2s mag=12.892'></div>
+<div class='bar' style='height:29px' title='t=22.2s mag=14.444'></div>
+<div class='bar' style='height:21px' title='t=23.2s mag=9.881'></div>
+<div class='bar' style='height:26px' title='t=24.2s mag=12.577'></div>
+<div class='bar' style='height:22px' title='t=25.2s mag=10.395'></div>
+<div class='bar' style='height:27px' title='t=26.2s mag=13.124'></div>
+<div class='bar' style='height:27px' title='t=27.2s mag=13.343'></div>
+<div class='bar' style='height:22px' title='t=28.2s mag=10.561'></div>
+<div class='bar' style='height:37px' title='t=29.2s mag=18.658'></div>
+<div class='bar' style='height:52px' title='t=30.3s mag=27.439'></div>
+<div class='bar' style='height:66px' title='t=31.3s mag=35.262'></div>
+<div class='bar' style='height:40px' title='t=32.3s mag=20.408'></div>
+<div class='bar gold' style='height:29px' title='t=33.3s mag=14.362'></div>
+<div class='bar' style='height:30px' title='t=34.3s mag=14.762'></div>
+<div class='bar' style='height:34px' title='t=35.3s mag=17.035'></div>
+<div class='bar' style='height:29px' title='t=36.3s mag=14.154'></div>
+<div class='bar' style='height:27px' title='t=37.3s mag=13.236'></div>
+<div class='bar' style='height:19px' title='t=38.3s mag=8.608'></div>
+<div class='bar' style='height:23px' title='t=39.3s mag=10.729'></div>
+<div class='bar' style='height:26px' title='t=40.3s mag=12.549'></div>
+<div class='bar' style='height:32px' title='t=41.3s mag=15.961'></div>
+<div class='bar' style='height:41px' title='t=42.4s mag=21.311'></div>
+<div class='bar' style='height:34px' title='t=43.4s mag=17.424'></div>
+<div class='bar' style='height:36px' title='t=44.4s mag=18.304'></div>
+<div class='bar' style='height:39px' title='t=45.4s mag=19.972'></div>
+<div class='bar' style='height:25px' title='t=46.4s mag=11.931'></div>
+<div class='bar' style='height:21px' title='t=47.4s mag=9.675'></div>
+<div class='bar' style='height:19px' title='t=48.4s mag=8.860'></div>
+<div class='bar' style='height:24px' title='t=49.4s mag=11.749'></div>
+<div class='bar' style='height:27px' title='t=50.4s mag=13.213'></div>
+<div class='bar' style='height:24px' title='t=51.4s mag=11.773'></div>
+<div class='bar' style='height:29px' title='t=52.4s mag=14.111'></div>
+<div class='bar gold' style='height:32px' title='t=53.4s mag=16.185'></div>
+<div class='bar' style='height:32px' title='t=54.5s mag=16.058'></div>
+<div class='bar' style='height:37px' title='t=55.5s mag=19.024'></div>
+<div class='bar' style='height:38px' title='t=56.5s mag=19.468'></div>
+<div class='bar pause' style='height:16px' title='t=57.5s mag=7.060'></div>
+<div class='bar pause' style='height:17px' title='t=58.5s mag=7.894'></div>
+<div class='bar' style='height:45px' title='t=59.5s mag=23.283'></div>
+<div class='bar' style='height:44px' title='t=60.5s mag=23.016'></div>
+<div class='bar' style='height:55px' title='t=61.5s mag=29.202'></div>
+<div class='bar' style='height:104px' title='t=62.5s mag=56.414'></div>
+<div class='bar' style='height:97px' title='t=63.5s mag=52.689'></div>
+<div class='bar' style='height:51px' title='t=64.5s mag=26.747'></div>
+<div class='bar' style='height:19px' title='t=65.5s mag=8.802'></div>
+<div class='bar' style='height:23px' title='t=66.6s mag=10.975'></div>
+<div class='bar' style='height:30px' title='t=67.6s mag=15.179'></div>
+<div class='bar' style='height:79px' title='t=68.6s mag=42.799'></div>
+<div class='bar' style='height:81px' title='t=69.6s mag=43.480'></div>
+<div class='bar' style='height:61px' title='t=70.6s mag=32.501'></div>
+<div class='bar pause' style='height:6px' title='t=71.6s mag=1.316'></div>
+<div class='bar pause' style='height:9px' title='t=72.6s mag=3.345'></div>
+<div class='bar pause' style='height:9px' title='t=73.6s mag=3.012'></div>
+<div class='bar pause' style='height:5px' title='t=74.6s mag=1.076'></div>
+<div class='bar pause' style='height:17px' title='t=75.6s mag=7.728'></div>
+<div class='bar' style='height:22px' title='t=76.6s mag=10.343'></div>
+<div class='bar' style='height:29px' title='t=77.6s mag=14.373'></div>
+<div class='bar' style='height:24px' title='t=78.7s mag=11.595'></div>
+<div class='bar' style='height:35px' title='t=79.7s mag=17.632'></div>
+<div class='bar' style='height:33px' title='t=80.7s mag=16.480'></div>
+<div class='bar' style='height:30px' title='t=81.7s mag=15.116'></div>
+<div class='bar' style='height:27px' title='t=82.7s mag=13.053'></div>
+<div class='bar' style='height:29px' title='t=83.7s mag=14.254'></div>
+<div class='bar gold' style='height:41px' title='t=84.7s mag=20.957'></div>
+<div class='bar' style='height:32px' title='t=85.7s mag=16.216'></div>
+<div class='bar' style='height:25px' title='t=86.7s mag=12.067'></div>
+<div class='bar' style='height:44px' title='t=87.7s mag=23.050'></div>
+<div class='bar' style='height:32px' title='t=88.7s mag=16.149'></div>
+<div class='bar' style='height:25px' title='t=89.7s mag=12.309'></div>
+<div class='bar' style='height:34px' title='t=90.8s mag=17.031'></div>
+<div class='bar' style='height:31px' title='t=91.8s mag=15.765'></div>
+<div class='bar' style='height:25px' title='t=92.8s mag=12.135'></div>
+<div class='bar pause' style='height:12px' title='t=93.8s mag=4.529'></div>
+<div class='bar' style='height:19px' title='t=94.8s mag=8.914'></div>
+<div class='bar' style='height:26px' title='t=95.8s mag=12.494'></div>
+<div class='bar' style='height:35px' title='t=96.8s mag=17.554'></div>
+<div class='bar' style='height:43px' title='t=97.8s mag=22.545'></div>
+<div class='bar' style='height:30px' title='t=98.8s mag=14.835'></div>
+<div class='bar' style='height:31px' title='t=99.8s mag=15.744'></div>
+<div class='bar' style='height:28px' title='t=100.8s mag=13.966'></div>
+<div class='bar' style='height:23px' title='t=101.8s mag=11.219'></div>
+<div class='bar pause' style='height:15px' title='t=102.9s mag=6.508'></div>
+<div class='bar pause' style='height:6px' title='t=103.9s mag=1.147'></div>
+<div class='bar pause' style='height:15px' title='t=104.9s mag=6.364'></div>
+<div class='bar' style='height:22px' title='t=105.9s mag=10.280'></div>
+<div class='bar' style='height:21px' title='t=106.9s mag=9.969'></div>
+<div class='bar' style='height:34px' title='t=107.9s mag=17.419'></div>
+<div class='bar' style='height:36px' title='t=108.9s mag=18.196'></div>
+<div class='bar' style='height:36px' title='t=109.9s mag=18.541'></div>
+<div class='bar' style='height:32px' title='t=110.9s mag=15.926'></div>
+<div class='bar' style='height:42px' title='t=111.9s mag=21.568'></div>
+<div class='bar pause' style='height:15px' title='t=112.9s mag=6.372'></div>
+<div class='bar' style='height:19px' title='t=113.9s mag=8.823'></div>
+<div class='bar' style='height:34px' title='t=115.0s mag=17.395'></div>
+<div class='bar' style='height:34px' title='t=116.0s mag=17.306'></div>
+<div class='bar' style='height:34px' title='t=117.0s mag=17.356'></div>
+<div class='bar' style='height:33px' title='t=118.0s mag=16.558'></div>
+<div class='bar' style='height:53px' title='t=119.0s mag=27.975'></div>
+<div class='bar' style='height:32px' title='t=120.0s mag=16.258'></div>
+<div class='bar' style='height:46px' title='t=121.0s mag=24.149'></div>
+<div class='bar' style='height:38px' title='t=122.0s mag=19.380'></div>
+<div class='bar' style='height:42px' title='t=123.0s mag=21.472'></div>
+<div class='bar pause' style='height:17px' title='t=124.0s mag=7.841'></div>
+<div class='bar' style='height:39px' title='t=125.0s mag=19.909'></div>
+<div class='bar' style='height:30px' title='t=126.0s mag=15.216'></div>
+<div class='bar' style='height:25px' title='t=127.1s mag=12.154'></div>
+<div class='bar pause' style='height:12px' title='t=128.1s mag=4.676'></div>
+<div class='bar' style='height:32px' title='t=129.1s mag=15.925'></div>
+<div class='bar' style='height:35px' title='t=130.1s mag=17.656'></div>
+<div class='bar' style='height:25px' title='t=131.1s mag=12.190'></div>
+<div class='bar' style='height:29px' title='t=132.1s mag=14.454'></div>
+<div class='bar' style='height:25px' title='t=133.1s mag=12.339'></div>
+<div class='bar' style='height:24px' title='t=134.1s mag=11.327'></div>
+<div class='bar' style='height:32px' title='t=135.1s mag=15.849'></div>
+<div class='bar' style='height:44px' title='t=136.1s mag=22.944'></div>
+<div class='bar' style='height:37px' title='t=137.1s mag=19.123'></div>
+<div class='bar' style='height:33px' title='t=138.2s mag=16.366'></div>
+<div class='bar' style='height:37px' title='t=139.2s mag=19.048'></div>
+<div class='bar' style='height:23px' title='t=140.2s mag=10.758'></div>
+<div class='bar' style='height:34px' title='t=141.2s mag=17.233'></div>
+<div class='bar' style='height:29px' title='t=142.2s mag=14.140'></div>
+<div class='bar' style='height:50px' title='t=143.2s mag=26.456'></div>
+<div class='bar' style='height:28px' title='t=144.2s mag=13.804'></div>
+<div class='bar' style='height:40px' title='t=145.2s mag=20.787'></div>
+<div class='bar' style='height:34px' title='t=146.2s mag=17.285'></div>
+<div class='bar' style='height:27px' title='t=147.2s mag=13.266'></div>
+<div class='bar' style='height:28px' title='t=148.2s mag=14.068'></div>
+<div class='bar' style='height:35px' title='t=149.2s mag=17.660'></div>
+<div class='bar' style='height:31px' title='t=150.3s mag=15.510'></div>
+<div class='bar' style='height:64px' title='t=151.3s mag=34.326'></div>
+<div class='bar' style='height:30px' title='t=152.3s mag=14.971'></div>
+<div class='bar' style='height:29px' title='t=153.3s mag=14.395'></div>
+<div class='bar' style='height:22px' title='t=154.3s mag=10.499'></div>
+<div class='bar' style='height:27px' title='t=155.3s mag=13.248'></div>
+<div class='bar' style='height:57px' title='t=156.3s mag=30.343'></div>
+<div class='bar' style='height:23px' title='t=157.3s mag=10.997'></div>
+<div class='bar' style='height:25px' title='t=158.3s mag=11.885'></div>
+<div class='bar pause' style='height:17px' title='t=159.3s mag=7.362'></div>
+<div class='bar' style='height:21px' title='t=160.3s mag=10.075'></div>
+<div class='bar pause' style='height:9px' title='t=161.3s mag=3.334'></div>
+<div class='bar pause' style='height:14px' title='t=162.4s mag=5.896'></div>
+<div class='bar' style='height:23px' title='t=163.4s mag=11.005'></div>
+<div class='bar' style='height:26px' title='t=164.4s mag=12.798'></div>
+<div class='bar pause' style='height:12px' title='t=165.4s mag=5.009'></div>
+<div class='bar pause' style='height:15px' title='t=166.4s mag=6.508'></div>
+<div class='bar' style='height:21px' title='t=167.4s mag=9.609'></div>
+<div class='bar pause' style='height:17px' title='t=168.4s mag=7.813'></div>
+<div class='bar pause' style='height:18px' title='t=169.4s mag=8.159'></div>
+<div class='bar' style='height:24px' title='t=170.4s mag=11.355'></div>
+<div class='bar' style='height:28px' title='t=171.4s mag=13.836'></div>
+<div class='bar' style='height:26px' title='t=172.4s mag=12.470'></div>
+<div class='bar' style='height:37px' title='t=173.4s mag=19.118'></div>
+<div class='bar' style='height:29px' title='t=174.5s mag=14.226'></div>
+<div class='bar' style='height:32px' title='t=175.5s mag=16.287'></div>
+<div class='bar' style='height:24px' title='t=176.5s mag=11.655'></div>
+<div class='bar' style='height:28px' title='t=177.5s mag=14.053'></div>
+<div class='bar' style='height:39px' title='t=178.5s mag=19.856'></div>
+<div class='bar' style='height:29px' title='t=179.5s mag=14.111'></div>
+<div class='bar' style='height:28px' title='t=180.5s mag=13.559'></div>
+<div class='bar' style='height:24px' title='t=181.5s mag=11.304'></div>
+<div class='bar' style='height:28px' title='t=182.5s mag=13.670'></div>
+<div class='bar' style='height:42px' title='t=183.5s mag=21.793'></div>
+<div class='bar' style='height:33px' title='t=184.5s mag=16.608'></div>
+<div class='bar' style='height:35px' title='t=185.5s mag=17.753'></div>
+<div class='bar' style='height:34px' title='t=186.6s mag=17.257'></div>
+<div class='bar' style='height:31px' title='t=187.6s mag=15.257'></div>
+<div class='bar' style='height:37px' title='t=188.6s mag=18.762'></div>
+<div class='bar' style='height:26px' title='t=189.6s mag=12.860'></div>
+<div class='bar' style='height:22px' title='t=190.6s mag=10.587'></div>
+<div class='bar' style='height:35px' title='t=191.6s mag=18.052'></div>
+<div class='bar' style='height:32px' title='t=192.6s mag=15.948'></div>
+<div class='bar' style='height:33px' title='t=193.6s mag=16.401'></div>
+<div class='bar' style='height:30px' title='t=194.6s mag=14.909'></div>
+<div class='bar' style='height:24px' title='t=195.6s mag=11.649'></div>
+<div class='bar' style='height:30px' title='t=196.6s mag=15.144'></div>
+<div class='bar' style='height:20px' title='t=197.6s mag=9.499'></div>
+<div class='bar' style='height:22px' title='t=198.7s mag=10.213'></div>
+<div class='bar' style='height:30px' title='t=199.7s mag=15.208'></div>
+<div class='bar' style='height:20px' title='t=200.7s mag=9.095'></div>
+<div class='bar' style='height:22px' title='t=201.7s mag=10.504'></div>
+<div class='bar' style='height:34px' title='t=202.7s mag=17.201'></div>
+<div class='bar' style='height:29px' title='t=203.7s mag=14.301'></div>
+<div class='bar' style='height:32px' title='t=204.7s mag=15.809'></div>
+<div class='bar' style='height:28px' title='t=205.7s mag=13.916'></div>
+<div class='bar' style='height:48px' title='t=206.7s mag=24.903'></div>
+<div class='bar' style='height:23px' title='t=207.7s mag=11.164'></div>
+<div class='bar' style='height:31px' title='t=208.7s mag=15.458'></div>
+<div class='bar' style='height:25px' title='t=209.7s mag=11.906'></div>
+<div class='bar' style='height:27px' title='t=210.8s mag=13.374'></div>
+<div class='bar' style='height:29px' title='t=211.8s mag=14.128'></div>
+<div class='bar' style='height:33px' title='t=212.8s mag=16.515'></div>
+<div class='bar' style='height:23px' title='t=213.8s mag=11.051'></div>
+<div class='bar' style='height:25px' title='t=214.8s mag=12.321'></div>
+<div class='bar' style='height:28px' title='t=215.8s mag=14.053'></div>
+<div class='bar' style='height:30px' title='t=216.8s mag=14.932'></div>
+<div class='bar' style='height:28px' title='t=217.8s mag=13.772'></div>
+<div class='bar' style='height:20px' title='t=218.8s mag=9.270'></div>
+<div class='bar' style='height:26px' title='t=219.8s mag=12.656'></div>
+<div class='bar' style='height:31px' title='t=220.8s mag=15.382'></div>
+<div class='bar' style='height:33px' title='t=221.8s mag=16.633'></div>
+<div class='bar' style='height:23px' title='t=222.9s mag=11.093'></div>
+<div class='bar' style='height:32px' title='t=223.9s mag=16.029'></div>
+<div class='bar' style='height:36px' title='t=224.9s mag=18.606'></div>
+<div class='bar' style='height:28px' title='t=225.9s mag=13.867'></div>
+<div class='bar' style='height:56px' title='t=226.9s mag=29.625'></div>
+<div class='bar' style='height:33px' title='t=227.9s mag=16.856'></div>
+<div class='bar' style='height:43px' title='t=228.9s mag=22.141'></div>
+<div class='bar' style='height:67px' title='t=229.9s mag=35.573'></div>
+<div class='bar' style='height:51px' title='t=230.9s mag=27.031'></div>
+<div class='bar' style='height:20px' title='t=231.9s mag=9.224'></div>
+<div class='bar' style='height:44px' title='t=232.9s mag=22.910'></div>
+<div class='bar' style='height:69px' title='t=233.9s mag=36.798'></div>
+<div class='bar' style='height:45px' title='t=235.0s mag=23.484'></div>
+<div class='bar' style='height:31px' title='t=236.0s mag=15.567'></div>
+<div class='bar' style='height:31px' title='t=237.0s mag=15.588'></div>
+<div class='bar' style='height:19px' title='t=238.0s mag=8.718'></div>
+<div class='bar' style='height:26px' title='t=239.0s mag=12.457'></div>
+<div class='bar' style='height:33px' title='t=240.0s mag=16.755'></div>
+<div class='bar' style='height:23px' title='t=241.0s mag=11.006'></div>
+<div class='bar' style='height:33px' title='t=242.0s mag=16.566'></div>
+<div class='bar' style='height:25px' title='t=243.0s mag=12.134'></div>
+<div class='bar' style='height:24px' title='t=244.0s mag=11.602'></div>
+<div class='bar' style='height:28px' title='t=245.0s mag=13.980'></div>
+<div class='bar' style='height:26px' title='t=246.0s mag=12.823'></div>
+<div class='bar' style='height:22px' title='t=247.1s mag=10.237'></div>
+<div class='bar' style='height:31px' title='t=248.1s mag=15.531'></div>
+<div class='bar' style='height:28px' title='t=249.1s mag=13.637'></div>
+<div class='bar' style='height:26px' title='t=250.1s mag=12.460'></div>
+<div class='bar' style='height:33px' title='t=251.1s mag=16.796'></div>
+<div class='bar' style='height:31px' title='t=252.1s mag=15.236'></div>
+<div class='bar' style='height:35px' title='t=253.1s mag=17.837'></div>
+<div class='bar' style='height:31px' title='t=254.1s mag=15.680'></div>
+<div class='bar' style='height:22px' title='t=255.1s mag=10.609'></div>
+<div class='bar' style='height:27px' title='t=256.1s mag=13.100'></div>
+<div class='bar' style='height:19px' title='t=257.1s mag=8.777'></div>
+<div class='bar' style='height:20px' title='t=258.1s mag=9.165'></div>
+<div class='bar' style='height:26px' title='t=259.2s mag=12.452'></div>
+<div class='bar' style='height:26px' title='t=260.2s mag=12.526'></div>
+<div class='bar' style='height:21px' title='t=261.2s mag=9.843'></div>
+<div class='bar' style='height:29px' title='t=262.2s mag=14.613'></div>
+<div class='bar' style='height:21px' title='t=263.2s mag=9.628'></div>
+<div class='bar' style='height:30px' title='t=264.2s mag=14.774'></div>
+<div class='bar' style='height:20px' title='t=265.2s mag=9.527'></div>
+<div class='bar' style='height:27px' title='t=266.2s mag=13.466'></div>
+<div class='bar' style='height:27px' title='t=267.2s mag=13.488'></div>
+<div class='bar' style='height:33px' title='t=268.2s mag=16.368'></div>
+<div class='bar' style='height:43px' title='t=269.2s mag=22.369'></div>
+<div class='bar' style='height:29px' title='t=270.2s mag=14.386'></div>
+<div class='bar' style='height:23px' title='t=271.3s mag=10.741'></div>
+<div class='bar' style='height:30px' title='t=272.3s mag=14.970'></div>
+<div class='bar' style='height:24px' title='t=273.3s mag=11.596'></div>
+<div class='bar' style='height:26px' title='t=274.3s mag=12.532'></div>
+<div class='bar' style='height:30px' title='t=275.3s mag=15.171'></div>
+<div class='bar' style='height:32px' title='t=276.3s mag=16.148'></div>
+<div class='bar' style='height:23px' title='t=277.3s mag=10.871'></div>
+<div class='bar gold' style='height:23px' title='t=278.3s mag=11.218'></div>
+<div class='bar' style='height:27px' title='t=279.3s mag=13.466'></div>
+<div class='bar' style='height:26px' title='t=280.3s mag=12.759'></div>
+<div class='bar' style='height:26px' title='t=281.3s mag=12.873'></div>
+<div class='bar' style='height:24px' title='t=282.4s mag=11.688'></div>
+<div class='bar' style='height:44px' title='t=283.4s mag=22.571'></div>
+<div class='bar' style='height:27px' title='t=284.4s mag=13.316'></div>
+<div class='bar' style='height:25px' title='t=285.4s mag=12.400'></div>
+<div class='bar' style='height:23px' title='t=286.4s mag=10.840'></div>
+<div class='bar' style='height:25px' title='t=287.4s mag=12.161'></div>
+<div class='bar' style='height:23px' title='t=288.4s mag=11.119'></div>
+<div class='bar' style='height:21px' title='t=289.4s mag=9.793'></div>
+<div class='bar' style='height:25px' title='t=290.4s mag=12.283'></div>
+<div class='bar' style='height:22px' title='t=291.4s mag=10.690'></div>
+<div class='bar' style='height:25px' title='t=292.4s mag=12.137'></div>
+<div class='bar' style='height:38px' title='t=293.4s mag=19.267'></div>
+<div class='bar' style='height:39px' title='t=294.5s mag=20.282'></div>
+<div class='bar' style='height:27px' title='t=295.5s mag=13.100'></div>
+<div class='bar pause' style='height:15px' title='t=296.5s mag=6.504'></div>
+<div class='bar' style='height:23px' title='t=297.5s mag=10.939'></div>
+<div class='bar' style='height:22px' title='t=298.5s mag=10.632'></div>
+<div class='bar' style='height:26px' title='t=299.5s mag=12.785'></div>
+<div class='bar' style='height:35px' title='t=300.5s mag=17.808'></div>
+<div class='bar' style='height:34px' title='t=301.5s mag=17.299'></div>
+<div class='bar' style='height:32px' title='t=302.5s mag=15.879'></div>
+<div class='bar' style='height:43px' title='t=303.5s mag=22.206'></div>
+<div class='bar gold' style='height:30px' title='t=304.5s mag=14.746'></div>
+<div class='bar' style='height:28px' title='t=305.5s mag=14.042'></div>
+<div class='bar gold' style='height:37px' title='t=306.6s mag=19.102'></div>
+<div class='bar pause' style='height:13px' title='t=307.6s mag=5.606'></div>
+<div class='bar' style='height:56px' title='t=308.6s mag=29.814'></div>
+<div class='bar' style='height:42px' title='t=309.6s mag=21.631'></div>
+<div class='bar' style='height:44px' title='t=310.6s mag=22.864'></div>
+<div class='bar' style='height:31px' title='t=311.6s mag=15.255'></div>
+<div class='bar' style='height:34px' title='t=312.6s mag=17.087'></div>
+<div class='bar' style='height:26px' title='t=313.6s mag=12.862'></div>
+<div class='bar' style='height:23px' title='t=314.6s mag=10.789'></div>
+<div class='bar' style='height:25px' title='t=315.6s mag=12.112'></div>
+<div class='bar' style='height:24px' title='t=316.6s mag=11.716'></div>
+<div class='bar' style='height:25px' title='t=317.6s mag=12.348'></div>
+<div class='bar' style='height:34px' title='t=318.7s mag=17.280'></div>
+<div class='bar' style='height:46px' title='t=319.7s mag=23.786'></div>
+<div class='bar' style='height:22px' title='t=320.7s mag=10.676'></div>
+<div class='bar' style='height:25px' title='t=321.7s mag=12.176'></div>
+<div class='bar' style='height:18px' title='t=322.7s mag=8.244'></div>
+<div class='bar pause' style='height:17px' title='t=323.7s mag=7.820'></div>
+<div class='bar' style='height:22px' title='t=324.7s mag=10.253'></div>
+<div class='bar' style='height:21px' title='t=325.7s mag=9.931'></div>
+<div class='bar' style='height:22px' title='t=326.7s mag=10.584'></div>
+<div class='bar gold' style='height:24px' title='t=327.7s mag=11.333'></div>
+<div class='bar' style='height:25px' title='t=328.7s mag=11.877'></div>
+<div class='bar' style='height:22px' title='t=329.7s mag=10.593'></div>
+<div class='bar' style='height:28px' title='t=330.8s mag=13.833'></div>
+<div class='bar' style='height:34px' title='t=331.8s mag=17.138'></div>
+<div class='bar' style='height:25px' title='t=332.8s mag=11.994'></div>
+<div class='bar' style='height:34px' title='t=333.8s mag=16.959'></div>
+<div class='bar' style='height:27px' title='t=334.8s mag=13.470'></div>
+<div class='bar' style='height:29px' title='t=335.8s mag=14.541'></div>
+<div class='bar' style='height:29px' title='t=336.8s mag=14.393'></div>
+<div class='bar' style='height:30px' title='t=337.8s mag=14.914'></div>
+<div class='bar' style='height:34px' title='t=338.8s mag=17.131'></div>
+<div class='bar' style='height:32px' title='t=339.8s mag=16.008'></div>
+<div class='bar' style='height:40px' title='t=340.8s mag=20.624'></div>
+<div class='bar' style='height:28px' title='t=341.8s mag=14.071'></div>
+<div class='bar' style='height:22px' title='t=342.9s mag=10.697'></div>
+<div class='bar' style='height:36px' title='t=343.9s mag=18.442'></div>
+<div class='bar' style='height:36px' title='t=344.9s mag=18.489'></div>
+<div class='bar' style='height:37px' title='t=345.9s mag=19.092'></div>
+<div class='bar' style='height:38px' title='t=346.9s mag=19.451'></div>
+<div class='bar' style='height:26px' title='t=347.9s mag=12.440'></div>
+<div class='bar' style='height:21px' title='t=348.9s mag=9.739'></div>
+<div class='bar' style='height:22px' title='t=349.9s mag=10.587'></div>
+<div class='bar' style='height:27px' title='t=350.9s mag=13.345'></div>
+<div class='bar' style='height:18px' title='t=351.9s mag=8.358'></div>
+<div class='bar pause' style='height:18px' title='t=352.9s mag=8.128'></div>
+<div class='bar' style='height:18px' title='t=353.9s mag=8.414'></div>
+<div class='bar pause' style='height:13px' title='t=355.0s mag=5.286'></div>
+<div class='bar pause gold' style='height:13px' title='t=356.0s mag=5.118'></div>
+<div class='bar pause' style='height:16px' title='t=357.0s mag=7.074'></div>
+<div class='bar' style='height:20px' title='t=358.0s mag=9.151'></div>
+<div class='bar pause' style='height:16px' title='t=359.0s mag=7.118'></div>
+<div class='bar pause' style='height:13px' title='t=360.0s mag=5.439'></div>
+<div class='bar pause' style='height:9px' title='t=361.0s mag=3.223'></div>
+<div class='bar pause' style='height:7px' title='t=362.0s mag=2.022'></div>
+<div class='bar pause' style='height:7px' title='t=363.0s mag=1.809'></div>
+<div class='bar pause' style='height:12px' title='t=364.0s mag=4.566'></div>
+<div class='bar pause gold' style='height:13px' title='t=365.0s mag=5.340'></div>
+<div class='bar pause' style='height:12px' title='t=366.0s mag=4.547'></div>
+<div class='bar pause' style='height:16px' title='t=367.1s mag=6.989'></div>
+<div class='bar pause' style='height:17px' title='t=368.1s mag=7.632'></div>
+<div class='bar pause' style='height:18px' title='t=369.1s mag=7.962'></div>
+<div class='bar pause' style='height:8px' title='t=370.1s mag=2.362'></div>
+<div class='bar pause' style='height:16px' title='t=371.1s mag=7.023'></div>
+<div class='bar gold' style='height:38px' title='t=372.1s mag=19.345'></div>
+<div class='bar pause' style='height:17px' title='t=373.1s mag=7.875'></div>
+<div class='bar' style='height:31px' title='t=374.1s mag=15.293'></div>
+<div class='bar pause' style='height:14px' title='t=375.1s mag=6.190'></div>
+<div class='bar pause' style='height:16px' title='t=376.1s mag=6.800'></div>
+<div class='bar' style='height:28px' title='t=377.1s mag=14.063'></div>
+<div class='bar' style='height:21px' title='t=378.1s mag=9.782'></div>
+<div class='bar' style='height:22px' title='t=379.2s mag=10.695'></div>
+<div class='bar' style='height:18px' title='t=380.2s mag=8.358'></div>
+<div class='bar' style='height:25px' title='t=381.2s mag=12.341'></div>
+<div class='bar' style='height:21px' title='t=382.2s mag=9.770'></div>
+<div class='bar' style='height:24px' title='t=383.2s mag=11.314'></div>
+<div class='bar' style='height:19px' title='t=384.2s mag=8.908'></div>
+<div class='bar' style='height:18px' title='t=385.2s mag=8.283'></div>
+<div class='bar pause' style='height:13px' title='t=386.2s mag=5.253'></div>
+<div class='bar pause' style='height:14px' title='t=387.2s mag=5.885'></div>
+<div class='bar' style='height:22px' title='t=388.2s mag=10.254'></div>
+<div class='bar' style='height:23px' title='t=389.2s mag=10.994'></div>
+<div class='bar' style='height:22px' title='t=390.2s mag=10.326'></div>
+<div class='bar pause' style='height:14px' title='t=391.3s mag=6.020'></div>
+<div class='bar' style='height:20px' title='t=392.3s mag=9.125'></div>
+<div class='bar pause' style='height:13px' title='t=393.3s mag=5.178'></div>
+<div class='bar pause' style='height:9px' title='t=394.3s mag=3.023'></div>
+<div class='bar' style='height:24px' title='t=395.3s mag=11.432'></div>
+<div class='bar' style='height:25px' title='t=396.3s mag=12.196'></div>
+<div class='bar' style='height:36px' title='t=397.3s mag=18.199'></div>
+<div class='bar' style='height:21px' title='t=398.3s mag=9.660'></div>
+<div class='bar' style='height:22px' title='t=399.3s mag=10.203'></div>
+<div class='bar' style='height:25px' title='t=400.3s mag=12.314'></div>
+<div class='bar pause' style='height:14px' title='t=401.3s mag=6.055'></div>
+<div class='bar' style='height:19px' title='t=402.4s mag=8.707'></div>
+<div class='bar' style='height:32px' title='t=403.4s mag=16.122'></div>
+<div class='bar gold' style='height:31px' title='t=404.4s mag=15.339'></div>
+<div class='bar' style='height:30px' title='t=405.4s mag=14.834'></div>
+<div class='bar' style='height:19px' title='t=406.4s mag=8.995'></div>
+<div class='bar pause' style='height:12px' title='t=407.4s mag=4.603'></div>
+<div class='bar pause gold' style='height:9px' title='t=408.4s mag=3.271'></div>
+<div class='bar pause' style='height:18px' title='t=409.4s mag=7.906'></div>
+<div class='bar' style='height:19px' title='t=410.4s mag=8.569'></div>
+<div class='bar' style='height:58px' title='t=411.4s mag=30.848'></div>
+<div class='bar' style='height:19px' title='t=412.4s mag=8.992'></div>
+<div class='bar pause' style='height:13px' title='t=413.4s mag=5.153'></div>
+<div class='bar pause' style='height:11px' title='t=414.5s mag=4.069'></div>
+<div class='bar pause' style='height:5px' title='t=415.5s mag=0.879'></div>
+<div class='bar pause' style='height:7px' title='t=416.5s mag=1.736'></div>
+<div class='bar pause' style='height:5px' title='t=417.5s mag=1.114'></div>
+<div class='bar pause' style='height:4px' title='t=418.5s mag=0.005'></div>
+<div class='bar pause gold' style='height:7px' title='t=419.5s mag=1.935'></div>
+<div class='bar pause' style='height:11px' title='t=420.5s mag=4.449'></div>
+<div class='bar pause' style='height:17px' title='t=421.5s mag=7.729'></div>
+<div class='bar gold' style='height:25px' title='t=422.5s mag=12.041'></div>
+<div class='bar' style='height:24px' title='t=423.5s mag=11.386'></div>
+<div class='bar' style='height:22px' title='t=424.5s mag=10.665'></div>
+<div class='bar' style='height:20px' title='t=425.5s mag=9.426'></div>
+<div class='bar pause' style='height:11px' title='t=426.6s mag=4.430'></div>
+<div class='bar pause gold' style='height:10px' title='t=427.6s mag=3.550'></div>
+<div class='bar pause gold' style='height:18px' title='t=428.6s mag=8.040'></div>
+<div class='bar' style='height:34px' title='t=429.6s mag=17.277'></div>
+<div class='bar pause' style='height:16px' title='t=430.6s mag=7.289'></div>
+<div class='bar' style='height:21px' title='t=431.6s mag=9.842'></div>
+<div class='bar' style='height:26px' title='t=432.6s mag=12.752'></div>
+<div class='bar gold' style='height:35px' title='t=433.6s mag=17.999'></div>
+<div class='bar' style='height:49px' title='t=434.6s mag=25.418'></div>
+<div class='bar' style='height:41px' title='t=435.6s mag=21.029'></div>
+<div class='bar' style='height:21px' title='t=436.6s mag=9.794'></div>
+<div class='bar pause' style='height:14px' title='t=437.6s mag=6.164'></div>
+<div class='bar pause' style='height:6px' title='t=438.7s mag=1.630'></div>
+<div class='bar pause' style='height:11px' title='t=439.7s mag=3.978'></div>
+<div class='bar pause' style='height:18px' title='t=440.7s mag=8.105'></div>
+<div class='bar pause' style='height:16px' title='t=441.7s mag=7.152'></div>
+<div class='bar pause' style='height:10px' title='t=442.7s mag=3.503'></div>
+<div class='bar pause' style='height:13px' title='t=443.7s mag=5.306'></div>
+<div class='bar pause' style='height:9px' title='t=444.7s mag=3.282'></div>
+<div class='bar pause' style='height:14px' title='t=445.7s mag=6.030'></div>
+<div class='bar pause' style='height:17px' title='t=446.7s mag=7.839'></div>
+<div class='bar' style='height:29px' title='t=447.7s mag=14.242'></div>
+<div class='bar' style='height:21px' title='t=448.7s mag=10.051'></div>
+<div class='bar pause' style='height:14px' title='t=449.7s mag=5.978'></div>
+<div class='bar pause' style='height:7px' title='t=450.8s mag=2.142'></div>
+<div class='bar pause' style='height:16px' title='t=451.8s mag=7.247'></div>
+<div class='bar pause gold' style='height:15px' title='t=452.8s mag=6.265'></div>
+<div class='bar pause' style='height:11px' title='t=453.8s mag=4.234'></div>
+<div class='bar pause' style='height:16px' title='t=454.8s mag=6.951'></div>
+<div class='bar' style='height:19px' title='t=455.8s mag=8.511'></div>
+<div class='bar pause' style='height:13px' title='t=456.8s mag=5.523'></div>
+<div class='bar pause' style='height:11px' title='t=457.8s mag=4.409'></div>
+<div class='bar pause' style='height:9px' title='t=458.8s mag=2.956'></div>
+<div class='bar pause' style='height:8px' title='t=459.8s mag=2.339'></div>
+<div class='bar pause' style='height:5px' title='t=460.8s mag=0.698'></div>
+<div class='bar pause' style='height:6px' title='t=461.8s mag=1.227'></div>
+<div class='bar pause' style='height:10px' title='t=462.9s mag=3.441'></div>
+<div class='bar pause' style='height:12px' title='t=463.9s mag=4.861'></div>
+<div class='bar pause' style='height:14px' title='t=464.9s mag=5.645'></div>
+<div class='bar pause' style='height:13px' title='t=465.9s mag=5.430'></div>
+<div class='bar pause' style='height:18px' title='t=466.9s mag=7.934'></div>
+<div class='bar' style='height:28px' title='t=467.9s mag=13.821'></div>
+<div class='bar' style='height:24px' title='t=468.9s mag=11.614'></div>
+<div class='bar pause' style='height:11px' title='t=469.9s mag=4.372'></div>
+<div class='bar pause' style='height:16px' title='t=470.9s mag=7.286'></div>
+<div class='bar' style='height:30px' title='t=471.9s mag=14.929'></div>
+<div class='bar pause' style='height:9px' title='t=472.9s mag=3.149'></div>
+<div class='bar pause' style='height:12px' title='t=473.9s mag=4.915'></div>
+<div class='bar' style='height:23px' title='t=475.0s mag=11.272'></div>
+<div class='bar' style='height:21px' title='t=476.0s mag=9.676'></div>
+<div class='bar pause' style='height:11px' title='t=477.0s mag=3.965'></div>
+<div class='bar pause' style='height:14px' title='t=478.0s mag=5.991'></div>
+<div class='bar pause' style='height:17px' title='t=479.0s mag=7.881'></div>
+<div class='bar' style='height:28px' title='t=480.0s mag=13.603'></div>
+<div class='bar' style='height:33px' title='t=481.0s mag=16.856'></div>
+<div class='bar' style='height:21px' title='t=482.0s mag=9.919'></div>
+<div class='bar pause gold' style='height:16px' title='t=483.0s mag=7.132'></div>
+<div class='bar pause' style='height:15px' title='t=484.0s mag=6.500'></div>
+<div class='bar' style='height:23px' title='t=485.0s mag=10.744'></div>
+<div class='bar' style='height:30px' title='t=486.0s mag=14.979'></div>
+<div class='bar' style='height:25px' title='t=487.1s mag=11.873'></div>
+<div class='bar' style='height:24px' title='t=488.1s mag=11.635'></div>
+<div class='bar' style='height:22px' title='t=489.1s mag=10.187'></div>
+<div class='bar pause' style='height:15px' title='t=490.1s mag=6.411'></div>
+<div class='bar pause' style='height:13px' title='t=491.1s mag=5.289'></div>
+<div class='bar pause' style='height:9px' title='t=492.1s mag=2.841'></div>
+<div class='bar' style='height:24px' title='t=493.1s mag=11.497'></div>
+<div class='bar' style='height:25px' title='t=494.1s mag=11.914'></div>
+<div class='bar pause' style='height:16px' title='t=495.1s mag=7.130'></div>
+<div class='bar pause' style='height:15px' title='t=496.1s mag=6.663'></div>
+<div class='bar pause' style='height:14px' title='t=497.1s mag=6.040'></div>
+<div class='bar' style='height:20px' title='t=498.1s mag=9.079'></div>
+<div class='bar' style='height:23px' title='t=499.2s mag=10.960'></div>
+<div class='bar' style='height:19px' title='t=500.2s mag=8.504'></div>
+<div class='bar pause gold' style='height:16px' title='t=501.2s mag=7.070'></div>
+<div class='bar pause' style='height:14px' title='t=502.2s mag=5.753'></div>
+<div class='bar pause' style='height:18px' title='t=503.2s mag=7.953'></div>
+<div class='bar' style='height:28px' title='t=504.2s mag=13.930'></div>
+<div class='bar' style='height:23px' title='t=505.2s mag=11.079'></div>
+<div class='bar' style='height:26px' title='t=506.2s mag=12.469'></div>
+<div class='bar' style='height:22px' title='t=507.2s mag=10.344'></div>
+<div class='bar' style='height:24px' title='t=508.2s mag=11.843'></div>
+<div class='bar' style='height:19px' title='t=509.2s mag=8.931'></div>
+<div class='bar pause' style='height:16px' title='t=510.2s mag=7.290'></div>
+<div class='bar' style='height:20px' title='t=511.3s mag=9.498'></div>
+<div class='bar' style='height:20px' title='t=512.3s mag=9.398'></div>
+<div class='bar' style='height:20px' title='t=513.3s mag=9.400'></div>
+<div class='bar' style='height:20px' title='t=514.3s mag=9.215'></div>
+<div class='bar' style='height:23px' title='t=515.3s mag=10.968'></div>
+<div class='bar' style='height:23px' title='t=516.3s mag=11.164'></div>
+<div class='bar' style='height:19px' title='t=517.3s mag=9.021'></div>
+<div class='bar pause' style='height:17px' title='t=518.3s mag=7.631'></div>
+<div class='bar pause' style='height:17px' title='t=519.3s mag=7.649'></div>
+<div class='bar pause' style='height:17px' title='t=520.3s mag=7.895'></div>
+<div class='bar pause' style='height:18px' title='t=521.3s mag=7.964'></div>
+<div class='bar' style='height:22px' title='t=522.3s mag=10.384'></div>
+<div class='bar' style='height:22px' title='t=523.4s mag=10.420'></div>
+<div class='bar' style='height:23px' title='t=524.4s mag=10.764'></div>
+<div class='bar pause' style='height:17px' title='t=525.4s mag=7.674'></div>
+<div class='bar pause' style='height:12px' title='t=526.4s mag=4.573'></div>
+<div class='bar pause' style='height:10px' title='t=527.4s mag=3.654'></div>
+<div class='bar pause' style='height:9px' title='t=528.4s mag=3.310'></div>
+<div class='bar pause' style='height:9px' title='t=529.4s mag=3.341'></div>
+<div class='bar pause' style='height:6px' title='t=530.4s mag=1.166'></div>
+<div class='bar pause' style='height:6px' title='t=531.4s mag=1.313'></div>
+<div class='bar pause' style='height:8px' title='t=532.4s mag=2.516'></div>
+<div class='bar pause' style='height:6px' title='t=533.4s mag=1.287'></div>
+<div class='bar pause' style='height:12px' title='t=534.5s mag=4.951'></div>
+<div class='bar' style='height:18px' title='t=535.5s mag=8.322'></div>
+<div class='bar' style='height:23px' title='t=536.5s mag=10.924'></div>
+<div class='bar' style='height:19px' title='t=537.5s mag=8.759'></div>
+<div class='bar' style='height:23px' title='t=538.5s mag=10.835'></div>
+<div class='bar' style='height:47px' title='t=539.5s mag=24.364'></div>
+<div class='bar pause' style='height:18px' title='t=540.5s mag=8.014'></div>
+<div class='bar pause' style='height:17px' title='t=541.5s mag=7.569'></div>
+<div class='bar pause' style='height:13px' title='t=542.5s mag=5.154'></div>
+<div class='bar' style='height:45px' title='t=543.5s mag=23.429'></div>
+<div class='bar' style='height:52px' title='t=544.5s mag=27.207'></div>
+<div class='bar' style='height:23px' title='t=545.5s mag=11.277'></div>
+<div class='bar' style='height:35px' title='t=546.6s mag=17.865'></div>
+<div class='bar' style='height:32px' title='t=547.6s mag=16.301'></div>
+<div class='bar' style='height:27px' title='t=548.6s mag=13.244'></div>
+<div class='bar pause' style='height:16px' title='t=549.6s mag=7.117'></div>
+<div class='bar pause' style='height:16px' title='t=550.6s mag=7.040'></div>
+<div class='bar pause' style='height:16px' title='t=551.6s mag=6.917'></div>
+<div class='bar pause' style='height:17px' title='t=552.6s mag=7.380'></div>
+<div class='bar pause' style='height:18px' title='t=553.6s mag=8.176'></div>
+<div class='bar' style='height:18px' title='t=554.6s mag=8.189'></div>
+<div class='bar' style='height:18px' title='t=555.6s mag=8.283'></div>
+<div class='bar' style='height:25px' title='t=556.6s mag=12.305'></div>
+<div class='bar' style='height:22px' title='t=557.6s mag=10.453'></div>
+<div class='bar pause' style='height:17px' title='t=558.7s mag=7.731'></div>
+<div class='bar' style='height:22px' title='t=559.7s mag=10.559'></div>
+<div class='bar' style='height:32px' title='t=560.7s mag=16.059'></div>
+<div class='bar' style='height:33px' title='t=561.7s mag=16.839'></div>
+<div class='bar' style='height:36px' title='t=562.7s mag=18.548'></div>
+<div class='bar' style='height:30px' title='t=563.7s mag=14.800'></div>
+<div class='bar pause' style='height:11px' title='t=564.7s mag=4.050'></div>
+<div class='bar pause' style='height:5px' title='t=565.7s mag=0.582'></div>
+<div class='bar pause' style='height:14px' title='t=566.7s mag=6.093'></div>
+<div class='bar pause' style='height:17px' title='t=567.7s mag=7.763'></div>
+<div class='bar' style='height:22px' title='t=568.7s mag=10.626'></div>
+<div class='bar pause' style='height:15px' title='t=569.7s mag=6.656'></div>
+<div class='bar pause' style='height:10px' title='t=570.8s mag=3.739'></div>
+<div class='bar pause' style='height:11px' title='t=571.8s mag=4.113'></div>
+<div class='bar pause' style='height:12px' title='t=572.8s mag=4.667'></div>
+<div class='bar pause' style='height:10px' title='t=573.8s mag=3.890'></div>
+<div class='bar pause' style='height:14px' title='t=574.8s mag=5.908'></div>
+<div class='bar pause' style='height:14px' title='t=575.8s mag=5.992'></div>
+<div class='bar' style='height:22px' title='t=576.8s mag=10.213'></div>
+<div class='bar' style='height:55px' title='t=577.8s mag=29.312'></div>
+<div class='bar' style='height:79px' title='t=578.8s mag=42.592'></div>
+<div class='bar' style='height:44px' title='t=579.8s mag=22.744'></div>
+<div class='bar' style='height:29px' title='t=580.8s mag=14.222'></div>
+<div class='bar' style='height:26px' title='t=581.8s mag=12.799'></div>
+<div class='bar' style='height:25px' title='t=582.9s mag=12.165'></div>
+<div class='bar pause' style='height:16px' title='t=583.9s mag=6.885'></div>
+<div class='bar pause' style='height:12px' title='t=584.9s mag=4.628'></div>
+<div class='bar' style='height:19px' title='t=585.9s mag=9.000'></div>
+<div class='bar' style='height:36px' title='t=586.9s mag=18.140'></div>
+<div class='bar' style='height:22px' title='t=587.9s mag=10.413'></div>
+<div class='bar pause' style='height:17px' title='t=588.9s mag=7.701'></div>
+<div class='bar pause' style='height:14px' title='t=589.9s mag=5.701'></div>
+<div class='bar pause' style='height:13px' title='t=590.9s mag=5.611'></div>
+<div class='bar' style='height:23px' title='t=591.9s mag=11.129'></div>
+<div class='bar' style='height:26px' title='t=592.9s mag=12.501'></div>
+<div class='bar' style='height:31px' title='t=593.9s mag=15.374'></div>
+<div class='bar pause' style='height:17px' title='t=595.0s mag=7.584'></div>
+<div class='bar' style='height:23px' title='t=596.0s mag=11.199'></div>
+<div class='bar' style='height:23px' title='t=597.0s mag=10.745'></div>
+<div class='bar' style='height:24px' title='t=598.0s mag=11.522'></div>
+<div class='bar' style='height:28px' title='t=599.0s mag=13.626'></div>
+<div class='bar' style='height:22px' title='t=600.0s mag=10.334'></div>
+<div class='bar' style='height:33px' title='t=601.0s mag=16.363'></div>
+<div class='bar' style='height:44px' title='t=602.0s mag=23.027'></div>
+<div class='bar pause' style='height:14px' title='t=603.0s mag=5.934'></div>
+<div class='bar' style='height:39px' title='t=604.0s mag=19.891'></div>
+<div class='bar' style='height:27px' title='t=605.0s mag=13.477'></div>
+<div class='bar' style='height:28px' title='t=606.0s mag=14.061'></div>
+<div class='bar' style='height:67px' title='t=607.1s mag=35.858'></div>
+<div class='bar' style='height:40px' title='t=608.1s mag=20.564'></div>
+<div class='bar' style='height:58px' title='t=609.1s mag=30.908'></div>
+<div class='bar' style='height:58px' title='t=610.1s mag=30.485'></div>
+<div class='bar' style='height:44px' title='t=611.1s mag=22.934'></div>
+<div class='bar' style='height:40px' title='t=612.1s mag=20.434'></div>
+<div class='bar' style='height:24px' title='t=613.1s mag=11.649'></div>
+<div class='bar' style='height:34px' title='t=614.1s mag=17.065'></div>
+<div class='bar' style='height:27px' title='t=615.1s mag=13.355'></div>
+<div class='bar' style='height:33px' title='t=616.1s mag=16.720'></div>
+<div class='bar' style='height:25px' title='t=617.1s mag=12.235'></div>
+<div class='bar' style='height:21px' title='t=618.1s mag=9.909'></div>
+<div class='bar' style='height:23px' title='t=619.2s mag=10.738'></div>
+<div class='bar' style='height:19px' title='t=620.2s mag=8.617'></div>
+<div class='bar pause' style='height:11px' title='t=621.2s mag=4.149'></div>
+<div class='bar pause' style='height:13px' title='t=622.2s mag=5.582'></div>
+<div class='bar pause' style='height:13px' title='t=623.2s mag=5.272'></div>
+<div class='bar pause' style='height:12px' title='t=624.2s mag=5.049'></div>
+<div class='bar pause' style='height:16px' title='t=625.2s mag=7.327'></div>
+<div class='bar pause' style='height:17px' title='t=626.2s mag=7.881'></div>
+<div class='bar' style='height:25px' title='t=627.2s mag=12.128'></div>
+<div class='bar pause' style='height:16px' title='t=628.2s mag=7.084'></div>
+<div class='bar pause' style='height:13px' title='t=629.2s mag=5.461'></div>
+<div class='bar pause' style='height:18px' title='t=630.2s mag=8.008'></div>
+<div class='bar' style='height:31px' title='t=631.3s mag=15.427'></div>
+<div class='bar gold' style='height:31px' title='t=632.3s mag=15.420'></div>
+<div class='bar' style='height:37px' title='t=633.3s mag=19.038'></div>
+<div class='bar' style='height:43px' title='t=634.3s mag=22.107'></div>
+<div class='bar' style='height:37px' title='t=635.3s mag=19.142'></div>
+<div class='bar' style='height:33px' title='t=636.3s mag=16.481'></div>
+<div class='bar' style='height:29px' title='t=637.3s mag=14.544'></div>
+<div class='bar' style='height:29px' title='t=638.3s mag=14.169'></div>
+<div class='bar' style='height:24px' title='t=639.3s mag=11.531'></div>
+<div class='bar' style='height:38px' title='t=640.3s mag=19.637'></div>
+<div class='bar' style='height:28px' title='t=641.3s mag=13.682'></div>
+<div class='bar gold' style='height:28px' title='t=642.3s mag=13.927'></div>
+<div class='bar' style='height:39px' title='t=643.4s mag=20.213'></div>
+<div class='bar' style='height:28px' title='t=644.4s mag=13.879'></div>
+<div class='bar' style='height:47px' title='t=645.4s mag=24.269'></div>
+<div class='bar' style='height:34px' title='t=646.4s mag=17.393'></div>
+<div class='bar' style='height:27px' title='t=647.4s mag=13.532'></div>
+<div class='bar' style='height:31px' title='t=648.4s mag=15.388'></div>
+<div class='bar' style='height:37px' title='t=649.4s mag=18.678'></div>
+<div class='bar' style='height:36px' title='t=650.4s mag=18.568'></div>
+<div class='bar' style='height:29px' title='t=651.4s mag=14.210'></div>
+<div class='bar' style='height:30px' title='t=652.4s mag=14.959'></div>
+<div class='bar' style='height:30px' title='t=653.4s mag=15.143'></div>
+<div class='bar' style='height:27px' title='t=654.4s mag=13.440'></div>
+<div class='bar' style='height:23px' title='t=655.5s mag=11.266'></div>
+<div class='bar' style='height:29px' title='t=656.5s mag=14.419'></div>
+<div class='bar' style='height:34px' title='t=657.5s mag=17.085'></div>
+<div class='bar' style='height:35px' title='t=658.5s mag=17.977'></div>
+<div class='bar' style='height:40px' title='t=659.5s mag=20.840'></div>
+<div class='bar' style='height:27px' title='t=660.5s mag=13.474'></div>
+<div class='bar pause' style='height:17px' title='t=661.5s mag=7.515'></div>
+<div class='bar' style='height:21px' title='t=662.5s mag=9.679'></div>
+<div class='bar' style='height:34px' title='t=663.5s mag=16.937'></div>
+<div class='bar' style='height:26px' title='t=664.5s mag=12.811'></div>
+<div class='bar' style='height:34px' title='t=665.5s mag=17.463'></div>
+<div class='bar' style='height:35px' title='t=666.5s mag=17.728'></div>
+<div class='bar' style='height:33px' title='t=667.6s mag=16.418'></div>
+<div class='bar' style='height:44px' title='t=668.6s mag=22.882'></div>
+<div class='bar' style='height:32px' title='t=669.6s mag=15.845'></div>
+<div class='bar' style='height:34px' title='t=670.6s mag=17.006'></div>
+<div class='bar pause' style='height:17px' title='t=671.6s mag=7.362'></div>
+<div class='bar' style='height:23px' title='t=672.6s mag=11.077'></div>
+<div class='bar' style='height:21px' title='t=673.6s mag=9.834'></div>
+<div class='bar' style='height:20px' title='t=674.6s mag=9.344'></div>
+<div class='bar' style='height:20px' title='t=675.6s mag=9.249'></div>
+<div class='bar pause' style='height:16px' title='t=676.6s mag=6.819'></div>
+<div class='bar' style='height:24px' title='t=677.6s mag=11.444'></div>
+<div class='bar' style='height:38px' title='t=678.7s mag=19.546'></div>
+<div class='bar' style='height:35px' title='t=679.7s mag=17.768'></div>
+<div class='bar' style='height:37px' title='t=680.7s mag=18.867'></div>
+<div class='bar gold' style='height:39px' title='t=681.7s mag=20.215'></div>
+<div class='bar gold' style='height:38px' title='t=682.7s mag=19.736'></div>
+<div class='bar' style='height:31px' title='t=683.7s mag=15.713'></div>
+<div class='bar' style='height:33px' title='t=684.7s mag=16.532'></div>
+<div class='bar' style='height:38px' title='t=685.7s mag=19.480'></div>
+<div class='bar' style='height:44px' title='t=686.7s mag=22.763'></div>
+<div class='bar' style='height:19px' title='t=687.7s mag=8.695'></div>
+<div class='bar' style='height:19px' title='t=688.7s mag=8.914'></div>
+<div class='bar' style='height:18px' title='t=689.7s mag=8.431'></div>
+<div class='bar' style='height:19px' title='t=690.8s mag=8.601'></div>
+<div class='bar pause' style='height:15px' title='t=691.8s mag=6.375'></div>
+<div class='bar pause' style='height:15px' title='t=692.8s mag=6.221'></div>
+<div class='bar pause' style='height:17px' title='t=693.8s mag=7.456'></div>
+<div class='bar' style='height:25px' title='t=694.8s mag=12.263'></div>
+<div class='bar' style='height:32px' title='t=695.8s mag=15.811'></div>
+<div class='bar' style='height:26px' title='t=696.8s mag=12.575'></div>
+<div class='bar' style='height:24px' title='t=697.8s mag=11.587'></div>
+<div class='bar' style='height:32px' title='t=698.8s mag=16.024'></div>
+<div class='bar' style='height:33px' title='t=699.8s mag=16.665'></div>
+<div class='bar' style='height:43px' title='t=700.8s mag=22.494'></div>
+<div class='bar' style='height:31px' title='t=701.8s mag=15.745'></div>
+<div class='bar' style='height:29px' title='t=702.9s mag=14.525'></div>
+<div class='bar' style='height:32px' title='t=703.9s mag=16.117'></div>
+<div class='bar' style='height:37px' title='t=704.9s mag=18.944'></div>
+<div class='bar' style='height:37px' title='t=705.9s mag=18.859'></div>
+<div class='bar' style='height:28px' title='t=706.9s mag=13.633'></div>
+<div class='bar' style='height:26px' title='t=707.9s mag=12.810'></div>
+<div class='bar' style='height:42px' title='t=708.9s mag=21.529'></div>
+<div class='bar' style='height:27px' title='t=709.9s mag=13.242'></div>
+<div class='bar' style='height:27px' title='t=710.9s mag=13.114'></div>
+<div class='bar' style='height:32px' title='t=711.9s mag=16.138'></div>
+<div class='bar' style='height:30px' title='t=712.9s mag=14.815'></div>
+<div class='bar' style='height:43px' title='t=713.9s mag=22.272'></div>
+<div class='bar pause' style='height:14px' title='t=715.0s mag=6.050'></div>
+<div class='bar' style='height:36px' title='t=716.0s mag=18.469'></div>
+<div class='bar' style='height:36px' title='t=717.0s mag=18.062'></div>
+<div class='bar' style='height:35px' title='t=718.0s mag=17.653'></div>
+<div class='bar' style='height:28px' title='t=719.0s mag=13.867'></div>
+<div class='bar' style='height:20px' title='t=720.0s mag=9.406'></div>
+<div class='bar' style='height:19px' title='t=721.0s mag=8.491'></div>
+<div class='bar pause' style='height:18px' title='t=722.0s mag=8.100'></div>
+<div class='bar' style='height:19px' title='t=723.0s mag=8.473'></div>
+<div class='bar' style='height:30px' title='t=724.0s mag=15.218'></div>
+<div class='bar' style='height:23px' title='t=725.0s mag=10.874'></div>
+<div class='bar pause' style='height:18px' title='t=726.0s mag=8.062'></div>
+<div class='bar' style='height:28px' title='t=727.1s mag=14.008'></div>
+<div class='bar' style='height:22px' title='t=728.1s mag=10.433'></div>
+<div class='bar' style='height:20px' title='t=729.1s mag=9.254'></div>
+<div class='bar pause' style='height:17px' title='t=730.1s mag=7.755'></div>
+<div class='bar' style='height:22px' title='t=731.1s mag=10.427'></div>
+<div class='bar' style='height:26px' title='t=732.1s mag=12.584'></div>
+<div class='bar pause' style='height:14px' title='t=733.1s mag=5.823'></div>
+<div class='bar' style='height:18px' title='t=734.1s mag=8.384'></div>
+<div class='bar gold' style='height:20px' title='t=735.1s mag=9.087'></div>
+<div class='bar pause' style='height:14px' title='t=736.1s mag=6.087'></div>
+<div class='bar' style='height:19px' title='t=737.1s mag=8.543'></div>
+<div class='bar pause' style='height:14px' title='t=738.1s mag=5.800'></div>
+<div class='bar pause' style='height:17px' title='t=739.2s mag=7.690'></div>
+<div class='bar pause' style='height:16px' title='t=740.2s mag=7.222'></div>
+<div class='bar pause' style='height:16px' title='t=741.2s mag=7.023'></div>
+<div class='bar pause' style='height:16px' title='t=742.2s mag=7.151'></div>
+<div class='bar pause' style='height:17px' title='t=743.2s mag=7.402'></div>
+<div class='bar' style='height:19px' title='t=744.2s mag=8.728'></div>
+<div class='bar pause' style='height:18px' title='t=745.2s mag=8.147'></div>
+<div class='bar pause gold' style='height:17px' title='t=746.2s mag=7.599'></div>
+<div class='bar' style='height:21px' title='t=747.2s mag=10.077'></div>
+<div class='bar pause' style='height:12px' title='t=748.2s mag=5.065'></div>
+<div class='bar pause' style='height:15px' title='t=749.2s mag=6.576'></div>
+<div class='bar pause' style='height:13px' title='t=750.2s mag=5.446'></div>
+<div class='bar pause' style='height:11px' title='t=751.3s mag=4.134'></div>
+<div class='bar pause' style='height:15px' title='t=752.3s mag=6.607'></div>
+<div class='bar' style='height:20px' title='t=753.3s mag=9.359'></div>
+<div class='bar' style='height:24px' title='t=754.3s mag=11.668'></div>
+<div class='bar' style='height:35px' title='t=755.3s mag=17.629'></div>
+<div class='bar' style='height:27px' title='t=756.3s mag=13.364'></div>
+<div class='bar' style='height:20px' title='t=757.3s mag=9.245'></div>
+<div class='bar' style='height:25px' title='t=758.3s mag=12.141'></div>
+<div class='bar pause' style='height:18px' title='t=759.3s mag=8.144'></div>
+<div class='bar' style='height:22px' title='t=760.3s mag=10.254'></div>
+<div class='bar' style='height:22px' title='t=761.3s mag=10.558'></div>
+<div class='bar' style='height:20px' title='t=762.3s mag=9.424'></div>
+<div class='bar' style='height:22px' title='t=763.4s mag=10.422'></div>
+<div class='bar pause' style='height:11px' title='t=764.4s mag=4.463'></div>
+<div class='bar pause' style='height:5px' title='t=765.4s mag=0.775'></div>
+<div class='bar pause' style='height:7px' title='t=766.4s mag=1.854'></div>
+<div class='bar pause' style='height:9px' title='t=767.4s mag=3.096'></div>
+<div class='bar pause' style='height:9px' title='t=768.4s mag=3.329'></div>
+<div class='bar pause' style='height:12px' title='t=769.4s mag=4.675'></div>
+<div class='bar pause' style='height:13px' title='t=770.4s mag=5.340'></div>
+<div class='bar pause' style='height:15px' title='t=771.4s mag=6.673'></div>
+<div class='bar pause' style='height:12px' title='t=772.4s mag=4.575'></div>
+<div class='bar' style='height:20px' title='t=773.4s mag=9.290'></div>
+<div class='bar pause' style='height:17px' title='t=774.4s mag=7.582'></div>
+<div class='bar pause' style='height:11px' title='t=775.5s mag=4.298'></div>
+<div class='bar pause' style='height:12px' title='t=776.5s mag=4.898'></div>
+<div class='bar pause' style='height:16px' title='t=777.5s mag=7.284'></div>
+<div class='bar pause' style='height:12px' title='t=778.5s mag=4.927'></div>
+<div class='bar' style='height:19px' title='t=779.5s mag=8.860'></div>
+<div class='bar' style='height:22px' title='t=780.5s mag=10.359'></div>
+<div class='bar pause' style='height:17px' title='t=781.5s mag=7.725'></div>
+<div class='bar' style='height:20px' title='t=782.5s mag=9.438'></div>
+<div class='bar pause' style='height:13px' title='t=783.5s mag=5.223'></div>
+<div class='bar pause' style='height:17px' title='t=784.5s mag=7.864'></div>
+<div class='bar' style='height:26px' title='t=785.5s mag=12.782'></div>
+<div class='bar' style='height:18px' title='t=786.5s mag=8.309'></div>
+<div class='bar pause' style='height:12px' title='t=787.6s mag=4.707'></div>
+<div class='bar pause' style='height:6px' title='t=788.6s mag=1.669'></div>
+<div class='bar pause' style='height:9px' title='t=789.6s mag=3.052'></div>
+<div class='bar pause gold' style='height:9px' title='t=790.6s mag=2.870'></div>
+<div class='bar pause' style='height:10px' title='t=791.6s mag=3.603'></div>
+<div class='bar pause' style='height:10px' title='t=792.6s mag=3.609'></div>
+<div class='bar pause' style='height:18px' title='t=793.6s mag=7.943'></div>
+<div class='bar' style='height:18px' title='t=794.6s mag=8.333'></div>
+<div class='bar pause' style='height:12px' title='t=795.6s mag=4.923'></div>
+<div class='bar pause' style='height:16px' title='t=796.6s mag=7.197'></div>
+<div class='bar' style='height:19px' title='t=797.6s mag=8.790'></div>
+<div class='bar' style='height:19px' title='t=798.6s mag=8.698'></div>
+<div class='bar pause' style='height:11px' title='t=799.7s mag=4.478'></div>
+<div class='bar pause' style='height:10px' title='t=800.7s mag=3.915'></div>
+<div class='bar pause' style='height:8px' title='t=801.7s mag=2.777'></div>
+<div class='bar pause' style='height:13px' title='t=802.7s mag=5.546'></div>
+</div>
+<h2>Gold top-3 vs pause</h2><table>
+<tr><th>Room</th><th>Frame</th><th>t (s)</th><th>Flow</th><th>Pause?</th><th>Flow top-3?</th></tr>
+<tr><td>Hallway</td><td>IMG_5512_f009738.jpg</td><td>327.3</td><td>11.3325</td><td>no</td><td>yes</td></tr>
+<tr><td>Hallway</td><td>IMG_5512_f000009.jpg</td><td>0.3</td><td>6.1277</td><td>yes</td><td>yes</td></tr>
+<tr><td>Hallway</td><td>IMG_5512_f000045.jpg</td><td>1.5</td><td>18.6095</td><td>no</td><td>no</td></tr>
+<tr><td>Living Room</td><td>IMG_5512_f009126.jpg</td><td>306.8</td><td>19.1017</td><td>no</td><td>no</td></tr>
+<tr><td>Living Room</td><td>IMG_5512_f008280.jpg</td><td>278.3</td><td>11.2181</td><td>no</td><td>no</td></tr>
+<tr><td>Living Room</td><td>IMG_5512_f009063.jpg</td><td>304.6</td><td>14.7457</td><td>no</td><td>no</td></tr>
+<tr><td>Kitchen</td><td>IMG_5512_f000981.jpg</td><td>33.0</td><td>14.362</td><td>no</td><td>no</td></tr>
+<tr><td>Kitchen</td><td>IMG_5512_f001584.jpg</td><td>53.2</td><td>16.1851</td><td>no</td><td>no</td></tr>
+<tr><td>Kitchen</td><td>IMG_5512_f002529.jpg</td><td>85.0</td><td>20.9574</td><td>no</td><td>no</td></tr>
+<tr><td>Bedroom 1</td><td>IMG_5512_f012906.jpg</td><td>433.8</td><td>17.9992</td><td>no</td><td>no</td></tr>
+<tr><td>Bedroom 1</td><td>IMG_5512_f012735.jpg</td><td>428.1</td><td>8.0399</td><td>no</td><td>yes</td></tr>
+<tr><td>Bedroom 1</td><td>IMG_5512_f012042.jpg</td><td>404.8</td><td>15.3388</td><td>no</td><td>no</td></tr>
+<tr><td>Loft Bedroom</td><td>IMG_5512_f020295.jpg</td><td>682.2</td><td>20.2148</td><td>no</td><td>no</td></tr>
+<tr><td>Loft Bedroom</td><td>IMG_5512_f018801.jpg</td><td>632.0</td><td>15.4196</td><td>no</td><td>no</td></tr>
+<tr><td>Loft Bedroom</td><td>IMG_5512_f019107.jpg</td><td>642.2</td><td>13.9275</td><td>no</td><td>no</td></tr>
+<tr><td>Bathroom</td><td>IMG_5512_f011070.jpg</td><td>372.1</td><td>19.3451</td><td>no</td><td>no</td></tr>
+<tr><td>Bathroom</td><td>IMG_5512_f010854.jpg</td><td>364.8</td><td>5.3403</td><td>yes</td><td>yes</td></tr>
+<tr><td>Bathroom</td><td>IMG_5512_f010593.jpg</td><td>356.1</td><td>5.1183</td><td>yes</td><td>yes</td></tr>
+<tr><td>En-suite Shower Room</td><td>IMG_5512_f012492.jpg</td><td>419.9</td><td>1.9348</td><td>yes</td><td>yes</td></tr>
+<tr><td>En-suite Shower Room</td><td>IMG_5512_f012141.jpg</td><td>408.1</td><td>3.2706</td><td>yes</td><td>yes</td></tr>
+<tr><td>En-suite Shower Room</td><td>IMG_5512_f012564.jpg</td><td>422.3</td><td>12.0408</td><td>no</td><td>no</td></tr>
+<tr><td>Loft Shower Room</td><td>IMG_5512_f021879.jpg</td><td>735.4</td><td>9.087</td><td>no</td><td>no</td></tr>
+<tr><td>Loft Shower Room</td><td>IMG_5512_f022194.jpg</td><td>746.0</td><td>7.5992</td><td>no</td><td>yes</td></tr>
+<tr><td>Loft Shower Room</td><td>IMG_5512_f023526.jpg</td><td>790.8</td><td>2.8699</td><td>yes</td><td>yes</td></tr>
+<tr><td>Stairs and Landing</td><td>IMG_5512_f014904.jpg</td><td>501.0</td><td>7.0704</td><td>yes</td><td>yes</td></tr>
+<tr><td>Stairs and Landing</td><td>IMG_5512_f013482.jpg</td><td>453.2</td><td>6.2645</td><td>no</td><td>yes</td></tr>
+<tr><td>Stairs and Landing</td><td>IMG_5512_f014382.jpg</td><td>483.4</td><td>7.1323</td><td>no</td><td>no</td></tr>
+</table></body></html>

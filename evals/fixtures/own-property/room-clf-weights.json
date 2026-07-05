@@ -136,7 +136,7 @@
     },
     "fine_tune_steps": [
       "Download HF dataset: uv pip install datasets huggingface_hub",
-      "  load_dataset('keremberke/indoor-scene-classification') or save_to_disk /workspace/evals/external/data/indoor-scene",
+      "  load_dataset('keremberke/indoor-scene-classification') or save_to_disk /Users/cobro/code/inventory/evals/external/data/indoor-scene",
       "Map MIT67 label \u2192 inventory room via MIT67_TO_INVENTORY (drop None)",
       "Fine-tune ViT-B/32 head (OpenCLIP) or train linear probe on embeddings",
       "Eval: uv run python evals/eval_room_classifier.py report --backend openclip",

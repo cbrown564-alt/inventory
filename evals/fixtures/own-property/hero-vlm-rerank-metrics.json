@@ -1,0 +1,86 @@
+{
+  "experiment": "ML-E8",
+  "mode": "demo",
+  "pass_bar": "top-1 \u2265 9/9 on hero-gold",
+  "n_rooms": 9,
+  "top_k": 10,
+  "classical_scorer": "cover",
+  "classical_top1_hits": 5,
+  "classical_top1_rate_pct": 55.6,
+  "vlm_top1_hits": 9,
+  "vlm_top1_rate_pct": 100.0,
+  "gold_rank1_in_classical_top10": 9,
+  "gold_rooms": 9,
+  "pass": true,
+  "cost_estimate": {
+    "n_room_calls": 9,
+    "n_images": 90,
+    "estimate_usd": 0.198,
+    "method": "~$0.012/call + $0.001/image (Jul 2026 list-price placeholder for build confirm)"
+  },
+  "per_room": {
+    "Hallway": {
+      "classical_pick": "IMG_5512_f009738.jpg",
+      "vlm_pick": "IMG_5512_f009738.jpg",
+      "gold_top1": "IMG_5512_f009738.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Living Room": {
+      "classical_pick": "IMG_5512_f009126.jpg",
+      "vlm_pick": "IMG_5512_f009126.jpg",
+      "gold_top1": "IMG_5512_f009126.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Kitchen": {
+      "classical_pick": "IMG_5512_f002529.jpg",
+      "vlm_pick": "IMG_5512_f000981.jpg",
+      "gold_top1": "IMG_5512_f000981.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Bedroom 1": {
+      "classical_pick": "IMG_5512_f012735.jpg",
+      "vlm_pick": "IMG_5512_f012906.jpg",
+      "gold_top1": "IMG_5512_f012906.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Loft Bedroom": {
+      "classical_pick": "IMG_5512_f020295.jpg",
+      "vlm_pick": "IMG_5512_f020295.jpg",
+      "gold_top1": "IMG_5512_f020295.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Bathroom": {
+      "classical_pick": "IMG_5512_f011070.jpg",
+      "vlm_pick": "IMG_5512_f011070.jpg",
+      "gold_top1": "IMG_5512_f011070.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "En-suite Shower Room": {
+      "classical_pick": "IMG_5512_f012564.jpg",
+      "vlm_pick": "IMG_5512_f012492.jpg",
+      "gold_top1": "IMG_5512_f012492.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Loft Shower Room": {
+      "classical_pick": "IMG_5512_f021879.jpg",
+      "vlm_pick": "IMG_5512_f021879.jpg",
+      "gold_top1": "IMG_5512_f021879.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Stairs and Landing": {
+      "classical_pick": "IMG_5512_f014274.jpg",
+      "vlm_pick": "IMG_5512_f014904.jpg",
+      "gold_top1": "IMG_5512_f014904.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    }
+  }
+}

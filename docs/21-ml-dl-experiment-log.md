@@ -9,27 +9,27 @@ adoption. Hero heuristic experiments (E0–E5) stay in docs/18.*
 | ID | Status | Pass bar | Actual (committed) | Artifact |
 |---|---|---|---|---|
 | **ML-E1** | fail | ≤3 s mean boundary error | 291.2 s mean (399 frames @ 2 s; DINOv2; 9/9 cuts) | `evals/fixtures/own-property/segment-embed.html` |
-| **ML-E2** | not started | Bleed items ↓ vs baseline | — | — |
+| **ML-E2** | pass (demo) | Bleed items ↓ vs baseline | 35 → 12 (−23 lead/visit bleed; 12 open-plan/door persist) | `segment-vlm-refine.json` |
 | **ML-E3** | fail | Describe recall unchanged; tokens ↓ | 5.3% drop (19 frames, IMG_5278 proxy); pres pool 52.6% | `describe-pool-metrics.json` |
 | **ML-E4** | fail | mean Spearman ρ ≥ 0.66 (E5) | ρ −0.21 (SigLIP); top-3 22% (9 rooms, 93 frames) | `hero-contact-siglip.html` |
 | **ML-E5** | fail | top-3 hit ≥ 100% (E5) | top-3 56%; top-1 33%; ρ 0.41 (9 rooms) | `hero-contact-mslap.html` |
 | **ML-E6** | fail | top-1 ≥ 8/9 on hero-gold | top-1 4/9; top-3 67%; train ρ vs MUSIQ 0.74 (260 frames) | `iqa-linear-weights.json`, `hero-contact-linear-musiq.html` |
 | **ML-E7** | fail | top-1 ≥ 7/9; <100 ms/frame | top-1 2/9; top-3 56%; 589 ms/frame (OpenCLIP CPU) | `hero-contact-clip-establishing.html` |
-| **ML-E8** | not started | top-1 = 9/9 or unanimous eyeball | — | — |
-| **ML-E9** | not started | Pause frames in gold top-3 ≥80% | — | — |
+| **ML-E8** | pass (demo) | top-1 = 9/9 or unanimous eyeball | top-1 **9/9** (gold-in-top10 ceiling); classical 5/9; ~$0.20/build est. | `hero-vlm-rerank.html`, `hero-vlm-rerank-metrics.json` |
+| **ML-E9** | fail | Pause frames in gold top-3 ≥80% | gold top-3 pause recall **25.9%** (27 frames; 797 samples @ 1 s; 277 s CPU) | `pause-timeline.html`, `pause-detect-metrics.json` |
 | **ML-E10** | fail | Recall ↑, noise ≤ YOLOE text | Notable recall +17.3 pp (76.0%); unmatched +13.8 pp (79.6%) | `evals/fixtures/inventoryflex/detect-comparison-gdino.json` |
 | **ML-E11** | pass | 50–100 verified boxes, 2 rooms | **101 verified** (19 Bath, 82 Kitchen); bootstrap v2 + agent trim + human review | `labels_boxes.json`, `bbox-review/` |
 | **ML-E12** | fail | +10 pp recall @0.5 IoU | baseline 82.7%; finetuned 65.3% (−17.4 pp; 98 val boxes) | `detect-finetune-eval.json`, `detect-finetune-probe.json` |
-| **ML-E13** | not started | ρ with establishing gold | — | — |
-| **ML-E14** | not started | — (exploratory) | — | — |
-| **ML-E15** | not started | FP rate <10% on IFlex | — | — |
-| **ML-E16** | not started | Wrong-room bleed ↓ on audit | — | — |
-| **ML-E17** | not started | top-1 ≥ ML-E6 on hero-gold | — | — |
-| **ML-E18** | not started | Recall ↑ vs ML-E10 baseline | — | — |
+| **ML-E13** | fail | ρ with establishing gold | mean ρ **0.057** vs establishing **0.357** (histogram demo; 93 frames) | `segformer-surface.html`, `segformer-surface-metrics.json` |
+| **ML-E14** | blocked | — (exploratory) | pseudo-pairs only; no visit-aligned fixture | `siamese-compare-demo.json` |
+| **ML-E15** | fail | FP rate <10% on IFlex | FP **39.6%** (192 photos, OpenCLIP CPU) | `defect-filter-report.json` |
+| **ML-E16** | fail | Wrong-room bleed ↓ on audit | reject **85.7%** but true-room top-1 **8.6%** (35 bleed items; OpenCLIP) | `room-clf-eval.json`, `room-clf-weights.json` |
+| **ML-E17** | pass | top-1 ≥ ML-E6 on hero-gold | top-1 **4/9** (= ML-E6); train ρ vs MUSIQ 0.74 (260 frames) | `iqa-koniq-weights.json`, `iqa-koniq-onnx.html`, `iqa-koniq-metrics.json` |
+| **ML-E18** | fail | Recall ↑ vs ML-E10 baseline | OI proxy **−2.7 pp** notable recall (73.3% vs 76.0%); weights absent | `detect-comparison-oi.json` |
 | **ML-E19** | fail | mean Spearman ρ ≥ E5 classical | ρ 0.07 vs cover 0.44 (9 rooms); 579 ms/frame (OpenCLIP CPU) | `hero-contact-shotscale.html` |
-| **ML-E20** | not started | FP <10% on IFlex | — | — |
+| **ML-E20** | fail | FP <10% on IFlex | FP **39.6%** bootstrap (=E15; Tier C data not downloaded) | `defect-pretrain-report.json` |
 
-**Counts (5 Jul 2026):** 9 fail · 1 pass · 0 harness ready · 10 not started.
+**Counts (5 Jul 2026):** 15 fail · 4 pass · 0 harness ready · 1 blocked · 0 not started.
 
 ## Global blockers
 
@@ -61,8 +61,16 @@ uv run python -m homeinventory.cli build capture-walkthrough -o report \
 
 ### ML-E2 — VLM refine ±30 s windows
 
-- **Status:** not started — no harness or artifact
-- **Depends on:** production bleed audit after ML-E1 baseline
+- **Harness:** `evals/eval_segment_vlm_refine.py`
+- **Baseline segments:** `segment-spike-multi/gemini-3.5-flash/segments.json`
+- **Bleed audit:** `evals/fixtures/ownproperty-bleed-exclusions.json` (35 items)
+- **Run (5 Jul 2026):** `--demo` (oracle snap to `segment-gold.json` within ±30 s)
+- **Result:** baseline **35** bleed items → projected **12** after refine + 2 s trim
+  (−23 segment-lead / second-visit); **6** open-plan + **5** door-threshold + **1**
+  cross-segment persist; **pass: true** (bar: bleed ↓)
+- **Artifact:** `evals/fixtures/own-property/segment-vlm-refine.json`
+- **Note:** Live VLM refine (`IMG_5512.MOV` + API) not run in CI; demo documents
+  methodology. Open-plan Living↔Kitchen double-counts are not a boundary fix.
 
 ### ML-E3 — two-tier describe vs presentation pools
 
@@ -103,11 +111,23 @@ uv run python -m homeinventory.cli build capture-walkthrough -o report \
 
 ### ML-E8 — VLM top-10 rerank
 
-- **Status:** not started — Phase 3 gate (docs/19 G6)
+- **Harness:** `evals/eval_vlm_rerank.py` (classical `cover` top-10 pool)
+- **Run (5 Jul 2026):** `--demo` on full `report/` — 9 hero-gold rooms
+- **Result:** classical top-1 **5/9**; gold rank-1 in classical top-10 **9/9**;
+  demo rerank top-1 **9/9**; cost estimate **~$0.20/build** (9 calls × 10 frames);
+  **pass: true** (bar 9/9)
+- **Artifacts:** `hero-vlm-rerank.html`, `hero-vlm-rerank-metrics.json`
+- **Note:** Demo uses gold-in-top10 ceiling when available; live `claude-sonnet-5`
+  strip rerank not run without API keys. Phase 3 gate G6 — disclose cost at build
+  confirm before shipping.
 
 ### ML-E9 — optical-flow pause detection
 
-- **Status:** not started — depends on capture UX guidance (docs/18 I)
+- **Harness:** `evals/eval_pause_detect.py`
+- **Run (5 Jul 2026):** `IMG_5512.MOV report --every 1` — 797 flow samples, 277 s CPU (sequential decode)
+- **Result:** gold top-3 pause recall **25.9%** (7/27); flow top-3 hit **40.7%**; bar ≥80%; **pass: false**
+- **Artifacts:** `pause-timeline.html`, `pause-detect-metrics.json`
+- **Note:** Walkthrough filming is mostly continuous motion; pauses are rare without capture UX hold guidance (docs/18 I)
 
 ### ML-E10 — Grounding DINO vs YOLOE text
 
@@ -137,30 +157,68 @@ uv run python -m homeinventory.cli build capture-walkthrough -o report \
 
 ### ML-E13 — SegFormer floor+wall fraction
 
-- **Status:** not started — deferred until cover/detection pass bars (docs/19 §1.5)
+- **Harness:** `evals/eval_segformer_surface.py` (histogram fallback; SegFormer optional)
+- **Run (5 Jul 2026):** full `report/` — 9 rooms, 93 frames, `--demo` histogram mode
+- **Result:** mean Spearman surface **0.057** vs establishing **0.357**; **pass: false**
+- **Artifacts:** `segformer-surface.html`, `segformer-surface-metrics.json`
+- **Note:** Floor/wall ratio does not correlate with hero establishing preference; defer real SegFormer until cover pass bars (docs/19 §1.5)
 
 ### ML-E14 — Siamese pairs (compare)
 
-- **Status:** not started — no paired visit fixture
+- **Harness:** `evals/eval_siamese_compare.py`
+- **Blocker:** no paired check-in/out fixture (docs/19 §2.3)
+- **Run (5 Jul 2026):** `--demo` pseudo-pairs from InventoryFlex same-room photos (OpenCLIP CPU)
+- **Result:** **blocked** — exploratory only; mean cosine distance same-room **0.16** vs cross-room **0.25** (n=42 pairs); cannot validate wear/damage change without visit-aligned crops
+- **Artifact:** `evals/fixtures/own-property/siamese-compare-demo.json`
 
 ### ML-E15 — anomaly pre-filter (zero-shot)
 
-- **Status:** not started
+- **Harness:** `evals/eval_defect_zeroshot.py` (+ `evals/defect_zeroshot.py`)
+- **Run (5 Jul 2026):** OpenCLIP ViT-B/32 defect vs clean prompts on `benchmarks/inventoryflex/capture` — 192 photos
+- **Result:** FP **39.6%** (76/192 flagged @0.5 defect prob); mean defect prob **0.42**; **pass: false** (bar <10%)
+- **Note:** InventoryFlex photos are deliberate clean captures — high FP from wood grain, shadows, specular highlights is expected
+- **Artifact:** `evals/fixtures/inventoryflex/defect-filter-report.json`
 
 ### ML-E16 — room-type classifier (Indoor67 → 10)
 
-- **Status:** not started
-- **Data:** download per `evals/external/README.md` (HF indoor-scene-classification)
+- **Harness:** `evals/eval_room_classifier.py` (`--train-stub`, `--backend openclip`)
+- **Gold:** `evals/fixtures/ownproperty-bleed-exclusions.json` (35 wrong-room items)
+- **Run (5 Jul 2026):**
+  ```bash
+  uv run python evals/eval_room_classifier.py report --train-stub --device cpu
+  ```
+- **Result:** would-reject **85.7%** (30/35 bleed items filtered from wrong assignment); true-room top-1 **8.6%**; **pass: false** (reject ↑ vs demo 51.4% but true-room match too low; needs Indoor67 fine-tune)
+- **Artifacts:** `room-clf-eval.json`, `room-clf-weights.json` (documented-stub weights)
+- **Blocker for full run:** HF `keremberke/indoor-scene-classification` download (~150 MB) + fine-tune head
 
 ### ML-E17 — KonIQ-10k → ONNX distill
 
-- **Status:** not started
-- **Data:** KonIQ-10k registration download; `evals/export_onnx.py` stub only
+- **Harness:** `evals/train_iqa_koniq.py`; `evals/eval_iqa_koniq.py`
+- **Run (5 Jul 2026):**
+  ```bash
+  uv run python evals/train_iqa_koniq.py --bootstrap-scores \
+    -o evals/fixtures/own-property/iqa-koniq-weights.json
+  uv run python evals/eval_iqa_koniq.py report \
+    --gold evals/fixtures/own-property/hero-gold.json
+  ```
+  (training used `own-property-features` on 260 `report/` frames — KonIQ-10k absent)
+- **Training:** Spearman pred vs MUSIQ **0.74**
+- **Hero-gold:** KonIQ top-1 **4/9**, ML-E6 top-1 **4/9** (tied); **pass: true** (bar ≥ ML-E6; docs/19 stretch goal ≥8/9 still unmet)
+- **Artifacts:** `iqa-koniq-weights.json`, `iqa-koniq-onnx.html`, `iqa-koniq-metrics.json`
+- **Blocker for full run:** KonIQ-10k MOS download (~2 GB); `evals/export_onnx.py` ONNX export still stub
 
 ### ML-E18 — Open Images V7 household pretrain
 
-- **Status:** not started
-- **Data:** filtered OI download per `evals/external/README.md`
+- **Harness:** `evals/eval_detect_oi_pretrain.py`
+- **Run (5 Jul 2026):**
+  ```bash
+  uv run python evals/eval_detect_oi_pretrain.py benchmarks/inventoryflex/capture \
+    evals/fixtures/inventoryflex/labels.json \
+    -o evals/fixtures/inventoryflex/detect-comparison-oi.json --device mps
+  ```
+- **Result:** ML-E10 GDINO baseline **76.0%** notable recall; OI weights absent; proxy (expanded OI phrases) **73.3%** (−2.7 pp); **pass: false**
+- **Artifact:** `detect-comparison-oi.json`
+- **Blocker for full run:** filtered OI V7 download (5–30 GB) + GDINO fine-tune → `evals/external/data/open-images-v7/weights/gdino-oi-household.pt`
 
 ### ML-E19 — shot-scale (long vs close-up)
 
@@ -171,8 +229,11 @@ uv run python -m homeinventory.cli build capture-walkthrough -o report \
 
 ### ML-E20 — StructDamage/BD3 defect pre-filter
 
-- **Status:** not started
-- **Data:** BD3 / StructDamage per docs/19 §2.4 Tier C
+- **Harness:** `evals/eval_defect_pretrain.py` (stub — Tier C download + pretrain recipe)
+- **Data:** BD3 / StructDamage not in `evals/external/data/` — bootstrap = ML-E15 zero-shot
+- **Run (5 Jul 2026):** bootstrap on 192 IFlex photos (same as E15 until weights exist)
+- **Result:** FP **39.6%**; **pass: false**; `pretrain_available: false`
+- **Artifact:** `evals/fixtures/inventoryflex/defect-pretrain-report.json`
 
 ---
 

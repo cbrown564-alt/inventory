@@ -1,0 +1,88 @@
+{
+  "experiment": "ML-E13",
+  "report_dir": "/Users/cobro/code/inventory/report",
+  "n_rooms": 9,
+  "n_frames": 93,
+  "demo": true,
+  "mean_spearman_surface": 0.057,
+  "mean_spearman_establishing": 0.357,
+  "pass_bar": "mean \u03c1 surface \u2265 establishing (0.357)",
+  "pass": false,
+  "timing": {
+    "infer_s": 32.84,
+    "ms_per_frame": 353.2,
+    "scorer_mode": "histogram"
+  },
+  "per_room": {
+    "Hallway": {
+      "n_frames": 8,
+      "spearman_surface": 0.2,
+      "spearman_establishing": 0.2,
+      "top3_hit_establishing": true,
+      "top1_hit_surface": false,
+      "top3_hit_surface": true
+    },
+    "Living Room": {
+      "n_frames": 9,
+      "spearman_surface": -0.6,
+      "spearman_establishing": 1.0,
+      "top3_hit_establishing": true,
+      "top1_hit_surface": false,
+      "top3_hit_surface": true
+    },
+    "Kitchen": {
+      "n_frames": 24,
+      "spearman_surface": -0.1,
+      "spearman_establishing": -0.8,
+      "top3_hit_establishing": false,
+      "top1_hit_surface": false,
+      "top3_hit_surface": true
+    },
+    "Bedroom 1": {
+      "n_frames": 8,
+      "spearman_surface": 0.5,
+      "spearman_establishing": 0.9,
+      "top3_hit_establishing": true,
+      "top1_hit_surface": false,
+      "top3_hit_surface": true
+    },
+    "Loft Bedroom": {
+      "n_frames": 22,
+      "spearman_surface": -0.7,
+      "spearman_establishing": 0.4,
+      "top3_hit_establishing": true,
+      "top1_hit_surface": false,
+      "top3_hit_surface": true
+    },
+    "Bathroom": {
+      "n_frames": 4,
+      "spearman_surface": null,
+      "spearman_establishing": null,
+      "top1_hit_surface": false,
+      "top3_hit_surface": true
+    },
+    "En-suite Shower Room": {
+      "n_frames": 4,
+      "spearman_surface": null,
+      "spearman_establishing": null,
+      "top1_hit_surface": false,
+      "top3_hit_surface": true
+    },
+    "Loft Shower Room": {
+      "n_frames": 8,
+      "spearman_surface": 1.0,
+      "spearman_establishing": -0.1,
+      "top3_hit_establishing": true,
+      "top1_hit_surface": true,
+      "top3_hit_surface": true
+    },
+    "Stairs and Landing": {
+      "n_frames": 6,
+      "spearman_surface": 0.1,
+      "spearman_establishing": 0.9,
+      "top3_hit_establishing": true,
+      "top1_hit_surface": false,
+      "top3_hit_surface": true
+    }
+  }
+}
