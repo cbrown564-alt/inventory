@@ -1,4 +1,4 @@
-# 19 — Pragmatic iOS path: native capture, hybrid intelligence
+# 20 — Pragmatic iOS path: native capture, hybrid intelligence
 
 *5 Jul 2026. Architecture plan for a native iOS companion to the
 video-first web product. Predecessors: docs/01 (pipeline), docs/04
