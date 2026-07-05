@@ -759,6 +759,32 @@ def _signature(inv: Inventory, name: str, role: str, via: str) -> dict:
             "inventory_sha256": inv.content_sha256(), "via": via}
 
 
+def _address_ok(inv: Inventory, uc: UseCase) -> bool:
+    """Cover address must be set to a real value before signing."""
+    addr = (inv.property_address or "").strip()
+    if not addr:
+        return False
+    for field in uc.cover_fields:
+        if field.name == "property_address" and field.placeholder:
+            if addr.lower() == field.placeholder.strip().lower():
+                return False
+    return True
+
+
+def _pdf_meta(st: SessionState) -> dict:
+    pdf_path = st.out_dir / "inventory.pdf"
+    inv_path = st.inv_path
+    ready = pdf_path.is_file()
+    stale = True
+    if ready and inv_path.is_file():
+        stale = inv_path.stat().st_mtime > pdf_path.stat().st_mtime
+    elif not ready:
+        stale = True
+    else:
+        stale = False
+    return {"ready": ready, "stale": stale}
+
+
 class ReviewHandler(BaseHandler):
     """Review/tenant routes; request plumbing inherited from webbase."""
 
@@ -832,6 +858,7 @@ class ReviewHandler(BaseHandler):
                 "sign_bar": uc.share_page.sign_bar,
                 "placeholder": uc.share_page.placeholder,
             },
+            "pdf_meta": _pdf_meta(st),
         }
         payload.update(extra)
         return payload
@@ -1053,7 +1080,7 @@ class ReviewHandler(BaseHandler):
                 self._err(404, "not found")
                 return
 
-        if path == "/":
+        if path in ("/", "/finish"):
             if not st.inv_path.exists():
                 self._html(self._render_start(st))
                 return
@@ -1318,6 +1345,10 @@ class ReviewHandler(BaseHandler):
                 if not name or role not in allowed:
                     self._err(400, "name and role ("
                                    + "|".join(allowed) + ") required")
+                    return
+                inv = st.load()
+                if not _address_ok(inv, st.uc):
+                    self._err(400, "property address required before signing")
                     return
                 with st.lock:
                     inv = st.load()

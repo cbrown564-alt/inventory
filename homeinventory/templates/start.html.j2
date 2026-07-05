@@ -169,6 +169,16 @@
     .hero { grid-template-columns: 1fr; gap: 30px; padding-top: 30px; }
     .sub { margin-bottom: 20px; }
   }
+  @media (max-width: 480px) {
+    main { padding: 0 12px 48px; }
+    .hero { gap: 24px; padding-top: 20px; }
+    h1 { font-size: 28px; }
+    .banner.rebuild { padding: 14px; margin-top: 16px; }
+    .banner-row { flex-direction: column; align-items: stretch; }
+    .banner-row .btn { width: 100%; text-align: center; }
+    #drop { padding: 32px 16px; }
+    .build-card { padding: 22px 18px 18px; }
+  }
 </style>
 </head>
 <body>

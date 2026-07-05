@@ -38,6 +38,36 @@
   .share { display: none; }
   #btn-queue { display: none; font-size: 12px; }
 
+  /* X5: mobile overflow menu when shell nav collapses */
+  .header-more { display: none; position: relative; flex-shrink: 0; }
+  .header-more > summary { list-style: none; cursor: pointer; }
+  .header-more > summary::-webkit-details-marker { display: none; }
+  .header-more-btn {
+    font-size: 18px; line-height: 1; padding: 4px 10px; letter-spacing: .12em;
+  }
+  .header-more-panel {
+    display: none; position: absolute; top: calc(100% + 6px); right: 0;
+    z-index: 50; min-width: 200px; flex-direction: column; align-items: stretch;
+    gap: 4px; padding: 10px; background: var(--panel);
+    border: 1px solid var(--line-strong); border-radius: 10px;
+    box-shadow: var(--shadow);
+  }
+  .header-more[open] .header-more-panel { display: flex; }
+  .header-more-shell a {
+    font-size: 13px; font-weight: 500; color: var(--muted);
+    text-decoration: none; padding: 6px 10px; border-radius: 6px;
+  }
+  .header-more-shell a:hover { color: var(--ink); background: var(--panel-2); }
+  .header-more-shell a[aria-current="page"] {
+    color: var(--brass-bright); background: var(--brass-soft);
+  }
+  .header-more-finish {
+    font-size: 13px; font-weight: 500; color: var(--muted);
+    text-decoration: none; padding: 6px 10px; border-radius: 6px;
+    border-top: 1px solid var(--line); margin-top: 4px;
+  }
+  .header-more-finish:hover { color: var(--ink); background: var(--panel-2); }
+
   /* ---------- layout ---------- */
   #app { flex: 1; display: grid; grid-template-columns: 272px 1fr;
          min-height: 0; }
@@ -485,6 +515,14 @@
     display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 16px;
   }
+  @media (max-width: 520px) {
+    .overview-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+    }
+    .overview { max-width: none; }
+    .overview-ctas .btn { flex: 1 1 auto; min-width: 0; font-size: 12px;
+                           padding: 8px 10px; }
+  }
   .room-card {
     border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
     background: var(--panel); cursor: pointer; text-align: left;
@@ -572,6 +610,13 @@
   .finish-handoff h2 { font: 600 16px/1.3 var(--ui); margin: 0 0 8px; }
   .finish-handoff p { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
   .finish-handoff-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  @media (max-width: 480px) {
+    .finish { max-width: none; }
+    .finish-step-head { padding: 12px 14px; }
+    .finish-fields input, .finish-fields select { font-size: 16px; }
+    .finish-handoff-actions .btn { flex: 1 1 auto; min-width: 0; }
+    .finish-handoff-actions a.btn { text-align: center; }
+  }
 
   /* ---------- lightbox (inspect + pin) ---------- */
   #lightbox { position: fixed; inset: 0; z-index: 70;
@@ -646,8 +691,43 @@
     #detail { padding: 14px 12px 40px; }
     #stage { height: clamp(240px, 42vh, 420px); border-radius: 10px; }
   }
-  @media (hover: none), (max-width: 640px) {
+  @media (hover: none), (pointer: coarse) {
     .claim-foot { display: none; }
+    #lb-hint { display: none; }
+  }
+  @media (max-width: 480px) {
+    body.stage .app-header {
+      display: grid; grid-template-columns: auto 1fr auto;
+      grid-template-areas:
+        "queue brand more"
+        "modes modes modes"
+        "progress progress progress";
+      gap: 6px 8px; padding: 8px 10px; align-items: center;
+    }
+    #btn-queue { grid-area: queue; margin: 0; }
+    body.stage .wordmark { grid-area: brand; font-size: 11px;
+                          letter-spacing: .28em; min-width: 0; }
+    body.stage .app-nav { display: none; }
+    .header-more { display: block; grid-area: more; margin-left: 0; }
+    .header-more-btn { display: inline-block; }
+    .header-more-shell { display: flex; flex-direction: column; gap: 2px; }
+    .header-end { display: none; }
+    body.stage .review-subnav {
+      grid-area: modes; order: unset; flex: unset; width: 100%;
+      border-left: none; padding: 0; margin: 0;
+      overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    body.stage .review-subnav::-webkit-scrollbar { display: none; }
+    body.stage .review-subnav a { flex-shrink: 0; }
+    #progress { grid-area: progress; order: unset; flex: unset; width: 100%;
+                max-width: none; margin: 0; }
+    .addr { display: none; }
+    .overview-stats { font-size: 12px; }
+    .coach-mark { font-size: 12px; padding: 12px; }
+    .room-card .body { padding: 10px; }
+    .room-card .name { font-size: 14px; }
+    #detail { padding: 10px 10px 28px; }
   }
 </style>
 </head>
@@ -673,6 +753,17 @@
   <div class="header-end">
     <span id="save-state" role="status">All changes saved</span>
   </div>
+  <details class="header-more">
+    <summary class="btn ghost header-more-btn" aria-label="Navigation menu">⋯</summary>
+    <div class="header-more-panel">
+      <nav class="header-more-shell" aria-label="Sections">
+        <a href="{{ route_prefix ~ '/' }}"{% if shell_active == "review" %} aria-current="page"{% endif %}>Review</a>
+        <a href="{{ route_prefix ~ '/report' }}"{% if shell_active == "report" %} aria-current="page"{% endif %}>Report</a>
+        <a href="{{ route_prefix ~ '/issue' }}"{% if shell_active == "issue" %} aria-current="page"{% endif %}>Final issue</a>
+      </nav>
+      <a href="#finish" class="header-more-finish">Finish checklist</a>
+    </div>
+  </details>
 </header>
 
 <div id="app">
@@ -927,9 +1018,11 @@
   }
   function markDirty() {
     dirty = true;
+    pdfMeta.stale = true;
     setSaveState("Unsaved changes…");
     scheduleSave();
     renderProgress();
+    if (viewMode === "finish" && finishHost) renderFinish();
   }
   window.addEventListener("beforeunload", function (e) {
     if (dirty || saving) { e.preventDefault(); e.returnValue = ""; }
@@ -964,6 +1057,7 @@
       var room = inv.rooms.find(function (r) { return r.name === sel.name; });
       if (room) renderRoom(room);
     } else if (viewMode === "overview") renderOverview();
+    else if (viewMode === "finish") renderFinish();
     toast("Undid: " + entry.label);
   }
 
@@ -1072,16 +1166,20 @@
     var o = document.getElementById("nav-overview");
     var i = document.getElementById("nav-items");
     var r = document.getElementById("nav-rooms");
+    var f = document.getElementById("nav-finish");
     o.removeAttribute("aria-current");
     i.removeAttribute("aria-current");
     r.removeAttribute("aria-current");
+    f.removeAttribute("aria-current");
     if (viewMode === "overview") o.setAttribute("aria-current", "page");
     else if (viewMode === "items") i.setAttribute("aria-current", "page");
     else if (viewMode === "room") r.setAttribute("aria-current", "page");
+    else if (viewMode === "finish") f.setAttribute("aria-current", "page");
   }
   function setViewHash(mode, arg) {
     var h = "";
     if (mode === "overview") h = "overview";
+    else if (mode === "finish") h = "finish";
     else if (mode === "item") h = "item-" + arg;
     else if (mode === "room") h = "room-" + encodeURIComponent(arg);
     else if (mode === "moment") h = "moment=" + arg;
@@ -3177,6 +3275,19 @@
   if (!window.matchMedia("(hover: none), (pointer: coarse)").matches &&
       searchBox.getAttribute("data-placeholder-kbd")) {
     searchBox.placeholder = searchBox.getAttribute("data-placeholder-kbd");
+  }
+  var headerMore = document.querySelector(".header-more");
+  if (headerMore) {
+    headerMore.querySelectorAll("a").forEach(function (node) {
+      node.addEventListener("click", function () {
+        headerMore.removeAttribute("open");
+      });
+    });
+    document.addEventListener("click", function (e) {
+      if (headerMore.hasAttribute("open") && !headerMore.contains(e.target)) {
+        headerMore.removeAttribute("open");
+      }
+    });
   }
   var searchTimer = null;
   function applySearch() {

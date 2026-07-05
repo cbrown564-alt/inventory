@@ -11,6 +11,14 @@
   body { font-size: 15px; line-height: 1.55; }
   main { max-width: 760px; margin: 0 auto; padding: 24px 22px 48px; }
 
+  @media (max-width: 480px) {
+    main { max-width: none; padding: 16px 12px 40px; }
+    .room-gallery { gap: 10px; }
+    .sign-section { margin-top: 32px; padding-top: 20px; position: static; }
+    .sign-form input, .sign-form button { flex: 1 1 100%; min-width: 0; width: 100%; }
+    .ev img { height: 96px; }
+  }
+
   .masthead { padding: 24px 0 20px; border-bottom: 2px solid var(--ink); }
   .masthead .kicker { font-size: 11px; font-weight: 600; letter-spacing: .18em;
     text-transform: uppercase; color: var(--accent-ink); }
