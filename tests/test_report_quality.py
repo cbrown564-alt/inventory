@@ -151,6 +151,23 @@ def test_appendix_b_uses_print_tier(tmp_path):
     assert 'src="photos/P001.jpg"' in html.split('id="appendix-photos"')[0]
 
 
+def test_schedule_renders_item_crops(tmp_path):
+    """docs/15 M4: an item's detector close-up appears beside its schedule
+    row, exported to out/crops so disk and served views both resolve."""
+    inv, cap, out = _fixture(tmp_path)
+    crop = out / "work" / "crops" / "k1_d00_worktop.jpg"
+    _img(crop)
+    inv.rooms[0].items[0].crop_path = str(crop)
+    html = render(inv, cap, out, pdf=False)["html"].read_text(encoding="utf-8")
+    assert (out / "crops" / "k1_d00_worktop.jpg").exists()
+    assert 'class="item-thumb"' in html
+    assert 'src="crops/k1_d00_worktop.jpg"' in html
+    # missing crop files degrade to no thumbnail, never a broken image
+    inv.rooms[0].items[1].crop_path = str(out / "work" / "crops" / "gone.jpg")
+    html = render(inv, cap, out, pdf=False)["html"].read_text(encoding="utf-8")
+    assert "gone.jpg" not in html
+
+
 def test_appendix_b_prunes_near_duplicate_frames(tmp_path):
     cap = tmp_path / "capture"
     _img(cap / "Kitchen" / "k1.jpg")

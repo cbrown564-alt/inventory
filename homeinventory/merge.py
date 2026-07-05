@@ -111,6 +111,36 @@ def merge_items(items: list[Item], room_code: str) -> list[Item]:
     return clusters
 
 
+def attach_detector_crops(items: list[Item], detections: dict) -> None:
+    """Give schedule items a detector close-up thumbnail (docs/15 M4).
+
+    The VLM backends cite photos but never map items to YOLOE boxes, so
+    their items ship without crops. An item without one borrows the
+    best-confidence detection whose label words all appear in the item's
+    name, searched only within the photos the item itself cites —
+    conservative by design: a wrong close-up is worse than none. The
+    offline backend's own crops (and any prior crop) are never replaced.
+    """
+    for item in items:
+        if item.crop_path:
+            continue
+        name_tokens = set(_tokens(item.name))
+        if not name_tokens:
+            continue
+        best = None
+        for pid in item.photo_ids:
+            for det in detections.get(pid) or []:
+                if not det.crop_path:
+                    continue
+                label_tokens = set(det.label.lower().split())
+                if not label_tokens or not label_tokens <= name_tokens:
+                    continue
+                if best is None or det.confidence > best.confidence:
+                    best = det
+        if best is not None:
+            item.crop_path = best.crop_path
+
+
 def room_code(room_name: str, used: set[str]) -> str:
     letters = re.sub(r"[^A-Z]", "", room_name.upper())[:3] or "RM"
     code, n = letters, 2

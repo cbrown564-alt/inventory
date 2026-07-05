@@ -283,6 +283,13 @@ def cmd_build(args) -> int:
             built[room_name] = Room(name=room_name, summary=summary,
                                     items=items, photos=photos)
 
+    # 5b. detector close-ups for the schedule (docs/15 M4) — VLM items
+    # borrow the best matching YOLOE crop from their own cited photos
+    if detections:
+        from .merge import attach_detector_crops
+        for room in built.values():
+            attach_detector_crops(room.items, detections)
+
     if prior:
         built_by_lower = {k.lower(): k for k in built}
         rooms: list[Room] = []

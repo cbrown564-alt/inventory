@@ -364,6 +364,36 @@ def _prune_near_duplicates(photos, keep_ids: set[str],
     return kept, pruned
 
 
+def _export_crops(inv: Inventory, out_dir: Path) -> dict[str, str]:
+    """Copy detector close-ups beside the exported photos so the report can
+    reference them relatively — ``crops/<name>`` resolves both on disk and
+    through the review server's /crops/ route. {item_id: rel src}."""
+    crop_src: dict[str, str] = {}
+    crops_dir = out_dir / "crops"
+    for room in inv.rooms:
+        for item in room.items:
+            if not item.crop_path or item.rejected:
+                continue
+            recorded = Path(item.crop_path.replace("\\", "/"))
+            candidates = [recorded if recorded.is_absolute()
+                          else out_dir / recorded,
+                          out_dir / "work" / "crops" / recorded.name]
+            src = next((c for c in candidates if c.is_file()), None)
+            if src is None:
+                continue
+            dest = crops_dir / src.name
+            try:
+                if not dest.exists() \
+                        or dest.stat().st_mtime < src.stat().st_mtime:
+                    crops_dir.mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(src, dest)
+            except OSError as e:
+                log.warning("could not export crop %s (%s)", src, e)
+                continue
+            crop_src[item.id] = f"crops/{src.name}"
+    return crop_src
+
+
 def import_weasyprint():
     """Import WeasyPrint, retrying on macOS with Homebrew's lib dir on the
     dyld fallback path — a stock `brew install glib pango` lands where the
@@ -386,10 +416,12 @@ def import_weasyprint():
         raise
 
 
-def _payload_inventory(inv: Inventory, display_path: dict[str, str]) -> dict:
+def _payload_inventory(inv: Inventory, display_path: dict[str, str],
+                       crop_src: dict[str, str]) -> dict:
     """The inventory as embedded in the HTML artefact: identical data, but
-    photo paths rewritten to capture/report-relative form so a report handed
-    to another party never leaks the build machine's filesystem layout."""
+    photo and crop paths rewritten to capture/report-relative form so a
+    report handed to another party never leaks the build machine's
+    filesystem layout."""
     body = asdict(inv)
     for room in body["rooms"]:
         for p in room["photos"]:
@@ -397,6 +429,8 @@ def _payload_inventory(inv: Inventory, display_path: dict[str, str]) -> dict:
             if p.get("source_video"):
                 p["source_video"] = Path(
                     str(p["source_video"]).replace("\\", "/")).name
+        for it in room["items"]:
+            it["crop_path"] = crop_src.get(it["id"])
     return body
 
 
@@ -456,11 +490,13 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
         section["appendix_photos"] = kept
         section["appendix_pruned"] = len(section["photos"]) - len(kept)
 
+    crop_src = _export_crops(inv, out_dir)
     context = dict(
         inv=inv,
         uc=uc,
         photo_src=photo_src,
         photo_print_src=photo_print_src,
+        crop_src=crop_src,
         photo_time=photo_time,
         photo_display_path=photo_display_path,
         regions_by_photo=dict(regions_by_photo),
@@ -474,8 +510,10 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
         agent_display=inv.agent_name or inv.inspected_by,
         # embedded for the in-report review layer (Level 1); photo paths are
         # sanitised so the artefact never carries the build machine's paths
-        payload={"inventory": _payload_inventory(inv, photo_display_path),
+        payload={"inventory": _payload_inventory(inv, photo_display_path,
+                                                 crop_src),
                  "photo_src": photo_src,
+                 "crop_src": crop_src,
                  "owner_role": uc.owner_role.key,
                  "counterparty_role": uc.counterparty_role.key,
                  "signing_roles": list(uc.signing_role_keys)},

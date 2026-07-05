@@ -50,6 +50,10 @@
   table.items td { border-bottom: 1px solid var(--rule); padding: 6px 8px;
                    vertical-align: top; }
   table.items tr { page-break-inside: avoid; }
+  /* detector close-up beside the item name (docs/15 M4) */
+  .item-thumb { display: block; width: 100%; max-width: 96px; height: 44px;
+                object-fit: cover; border: 1px solid var(--rule);
+                border-radius: 2px; margin-bottom: 3px; }
   /* grades wear small-caps; defect text stays sentence case */
   .grade-word { white-space: nowrap; font-variant: small-caps; }
   .grade-word.poor { color: #a3231f; font-weight: 700; }
@@ -178,6 +182,7 @@
 
   @media print {
     body { font-size: 10pt; }
+    .item-thumb { height: 34px; max-width: 72px; }
     main { max-width: none; padding: 0; }
     .cover { min-height: 297mm; padding: 90px 24px 60px; }
     .screen-only, .review-flag, tr.comment-row, footer .tool-meta,
@@ -490,7 +495,9 @@ rather than silently deleted.</p>
           {% elif reviewed_items %}<br><span class="review-flag pending">unreviewed</span>{% endif %}
           {% if item.added_by %}<br><span class="meta">added by {{ item.added_by }}</span>{% endif %}
         </td>
-        <td class="name-cell"><strong class="item-name">{{ item.name }}</strong>{% if item.quantity > 1 %} &times;{{ item.quantity }}{% endif %}
+        <td class="name-cell">{% if crop_src.get(item.id) %}<img class="item-thumb"
+            src="{{ crop_src[item.id] }}" alt="" loading="lazy">{% endif -%}
+          <strong class="item-name">{{ item.name }}</strong>{% if item.quantity > 1 %} &times;{{ item.quantity }}{% endif %}
           {% if item.rejected %}<br><span class="meta">AI suggested — reviewer rejected</span>{% endif %}
         </td>
         <td class="desc-cell"><span class="desc-text">{{ item.description }}</span>
@@ -680,6 +687,7 @@ rather than silently deleted.</p>
   var payload = JSON.parse(dataEl.textContent);
   var inv = payload.inventory;
   var photoSrc = payload.photo_src || {};
+  var cropSrc = payload.crop_src || {};
 
   var CONDITIONS = ["new", "excellent", "good", "fair", "poor"];
   var CLEANS = ["professionally cleaned", "cleaned to domestic standard",
@@ -794,6 +802,10 @@ rather than silently deleted.</p>
     }
     var name = tr.querySelector(".name-cell");
     name.innerHTML = "";
+    if (cropSrc[it.id] && !it.rejected) {
+      name.appendChild(el("img", { "class": "item-thumb",
+        src: cropSrc[it.id], alt: "", loading: "lazy" }));
+    }
     name.appendChild(el("strong", { "class": "item-name", text: it.name }));
     if ((it.quantity || 1) > 1) {
       name.appendChild(document.createTextNode(" ×" + it.quantity));
