@@ -8,7 +8,7 @@ drafting Kitchen 3/10*) instead of subprocess stdout.
 from __future__ import annotations
 
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Optional
 
@@ -16,9 +16,11 @@ from typing import Optional
 @dataclass
 class BuildProgress:
     status: str = "idle"          # idle | running | done | failed
-    stage: str = ""               # segmenting | segmented | describing | rendering
+    stage: str = ""               # segmenting | segmented | extracting |
+                                  # describing | rendering
     detail: str = ""
     rooms_found: int = 0
+    room_names: list[str] = field(default_factory=list)
     room_index: int = 0
     room_total: int = 0
     room_name: str = ""
@@ -52,11 +54,18 @@ class BuildProgress:
         self.detail = "Watching your video…"
         self.write(path)
 
-    def segmented(self, path: Optional[Path], n_rooms: int) -> None:
+    def segmented(self, path: Optional[Path], n_rooms: int,
+                  room_names: Optional[list[str]] = None) -> None:
         self.stage = "segmented"
         self.rooms_found = n_rooms
+        self.room_names = list(room_names or [])
         self.room_total = n_rooms
         self.detail = f"Found {n_rooms} room{'s' if n_rooms != 1 else ''}"
+        self.write(path)
+
+    def extracting(self, path: Optional[Path]) -> None:
+        self.stage = "extracting"
+        self.detail = "Extracting frames from each room…"
         self.write(path)
 
     def describing(self, path: Optional[Path], index: int, total: int,

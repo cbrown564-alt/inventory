@@ -45,7 +45,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 # verbatim). sniff_extension/_safe_component stay importable from here.
 from .webbase import (TEMPLATES, BaseHandler, WALKTHROUGH_ROOM, _safe_component,  # noqa: F401
                       lan_ip as _lan_ip, scan_capture, scan_rooms, sniff_extension)
-from .ingest import ROOM_ALIASES_FILE
+from .ingest import ROOM_ALIASES_FILE, find_root_videos
 from .progress import BuildProgress
 from .dotenv import load_dotenv
 from .schema import Inventory, Item, Photo, cover_value
@@ -61,6 +61,10 @@ log = logging.getLogger(__name__)
 _BACKEND_DEFAULT_MODEL = {"claude": "claude-opus-4-8", "openai": "gpt-4.1-mini",
                           "local": "qwen3.5:9b"}
 BUILD_CONFIRM = "yes"
+_USE_CASE_OUTCOMES = {
+    "tenancy": "Signed inventory + tenant link",
+    "deepclean": "Before/after reports + comparison sheet",
+}
 
 
 def spend_info(backend: str, model: Optional[str] = None) -> dict:
@@ -287,11 +291,15 @@ class ProjectState:
         for spec in self.uc.sessions:
             st = self.sessions[spec.key]
             built = st.inv_path.exists()
-            out.append({
+            entry = {
                 "key": spec.key, "label": spec.label, "built": built,
                 "prefix": st.route_prefix,
-                "rooms": st.scan_capture()["walkthrough_videos"] if not built else None,
-            })
+            }
+            if built:
+                inv = st.load()
+                entry["room_count"] = len(inv.rooms)
+                entry["item_count"] = inv.item_count()
+            out.append(entry)
         return out
 
     def followup_session(self) -> SessionState:
@@ -361,6 +369,16 @@ class SessionState:
 
     def scan_capture(self) -> dict:
         return scan_capture(self.capture_dir)
+
+    def remove_walkthrough(self, name: str) -> None:
+        """Delete a root walkthrough video from the capture folder."""
+        safe = _safe_component(name)
+        if not safe or safe != name:
+            raise ValueError("invalid filename")
+        allowed = {p.name for p in find_root_videos(self.capture_dir)}
+        if safe not in allowed:
+            raise FileNotFoundError(f"no such walkthrough: {safe}")
+        (self.capture_dir / safe).unlink()
 
     @property
     def inv_path(self) -> Path:
@@ -611,6 +629,7 @@ class SessionState:
                 "stage": prog.stage,
                 "stage_detail": prog.detail,
                 "rooms_found": prog.rooms_found,
+                "room_names": prog.room_names,
                 "room_index": prog.room_index,
                 "room_total": prog.room_total,
                 "room_name": prog.room_name,
@@ -844,7 +863,8 @@ class ReviewHandler(BaseHandler):
             show_picker=picker,
             walkthrough_room=WALKTHROUGH_ROOM,
             use_cases=[{"key": u.key, "name": u.display_name,
-                        "description": u.description}
+                        "description": u.description,
+                        "outcome": _USE_CASE_OUTCOMES.get(u.key, "")}
                        for u in REGISTRY.values()],
             route_prefix=st.route_prefix)
 
@@ -1167,6 +1187,28 @@ class ReviewHandler(BaseHandler):
                 st.ack("reviewer", st.uc.owner_role.key, "upload_media",
                        payload["path"])
                 self._json(payload)
+                return
+            if path == "/api/capture/remove":
+                b = self._body()
+                name = (b.get("name") or "").strip()
+                if not name:
+                    self._err(400, "name is required")
+                    return
+                with st.lock:
+                    if st.build.get("status") == "running":
+                        self._err(409, "cannot remove while a build is running")
+                        return
+                    try:
+                        st.remove_walkthrough(name)
+                    except ValueError as e:
+                        self._err(400, str(e))
+                        return
+                    except FileNotFoundError as e:
+                        self._err(404, str(e))
+                        return
+                    st.ack("reviewer", st.uc.owner_role.key, "remove_walkthrough",
+                           name)
+                self._json({"ok": True, "capture": st.scan_capture()})
                 return
             if path == "/api/build":
                 b = self._body()

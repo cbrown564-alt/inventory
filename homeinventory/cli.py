@@ -112,8 +112,11 @@ def cmd_build(args) -> int:
     def _on_segmenting():
         progress.segmenting(progress_path)
 
-    def _on_segmented(n_rooms: int):
-        progress.segmented(progress_path, n_rooms)
+    def _on_segmented(n_rooms: int, room_names: list[str] | None = None):
+        progress.segmented(progress_path, n_rooms, room_names)
+
+    def _on_extracting():
+        progress.extracting(progress_path)
 
     # 1. ingest
     try:
@@ -126,6 +129,7 @@ def cmd_build(args) -> int:
             no_segment=getattr(args, "no_segment", False),
             on_segmenting=_on_segmenting,
             on_segmented=_on_segmented,
+            on_extracting=_on_extracting,
         )
     except Exception as e:
         progress.failed(progress_path, str(e))
