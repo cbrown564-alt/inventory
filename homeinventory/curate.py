@@ -76,6 +76,9 @@ _LAPLACIAN_KERNEL = (3, 3), [0, 1, 0, 1, -4, 1, 0, 1, 0]
 _ESTABLISHING_WEIGHT = 0.6
 # rank-1 cover selection (docs/18 E5) and offline eval gates (E4)
 _COVER_CBR_REF = 2.5
+_COVER_CBR_LOW = 1.05        # penalise uniform-surface close-ups (drawer tops)
+_COVER_CBR_TEXTURE = 1.5     # prefer wider alt when winner looks texture-filled
+_COVER_TEXTURE_ALT = 0.88
 _COVER_SLOT_QUALITY = 0.12   # min quality ratio to admit a cover-slot hero
 _COVER_RANK1_QUALITY = 0.25  # prefer sharper rank-1 when within 8% cover score
 _COVER_ALT_WITHIN = 0.92
@@ -275,8 +278,15 @@ def _passes_cover_gates(
 
 
 def cover_score(establishing: float, cbr: float) -> float:
-    """Rank-1 cover heuristic: establishing damped by object-fill (high cbr)."""
-    return establishing * min(1.0, _COVER_CBR_REF / max(cbr, 0.5))
+    """Rank-1 cover heuristic: establishing damped by object-fill and uniform tops.
+
+    High centre/border ratio → object filling the frame; very low ratio → a
+    uniform surface close-up (drawer front, bread bin lid) that still looks
+    "balanced" to ``establishing_score``.
+    """
+    high_pen = min(1.0, _COVER_CBR_REF / max(cbr, 0.5))
+    low_pen = min(1.0, cbr / _COVER_CBR_LOW) if cbr < _COVER_CBR_LOW else 1.0
+    return establishing * high_pen * low_pen
 
 
 def _assign_rank_one(photos: list[Photo], best: Photo) -> None:
@@ -336,6 +346,13 @@ def _promote_cover_rank_one(
 
     best = max(heroes, key=score)
     top_score = score(best)
+    if cover[best.id][2] > _COVER_CBR_TEXTURE:
+        alts = [p for p in heroes
+                if cover[p.id][2] <= _COVER_CBR_TEXTURE
+                and score(p) >= top_score * _COVER_TEXTURE_ALT]
+        if alts:
+            best = max(alts, key=score)
+            top_score = score(best)
     if (best.quality or 0.0) < _COVER_RANK1_QUALITY:
         alts = [p for p in heroes
                 if (p.quality or 0.0) >= _COVER_RANK1_QUALITY

@@ -179,7 +179,34 @@ def _corner_closeup_img(path: Path) -> None:
     im.save(path, quality=92)
 
 
-def test_establishing_score_prefers_wide_balanced_frame():
+def _drawer_top_img(path: Path) -> None:
+    """Uniform worktop / drawer front — low centre/border ratio, high establishing."""
+    w, h = 320, 180
+    im = Image.new("L", (w, h), 140)
+    draw = ImageDraw.Draw(im)
+    for y in range(2 * h // 3, h, 6):
+        draw.line([(0, y), (w, y)], fill=90)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    im.save(path, quality=92)
+
+
+def test_uniform_drawer_closeup_loses_rank_one(tmp_path):
+    """Drawer-top uniform fills must not beat a wide balanced room view."""
+    wide_path = tmp_path / "wide.jpg"
+    drawer_path = tmp_path / "drawer.jpg"
+    _wide_balanced_img(wide_path)
+    _drawer_top_img(drawer_path)
+    photos = [
+        Photo(id="P001", path=str(drawer_path), room="Kitchen",
+              source_video="walk.mp4"),
+        Photo(id="P002", path=str(wide_path), room="Kitchen",
+              source_video="walk.mp4"),
+    ]
+    curate({"Kitchen": photos}, tmp_path, tmp_path / "work")
+    assert photos[1].hero == 1
+    assert photos[0].hero != 1
+
+
     wide = Image.new("L", (320, 180), 128)
     draw = ImageDraw.Draw(wide)
     rnd = random.Random(7)
