@@ -158,3 +158,42 @@ highlight toggle persisting, back button crossing worlds).
   under-cabinet lighting, cabinet spotlights).
 - **Leak fixed en route:** the report's embedded payload carried the
   build machine's absolute `crop_path`s; now sanitised like photo paths.
+
+## The learned IQA tier — benchmarked 5 Jul 2026, not adopted
+
+`evals/eval_iqa.py` scored all 260 own-property video frames with the
+classical gate, MUSIQ (musiq-koniq) and CLIP-IQA on MPS
+(`evals/fixtures/own-property/iqa-comparison-mps.json`), rank agreement
+computed per room because election quality is a ratio to the room's best
+frame. Eyeball method as docs/11/13: per-room contact sheets of each
+scorer's top-3/bottom-2, disputed frames inspected at full resolution.
+
+| scorer | ms/frame | mean per-room ρ vs classical | eyeball verdict |
+|---|---|---|---|
+| classical gate | 9 | — | sound except *texture bias* |
+| MUSIQ | 917 | 0.66 | best hero picks of the three |
+| CLIP-IQA | 809 | 0.16 | rejected — rewards overexposure |
+
+- **MUSIQ is the better ranker.** Rooms where scorers disagree tell the
+  story: on the Hallway (ρ −0.05 vs classical, while MUSIQ~CLIP-IQA agree
+  at 0.71) the classical gate's top picks are wallpaper close-ups —
+  Laplacian variance rewards *pattern*, not focus — and its #23 of 24 was
+  a clean, sharp front-door view MUSIQ ranked top-2. Same bias promoted
+  oven-rack interiors in the Kitchen and clutter piles in the Loft.
+  MUSIQ's tops were consistently the frames a human would pick; its
+  bottoms were the genuinely smeared passes.
+- **CLIP-IQA (zero-shot) is disqualified on accuracy alone:** its
+  Bathroom top-3 included two blown-out near-featureless frames and its
+  Hallway #1 was a door mid-swing — the prompt pair reads "bright" as
+  "good".
+- **The blocker is the licence, not the accuracy.** pyiqa (IQA-PyTorch)
+  ships CC BY-NC-SA 4.0 in the wheel (PyPI metadata misleadingly says
+  Apache) — NonCommercial is fatal for product use, stricter even than
+  the AGPL concern docs/13 flagged for Ultralytics. With ~100× the
+  runtime (4 min vs 2.4 s for this property) buying only a moderate
+  ranking improvement that MMR distinctness already blunts, the classical
+  gate stays. pyiqa is *not* a project extra; `eval_iqa.py` documents the
+  manual, evaluation-only install.
+- **Kept follow-up:** the texture bias is real and fixable locally —
+  e.g. normalising Laplacian variance against a coarse-scale texture
+  estimate, or a permissively-licensed NR-IQA if one clears the bar.

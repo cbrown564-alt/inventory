@@ -11,8 +11,13 @@ Scoring is comparative within a room — absolute thresholds don't transfer
 across devices, codecs and lighting (the same reasoning as
 extract_keyframes): Laplacian-variance sharpness damped by an
 exposure-clipping penalty, pure PIL so the core install curates without
-cv2/torch. A learned no-reference IQA tier (pyiqa MUSIQ / CLIP-IQA, local
-torch) can replace frame_quality as a drop-in when benchmarked (docs/15).
+cv2/torch. The learned no-reference IQA tier was benchmarked and NOT
+adopted (docs/15, 5 Jul 2026): MUSIQ ranked marginally more like a human
+(it fixes this gate's texture bias) but pyiqa is CC BY-NC-SA — unusable
+commercially — and ~100x slower; CLIP-IQA rewards overexposure and lost
+to this gate outright. Known bias to keep in mind: Laplacian variance
+rewards patterned surfaces (wallpaper, oven racks), so texture-rich
+frames outrank cleaner compositions of equal sharpness.
 
 Election is greedy maximal-marginal-relevance: each pick maximises
 quality minus similarity to what is already picked, so near-identical
