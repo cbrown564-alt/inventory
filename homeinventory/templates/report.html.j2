@@ -111,44 +111,47 @@
       text-transform: uppercase; color: var(--muted); }
     section.room tr.item-row {
       display: grid;
-      grid-template-columns: 64px minmax(0, 1fr) 170px;
+      grid-template-columns: 72px minmax(0, 1fr) minmax(132px, 168px);
       grid-template-areas:
         "ref name  cond"
         "ref desc  clean"
         "ref def   def"
         "ref photo photo";
-      column-gap: 16px; row-gap: 1px; align-items: start;
-      padding: 12px 0 13px; border-bottom: 1px solid var(--rule);
+      column-gap: 20px; row-gap: 4px; align-items: start;
+      padding: 14px 4px 15px; border-bottom: 1px solid var(--rule);
     }
-    section.room .ref-cell { grid-area: ref; align-self: stretch;
-      padding-top: 3px; }
+    section.room .ref-cell { grid-area: ref; align-self: start;
+      display: flex; flex-direction: column; gap: 4px;
+      padding-top: 2px; min-width: 0; }
     section.room .ref-cell > .ref-mono { display: block; font-size: 9pt; }
-    section.room .ref-cell .ref-internal { font-size: 7.5pt; }
+    section.room .ref-cell .ref-internal { display: block; font-size: 7.5pt;
+      line-height: 1.35; }
     section.room .name-cell { grid-area: name; display: flex;
-      align-items: center; gap: 12px; }
+      align-items: center; gap: 10px; flex-wrap: wrap; min-width: 0; }
+    section.room .name-cell .review-flag { flex-shrink: 0; }
     section.room .name-cell .item-name { font-size: 11.5pt; }
     section.room .name-cell .item-thumb { order: 9; margin: 0 0 0 auto;
       width: 46px; height: 46px; max-width: none; border-radius: 2px; }
     section.room .desc-cell { grid-area: desc; max-width: 62ch;
-      font-size: 10pt; line-height: 1.5; padding-top: 1px; }
+      font-size: 10pt; line-height: 1.5; padding-top: 2px; min-width: 0; }
     section.room .cond-cell { grid-area: cond; text-align: right;
-      padding-top: 2px; }
+      padding-top: 2px; min-width: 0; }
     section.room .cond-cell .grade-word { font-size: 10.5pt;
       letter-spacing: .02em; }
     section.room .clean-cell { grid-area: clean; text-align: right;
-      font: 8.5pt var(--ui); color: var(--muted); }
+      font: 8.5pt/1.45 var(--ui); color: var(--muted); min-width: 0; }
     section.room .def-cell { grid-area: def; margin-top: 7px; }
     /* absence says "none noted" on screen; print keeps the words */
     section.room .def-cell > .meta { display: none; }
     section.room .def-cell .defects { list-style: none; margin: 0;
       padding: 1px 0 1px 10px; border-left: 2px solid var(--reject);
       max-width: 62ch; font-size: 9.5pt; line-height: 1.45; }
-    section.room .photo-cell { grid-area: photo; margin-top: 6px;
-      font-size: 8pt; }
+    section.room .photo-cell { grid-area: photo; margin-top: 8px;
+      font-size: 8pt; min-width: 0; }
     section.room .photo-cell:not(:empty)::before { content: "Evidence";
       font: 600 7pt var(--ui); letter-spacing: .12em;
       text-transform: uppercase; color: var(--muted); margin-right: 7px; }
-    section.room tr.comment-row { display: block; margin: 0 0 2px 80px; }
+    section.room tr.comment-row { display: block; margin: 0 0 2px 92px; }
     section.room tr.comment-row td { display: block; }
     section.room tr.comment-row td:first-child { display: none; }
     section.room tr.rv-evidence { display: block; margin: 2px 0 10px; }
@@ -157,8 +160,7 @@
     body.reviewing section.room tr.item-row.active td { background: none;
       border: none; }
     body.reviewing section.room tr.item-row.active { background: #f6f9fc;
-      box-shadow: 0 0 0 1px var(--accent); border-radius: 4px;
-      padding-left: 10px; padding-right: 10px; }
+      box-shadow: inset 0 0 0 1px var(--accent); border-radius: 4px; }
     /* the frame around the entries (docs/16 R2) */
     .room-meta { font: 500 8.5pt var(--ui); letter-spacing: .08em;
       text-transform: uppercase; color: var(--muted); margin: 8px 0 14px; }
@@ -172,10 +174,10 @@
   }
   @media screen and (max-width: 640px) {
     section.room tr.item-row {
-      grid-template-columns: 52px minmax(0, 1fr);
+      grid-template-columns: 56px minmax(0, 1fr);
       grid-template-areas:
         "ref name" "ref cond" "ref clean" "ref desc" "ref def" "ref photo";
-      column-gap: 12px;
+      column-gap: 14px; padding-inline: 0;
     }
     section.room .cond-cell, section.room .clean-cell { text-align: left; }
   }
@@ -213,7 +215,6 @@
     main { padding: 12px 10px 32px; }
     .cover { padding: 56px 10px 28px; }
     .cover h1 { font-size: 22pt; }
-    section.room tr.item-row.active { padding-left: 6px; padding-right: 6px; }
   }
 
   /* ---------- PDF / clerk layout (WeasyPrint) ---------- */
@@ -314,9 +315,10 @@
   /* ---------- static review-state rendering ---------- */
   tr.item-rejected td, tr.item-rejected .defects { color: var(--muted); }
   tr.item-rejected td.name-cell .item-name { text-decoration: line-through; }
-  .review-flag { display: inline-block; font-family: var(--ui); font-size: 7.5pt;
-                 letter-spacing: .08em; text-transform: uppercase;
-                 padding: 1px 6px; border-radius: 2px; vertical-align: 1px; }
+  .review-flag { display: inline-block; font-family: var(--ui); font-size: 7pt;
+                 font-weight: 600; letter-spacing: .07em;
+                 text-transform: uppercase; padding: 2px 7px; border-radius: 999px;
+                 line-height: 1.35; white-space: nowrap; }
   .review-flag.ok { color: var(--confirm); background: var(--confirm-soft); }
   .review-flag.no { color: var(--reject); background: var(--reject-soft); }
   .review-flag.pending { color: var(--pend); background: var(--pend-soft); }
@@ -601,13 +603,13 @@ rather than silently deleted.</p>
           {% if final %}<span class="screen-only ref-internal ref-mono">{{ item.id }}</span>
           {% else %}<a class="screen-only ref-internal ref-mono deep-link"
              href="./#item-{{ item.id }}" title="Open this item in the review app">{{ item.id }}</a>{% endif %}
-          {% if item.rejected %}<br><span class="review-flag no">rejected</span>
-          {% elif final %}
-          {% elif item.reviewed %}<br><span class="review-flag ok">reviewed</span>
-          {% elif reviewed_items %}<br><span class="review-flag pending">unreviewed</span>{% endif %}
-          {% if item.added_by %}<br><span class="meta">added by {{ item.added_by }}</span>{% endif %}
+          {% if item.added_by %}<span class="meta">added by {{ item.added_by }}</span>{% endif %}
         </td>
-        <td class="name-cell">{% if crop_src.get(item.id) %}<img class="item-thumb"
+        <td class="name-cell">{% if item.rejected %}<span class="review-flag no">rejected</span>
+          {% elif final %}
+          {% elif item.reviewed %}<span class="review-flag ok">reviewed</span>
+          {% elif reviewed_items %}<span class="review-flag pending">unreviewed</span>{% endif -%}
+          {% if crop_src.get(item.id) %}<img class="item-thumb"
             src="{{ crop_src[item.id] }}" alt="" loading="lazy">{% endif -%}
           <strong class="item-name">{{ item.name }}</strong>{% if item.quantity > 1 %} &times;{{ item.quantity }}{% endif %}
           {% if item.rejected %}<br><span class="meta">AI suggested — reviewer rejected</span>{% endif %}
