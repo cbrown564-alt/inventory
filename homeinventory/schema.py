@@ -61,6 +61,11 @@ class Photo:
     captured_at: Optional[str] = None   # ISO 8601, from EXIF when available
     source_video: Optional[str] = None  # set when extracted from a video
     note: Optional[str] = None
+    # curation (docs/15 M2): what is *shown by default*, never what exists.
+    # hero is a 1-based display rank within the room (None = disclosed tier);
+    # quality is the within-room 0..1 score the election used.
+    hero: Optional[int] = None
+    quality: Optional[float] = None
 
 
 @dataclass

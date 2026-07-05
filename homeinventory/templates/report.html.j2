@@ -68,6 +68,19 @@
                 border: 1px solid var(--rule); }
   .photos figcaption { font-size: 8pt; color: var(--muted);
                        font-family: var(--mono); }
+  /* curation (docs/15 M2): the cover hero heads the room; the disclosed
+     tier sits behind a quiet summary line */
+  .room-cover { margin: 14px 0 4px; }
+  .room-cover .frame { position: relative; }
+  .room-cover img { width: 100%; height: auto; max-height: 340px;
+                    object-fit: cover; display: block;
+                    border: 1px solid var(--rule); }
+  .room-cover figcaption { font-size: 8pt; color: var(--muted);
+                           font-family: var(--mono); margin-top: 3px; }
+  details.more-frames { margin: 4px 0 16px; }
+  details.more-frames summary { cursor: pointer; list-style-position: outside;
+    font: 500 9.5pt var(--ui); color: var(--muted); padding: 4px 0; }
+  details.more-frames summary:hover { color: var(--brass); }
   .region { position: absolute; border: 2px solid var(--reject);
             background: rgba(163,35,31,.08); pointer-events: none; }
   .region::after {
@@ -374,7 +387,7 @@
     {% endif %}
     <tr><td>Rooms inspected</td><td><strong>{{ inv.rooms | length }}</strong></td></tr>
     <tr><td>Items recorded</td><td><strong>{{ total_items }}</strong></td></tr>
-    <tr><td>Photographs</td><td><strong>{{ total_photos }}</strong></td></tr>
+    <tr><td>Photographs</td><td><strong>{{ total_photos }}</strong>{% if hero_total and hero_total < total_photos %}<span class="screen-only meta"> — {{ hero_total }} shown, every frame analysed &amp; hashed in Appendix A</span>{% endif %}</td></tr>
     {% if reviewed_items %}
     <tr class="screen-only"><td>Human-reviewed</td><td><strong>{{ reviewed_items }} of {{ total_items }} items</strong></td></tr>
     {% endif %}
@@ -424,9 +437,30 @@ rather than silently deleted.</p>
   </table>
 </section>
 
+{% macro photo_figure(photo, cls="") -%}
+    <figure id="photo-{{ photo.id }}" data-photo-id="{{ photo.id }}"{% if cls %} class="{{ cls }}"{% endif %}>
+      <div class="frame">
+        <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}" loading="lazy">
+        {% for reg in regions_by_photo.get(photo.id, []) %}
+          <span class="region" data-label="{{ reg.item_id }} · {{ reg.defect }}"
+                style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
+        {% endfor %}
+      </div>
+      <figcaption>{{ photo.id }}{% if photo.captured_at %} &middot; {{ photo.captured_at }}{% endif %}
+        {%- if photo_time.get(photo.id) %} &middot;
+          {%- if final %} seen at {{ photo_time[photo.id].t | timecode }} in {{ photo.source_video | basename }}
+          {%- else %} <a class="moment-link deep-link" href="./#moment={{ photo.id }}"
+             title="Play this moment of the walkthrough in the review app">seen at {{ photo_time[photo.id].t | timecode }}</a> in {{ photo.source_video | basename }}{% endif %}
+        {%- elif photo.source_video %} &middot; frame of {{ photo.source_video | basename }}{% endif %}</figcaption>
+    </figure>
+{%- endmacro %}
+
 {% for section in room_sections %}
 <section class="room" id="room-{{ section.number }}" data-room="{{ section.name }}">
   <h2>{{ section.number }}. {{ section.name }}</h2>
+  {% if section.cover and photo_src.get(section.cover.id) %}
+  {{ photo_figure(section.cover, "room-cover screen-only") }}
+  {% endif %}
   {% if section.summary %}<div class="summary">{{ section.summary }}</div>{% endif %}
 
   <table class="items">
@@ -498,26 +532,23 @@ rather than silently deleted.</p>
   </table>
 
   {% if section.photos %}
+  {% set cover_id = section.cover.id if section.cover else none %}
+  {% set strip_photos = section.hero_photos | rejectattr("id", "equalto", cover_id) | list %}
   <h3 class="screen-only">Photographs — {{ section.name }}</h3>
+  {% if strip_photos %}
   <div class="photos screen-only">
-    {% for photo in section.photos %}
-    <figure id="photo-{{ photo.id }}" data-photo-id="{{ photo.id }}">
-      <div class="frame">
-        <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}" loading="lazy">
-        {% for reg in regions_by_photo.get(photo.id, []) %}
-          <span class="region" data-label="{{ reg.item_id }} · {{ reg.defect }}"
-                style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
-        {% endfor %}
-      </div>
-      <figcaption>{{ photo.id }}{% if photo.captured_at %} &middot; {{ photo.captured_at }}{% endif %}
-        {%- if photo_time.get(photo.id) %} &middot;
-          {%- if final %} seen at {{ photo_time[photo.id].t | timecode }} in {{ photo.source_video | basename }}
-          {%- else %} <a class="moment-link deep-link" href="./#moment={{ photo.id }}"
-             title="Play this moment of the walkthrough in the review app">seen at {{ photo_time[photo.id].t | timecode }}</a> in {{ photo.source_video | basename }}{% endif %}
-        {%- elif photo.source_video %} &middot; frame of {{ photo.source_video | basename }}{% endif %}</figcaption>
-    </figure>
-    {% endfor %}
+    {% for photo in strip_photos %}{{ photo_figure(photo) }}{% endfor %}
   </div>
+  {% endif %}
+  {% if section.more_photos %}
+  <details class="more-frames screen-only">
+    <summary>All {{ section.photos | length }} frames — every angle the
+      walkthrough captured, blurred passes included</summary>
+    <div class="photos">
+      {% for photo in section.more_photos %}{{ photo_figure(photo) }}{% endfor %}
+    </div>
+  </details>
+  {% endif %}
   {% endif %}
 </section>
 {% endfor %}
@@ -569,10 +600,11 @@ rather than silently deleted.</p>
     {% endfor %}
   </div>
   {% if section.appendix_pruned %}
-  <p class="meta">{{ section.appendix_pruned }} near-duplicate walkthrough-video
-  frame{{ "s" if section.appendix_pruned != 1 }} (cited by no item) omitted from
-  this appendix; every capture file remains listed with its checksum in
-  Appendix A.</p>
+  <p class="meta">{{ section.appendix_pruned }} further
+  frame{{ "s" if section.appendix_pruned != 1 }} of this room
+  {{ "was" if section.appendix_pruned == 1 else "were" }} analysed but not
+  reproduced here (near-duplicate or lower-quality walkthrough frames cited
+  by no item); every file remains listed with its checksum in Appendix A.</p>
   {% endif %}
   {% endif %}
   {% endfor %}
@@ -930,6 +962,8 @@ rather than silently deleted.</p>
   function flashPhoto(pid) {
     var fig = document.getElementById("photo-" + pid);
     if (!fig) { toast(pid + " — photo not embedded in this report"); return; }
+    var det = fig.closest ? fig.closest("details") : null;
+    if (det && !det.open) det.open = true;   // disclosed-tier evidence
     fig.scrollIntoView({ behavior: "smooth", block: "center" });
     fig.classList.remove("flash");
     void fig.offsetWidth;  // restart the animation

@@ -176,7 +176,7 @@ def test_appendix_b_prunes_near_duplicate_frames(tmp_path):
     assert 'data-photo-id="P002"' in appendix   # first frame of the video
     assert 'data-photo-id="P003"' in appendix   # near-duplicate but CITED
     assert 'data-photo-id="P004"' not in appendix  # uncited near-dup pruned
-    assert "near-duplicate walkthrough-video" in appendix  # honest note
+    assert "listed with its checksum in Appendix A" in appendix  # honest note
     # every file still listed with its hash in Appendix A
     manifest = html.split('id="appendix-manifest"', 1)[1]
     for pid in ("P002", "P003", "P004"):

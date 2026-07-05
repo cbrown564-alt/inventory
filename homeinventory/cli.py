@@ -141,6 +141,12 @@ def cmd_build(args) -> int:
     # 2. integrity manifest
     build_manifest(capture_dir, rooms_photos, out_dir / "manifest.json")
 
+    # 2b. curation: score every frame and elect each room's hero set — the
+    # few, high-quality, distinct frames shown by default (docs/15). Runs
+    # after the manifest so reviewer overrides key on sha256.
+    from .curate import curate
+    curate(rooms_photos, capture_dir, work_dir)
+
     only = {r.strip().lower() for r in args.room.split(",")} if args.room else None
     selected = {name: photos for name, photos in rooms_photos.items()
                 if not only or name.lower() in only}

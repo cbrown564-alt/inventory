@@ -158,6 +158,18 @@ def _grades_line(item: Item) -> str:
     return " · ".join(parts) if parts else "—"
 
 
+def split_heroes(photos: list) -> tuple[list, list]:
+    """(hero photos in rank order, the disclosed rest).
+
+    Inventories built before curation (docs/15 M2) have no hero ranks —
+    everything is a hero, nothing is disclosed, the report is unchanged."""
+    heroes = sorted((p for p in photos if getattr(p, "hero", None)),
+                    key=lambda p: p.hero)
+    if not heroes:
+        return list(photos), []
+    return heroes, [p for p in photos if not p.hero]
+
+
 def prepare_room_sections(inv: Inventory) -> list[dict]:
     """Room blocks with clerk-style numbering and grouped items."""
     sections: list[dict] = []
@@ -176,12 +188,19 @@ def prepare_room_sections(inv: Inventory) -> list[dict]:
                     "grades_line": _grades_line(item),
                 })
             grouped.append({"heading": heading, "rows": rows})
+        heroes, more = split_heroes(room.photos)
         sections.append({
             "number": idx,
             "name": room.name,
             "summary": room.summary,
             "groups": grouped,
             "photos": room.photos,
+            "hero_photos": heroes,
+            "more_photos": more,
+            # the top-ranked hero heads the section — but only when curation
+            # actually elected a set; an uncurated room stays a plain strip
+            "cover": heroes[0] if heroes and getattr(heroes[0], "hero", None)
+                     else None,
         })
     return sections
 
@@ -426,10 +445,16 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
             if not item.rejected:
                 keep_ids.update(item.photo_ids or [])
     for section in room_sections:
-        kept, pruned = _prune_near_duplicates(section["photos"], keep_ids,
-                                              dhash_map)
+        # the printed appendix cannot disclose progressively, so it carries
+        # the hero set plus everything the evidence chain needs (cited or
+        # annotated photos) — the rest is analysed, hashed in Appendix A,
+        # and reachable behind the screen report's disclosure
+        hero_ids = {p.id for p in section["hero_photos"]}
+        pool = [p for p in section["photos"]
+                if p.id in hero_ids or p.id in keep_ids]
+        kept, _ = _prune_near_duplicates(pool, keep_ids, dhash_map)
         section["appendix_photos"] = kept
-        section["appendix_pruned"] = pruned
+        section["appendix_pruned"] = len(section["photos"]) - len(kept)
 
     context = dict(
         inv=inv,
@@ -441,6 +466,7 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
         regions_by_photo=dict(regions_by_photo),
         total_items=inv.item_count(),
         total_photos=inv.photo_count(),
+        hero_total=sum(len(s["hero_photos"]) for s in room_sections),
         reviewed_items=inv.reviewed_count(),
         schedule_summary=schedule,
         cover_rows=build_cover_rows(inv, uc),

@@ -208,6 +208,7 @@
                     padding: 3px 0 1px; }
   .prov { margin-top: 10px; font-size: 12px; color: var(--muted);
           display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .stage-toggle { margin-top: 8px; font-size: 12px; }
   .prov .tc { font-family: var(--mono); color: var(--brass-bright); }
   .prov .vid { font-family: var(--mono); color: var(--faint); }
 
@@ -512,6 +513,7 @@
   var sortMode = "room";
   var query = "";
   var sel = null;            // {type:"item", id} | {type:"room", name}
+  var roomShowAll = {};      // room name -> true: disclosed tier revealed
   var el = ui.el, toast = ui.toast;
 
   function index() {
@@ -1770,11 +1772,31 @@
     var grid = el("div", { "class": "room-grid" });
     d.appendChild(grid);
 
-    // left: the room's footage on the stage
-    var roomPids = (room.photos || []).map(function (p) { return p.id; })
+    // left: the room's footage on the stage — the curated hero set by
+    // default (docs/15 M2), the full frame record one click behind it
+    var allPids = (room.photos || []).map(function (p) { return p.id; })
       .filter(function (pid) { return photoSrc[pid]; });
-    buildStage(grid, { pids: roomPids, crop: null, item: null,
-                       roomName: room.name });
+    var heroPids = (room.photos || [])
+      .filter(function (p) { return p.hero && photoSrc[p.id]; })
+      .sort(function (a, b) { return a.hero - b.hero; })
+      .map(function (p) { return p.id; });
+    var curated = heroPids.length > 0 && heroPids.length < allPids.length;
+    var showAll = !curated || !!roomShowAll[room.name] ||
+      (sel && sel.focusPid && heroPids.indexOf(sel.focusPid) < 0);
+    var ctl = buildStage(grid, {
+      pids: showAll ? allPids : heroPids,
+      crop: null, item: null, roomName: room.name });
+    if (curated && ctl && ctl.host) {
+      ctl.host.appendChild(el("button", {
+        "class": "btn ghost stage-toggle",
+        text: showAll
+          ? "Highlights only (" + heroPids.length + " frames)"
+          : "All " + allPids.length + " frames — blurred passes included",
+        onclick: function () {
+          roomShowAll[room.name] = !showAll;
+          renderRoom(room);
+        } }));
+    }
 
     var cards = el("div", { "class": "room-cards" });
     grid.appendChild(cards);
