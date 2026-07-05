@@ -1,0 +1,113 @@
+{
+  "video": "IMG_5512.MOV",
+  "rooms": {
+    "Hallway": {
+      "top": [
+        "IMG_5512_f009738.jpg",
+        "IMG_5512_f000009.jpg",
+        "IMG_5512_f000045.jpg"
+      ],
+      "bottom": [
+        "IMG_5512_f010341.jpg",
+        "IMG_5512_f010071.jpg"
+      ],
+      "notes": "Wide hallway with floor and floral wallpaper; avoid door-edge close-ups"
+    },
+    "Living Room": {
+      "top": [
+        "IMG_5512_f009126.jpg",
+        "IMG_5512_f008280.jpg",
+        "IMG_5512_f009063.jpg"
+      ],
+      "bottom": [
+        "IMG_5512_f000297.jpg",
+        "IMG_5512_f000216.jpg"
+      ],
+      "notes": "Sofa grouping and windows visible; avoid early doorway blur passes"
+    },
+    "Kitchen": {
+      "top": [
+        "IMG_5512_f000981.jpg",
+        "IMG_5512_f001584.jpg",
+        "IMG_5512_f003393.jpg"
+      ],
+      "bottom": [
+        "IMG_5512_f005292.jpg",
+        "IMG_5512_f003762.jpg"
+      ],
+      "notes": "Need hob and cabinets visible, not hob-surface texture fill"
+    },
+    "Bedroom 1": {
+      "top": [
+        "IMG_5512_f012906.jpg",
+        "IMG_5512_f012735.jpg",
+        "IMG_5512_f012042.jpg"
+      ],
+      "bottom": [
+        "IMG_5512_f013023.jpg",
+        "IMG_5512_f011430.jpg"
+      ],
+      "notes": "Full bed and walls in frame; avoid bedside-table close-ups"
+    },
+    "Loft Bedroom": {
+      "top": [
+        "IMG_5512_f020295.jpg",
+        "IMG_5512_f018801.jpg",
+        "IMG_5512_f019107.jpg"
+      ],
+      "bottom": [
+        "IMG_5512_f018756.jpg",
+        "IMG_5512_f015777.jpg"
+      ],
+      "notes": "Loft eaves and bed visible; avoid wardrobe interior fill"
+    },
+    "Bathroom": {
+      "top": [
+        "IMG_5512_f011070.jpg",
+        "IMG_5512_f010854.jpg",
+        "IMG_5512_f010593.jpg"
+      ],
+      "bottom": [
+        "IMG_5512_f010629.jpg",
+        "IMG_5512_f010593.jpg"
+      ],
+      "notes": "Vanity and bath suite overview; avoid motion-blurred pan frames"
+    },
+    "En-suite Shower Room": {
+      "top": [
+        "IMG_5512_f012492.jpg",
+        "IMG_5512_f012141.jpg",
+        "IMG_5512_f012564.jpg"
+      ],
+      "bottom": [
+        "IMG_5512_f012213.jpg",
+        "IMG_5512_f012564.jpg"
+      ],
+      "notes": "Shower room overview; avoid shower-head and tray close-ups"
+    },
+    "Loft Shower Room": {
+      "top": [
+        "IMG_5512_f021879.jpg",
+        "IMG_5512_f022194.jpg",
+        "IMG_5512_f023526.jpg"
+      ],
+      "bottom": [
+        "IMG_5512_f021726.jpg",
+        "IMG_5512_f023022.jpg"
+      ],
+      "notes": "Full shower enclosure visible; avoid tray and fitting close-ups"
+    },
+    "Stairs and Landing": {
+      "top": [
+        "IMG_5512_f014904.jpg",
+        "IMG_5512_f013482.jpg",
+        "IMG_5512_f014382.jpg"
+      ],
+      "bottom": [
+        "IMG_5512_f013176.jpg",
+        "IMG_5512_f014274.jpg"
+      ],
+      "notes": "Staircase and landing walls visible; avoid motion-blurred passes"
+    }
+  }
+}

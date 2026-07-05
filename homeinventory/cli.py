@@ -2,6 +2,9 @@
 
   homeinventory guide                          # print the photo capture checklist
   homeinventory build CAPTURE_DIR -o OUT_DIR   # run the full pipeline
+  homeinventory curate-only CAPTURE_DIR -o OUT_DIR
+                                               # re-run hero curation + render
+                                               # from existing inventory.json
   homeinventory review CAPTURE_DIR -o OUT_DIR  # local review web app (--share
                                                # adds a tenant link)
   homeinventory check CAPTURE_DIR              # detector-only coverage check
@@ -323,6 +326,41 @@ def cmd_build(args) -> int:
     return 0
 
 
+def cmd_curate_only(args) -> int:
+    """Re-run frame curation on an existing build (no describe/detect cost).
+
+    Reloads inventory.json, re-scores every frame path, re-elects hero ranks,
+    saves inventory.json, and re-renders HTML — same post-curate path as build.
+    """
+    from .curate import curate
+    from .report import render
+    from .schema import Inventory
+
+    capture_dir = Path(args.capture_dir)
+    out_dir = Path(args.out)
+    if not capture_dir.is_dir():
+        print(f"error: capture dir not found: {capture_dir}", file=sys.stderr)
+        return 2
+    inv_path = out_dir / "inventory.json"
+    if not inv_path.is_file():
+        print(f"error: no inventory.json at {inv_path} — run build first",
+              file=sys.stderr)
+        return 2
+    work_dir = out_dir / "work"
+    inv = Inventory.from_json(inv_path.read_text(encoding="utf-8"))
+    if not inv.rooms:
+        print("error: inventory has no rooms", file=sys.stderr)
+        return 2
+    rooms = {r.name: r.photos for r in inv.rooms}
+    curate(rooms, capture_dir, work_dir)
+    outputs = render(inv, capture_dir, out_dir, pdf=not args.no_pdf,
+                     use_case=args.use_case)
+    print(f"re-curated {inv.photo_count()} photos across {len(inv.rooms)} rooms.")
+    for kind, path in outputs.items():
+        print(f"  {kind:5} {path}")
+    return 0
+
+
 def cmd_render(args) -> int:
     """Re-render the report from an edited inventory.json (review loop)."""
     from .report import render
@@ -566,6 +604,16 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--det-conf", type=float, default=0.25)
     b.add_argument("--no-pdf", action="store_true")
     b.set_defaults(func=cmd_build)
+
+    co = sub.add_parser("curate-only",
+                        help="re-run hero curation on an existing build "
+                             "(no describe/detect API cost)")
+    co.add_argument("capture_dir")
+    co.add_argument("-o", "--out", default="report")
+    co.add_argument("--use-case", choices=use_cases, default=None,
+                    help="override use-case profile when rendering")
+    co.add_argument("--no-pdf", action="store_true")
+    co.set_defaults(func=cmd_curate_only)
 
     r = sub.add_parser("render", help="re-render report from edited inventory.json")
     r.add_argument("capture_dir")

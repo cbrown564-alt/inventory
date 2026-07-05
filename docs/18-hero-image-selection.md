@@ -66,9 +66,16 @@ uv run python -m homeinventory.cli build capture-walkthrough -o report \
 
 Re-curate only (no describe cost):
 
-```python
-# reload inventory.json → curate(rooms, work, work) → save → render
+```bash
+uv run python -m homeinventory.cli curate-only capture-walkthrough -o report \
+  --no-pdf
 ```
+
+Reloads `report/inventory.json`, re-scores frame paths under the capture dir,
+re-elects hero ranks via `curate()`, writes `inventory.json`, and re-renders
+`inventory.html` — same post-curate path as `build`, without ingest,
+describe, or detect API spend. Use after changing scorer logic in `curate.py`
+or reviewer overrides in `work/curation.json`.
 
 ## Failure modes (catalogue)
 
@@ -110,6 +117,22 @@ Observed on IMG_5512, Jul 2026 sessions:
 - **Result:** Reduces wrong-room frames in pool; does not fix close-up selection within the correct room.
 - **Verdict:** ✅ Keep — orthogonal hygiene, tests in `tests/test_ingest_segment.py`.
 
+### E4 — Hard gates before ranking (curate)
+
+- **Date:** 5 Jul 2026
+- **Method:** Approach A — reject candidates below room-median sharpness, above 15% clipped exposure, empty blur (smooth fraction > 0.97 and sharpness < room p25), or centre/border Laplacian ratio > 3.0; rank survivors by establishing score within the MMR hero pool.
+- **Result:** top-1 hit **44.4%** (4/9) on IMG_5512 gold — regressed vs E1; Loft Bedroom and Loft Shower re-picked wardrobe/shower close-ups.
+- **Verdict:** ❌ **Reject for product.** Gates kept in `eval_hero_cover.py --scorer hard-gates` for offline comparison only.
+- **Artifacts:** `evals/fixtures/own-property/hero-contact-hard-gates.html`
+
+### E5 — Cover score + establishing slot + adaptive sharpness (curate)
+
+- **Date:** 5 Jul 2026
+- **Method:** After MMR, admit one **cover slot** hero (best `cover_score = establishing × min(1, 2.5/cbr)` among frames with quality ≥ 12% of room max). Rank 1 = max cover_score among heroes; reject a low-quality winner (< 25% of room max) when a sharper alternative scores within 8%. Pool stays narrow (heroes + slot — not full frame pool).
+- **Result:** top-1 hit **77.8%** (7/9), top-3 hit **100%** (9/9) on IMG_5512 gold. Kitchen and En-suite pick gold #3 frames (still top-3 hits). Regression test `test_rank1_matches_hero_gold_when_fixture_present` locks ≥ 7/9.
+- **Verdict:** ✅ **Adopted** as product rank-1 scorer (E1 MMR + E3 boundary trim unchanged).
+- **Artifacts:** `evals/fixtures/own-property/hero-contact-cover.html`, `report/inventory.html` after `curate-only`
+
 ### docs/15 IQA benchmark (not adopted for product)
 
 - MUSIQ ranked closer to human within-room order (ρ ≈ 0.66 vs classical) but CC BY-NC-SA blocks product use; ~100× slower.
@@ -149,12 +172,30 @@ Until gold exists, use ** pairwise eyeball** on contact sheets (below).
 
 ### 2. Contact sheet per scorer
 
-New harness: `evals/eval_hero_cover.py`
+Harness: `evals/eval_hero_cover.py`
 
 - Input: build output dir or frame directory + room assignment
 - Per room: grid of all frames with overlay: sharpness, each scorer's rank, gold rank if present, **★** on current pick
 - Output: `evals/fixtures/own-property/hero-contact-<scorer>.html`
 - Sort rooms in walkthrough order
+
+Usage (after a build or `curate-only` run):
+
+```bash
+# Contact sheet for the current curate scorer on the own-property build
+uv run python evals/eval_hero_cover.py report
+
+# Named scorer variant (e.g. hard-gates experiment E4)
+uv run python evals/eval_hero_cover.py report --scorer hard-gates \
+  -o evals/fixtures/own-property/hero-contact-hard-gates.html
+
+# Gold metrics when hero-gold.json exists
+uv run python evals/eval_hero_cover.py report --gold \
+  evals/fixtures/own-property/hero-gold.json
+```
+
+Typical experiment loop: edit `curate.py` → `curate-only` → `eval_hero_cover.py`
+→ eyeball contact sheet → log verdict here.
 
 ### 3. Metrics (per room, then mean)
 
@@ -282,28 +323,32 @@ flow / low motion windows; prefer those frames for rank 1.
    Loft Bedroom. Accept for benchmark or re-segment with sonnet-5?
 3. **Licence-clean learned model** — is a small ONNX mobile-grade IQA
    model worth training on gold + MUSIQ labels?
-4. **Rebuild cost** — is a `--curate-only` CLI command worth shipping so
-   experiments don't require describe API spend?
+4. **Rebuild cost** — shipped: `curate-only` CLI (see above) re-runs
+   `curate()` + render without describe/detect spend.
 
 ## Related files
 
 | Path | Role |
 |---|---|
-| `homeinventory/curate.py` | Scoring, MMR, rank-1 promotion |
+| `homeinventory/cli.py` | `build`, `curate-only`, `render` |
 | `homeinventory/ingest.py` | Frame pool + boundary trim |
 | `homeinventory/templates/review.html.j2` | `roomHeroSrc()` |
 | `homeinventory/report.py` | `prepare_room_sections()` → `cover` |
+| `homeinventory/curate.py` | Scoring, MMR, rank-1 promotion |
+| `evals/eval_hero_cover.py` | Per-room contact sheets + gold metrics |
 | `evals/eval_iqa.py` | Within-room rank benchmark (oracle) |
 | `docs/15-curation-and-one-app.md` | Hero set + MMR architecture |
 | `docs/17-experience-redesign.md` | Overview gallery UX |
 
 ## Definition of done (this doc's feature)
 
-- [ ] Gold rankings for IMG_5512 committed under `evals/fixtures/own-property/`
-- [ ] `evals/eval_hero_cover.py` produces per-room contact sheets
-- [ ] Adopted scorer hits pass bar on gold; regression test locks rank-1 for fixture hashes
+- [x] Gold rankings for IMG_5512 committed under `evals/fixtures/own-property/hero-gold.json`
+- [x] `evals/eval_hero_cover.py` produces per-room contact sheets
+- [x] Adopted scorer (E5) hits pass bar on gold (7/9 top-1); regression test locks rank-1
 - [ ] Overview on own-property build: user eyeball approval — *"I'd show this to a landlord"*
-- [ ] Documented experiment ID in this file with date, verdict, and link to artifact
+- [x] Documented experiment ID (E4 reject, E5 adopt) with date, verdict, and artifact links
+- [x] `curate-only` CLI re-runs curation + render without describe/detect cost
+- [x] Segment boundary trim (E3) with tests in `tests/test_ingest_segment.py`
 
-Until then, treat hero cover selection as **research in progress**, not
-shipped quality.
+E5 is **shipped** for rank-1 cover selection. Remaining gate: landlord eyeball on the
+overview gallery (review app or `report/inventory.html`).

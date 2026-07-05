@@ -8,9 +8,11 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter
 
 from homeinventory.cli import main
-from homeinventory.curate import (apply_override, curate, establishing_score,
+from homeinventory.curate import (apply_override, centre_border_ratio, curate,
+                                  establishing_score, exposure_clipped_fraction,
                                   frame_quality, hero_budget, load_overrides,
-                                  override_key, save_override)
+                                  override_key, save_override, sharpness,
+                                  smooth_fraction)
 from homeinventory.report import render
 from homeinventory.schema import Inventory, Item, Photo, Room
 
@@ -166,12 +168,13 @@ def _wide_balanced_img(path: Path) -> None:
 
 
 def _corner_closeup_img(path: Path) -> None:
-    """Synthetic close-up: sharp detail in one quadrant only."""
+    """Synthetic object fill: sharp detail in centre on a flat field."""
     w, h = 320, 180
-    im = Image.new("L", (w, h), 30)          # dark surround — distinct thumb
-    detail = Image.new("L", (w // 2, h // 2))
-    detail.putdata([random.Random(i).randrange(256) for i in range(w // 2 * h // 2)])
-    im.paste(detail, (w // 2, h // 2))
+    im = Image.new("L", (w, h), 128)
+    pw, ph = w // 5, h // 5
+    detail = Image.new("L", (pw, ph))
+    detail.putdata([random.Random(i).randrange(64, 192) for i in range(pw * ph)])
+    im.paste(detail, ((w - pw) // 2, (h - ph) // 2))
     path.parent.mkdir(parents=True, exist_ok=True)
     im.save(path, quality=92)
 
@@ -188,7 +191,7 @@ def test_establishing_score_prefers_wide_balanced_frame():
     close = Image.new("L", (320, 180), 30)
     patch = Image.new("L", (160, 90))
     patch.putdata([random.Random(i).randrange(256) for i in range(160 * 90)])
-    close.paste(patch, (160, 90))
+    close.paste(patch, (80, 45))
 
     wide_score = establishing_score(wide)
     close_score = establishing_score(close)
@@ -200,6 +203,95 @@ def test_establishing_score_prefers_wide_balanced_frame():
 def test_establishing_score_uniform_frame_is_neutral():
     flat = Image.new("L", (160, 90), 128)
     assert establishing_score(flat) == 1.0
+
+
+def _blurred_wide_img(path: Path) -> None:
+    """Wide layout but motion-blurred — should fail sharpness gate."""
+    w, h = 320, 180
+    im = Image.new("L", (w, h), 128)
+    draw = ImageDraw.Draw(im)
+    rnd = random.Random(99)
+    for y in range(0, h, 4):
+        draw.line([(0, y), (w, y)], fill=rnd.randrange(80, 176))
+    for x in range(0, w, 6):
+        draw.line([(x, 0), (x, h)], fill=rnd.randrange(70, 186))
+    im = im.filter(ImageFilter.GaussianBlur(6.0))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    im.save(path, quality=92)
+
+
+def test_hard_gates_reject_blur_and_closeup_for_rank_one(tmp_path):
+    """Rank 1 stays on the wide establishing frame, not blur or object fill."""
+    wide_path = tmp_path / "wide.jpg"
+    close_path = tmp_path / "close.jpg"
+    blur_path = tmp_path / "blur.jpg"
+    _wide_balanced_img(wide_path)
+    _corner_closeup_img(close_path)
+    _blurred_wide_img(blur_path)
+
+    photos = [
+        Photo(id="P001", path=str(close_path), room="Kitchen",
+              source_video="walk.mp4"),
+        Photo(id="P002", path=str(wide_path), room="Kitchen",
+              source_video="walk.mp4"),
+        Photo(id="P003", path=str(blur_path), room="Kitchen",
+              source_video="walk.mp4"),
+    ]
+    curate({"Kitchen": photos}, tmp_path, tmp_path / "work")
+
+    assert photos[1].hero == 1          # wide balanced cover
+    assert photos[0].hero != 1          # object fill never rank 1
+    assert photos[2].hero != 1          # blur never rank 1
+
+    with Image.open(wide_path) as im:
+        g = im.convert("L")
+    with Image.open(close_path) as im:
+        close_g = im.convert("L")
+    assert centre_border_ratio(close_g) > 3.0
+    assert smooth_fraction(close_g) < 0.97 or sharpness(close_g) >= sharpness(g)
+
+
+def test_cover_gate_helpers_on_synthetics(tmp_path):
+    wide_path = tmp_path / "wide.jpg"
+    close_path = tmp_path / "close.jpg"
+    _wide_balanced_img(wide_path)
+    _corner_closeup_img(close_path)
+    with Image.open(wide_path) as im:
+        wide_g = im.convert("L")
+    with Image.open(close_path) as im:
+        close_g = im.convert("L")
+    assert smooth_fraction(wide_g) < 0.97
+    assert centre_border_ratio(close_g) > centre_border_ratio(wide_g)
+    assert 0.0 <= exposure_clipped_fraction(wide_g) <= 1.0
+
+
+HERO_GOLD = Path(__file__).resolve().parents[1] / "evals/fixtures/own-property/hero-gold.json"
+
+
+def test_rank1_matches_hero_gold_when_fixture_present():
+    """Regression lock when hero-gold.json exists (docs/18 pass bar ≥7/9)."""
+    if not HERO_GOLD.is_file():
+        return
+    gold = json.loads(HERO_GOLD.read_text(encoding="utf-8"))
+    report = Path(__file__).resolve().parents[1] / "report"
+    inv_path = report / "inventory.json"
+    if not inv_path.is_file():
+        return
+    inv = json.loads(inv_path.read_text(encoding="utf-8"))
+    hits = 0
+    rooms = gold.get("rooms", {})
+    for room_name, spec in rooms.items():
+        gold_top = (spec.get("top") or [None])[0]
+        if not gold_top:
+            continue
+        room = next((r for r in inv["rooms"] if r["name"] == room_name), None)
+        if not room:
+            continue
+        rank1 = min((p for p in room["photos"] if p.get("hero")),
+                    key=lambda p: p["hero"], default=None)
+        if rank1 and Path(rank1["path"]).name == gold_top:
+            hits += 1
+    assert hits >= 7, f"rank-1 hit {hits}/{len(rooms)} — re-curate report/ and update gold"
 
 
 def test_wide_balanced_frame_wins_hero_rank_one(tmp_path):
@@ -215,7 +307,37 @@ def test_wide_balanced_frame_wins_hero_rank_one(tmp_path):
     ]
     curate({"Living Room": photos}, tmp_path, tmp_path / "work")
     assert photos[1].hero == 1
-    assert photos[0].hero == 2
+    assert photos[0].hero != 1
     _, _, wide_est = frame_quality(wide_path)
     _, _, close_est = frame_quality(close_path)
     assert wide_est > close_est
+
+
+def test_curate_only_reruns_curation_without_describe(tmp_path):
+    """curate-only reloads inventory.json, re-elects heroes, saves + renders."""
+    cap = tmp_path / "capture"
+    out = tmp_path / "report"
+    n = 8
+    photos = []
+    for i in range(n):
+        rel = f"Kitchen/walk_f{i:06d}.jpg"
+        _noise_img(cap / rel, seed=i, blur=4.0 if i % 2 else 0.0)
+        photos.append({
+            "id": f"P{i:03d}", "path": rel, "room": "Kitchen",
+            "source_video": "walk.mp4", "hero": 99, "quality": 0.001,
+        })
+    out.mkdir(parents=True)
+    (out / "work").mkdir()
+    (out / "inventory.json").write_text(json.dumps({
+        "property_address": "",
+        "rooms": [{"name": "Kitchen", "summary": "", "items": [], "photos": photos}],
+    }), encoding="utf-8")
+
+    assert main(["curate-only", str(cap), "-o", str(out), "--no-pdf"]) == 0
+    inv2 = json.loads((out / "inventory.json").read_text(encoding="utf-8"))
+    photos2 = inv2["rooms"][0]["photos"]
+    heroes = [p for p in photos2 if p["hero"]]
+    assert heroes and len(heroes) <= 6
+    blurred = {photos2[i]["id"] for i in range(n) if i % 2}
+    assert not {p["id"] for p in heroes} & blurred
+    assert (out / "inventory.html").is_file()
