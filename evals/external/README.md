@@ -92,38 +92,62 @@ curl -L -o evals/external/data/mit-indoor67/Indoor67.tar \
 
 ### Open Images V7 (household filter) — ML-E18
 
-**Purpose:** Pretrain Grounding DINO / YOLO on ~30–40 household classes aligned
-with `HOUSEHOLD_VOCAB` before InventoryFlex eval.
+**Purpose:** Pretrain Grounding DINO / YOLO on **42 household classes** aligned
+with `homeinventory.detect.HOUSEHOLD_VOCAB` (~35/48 inventory terms covered;
+long-tail gaps like *towel rail* and *smoke alarm* stay in our fixtures).
+Eval harness: `evals/eval_detect_oi_pretrain.py` →
+`evals/fixtures/inventoryflex/detect-comparison-oi.json`.
 
-**Do not download the full 561 GB corpus.** Filter by class:
+**Do not download the full 561 GB corpus.** Use the class filter only (~5–30 GB
+depending on `--max-samples`).
+
+**Household subset (OI display names)** — canonical list in `evals/oi_vocab.py`:
+
+```text
+Armchair, Bathtub, Bed, Bicycle, Bookcase, Cabinetry, Carpet, Ceiling fan,
+Chair, Chest of drawers, Clock, Coffee table, Computer monitor, Couch,
+Countertop, Cupboard, Curtain, Desk, Dishwasher, Door, Drawer, Faucet,
+Houseplant, Kitchen & dining room table, Lamp, Laptop, Microwave oven, Mirror,
+Oven, Picture frame, Poster, Range hood, Refrigerator, Sink, Shower, Sofa bed,
+Stool, Table, Television, Toilet, Washing machine, Window
+```
+
+**Inspect subset metadata (no download):**
 
 ```sh
-mkdir -p evals/external/data/open-images-v7
-uv run python - <<'PY'
-"""Fetch Open Images class list and write a household subset manifest.
-Requires: pip install fiftyone  (heavy — optional extra for one-off download)
-"""
-HOUSEHOLD = {
-    "Bathtub", "Bed", "Chair", "Coffee table", "Couch", "Desk", "Dishwasher",
-    "Door", "Faucet", "House", "Kitchen & dining room table", "Lamp",
-    "Microwave oven", "Mirror", "Oven", "Picture frame", "Refrigerator",
-    "Sink", "Sofa bed", "Stool", "Table", "Television", "Toilet", "Washing machine",
-    "Window", "Cabinetry", "Chest of drawers", "Countertop", "Tap", "Shower",
-}
-print("Household class filter:", len(HOUSEHOLD), "terms")
-print("Use FiftyOne zoo.open_images download with classes= above,")
-print("or aws s3 sync s3://open-images-dataset/ with class-filtered CSVs.")
-print("See https://storage.googleapis.com/openimages/web/download.html")
+python3 - <<'PY'
+from evals.oi_vocab import open_images_subset_doc
+import json
+print(json.dumps(open_images_subset_doc(), indent=2))
 PY
 ```
 
-**FiftyOne one-liner (after `pip install fiftyone`):**
+**FiftyOne filter command** (after `pip install fiftyone`):
 
 ```sh
+mkdir -p evals/external/data/open-images-v7
 fiftyone datasets download open-images-v7 \
-  --classes Bathtub,Bed,Chair,Dishwasher,Door,Faucet,Mirror,Oven,Refrigerator,Sink,Toilet,Washing machine \
+  --classes Armchair,Bathtub,Bed,Bicycle,Bookcase,Cabinetry,Carpet,Ceiling fan,Chair,Chest of drawers,Clock,Coffee table,Computer monitor,Couch,Countertop,Cupboard,Curtain,Desk,Dishwasher,Door,Drawer,Faucet,Houseplant,Kitchen & dining room table,Lamp,Laptop,Microwave oven,Mirror,Oven,Picture frame,Poster,Range hood,Refrigerator,Sink,Shower,Sofa bed,Stool,Table,Television,Toilet,Washing machine,Window \
   --max-samples 50000 \
   --dataset-dir evals/external/data/open-images-v7
+```
+
+Tune `--max-samples` for disk budget (50k ≈ 5–15 GB). Alternative: AWS CLI with
+[class-filtered CSVs](https://storage.googleapis.com/openimages/web/download.html)
+if FiftyOne is unavailable.
+
+**After pretrain**, save fine-tuned Grounding DINO weights to:
+
+```text
+evals/external/data/open-images-v7/weights/gdino-oi-household.pt
+```
+
+Then re-run ML-E18 eval (compares vs ML-E10 GDINO baseline):
+
+```sh
+python benchmarks/extract_inventoryflex.py
+python3 evals/eval_detect_oi_pretrain.py benchmarks/inventoryflex/capture \
+  evals/fixtures/inventoryflex/labels.json
 ```
 
 **Licence:** Apache 2.0.
@@ -163,7 +187,8 @@ When a spike consumes a dataset, add a row:
 
 | Date | ML-E | Dataset path | Notes |
 |---|---|---|---|
-| — | — | — | (fill on first download) |
+| 2026-07-05 | **ML-E16** | HF `keremberke/indoor-scene-classification` (stub) | Demo weights + bleed eval; no full download |
+| 2026-07-05 | **ML-E17** | KonIQ-10k (bootstrap fallback) | MUSIQ-proxy linear head; real KonIQ needs manual download |
 
 ## Related
 

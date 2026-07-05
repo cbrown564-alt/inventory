@@ -69,3 +69,80 @@ def test_segment_gold_fixture_loads():
     data = json.loads(path.read_text(encoding="utf-8"))
     assert len(data["rooms"]) == 10
     assert data["rooms"][0]["room"] == "Hallway"
+
+
+def test_eval_room_classifier_demo_writes_json(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import eval_room_classifier as erc  # noqa: E402
+
+    out = tmp_path / "room-clf-eval.json"
+    weights_path = tmp_path / "room-clf-weights.json"
+
+    class Args:
+        report = None
+        bleed = ROOT / "evals/fixtures/ownproperty-bleed-exclusions.json"
+        output = out
+        weights = weights_path
+        backend = "demo"
+        device = "cpu"
+        train_stub = True
+        stream_hf = False
+        max_samples = 8
+
+    erc.train_stub(output=weights_path, stream_hf=False, max_samples=8)
+    payload = erc.run_eval(Args())
+    assert payload["experiment"] == "ML-E16"
+    assert payload["metrics"]["n_exclusions"] >= 30
+    assert payload["metrics"]["would_reject_rate"] > 0
+    assert out.is_file()
+    assert weights_path.is_file()
+    wdata = json.loads(weights_path.read_text(encoding="utf-8"))
+    assert "fine_tune_steps" in wdata["training"]
+
+
+def test_train_iqa_koniq_bootstrap(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import train_iqa_koniq as tik  # noqa: E402
+
+    out = tmp_path / "iqa-koniq-weights.json"
+    sys.argv = [
+        "train_iqa_koniq.py",
+        "--bootstrap-scores",
+        "-o",
+        str(out),
+    ]
+    assert tik.main() == 0
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["experiment"] == "ML-E17"
+    assert data["training"]["mode"] == "bootstrap-musiq-proxy"
+    assert "disclaimer" in data
+    assert len(data["weights"]) == len(data["features"])
+
+
+def test_eval_iqa_koniq_demo(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import train_iqa_koniq as tik  # noqa: E402
+    import eval_iqa_koniq as eik  # noqa: E402
+
+    weights = tmp_path / "iqa-koniq-weights.json"
+    sys.argv = [
+        "train_iqa_koniq.py",
+        "--bootstrap-scores",
+        "-o",
+        str(weights),
+    ]
+    tik.main()
+
+    class DemoArgs:
+        report_dir = pathlib.Path("report")
+        gold = ROOT / "evals/fixtures/own-property/hero-gold.json"
+        koniq_weights = weights
+        mle6_weights = ROOT / "evals/fixtures/own-property/iqa-linear-weights.json"
+        output = tmp_path / "iqa-koniq-onnx.html"
+        json_output = tmp_path / "iqa-koniq-metrics.json"
+        demo = True
+
+    summary = eik.run(DemoArgs())
+    assert summary["experiment"] == "ML-E17"
+    assert DemoArgs.output.is_file()
+    assert DemoArgs.json_output.is_file()
