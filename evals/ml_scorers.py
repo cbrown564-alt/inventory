@@ -67,7 +67,10 @@ class SigLIPRelevanceScorer:
     def _encode_text(self, text: str):
         inputs = self.processor(text=[text], return_tensors="pt", padding=True)
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
-        return self.model.get_text_features(**inputs)
+        feat = self.model.get_text_features(**inputs)
+        if not hasattr(feat, "norm"):
+            feat = feat.pooler_output
+        return feat
 
     def _encode_image(self, path: Path):
         rgb = _load_grey_pil(path)
@@ -75,6 +78,8 @@ class SigLIPRelevanceScorer:
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
         with self.torch.no_grad():
             feat = self.model.get_image_features(**inputs)
+        if not hasattr(feat, "norm"):
+            feat = feat.pooler_output
         feat = feat / feat.norm(dim=-1, keepdim=True)
         return feat[0]
 
@@ -150,20 +155,13 @@ class FrameEmbedder:
 
         if backend == "dinov2":
             import timm
-            from torchvision import transforms
+            from timm.data import create_transform, resolve_model_data_config
 
             self.model = timm.create_model(
                 "vit_small_patch14_dinov2.lvd142m", pretrained=True)
             self.model.eval().to(device)
-            self.transform = transforms.Compose([
-                transforms.Resize(256, interpolation=transforms.InterpolationMode.BICUBIC),
-                transforms.CenterCrop(224),
-                transforms.ToTensor(),
-                transforms.Normalize(
-                    mean=(0.485, 0.456, 0.406),
-                    std=(0.229, 0.224, 0.225),
-                ),
-            ])
+            data_config = resolve_model_data_config(self.model)
+            self.transform = create_transform(**data_config, is_training=False)
 
             def encode_jpeg(jpeg: bytes):
                 from PIL import Image

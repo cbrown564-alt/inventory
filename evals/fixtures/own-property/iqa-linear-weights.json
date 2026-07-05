@@ -13,20 +13,20 @@
     "cover"
   ],
   "weights": [
-    8.048598,
-    11.903115,
-    -8.209767,
-    9.3912,
-    -2.137336,
-    16.087534,
-    4.680631
+    -25.652136,
+    10.271248,
+    15.285007,
+    0.566302,
+    -3.069676,
+    -2.544919,
+    2.860642
   ],
   "training": {
     "fixture": "evals/fixtures/own-property/iqa-comparison-mps.json",
-    "mode": "bootstrap-scores",
+    "mode": "features",
     "n_resolved_frames": 260,
     "ridge_alpha": 1.0,
     "n_samples": 260,
-    "spearman_pred_vs_musiq": 0.74
+    "spearman_pred_vs_musiq": 0.744
   }
 }

@@ -18,17 +18,43 @@ figcaption{font-size:11px;color:#bbb;text-align:center}
 <div class='summary'><h2>Metrics</h2><pre>
 {
   &quot;experiment&quot;: &quot;ML-E1&quot;,
-  &quot;mode&quot;: &quot;synthetic&quot;,
-  &quot;encoder&quot;: &quot;synthetic-distance&quot;,
-  &quot;n_frames&quot;: 32,
-  &quot;every_s&quot;: 5.0,
-  &quot;n_detected_boundaries&quot;: 3,
+  &quot;mode&quot;: &quot;video&quot;,
+  &quot;encoder&quot;: &quot;dinov2&quot;,
+  &quot;n_frames&quot;: 399,
+  &quot;every_s&quot;: 2.0,
+  &quot;n_detected_boundaries&quot;: 28,
   &quot;detected_boundaries_s&quot;: [
-    37.5,
-    77.5,
-    117.5
+    51.43,
+    55.46,
+    93.78,
+    103.87,
+    148.24,
+    154.28,
+    170.42,
+    182.52,
+    257.14,
+    261.18,
+    297.48,
+    311.6,
+    327.73,
+    335.8,
+    370.08,
+    382.18,
+    398.31,
+    406.38,
+    426.55,
+    466.89,
+    499.15,
+    531.42,
+    547.56,
+    561.68,
+    567.73,
+    628.23,
+    716.97,
+    797.64
   ],
   &quot;pass_bar_mean_error_s&quot;: 3.0,
+  &quot;video&quot;: &quot;examples/videos/IMG_5512.MOV&quot;,
   &quot;gold_video&quot;: &quot;IMG_5512.MOV&quot;,
   &quot;reference_boundaries_s&quot;: [
     38.0,
@@ -42,96 +68,905 @@ figcaption{font-size:11px;color:#bbb;text-align:center}
     735.0
   ],
   &quot;boundary_errors_s&quot;: [
-    0.5,
-    27.5,
-    150.5,
-    277.5,
-    367.5,
-    427.5,
-    467.5,
-    537.5,
-    617.5
+    13.43,
+    49.54,
+    174.22,
+    291.13,
+    336.76,
+    390.72,
+    414.58,
+    472.48,
+    477.86
   ],
-  &quot;mean_boundary_error_s&quot;: 319.28,
+  &quot;mean_boundary_error_s&quot;: 291.19,
   &quot;pass&quot;: false
 }
 </pre></div>
 <h2>Distance strip</h2>
 <div class='chart'>
-<div class='bar' style='height:16px' title='t≈0s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈5s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈10s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈15s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈20s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈25s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈30s d=0.080'></div>
-<div class='bar peak' style='height:74px' title='t≈35s d=0.450'></div>
-<div class='bar' style='height:63px' title='t≈40s d=0.380'></div>
-<div class='bar' style='height:16px' title='t≈45s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈50s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈55s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈60s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈65s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈70s d=0.080'></div>
-<div class='bar peak' style='height:74px' title='t≈75s d=0.450'></div>
-<div class='bar' style='height:63px' title='t≈80s d=0.380'></div>
-<div class='bar' style='height:16px' title='t≈85s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈90s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈95s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈100s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈105s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈110s d=0.080'></div>
-<div class='bar peak' style='height:74px' title='t≈115s d=0.450'></div>
-<div class='bar' style='height:63px' title='t≈120s d=0.380'></div>
-<div class='bar' style='height:16px' title='t≈125s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈130s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈135s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈140s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈145s d=0.080'></div>
-<div class='bar' style='height:16px' title='t≈150s d=0.080'></div>
+<div class='bar' style='height:14px' title='t≈0s d=0.164'></div>
+<div class='bar' style='height:47px' title='t≈2s d=0.656'></div>
+<div class='bar' style='height:42px' title='t≈4s d=0.578'></div>
+<div class='bar' style='height:60px' title='t≈6s d=0.848'></div>
+<div class='bar' style='height:42px' title='t≈8s d=0.573'></div>
+<div class='bar' style='height:28px' title='t≈10s d=0.366'></div>
+<div class='bar' style='height:20px' title='t≈12s d=0.245'></div>
+<div class='bar' style='height:18px' title='t≈14s d=0.222'></div>
+<div class='bar' style='height:23px' title='t≈16s d=0.300'></div>
+<div class='bar' style='height:37px' title='t≈18s d=0.500'></div>
+<div class='bar' style='height:42px' title='t≈20s d=0.572'></div>
+<div class='bar' style='height:41px' title='t≈22s d=0.557'></div>
+<div class='bar' style='height:25px' title='t≈24s d=0.320'></div>
+<div class='bar' style='height:47px' title='t≈26s d=0.650'></div>
+<div class='bar' style='height:47px' title='t≈28s d=0.647'></div>
+<div class='bar' style='height:50px' title='t≈30s d=0.701'></div>
+<div class='bar' style='height:20px' title='t≈32s d=0.242'></div>
+<div class='bar' style='height:44px' title='t≈34s d=0.608'></div>
+<div class='bar' style='height:42px' title='t≈36s d=0.578'></div>
+<div class='bar' style='height:27px' title='t≈38s d=0.349'></div>
+<div class='bar' style='height:33px' title='t≈40s d=0.450'></div>
+<div class='bar' style='height:40px' title='t≈42s d=0.546'></div>
+<div class='bar' style='height:20px' title='t≈44s d=0.249'></div>
+<div class='bar' style='height:22px' title='t≈46s d=0.284'></div>
+<div class='bar' style='height:25px' title='t≈48s d=0.317'></div>
+<div class='bar peak' style='height:74px' title='t≈50s d=1.051'></div>
+<div class='bar' style='height:28px' title='t≈52s d=0.367'></div>
+<div class='bar peak' style='height:61px' title='t≈54s d=0.867'></div>
+<div class='bar' style='height:48px' title='t≈56s d=0.672'></div>
+<div class='bar' style='height:57px' title='t≈58s d=0.801'></div>
+<div class='bar' style='height:17px' title='t≈60s d=0.204'></div>
+<div class='bar' style='height:57px' title='t≈63s d=0.798'></div>
+<div class='bar' style='height:56px' title='t≈65s d=0.787'></div>
+<div class='bar' style='height:58px' title='t≈67s d=0.818'></div>
+<div class='bar' style='height:16px' title='t≈69s d=0.195'></div>
+<div class='bar' style='height:9px' title='t≈71s d=0.088'></div>
+<div class='bar' style='height:55px' title='t≈73s d=0.767'></div>
+<div class='bar' style='height:8px' title='t≈75s d=0.070'></div>
+<div class='bar' style='height:12px' title='t≈77s d=0.126'></div>
+<div class='bar' style='height:9px' title='t≈79s d=0.084'></div>
+<div class='bar' style='height:8px' title='t≈81s d=0.071'></div>
+<div class='bar' style='height:16px' title='t≈83s d=0.192'></div>
+<div class='bar' style='height:33px' title='t≈85s d=0.438'></div>
+<div class='bar' style='height:30px' title='t≈87s d=0.403'></div>
+<div class='bar' style='height:27px' title='t≈89s d=0.353'></div>
+<div class='bar' style='height:61px' title='t≈91s d=0.860'></div>
+<div class='bar peak' style='height:63px' title='t≈93s d=0.897'></div>
+<div class='bar' style='height:18px' title='t≈95s d=0.220'></div>
+<div class='bar' style='height:18px' title='t≈97s d=0.218'></div>
+<div class='bar' style='height:32px' title='t≈99s d=0.421'></div>
+<div class='bar' style='height:65px' title='t≈101s d=0.919'></div>
+<div class='bar peak' style='height:69px' title='t≈103s d=0.979'></div>
+<div class='bar' style='height:22px' title='t≈105s d=0.283'></div>
+<div class='bar' style='height:27px' title='t≈107s d=0.352'></div>
+<div class='bar' style='height:35px' title='t≈109s d=0.477'></div>
+<div class='bar' style='height:46px' title='t≈111s d=0.637'></div>
+<div class='bar' style='height:58px' title='t≈113s d=0.822'></div>
+<div class='bar' style='height:16px' title='t≈115s d=0.189'></div>
+<div class='bar' style='height:44px' title='t≈117s d=0.601'></div>
+<div class='bar' style='height:40px' title='t≈119s d=0.545'></div>
+<div class='bar' style='height:33px' title='t≈121s d=0.446'></div>
+<div class='bar' style='height:24px' title='t≈123s d=0.307'></div>
+<div class='bar' style='height:15px' title='t≈125s d=0.179'></div>
+<div class='bar' style='height:9px' title='t≈127s d=0.089'></div>
+<div class='bar' style='height:37px' title='t≈129s d=0.498'></div>
+<div class='bar' style='height:46px' title='t≈131s d=0.645'></div>
+<div class='bar' style='height:32px' title='t≈133s d=0.423'></div>
+<div class='bar' style='height:22px' title='t≈135s d=0.282'></div>
+<div class='bar' style='height:55px' title='t≈137s d=0.775'></div>
+<div class='bar' style='height:13px' title='t≈139s d=0.142'></div>
+<div class='bar' style='height:10px' title='t≈141s d=0.103'></div>
+<div class='bar' style='height:15px' title='t≈143s d=0.168'></div>
+<div class='bar' style='height:35px' title='t≈145s d=0.471'></div>
+<div class='bar peak' style='height:60px' title='t≈147s d=0.852'></div>
+<div class='bar' style='height:60px' title='t≈149s d=0.843'></div>
+<div class='bar' style='height:13px' title='t≈151s d=0.147'></div>
+<div class='bar peak' style='height:60px' title='t≈153s d=0.855'></div>
+<div class='bar' style='height:56px' title='t≈155s d=0.781'></div>
+<div class='bar' style='height:12px' title='t≈157s d=0.131'></div>
+<div class='bar' style='height:27px' title='t≈159s d=0.358'></div>
+<div class='bar' style='height:28px' title='t≈161s d=0.365'></div>
+<div class='bar' style='height:27px' title='t≈163s d=0.360'></div>
+<div class='bar' style='height:47px' title='t≈165s d=0.658'></div>
+<div class='bar' style='height:25px' title='t≈167s d=0.326'></div>
+<div class='bar peak' style='height:68px' title='t≈169s d=0.974'></div>
+<div class='bar' style='height:25px' title='t≈171s d=0.323'></div>
+<div class='bar' style='height:9px' title='t≈173s d=0.084'></div>
+<div class='bar' style='height:11px' title='t≈175s d=0.107'></div>
+<div class='bar' style='height:15px' title='t≈177s d=0.173'></div>
+<div class='bar' style='height:20px' title='t≈179s d=0.251'></div>
+<div class='bar peak' style='height:64px' title='t≈182s d=0.908'></div>
+<div class='bar' style='height:29px' title='t≈184s d=0.381'></div>
+<div class='bar' style='height:29px' title='t≈186s d=0.380'></div>
+<div class='bar' style='height:39px' title='t≈188s d=0.536'></div>
+<div class='bar' style='height:45px' title='t≈190s d=0.623'></div>
+<div class='bar' style='height:41px' title='t≈192s d=0.559'></div>
+<div class='bar' style='height:34px' title='t≈194s d=0.461'></div>
+<div class='bar' style='height:52px' title='t≈196s d=0.733'></div>
+<div class='bar' style='height:23px' title='t≈198s d=0.291'></div>
+<div class='bar' style='height:26px' title='t≈200s d=0.333'></div>
+<div class='bar' style='height:11px' title='t≈202s d=0.106'></div>
+<div class='bar' style='height:14px' title='t≈204s d=0.153'></div>
+<div class='bar' style='height:33px' title='t≈206s d=0.439'></div>
+<div class='bar' style='height:38px' title='t≈208s d=0.521'></div>
+<div class='bar' style='height:41px' title='t≈210s d=0.568'></div>
+<div class='bar' style='height:51px' title='t≈212s d=0.716'></div>
+<div class='bar' style='height:22px' title='t≈214s d=0.271'></div>
+<div class='bar' style='height:51px' title='t≈216s d=0.710'></div>
+<div class='bar' style='height:49px' title='t≈218s d=0.686'></div>
+<div class='bar' style='height:46px' title='t≈220s d=0.641'></div>
+<div class='bar' style='height:47px' title='t≈222s d=0.654'></div>
+<div class='bar' style='height:55px' title='t≈224s d=0.772'></div>
+<div class='bar' style='height:13px' title='t≈226s d=0.137'></div>
+<div class='bar' style='height:9px' title='t≈228s d=0.076'></div>
+<div class='bar' style='height:7px' title='t≈230s d=0.051'></div>
+<div class='bar' style='height:25px' title='t≈232s d=0.321'></div>
+<div class='bar' style='height:48px' title='t≈234s d=0.672'></div>
+<div class='bar' style='height:50px' title='t≈236s d=0.691'></div>
+<div class='bar' style='height:16px' title='t≈238s d=0.184'></div>
+<div class='bar' style='height:55px' title='t≈240s d=0.774'></div>
+<div class='bar' style='height:22px' title='t≈242s d=0.282'></div>
+<div class='bar' style='height:27px' title='t≈244s d=0.349'></div>
+<div class='bar' style='height:33px' title='t≈246s d=0.439'></div>
+<div class='bar' style='height:51px' title='t≈248s d=0.710'></div>
+<div class='bar' style='height:49px' title='t≈250s d=0.681'></div>
+<div class='bar' style='height:26px' title='t≈252s d=0.343'></div>
+<div class='bar' style='height:19px' title='t≈254s d=0.226'></div>
+<div class='bar peak' style='height:67px' title='t≈256s d=0.947'></div>
+<div class='bar' style='height:35px' title='t≈258s d=0.475'></div>
+<div class='bar peak' style='height:68px' title='t≈260s d=0.974'></div>
+<div class='bar' style='height:22px' title='t≈262s d=0.280'></div>
+<div class='bar' style='height:23px' title='t≈264s d=0.289'></div>
+<div class='bar' style='height:23px' title='t≈266s d=0.287'></div>
+<div class='bar' style='height:58px' title='t≈268s d=0.813'></div>
+<div class='bar' style='height:50px' title='t≈270s d=0.695'></div>
+<div class='bar' style='height:46px' title='t≈272s d=0.642'></div>
+<div class='bar' style='height:42px' title='t≈274s d=0.579'></div>
+<div class='bar' style='height:35px' title='t≈276s d=0.473'></div>
+<div class='bar' style='height:58px' title='t≈278s d=0.824'></div>
+<div class='bar' style='height:16px' title='t≈280s d=0.184'></div>
+<div class='bar' style='height:45px' title='t≈282s d=0.629'></div>
+<div class='bar' style='height:12px' title='t≈284s d=0.126'></div>
+<div class='bar' style='height:27px' title='t≈286s d=0.359'></div>
+<div class='bar' style='height:27px' title='t≈288s d=0.353'></div>
+<div class='bar' style='height:22px' title='t≈290s d=0.275'></div>
+<div class='bar' style='height:37px' title='t≈292s d=0.503'></div>
+<div class='bar' style='height:34px' title='t≈294s d=0.463'></div>
+<div class='bar peak' style='height:63px' title='t≈296s d=0.887'></div>
+<div class='bar' style='height:22px' title='t≈298s d=0.272'></div>
+<div class='bar' style='height:18px' title='t≈300s d=0.213'></div>
+<div class='bar' style='height:56px' title='t≈303s d=0.789'></div>
+<div class='bar' style='height:9px' title='t≈305s d=0.089'></div>
+<div class='bar' style='height:19px' title='t≈307s d=0.238'></div>
+<div class='bar' style='height:54px' title='t≈309s d=0.758'></div>
+<div class='bar peak' style='height:63px' title='t≈311s d=0.899'></div>
+<div class='bar' style='height:49px' title='t≈313s d=0.676'></div>
+<div class='bar' style='height:44px' title='t≈315s d=0.610'></div>
+<div class='bar' style='height:50px' title='t≈317s d=0.699'></div>
+<div class='bar' style='height:28px' title='t≈319s d=0.375'></div>
+<div class='bar' style='height:6px' title='t≈321s d=0.037'></div>
+<div class='bar' style='height:36px' title='t≈323s d=0.492'></div>
+<div class='bar' style='height:54px' title='t≈325s d=0.760'></div>
+<div class='bar peak' style='height:61px' title='t≈327s d=0.859'></div>
+<div class='bar' style='height:13px' title='t≈329s d=0.144'></div>
+<div class='bar' style='height:12px' title='t≈331s d=0.121'></div>
+<div class='bar' style='height:57px' title='t≈333s d=0.803'></div>
+<div class='bar peak' style='height:61px' title='t≈335s d=0.867'></div>
+<div class='bar' style='height:8px' title='t≈337s d=0.070'></div>
+<div class='bar' style='height:9px' title='t≈339s d=0.081'></div>
+<div class='bar' style='height:14px' title='t≈341s d=0.160'></div>
+<div class='bar' style='height:21px' title='t≈343s d=0.266'></div>
+<div class='bar' style='height:56px' title='t≈345s d=0.786'></div>
+<div class='bar' style='height:28px' title='t≈347s d=0.365'></div>
+<div class='bar' style='height:27px' title='t≈349s d=0.354'></div>
+<div class='bar' style='height:24px' title='t≈351s d=0.315'></div>
+<div class='bar' style='height:17px' title='t≈353s d=0.204'></div>
+<div class='bar' style='height:27px' title='t≈355s d=0.348'></div>
+<div class='bar' style='height:42px' title='t≈357s d=0.572'></div>
+<div class='bar' style='height:26px' title='t≈359s d=0.332'></div>
+<div class='bar' style='height:25px' title='t≈361s d=0.324'></div>
+<div class='bar' style='height:58px' title='t≈363s d=0.814'></div>
+<div class='bar' style='height:50px' title='t≈365s d=0.703'></div>
+<div class='bar' style='height:18px' title='t≈367s d=0.222'></div>
+<div class='bar peak' style='height:61px' title='t≈369s d=0.870'></div>
+<div class='bar' style='height:51px' title='t≈371s d=0.719'></div>
+<div class='bar' style='height:54px' title='t≈373s d=0.755'></div>
+<div class='bar' style='height:50px' title='t≈375s d=0.701'></div>
+<div class='bar' style='height:12px' title='t≈377s d=0.121'></div>
+<div class='bar' style='height:55px' title='t≈379s d=0.770'></div>
+<div class='bar peak' style='height:61px' title='t≈381s d=0.864'></div>
+<div class='bar' style='height:24px' title='t≈383s d=0.310'></div>
+<div class='bar' style='height:23px' title='t≈385s d=0.293'></div>
+<div class='bar' style='height:31px' title='t≈387s d=0.409'></div>
+<div class='bar' style='height:24px' title='t≈389s d=0.314'></div>
+<div class='bar' style='height:28px' title='t≈391s d=0.363'></div>
+<div class='bar' style='height:35px' title='t≈393s d=0.469'></div>
+<div class='bar' style='height:50px' title='t≈395s d=0.698'></div>
+<div class='bar peak' style='height:63px' title='t≈397s d=0.889'></div>
+<div class='bar' style='height:21px' title='t≈399s d=0.267'></div>
+<div class='bar' style='height:41px' title='t≈401s d=0.566'></div>
+<div class='bar' style='height:57px' title='t≈403s d=0.810'></div>
+<div class='bar peak' style='height:64px' title='t≈405s d=0.906'></div>
+<div class='bar' style='height:21px' title='t≈407s d=0.262'></div>
+<div class='bar' style='height:32px' title='t≈409s d=0.432'></div>
+<div class='bar' style='height:32px' title='t≈411s d=0.429'></div>
+<div class='bar' style='height:36px' title='t≈413s d=0.487'></div>
+<div class='bar' style='height:30px' title='t≈415s d=0.392'></div>
+<div class='bar' style='height:55px' title='t≈417s d=0.770'></div>
+<div class='bar' style='height:31px' title='t≈419s d=0.410'></div>
+<div class='bar' style='height:18px' title='t≈422s d=0.218'></div>
+<div class='bar' style='height:61px' title='t≈424s d=0.870'></div>
+<div class='bar peak' style='height:64px' title='t≈426s d=0.909'></div>
+<div class='bar' style='height:51px' title='t≈428s d=0.707'></div>
+<div class='bar' style='height:19px' title='t≈430s d=0.237'></div>
+<div class='bar' style='height:38px' title='t≈432s d=0.514'></div>
+<div class='bar' style='height:59px' title='t≈434s d=0.831'></div>
+<div class='bar' style='height:47px' title='t≈436s d=0.656'></div>
+<div class='bar' style='height:45px' title='t≈438s d=0.624'></div>
+<div class='bar' style='height:25px' title='t≈440s d=0.321'></div>
+<div class='bar' style='height:42px' title='t≈442s d=0.571'></div>
+<div class='bar' style='height:56px' title='t≈444s d=0.787'></div>
+<div class='bar' style='height:54px' title='t≈446s d=0.756'></div>
+<div class='bar' style='height:53px' title='t≈448s d=0.748'></div>
+<div class='bar' style='height:54px' title='t≈450s d=0.752'></div>
+<div class='bar' style='height:49px' title='t≈452s d=0.686'></div>
+<div class='bar' style='height:42px' title='t≈454s d=0.573'></div>
+<div class='bar' style='height:32px' title='t≈456s d=0.434'></div>
+<div class='bar' style='height:32px' title='t≈458s d=0.428'></div>
+<div class='bar' style='height:49px' title='t≈460s d=0.683'></div>
+<div class='bar' style='height:12px' title='t≈462s d=0.127'></div>
+<div class='bar' style='height:16px' title='t≈464s d=0.193'></div>
+<div class='bar peak' style='height:61px' title='t≈466s d=0.863'></div>
+<div class='bar' style='height:32px' title='t≈468s d=0.425'></div>
+<div class='bar' style='height:40px' title='t≈470s d=0.547'></div>
+<div class='bar' style='height:5px' title='t≈472s d=0.030'></div>
+<div class='bar' style='height:11px' title='t≈474s d=0.116'></div>
+<div class='bar' style='height:15px' title='t≈476s d=0.177'></div>
+<div class='bar' style='height:18px' title='t≈478s d=0.213'></div>
+<div class='bar' style='height:14px' title='t≈480s d=0.159'></div>
+<div class='bar' style='height:15px' title='t≈482s d=0.171'></div>
+<div class='bar' style='height:21px' title='t≈484s d=0.267'></div>
+<div class='bar' style='height:45px' title='t≈486s d=0.629'></div>
+<div class='bar' style='height:8px' title='t≈488s d=0.068'></div>
+<div class='bar' style='height:18px' title='t≈490s d=0.224'></div>
+<div class='bar' style='height:26px' title='t≈492s d=0.343'></div>
+<div class='bar' style='height:42px' title='t≈494s d=0.573'></div>
+<div class='bar' style='height:41px' title='t≈496s d=0.556'></div>
+<div class='bar peak' style='height:70px' title='t≈498s d=1.003'></div>
+<div class='bar' style='height:10px' title='t≈500s d=0.097'></div>
+<div class='bar' style='height:12px' title='t≈502s d=0.126'></div>
+<div class='bar' style='height:43px' title='t≈504s d=0.595'></div>
+<div class='bar' style='height:38px' title='t≈506s d=0.521'></div>
+<div class='bar' style='height:14px' title='t≈508s d=0.152'></div>
+<div class='bar' style='height:45px' title='t≈510s d=0.621'></div>
+<div class='bar' style='height:53px' title='t≈512s d=0.738'></div>
+<div class='bar' style='height:50px' title='t≈514s d=0.703'></div>
+<div class='bar' style='height:17px' title='t≈516s d=0.207'></div>
+<div class='bar' style='height:16px' title='t≈518s d=0.186'></div>
+<div class='bar' style='height:54px' title='t≈520s d=0.751'></div>
+<div class='bar' style='height:54px' title='t≈522s d=0.759'></div>
+<div class='bar' style='height:24px' title='t≈524s d=0.301'></div>
+<div class='bar' style='height:48px' title='t≈526s d=0.668'></div>
+<div class='bar' style='height:60px' title='t≈528s d=0.847'></div>
+<div class='bar peak' style='height:64px' title='t≈530s d=0.915'></div>
+<div class='bar' style='height:15px' title='t≈532s d=0.169'></div>
+<div class='bar' style='height:38px' title='t≈534s d=0.512'></div>
+<div class='bar' style='height:15px' title='t≈536s d=0.179'></div>
+<div class='bar' style='height:23px' title='t≈538s d=0.289'></div>
+<div class='bar' style='height:24px' title='t≈540s d=0.315'></div>
+<div class='bar' style='height:23px' title='t≈543s d=0.299'></div>
+<div class='bar' style='height:41px' title='t≈545s d=0.563'></div>
+<div class='bar peak' style='height:62px' title='t≈547s d=0.883'></div>
+<div class='bar' style='height:36px' title='t≈549s d=0.489'></div>
+<div class='bar' style='height:44px' title='t≈551s d=0.605'></div>
+<div class='bar' style='height:16px' title='t≈553s d=0.181'></div>
+<div class='bar' style='height:19px' title='t≈555s d=0.235'></div>
+<div class='bar' style='height:51px' title='t≈557s d=0.718'></div>
+<div class='bar' style='height:16px' title='t≈559s d=0.188'></div>
+<div class='bar peak' style='height:65px' title='t≈561s d=0.929'></div>
+<div class='bar' style='height:62px' title='t≈563s d=0.878'></div>
+<div class='bar' style='height:44px' title='t≈565s d=0.605'></div>
+<div class='bar peak' style='height:62px' title='t≈567s d=0.879'></div>
+<div class='bar' style='height:47px' title='t≈569s d=0.645'></div>
+<div class='bar' style='height:21px' title='t≈571s d=0.256'></div>
+<div class='bar' style='height:58px' title='t≈573s d=0.817'></div>
+<div class='bar' style='height:50px' title='t≈575s d=0.704'></div>
+<div class='bar' style='height:44px' title='t≈577s d=0.607'></div>
+<div class='bar' style='height:36px' title='t≈579s d=0.481'></div>
+<div class='bar' style='height:39px' title='t≈581s d=0.528'></div>
+<div class='bar' style='height:47px' title='t≈583s d=0.647'></div>
+<div class='bar' style='height:48px' title='t≈585s d=0.661'></div>
+<div class='bar' style='height:47px' title='t≈587s d=0.646'></div>
+<div class='bar' style='height:23px' title='t≈589s d=0.292'></div>
+<div class='bar' style='height:55px' title='t≈591s d=0.779'></div>
+<div class='bar' style='height:32px' title='t≈593s d=0.423'></div>
+<div class='bar' style='height:44px' title='t≈595s d=0.602'></div>
+<div class='bar' style='height:15px' title='t≈597s d=0.179'></div>
+<div class='bar' style='height:12px' title='t≈599s d=0.124'></div>
+<div class='bar' style='height:25px' title='t≈601s d=0.330'></div>
+<div class='bar' style='height:18px' title='t≈603s d=0.222'></div>
+<div class='bar' style='height:15px' title='t≈605s d=0.180'></div>
+<div class='bar' style='height:16px' title='t≈607s d=0.194'></div>
+<div class='bar' style='height:14px' title='t≈609s d=0.152'></div>
+<div class='bar' style='height:12px' title='t≈611s d=0.123'></div>
+<div class='bar' style='height:22px' title='t≈613s d=0.272'></div>
+<div class='bar' style='height:25px' title='t≈615s d=0.319'></div>
+<div class='bar' style='height:51px' title='t≈617s d=0.711'></div>
+<div class='bar' style='height:25px' title='t≈619s d=0.327'></div>
+<div class='bar' style='height:57px' title='t≈621s d=0.799'></div>
+<div class='bar' style='height:21px' title='t≈623s d=0.263'></div>
+<div class='bar' style='height:13px' title='t≈625s d=0.145'></div>
+<div class='bar peak' style='height:62px' title='t≈627s d=0.880'></div>
+<div class='bar' style='height:9px' title='t≈629s d=0.084'></div>
+<div class='bar' style='height:8px' title='t≈631s d=0.073'></div>
+<div class='bar' style='height:11px' title='t≈633s d=0.108'></div>
+<div class='bar' style='height:29px' title='t≈635s d=0.390'></div>
+<div class='bar' style='height:43px' title='t≈637s d=0.588'></div>
+<div class='bar' style='height:47px' title='t≈639s d=0.658'></div>
+<div class='bar' style='height:11px' title='t≈641s d=0.105'></div>
+<div class='bar' style='height:44px' title='t≈643s d=0.601'></div>
+<div class='bar' style='height:17px' title='t≈645s d=0.195'></div>
+<div class='bar' style='height:40px' title='t≈647s d=0.548'></div>
+<div class='bar' style='height:31px' title='t≈649s d=0.411'></div>
+<div class='bar' style='height:23px' title='t≈651s d=0.296'></div>
+<div class='bar' style='height:21px' title='t≈653s d=0.258'></div>
+<div class='bar' style='height:38px' title='t≈655s d=0.512'></div>
+<div class='bar' style='height:18px' title='t≈657s d=0.212'></div>
+<div class='bar' style='height:41px' title='t≈659s d=0.563'></div>
+<div class='bar' style='height:46px' title='t≈662s d=0.633'></div>
+<div class='bar' style='height:43px' title='t≈664s d=0.589'></div>
+<div class='bar' style='height:20px' title='t≈666s d=0.248'></div>
+<div class='bar' style='height:14px' title='t≈668s d=0.152'></div>
+<div class='bar' style='height:55px' title='t≈670s d=0.777'></div>
+<div class='bar' style='height:22px' title='t≈672s d=0.277'></div>
+<div class='bar' style='height:41px' title='t≈674s d=0.569'></div>
+<div class='bar' style='height:7px' title='t≈676s d=0.048'></div>
+<div class='bar' style='height:7px' title='t≈678s d=0.051'></div>
+<div class='bar' style='height:11px' title='t≈680s d=0.111'></div>
+<div class='bar' style='height:27px' title='t≈682s d=0.350'></div>
+<div class='bar' style='height:28px' title='t≈684s d=0.374'></div>
+<div class='bar' style='height:32px' title='t≈686s d=0.431'></div>
+<div class='bar' style='height:21px' title='t≈688s d=0.265'></div>
+<div class='bar' style='height:28px' title='t≈690s d=0.371'></div>
+<div class='bar' style='height:23px' title='t≈692s d=0.297'></div>
+<div class='bar' style='height:27px' title='t≈694s d=0.360'></div>
+<div class='bar' style='height:19px' title='t≈696s d=0.226'></div>
+<div class='bar' style='height:19px' title='t≈698s d=0.231'></div>
+<div class='bar' style='height:19px' title='t≈700s d=0.232'></div>
+<div class='bar' style='height:22px' title='t≈702s d=0.279'></div>
+<div class='bar' style='height:21px' title='t≈704s d=0.256'></div>
+<div class='bar' style='height:17px' title='t≈706s d=0.208'></div>
+<div class='bar' style='height:22px' title='t≈708s d=0.281'></div>
+<div class='bar' style='height:12px' title='t≈710s d=0.124'></div>
+<div class='bar' style='height:24px' title='t≈712s d=0.305'></div>
+<div class='bar' style='height:60px' title='t≈714s d=0.854'></div>
+<div class='bar peak' style='height:62px' title='t≈716s d=0.871'></div>
+<div class='bar' style='height:50px' title='t≈718s d=0.697'></div>
+<div class='bar' style='height:43px' title='t≈720s d=0.598'></div>
+<div class='bar' style='height:16px' title='t≈722s d=0.184'></div>
+<div class='bar' style='height:28px' title='t≈724s d=0.374'></div>
+<div class='bar' style='height:18px' title='t≈726s d=0.214'></div>
+<div class='bar' style='height:38px' title='t≈728s d=0.521'></div>
+<div class='bar' style='height:24px' title='t≈730s d=0.304'></div>
+<div class='bar' style='height:21px' title='t≈732s d=0.259'></div>
+<div class='bar' style='height:10px' title='t≈734s d=0.091'></div>
+<div class='bar' style='height:25px' title='t≈736s d=0.315'></div>
+<div class='bar' style='height:25px' title='t≈738s d=0.322'></div>
+<div class='bar' style='height:38px' title='t≈740s d=0.511'></div>
+<div class='bar' style='height:33px' title='t≈742s d=0.442'></div>
+<div class='bar' style='height:43px' title='t≈744s d=0.589'></div>
+<div class='bar' style='height:34px' title='t≈746s d=0.458'></div>
+<div class='bar' style='height:45px' title='t≈748s d=0.618'></div>
+<div class='bar' style='height:7px' title='t≈750s d=0.050'></div>
+<div class='bar' style='height:10px' title='t≈752s d=0.102'></div>
+<div class='bar' style='height:11px' title='t≈754s d=0.119'></div>
+<div class='bar' style='height:54px' title='t≈756s d=0.752'></div>
+<div class='bar' style='height:59px' title='t≈758s d=0.830'></div>
+<div class='bar' style='height:54px' title='t≈760s d=0.764'></div>
+<div class='bar' style='height:19px' title='t≈762s d=0.229'></div>
+<div class='bar' style='height:59px' title='t≈764s d=0.827'></div>
+<div class='bar' style='height:37px' title='t≈766s d=0.505'></div>
+<div class='bar' style='height:28px' title='t≈768s d=0.370'></div>
+<div class='bar' style='height:29px' title='t≈770s d=0.380'></div>
+<div class='bar' style='height:32px' title='t≈772s d=0.426'></div>
+<div class='bar' style='height:49px' title='t≈774s d=0.676'></div>
+<div class='bar' style='height:31px' title='t≈776s d=0.413'></div>
+<div class='bar' style='height:57px' title='t≈778s d=0.804'></div>
+<div class='bar' style='height:10px' title='t≈780s d=0.099'></div>
+<div class='bar' style='height:24px' title='t≈783s d=0.301'></div>
+<div class='bar' style='height:51px' title='t≈785s d=0.715'></div>
+<div class='bar' style='height:19px' title='t≈787s d=0.230'></div>
+<div class='bar' style='height:44px' title='t≈789s d=0.607'></div>
+<div class='bar' style='height:55px' title='t≈791s d=0.776'></div>
+<div class='bar' style='height:43px' title='t≈793s d=0.596'></div>
+<div class='bar' style='height:15px' title='t≈795s d=0.173'></div>
+<div class='bar peak' style='height:73px' title='t≈797s d=1.044'></div>
+<div class='bar' style='height:60px' title='t≈799s d=0.854'></div>
+<div class='bar' style='height:68px' title='t≈801s d=0.968'></div>
 </div>
 <h2>segment_00</h2>
-<p class='meta'>0:00–0:35 (8 frames)</p><div class='row'>
+<p class='meta'>0:00–0:50 (26 frames)</p><div class='row'>
 <figure class='boundary'><img src='segment-embed-strip/t00000.jpg' loading='lazy'><figcaption>0:00</figcaption></figure>
-<figure><img src='segment-embed-strip/t00005.jpg' loading='lazy'><figcaption>0:05</figcaption></figure>
+<figure><img src='segment-embed-strip/t00002.jpg' loading='lazy'><figcaption>0:02</figcaption></figure>
+<figure><img src='segment-embed-strip/t00004.jpg' loading='lazy'><figcaption>0:04</figcaption></figure>
+<figure><img src='segment-embed-strip/t00006.jpg' loading='lazy'><figcaption>0:06</figcaption></figure>
+<figure><img src='segment-embed-strip/t00008.jpg' loading='lazy'><figcaption>0:08</figcaption></figure>
 <figure><img src='segment-embed-strip/t00010.jpg' loading='lazy'><figcaption>0:10</figcaption></figure>
-<figure><img src='segment-embed-strip/t00015.jpg' loading='lazy'><figcaption>0:15</figcaption></figure>
+<figure><img src='segment-embed-strip/t00012.jpg' loading='lazy'><figcaption>0:12</figcaption></figure>
+<figure><img src='segment-embed-strip/t00014.jpg' loading='lazy'><figcaption>0:14</figcaption></figure>
+<figure><img src='segment-embed-strip/t00016.jpg' loading='lazy'><figcaption>0:16</figcaption></figure>
+<figure><img src='segment-embed-strip/t00018.jpg' loading='lazy'><figcaption>0:18</figcaption></figure>
 <figure><img src='segment-embed-strip/t00020.jpg' loading='lazy'><figcaption>0:20</figcaption></figure>
-<figure><img src='segment-embed-strip/t00025.jpg' loading='lazy'><figcaption>0:25</figcaption></figure>
+<figure><img src='segment-embed-strip/t00022.jpg' loading='lazy'><figcaption>0:22</figcaption></figure>
+<figure><img src='segment-embed-strip/t00024.jpg' loading='lazy'><figcaption>0:24</figcaption></figure>
+<figure><img src='segment-embed-strip/t00026.jpg' loading='lazy'><figcaption>0:26</figcaption></figure>
+<figure><img src='segment-embed-strip/t00028.jpg' loading='lazy'><figcaption>0:28</figcaption></figure>
 <figure><img src='segment-embed-strip/t00030.jpg' loading='lazy'><figcaption>0:30</figcaption></figure>
-<figure><img src='segment-embed-strip/t00035.jpg' loading='lazy'><figcaption>0:35</figcaption></figure>
+<figure><img src='segment-embed-strip/t00032.jpg' loading='lazy'><figcaption>0:32</figcaption></figure>
+<figure><img src='segment-embed-strip/t00034.jpg' loading='lazy'><figcaption>0:34</figcaption></figure>
+<figure><img src='segment-embed-strip/t00036.jpg' loading='lazy'><figcaption>0:36</figcaption></figure>
+<figure><img src='segment-embed-strip/t00038.jpg' loading='lazy'><figcaption>0:38</figcaption></figure>
+<figure><img src='segment-embed-strip/t00040.jpg' loading='lazy'><figcaption>0:40</figcaption></figure>
+<figure><img src='segment-embed-strip/t00042.jpg' loading='lazy'><figcaption>0:42</figcaption></figure>
+<figure><img src='segment-embed-strip/t00044.jpg' loading='lazy'><figcaption>0:44</figcaption></figure>
+<figure><img src='segment-embed-strip/t00046.jpg' loading='lazy'><figcaption>0:46</figcaption></figure>
+<figure><img src='segment-embed-strip/t00048.jpg' loading='lazy'><figcaption>0:48</figcaption></figure>
+<figure><img src='segment-embed-strip/t00050.jpg' loading='lazy'><figcaption>0:50</figcaption></figure>
 </div>
 <h2>segment_01</h2>
-<p class='meta'>0:40–1:15 (8 frames)</p><div class='row'>
-<figure class='boundary'><img src='segment-embed-strip/t00040.jpg' loading='lazy'><figcaption>0:40</figcaption></figure>
-<figure><img src='segment-embed-strip/t00045.jpg' loading='lazy'><figcaption>0:45</figcaption></figure>
-<figure><img src='segment-embed-strip/t00050.jpg' loading='lazy'><figcaption>0:50</figcaption></figure>
-<figure><img src='segment-embed-strip/t00055.jpg' loading='lazy'><figcaption>0:55</figcaption></figure>
-<figure><img src='segment-embed-strip/t00060.jpg' loading='lazy'><figcaption>1:00</figcaption></figure>
-<figure><img src='segment-embed-strip/t00065.jpg' loading='lazy'><figcaption>1:05</figcaption></figure>
-<figure><img src='segment-embed-strip/t00070.jpg' loading='lazy'><figcaption>1:10</figcaption></figure>
-<figure><img src='segment-embed-strip/t00075.jpg' loading='lazy'><figcaption>1:15</figcaption></figure>
+<p class='meta'>0:52–0:54 (2 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00052.jpg' loading='lazy'><figcaption>0:52</figcaption></figure>
+<figure><img src='segment-embed-strip/t00054.jpg' loading='lazy'><figcaption>0:54</figcaption></figure>
 </div>
 <h2>segment_02</h2>
-<p class='meta'>1:20–1:55 (8 frames)</p><div class='row'>
-<figure class='boundary'><img src='segment-embed-strip/t00080.jpg' loading='lazy'><figcaption>1:20</figcaption></figure>
-<figure><img src='segment-embed-strip/t00085.jpg' loading='lazy'><figcaption>1:25</figcaption></figure>
-<figure><img src='segment-embed-strip/t00090.jpg' loading='lazy'><figcaption>1:30</figcaption></figure>
-<figure><img src='segment-embed-strip/t00095.jpg' loading='lazy'><figcaption>1:35</figcaption></figure>
-<figure><img src='segment-embed-strip/t00100.jpg' loading='lazy'><figcaption>1:40</figcaption></figure>
-<figure><img src='segment-embed-strip/t00105.jpg' loading='lazy'><figcaption>1:45</figcaption></figure>
-<figure><img src='segment-embed-strip/t00110.jpg' loading='lazy'><figcaption>1:50</figcaption></figure>
-<figure><img src='segment-embed-strip/t00115.jpg' loading='lazy'><figcaption>1:55</figcaption></figure>
+<p class='meta'>0:56–1:32 (19 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00056.jpg' loading='lazy'><figcaption>0:56</figcaption></figure>
+<figure><img src='segment-embed-strip/t00058.jpg' loading='lazy'><figcaption>0:58</figcaption></figure>
+<figure><img src='segment-embed-strip/t00060.jpg' loading='lazy'><figcaption>1:00</figcaption></figure>
+<figure><img src='segment-embed-strip/t00063.jpg' loading='lazy'><figcaption>1:02</figcaption></figure>
+<figure><img src='segment-embed-strip/t00065.jpg' loading='lazy'><figcaption>1:04</figcaption></figure>
+<figure><img src='segment-embed-strip/t00067.jpg' loading='lazy'><figcaption>1:06</figcaption></figure>
+<figure><img src='segment-embed-strip/t00069.jpg' loading='lazy'><figcaption>1:08</figcaption></figure>
+<figure><img src='segment-embed-strip/t00071.jpg' loading='lazy'><figcaption>1:10</figcaption></figure>
+<figure><img src='segment-embed-strip/t00073.jpg' loading='lazy'><figcaption>1:12</figcaption></figure>
+<figure><img src='segment-embed-strip/t00075.jpg' loading='lazy'><figcaption>1:14</figcaption></figure>
+<figure><img src='segment-embed-strip/t00077.jpg' loading='lazy'><figcaption>1:16</figcaption></figure>
+<figure><img src='segment-embed-strip/t00079.jpg' loading='lazy'><figcaption>1:18</figcaption></figure>
+<figure><img src='segment-embed-strip/t00081.jpg' loading='lazy'><figcaption>1:20</figcaption></figure>
+<figure><img src='segment-embed-strip/t00083.jpg' loading='lazy'><figcaption>1:22</figcaption></figure>
+<figure><img src='segment-embed-strip/t00085.jpg' loading='lazy'><figcaption>1:24</figcaption></figure>
+<figure><img src='segment-embed-strip/t00087.jpg' loading='lazy'><figcaption>1:26</figcaption></figure>
+<figure><img src='segment-embed-strip/t00089.jpg' loading='lazy'><figcaption>1:28</figcaption></figure>
+<figure><img src='segment-embed-strip/t00091.jpg' loading='lazy'><figcaption>1:30</figcaption></figure>
+<figure><img src='segment-embed-strip/t00093.jpg' loading='lazy'><figcaption>1:32</figcaption></figure>
 </div>
 <h2>segment_03</h2>
-<p class='meta'>2:00–2:35 (8 frames)</p><div class='row'>
-<figure class='boundary'><img src='segment-embed-strip/t00120.jpg' loading='lazy'><figcaption>2:00</figcaption></figure>
+<p class='meta'>1:34–1:42 (5 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00095.jpg' loading='lazy'><figcaption>1:34</figcaption></figure>
+<figure><img src='segment-embed-strip/t00097.jpg' loading='lazy'><figcaption>1:36</figcaption></figure>
+<figure><img src='segment-embed-strip/t00099.jpg' loading='lazy'><figcaption>1:38</figcaption></figure>
+<figure><img src='segment-embed-strip/t00101.jpg' loading='lazy'><figcaption>1:40</figcaption></figure>
+<figure><img src='segment-embed-strip/t00103.jpg' loading='lazy'><figcaption>1:42</figcaption></figure>
+</div>
+<h2>segment_04</h2>
+<p class='meta'>1:44–2:27 (22 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00105.jpg' loading='lazy'><figcaption>1:44</figcaption></figure>
+<figure><img src='segment-embed-strip/t00107.jpg' loading='lazy'><figcaption>1:46</figcaption></figure>
+<figure><img src='segment-embed-strip/t00109.jpg' loading='lazy'><figcaption>1:48</figcaption></figure>
+<figure><img src='segment-embed-strip/t00111.jpg' loading='lazy'><figcaption>1:50</figcaption></figure>
+<figure><img src='segment-embed-strip/t00113.jpg' loading='lazy'><figcaption>1:52</figcaption></figure>
+<figure><img src='segment-embed-strip/t00115.jpg' loading='lazy'><figcaption>1:54</figcaption></figure>
+<figure><img src='segment-embed-strip/t00117.jpg' loading='lazy'><figcaption>1:56</figcaption></figure>
+<figure><img src='segment-embed-strip/t00119.jpg' loading='lazy'><figcaption>1:58</figcaption></figure>
+<figure><img src='segment-embed-strip/t00121.jpg' loading='lazy'><figcaption>2:01</figcaption></figure>
+<figure><img src='segment-embed-strip/t00123.jpg' loading='lazy'><figcaption>2:03</figcaption></figure>
 <figure><img src='segment-embed-strip/t00125.jpg' loading='lazy'><figcaption>2:05</figcaption></figure>
-<figure><img src='segment-embed-strip/t00130.jpg' loading='lazy'><figcaption>2:10</figcaption></figure>
+<figure><img src='segment-embed-strip/t00127.jpg' loading='lazy'><figcaption>2:07</figcaption></figure>
+<figure><img src='segment-embed-strip/t00129.jpg' loading='lazy'><figcaption>2:09</figcaption></figure>
+<figure><img src='segment-embed-strip/t00131.jpg' loading='lazy'><figcaption>2:11</figcaption></figure>
+<figure><img src='segment-embed-strip/t00133.jpg' loading='lazy'><figcaption>2:13</figcaption></figure>
 <figure><img src='segment-embed-strip/t00135.jpg' loading='lazy'><figcaption>2:15</figcaption></figure>
-<figure><img src='segment-embed-strip/t00140.jpg' loading='lazy'><figcaption>2:20</figcaption></figure>
+<figure><img src='segment-embed-strip/t00137.jpg' loading='lazy'><figcaption>2:17</figcaption></figure>
+<figure><img src='segment-embed-strip/t00139.jpg' loading='lazy'><figcaption>2:19</figcaption></figure>
+<figure><img src='segment-embed-strip/t00141.jpg' loading='lazy'><figcaption>2:21</figcaption></figure>
+<figure><img src='segment-embed-strip/t00143.jpg' loading='lazy'><figcaption>2:23</figcaption></figure>
 <figure><img src='segment-embed-strip/t00145.jpg' loading='lazy'><figcaption>2:25</figcaption></figure>
-<figure><img src='segment-embed-strip/t00150.jpg' loading='lazy'><figcaption>2:30</figcaption></figure>
-<figure><img src='segment-embed-strip/t00155.jpg' loading='lazy'><figcaption>2:35</figcaption></figure>
+<figure><img src='segment-embed-strip/t00147.jpg' loading='lazy'><figcaption>2:27</figcaption></figure>
+</div>
+<h2>segment_05</h2>
+<p class='meta'>2:29–2:33 (3 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00149.jpg' loading='lazy'><figcaption>2:29</figcaption></figure>
+<figure><img src='segment-embed-strip/t00151.jpg' loading='lazy'><figcaption>2:31</figcaption></figure>
+<figure><img src='segment-embed-strip/t00153.jpg' loading='lazy'><figcaption>2:33</figcaption></figure>
+</div>
+<h2>segment_06</h2>
+<p class='meta'>2:35–2:49 (8 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00155.jpg' loading='lazy'><figcaption>2:35</figcaption></figure>
+<figure><img src='segment-embed-strip/t00157.jpg' loading='lazy'><figcaption>2:37</figcaption></figure>
+<figure><img src='segment-embed-strip/t00159.jpg' loading='lazy'><figcaption>2:39</figcaption></figure>
+<figure><img src='segment-embed-strip/t00161.jpg' loading='lazy'><figcaption>2:41</figcaption></figure>
+<figure><img src='segment-embed-strip/t00163.jpg' loading='lazy'><figcaption>2:43</figcaption></figure>
+<figure><img src='segment-embed-strip/t00165.jpg' loading='lazy'><figcaption>2:45</figcaption></figure>
+<figure><img src='segment-embed-strip/t00167.jpg' loading='lazy'><figcaption>2:47</figcaption></figure>
+<figure><img src='segment-embed-strip/t00169.jpg' loading='lazy'><figcaption>2:49</figcaption></figure>
+</div>
+<h2>segment_07</h2>
+<p class='meta'>2:51–3:01 (6 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00171.jpg' loading='lazy'><figcaption>2:51</figcaption></figure>
+<figure><img src='segment-embed-strip/t00173.jpg' loading='lazy'><figcaption>2:53</figcaption></figure>
+<figure><img src='segment-embed-strip/t00175.jpg' loading='lazy'><figcaption>2:55</figcaption></figure>
+<figure><img src='segment-embed-strip/t00177.jpg' loading='lazy'><figcaption>2:57</figcaption></figure>
+<figure><img src='segment-embed-strip/t00179.jpg' loading='lazy'><figcaption>2:59</figcaption></figure>
+<figure><img src='segment-embed-strip/t00182.jpg' loading='lazy'><figcaption>3:01</figcaption></figure>
+</div>
+<h2>segment_08</h2>
+<p class='meta'>3:03–4:16 (37 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00184.jpg' loading='lazy'><figcaption>3:03</figcaption></figure>
+<figure><img src='segment-embed-strip/t00186.jpg' loading='lazy'><figcaption>3:05</figcaption></figure>
+<figure><img src='segment-embed-strip/t00188.jpg' loading='lazy'><figcaption>3:07</figcaption></figure>
+<figure><img src='segment-embed-strip/t00190.jpg' loading='lazy'><figcaption>3:09</figcaption></figure>
+<figure><img src='segment-embed-strip/t00192.jpg' loading='lazy'><figcaption>3:11</figcaption></figure>
+<figure><img src='segment-embed-strip/t00194.jpg' loading='lazy'><figcaption>3:13</figcaption></figure>
+<figure><img src='segment-embed-strip/t00196.jpg' loading='lazy'><figcaption>3:15</figcaption></figure>
+<figure><img src='segment-embed-strip/t00198.jpg' loading='lazy'><figcaption>3:17</figcaption></figure>
+<figure><img src='segment-embed-strip/t00200.jpg' loading='lazy'><figcaption>3:19</figcaption></figure>
+<figure><img src='segment-embed-strip/t00202.jpg' loading='lazy'><figcaption>3:21</figcaption></figure>
+<figure><img src='segment-embed-strip/t00204.jpg' loading='lazy'><figcaption>3:23</figcaption></figure>
+<figure><img src='segment-embed-strip/t00206.jpg' loading='lazy'><figcaption>3:25</figcaption></figure>
+<figure><img src='segment-embed-strip/t00208.jpg' loading='lazy'><figcaption>3:27</figcaption></figure>
+<figure><img src='segment-embed-strip/t00210.jpg' loading='lazy'><figcaption>3:29</figcaption></figure>
+<figure><img src='segment-embed-strip/t00212.jpg' loading='lazy'><figcaption>3:31</figcaption></figure>
+<figure><img src='segment-embed-strip/t00214.jpg' loading='lazy'><figcaption>3:33</figcaption></figure>
+<figure><img src='segment-embed-strip/t00216.jpg' loading='lazy'><figcaption>3:35</figcaption></figure>
+<figure><img src='segment-embed-strip/t00218.jpg' loading='lazy'><figcaption>3:37</figcaption></figure>
+<figure><img src='segment-embed-strip/t00220.jpg' loading='lazy'><figcaption>3:39</figcaption></figure>
+<figure><img src='segment-embed-strip/t00222.jpg' loading='lazy'><figcaption>3:41</figcaption></figure>
+<figure><img src='segment-embed-strip/t00224.jpg' loading='lazy'><figcaption>3:43</figcaption></figure>
+<figure><img src='segment-embed-strip/t00226.jpg' loading='lazy'><figcaption>3:45</figcaption></figure>
+<figure><img src='segment-embed-strip/t00228.jpg' loading='lazy'><figcaption>3:47</figcaption></figure>
+<figure><img src='segment-embed-strip/t00230.jpg' loading='lazy'><figcaption>3:49</figcaption></figure>
+<figure><img src='segment-embed-strip/t00232.jpg' loading='lazy'><figcaption>3:51</figcaption></figure>
+<figure><img src='segment-embed-strip/t00234.jpg' loading='lazy'><figcaption>3:53</figcaption></figure>
+<figure><img src='segment-embed-strip/t00236.jpg' loading='lazy'><figcaption>3:55</figcaption></figure>
+<figure><img src='segment-embed-strip/t00238.jpg' loading='lazy'><figcaption>3:57</figcaption></figure>
+<figure><img src='segment-embed-strip/t00240.jpg' loading='lazy'><figcaption>4:00</figcaption></figure>
+<figure><img src='segment-embed-strip/t00242.jpg' loading='lazy'><figcaption>4:02</figcaption></figure>
+<figure><img src='segment-embed-strip/t00244.jpg' loading='lazy'><figcaption>4:04</figcaption></figure>
+<figure><img src='segment-embed-strip/t00246.jpg' loading='lazy'><figcaption>4:06</figcaption></figure>
+<figure><img src='segment-embed-strip/t00248.jpg' loading='lazy'><figcaption>4:08</figcaption></figure>
+<figure><img src='segment-embed-strip/t00250.jpg' loading='lazy'><figcaption>4:10</figcaption></figure>
+<figure><img src='segment-embed-strip/t00252.jpg' loading='lazy'><figcaption>4:12</figcaption></figure>
+<figure><img src='segment-embed-strip/t00254.jpg' loading='lazy'><figcaption>4:14</figcaption></figure>
+<figure><img src='segment-embed-strip/t00256.jpg' loading='lazy'><figcaption>4:16</figcaption></figure>
+</div>
+<h2>segment_09</h2>
+<p class='meta'>4:18–4:20 (2 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00258.jpg' loading='lazy'><figcaption>4:18</figcaption></figure>
+<figure><img src='segment-embed-strip/t00260.jpg' loading='lazy'><figcaption>4:20</figcaption></figure>
+</div>
+<h2>segment_10</h2>
+<p class='meta'>4:22–4:56 (18 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00262.jpg' loading='lazy'><figcaption>4:22</figcaption></figure>
+<figure><img src='segment-embed-strip/t00264.jpg' loading='lazy'><figcaption>4:24</figcaption></figure>
+<figure><img src='segment-embed-strip/t00266.jpg' loading='lazy'><figcaption>4:26</figcaption></figure>
+<figure><img src='segment-embed-strip/t00268.jpg' loading='lazy'><figcaption>4:28</figcaption></figure>
+<figure><img src='segment-embed-strip/t00270.jpg' loading='lazy'><figcaption>4:30</figcaption></figure>
+<figure><img src='segment-embed-strip/t00272.jpg' loading='lazy'><figcaption>4:32</figcaption></figure>
+<figure><img src='segment-embed-strip/t00274.jpg' loading='lazy'><figcaption>4:34</figcaption></figure>
+<figure><img src='segment-embed-strip/t00276.jpg' loading='lazy'><figcaption>4:36</figcaption></figure>
+<figure><img src='segment-embed-strip/t00278.jpg' loading='lazy'><figcaption>4:38</figcaption></figure>
+<figure><img src='segment-embed-strip/t00280.jpg' loading='lazy'><figcaption>4:40</figcaption></figure>
+<figure><img src='segment-embed-strip/t00282.jpg' loading='lazy'><figcaption>4:42</figcaption></figure>
+<figure><img src='segment-embed-strip/t00284.jpg' loading='lazy'><figcaption>4:44</figcaption></figure>
+<figure><img src='segment-embed-strip/t00286.jpg' loading='lazy'><figcaption>4:46</figcaption></figure>
+<figure><img src='segment-embed-strip/t00288.jpg' loading='lazy'><figcaption>4:48</figcaption></figure>
+<figure><img src='segment-embed-strip/t00290.jpg' loading='lazy'><figcaption>4:50</figcaption></figure>
+<figure><img src='segment-embed-strip/t00292.jpg' loading='lazy'><figcaption>4:52</figcaption></figure>
+<figure><img src='segment-embed-strip/t00294.jpg' loading='lazy'><figcaption>4:54</figcaption></figure>
+<figure><img src='segment-embed-strip/t00296.jpg' loading='lazy'><figcaption>4:56</figcaption></figure>
+</div>
+<h2>segment_11</h2>
+<p class='meta'>4:58–5:10 (7 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00298.jpg' loading='lazy'><figcaption>4:58</figcaption></figure>
+<figure><img src='segment-embed-strip/t00300.jpg' loading='lazy'><figcaption>5:00</figcaption></figure>
+<figure><img src='segment-embed-strip/t00303.jpg' loading='lazy'><figcaption>5:02</figcaption></figure>
+<figure><img src='segment-embed-strip/t00305.jpg' loading='lazy'><figcaption>5:04</figcaption></figure>
+<figure><img src='segment-embed-strip/t00307.jpg' loading='lazy'><figcaption>5:06</figcaption></figure>
+<figure><img src='segment-embed-strip/t00309.jpg' loading='lazy'><figcaption>5:08</figcaption></figure>
+<figure><img src='segment-embed-strip/t00311.jpg' loading='lazy'><figcaption>5:10</figcaption></figure>
+</div>
+<h2>segment_12</h2>
+<p class='meta'>5:12–5:26 (8 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00313.jpg' loading='lazy'><figcaption>5:12</figcaption></figure>
+<figure><img src='segment-embed-strip/t00315.jpg' loading='lazy'><figcaption>5:14</figcaption></figure>
+<figure><img src='segment-embed-strip/t00317.jpg' loading='lazy'><figcaption>5:16</figcaption></figure>
+<figure><img src='segment-embed-strip/t00319.jpg' loading='lazy'><figcaption>5:18</figcaption></figure>
+<figure><img src='segment-embed-strip/t00321.jpg' loading='lazy'><figcaption>5:20</figcaption></figure>
+<figure><img src='segment-embed-strip/t00323.jpg' loading='lazy'><figcaption>5:22</figcaption></figure>
+<figure><img src='segment-embed-strip/t00325.jpg' loading='lazy'><figcaption>5:24</figcaption></figure>
+<figure><img src='segment-embed-strip/t00327.jpg' loading='lazy'><figcaption>5:26</figcaption></figure>
+</div>
+<h2>segment_13</h2>
+<p class='meta'>5:28–5:34 (4 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00329.jpg' loading='lazy'><figcaption>5:28</figcaption></figure>
+<figure><img src='segment-embed-strip/t00331.jpg' loading='lazy'><figcaption>5:30</figcaption></figure>
+<figure><img src='segment-embed-strip/t00333.jpg' loading='lazy'><figcaption>5:32</figcaption></figure>
+<figure><img src='segment-embed-strip/t00335.jpg' loading='lazy'><figcaption>5:34</figcaption></figure>
+</div>
+<h2>segment_14</h2>
+<p class='meta'>5:36–6:09 (17 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00337.jpg' loading='lazy'><figcaption>5:36</figcaption></figure>
+<figure><img src='segment-embed-strip/t00339.jpg' loading='lazy'><figcaption>5:38</figcaption></figure>
+<figure><img src='segment-embed-strip/t00341.jpg' loading='lazy'><figcaption>5:40</figcaption></figure>
+<figure><img src='segment-embed-strip/t00343.jpg' loading='lazy'><figcaption>5:42</figcaption></figure>
+<figure><img src='segment-embed-strip/t00345.jpg' loading='lazy'><figcaption>5:44</figcaption></figure>
+<figure><img src='segment-embed-strip/t00347.jpg' loading='lazy'><figcaption>5:46</figcaption></figure>
+<figure><img src='segment-embed-strip/t00349.jpg' loading='lazy'><figcaption>5:48</figcaption></figure>
+<figure><img src='segment-embed-strip/t00351.jpg' loading='lazy'><figcaption>5:50</figcaption></figure>
+<figure><img src='segment-embed-strip/t00353.jpg' loading='lazy'><figcaption>5:52</figcaption></figure>
+<figure><img src='segment-embed-strip/t00355.jpg' loading='lazy'><figcaption>5:54</figcaption></figure>
+<figure><img src='segment-embed-strip/t00357.jpg' loading='lazy'><figcaption>5:56</figcaption></figure>
+<figure><img src='segment-embed-strip/t00359.jpg' loading='lazy'><figcaption>5:58</figcaption></figure>
+<figure><img src='segment-embed-strip/t00361.jpg' loading='lazy'><figcaption>6:01</figcaption></figure>
+<figure><img src='segment-embed-strip/t00363.jpg' loading='lazy'><figcaption>6:03</figcaption></figure>
+<figure><img src='segment-embed-strip/t00365.jpg' loading='lazy'><figcaption>6:05</figcaption></figure>
+<figure><img src='segment-embed-strip/t00367.jpg' loading='lazy'><figcaption>6:07</figcaption></figure>
+<figure><img src='segment-embed-strip/t00369.jpg' loading='lazy'><figcaption>6:09</figcaption></figure>
+</div>
+<h2>segment_15</h2>
+<p class='meta'>6:11–6:21 (6 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00371.jpg' loading='lazy'><figcaption>6:11</figcaption></figure>
+<figure><img src='segment-embed-strip/t00373.jpg' loading='lazy'><figcaption>6:13</figcaption></figure>
+<figure><img src='segment-embed-strip/t00375.jpg' loading='lazy'><figcaption>6:15</figcaption></figure>
+<figure><img src='segment-embed-strip/t00377.jpg' loading='lazy'><figcaption>6:17</figcaption></figure>
+<figure><img src='segment-embed-strip/t00379.jpg' loading='lazy'><figcaption>6:19</figcaption></figure>
+<figure><img src='segment-embed-strip/t00381.jpg' loading='lazy'><figcaption>6:21</figcaption></figure>
+</div>
+<h2>segment_16</h2>
+<p class='meta'>6:23–6:37 (8 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00383.jpg' loading='lazy'><figcaption>6:23</figcaption></figure>
+<figure><img src='segment-embed-strip/t00385.jpg' loading='lazy'><figcaption>6:25</figcaption></figure>
+<figure><img src='segment-embed-strip/t00387.jpg' loading='lazy'><figcaption>6:27</figcaption></figure>
+<figure><img src='segment-embed-strip/t00389.jpg' loading='lazy'><figcaption>6:29</figcaption></figure>
+<figure><img src='segment-embed-strip/t00391.jpg' loading='lazy'><figcaption>6:31</figcaption></figure>
+<figure><img src='segment-embed-strip/t00393.jpg' loading='lazy'><figcaption>6:33</figcaption></figure>
+<figure><img src='segment-embed-strip/t00395.jpg' loading='lazy'><figcaption>6:35</figcaption></figure>
+<figure><img src='segment-embed-strip/t00397.jpg' loading='lazy'><figcaption>6:37</figcaption></figure>
+</div>
+<h2>segment_17</h2>
+<p class='meta'>6:39–6:45 (4 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00399.jpg' loading='lazy'><figcaption>6:39</figcaption></figure>
+<figure><img src='segment-embed-strip/t00401.jpg' loading='lazy'><figcaption>6:41</figcaption></figure>
+<figure><img src='segment-embed-strip/t00403.jpg' loading='lazy'><figcaption>6:43</figcaption></figure>
+<figure><img src='segment-embed-strip/t00405.jpg' loading='lazy'><figcaption>6:45</figcaption></figure>
+</div>
+<h2>segment_18</h2>
+<p class='meta'>6:47–7:05 (10 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00407.jpg' loading='lazy'><figcaption>6:47</figcaption></figure>
+<figure><img src='segment-embed-strip/t00409.jpg' loading='lazy'><figcaption>6:49</figcaption></figure>
+<figure><img src='segment-embed-strip/t00411.jpg' loading='lazy'><figcaption>6:51</figcaption></figure>
+<figure><img src='segment-embed-strip/t00413.jpg' loading='lazy'><figcaption>6:53</figcaption></figure>
+<figure><img src='segment-embed-strip/t00415.jpg' loading='lazy'><figcaption>6:55</figcaption></figure>
+<figure><img src='segment-embed-strip/t00417.jpg' loading='lazy'><figcaption>6:57</figcaption></figure>
+<figure><img src='segment-embed-strip/t00419.jpg' loading='lazy'><figcaption>6:59</figcaption></figure>
+<figure><img src='segment-embed-strip/t00422.jpg' loading='lazy'><figcaption>7:01</figcaption></figure>
+<figure><img src='segment-embed-strip/t00424.jpg' loading='lazy'><figcaption>7:03</figcaption></figure>
+<figure><img src='segment-embed-strip/t00426.jpg' loading='lazy'><figcaption>7:05</figcaption></figure>
+</div>
+<h2>segment_19</h2>
+<p class='meta'>7:07–7:45 (20 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00428.jpg' loading='lazy'><figcaption>7:07</figcaption></figure>
+<figure><img src='segment-embed-strip/t00430.jpg' loading='lazy'><figcaption>7:09</figcaption></figure>
+<figure><img src='segment-embed-strip/t00432.jpg' loading='lazy'><figcaption>7:11</figcaption></figure>
+<figure><img src='segment-embed-strip/t00434.jpg' loading='lazy'><figcaption>7:13</figcaption></figure>
+<figure><img src='segment-embed-strip/t00436.jpg' loading='lazy'><figcaption>7:15</figcaption></figure>
+<figure><img src='segment-embed-strip/t00438.jpg' loading='lazy'><figcaption>7:17</figcaption></figure>
+<figure><img src='segment-embed-strip/t00440.jpg' loading='lazy'><figcaption>7:19</figcaption></figure>
+<figure><img src='segment-embed-strip/t00442.jpg' loading='lazy'><figcaption>7:21</figcaption></figure>
+<figure><img src='segment-embed-strip/t00444.jpg' loading='lazy'><figcaption>7:23</figcaption></figure>
+<figure><img src='segment-embed-strip/t00446.jpg' loading='lazy'><figcaption>7:25</figcaption></figure>
+<figure><img src='segment-embed-strip/t00448.jpg' loading='lazy'><figcaption>7:27</figcaption></figure>
+<figure><img src='segment-embed-strip/t00450.jpg' loading='lazy'><figcaption>7:29</figcaption></figure>
+<figure><img src='segment-embed-strip/t00452.jpg' loading='lazy'><figcaption>7:31</figcaption></figure>
+<figure><img src='segment-embed-strip/t00454.jpg' loading='lazy'><figcaption>7:33</figcaption></figure>
+<figure><img src='segment-embed-strip/t00456.jpg' loading='lazy'><figcaption>7:35</figcaption></figure>
+<figure><img src='segment-embed-strip/t00458.jpg' loading='lazy'><figcaption>7:37</figcaption></figure>
+<figure><img src='segment-embed-strip/t00460.jpg' loading='lazy'><figcaption>7:39</figcaption></figure>
+<figure><img src='segment-embed-strip/t00462.jpg' loading='lazy'><figcaption>7:41</figcaption></figure>
+<figure><img src='segment-embed-strip/t00464.jpg' loading='lazy'><figcaption>7:43</figcaption></figure>
+<figure><img src='segment-embed-strip/t00466.jpg' loading='lazy'><figcaption>7:45</figcaption></figure>
+</div>
+<h2>segment_20</h2>
+<p class='meta'>7:47–8:18 (16 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00468.jpg' loading='lazy'><figcaption>7:47</figcaption></figure>
+<figure><img src='segment-embed-strip/t00470.jpg' loading='lazy'><figcaption>7:49</figcaption></figure>
+<figure><img src='segment-embed-strip/t00472.jpg' loading='lazy'><figcaption>7:51</figcaption></figure>
+<figure><img src='segment-embed-strip/t00474.jpg' loading='lazy'><figcaption>7:53</figcaption></figure>
+<figure><img src='segment-embed-strip/t00476.jpg' loading='lazy'><figcaption>7:55</figcaption></figure>
+<figure><img src='segment-embed-strip/t00478.jpg' loading='lazy'><figcaption>7:57</figcaption></figure>
+<figure><img src='segment-embed-strip/t00480.jpg' loading='lazy'><figcaption>8:00</figcaption></figure>
+<figure><img src='segment-embed-strip/t00482.jpg' loading='lazy'><figcaption>8:02</figcaption></figure>
+<figure><img src='segment-embed-strip/t00484.jpg' loading='lazy'><figcaption>8:04</figcaption></figure>
+<figure><img src='segment-embed-strip/t00486.jpg' loading='lazy'><figcaption>8:06</figcaption></figure>
+<figure><img src='segment-embed-strip/t00488.jpg' loading='lazy'><figcaption>8:08</figcaption></figure>
+<figure><img src='segment-embed-strip/t00490.jpg' loading='lazy'><figcaption>8:10</figcaption></figure>
+<figure><img src='segment-embed-strip/t00492.jpg' loading='lazy'><figcaption>8:12</figcaption></figure>
+<figure><img src='segment-embed-strip/t00494.jpg' loading='lazy'><figcaption>8:14</figcaption></figure>
+<figure><img src='segment-embed-strip/t00496.jpg' loading='lazy'><figcaption>8:16</figcaption></figure>
+<figure><img src='segment-embed-strip/t00498.jpg' loading='lazy'><figcaption>8:18</figcaption></figure>
+</div>
+<h2>segment_21</h2>
+<p class='meta'>8:20–8:50 (16 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00500.jpg' loading='lazy'><figcaption>8:20</figcaption></figure>
+<figure><img src='segment-embed-strip/t00502.jpg' loading='lazy'><figcaption>8:22</figcaption></figure>
+<figure><img src='segment-embed-strip/t00504.jpg' loading='lazy'><figcaption>8:24</figcaption></figure>
+<figure><img src='segment-embed-strip/t00506.jpg' loading='lazy'><figcaption>8:26</figcaption></figure>
+<figure><img src='segment-embed-strip/t00508.jpg' loading='lazy'><figcaption>8:28</figcaption></figure>
+<figure><img src='segment-embed-strip/t00510.jpg' loading='lazy'><figcaption>8:30</figcaption></figure>
+<figure><img src='segment-embed-strip/t00512.jpg' loading='lazy'><figcaption>8:32</figcaption></figure>
+<figure><img src='segment-embed-strip/t00514.jpg' loading='lazy'><figcaption>8:34</figcaption></figure>
+<figure><img src='segment-embed-strip/t00516.jpg' loading='lazy'><figcaption>8:36</figcaption></figure>
+<figure><img src='segment-embed-strip/t00518.jpg' loading='lazy'><figcaption>8:38</figcaption></figure>
+<figure><img src='segment-embed-strip/t00520.jpg' loading='lazy'><figcaption>8:40</figcaption></figure>
+<figure><img src='segment-embed-strip/t00522.jpg' loading='lazy'><figcaption>8:42</figcaption></figure>
+<figure><img src='segment-embed-strip/t00524.jpg' loading='lazy'><figcaption>8:44</figcaption></figure>
+<figure><img src='segment-embed-strip/t00526.jpg' loading='lazy'><figcaption>8:46</figcaption></figure>
+<figure><img src='segment-embed-strip/t00528.jpg' loading='lazy'><figcaption>8:48</figcaption></figure>
+<figure><img src='segment-embed-strip/t00530.jpg' loading='lazy'><figcaption>8:50</figcaption></figure>
+</div>
+<h2>segment_22</h2>
+<p class='meta'>8:52–9:06 (8 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00532.jpg' loading='lazy'><figcaption>8:52</figcaption></figure>
+<figure><img src='segment-embed-strip/t00534.jpg' loading='lazy'><figcaption>8:54</figcaption></figure>
+<figure><img src='segment-embed-strip/t00536.jpg' loading='lazy'><figcaption>8:56</figcaption></figure>
+<figure><img src='segment-embed-strip/t00538.jpg' loading='lazy'><figcaption>8:58</figcaption></figure>
+<figure><img src='segment-embed-strip/t00540.jpg' loading='lazy'><figcaption>9:00</figcaption></figure>
+<figure><img src='segment-embed-strip/t00543.jpg' loading='lazy'><figcaption>9:02</figcaption></figure>
+<figure><img src='segment-embed-strip/t00545.jpg' loading='lazy'><figcaption>9:04</figcaption></figure>
+<figure><img src='segment-embed-strip/t00547.jpg' loading='lazy'><figcaption>9:06</figcaption></figure>
+</div>
+<h2>segment_23</h2>
+<p class='meta'>9:08–9:20 (7 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00549.jpg' loading='lazy'><figcaption>9:08</figcaption></figure>
+<figure><img src='segment-embed-strip/t00551.jpg' loading='lazy'><figcaption>9:10</figcaption></figure>
+<figure><img src='segment-embed-strip/t00553.jpg' loading='lazy'><figcaption>9:12</figcaption></figure>
+<figure><img src='segment-embed-strip/t00555.jpg' loading='lazy'><figcaption>9:14</figcaption></figure>
+<figure><img src='segment-embed-strip/t00557.jpg' loading='lazy'><figcaption>9:16</figcaption></figure>
+<figure><img src='segment-embed-strip/t00559.jpg' loading='lazy'><figcaption>9:18</figcaption></figure>
+<figure><img src='segment-embed-strip/t00561.jpg' loading='lazy'><figcaption>9:20</figcaption></figure>
+</div>
+<h2>segment_24</h2>
+<p class='meta'>9:22–9:26 (3 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00563.jpg' loading='lazy'><figcaption>9:22</figcaption></figure>
+<figure><img src='segment-embed-strip/t00565.jpg' loading='lazy'><figcaption>9:24</figcaption></figure>
+<figure><img src='segment-embed-strip/t00567.jpg' loading='lazy'><figcaption>9:26</figcaption></figure>
+</div>
+<h2>segment_25</h2>
+<p class='meta'>9:28–10:27 (30 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00569.jpg' loading='lazy'><figcaption>9:28</figcaption></figure>
+<figure><img src='segment-embed-strip/t00571.jpg' loading='lazy'><figcaption>9:30</figcaption></figure>
+<figure><img src='segment-embed-strip/t00573.jpg' loading='lazy'><figcaption>9:32</figcaption></figure>
+<figure><img src='segment-embed-strip/t00575.jpg' loading='lazy'><figcaption>9:34</figcaption></figure>
+<figure><img src='segment-embed-strip/t00577.jpg' loading='lazy'><figcaption>9:36</figcaption></figure>
+<figure><img src='segment-embed-strip/t00579.jpg' loading='lazy'><figcaption>9:38</figcaption></figure>
+<figure><img src='segment-embed-strip/t00581.jpg' loading='lazy'><figcaption>9:40</figcaption></figure>
+<figure><img src='segment-embed-strip/t00583.jpg' loading='lazy'><figcaption>9:42</figcaption></figure>
+<figure><img src='segment-embed-strip/t00585.jpg' loading='lazy'><figcaption>9:44</figcaption></figure>
+<figure><img src='segment-embed-strip/t00587.jpg' loading='lazy'><figcaption>9:46</figcaption></figure>
+<figure><img src='segment-embed-strip/t00589.jpg' loading='lazy'><figcaption>9:48</figcaption></figure>
+<figure><img src='segment-embed-strip/t00591.jpg' loading='lazy'><figcaption>9:50</figcaption></figure>
+<figure><img src='segment-embed-strip/t00593.jpg' loading='lazy'><figcaption>9:52</figcaption></figure>
+<figure><img src='segment-embed-strip/t00595.jpg' loading='lazy'><figcaption>9:54</figcaption></figure>
+<figure><img src='segment-embed-strip/t00597.jpg' loading='lazy'><figcaption>9:56</figcaption></figure>
+<figure><img src='segment-embed-strip/t00599.jpg' loading='lazy'><figcaption>9:58</figcaption></figure>
+<figure><img src='segment-embed-strip/t00601.jpg' loading='lazy'><figcaption>10:01</figcaption></figure>
+<figure><img src='segment-embed-strip/t00603.jpg' loading='lazy'><figcaption>10:03</figcaption></figure>
+<figure><img src='segment-embed-strip/t00605.jpg' loading='lazy'><figcaption>10:05</figcaption></figure>
+<figure><img src='segment-embed-strip/t00607.jpg' loading='lazy'><figcaption>10:07</figcaption></figure>
+<figure><img src='segment-embed-strip/t00609.jpg' loading='lazy'><figcaption>10:09</figcaption></figure>
+<figure><img src='segment-embed-strip/t00611.jpg' loading='lazy'><figcaption>10:11</figcaption></figure>
+<figure><img src='segment-embed-strip/t00613.jpg' loading='lazy'><figcaption>10:13</figcaption></figure>
+<figure><img src='segment-embed-strip/t00615.jpg' loading='lazy'><figcaption>10:15</figcaption></figure>
+<figure><img src='segment-embed-strip/t00617.jpg' loading='lazy'><figcaption>10:17</figcaption></figure>
+<figure><img src='segment-embed-strip/t00619.jpg' loading='lazy'><figcaption>10:19</figcaption></figure>
+<figure><img src='segment-embed-strip/t00621.jpg' loading='lazy'><figcaption>10:21</figcaption></figure>
+<figure><img src='segment-embed-strip/t00623.jpg' loading='lazy'><figcaption>10:23</figcaption></figure>
+<figure><img src='segment-embed-strip/t00625.jpg' loading='lazy'><figcaption>10:25</figcaption></figure>
+<figure><img src='segment-embed-strip/t00627.jpg' loading='lazy'><figcaption>10:27</figcaption></figure>
+</div>
+<h2>segment_26</h2>
+<p class='meta'>10:29–11:55 (44 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00629.jpg' loading='lazy'><figcaption>10:29</figcaption></figure>
+<figure><img src='segment-embed-strip/t00631.jpg' loading='lazy'><figcaption>10:31</figcaption></figure>
+<figure><img src='segment-embed-strip/t00633.jpg' loading='lazy'><figcaption>10:33</figcaption></figure>
+<figure><img src='segment-embed-strip/t00635.jpg' loading='lazy'><figcaption>10:35</figcaption></figure>
+<figure><img src='segment-embed-strip/t00637.jpg' loading='lazy'><figcaption>10:37</figcaption></figure>
+<figure><img src='segment-embed-strip/t00639.jpg' loading='lazy'><figcaption>10:39</figcaption></figure>
+<figure><img src='segment-embed-strip/t00641.jpg' loading='lazy'><figcaption>10:41</figcaption></figure>
+<figure><img src='segment-embed-strip/t00643.jpg' loading='lazy'><figcaption>10:43</figcaption></figure>
+<figure><img src='segment-embed-strip/t00645.jpg' loading='lazy'><figcaption>10:45</figcaption></figure>
+<figure><img src='segment-embed-strip/t00647.jpg' loading='lazy'><figcaption>10:47</figcaption></figure>
+<figure><img src='segment-embed-strip/t00649.jpg' loading='lazy'><figcaption>10:49</figcaption></figure>
+<figure><img src='segment-embed-strip/t00651.jpg' loading='lazy'><figcaption>10:51</figcaption></figure>
+<figure><img src='segment-embed-strip/t00653.jpg' loading='lazy'><figcaption>10:53</figcaption></figure>
+<figure><img src='segment-embed-strip/t00655.jpg' loading='lazy'><figcaption>10:55</figcaption></figure>
+<figure><img src='segment-embed-strip/t00657.jpg' loading='lazy'><figcaption>10:57</figcaption></figure>
+<figure><img src='segment-embed-strip/t00659.jpg' loading='lazy'><figcaption>10:59</figcaption></figure>
+<figure><img src='segment-embed-strip/t00662.jpg' loading='lazy'><figcaption>11:01</figcaption></figure>
+<figure><img src='segment-embed-strip/t00664.jpg' loading='lazy'><figcaption>11:03</figcaption></figure>
+<figure><img src='segment-embed-strip/t00666.jpg' loading='lazy'><figcaption>11:05</figcaption></figure>
+<figure><img src='segment-embed-strip/t00668.jpg' loading='lazy'><figcaption>11:07</figcaption></figure>
+<figure><img src='segment-embed-strip/t00670.jpg' loading='lazy'><figcaption>11:09</figcaption></figure>
+<figure><img src='segment-embed-strip/t00672.jpg' loading='lazy'><figcaption>11:11</figcaption></figure>
+<figure><img src='segment-embed-strip/t00674.jpg' loading='lazy'><figcaption>11:13</figcaption></figure>
+<figure><img src='segment-embed-strip/t00676.jpg' loading='lazy'><figcaption>11:15</figcaption></figure>
+<figure><img src='segment-embed-strip/t00678.jpg' loading='lazy'><figcaption>11:17</figcaption></figure>
+<figure><img src='segment-embed-strip/t00680.jpg' loading='lazy'><figcaption>11:19</figcaption></figure>
+<figure><img src='segment-embed-strip/t00682.jpg' loading='lazy'><figcaption>11:21</figcaption></figure>
+<figure><img src='segment-embed-strip/t00684.jpg' loading='lazy'><figcaption>11:23</figcaption></figure>
+<figure><img src='segment-embed-strip/t00686.jpg' loading='lazy'><figcaption>11:25</figcaption></figure>
+<figure><img src='segment-embed-strip/t00688.jpg' loading='lazy'><figcaption>11:27</figcaption></figure>
+<figure><img src='segment-embed-strip/t00690.jpg' loading='lazy'><figcaption>11:29</figcaption></figure>
+<figure><img src='segment-embed-strip/t00692.jpg' loading='lazy'><figcaption>11:31</figcaption></figure>
+<figure><img src='segment-embed-strip/t00694.jpg' loading='lazy'><figcaption>11:33</figcaption></figure>
+<figure><img src='segment-embed-strip/t00696.jpg' loading='lazy'><figcaption>11:35</figcaption></figure>
+<figure><img src='segment-embed-strip/t00698.jpg' loading='lazy'><figcaption>11:37</figcaption></figure>
+<figure><img src='segment-embed-strip/t00700.jpg' loading='lazy'><figcaption>11:39</figcaption></figure>
+<figure><img src='segment-embed-strip/t00702.jpg' loading='lazy'><figcaption>11:41</figcaption></figure>
+<figure><img src='segment-embed-strip/t00704.jpg' loading='lazy'><figcaption>11:43</figcaption></figure>
+<figure><img src='segment-embed-strip/t00706.jpg' loading='lazy'><figcaption>11:45</figcaption></figure>
+<figure><img src='segment-embed-strip/t00708.jpg' loading='lazy'><figcaption>11:47</figcaption></figure>
+<figure><img src='segment-embed-strip/t00710.jpg' loading='lazy'><figcaption>11:49</figcaption></figure>
+<figure><img src='segment-embed-strip/t00712.jpg' loading='lazy'><figcaption>11:51</figcaption></figure>
+<figure><img src='segment-embed-strip/t00714.jpg' loading='lazy'><figcaption>11:53</figcaption></figure>
+<figure><img src='segment-embed-strip/t00716.jpg' loading='lazy'><figcaption>11:55</figcaption></figure>
+</div>
+<h2>segment_27</h2>
+<p class='meta'>11:57–13:16 (40 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00718.jpg' loading='lazy'><figcaption>11:57</figcaption></figure>
+<figure><img src='segment-embed-strip/t00720.jpg' loading='lazy'><figcaption>11:59</figcaption></figure>
+<figure><img src='segment-embed-strip/t00722.jpg' loading='lazy'><figcaption>12:02</figcaption></figure>
+<figure><img src='segment-embed-strip/t00724.jpg' loading='lazy'><figcaption>12:04</figcaption></figure>
+<figure><img src='segment-embed-strip/t00726.jpg' loading='lazy'><figcaption>12:06</figcaption></figure>
+<figure><img src='segment-embed-strip/t00728.jpg' loading='lazy'><figcaption>12:08</figcaption></figure>
+<figure><img src='segment-embed-strip/t00730.jpg' loading='lazy'><figcaption>12:10</figcaption></figure>
+<figure><img src='segment-embed-strip/t00732.jpg' loading='lazy'><figcaption>12:12</figcaption></figure>
+<figure><img src='segment-embed-strip/t00734.jpg' loading='lazy'><figcaption>12:14</figcaption></figure>
+<figure><img src='segment-embed-strip/t00736.jpg' loading='lazy'><figcaption>12:16</figcaption></figure>
+<figure><img src='segment-embed-strip/t00738.jpg' loading='lazy'><figcaption>12:18</figcaption></figure>
+<figure><img src='segment-embed-strip/t00740.jpg' loading='lazy'><figcaption>12:20</figcaption></figure>
+<figure><img src='segment-embed-strip/t00742.jpg' loading='lazy'><figcaption>12:22</figcaption></figure>
+<figure><img src='segment-embed-strip/t00744.jpg' loading='lazy'><figcaption>12:24</figcaption></figure>
+<figure><img src='segment-embed-strip/t00746.jpg' loading='lazy'><figcaption>12:26</figcaption></figure>
+<figure><img src='segment-embed-strip/t00748.jpg' loading='lazy'><figcaption>12:28</figcaption></figure>
+<figure><img src='segment-embed-strip/t00750.jpg' loading='lazy'><figcaption>12:30</figcaption></figure>
+<figure><img src='segment-embed-strip/t00752.jpg' loading='lazy'><figcaption>12:32</figcaption></figure>
+<figure><img src='segment-embed-strip/t00754.jpg' loading='lazy'><figcaption>12:34</figcaption></figure>
+<figure><img src='segment-embed-strip/t00756.jpg' loading='lazy'><figcaption>12:36</figcaption></figure>
+<figure><img src='segment-embed-strip/t00758.jpg' loading='lazy'><figcaption>12:38</figcaption></figure>
+<figure><img src='segment-embed-strip/t00760.jpg' loading='lazy'><figcaption>12:40</figcaption></figure>
+<figure><img src='segment-embed-strip/t00762.jpg' loading='lazy'><figcaption>12:42</figcaption></figure>
+<figure><img src='segment-embed-strip/t00764.jpg' loading='lazy'><figcaption>12:44</figcaption></figure>
+<figure><img src='segment-embed-strip/t00766.jpg' loading='lazy'><figcaption>12:46</figcaption></figure>
+<figure><img src='segment-embed-strip/t00768.jpg' loading='lazy'><figcaption>12:48</figcaption></figure>
+<figure><img src='segment-embed-strip/t00770.jpg' loading='lazy'><figcaption>12:50</figcaption></figure>
+<figure><img src='segment-embed-strip/t00772.jpg' loading='lazy'><figcaption>12:52</figcaption></figure>
+<figure><img src='segment-embed-strip/t00774.jpg' loading='lazy'><figcaption>12:54</figcaption></figure>
+<figure><img src='segment-embed-strip/t00776.jpg' loading='lazy'><figcaption>12:56</figcaption></figure>
+<figure><img src='segment-embed-strip/t00778.jpg' loading='lazy'><figcaption>12:58</figcaption></figure>
+<figure><img src='segment-embed-strip/t00780.jpg' loading='lazy'><figcaption>13:00</figcaption></figure>
+<figure><img src='segment-embed-strip/t00783.jpg' loading='lazy'><figcaption>13:02</figcaption></figure>
+<figure><img src='segment-embed-strip/t00785.jpg' loading='lazy'><figcaption>13:04</figcaption></figure>
+<figure><img src='segment-embed-strip/t00787.jpg' loading='lazy'><figcaption>13:06</figcaption></figure>
+<figure><img src='segment-embed-strip/t00789.jpg' loading='lazy'><figcaption>13:08</figcaption></figure>
+<figure><img src='segment-embed-strip/t00791.jpg' loading='lazy'><figcaption>13:10</figcaption></figure>
+<figure><img src='segment-embed-strip/t00793.jpg' loading='lazy'><figcaption>13:12</figcaption></figure>
+<figure><img src='segment-embed-strip/t00795.jpg' loading='lazy'><figcaption>13:14</figcaption></figure>
+<figure><img src='segment-embed-strip/t00797.jpg' loading='lazy'><figcaption>13:16</figcaption></figure>
+</div>
+<h2>segment_28</h2>
+<p class='meta'>13:18–13:22 (3 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00799.jpg' loading='lazy'><figcaption>13:18</figcaption></figure>
+<figure><img src='segment-embed-strip/t00801.jpg' loading='lazy'><figcaption>13:20</figcaption></figure>
+<figure><img src='segment-embed-strip/t00803.jpg' loading='lazy'><figcaption>13:22</figcaption></figure>
 </div>
 </body></html>
