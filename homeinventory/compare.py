@@ -517,8 +517,31 @@ def _export_photo(src: Path, dest: Path, max_dim: int = 1000) -> bool:
         return False
 
 
+def _timecode(seconds) -> str:
+    s = max(0, int(seconds or 0))
+    h, m, r = s // 3600, (s % 3600) // 60, s % 60
+    return f"{h}:{m:02d}:{r:02d}" if h else f"{m}:{r:02d}"
+
+
+def _guess_capture_dir(report_dir: Path) -> Optional[Path]:
+    """Deep-clean layout: sibling ``capture/<session>/`` next to ``report/``."""
+    cap = report_dir.parent.parent / "capture" / report_dir.name
+    return cap if cap.is_dir() else None
+
+
+def _photo_times(inv: Inventory, report_dir: Path) -> dict[str, dict]:
+    cap = _guess_capture_dir(report_dir)
+    if cap is None:
+        return {}
+    from .videometa import video_payload
+    _, photo_time = video_payload(inv, cap, report_dir / "work", "", {})
+    return photo_time
+
+
 def _evidence_photos(change: dict, side: str, inv: Inventory, side_dir: Path,
-                     out_dir: Path, exported: dict, limit: int = 3) -> list[dict]:
+                     out_dir: Path, exported: dict,
+                     photo_time: dict[str, dict] | None = None,
+                     limit: int = 3) -> list[dict]:
     """Pick up to *limit* evidence photos for one side of a changed item —
     photos carrying this item's defect_regions first (the docs/05 Level 2
     regions are the alignment anchor), then the remaining cited photos."""
@@ -537,12 +560,17 @@ def _evidence_photos(change: dict, side: str, inv: Inventory, side_dir: Path,
             rel = f"photos/{side}/{pid}.jpg"
             ok = bool(src) and _export_photo(src, out_dir / rel)
             exported[key] = rel if ok else None
-        shown.append({
+        pt = (photo_time or {}).get(pid)
+        entry = {
             "id": pid,
             "src": exported[key],
             "captured_at": getattr(photo, "captured_at", None),
+            "source_video": getattr(photo, "source_video", None),
             "regions": [r for r in regions if r.get("photo_id") == pid],
-        })
+        }
+        if pt and pt.get("t") is not None:
+            entry["seen_at"] = _timecode(pt["t"])
+        shown.append(entry)
     return shown
 
 
@@ -555,28 +583,38 @@ def render_comparison(result: dict, checkin: Inventory, checkout: Inventory,
 
     out_dir.mkdir(parents=True, exist_ok=True)
     exported: dict = {}
+    checkin_pt = _photo_times(checkin, checkin_dir)
+    checkout_pt = _photo_times(checkout, checkout_dir)
     view_rooms = []
+    filter_classes: list[str] = []
     for room in result["rooms"]:
         view_changed = []
         for change in room["changed"]:
+            cls = change.get("classification") or "unclassified"
+            if cls not in filter_classes:
+                filter_classes.append(cls)
             view_changed.append({
                 **change,
                 "checkin_photos": _evidence_photos(
-                    change, "checkin", checkin, checkin_dir, out_dir, exported),
+                    change, "checkin", checkin, checkin_dir, out_dir, exported,
+                    checkin_pt),
                 "checkout_photos": _evidence_photos(
-                    change, "checkout", checkout, checkout_dir, out_dir, exported),
+                    change, "checkout", checkout, checkout_dir, out_dir, exported,
+                    checkout_pt),
             })
         view_rooms.append({**room, "changed": view_changed})
 
     comp = result["comparison"]
     env = Environment(loader=FileSystemLoader(Path(__file__).parent / "templates"),
                       autoescape=True)
+    env.filters["timecode"] = _timecode
     html = env.get_template("compare.html.j2").render(
         result=result, rooms=view_rooms,
         labels=result["labels"],
         class_labels=comp["class_labels"],
         class_tones=comp["class_tones"],
-        context_params=comp["context_params"])
+        context_params=comp["context_params"],
+        filter_classes=filter_classes)
 
     outputs: dict[str, Path] = {}
     json_path = out_dir / "compare.json"

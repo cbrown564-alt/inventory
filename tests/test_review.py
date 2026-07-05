@@ -1067,7 +1067,7 @@ def test_post_api_project_creates_deepclean_layout(tmp_path):
         assert (cap / "before").is_dir() and (cap / "after").is_dir()
         assert (out / "before").is_dir() and (out / "after").is_dir()
         status, html = _get_text(base + "/")
-        assert status == 200 and 'class="slots"' in html
+        assert status == 200 and 'class="stepper"' in html
         assert 'id="use-case-picker"' not in html
     finally:
         httpd.shutdown()
