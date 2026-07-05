@@ -127,9 +127,10 @@ def test_final_issue_strips_review_instrument(tmp_path):
     outputs = render(inv, cap, out, pdf=False)
     live = outputs["html"].read_text(encoding="utf-8")
     issue = outputs["issue"].read_text(encoding="utf-8")
-    assert 'id="hi-data"' in live and "Review docket" in live
+    assert 'id="hi-data"' in live and "Review progress" in live
+    assert "Continue in Review" in live
     assert 'id="hi-data"' not in issue         # no embedded payload
-    assert "Review docket" not in issue        # no instrument layer
+    assert "Review progress" not in issue        # no instrument layer
     assert "review-flag ok" not in issue       # no review-state chips
     assert "review-flag pending" not in issue
     assert "review app" not in issue           # no reviewer-facing copy

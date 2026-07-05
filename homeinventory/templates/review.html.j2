@@ -26,7 +26,6 @@
     flex-shrink: 0;
   }
   .addr { display: none; }
-  #btn-details { font-size: 12px; padding: 4px 10px; }
   #progress { flex: 1 1 auto; min-width: 120px; max-width: 320px; margin: 0 auto; }
   #progress .label { font-size: 12px; font-weight: 500; color: var(--muted);
                      font-variant-numeric: tabular-nums; }
@@ -37,8 +36,6 @@
   #save-state { font-size: 11px; color: var(--faint); white-space: nowrap; }
   #save-state.err { color: var(--danger); }
   .share { display: none; }
-  #btn-pdf { font-size: 12px; padding: 6px 12px; }
-  #btn-sign { font-size: 12px; padding: 6px 14px; }
   #btn-queue { display: none; font-size: 12px; }
 
   /* ---------- layout ---------- */
@@ -158,11 +155,12 @@
   }
   #stage { position: relative; background: #05070b;
            border: none; border-radius: 0; overflow: hidden;
-           height: clamp(320px, 58vh, 640px); }
+           height: clamp(280px, 52vh, 520px); }
   #stage .media { width: 100%; height: 100%; display: flex;
                   align-items: center; justify-content: center; }
-  #stage img, #stage video { max-width: 100%; max-height: 100%;
-                             display: block; }
+  #stage img, #stage video { width: 100%; height: 100%;
+                             max-width: 100%; max-height: 100%;
+                             object-fit: contain; display: block; }
   #stage img { cursor: zoom-in; }
   #stage .media.fading img { animation: stage-in .22s ease; }
   @keyframes stage-in { from { opacity: .25; } to { opacity: 1; } }
@@ -254,8 +252,15 @@
           padding: 12px 22px; border-bottom: 1px solid var(--line);
           display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .stage-foot { margin-top: 0; }
+  .stage-foot .spine-pinned { padding: 0 22px 12px; }
   .stage-foot .disclosure > summary { padding: 12px 22px; }
   .stage-foot .disclosure-body { padding: 0 22px 16px 44px; }
+  .rail-overview {
+    display: block; padding: 12px 18px 10px; font-size: 12px; font-weight: 600;
+    color: var(--brass-bright); text-decoration: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .rail-overview:hover { color: var(--ink); }
   .stage-toggle {
     display: block; width: calc(100% - 44px); margin: 0 22px 14px;
     text-align: center; font-size: 12px;
@@ -542,6 +547,32 @@
     background: var(--panel); font-size: 12px; color: var(--muted);
   }
 
+
+  /* ---------- finish checklist (X2) ---------- */
+  .finish { max-width: 640px; }
+  .finish h1 { font: 600 22px/1.25 var(--display); margin: 0 0 8px; }
+  .finish-intro { font-size: 13px; line-height: 1.55; color: var(--muted); margin: 0 0 24px; }
+  .finish-checklist { list-style: none; padding: 0; margin: 0; }
+  .finish-step { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 12px; background: var(--panel); overflow: hidden; }
+  .finish-step-head { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; }
+  .finish-step-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--line); color: var(--faint); }
+  .finish-step.ok .finish-step-icon { background: var(--confirm-soft); color: var(--confirm); }
+  .finish-step.warn .finish-step-icon { background: var(--pend-soft); color: var(--pend); }
+  .finish-step.blocker .finish-step-icon { background: var(--danger-soft); color: var(--danger); }
+  .finish-step-title { font: 600 14px/1.35 var(--ui); margin: 0; }
+  .finish-step-note { font-size: 12px; line-height: 1.45; color: var(--muted); margin: 4px 0 0; }
+  .finish-step-body { padding: 0 16px 16px 44px; border-top: 1px solid var(--line); }
+  .finish-step-body:empty { display: none; }
+  .finish-fields { display: grid; gap: 12px; padding-top: 14px; }
+  .finish-fields label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+  .finish-fields input, .finish-fields select { width: 100%; font: 13px var(--ui); padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); }
+  .finish-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .finish-sig-list { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  .finish-handoff { margin-top: 24px; padding: 20px; border-radius: 12px; background: var(--confirm-soft); border: 1px solid var(--confirm); }
+  .finish-handoff h2 { font: 600 16px/1.3 var(--ui); margin: 0 0 8px; }
+  .finish-handoff p { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+  .finish-handoff-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
   /* ---------- lightbox (inspect + pin) ---------- */
   #lightbox { position: fixed; inset: 0; z-index: 70;
               background: rgba(5, 7, 11, .96); display: none;
@@ -629,27 +660,28 @@
     <a href="#overview" id="nav-overview" aria-current="page">Overview</a>
     <a href="#items" id="nav-items">Items</a>
     <a href="#rooms" id="nav-rooms">Rooms</a>
+    <a href="#finish" id="nav-finish">Finish</a>
   </nav>
   <span class="addr" id="hdr-addr">{{ inv.property_address or "No address yet" }}</span>
-  <button class="btn ghost" id="btn-details">Details</button>
   <div id="progress">
     <div class="label"><span id="prog-n">0</span> of <span id="prog-d">0</span>
       items confirmed</div>
     <div class="track"><div class="fill" id="prog-fill"></div></div>
   </div>
-  {% if share_url %}<span class="share">{{ payload.share.link_noun }} link:
-    <a href="{{ share_url }}" target="_blank">{{ share_url }}</a></span>{% endif %}
+  {% if share_url %}<span class="share" id="share-link-label">{{ payload.share.link_noun }} link:
+    <a href="{{ share_url }}" id="share-url">{{ share_url }}</a></span>{% endif %}
   <div class="header-end">
     <span id="save-state" role="status">All changes saved</span>
-    <button class="btn" id="btn-pdf">Export PDF</button>
-    <button class="btn primary" id="btn-sign">Sign</button>
   </div>
 </header>
 
 <div id="app">
   <nav id="rail" aria-label="Item queue">
+    <a href="#overview" class="rail-overview" id="rail-overview">Overview</a>
     <div class="tools">
-      <input type="search" id="q-search" placeholder="Search items…"
+      <input type="search" id="q-search"
+             placeholder="Search items…"
+             data-placeholder-kbd="Search items · ⌘K or /"
              aria-label="Search items" autocomplete="off">
       <div class="filters" id="filters">
         <button data-f="all" aria-pressed="true">All</button>
@@ -661,8 +693,8 @@
         <summary>Sort &amp; bulk</summary>
         <div class="row2">
           <select id="sort" aria-label="Sort order">
+            <option value="conf" selected>Least confident first</option>
             <option value="room">By room</option>
-            <option value="conf">Least confident first</option>
           </select>
           <button class="btn" id="bulk">Accept remaining</button>
         </div>
@@ -723,6 +755,13 @@
   var photoTime = payload.photo_time || {};
   var signingRoles = payload.signing_roles || ["landlord", "agent"];
   var coverFields = payload.cover_fields || [];
+  var rolesMeta = payload.roles || {};
+  var shareSpec = payload.share || {};
+  var SHARE_URL = {{ share_url | tojson }};
+  var pdfMeta = payload.pdf_meta || { ready: false, stale: true };
+  var pdfStatus = "idle";
+  var pdfExportStarted = false;
+  var finishHost = null;
 
   var CONDITIONS = ["new", "excellent", "good", "fair", "poor"];
   var NOT_INSPECTED = ["not tested", "not visible"];
@@ -730,9 +769,9 @@
                 "requires cleaning"];
 
   var filter = "all";
-  var sortMode = "room";
+  var sortMode = "conf";
   var query = "";
-  var viewMode = "overview"; // overview | items | room
+  var viewMode = "overview"; // overview | items | room | finish
   var sel = null;            // {type:"item", id} | {type:"room", name}
   var roomShowAll = {};      // room name -> true: disclosed tier revealed
   var collapsedRooms = {};   // room name -> true when collapsed in the rail
@@ -929,13 +968,55 @@
   }
 
   /* ---------- progress ---------- */
+  function filterCounts() {
+    var pending = 0, defects = 0, noev = 0;
+    ix.items.forEach(function (it) {
+      if (!isDone(it)) pending++;
+      if ((it.defects || []).length || (it.rejected_defects || []).length) {
+        defects++;
+      }
+      if (!hasEvidence(it)) noev++;
+    });
+    return { all: ix.items.length, pending: pending, defects: defects,
+             noev: noev };
+  }
+  var FILTER_LABELS = {
+    all: "All", pending: "Unreviewed", defects: "Defects", noev: "No evidence"
+  };
+  function updateFilterBadges() {
+    var c = filterCounts();
+    document.getElementById("filters").querySelectorAll("button").forEach(
+      function (btn) {
+        var f = btn.getAttribute("data-f");
+        btn.textContent = FILTER_LABELS[f] + " " + c[f];
+      });
+  }
   function renderProgress() {
     var done = ix.items.filter(isDone).length;
     document.getElementById("prog-n").textContent = done;
     document.getElementById("prog-d").textContent = ix.items.length;
     document.getElementById("prog-fill").style.width =
       ix.items.length ? (100 * done / ix.items.length) + "%" : "0";
+    updateFilterBadges();
     if (viewMode === "overview") refreshOverviewMeters();
+  }
+  function confidenceBands(items) {
+    var bands = { low: 0, mid: 0, high: 0, unknown: 0 };
+    items.forEach(function (it) {
+      if (typeof it.confidence !== "number") bands.unknown++;
+      else if (it.confidence < 0.6) bands.low++;
+      else if (it.confidence < 0.8) bands.mid++;
+      else bands.high++;
+    });
+    return bands;
+  }
+  function formatConfidenceBands(bands) {
+    var lines = [];
+    if (bands.low) lines.push("Below 60%: " + bands.low);
+    if (bands.mid) lines.push("60–80%: " + bands.mid);
+    if (bands.high) lines.push("80%+: " + bands.high);
+    if (bands.unknown) lines.push("No score: " + bands.unknown);
+    return lines.join(" · ");
   }
 
   /* ---------- overview (X1 orient) ---------- */
@@ -1164,7 +1245,356 @@
     if (open.length) select({ type: "item", id: open[0].id });
     else toast("All items are already reviewed");
   }
+
+  /* ---------- finish checklist (X2) ---------- */
+  function addressFieldMeta() {
+    var pf = coverFields.find(function (f) { return f.name === "property_address"; });
+    return pf || { placeholder: "12 Example Road, London N1 1AA" };
+  }
+  function addressMissing() {
+    var addr = (inv.property_address || "").trim();
+    if (!addr) return true;
+    var ph = (addressFieldMeta().placeholder || "").trim();
+    if (ph && addr.toLowerCase() === ph.toLowerCase()) return true;
+    return false;
+  }
+  function genericRoomNames() {
+    return inv.rooms.filter(function (room) {
+      var n = (room.name || "").trim();
+      if (!n) return true;
+      if (/^room\s*\d+$/i.test(n)) return true;
+      if (/^(unknown|unnamed|untitled)$/i.test(n)) return true;
+      return false;
+    });
+  }
+  function ownerSignatures() {
+    var cp = rolesMeta.counterparty && rolesMeta.counterparty.key;
+    return (inv.signatures || []).filter(function (s) {
+      return !cp || s.role !== cp;
+    });
+  }
+  function hasOwnerSignature() { return ownerSignatures().length > 0; }
+  function pdfReady() {
+    if (pdfStatus === "running") return false;
+    if (dirty) return false;
+    return pdfMeta.ready && !pdfMeta.stale;
+  }
+  function buildDetailsFieldDefs() {
+    if (coverFields.length) {
+      var fields = coverFields.map(function (f) {
+        return { name: f.name, label: f.label,
+                 value: f.name === "property_address" ? inv.property_address :
+                        (f.name in inv ? inv[f.name] :
+                         (inv.parties || {})[f.name] || f.value || ""),
+                 placeholder: f.placeholder || "" };
+      });
+      fields.push(
+        { name: "inspected_by", label: "Prepared by",
+          value: inv.inspected_by, placeholder: "Full name" },
+        { name: "inspected_at", label: "Date of inspection", type: "date",
+          value: inv.inspected_at }
+      );
+      return fields;
+    }
+    return [
+      { name: "property_address", label: "Property address",
+        value: inv.property_address,
+        placeholder: "12 Example Road, London N1 1AA" },
+      { name: "property_type", label: "Property type",
+        value: inv.property_type,
+        placeholder: "1 bedroom furnished apartment" },
+      { name: "inspected_by", label: "Prepared by",
+        value: inv.inspected_by, placeholder: "Full name" },
+      { name: "agent_name", label: "Agent / company", value: inv.agent_name },
+      { name: "landlord_name", label: "Landlord", value: inv.landlord_name },
+      { name: "tenant_name", label: "Tenant", value: inv.tenant_name },
+      { name: "report_ref", label: "Report reference", value: inv.report_ref },
+      { name: "inspected_at", label: "Date of inspection", type: "date",
+        value: inv.inspected_at }
+    ];
+  }
+  function saveDetailsFromForm(formEl) {
+    var defs = buildDetailsFieldDefs();
+    var values = {};
+    defs.forEach(function (f) {
+      var input = formEl.querySelector('[name="' + f.name + '"]');
+      if (input) values[f.name] = input.value.trim();
+    });
+    pushUndo("edit report details", [inv]);
+    Object.keys(values).forEach(function (k) {
+      if (k in inv && k !== "parties") inv[k] = values[k];
+      else { inv.parties = inv.parties || {}; inv.parties[k] = values[k]; }
+    });
+    coverFields.forEach(function (f) {
+      if (values[f.name] != null) f.value = values[f.name];
+    });
+    document.getElementById("hdr-addr").textContent =
+      inv.property_address || "No address yet";
+    pdfMeta.stale = true;
+    markDirty();
+    toast("Details saved — they appear on the next report render");
+    renderFinish();
+  }
+  function finishStep(icon, title, note, bodyFn, state) {
+    var li = el("li", { "class": "finish-step" + (state ? " " + state : "") });
+    var head = el("div", { "class": "finish-step-head" });
+    head.appendChild(el("span", { "class": "finish-step-icon", text: icon }));
+    var text = el("div", {});
+    text.appendChild(el("p", { "class": "finish-step-title", text: title }));
+    if (note) text.appendChild(el("p", { "class": "finish-step-note", text: note }));
+    head.appendChild(text);
+    li.appendChild(head);
+    if (bodyFn) {
+      var body = el("div", { "class": "finish-step-body" });
+      bodyFn(body);
+      li.appendChild(body);
+    }
+    return li;
+  }
+  function copyShareLink() {
+    if (!SHARE_URL) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(SHARE_URL).then(function () {
+        toast("Link copied — send it to the " + (shareSpec.link_noun || "tenant"));
+      }).catch(function () { window.prompt("Copy link:", SHARE_URL); });
+    } else window.prompt("Copy link:", SHARE_URL);
+  }
+  function submitSign(nameInput, roleInput, signBtn) {
+    var name = (nameInput.value || "").trim();
+    var role = roleInput.value;
+    if (!name) { toast("Enter your full name to sign"); nameInput.focus(); return; }
+    if (addressMissing()) { toast("Add the property address before signing"); return; }
+    var pend = ix.items.filter(function (i) { return !isDone(i); }).length;
+    function doSign() {
+      signBtn.disabled = true;
+      flush({ manual: true }).then(function () {
+        return api("POST", "/api/sign", { name: name, role: role });
+      }).then(function () {
+        toast("Signed — the signature pins the saved inventory hash");
+        return reload();
+      }).then(function () { showFinish(true); })
+      .catch(function (e) { signBtn.disabled = false; toast(e.message); });
+    }
+    if (pend) {
+      ui.confirmDialog({
+        title: "Sign with " + pend + " unreviewed item" + (pend > 1 ? "s" : "") + "?",
+        message: pend + " items are still unreviewed.",
+        note: "Signing pins the current content hash to your name in the report's declaration.",
+        confirmLabel: "Sign anyway"
+      }).then(function (yes) { if (yes) doSign(); });
+    } else doSign();
+  }
+  function startPdfExport(openWhenDone) {
+    flush({ manual: true }).then(function () {
+      return api("POST", "/api/pdf", {});
+    }).then(function () {
+      pdfExportStarted = openWhenDone;
+      pollPdf();
+      renderFinish();
+    }).catch(function (e) {
+      var body = ui.el("div", {});
+      body.appendChild(ui.el("p", { text: e.message }));
+      body.appendChild(ui.el("p", { "class": "note",
+        text: "Without WeasyPrint you can still open the report and use Print → Save as PDF." }));
+      ui.open({ title: "PDF export unavailable", body: body, actions: [
+        { label: "Open report", onclick: function (close) {
+            close(); window.open(PREFIX + "/report", "_blank"); } },
+        { label: "Close", primary: true, onclick: function (close) { close(); } }] });
+    });
+  }
+  function pollPdf() {
+    api("GET", "/api/pdf").then(function (s) {
+      pdfStatus = s.status || "idle";
+      if (s.status === "running") {
+        setTimeout(pollPdf, 1500);
+        if (finishHost) renderFinish();
+        return;
+      }
+      if (s.status === "done") {
+        pdfMeta.ready = true;
+        pdfMeta.stale = false;
+        if (pdfExportStarted) {
+          pdfExportStarted = false;
+          toast("PDF ready — opening");
+          window.open(PREFIX + "/pdf", "_blank");
+        }
+      } else if (s.status === "failed" && pdfExportStarted) {
+        pdfExportStarted = false;
+        var body = ui.el("div", {});
+        body.appendChild(ui.el("p", { text: "The PDF could not be generated." }));
+        if (s.detail) body.appendChild(ui.el("p", { "class": "note", text: s.detail }));
+        ui.open({ title: "PDF export failed", body: body, actions: [
+          { label: "Close", primary: true, onclick: function (close) { close(); } }] });
+      }
+      if (finishHost) renderFinish();
+    }).catch(function () {});
+  }
+  function renderFinish() {
+    viewMode = "finish";
+    finishHost = null;
+    stageCtl = null;
+    sel = null;
+    closeAnnoForm();
+    var d = document.getElementById("detail");
+    d.innerHTML = "";
+    var host = el("div", { "class": "finish", id: "finish-panel" });
+    finishHost = host;
+    d.appendChild(host);
+    host.appendChild(el("h1", { text: "Finish" }));
+    host.appendChild(el("p", { "class": "finish-intro",
+      text: "Close the file: complete the cover details, export a fresh PDF, sign, then send the final issue." }));
+    var list = el("ol", { "class": "finish-checklist" });
+    var addrBad = addressMissing();
+    list.appendChild(finishStep(addrBad ? "!" : "\u2713", "Property details",
+      addrBad ? "The report cover needs a real address before you can sign."
+              : "Address, parties, and inspection date are set.",
+      function (body) {
+        var form = el("form", { "class": "finish-fields", id: "finish-details" });
+        buildDetailsFieldDefs().forEach(function (f) {
+          var field = el("div", {});
+          field.appendChild(el("label", { text: f.label, for: "fd-" + f.name }));
+          var input;
+          if (f.type === "select") {
+            input = el("select", { name: f.name, id: "fd-" + f.name });
+            (f.options || []).forEach(function (o) {
+              var val = typeof o === "string" ? o : o.value;
+              var op = el("option", { value: val, text: typeof o === "string" ? o : o.label });
+              if (val === (f.value || "")) op.selected = true;
+              input.appendChild(op);
+            });
+          } else {
+            input = el("input", {
+              type: f.type || "text", name: f.name, id: "fd-" + f.name,
+              value: f.value || "", placeholder: f.placeholder || "" });
+          }
+          field.appendChild(input);
+          form.appendChild(field);
+        });
+        form.addEventListener("submit", function (e) {
+          e.preventDefault(); saveDetailsFromForm(form);
+        });
+        var actions = el("div", { "class": "finish-actions" });
+        actions.appendChild(el("button", { type: "submit", "class": "btn primary", text: "Save details" }));
+        body.appendChild(form);
+        body.appendChild(actions);
+      }, addrBad ? "blocker" : "ok"));
+    var vague = genericRoomNames();
+    list.appendChild(finishStep(vague.length ? "!" : "\u2713", "Room names",
+      vague.length ? vague.length + " room(s) still have generic names — rename in Rooms if needed."
+                   : "Every room has a descriptive name.",
+      vague.length ? function (body) {
+        vague.forEach(function (room) {
+          body.appendChild(el("button", { type: "button", "class": "btn ghost",
+            text: "Rename " + room.name,
+            onclick: function () { select({ type: "room", name: room.name }); } }));
+        });
+      } : null, vague.length ? "warn" : "ok"));
+    var pend = ix.items.filter(function (i) { return !isDone(i); }).length;
+    list.appendChild(finishStep(pend ? "!" : "\u2713", "Items reviewed",
+      pend ? pend + " item(s) still unreviewed." : "Every item has been confirmed or rejected.",
+      pend ? function (body) {
+        body.appendChild(el("button", { type: "button", "class": "btn",
+          text: "Continue review", onclick: startReview }));
+      } : null, pend ? "warn" : "ok"));
+    var pdfState = pdfStatus === "running" ? "running" : pdfReady() ? "ready" : "stale";
+    list.appendChild(finishStep(
+      pdfState === "ready" ? "\u2713" : (pdfState === "running" ? "\u2026" : "!"),
+      "PDF generated",
+      pdfState === "running" ? "Preparing PDF\u2026"
+      : pdfState === "ready" ? "Server PDF matches the saved inventory."
+      : "Export a fresh PDF after your latest edits.",
+      function (body) {
+        var actions = el("div", { "class": "finish-actions" });
+        var label = pdfState === "running" ? "Preparing PDF\u2026"
+          : pdfMeta.ready ? "Re-export PDF" : "Export PDF";
+        actions.appendChild(el("button", {
+          type: "button", "class": "btn", text: label,
+          disabled: pdfState === "running" ? "disabled" : null,
+          onclick: function () { startPdfExport(true); } }));
+        if (pdfMeta.ready && pdfState !== "running") {
+          actions.appendChild(el("button", { type: "button", "class": "btn ghost",
+            text: "Open PDF", onclick: function () { window.open(PREFIX + "/pdf", "_blank"); } }));
+        }
+        body.appendChild(actions);
+      }, pdfState === "ready" ? "ok" : "warn"));
+    var signed = hasOwnerSignature();
+    var signBlocked = addressMissing();
+    list.appendChild(finishStep(
+      signed ? "\u2713" : (signBlocked ? "\u2717" : "\u2026"), "Your signature",
+      signed ? "Declaration signed on the report."
+             : signBlocked ? "Add the property address above before signing."
+             : "Signing pins the current content hash to your name.",
+      signed ? function (body) {
+        var ul = el("ul", { "class": "finish-sig-list" });
+        ownerSignatures().forEach(function (s) {
+          ul.appendChild(el("li", { text: s.name + " \u2014 " + s.role + " \u2014 signed " + s.signed_at }));
+        });
+        body.appendChild(ul);
+      } : function (body) {
+        var form = el("div", { "class": "finish-fields" });
+        var nameInput = el("input", { type: "text", id: "finish-sign-name",
+          value: inv.inspected_by || "", placeholder: "Full name" });
+        var roleInput = el("select", { id: "finish-sign-role" });
+        signingRoles.forEach(function (r) {
+          var op = el("option", { value: r, text: r });
+          if (r === (signingRoles[0] || "landlord")) op.selected = true;
+          roleInput.appendChild(op);
+        });
+        form.appendChild(el("label", { text: "Full name", for: "finish-sign-name" }));
+        form.appendChild(nameInput);
+        form.appendChild(el("label", { text: "Role", for: "finish-sign-role" }));
+        form.appendChild(roleInput);
+        body.appendChild(form);
+        var actions = el("div", { "class": "finish-actions" });
+        var signBtn = el("button", { type: "button", "class": "btn primary",
+          text: "Sign inventory", disabled: signBlocked ? "disabled" : null,
+          onclick: function () { submitSign(nameInput, roleInput, signBtn); } });
+        actions.appendChild(signBtn);
+        body.appendChild(actions);
+      }, signed ? "ok" : (signBlocked ? "blocker" : "warn")));
+    if (SHARE_URL) {
+      list.appendChild(finishStep("\u2026", (shareSpec.link_noun || "Tenant") + " link",
+        "Optional — send this read-only link for walk-through and countersign.",
+        function (body) {
+          body.appendChild(el("p", { "class": "finish-step-note", text: SHARE_URL }));
+          var actions = el("div", { "class": "finish-actions" });
+          actions.appendChild(el("button", { type: "button", "class": "btn",
+            text: "Copy link", onclick: copyShareLink }));
+          actions.appendChild(el("a", { href: SHARE_URL, target: "_blank",
+            "class": "btn ghost", text: "Open link" }));
+          body.appendChild(actions);
+        }, "ok"));
+    }
+    host.appendChild(list);
+    if (signed) {
+      var handoff = el("div", { "class": "finish-handoff", id: "finish-handoff" });
+      handoff.appendChild(el("h2", { text: "Ready to send" }));
+      handoff.appendChild(el("p", { text: "Your signature is on record. Open the clean final issue or copy the "
+        + (shareSpec.link_noun || "tenant") + " link." }));
+      var hact = el("div", { "class": "finish-handoff-actions" });
+      hact.appendChild(el("a", { href: PREFIX + "/issue", "class": "btn primary", text: "Open Final issue" }));
+      if (SHARE_URL) {
+        hact.appendChild(el("button", { type: "button", "class": "btn",
+          text: "Copy " + (shareSpec.link_noun || "tenant") + " link", onclick: copyShareLink }));
+      }
+      handoff.appendChild(hact);
+      host.appendChild(handoff);
+    }
+    updateSubNav();
+    renderQueue();
+  }
+  function showFinish(scrollHandoff) {
+    renderFinish();
+    setViewHash("finish");
+    if (scrollHandoff) {
+      var target = document.getElementById("finish-handoff");
+      if (target) target.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }
   document.getElementById("nav-overview").addEventListener("click", function (e) {
+    e.preventDefault(); showOverview();
+  });
+  document.getElementById("rail-overview").addEventListener("click", function (e) {
     e.preventDefault(); showOverview();
   });
   document.getElementById("nav-items").addEventListener("click", function (e) {
@@ -1179,6 +1609,10 @@
     e.preventDefault();
     if (viewMode === "room" && sel && sel.type === "room") return;
     showOverview();
+  });
+  document.getElementById("nav-finish").addEventListener("click", function (e) {
+    e.preventDefault();
+    showFinish();
   });
 
   /* ---------- queue rail ---------- */
@@ -1477,7 +1911,10 @@
       ? el("div", { "class": "strip", role: "listbox",
                     "aria-label": "Evidence frames" })
       : null;
-    spine = el("div", { id: "spine", hidden: "hidden" });
+    var spinePinned = !!opts.item;
+    spine = el("div", { id: "spine", hidden: "hidden",
+      "class": spinePinned ? "spine-pinned" : "" });
+    if (spinePinned) foot.appendChild(spine);
     var extraHint = el("span", { "class": "disclosure-hint", text: "" });
     var extraSum = el("summary");
     extraSum.appendChild(el("span", { "class": "disclosure-title",
@@ -1485,11 +1922,14 @@
     extraSum.appendChild(extraHint);
     var extraBody = el("div", { "class": "disclosure-body" });
     if (strip) extraBody.appendChild(strip);
-    extraBody.appendChild(spine);
-    var extra = el("details", { "class": "disclosure" });
-    extra.appendChild(extraSum);
-    extra.appendChild(extraBody);
-    foot.appendChild(extra);
+    if (!spinePinned) extraBody.appendChild(spine);
+    var extra = null;
+    if (strip || !spinePinned) {
+      extra = el("details", { "class": "disclosure" });
+      extra.appendChild(extraSum);
+      extra.appendChild(extraBody);
+      foot.appendChild(extra);
+    }
     box.appendChild(foot);
 
     var ctl = {
@@ -1500,9 +1940,9 @@
     function updateStageExtraHint() {
       var bits = [];
       if (entries.length > 1) bits.push(entries.length + " frames");
-      if (!spine.hidden) bits.push("timeline");
+      if (!spinePinned && !spine.hidden) bits.push("timeline");
       extraHint.textContent = bits.length ? bits.join(" · ") : "walkthrough";
-      extra.hidden = !bits.length;
+      if (extra) extra.hidden = !bits.length;
     }
 
     function curEntry() { return ctl.entries[ctl.cur]; }
@@ -2692,109 +3132,7 @@
       }, false));
   }
 
-  /* ---------- details (report metadata) ---------- */
-  document.getElementById("btn-details").addEventListener("click", function () {
-    var fields = coverFields.length ? coverFields.map(function (f) {
-      return { name: f.name, label: f.label, value: f.value || "",
-               placeholder: f.placeholder || "" };
-    }) : [
-        { name: "property_address", label: "Property address",
-          value: inv.property_address,
-          placeholder: "12 Example Road, London N1 1AA" },
-        { name: "property_type", label: "Property type",
-          value: inv.property_type,
-          placeholder: "1 bedroom furnished apartment" },
-        { name: "inspected_by", label: "Prepared by",
-          value: inv.inspected_by, placeholder: "Full name" },
-        { name: "agent_name", label: "Agent / company",
-          value: inv.agent_name },
-        { name: "landlord_name", label: "Landlord", value: inv.landlord_name },
-        { name: "tenant_name", label: "Tenant", value: inv.tenant_name },
-        { name: "report_ref", label: "Report reference",
-          value: inv.report_ref },
-        { name: "inspected_at", label: "Date of inspection", type: "date",
-          value: inv.inspected_at }
-      ];
-    ui.form({
-      title: "Report details",
-      note: "These appear on the report cover and in the declaration.",
-      submitLabel: "Save details",
-      fields: fields.concat(coverFields.length ? [
-        { name: "inspected_by", label: "Prepared by",
-          value: inv.inspected_by, placeholder: "Full name" },
-        { name: "inspected_at", label: "Date of inspection", type: "date",
-          value: inv.inspected_at }
-      ] : [])
-    }).then(function (values) {
-      if (!values) return;
-      pushUndo("edit report details", [inv]);
-      Object.keys(values).forEach(function (k) {
-        if (k in inv && k !== "parties") inv[k] = values[k];
-        else {
-          inv.parties = inv.parties || {};
-          inv.parties[k] = values[k];
-        }
-      });
-      document.getElementById("hdr-addr").textContent =
-        inv.property_address || "No address yet";
-      markDirty();
-      toast("Details saved — they appear on the next report render");
-    });
-  });
-
-  /* ---------- PDF export ---------- */
-  var pdfBtn = document.getElementById("btn-pdf");
-  function pollPdf() {
-    api("GET", "/api/pdf").then(function (s) {
-      if (s.status === "running") {
-        pdfBtn.disabled = true;
-        pdfBtn.textContent = "Preparing PDF…";
-        setTimeout(pollPdf, 1500);
-        return;
-      }
-      pdfBtn.disabled = false;
-      pdfBtn.textContent = "Export PDF";
-      if (s.status === "done" && pollPdf._started) {
-        pollPdf._started = false;
-        toast("PDF ready — opening");
-        window.open(PREFIX + "/pdf", "_blank");
-      } else if (s.status === "failed" && pollPdf._started) {
-        pollPdf._started = false;
-        var body = ui.el("div", {});
-        body.appendChild(ui.el("p", { text: "The PDF could not be generated." }));
-        if (s.detail) {
-          body.appendChild(ui.el("p", { "class": "note", text: s.detail }));
-        }
-        ui.open({ title: "PDF export failed", body: body, actions: [
-          { label: "Close", primary: true,
-            onclick: function (close) { close(); } }] });
-      }
-    }).catch(function () { /* server gone; stop polling */ });
-  }
-  pdfBtn.addEventListener("click", function () {
-    flush({ manual: true }).then(function () {
-      return api("POST", "/api/pdf", {});
-    }).then(function () {
-      pollPdf._started = true;
-      pollPdf();
-    }).catch(function (e) {
-      var body = ui.el("div", {});
-      body.appendChild(ui.el("p", { text: e.message }));
-      body.appendChild(ui.el("p", { "class": "note",
-        text: "Without WeasyPrint you can still open the report and use " +
-              "your browser's Print → Save as PDF; the server-generated " +
-              "PDF adds page numbers in the contents and the tenant-" +
-              "initials line on every page." }));
-      ui.open({ title: "PDF export unavailable", body: body, actions: [
-        { label: "Open report", onclick: function (close) {
-            close(); window.open(PREFIX + "/report", "_blank"); } },
-        { label: "Close", primary: true,
-          onclick: function (close) { close(); } }] });
-    });
-  });
-  pollPdf();   // reflect an export already in flight on page load
-
-  /* ---------- sign / reload ---------- */
+  /* ---------- finish helpers (reload / PDF poll) ---------- */
   function reload() {
     return api("GET", "/api/inventory").then(function (p) {
       inv = p.inventory; photoSrc = p.photo_src || {};
@@ -2811,6 +3149,8 @@
       } else if (sel && sel.type === "room") {
         var room = inv.rooms.find(function (r) { return r.name === sel.name; });
         if (room) renderRoom(room);
+      } else if (viewMode === "finish") {
+        renderFinish();
       } else if (viewMode === "overview") {
         renderOverview();
       } else if (ix.items.length) {
@@ -2818,31 +3158,7 @@
       }
     });
   }
-  document.getElementById("btn-sign").addEventListener("click", function () {
-    var pend = ix.items.filter(function (i) { return !isDone(i); }).length;
-    ui.form({
-      title: "Sign this inventory",
-      note: (pend ? pend + " items are still unreviewed. " : "") +
-            "Signing pins the current content hash to your name in the " +
-            "report's declaration.",
-      submitLabel: "Sign",
-      fields: [
-        { name: "name", label: "Full name", value: inv.inspected_by || "",
-          required: true },
-        { name: "role", label: "Role", type: "select",
-          value: signingRoles[0] || "landlord",
-          options: signingRoles }
-      ]
-    }).then(function (values) {
-      if (!values) return;
-      flush({ manual: true }).then(function () {
-        return api("POST", "/api/sign", values);
-      }).then(function () {
-        toast("Signed — the signature pins the saved inventory hash");
-        return reload();
-      }).catch(function (e) { toast(e.message); });
-    });
-  });
+  pollPdf();
 
   /* ---------- filters / sort / bulk ---------- */
   document.getElementById("filters").addEventListener("click", function (e) {
@@ -2858,6 +3174,10 @@
     sortMode = this.value; renderQueue();
   });
   var searchBox = document.getElementById("q-search");
+  if (!window.matchMedia("(hover: none), (pointer: coarse)").matches &&
+      searchBox.getAttribute("data-placeholder-kbd")) {
+    searchBox.placeholder = searchBox.getAttribute("data-placeholder-kbd");
+  }
   var searchTimer = null;
   function applySearch() {
     query = searchBox.value.trim().toLowerCase();
@@ -2887,11 +3207,14 @@
   document.getElementById("bulk").addEventListener("click", function () {
     var open = queueEntries().filter(function (i) { return !isDone(i); });
     if (!open.length) { toast("Nothing left to accept"); return; }
+    var bands = confidenceBands(open);
+    var bandLine = formatConfidenceBands(bands);
     ui.confirmDialog({
       title: "Accept " + open.length + " remaining item" +
              (open.length > 1 ? "s" : "") + "?",
       message: "Every visible unreviewed item is marked as confirmed by you.",
-      note: "You can undo this with ⌘Z / Ctrl+Z.",
+      note: (bandLine ? bandLine + ". " : "") +
+            "You can undo this with ⌘Z / Ctrl+Z.",
       confirmLabel: "Accept all"
     }).then(function (yes) {
       if (!yes) return;
@@ -2963,6 +3286,10 @@
       startReview();
       return true;
     }
+    if (h === "finish") {
+      if (ix.items.length) showFinish();
+      return true;
+    }
     var m = /^item-(.+)$/.exec(h);
     if (m && ix.byId[m[1]]) {
       select({ type: "item", id: m[1] });
@@ -2997,6 +3324,10 @@
   window.addEventListener("hashchange", handleHash);
 
   /* ---------- boot ---------- */
+  if (/\/finish\/?$/.test(location.pathname)) {
+    var base = location.pathname.replace(/\/?finish\/?$/, "/") || "/";
+    history.replaceState(null, "", base + location.search + "#finish");
+  }
   renderProgress();
   renderQueue();
   if (handleHash()) {
