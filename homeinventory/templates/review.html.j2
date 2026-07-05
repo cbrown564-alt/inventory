@@ -412,13 +412,8 @@
 <body class="stage">
 <header class="app-header">
   <button class="btn ghost" id="btn-queue" aria-label="Show item list">☰ Items</button>
-  <span class="wordmark">Homeinventory</span>
-  <nav class="app-nav" aria-label="Sections">
-    <a href="{{ route_prefix }}/" aria-current="page">Review</a>
-    <a href="{{ route_prefix }}/report" target="_blank" rel="noopener">Report</a>
-    <a href="{{ route_prefix }}/issue" target="_blank" rel="noopener"
-       title="Clean copy for sending — no review controls">Final issue</a>
-  </nav>
+  {% set shell_base = route_prefix ~ "/" %}{% set shell_active = "review" %}
+  {%- include "_shell.html.j2" %}
   <span class="addr" id="hdr-addr">{{ inv.property_address or "No address yet" }}</span>
   <button class="btn ghost" id="btn-details">Details</button>
   <div id="progress">
@@ -1254,6 +1249,17 @@
     };
     ctl.refreshPins = function () {
       drawStrip(); drawSpine(); drawHud();
+    };
+    ctl.focusPid = function (pid, play) {
+      // deep links (report "seen at 4:12" captions) land on a frame
+      for (var fi = 0; fi < ctl.entries.length; fi++) {
+        if (ctl.entries[fi].pid === pid) {
+          showFrame(fi);
+          if (play) ctl.key("v");
+          return true;
+        }
+      }
+      return false;
     };
 
     drawStrip();
@@ -2244,10 +2250,40 @@
     } else if (e.key === "Escape") closeAnnoForm();
   });
 
+  /* ---------- deep links from the report (#item-<id>, #moment=<pid>) --- */
+  function handleHash() {
+    var h;
+    try { h = decodeURIComponent(location.hash.replace(/^#/, "")); }
+    catch (e) { h = location.hash.replace(/^#/, ""); }
+    if (!h) return false;
+    var m = /^item-(.+)$/.exec(h);
+    if (m && ix.byId[m[1]]) {
+      select({ type: "item", id: m[1] });
+      return true;
+    }
+    m = /^moment=(.+)$/.exec(h);
+    if (m && ix.photoById[m[1]]) {
+      var pid = m[1];
+      // prefer the live item citing this frame; fall back to its room
+      var citing = ix.items.filter(function (i) {
+        return !i.rejected && (i.photo_ids || []).indexOf(pid) >= 0;
+      })[0];
+      if (citing) select({ type: "item", id: citing.id });
+      else select({ type: "room", name: ix.photoById[pid].room,
+                    focusPid: pid });
+      if (stageCtl && stageCtl.focusPid) stageCtl.focusPid(pid, true);
+      return true;
+    }
+    return false;
+  }
+  window.addEventListener("hashchange", handleHash);
+
   /* ---------- boot ---------- */
   renderProgress();
   renderQueue();
-  if (ix.items.length) {
+  if (handleHash()) {
+    // arrived on a deep link from the report
+  } else if (ix.items.length) {
     // start on the least confident unreviewed item: the queue's whole point
     var first = ix.items.filter(function (i) { return !isDone(i); })
       .sort(function (a, b) {

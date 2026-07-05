@@ -1,0 +1,16 @@
+{#- The one-app shell (docs/15): wordmark + section nav, identical
+    structure on the review app and the served report so the two worlds
+    read as one product. Each host styles .app-header/.app-nav in its own
+    palette (stage vs paper) — the mood changes, the product doesn't.
+
+    Context:
+      shell_base   URL prefix for section links — "<route_prefix>/" in the
+                   served apps, "./" in the report document (relative links
+                   survive both "/report" and "/s/<key>/report").
+      shell_active "review" | "report" | "issue" — the current section. -#}
+<a class="wordmark" href="{{ shell_base }}">Homeinventory</a>
+<nav class="app-nav" aria-label="Sections">
+  <a href="{{ shell_base }}"{% if shell_active == "review" %} aria-current="page"{% endif %}>Review</a>
+  <a href="{{ shell_base }}report"{% if shell_active == "report" %} aria-current="page"{% endif %}>Report</a>
+  <a href="{{ shell_base }}issue" title="Clean copy for sending — no review controls"{% if shell_active == "issue" %} aria-current="page"{% endif %}>Final issue</a>
+</nav>

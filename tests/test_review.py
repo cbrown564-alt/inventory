@@ -174,6 +174,23 @@ def test_owner_app_has_search_and_final_issue_link(server):
     assert 'href="/issue"' in html             # final issue reachable from UI
 
 
+def test_one_app_shell_round_trip(server):
+    """docs/15 M1: review ⇄ report is one app — shared shell, same-tab
+    nav, deep links both ways; the final issue stays a clean document."""
+    base, _state, _out, _cap = server
+    _, review_html = _get_text(base + "/")
+    assert 'href="/report"' in review_html          # review → report
+    assert 'target="_blank" rel="noopener">Report' not in review_html
+    assert "hashchange" in review_html              # report → review landing
+    _, report_html = _get_text(base + "/report")
+    assert 'id="app-shell"' in report_html          # the shell, paper mood
+    assert 'href="./"' in report_html               # report → review
+    assert 'href="./#item-' in report_html          # schedule row deep link
+    _, issue_html = _get_text(base + "/issue")
+    assert 'id="app-shell"' not in issue_html       # clean copy: no chrome
+    assert 'href="./#item-' not in issue_html
+
+
 def test_issue_route_serves_final_copy(server):
     base, _state, out, _cap = server
     status, html = _get_text(base + "/issue")

@@ -119,6 +119,32 @@
   .initials-note { font-size: 9pt; color: var(--muted); margin-top: 18px; }
   .pdf-brand { font: 7.5pt var(--ui); color: var(--muted); text-align: center; }
 
+  /* ---------- the one-app shell (paper mood; see _shell.html.j2) -------- */
+  .app-header { display: flex; align-items: center; gap: 14px;
+    padding: 9px 20px; background: var(--paper);
+    border-bottom: 1px solid var(--rule); position: sticky; top: 0;
+    z-index: 45; font-family: var(--ui); flex-wrap: wrap; }
+  .wordmark { font: 600 12px/1 var(--serif); letter-spacing: .34em;
+    text-transform: uppercase; color: var(--brass); white-space: nowrap;
+    text-decoration: none; }
+  .wordmark::after { content: "."; color: var(--muted); letter-spacing: 0; }
+  .app-nav { display: flex; gap: 2px; }
+  .app-nav a { font: 500 13px var(--ui); color: var(--muted);
+    text-decoration: none; padding: 5px 11px; border-radius: 6px; }
+  .app-nav a:hover { color: var(--ink); background: var(--band); }
+  .app-nav a[aria-current="page"] { color: var(--brass);
+    background: var(--band); }
+  .app-header .shell-addr { margin-left: auto; font: 11px var(--mono);
+    color: var(--muted); overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap; max-width: 40%; }
+  .ref-internal[href] { color: var(--muted); text-decoration: none;
+    border-bottom: 1px dotted var(--rule); }
+  .ref-internal[href]:hover { color: var(--brass); border-bottom-color:
+    var(--brass); }
+  .moment-link { color: inherit; text-decoration: none;
+    border-bottom: 1px dotted var(--rule); }
+  .moment-link:hover { color: var(--brass); border-bottom-color: var(--brass); }
+
   @page {
     size: A4;
     margin: 16mm 14mm 22mm 14mm;
@@ -313,6 +339,13 @@
 </style>
 </head>
 <body>
+{% if not final %}
+<header class="app-header screen-only" id="app-shell">
+  {% set shell_base = "./" %}{% set shell_active = "report" %}
+  {%- include "_shell.html.j2" %}
+  <span class="shell-addr">{{ inv.property_address or "" }}</span>
+</header>
+{% endif %}
 <main>
 <div class="cover">
   {% if inv.agent_name %}<div class="agent-name">{{ inv.agent_name }}</div>{% endif %}
@@ -414,7 +447,9 @@ rather than silently deleted.</p>
       <tr class="item-row{% if item.rejected %} item-rejected{% endif %}"
           data-item-id="{{ item.id }}" data-ref="{{ row.ref }}" data-room="{{ section.name }}">
         <td class="ref-cell"><span class="ref-mono">{{ row.ref }}</span>
-          <span class="screen-only ref-internal ref-mono">{{ item.id }}</span>
+          {% if final %}<span class="screen-only ref-internal ref-mono">{{ item.id }}</span>
+          {% else %}<a class="screen-only ref-internal ref-mono deep-link"
+             href="./#item-{{ item.id }}" title="Open this item in the review app">{{ item.id }}</a>{% endif %}
           {% if item.rejected %}<br><span class="review-flag no">rejected</span>
           {% elif final %}
           {% elif item.reviewed %}<br><span class="review-flag ok">reviewed</span>
@@ -475,7 +510,10 @@ rather than silently deleted.</p>
         {% endfor %}
       </div>
       <figcaption>{{ photo.id }}{% if photo.captured_at %} &middot; {{ photo.captured_at }}{% endif %}
-        {%- if photo_time.get(photo.id) %} &middot; seen at {{ photo_time[photo.id].t | timecode }} in {{ photo.source_video | basename }}
+        {%- if photo_time.get(photo.id) %} &middot;
+          {%- if final %} seen at {{ photo_time[photo.id].t | timecode }} in {{ photo.source_video | basename }}
+          {%- else %} <a class="moment-link deep-link" href="./#moment={{ photo.id }}"
+             title="Play this moment of the walkthrough in the review app">seen at {{ photo_time[photo.id].t | timecode }}</a> in {{ photo.source_video | basename }}{% endif %}
         {%- elif photo.source_video %} &middot; frame of {{ photo.source_video | basename }}{% endif %}</figcaption>
     </figure>
     {% endfor %}
@@ -705,6 +743,13 @@ rather than silently deleted.</p>
     ref.innerHTML = "";
     var displayRef = tr.getAttribute("data-ref") || it.id;
     ref.appendChild(el("span", { "class": "ref-mono", text: displayRef }));
+    ref.appendChild(document.createTextNode(" "));
+    ref.appendChild(location.protocol === "file:"
+      ? el("span", { "class": "screen-only ref-internal ref-mono",
+                     text: it.id })
+      : el("a", { "class": "screen-only ref-internal ref-mono deep-link",
+                  href: "./#item-" + it.id,
+                  title: "Open this item in the review app", text: it.id }));
     var flag = it.rejected ? ["no", "rejected"] :
                it.reviewed ? ["ok", "reviewed"] : null;
     if (flag) {
@@ -1106,6 +1151,20 @@ rather than silently deleted.</p>
         toast("Signed — download the review file to make it permanent.");
       });
     });
+  }
+
+  /* ---- the one-app shell only works when this document is served by the
+     review server; opened straight from disk, its links would dead-end,
+     so the shell and the deep links degrade to plain text ---- */
+  if (location.protocol === "file:") {
+    var shell = document.getElementById("app-shell");
+    if (shell) shell.remove();
+    Array.prototype.forEach.call(
+      document.querySelectorAll("a.deep-link"), function (a) {
+        var span = el("span", { "class": a.className.replace("deep-link", "")
+                                  .trim(), text: a.textContent });
+        a.parentNode.replaceChild(span, a);
+      });
   }
 
   /* ---- wire-up ---- */
