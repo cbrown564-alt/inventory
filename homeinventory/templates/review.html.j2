@@ -10,110 +10,155 @@
 
   html, body { height: 100%; }
   body { display: flex; flex-direction: column; }
+  body.stage { background: var(--paper); }
 
   /* ---------- header ---------- */
-  .addr { font-weight: 500; color: var(--muted); font-size: 13px;
-          max-width: 260px; overflow: hidden; text-overflow: ellipsis;
-          white-space: nowrap; }
-  #progress { flex: 1 1 170px; min-width: 140px; }
-  #progress .label { font-size: 12px; color: var(--muted);
+  body.stage .app-header {
+    padding: 10px 22px; gap: 12px 18px; flex-wrap: nowrap;
+  }
+  body.stage .app-nav a { font-size: 12px; padding: 4px 10px; border-radius: 999px; }
+  body.stage .app-nav a[aria-current="page"] {
+    background: transparent; color: var(--ink); font-weight: 600;
+    box-shadow: inset 0 -2px 0 var(--brass);
+  }
+  .header-end {
+    display: flex; align-items: center; gap: 8px; margin-left: auto;
+    flex-shrink: 0;
+  }
+  .addr { display: none; }
+  #btn-details { font-size: 12px; padding: 4px 10px; }
+  #progress { flex: 1 1 auto; min-width: 120px; max-width: 320px; margin: 0 auto; }
+  #progress .label { font-size: 12px; font-weight: 500; color: var(--muted);
                      font-variant-numeric: tabular-nums; }
   #progress .track { height: 3px; background: var(--line); border-radius: 2px;
-                     overflow: hidden; margin-top: 4px; }
+                     overflow: hidden; margin-top: 6px; }
   #progress .fill { height: 100%; width: 0; background: var(--confirm);
                     transition: width .35s cubic-bezier(.16,1,.3,1); }
-  #save-state { font-size: 12px; color: var(--faint); white-space: nowrap;
-                min-width: 88px; text-align: right; }
+  #save-state { font-size: 11px; color: var(--faint); white-space: nowrap; }
   #save-state.err { color: var(--danger); }
-  .share { font-family: var(--mono); font-size: 11px; color: var(--faint); }
-  .share a { color: var(--brass); }
-  #btn-queue { display: none; }
+  .share { display: none; }
+  #btn-pdf { font-size: 12px; padding: 6px 12px; }
+  #btn-sign { font-size: 12px; padding: 6px 14px; }
+  #btn-queue { display: none; font-size: 12px; }
 
   /* ---------- layout ---------- */
-  #app { flex: 1; display: grid; grid-template-columns: 292px 1fr;
+  #app { flex: 1; display: grid; grid-template-columns: 272px 1fr;
          min-height: 0; }
 
   /* ---------- queue rail ---------- */
-  #rail { border-right: 1px solid var(--line); background: var(--panel);
+  #rail { border-right: 1px solid var(--line); background: var(--paper);
           overflow-y: auto; }
-  #rail .tools { position: sticky; top: 0; background: var(--panel);
-                 padding: 12px 14px 10px; border-bottom: 1px solid var(--line);
+  #rail .tools { position: sticky; top: 0; background: var(--paper);
+                 padding: 16px 18px 14px; border-bottom: 1px solid var(--line);
                  z-index: 5; }
-  #q-search { width: 100%; font: 13px var(--ui); padding: 7px 11px;
-              margin-bottom: 9px; border: 1px solid var(--line);
-              border-radius: 7px; background: var(--paper);
+  #q-search { width: 100%; font: 13px var(--ui); padding: 9px 12px;
+              margin-bottom: 12px; border: 1px solid var(--line);
+              border-radius: 8px; background: var(--panel);
               color: var(--ink); }
   #q-search::placeholder { color: var(--faint); }
-  #q-search:focus { outline: 2px solid var(--brass); outline-offset: -1px; }
-  .filters { display: flex; gap: 5px; flex-wrap: wrap; }
+  #q-search:focus { outline: none; border-color: var(--brass); }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
   .filters button {
-    border: 1px solid var(--line); background: transparent;
-    color: var(--muted); border-radius: 999px; font-size: 12px;
-    padding: 3px 11px; cursor: pointer;
+    border: 1px solid transparent; background: transparent;
+    color: var(--faint); border-radius: 999px; font-size: 11px;
+    font-weight: 500; padding: 4px 10px; cursor: pointer;
   }
-  .filters button:hover { color: var(--ink); border-color: var(--line-strong); }
-  .filters button[aria-pressed="true"] { background: var(--brass-soft);
-    border-color: var(--brass); color: var(--brass-bright); }
-  .tools .row2 { display: flex; gap: 6px; margin-top: 9px;
+  .filters button:hover { color: var(--muted); background: var(--panel); }
+  .filters button[aria-pressed="true"] {
+    background: var(--panel); border-color: var(--line);
+    color: var(--ink); font-weight: 600;
+  }
+  .tools .row2 { display: flex; gap: 8px; margin-top: 12px;
                  align-items: center; }
-  .tools select { flex: 1; font: 12px var(--ui); border: 1px solid var(--line);
-                  border-radius: 6px; padding: 4px 6px;
-                  background: var(--paper); color: var(--muted); }
-  #bulk { font-size: 12px; padding: 4px 10px; }
-
-  .room-head {
-    padding: 14px 14px 6px; font-size: 11px; font-weight: 600;
-    letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
-    cursor: pointer; user-select: none;
+  .tools-more { margin-top: 10px; border-top: 1px solid var(--line);
+                padding-top: 10px; }
+  .tools-more > summary {
+    font-size: 11px; font-weight: 500; color: var(--faint); cursor: pointer;
+    list-style: none; padding: 2px 0; user-select: none;
   }
-  .room-head:hover { color: var(--brass-bright); }
-  .room-head .top { display: flex; justify-content: space-between;
-                    align-items: baseline; gap: 8px; }
+  .tools-more > summary::-webkit-details-marker { display: none; }
+  .tools-more > summary::before {
+    content: "▸"; display: inline-block; width: 12px; color: var(--faint);
+    transition: transform .15s;
+  }
+  .tools-more[open] > summary::before { transform: rotate(90deg); }
+  .tools select { flex: 1; font: 12px var(--ui); border: 1px solid var(--line);
+                  border-radius: 8px; padding: 7px 10px;
+                  background: var(--panel); color: var(--muted); }
+  #bulk { font-size: 12px; padding: 7px 12px; white-space: nowrap; }
+
+  .room-group { border-bottom: 1px solid var(--line); }
+  .room-group:last-child { border-bottom: none; }
+  .room-head {
+    padding: 13px 18px 11px; font-size: 10px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
+    cursor: pointer; user-select: none;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .room-head .chev {
+    font-size: 9px; color: var(--faint); width: 10px; flex-shrink: 0;
+    transition: transform .15s;
+  }
+  .room-group.collapsed .room-head .chev { transform: rotate(-90deg); }
+  .room-group.collapsed .room-items { display: none; }
+  .room-head:hover { color: var(--muted); }
   .room-head .n { font-family: var(--mono); font-size: 10px;
-                  letter-spacing: 0; text-transform: none; }
-  .room-head .meter { height: 2px; background: var(--line); margin-top: 5px;
-                      border-radius: 1px; overflow: hidden; }
+                  letter-spacing: 0; text-transform: none; margin-left: auto;
+                  color: var(--faint); }
+  .room-head .meter { height: 2px; background: var(--line); margin-top: 8px;
+                      border-radius: 1px; overflow: hidden; width: 100%;
+                      flex-basis: 100%; }
   .room-head .meter i { display: block; height: 100%;
                         background: var(--confirm); }
   .q-item {
-    display: grid; grid-template-columns: 12px 1fr auto; gap: 9px;
-    align-items: center; padding: 7px 14px; cursor: pointer;
+    display: grid; grid-template-columns: 8px 1fr auto; gap: 10px;
+    align-items: start; padding: 11px 18px 11px 16px; cursor: pointer;
     border-left: 2px solid transparent;
   }
-  .q-item:hover { background: var(--panel-2); }
-  .q-item.active { background: var(--brass-soft);
-                   border-left-color: var(--brass); }
-  .q-item .dot { width: 7px; height: 7px; border-radius: 50%;
-                 border: 1.5px solid var(--line-strong); }
+  .q-item:hover { background: var(--panel); }
+  .q-item.active {
+    background: var(--panel);
+    border-left-color: var(--brass);
+  }
+  .q-item.active .name { color: var(--ink); }
+  .q-item.active .name .item-title { font-weight: 600; }
+  .q-item .dot { width: 6px; height: 6px; border-radius: 50%;
+                 border: 1.5px solid var(--line-strong); flex-shrink: 0;
+                 margin-top: 5px; }
   .q-item.done .dot { background: var(--confirm); border-color: var(--confirm); }
   .q-item.bad .dot { background: var(--danger); border-color: var(--danger); }
-  .q-item .name { font-weight: 500; font-size: 13px; overflow: hidden;
-                  text-overflow: ellipsis; white-space: nowrap; }
-  .q-item .name .ref { font-family: var(--mono); font-size: 10px;
-                       color: var(--faint); margin-right: 6px; }
+  .q-item .name { font-weight: 400; font-size: 13px; line-height: 1.4;
+                  overflow: hidden; color: var(--muted); min-width: 0; }
+  .q-item .name .item-title { display: block; overflow: hidden;
+                              text-overflow: ellipsis; white-space: nowrap; }
+  .q-item .name .ref { display: block; font-family: var(--mono); font-size: 10px;
+                       color: var(--faint); margin-bottom: 2px; }
   .q-item .name .sub { display: block; font-size: 11px; color: var(--faint);
-                       font-weight: 400; }
-  .q-item.bad .name { text-decoration: line-through; color: var(--muted); }
-  .conf { width: 40px; }
-  .conf .t { height: 3px; background: var(--line); border-radius: 2px;
+                       font-weight: 400; margin-top: 2px; }
+  .q-item.bad .name { text-decoration: line-through; color: var(--faint); }
+  .conf { width: 32px; flex-shrink: 0; padding-top: 4px; }
+  .conf .t { height: 2px; background: var(--line); border-radius: 1px;
              overflow: hidden; }
   .conf .f { height: 100%; background: var(--pend); }
   .conf .v { font-family: var(--mono); font-size: 9px; color: var(--faint);
              text-align: right; display: block; }
-  .empty-queue { padding: 28px 16px; color: var(--muted); font-size: 13px;
-                 text-align: center; }
+  .empty-queue { padding: 32px 20px; color: var(--muted); font-size: 13px;
+                 line-height: 1.5; text-align: center; }
   #rail-backdrop { display: none; }
 
   /* ---------- detail pane ---------- */
-  #detail { overflow-y: auto; padding: 20px 26px 40px; min-width: 0; }
-  .work { display: grid; grid-template-columns: minmax(0, 1fr) 384px;
-          gap: 20px; align-items: start; }
+  #detail { overflow-y: auto; padding: 20px 24px 48px; min-width: 0; }
+  .work { display: grid; grid-template-columns: minmax(0, 1fr) 420px;
+          gap: 24px; align-items: start; }
 
   /* ----- the evidence stage ----- */
-  .stage-col { min-width: 0; }
+  .stage-col {
+    min-width: 0; border: 1px solid var(--line); border-radius: 12px;
+    overflow: hidden; background: var(--panel);
+  }
   #stage { position: relative; background: #05070b;
-           border: 1px solid var(--line); border-radius: 12px;
-           overflow: hidden; height: clamp(300px, 54vh, 600px); }
+           border: none; border-radius: 0; overflow: hidden;
+           height: clamp(320px, 58vh, 640px); }
   #stage .media { width: 100%; height: 100%; display: flex;
                   align-items: center; justify-content: center; }
   #stage img, #stage video { max-width: 100%; max-height: 100%;
@@ -123,142 +168,197 @@
   @keyframes stage-in { from { opacity: .25; } to { opacity: 1; } }
   .hud { position: absolute; display: flex; gap: 6px; align-items: center;
          z-index: 4; }
-  .hud.tl { top: 10px; left: 10px; }
-  .hud.tr { top: 10px; right: 10px; }
-  .hud.bl { bottom: 10px; left: 10px; }
-  .hud.br { bottom: 10px; right: 10px; }
-  .hud-chip { background: rgba(8, 10, 14, .78); color: #dfe5ec;
-              font: 11px var(--mono); padding: 3px 9px; border-radius: 6px;
-              border: 1px solid rgba(255,255,255,.08); }
+  .hud.tl { top: 12px; left: 12px; }
+  .hud.tr { top: 12px; right: 12px; }
+  .hud.bl { bottom: 12px; left: 12px; }
+  .hud.br { bottom: 12px; right: 12px; }
+  .hud-chip { background: rgba(8, 10, 14, .82); color: #c8d0da;
+              font: 11px var(--mono); padding: 4px 10px; border-radius: 999px;
+              border: 1px solid rgba(255,255,255,.1); backdrop-filter: blur(4px); }
   .hud-chip .tc { color: var(--brass-bright); }
-  .hud-btn { background: rgba(8, 10, 14, .78); color: #eef1f4;
-             border: 1px solid rgba(255,255,255,.16); border-radius: 7px;
-             font: 500 12px var(--ui); padding: 5px 11px; cursor: pointer; }
-  .hud-btn:hover { border-color: var(--brass-bright);
-                   color: var(--brass-bright); }
+  .hud-btn { background: rgba(8, 10, 14, .82); color: #eef1f4;
+             border: 1px solid rgba(255,255,255,.14); border-radius: 999px;
+             font: 500 12px var(--ui); padding: 6px 12px; cursor: pointer;
+             backdrop-filter: blur(4px); }
+  .hud-btn:hover { border-color: var(--brass); color: var(--brass-bright); }
   .hud-btn.on { background: var(--brass); border-color: var(--brass);
                 color: #14100a; }
-  .stage-empty { color: var(--muted); font-size: 13px; text-align: center;
-                 padding: 40px 24px; max-width: 380px; margin: 0 auto; }
-  .stage-empty b { color: var(--pend); display: block; font-size: 14px;
-                   margin-bottom: 6px; }
+  .stage-empty { color: var(--muted); font-size: 13px; line-height: 1.55;
+                 text-align: center; padding: 48px 28px; max-width: 360px;
+                 margin: 0 auto; }
+  .stage-empty b { color: var(--ink); display: block; font-size: 14px;
+                   font-weight: 600; margin-bottom: 8px; }
 
   /* ----- filmstrip of cited frames ----- */
-  .strip { display: flex; gap: 6px; margin-top: 10px; overflow-x: auto;
-           padding-bottom: 4px; scrollbar-width: thin; }
+  .strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px;
+           scrollbar-width: thin; }
   .strip button { flex: 0 0 auto; padding: 0; border: 2px solid transparent;
-                  border-radius: 7px; overflow: hidden; background: #05070b;
+                  border-radius: 8px; overflow: hidden; background: #05070b;
                   cursor: pointer; position: relative; line-height: 0; }
   .strip button:hover { border-color: var(--line-strong); }
   .strip button.active { border-color: var(--brass); }
-  .strip img { height: 56px; width: auto; display: block; opacity: .92; }
+  .strip img { height: 52px; width: auto; display: block; opacity: .9; }
   .strip button.active img { opacity: 1; }
   .strip .pin-n { position: absolute; right: 3px; bottom: 3px;
                   background: var(--danger); color: #fff;
                   font: 9px var(--ui); line-height: 1.5; padding: 0 5px;
                   border-radius: 4px; }
   .strip .tag { position: absolute; left: 3px; top: 3px;
-                background: rgba(8,10,14,.75); color: #cfd6de;
-                font: 9px var(--mono); padding: 1px 4px; border-radius: 3px; }
+                background: rgba(8,10,14,.8); color: #cfd6de;
+                font: 9px var(--mono); padding: 1px 5px; border-radius: 4px; }
   .strip .hero-star { position: absolute; right: 3px; top: 2px;
-                      color: var(--brass-bright); font-size: 10px;
-                      text-shadow: 0 0 4px rgba(0,0,0,.85); }
+                      color: var(--brass-bright); font-size: 10px; }
 
   /* ----- the walkthrough spine ----- */
-  #spine { margin-top: 12px; user-select: none; }
-  #spine .chapters { display: flex; gap: 2px; height: 20px;
-                     margin-bottom: 6px; }
-  #spine .chap { position: relative; border-radius: 4px; overflow: hidden;
-                 background: var(--panel-2); cursor: pointer; min-width: 4px; }
+  #spine { margin-top: 4px; user-select: none; }
+  #spine .chapters { display: flex; gap: 2px; height: 18px;
+                     margin-bottom: 8px; }
+  #spine .chap { position: relative; border-radius: 3px; overflow: hidden;
+                 background: var(--paper); cursor: pointer; min-width: 4px; }
   #spine .chap span { position: absolute; inset: 0; display: block;
-                      font: 9px/20px var(--ui); letter-spacing: .04em;
+                      font: 9px/18px var(--ui); letter-spacing: .04em;
                       text-transform: uppercase; color: var(--faint);
                       padding: 0 6px; white-space: nowrap; overflow: hidden;
                       text-overflow: ellipsis; }
   #spine .chap:hover span { color: var(--muted); }
   #spine .chap.here { background: var(--brass-soft); }
   #spine .chap.here span { color: var(--brass-bright); }
-  #spine .scrub { position: relative; height: 30px; cursor: pointer; }
+  #spine .scrub { position: relative; height: 28px; cursor: pointer; }
   #spine .scrub .rail-line { position: absolute; left: 0; right: 0;
-                             top: 14px; height: 2px; background: var(--line);
-                             border-radius: 1px; }
-  #spine .tick { position: absolute; top: 10px; width: 2px; height: 10px;
-                 background: var(--faint); opacity: .5; border-radius: 1px;
+                             top: 13px; height: 1px; background: var(--line); }
+  #spine .tick { position: absolute; top: 10px; width: 1px; height: 8px;
+                 background: var(--faint); opacity: .45;
                  transform: translateX(-1px); }
-  #spine .tick.cited { background: var(--brass); opacity: .95; top: 8px;
-                       height: 14px; }
-  #spine .tick.flag { background: var(--danger); opacity: .95; top: 8px;
-                      height: 14px; }
-  #spine .playhead { position: absolute; top: 4px; width: 2px; height: 22px;
+  #spine .tick.cited { background: var(--brass); opacity: .9; top: 8px;
+                       height: 12px; }
+  #spine .tick.flag { background: var(--danger); opacity: .9; top: 8px;
+                      height: 12px; }
+  #spine .playhead { position: absolute; top: 5px; width: 1px; height: 18px;
                      background: var(--brass-bright);
-                     box-shadow: 0 0 8px rgba(229,196,127,.6);
                      transform: translateX(-1px);
                      transition: left .25s cubic-bezier(.16,1,.3,1); }
-  #spine .playhead::after { content: ""; position: absolute; top: -4px;
-                            left: -3px; width: 8px; height: 8px;
-                            transform: rotate(45deg);
+  #spine .playhead::after { content: ""; position: absolute; top: -3px;
+                            left: -3px; width: 7px; height: 7px; border-radius: 50%;
                             background: var(--brass-bright); }
   #spine.live .playhead { transition: none; }
-  #spine .peek { position: absolute; bottom: 34px; z-index: 6;
+  #spine .peek { position: absolute; bottom: 32px; z-index: 6;
                  transform: translateX(-50%); display: none;
-                 background: #05070b; border: 1px solid var(--line-strong);
-                 border-radius: 8px; padding: 4px; pointer-events: none;
-                 box-shadow: var(--shadow); }
-  #spine .peek img { display: block; width: 128px; height: auto;
-                     border-radius: 5px; }
+                 background: #05070b; border: 1px solid var(--line);
+                 border-radius: 8px; padding: 4px; pointer-events: none; }
+  #spine .peek img { display: block; width: 120px; height: auto;
+                     border-radius: 6px; }
   #spine .peek .t { display: block; text-align: center;
                     font: 10px var(--mono); color: var(--brass-bright);
-                    padding: 3px 0 1px; }
-  .prov { margin-top: 10px; font-size: 12px; color: var(--muted);
+                    padding: 4px 0 2px; }
+  .prov { font-size: 12px; line-height: 1.45; color: var(--faint);
+          padding: 12px 22px; border-bottom: 1px solid var(--line);
           display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .stage-toggle { margin-top: 8px; font-size: 12px; }
-  .prov .tc { font-family: var(--mono); color: var(--brass-bright); }
+  .stage-foot { margin-top: 0; }
+  .stage-foot .disclosure > summary { padding: 12px 22px; }
+  .stage-foot .disclosure-body { padding: 0 22px 16px 44px; }
+  .stage-toggle {
+    display: block; width: calc(100% - 44px); margin: 0 22px 14px;
+    text-align: center; font-size: 12px;
+  }
+  .prov .tc { font-family: var(--mono); color: var(--muted); }
   .prov .vid { font-family: var(--mono); color: var(--faint); }
 
   /* ----- claim card ----- */
   .claim { background: var(--panel); border: 1px solid var(--line);
            border-radius: 12px; position: sticky; top: 12px;
            max-height: calc(100vh - 90px); display: flex;
-           flex-direction: column; min-width: 0; }
-  .claim .scroll { overflow-y: auto; padding: 16px 18px 6px; }
-  .crumb { font-family: var(--mono); font-size: 11px; color: var(--faint);
-           display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .badge { font-size: 10px; font-weight: 600; letter-spacing: .07em;
-           text-transform: uppercase; border-radius: 4px; padding: 2px 7px; }
+           flex-direction: column; min-width: 0; overflow: hidden; }
+  .claim-verdict {
+    padding: 22px 22px 20px; flex-shrink: 0;
+  }
+  .claim-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+                margin-bottom: 14px; }
+  .claim-loc { font-family: var(--mono); font-size: 11px; color: var(--faint);
+               letter-spacing: .02em; }
+  .claim-loc .sep { color: var(--line-strong); margin: 0 4px; }
+  .badge { font-size: 9px; font-weight: 600; letter-spacing: .06em;
+           text-transform: uppercase; border-radius: 999px; padding: 3px 8px;
+           line-height: 1.3; }
   .badge.ok { color: var(--confirm); background: var(--confirm-soft); }
   .badge.no { color: var(--danger); background: var(--danger-soft); }
-  .badge.pend { color: var(--pend); background: var(--pend-soft); }
-  .badge.prov { color: var(--muted); background: var(--panel-2);
-                text-transform: none; letter-spacing: 0; font-weight: 500;
-                font-family: var(--ui); }
+  .badge.pend { color: var(--brass-bright); background: var(--brass-soft); }
+  .badge.prov { color: var(--faint); background: transparent;
+                border: 1px solid var(--line); text-transform: none;
+                letter-spacing: 0; font-weight: 500; font-family: var(--ui);
+                font-size: 10px; }
+  .claim-warn {
+    font-size: 12px; line-height: 1.45; color: var(--muted);
+    border-left: 2px solid var(--pend); padding: 0 0 0 12px;
+    margin: 0 0 16px;
+  }
+  .claim-warn b { color: var(--ink); font-weight: 600; }
+  .claim-identity { margin-bottom: 0; }
   #d-name {
-    font: 600 20px/1.25 var(--ui); letter-spacing: -.01em; color: var(--ink);
-    border: none; background: transparent; width: 100%; margin: 8px 0 0;
-    padding: 2px 0; border-bottom: 1px dashed transparent;
+    display: block; font: 600 20px/1.35 var(--ui); letter-spacing: -.015em;
+    color: var(--ink); border: none; background: transparent; width: 100%;
+    margin: 0; padding: 0; resize: none; overflow: hidden;
+    field-sizing: content; min-height: 1.35em;
   }
-  #d-name:hover, #d-name:focus { border-bottom-color: var(--line-strong);
-                                 outline: none; }
+  #d-name:hover { opacity: .92; }
+  #d-name:focus { outline: none; opacity: 1; }
   #d-desc {
-    font: 13px/1.5 var(--ui); color: var(--muted); width: 100%;
-    min-height: 46px; border: 1px solid transparent; background: transparent;
-    resize: vertical; padding: 4px 0; border-radius: 6px; margin-top: 2px;
+    display: block; font: 14px/1.6 var(--ui); color: var(--muted);
+    width: 100%; min-height: 0; border: none; background: transparent;
+    resize: none; padding: 0; margin: 10px 0 0; overflow: visible;
+    field-sizing: content;
   }
-  #d-desc:hover { border-color: var(--line); }
-  #d-desc:focus { border-color: var(--brass); outline: none;
-                  background: var(--paper); padding: 4px 8px;
-                  color: var(--ink); }
-  .grades { display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-            margin: 14px 0 0; }
+  #d-desc:hover { color: var(--ink); }
+  #d-desc:focus { outline: none; color: var(--ink); }
+  #actions {
+    margin: 20px 0 0; padding: 18px 0 0; border-top: 1px solid var(--line);
+  }
+  #actions .row { display: flex; gap: 10px; }
+  #actions .row .btn {
+    flex: 1; padding: 12px 14px; font-size: 14px; font-weight: 600;
+    border-radius: 8px;
+  }
+  .claim .scroll {
+    overflow-y: auto; padding: 0; flex: 1; min-height: 0;
+    display: flex; flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+  .disclosure {
+    border: none; border-radius: 0; background: transparent;
+    border-bottom: 1px solid var(--line);
+  }
+  .disclosure:last-child { border-bottom: none; }
+  .disclosure > summary {
+    display: grid; grid-template-columns: 12px 1fr; gap: 3px 10px;
+    align-items: start; padding: 14px 22px; cursor: pointer;
+    list-style: none; user-select: none;
+  }
+  .disclosure > summary::-webkit-details-marker { display: none; }
+  .disclosure > summary::before {
+    content: "▸"; font-size: 10px; color: var(--faint); grid-row: 1 / -1;
+    align-self: start; margin-top: 2px; transition: transform .15s;
+  }
+  .disclosure[open] > summary::before { transform: rotate(90deg); }
+  .disclosure-title {
+    font-size: 11px; font-weight: 600; letter-spacing: .07em;
+    text-transform: uppercase; color: var(--faint); grid-column: 2;
+  }
+  .disclosure-hint {
+    font-size: 13px; line-height: 1.45; color: var(--muted);
+    grid-column: 2; white-space: normal; overflow: visible;
+    word-break: break-word;
+  }
+  .disclosure-hint.em { color: var(--danger); }
+  .disclosure-hint.ok { color: var(--confirm); }
+  .disclosure-body { padding: 0 22px 16px 44px; }
+  .disclosure-body .grades { margin: 0; padding: 0; border: none; }
+  .grades { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .grades label { display: block; font-size: 10px; font-weight: 600;
-    letter-spacing: .09em; text-transform: uppercase; color: var(--faint);
-    margin-bottom: 4px; }
-  .grades select { width: 100%; font: 13px var(--ui); padding: 6px 8px;
-    border: 1px solid var(--line-strong); border-radius: 6px;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
+    margin-bottom: 5px; }
+  .grades select { width: 100%; font: 13px var(--ui); padding: 7px 9px;
+    border: 1px solid var(--line); border-radius: 7px;
     background: var(--paper); color: var(--ink); }
-  .sec { margin-top: 16px; padding-top: 12px;
-         border-top: 1px solid var(--line); }
-  .sec > h3 { margin: 0 0 8px; font-size: 10px; font-weight: 600;
-    letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
+  .sec-empty { font-size: 12px; color: var(--faint); font-style: italic; }
 
   .chip {
     display: inline-flex; align-items: center; gap: 6px; margin: 2px 6px 2px 0;
@@ -278,13 +378,15 @@
     background: var(--paper); color: var(--ink); }
   .def-add input::placeholder { color: var(--faint); }
 
-  .ev-missing { color: var(--pend); background: var(--pend-soft);
-    border: 1px solid var(--line-strong); border-radius: 8px;
-    padding: 10px 14px; font-size: 13px; }
+  .ev-missing {
+    font-size: 13px; line-height: 1.45; color: var(--muted);
+    border-left: 2px solid var(--pend); padding: 0 0 0 12px; margin: 0;
+  }
 
   /* comments */
-  .c-line { padding: 7px 0; border-top: 1px dotted var(--line);
-            font-size: 12.5px; }
+  .c-line { padding: 10px 0; border-top: 1px solid var(--line);
+            font-size: 13px; line-height: 1.45; }
+  .c-line:first-child { border-top: none; padding-top: 0; }
   .c-line .who { font-weight: 600; font-size: 12px; }
   .c-line .who.tenant { color: var(--tenant); }
   .c-line .who.landlord, .c-line .who.agent { color: var(--brass-bright); }
@@ -296,68 +398,77 @@
     background: var(--paper); color: var(--ink); }
   .c-add input::placeholder { color: var(--faint); }
 
-  /* claim card actions */
-  #actions { padding: 12px 18px 14px; border-top: 1px solid var(--line);
-             background: linear-gradient(to top, var(--panel) 75%,
-                         transparent); border-radius: 0 0 12px 12px; }
-  #actions .row { display: flex; gap: 8px; }
-  #actions .row .btn { flex: 1; padding: 9px 10px; font-size: 13px; }
-  .kbd-row { display: flex; gap: 10px; margin-top: 9px; flex-wrap: wrap;
-             justify-content: center; }
-  .kbd { font-family: var(--mono); font-size: 10px; color: var(--muted);
-         background: var(--panel-2); border: 1px solid var(--line);
-         border-radius: 4px; padding: 0 5px; }
-  .kbd-label { font-size: 11px; color: var(--faint); }
+  /* claim card actions — separated from claim text above */
+  .claim-foot { padding: 0; border-top: 1px solid var(--line); flex-shrink: 0; }
+  .claim-foot .disclosure > summary { padding: 10px 22px; }
+  .claim-foot .disclosure-body { padding: 0 22px 12px 44px; }
+  .claim-foot .disclosure-title {
+    font-size: 11px; color: var(--faint); text-transform: none;
+    letter-spacing: 0; font-weight: 500;
+  }
+  .kbd-row { display: flex; gap: 8px 12px; flex-wrap: wrap; }
+  .kbd { font-family: var(--mono); font-size: 9px; color: var(--faint);
+         background: transparent; border: 1px solid var(--line);
+         border-radius: 3px; padding: 1px 4px; }
+  .kbd-label { font-size: 10px; color: var(--faint); opacity: .75; }
 
   /* ---------- room view ---------- */
-  .room-title { font: 600 22px/1.2 var(--ui); letter-spacing: -.01em;
-                margin: 6px 0 0; }
-  .room-grid { display: grid; grid-template-columns: minmax(0, 1fr) 384px;
-               gap: 20px; align-items: start; margin-top: 14px; }
-  .room-cards .card { background: var(--panel); border: 1px solid var(--line);
-    border-radius: 12px; padding: 14px 18px 16px; margin-bottom: 14px; }
-  .room-cards .card > h3 { margin: 0 0 8px; font-size: 10px; font-weight: 600;
-    letter-spacing: .11em; text-transform: uppercase; color: var(--faint); }
-  .hint { font-size: 12.5px; color: var(--muted); margin: 4px 0 10px; }
-  .room-summary { width: 100%; min-height: 70px; font: 13px/1.5 var(--ui);
-    border: 1px solid var(--line); border-radius: 7px; padding: 10px 12px;
+  .room-headline { margin-bottom: 20px; }
+  .room-headline .claim-loc { display: block; margin-bottom: 6px; }
+  .room-title { font: 600 24px/1.25 var(--ui); letter-spacing: -.015em;
+                margin: 0; }
+  .room-grid { display: grid; grid-template-columns: minmax(0, 1fr) 420px;
+               gap: 24px; align-items: start; }
+  .room-panel {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; overflow: hidden; position: sticky; top: 12px;
+    max-height: calc(100vh - 90px); display: flex; flex-direction: column;
+  }
+  .room-panel-body {
+    overflow-y: auto; flex: 1; min-height: 0;
+  }
+  .panel-note { font-size: 13px; line-height: 1.5; color: var(--muted);
+                margin: 0 0 12px; }
+  .room-summary { width: 100%; min-height: 80px; font: 14px/1.55 var(--ui);
+    border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
     background: var(--paper); color: var(--ink); resize: vertical; }
-  .add-form { display: grid; gap: 8px; }
-  .add-form input, .add-form select { font: 13px var(--ui); padding: 7px 10px;
-    border: 1px solid var(--line); border-radius: 6px;
+  .add-form { display: grid; gap: 10px; }
+  .add-form + .add-form { margin-top: 10px; }
+  .add-form input, .add-form select { font: 13px var(--ui); padding: 9px 12px;
+    border: 1px solid var(--line); border-radius: 8px;
     background: var(--paper); color: var(--ink); }
   .add-form input::placeholder { color: var(--faint); }
   .uncited { display: flex; gap: 8px; flex-wrap: wrap; }
   .uncited button { padding: 0; border: 2px solid transparent;
-    border-radius: 7px; overflow: hidden; background: #05070b;
+    border-radius: 8px; overflow: hidden; background: #05070b;
     cursor: pointer; line-height: 0; }
   .uncited button:hover { border-color: var(--brass); }
-  .uncited img { height: 64px; width: auto; display: block; }
+  .uncited img { height: 56px; width: auto; display: block; }
   .uncited figure { margin: 0; }
-  .uncited figcaption { font: 9px var(--mono); color: var(--faint);
-                        padding-top: 2px; }
-  #redesc-status { font-size: 12px; color: var(--muted); margin-top: 8px; }
-  #redesc-status details { margin-top: 6px; }
+  .uncited figcaption { font: 10px var(--mono); color: var(--faint);
+                        padding-top: 4px; }
+  #redesc-status { font-size: 13px; line-height: 1.45; color: var(--muted);
+                   margin-top: 10px; }
+  #redesc-status details { margin-top: 8px; }
   #redesc-status pre { font: 11px var(--mono); white-space: pre-wrap;
     background: var(--paper); border: 1px solid var(--line);
-    border-radius: 6px; padding: 8px 10px; max-height: 220px;
+    border-radius: 8px; padding: 10px 12px; max-height: 220px;
     overflow: auto; }
 
   /* ---------- lightbox (inspect + pin) ---------- */
   #lightbox { position: fixed; inset: 0; z-index: 70;
-              background: rgba(5, 7, 11, .97); display: none;
+              background: rgba(5, 7, 11, .96); display: none;
               flex-direction: column; }
   #lightbox.on { display: flex; }
-  #lb-top { display: flex; align-items: center; gap: 12px; padding: 10px 16px;
-            color: #dfe3e8; font-size: 13px; }
+  #lb-top { display: flex; align-items: center; gap: 12px; padding: 12px 20px;
+            color: #c8d0da; font-size: 13px; border-bottom: 1px solid #232c38; }
   #lb-top .pid { font-family: var(--mono); font-size: 12px;
                  color: var(--brass-bright); }
   #lb-top .spacer { flex: 1; }
-  .lb-btn { border: 1px solid rgba(255,255,255,.22); background: transparent;
-            color: #eef1f4; border-radius: 7px; padding: 6px 12px;
-            font-size: 13px; cursor: pointer; }
-  .lb-btn:hover { border-color: var(--brass-bright);
-                  color: var(--brass-bright); }
+  .lb-btn { border: 1px solid rgba(255,255,255,.16); background: transparent;
+            color: #eef1f4; border-radius: 999px; padding: 6px 14px;
+            font-size: 12px; cursor: pointer; }
+  .lb-btn:hover { border-color: var(--brass); color: var(--brass-bright); }
   .lb-btn[aria-pressed="true"] { background: var(--danger);
                                  border-color: var(--danger); color: #fff; }
   #lb-stage { flex: 1; position: relative; overflow: hidden; cursor: grab; }
@@ -374,32 +485,36 @@
   #lb-canvas .box.draft { border-style: dashed;
                           background: rgba(224,100,89,.07); }
   #lb-bottom { display: flex; align-items: center; justify-content: center;
-               gap: 10px; padding: 10px 16px; color: #93a0ae; font-size: 12px;
-               flex-wrap: wrap; }
-  #lb-zoom { font-family: var(--mono); min-width: 46px; text-align: center; }
-  #lb-hint { font-size: 12px; }
+               gap: 10px; padding: 12px 20px; color: #7f8fa3; font-size: 12px;
+               flex-wrap: wrap; border-top: 1px solid #232c38; }
+  #lb-zoom { font-family: var(--mono); min-width: 46px; text-align: center;
+             color: #c8d0da; }
+  #lb-hint { font-size: 11px; color: #5f6c7c; }
 
   /* annotation label popover (shared by lightbox pins) */
   #anno-form { position: fixed; z-index: 95; background: var(--panel);
-    border: 1px solid var(--line-strong); border-radius: 10px; padding: 10px;
-    box-shadow: var(--shadow); display: none; width: 280px; }
+    border: 1px solid var(--line); border-radius: 12px; padding: 14px;
+    display: none; width: 280px; }
   #anno-form select, #anno-form input { width: 100%; font: 13px var(--ui);
-    padding: 6px 8px; margin-bottom: 6px; border: 1px solid var(--line-strong);
-    border-radius: 6px; background: var(--paper); color: var(--ink); }
+    padding: 8px 10px; margin-bottom: 8px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--paper); color: var(--ink); }
   #anno-form .row { display: flex; gap: 6px; justify-content: flex-end; }
 
   /* ---------- responsive ---------- */
   @media (max-width: 1220px) {
     .work, .room-grid { grid-template-columns: 1fr; }
-    .claim { position: static; max-height: none; }
+    .claim, .room-panel { position: static; max-height: none; }
     #stage { height: clamp(280px, 48vh, 520px); }
   }
   @media (max-width: 900px) {
     #app { grid-template-columns: 1fr; }
     #btn-queue { display: inline-block; }
+    body.stage .app-header { flex-wrap: wrap; padding: 10px 16px; }
+    #progress { order: 3; flex: 1 1 100%; max-width: none; margin: 0; }
+    .header-end { margin-left: 0; }
     #rail { position: fixed; top: 0; bottom: 0; left: 0; width: 82vw;
             max-width: 360px; z-index: 60; transform: translateX(-103%);
-            transition: transform .22s ease; box-shadow: var(--shadow); }
+            transition: transform .22s ease; border-right: 1px solid var(--line); }
     #rail.open { transform: none; }
     #rail-backdrop { display: none; position: fixed; inset: 0; z-index: 55;
                      background: rgba(5,7,11,.55); }
@@ -409,7 +524,7 @@
     #stage { height: clamp(240px, 42vh, 420px); border-radius: 10px; }
   }
   @media (hover: none), (max-width: 640px) {
-    .kbd, .kbd-label, .kbd-row { display: none; }
+    .claim-foot { display: none; }
   }
 </style>
 </head>
@@ -427,9 +542,11 @@
   </div>
   {% if share_url %}<span class="share">{{ payload.share.link_noun }} link:
     <a href="{{ share_url }}" target="_blank">{{ share_url }}</a></span>{% endif %}
-  <span id="save-state" role="status">All changes saved</span>
-  <button class="btn" id="btn-pdf">Export PDF</button>
-  <button class="btn primary" id="btn-sign">Sign</button>
+  <div class="header-end">
+    <span id="save-state" role="status">All changes saved</span>
+    <button class="btn" id="btn-pdf">Export PDF</button>
+    <button class="btn primary" id="btn-sign">Sign</button>
+  </div>
 </header>
 
 <div id="app">
@@ -443,13 +560,16 @@
         <button data-f="defects" aria-pressed="false">Defects</button>
         <button data-f="noev" aria-pressed="false">No evidence</button>
       </div>
-      <div class="row2">
-        <select id="sort" aria-label="Sort order">
-          <option value="room">By room</option>
-          <option value="conf">Least confident first</option>
-        </select>
-        <button class="btn" id="bulk">Accept remaining</button>
-      </div>
+      <details class="tools-more">
+        <summary>Sort &amp; bulk</summary>
+        <div class="row2">
+          <select id="sort" aria-label="Sort order">
+            <option value="room">By room</option>
+            <option value="conf">Least confident first</option>
+          </select>
+          <button class="btn" id="bulk">Accept remaining</button>
+        </div>
+      </details>
     </div>
     <div id="queue"></div>
   </nav>
@@ -517,7 +637,78 @@
   var query = "";
   var sel = null;            // {type:"item", id} | {type:"room", name}
   var roomShowAll = {};      // room name -> true: disclosed tier revealed
+  var collapsedRooms = {};   // room name -> true when collapsed in the rail
   var el = ui.el, toast = ui.toast;
+
+  function disclosure(title, hint, bodyFn, open) {
+    var det = el("details", { "class": "disclosure" });
+    if (open) det.setAttribute("open", "");
+    var sum = el("summary");
+    sum.appendChild(el("span", { "class": "disclosure-title", text: title }));
+    if (hint) {
+      var hintCls = "disclosure-hint";
+      var hintText = typeof hint === "string" ? hint : hint.text;
+      if (typeof hint === "object") {
+        if (hint.em) hintCls += " em";
+        else if (hint.ok) hintCls += " ok";
+      }
+      if (hintText) {
+        sum.appendChild(el("span", { "class": hintCls, text: hintText }));
+      }
+    }
+    det.appendChild(sum);
+    var body = el("div", { "class": "disclosure-body" });
+    bodyFn(body);
+    det.appendChild(body);
+    return det;
+  }
+  function gradeSummary(it) {
+    var parts = [];
+    if (it.not_inspected) parts.push(it.not_inspected);
+    else if (it.condition) parts.push(it.condition);
+    if (it.cleanliness) parts.push(it.cleanliness);
+    return parts.length ? parts.join(" · ") : "Not set";
+  }
+  function defectSummary(it) {
+    var n = (it.defects || []).length;
+    var r = (it.rejected_defects || []).length;
+    if (n && r) return n + " noted, " + r + " rejected";
+    if (n === 1) return it.defects[0];
+    if (n) return n + " defects";
+    if (r) return r + " rejected";
+    return "None";
+  }
+  function commentSummary(it) {
+    var n = (it.comments || []).length;
+    return n ? n + (n === 1 ? " comment" : " comments") : "None";
+  }
+  function autoResize(node) {
+    node.style.height = "auto";
+    node.style.height = node.scrollHeight + "px";
+  }
+  function roomCollapsed(name) {
+    if (name in collapsedRooms) return collapsedRooms[name];
+    if (sel && sel.type === "item") {
+      var room = ix.roomOf[sel.id];
+      return !room || room.name !== name;
+    }
+    return true;
+  }
+  function setRoomCollapsed(name, collapsed) {
+    collapsedRooms[name] = collapsed;
+    syncRoomCollapse();
+  }
+  function syncRoomCollapse() {
+    document.querySelectorAll(".room-group[data-room]").forEach(function (grp) {
+      var name = grp.getAttribute("data-room");
+      grp.classList.toggle("collapsed", roomCollapsed(name));
+    });
+  }
+  function expandRoomForItem(it) {
+    if (!it) return;
+    var room = ix.roomOf[it.id];
+    if (room) setRoomCollapsed(room.name, false);
+  }
 
   function index() {
     var items = [], byId = {}, roomOf = {}, photoById = {};
@@ -704,7 +895,9 @@
     row.appendChild(el("span", { "class": "dot" }));
     var name = el("span", { "class": "name", title: it.name || "" });
     name.appendChild(el("span", { "class": "ref", text: it.id }));
-    name.appendChild(document.createTextNode(it.name || "(unnamed)"));
+    var nameText = el("span", { "class": "item-title" });
+    nameText.textContent = it.name || "(unnamed)";
+    name.appendChild(nameText);
     var bits = [];
     if ((it.defects || []).length) bits.push((it.defects.length) + " defect" +
       (it.defects.length > 1 ? "s" : ""));
@@ -751,8 +944,8 @@
           : "No items match this filter." }));
       return;
     }
-    qview = { entries: entries, next: 0, lastRoom: null, box: q,
-              sentinel: el("div", {}) };
+    qview = { entries: entries, next: 0, lastRoom: null, curGroup: null,
+              box: q, sentinel: el("div", {}) };
     q.appendChild(qview.sentinel);
     renderMoreRows();
   }
@@ -760,32 +953,56 @@
     if (!qview) return;
     var stop = Math.min(qview.entries.length, qview.next + Q_CHUNK);
     var frag = document.createDocumentFragment();
+    var curGroup = qview.curGroup;
     for (; qview.next < stop; qview.next++) {
       var it = qview.entries[qview.next];
       var room = ix.roomOf[it.id];
       if (sortMode === "room" && room.name !== qview.lastRoom) {
+        if (curGroup) frag.appendChild(curGroup);
         qview.lastRoom = room.name;
         var pend = room.items.filter(function (i) { return !isDone(i); }).length;
-        var head = el("div", {
-          "class": "room-head",
-          onclick: (function (name) { return function () {
-            select({ type: "room", name: name });
-          }; })(room.name)
+        curGroup = el("div", {
+          "class": "room-group" + (roomCollapsed(room.name) ? " collapsed" : ""),
+          "data-room": room.name
         });
-        head.appendChild(el("div", { "class": "top" }, [
-          el("span", { text: room.name }),
-          el("span", { "class": "n",
-            text: pend ? pend + " open" : "done" })
-        ]));
+        var head = el("div", { "class": "room-head" });
+        head.appendChild(el("span", { "class": "chev", text: "▾" }));
+        head.appendChild(el("span", { text: room.name }));
+        head.appendChild(el("span", { "class": "n",
+          text: pend ? pend + " open" : "done" }));
+        head.addEventListener("click", (function (roomName) {
+          return function () {
+            var viewingSameRoom = sel && (
+              (sel.type === "room" && sel.name === roomName) ||
+              (sel.type === "item" && ix.roomOf[sel.id] &&
+               ix.roomOf[sel.id].name === roomName));
+            if (!roomCollapsed(roomName) && viewingSameRoom) {
+              setRoomCollapsed(roomName, true);
+              return;
+            }
+            setRoomCollapsed(roomName, false);
+            select({ type: "room", name: roomName });
+          };
+        })(room.name));
         var meter = el("div", { "class": "meter" });
         var mfill = el("i", {});
         mfill.style.width = room.items.length
           ? (100 * (room.items.length - pend) / room.items.length) + "%" : "0";
         meter.appendChild(mfill);
         head.appendChild(meter);
-        frag.appendChild(head);
+        curGroup.appendChild(head);
+        var itemsBox = el("div", { "class": "room-items" });
+        curGroup.appendChild(itemsBox);
+        qview.curGroup = curGroup;
       }
-      frag.appendChild(queueRow(it));
+      var target = (sortMode === "room" && curGroup)
+        ? curGroup.querySelector(".room-items") : frag;
+      target.appendChild(queueRow(it));
+      if (sortMode !== "room") curGroup = null;
+    }
+    if (curGroup && sortMode === "room") {
+      frag.appendChild(curGroup);
+      qview.curGroup = curGroup;
     }
     qview.box.insertBefore(frag, qview.sentinel);
     if (qview.next >= qview.entries.length) {
@@ -823,6 +1040,8 @@
     }
     if (s.type === "item") {
       ensureRowRendered(s.id);
+      expandRoomForItem(ix.byId[s.id]);
+      syncRoomCollapse();
       refreshQueueRow(ix.byId[s.id]);
       renderItem(ix.byId[s.id]);
     } else {
@@ -902,22 +1121,42 @@
     stage.appendChild(hudBL);
     box.appendChild(stage);
 
-    var strip = null;
-    if (entries.length > 1) {
-      strip = el("div", { "class": "strip", role: "listbox",
-                          "aria-label": "Evidence frames" });
-      box.appendChild(strip);
-    }
+    var strip, spine, prov;
+    var foot = el("div", { "class": "stage-foot" });
+    prov = el("div", { "class": "prov" });
+    foot.appendChild(prov);
 
-    var spine = el("div", { id: "spine", hidden: "hidden" });
-    box.appendChild(spine);
-    var prov = el("div", { "class": "prov" });
-    box.appendChild(prov);
+    strip = entries.length > 1
+      ? el("div", { "class": "strip", role: "listbox",
+                    "aria-label": "Evidence frames" })
+      : null;
+    spine = el("div", { id: "spine", hidden: "hidden" });
+    var extraHint = el("span", { "class": "disclosure-hint", text: "" });
+    var extraSum = el("summary");
+    extraSum.appendChild(el("span", { "class": "disclosure-title",
+      text: "Evidence trail" }));
+    extraSum.appendChild(extraHint);
+    var extraBody = el("div", { "class": "disclosure-body" });
+    if (strip) extraBody.appendChild(strip);
+    extraBody.appendChild(spine);
+    var extra = el("details", { "class": "disclosure" });
+    extra.appendChild(extraSum);
+    extra.appendChild(extraBody);
+    foot.appendChild(extra);
+    box.appendChild(foot);
 
     var ctl = {
       host: box, mode: "frame", cur: startIdx, entries: entries,
       video: null, vrel: null, item: opts.item, roomName: opts.roomName
     };
+
+    function updateStageExtraHint() {
+      var bits = [];
+      if (entries.length > 1) bits.push(entries.length + " frames");
+      if (!spine.hidden) bits.push("timeline");
+      extraHint.textContent = bits.length ? bits.join(" · ") : "walkthrough";
+      extra.hidden = !bits.length;
+    }
 
     function curEntry() { return ctl.entries[ctl.cur]; }
     function timeOfCur() {
@@ -1119,7 +1358,7 @@
       spine.innerHTML = "";
       chapEls = [];
       var d = spineData();
-      if (!d || !d.meta.duration) { spine.hidden = true; return; }
+      if (!d || !d.meta.duration) { spine.hidden = true; updateStageExtraHint(); return; }
       spine.hidden = false;
       var dur = d.meta.duration;
       var segs = d.meta.segments || [];
@@ -1187,6 +1426,7 @@
       spine.appendChild(scrub);
       movePlayhead();
       markChapter(curT());
+      updateStageExtraHint();
     }
     function scrubTime(ev) {
       var d = spineData();
@@ -1283,6 +1523,7 @@
 
     drawStrip();
     showFrame(startIdx);
+    updateStageExtraHint();
     stageCtl = ctl;
     return ctl;
   }
@@ -1318,23 +1559,34 @@
       roomName: room.name
     });
 
-    // right: the claim card
+    // right: the claim card — verdict header first, then editable details
     var claim = el("div", { "class": "claim" });
+    var verdict = el("div", { "class": "claim-verdict" });
     var scroll = el("div", { "class": "scroll" });
+    claim.appendChild(verdict);
     claim.appendChild(scroll);
     work.appendChild(claim);
 
-    var crumb = el("div", { "class": "crumb" });
-    crumb.appendChild(el("span", { text: room.name + " · " + it.id }));
-    crumb.appendChild(it.rejected ? badge("no", "rejected") :
-      it.reviewed ? badge("ok", "reviewed") : badge("pend", "unreviewed"));
-    crumb.appendChild(badge("prov",
+    var meta = el("div", { "class": "claim-meta" });
+    var loc = el("span", { "class": "claim-loc" });
+    loc.appendChild(el("span", { text: room.name }));
+    loc.appendChild(el("span", { "class": "sep", text: "·" }));
+    loc.appendChild(el("span", { text: it.id }));
+    meta.appendChild(loc);
+    meta.appendChild(it.rejected ? badge("no", "rejected") :
+      it.reviewed ? badge("ok", "confirmed") : badge("pend", "unreviewed"));
+    meta.appendChild(badge("prov",
       it.added_by ? "added by " + it.added_by : "AI draft"));
-    if (typeof it.confidence === "number") {
-      crumb.appendChild(el("span", { text:
-        Math.round(it.confidence * 100) + "% confident" }));
+    verdict.appendChild(meta);
+
+    if (typeof it.confidence === "number" && it.confidence < 0.7) {
+      var pct = Math.round(it.confidence * 100);
+      var warn = el("div", { "class": "claim-warn" });
+      warn.appendChild(el("b", { text: pct + "% confident" }));
+      warn.appendChild(document.createTextNode(
+        " — check the evidence before confirming."));
+      verdict.appendChild(warn);
     }
-    scroll.appendChild(crumb);
 
     var editSnap = null;   // one undo entry per focus session on text fields
     function textUndo(node) {
@@ -1354,40 +1606,66 @@
         editSnap = null;
       });
     }
-    var name = el("input", { id: "d-name", value: it.name || "",
+    var name = el("textarea", { id: "d-name", rows: 1,
       "aria-label": "Item name",
-      oninput: function () { it.name = name.value; markDirty(); },
+      oninput: function () {
+        it.name = name.value; markDirty(); autoResize(name);
+      },
       onchange: renderQueue });
+    name.value = it.name || "";
     textUndo(name);
-    scroll.appendChild(name);
-    var desc = el("textarea", { id: "d-desc",
+    var identity = el("div", { "class": "claim-identity" });
+    identity.appendChild(name);
+
+    var desc = el("textarea", { id: "d-desc", rows: 1,
       "aria-label": "Item description",
       placeholder: "Material, colour, brand…",
-      oninput: function () { it.description = desc.value; markDirty(); } });
+      oninput: function () {
+        it.description = desc.value; markDirty(); autoResize(desc);
+      } });
     desc.value = it.description || "";
     textUndo(desc);
-    scroll.appendChild(desc);
+    identity.appendChild(desc);
+    verdict.appendChild(identity);
+    autoResize(name);
+    autoResize(desc);
 
-    var grades = el("div", { "class": "grades" });
-    grades.appendChild(gradeBlock("Condition", CONDITIONS.concat(NOT_INSPECTED),
-      it.not_inspected || it.condition || "",
-      function (v) {
-        pushUndo("condition of " + it.id, [it]);
-        if (NOT_INSPECTED.indexOf(v) >= 0) {
-          it.not_inspected = v; it.condition = null;
-        } else { it.condition = v || null; it.not_inspected = null; }
-        markDirty();
-      }));
-    grades.appendChild(gradeBlock("Cleanliness", CLEANS, it.cleanliness || "",
-      function (v) {
-        pushUndo("cleanliness of " + it.id, [it]);
-        it.cleanliness = v || null; markDirty();
-      }));
-    scroll.appendChild(grades);
+    // primary actions — separated from claim text above
+    var act = el("div", { id: "actions" });
+    var row = el("div", { "class": "row" });
+    row.appendChild(el("button", {
+      "class": "btn confirm", text: it.reviewed ? "✓ Confirmed" : "✓ Confirm",
+      onclick: function () { confirmItem(it); } }));
+    row.appendChild(el("button", {
+      "class": "btn danger",
+      text: it.rejected ? "Restore item" : "✕ Reject",
+      onclick: function () { rejectItem(it); } }));
+    act.appendChild(row);
+    verdict.appendChild(act);
+
+    var hasDefects = (it.defects || []).length || (it.rejected_defects || []).length;
+    var hasComments = (it.comments || []).length;
+
+    scroll.appendChild(disclosure("Grading", gradeSummary(it), function (body) {
+      var grades = el("div", { "class": "grades" });
+      grades.appendChild(gradeBlock("Condition", CONDITIONS.concat(NOT_INSPECTED),
+        it.not_inspected || it.condition || "",
+        function (v) {
+          pushUndo("condition of " + it.id, [it]);
+          if (NOT_INSPECTED.indexOf(v) >= 0) {
+            it.not_inspected = v; it.condition = null;
+          } else { it.condition = v || null; it.not_inspected = null; }
+          markDirty();
+        }));
+      grades.appendChild(gradeBlock("Cleanliness", CLEANS, it.cleanliness || "",
+        function (v) {
+          pushUndo("cleanliness of " + it.id, [it]);
+          it.cleanliness = v || null; markDirty();
+        }));
+      body.appendChild(grades);
+    }, false));
 
     // defects
-    var secD = el("div", { "class": "sec" });
-    secD.appendChild(el("h3", { text: "Defects" }));
     var chipWrap = el("div", {});
     function drawChips() {
       chipWrap.innerHTML = "";
@@ -1398,7 +1676,7 @@
         chipWrap.appendChild(defChip(t, true));
       });
       if (!(it.defects || []).length && !(it.rejected_defects || []).length) {
-        chipWrap.appendChild(el("span", { "class": "c-line",
+        chipWrap.appendChild(el("span", { "class": "sec-empty",
           text: "None noted." }));
       }
     }
@@ -1421,25 +1699,27 @@
       return c;
     }
     drawChips();
-    secD.appendChild(chipWrap);
-    var addBox = el("div", { "class": "def-add" });
-    var addIn = el("input", { type: "text",
-      placeholder: "Add a defect (press Enter)…" });
-    addIn.addEventListener("keydown", function (e) {
-      e.stopPropagation();
-      if (e.key === "Enter" && addIn.value.trim()) {
-        pushUndo("add defect", [it]);
-        (it.defects = it.defects || []).push(addIn.value.trim());
-        addIn.value = ""; markDirty(); drawChips();
-      }
-    });
-    addBox.appendChild(addIn);
-    secD.appendChild(addBox);
-    scroll.appendChild(secD);
+    var defHint = defectSummary(it);
+    scroll.appendChild(disclosure("Defects",
+      { text: defHint, em: hasDefects && (it.defects || []).length },
+      function (body) {
+        body.appendChild(chipWrap);
+        var addBox = el("div", { "class": "def-add" });
+        var addIn = el("input", { type: "text",
+          placeholder: "Add a defect (press Enter)…" });
+        addIn.addEventListener("keydown", function (e) {
+          e.stopPropagation();
+          if (e.key === "Enter" && addIn.value.trim()) {
+            pushUndo("add defect", [it]);
+            (it.defects = it.defects || []).push(addIn.value.trim());
+            addIn.value = ""; markDirty(); drawChips();
+          }
+        });
+        addBox.appendChild(addIn);
+        body.appendChild(addBox);
+      }, hasDefects));
 
     // comments
-    var secC = el("div", { "class": "sec" });
-    secC.appendChild(el("h3", { text: "Comments" }));
     var cwrap2 = el("div", {});
     function drawComments() {
       cwrap2.innerHTML = "";
@@ -1455,43 +1735,37 @@
       });
     }
     drawComments();
-    secC.appendChild(cwrap2);
-    var cBox = el("div", { "class": "c-add" });
-    var cIn = el("input", { type: "text", placeholder: "Add a comment…" });
-    cIn.addEventListener("keydown", function (e) {
-      e.stopPropagation();
-      if (e.key === "Enter" && cIn.value.trim()) {
-        pushUndo("comment on " + it.id, [it]);
-        (it.comments = it.comments || []).push({
-          author: inv.inspected_by || "reviewer", role: "landlord",
-          text: cIn.value.trim(), at: new Date().toISOString() });
-        cIn.value = ""; markDirty(); drawComments();
-      }
-    });
-    cBox.appendChild(cIn);
-    secC.appendChild(cBox);
-    scroll.appendChild(secC);
-
-    // actions
-    var act = el("div", { id: "actions" });
-    var row = el("div", { "class": "row" });
-    row.appendChild(el("button", {
-      "class": "btn confirm", text: it.reviewed ? "✓ Confirmed" : "✓ Confirm",
-      onclick: function () { confirmItem(it); } }));
-    row.appendChild(el("button", {
-      "class": "btn danger",
-      text: it.rejected ? "Restore item" : "✕ Reject",
-      onclick: function () { rejectItem(it); } }));
-    act.appendChild(row);
-    var kb = el("div", { "class": "kbd-row" });
-    [["space", "confirm + next"], ["x", "reject"], ["j k", "move"],
-     ["v", "play moment"], ["/", "search"], ["⌘Z", "undo"]]
-      .forEach(function (pair) {
-        kb.appendChild(el("span", { "class": "kbd", text: pair[0] }));
-        kb.appendChild(el("span", { "class": "kbd-label", text: pair[1] }));
+    scroll.appendChild(disclosure("Comments", commentSummary(it), function (body) {
+      body.appendChild(cwrap2);
+      var cBox = el("div", { "class": "c-add" });
+      var cIn = el("input", { type: "text", placeholder: "Add a comment…" });
+      cIn.addEventListener("keydown", function (e) {
+        e.stopPropagation();
+        if (e.key === "Enter" && cIn.value.trim()) {
+          pushUndo("comment on " + it.id, [it]);
+          (it.comments = it.comments || []).push({
+            author: inv.inspected_by || "reviewer", role: "landlord",
+            text: cIn.value.trim(), at: new Date().toISOString() });
+          cIn.value = ""; markDirty(); drawComments();
+        }
       });
-    act.appendChild(kb);
-    claim.appendChild(act);
+      cBox.appendChild(cIn);
+      body.appendChild(cBox);
+    }, hasComments));
+
+    // keyboard hints — hidden until requested
+    var foot = el("div", { "class": "claim-foot" });
+    foot.appendChild(disclosure("Keyboard shortcuts", "", function (body) {
+      var kb = el("div", { "class": "kbd-row" });
+      [["space", "confirm + next"], ["x", "reject"], ["j k", "move"],
+       ["v", "play moment"], ["/", "search"], ["⌘Z", "undo"]]
+        .forEach(function (pair) {
+          kb.appendChild(el("span", { "class": "kbd", text: pair[0] }));
+          kb.appendChild(el("span", { "class": "kbd-label", text: pair[1] }));
+        });
+      body.appendChild(kb);
+    }, false));
+    claim.appendChild(foot);
   }
 
   function gradeBlock(label, opts, current, onset) {
@@ -1783,8 +2057,11 @@
     var d = document.getElementById("detail");
     d.innerHTML = "";
     stageCtl = null;
-    d.appendChild(el("div", { "class": "crumb", text: "Room" }));
-    d.appendChild(el("h2", { "class": "room-title", text: room.name }));
+
+    var headline = el("div", { "class": "room-headline" });
+    headline.appendChild(el("span", { "class": "claim-loc", text: "Room view" }));
+    headline.appendChild(el("h2", { "class": "room-title", text: room.name }));
+    d.appendChild(headline);
 
     var grid = el("div", { "class": "room-grid" });
     d.appendChild(grid);
@@ -1840,14 +2117,11 @@
         } }));
     }
 
-    var cards = el("div", { "class": "room-cards" });
-    grid.appendChild(cards);
+    var panel = el("div", { "class": "room-panel" });
+    var panelBody = el("div", { "class": "room-panel-body" });
+    panel.appendChild(panelBody);
+    grid.appendChild(panel);
 
-    var secFix = el("div", { "class": "card" });
-    secFix.appendChild(el("h3", { text: "Room name & boundaries" }));
-    secFix.appendChild(el("p", { "class": "hint",
-      text: "Segmentation sometimes merges or misnames a room — fix it here "
-            + "before signing." }));
     var renameRow = el("div", { "class": "add-form" });
     var renameInput = el("input", { type: "text", value: room.name,
       placeholder: "Room name" });
@@ -1862,9 +2136,7 @@
     });
     renameRow.appendChild(renameInput);
     renameRow.appendChild(renameBtn);
-    secFix.appendChild(renameRow);
     var mergeRow = el("div", { "class": "add-form" });
-    mergeRow.style.marginTop = "8px";
     var mergeSelect = el("select", {});
     mergeSelect.appendChild(el("option", { value: "", text: "Merge into…" }));
     inv.rooms.forEach(function (r) {
@@ -1891,11 +2163,15 @@
     });
     mergeRow.appendChild(mergeSelect);
     mergeRow.appendChild(mergeBtn);
-    secFix.appendChild(mergeRow);
-    cards.appendChild(secFix);
+    panelBody.appendChild(disclosure("Name & boundaries", "Rename or merge",
+      function (body) {
+        body.appendChild(el("p", { "class": "panel-note",
+          text: "Segmentation sometimes merges or misnames a room — fix it "
+                + "here before signing." }));
+        body.appendChild(renameRow);
+        body.appendChild(mergeRow);
+      }, false));
 
-    var secS = el("div", { "class": "card" });
-    secS.appendChild(el("h3", { text: "Room summary" }));
     var ta = el("textarea", { "class": "room-summary" });
     ta.value = room.summary || "";
     var roomSnap = null;
@@ -1914,8 +2190,10 @@
     ta.addEventListener("input", function () {
       room.summary = ta.value; markDirty();
     });
-    secS.appendChild(ta);
-    cards.appendChild(secS);
+    panelBody.appendChild(disclosure("Room summary",
+      room.summary ? "Has text" : "Empty",
+      function (body) { body.appendChild(ta); },
+      !!room.summary));
 
     // coverage: photos no item cites
     var cited = {};
@@ -1925,39 +2203,37 @@
     var orphans = (room.photos || []).filter(function (p) {
       return !cited[p.id] && photoSrc[p.id];
     });
-    var secO = el("div", { "class": "card" });
-    secO.appendChild(el("h3", {
-      text: "Coverage — frames no item cites (" + orphans.length + ")" }));
-    if (orphans.length) {
-      var strip = el("div", { "class": "uncited" });
-      orphans.forEach(function (p) {
-        var fig = el("figure", {});
-        var b = el("button", { type: "button",
-          "aria-label": "Inspect " + p.id,
-          onclick: function () {
-            ui.photoViewer({ photos: orphans.map(function (o) {
-              return { label: o.id, src: photoSrc[o.id] }; }),
-              index: orphans.indexOf(p) });
-          } });
-        b.appendChild(el("img", { src: photoSrc[p.id], alt: p.id,
-                                  loading: "lazy" }));
-        fig.appendChild(b);
-        fig.appendChild(el("figcaption", { text: p.id +
-          (photoTime[p.id] ? " · " + fmtT(photoTime[p.id].t) : "") }));
-        strip.appendChild(fig);
-      });
-      secO.appendChild(strip);
-      secO.appendChild(el("p", { "class": "hint",
-        text: "Wasted shots, or items the AI missed — check before signing." }));
-    } else {
-      secO.appendChild(el("p", { "class": "hint",
-        text: "Every embedded photo in this room is cited by at least one item." }));
-    }
-    cards.appendChild(secO);
+    panelBody.appendChild(disclosure("Coverage",
+      orphans.length ? orphans.length + " uncited frames" : "All frames cited",
+      function (body) {
+        if (orphans.length) {
+          var strip = el("div", { "class": "uncited" });
+          orphans.forEach(function (p) {
+            var fig = el("figure", {});
+            var b = el("button", { type: "button",
+              "aria-label": "Inspect " + p.id,
+              onclick: function () {
+                ui.photoViewer({ photos: orphans.map(function (o) {
+                  return { label: o.id, src: photoSrc[o.id] }; }),
+                  index: orphans.indexOf(p) });
+              } });
+            b.appendChild(el("img", { src: photoSrc[p.id], alt: p.id,
+                                      loading: "lazy" }));
+            fig.appendChild(b);
+            fig.appendChild(el("figcaption", { text: p.id +
+              (photoTime[p.id] ? " · " + fmtT(photoTime[p.id].t) : "") }));
+            strip.appendChild(fig);
+          });
+          body.appendChild(strip);
+          body.appendChild(el("p", { "class": "panel-note",
+            text: "Wasted shots, or items the AI missed — check before signing." }));
+        } else {
+          body.appendChild(el("p", { "class": "panel-note",
+            text: "Every embedded photo in this room is cited by at least one item." }));
+        }
+      }, orphans.length > 0));
 
     // add missing item
-    var secA = el("div", { "class": "card" });
-    secA.appendChild(el("h3", { text: "Add a missed item" }));
     var form = el("div", { "class": "add-form" });
     var fName = el("input", { type: "text", placeholder: "Item name *" });
     var fDesc = el("input", { type: "text",
@@ -1994,16 +2270,10 @@
     [fName, fDesc, fCond, fPhoto, fBtn].forEach(function (n) {
       form.appendChild(n);
     });
-    secA.appendChild(form);
-    cards.appendChild(secA);
+    panelBody.appendChild(disclosure("Add missed item", "Manual entry",
+      function (body) { body.appendChild(form); }, false));
 
     // re-describe
-    var secR = el("div", { "class": "card" });
-    secR.appendChild(el("h3", { text: "Re-describe this room" }));
-    secR.appendChild(el("p", { "class": "hint",
-      text: "Re-runs the AI over this room's photos — useful after fixing " +
-            "capture problems. Your review decisions for this room are " +
-            "replaced." }));
     var rBtn = el("button", { "class": "btn", text: "Re-describe " + room.name });
     var rStatus = el("div", { id: "redesc-status" });
     function watchRedescribe() {
@@ -2053,9 +2323,15 @@
         });
       });
     });
-    secR.appendChild(rBtn);
-    secR.appendChild(rStatus);
-    cards.appendChild(secR);
+    panelBody.appendChild(disclosure("Re-describe room",
+      "Re-run AI on this room's photos",
+      function (body) {
+        body.appendChild(el("p", { "class": "panel-note",
+          text: "Useful after fixing capture problems. Review decisions for "
+                + "this room are replaced." }));
+        body.appendChild(rBtn);
+        body.appendChild(rStatus);
+      }, false));
   }
 
   /* ---------- details (report metadata) ---------- */
