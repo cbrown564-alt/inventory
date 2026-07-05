@@ -160,6 +160,9 @@
   .strip .tag { position: absolute; left: 3px; top: 3px;
                 background: rgba(8,10,14,.75); color: #cfd6de;
                 font: 9px var(--mono); padding: 1px 4px; border-radius: 3px; }
+  .strip .hero-star { position: absolute; right: 3px; top: 2px;
+                      color: var(--brass-bright); font-size: 10px;
+                      text-shadow: 0 0 4px rgba(0,0,0,.85); }
 
   /* ----- the walkthrough spine ----- */
   #spine { margin-top: 12px; user-select: none; }
@@ -968,6 +971,16 @@
         var n = e.pid && opts.item ? pinsOn(opts.item, e.pid) : 0;
         if (n) hudTL.appendChild(el("span", { "class": "hud-chip",
           text: n + " pin" + (n > 1 ? "s" : "") }));
+        if (opts.curate && e.pid) {
+          var isH = opts.curate.isHero(e.pid);
+          hudTR.appendChild(el("button", {
+            "class": "hud-btn" + (isH ? " on" : ""),
+            text: isH ? "★ Highlighted" : "☆ Highlight",
+            title: isH ? "Remove from the room's default frames — it stays "
+                         + "under All frames"
+                       : "Show this frame by default",
+            onclick: function () { opts.curate.toggle(e.pid); } }));
+        }
         hudTR.appendChild(el("button", { "class": "hud-btn",
           text: "⤢ Inspect", onclick: function () {
             if (opts.item) lightbox.open(opts.item, e.pid, e.src, e.label);
@@ -1078,6 +1091,10 @@
             ? fmtT(photoTime[e.pid].t) : e.label }));
         var n = e.pid && opts.item ? pinsOn(opts.item, e.pid) : 0;
         if (n) b.appendChild(el("span", { "class": "pin-n", text: n }));
+        if (opts.curate && e.pid && opts.curate.isHero(e.pid)) {
+          b.appendChild(el("span", { "class": "hero-star", text: "★",
+            title: "Shown by default" }));
+        }
         strip.appendChild(b);
       });
       drawStripActive();
@@ -1783,9 +1800,34 @@
     var curated = heroPids.length > 0 && heroPids.length < allPids.length;
     var showAll = !curated || !!roomShowAll[room.name] ||
       (sel && sel.focusPid && heroPids.indexOf(sel.focusPid) < 0);
+    function photoOf(pid) {
+      return (room.photos || []).filter(function (p) {
+        return p.id === pid; })[0] || null;
+    }
     var ctl = buildStage(grid, {
       pids: showAll ? allPids : heroPids,
-      crop: null, item: null, roomName: room.name });
+      crop: null, item: null, roomName: room.name,
+      curate: {
+        isHero: function (pid) {
+          var p = photoOf(pid);
+          return !!(p && p.hero);
+        },
+        toggle: function (pid) {
+          var p = photoOf(pid);
+          if (!p) return;
+          var action = p.hero ? "demote" : "promote";
+          api("POST", "/api/curation", { photo_id: pid, action: action })
+            .then(function (res) {
+              p.hero = res.hero;
+              toast(action === "promote"
+                ? pid + " added to this room's highlights"
+                : pid + " removed from highlights — it stays under "
+                  + "All frames");
+              if (stageCtl && stageCtl.refreshPins) stageCtl.refreshPins();
+            })
+            .catch(function (e) { toast("Could not save: " + e.message); });
+        }
+      } });
     if (curated && ctl && ctl.host) {
       ctl.host.appendChild(el("button", {
         "class": "btn ghost stage-toggle",

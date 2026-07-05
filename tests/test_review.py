@@ -337,6 +337,60 @@ def test_unknown_routes_and_bad_input(server):
 # coverage check (detector-only, no AI)
 # --------------------------------------------------------------------------
 
+def test_curation_override_endpoint(server):
+    """docs/15 M3: promote/demote a frame from the review app; the decision
+    lands in inventory.json now and curation.json for rebuilds."""
+    base, state, out, _cap = server
+    status, body = _req("POST", base + "/api/curation",
+                        {"photo_id": "P001", "action": "promote"})
+    assert status == 200 and body["hero"] == 1
+    photo = [p for r in state.load().rooms for p in r.photos
+             if p.id == "P001"][0]
+    assert photo.hero == 1
+    cur = json.loads((out / "work" / "curation.json").read_text("utf-8"))
+    assert photo.sha256 in cur["overrides"]
+    assert cur["overrides"][photo.sha256] == "hero"
+
+    status, body = _req("POST", base + "/api/curation",
+                        {"photo_id": "P001", "action": "demote"})
+    assert status == 200 and body["hero"] is None
+    cur = json.loads((out / "work" / "curation.json").read_text("utf-8"))
+    assert cur["overrides"][photo.sha256] == "hidden"
+
+    status, _ = _req("POST", base + "/api/curation",
+                     {"photo_id": "P999", "action": "promote"})
+    assert status == 400
+    status, _ = _req("POST", base + "/api/curation",
+                     {"photo_id": "P001", "action": "delete"})
+    assert status == 400
+
+
+def test_demoted_frame_survives_rebuild(server):
+    """docs/15 M3 definition of done: a demoted frame stays demoted after
+    a full rebuild re-derives the hero election."""
+    base, state, out, cap = server
+    # make the rooms' photos distinct: override keys are content hashes,
+    # and the fixture's identical white images would rightly share fate
+    Image.new("RGB", (64, 48), "black").save(cap / "Living Room" / "l1.jpg")
+    rebuild = ["build", str(cap), "-o", str(out), "--backend", "offline",
+               "--no-detect", "--no-pdf", "--from-json"]
+    assert main(rebuild) == 0               # refresh the recorded hashes
+    status, _ = _req("POST", base + "/api/curation",
+                     {"photo_id": "P001", "action": "demote"})
+    assert status == 200
+    assert main(rebuild) == 0
+    photos = {p.id: p for r in state.load().rooms for p in r.photos}
+    assert photos["P001"].hero is None      # demoted stays demoted
+    assert photos["P002"].hero              # the rest still elected
+
+
+def test_review_app_offers_highlight_control(server):
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "/api/curation" in html
+    assert "Highlight" in html
+
+
 def test_expected_for_merges_room_keywords():
     exp = expected_for("Bedroom 2")
     assert "door" in exp and "window" in exp and "radiator" in exp

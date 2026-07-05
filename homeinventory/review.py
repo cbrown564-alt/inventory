@@ -686,6 +686,21 @@ class SessionState:
         self.ack("reviewer", self.uc.owner_role.key, "merge_rooms",
                  f"{source} → {into}")
 
+    def set_hero_override(self, photo_id: str, action: str) -> dict:
+        """Promote/demote a frame in the room's default view, now and
+        across rebuilds (docs/15 M3 — the curation.json override survives
+        the next build's re-election)."""
+        from .curate import apply_override
+        with self.lock:
+            inv = self.load()
+            result = apply_override(inv, photo_id, action,
+                                    self.out_dir / "work")
+            self.save(inv)
+            self.rerender(inv)
+        self.ack("reviewer", self.uc.owner_role.key,
+                 f"curate_{action}", photo_id)
+        return result
+
     def start_pdf(self) -> bool:
         """PDF export as a background job (WeasyPrint runs outside the lock)."""
         with self.lock:
@@ -1246,6 +1261,12 @@ class ReviewHandler(BaseHandler):
                     self._err(400, str(e))
                     return
                 self._json({"ok": True})
+                return
+            if path == "/api/curation":
+                b = self._body()
+                result = st.set_hero_override(b.get("photo_id") or "",
+                                              (b.get("action") or "").strip())
+                self._json({"ok": True, **result})
                 return
             if path == "/api/sign":
                 b = self._body()
