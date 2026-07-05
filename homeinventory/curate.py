@@ -140,6 +140,22 @@ def centre_border_ratio(g) -> float:
     return centre_var / border_var
 
 
+def mslap_ratio(g) -> float:
+    """Multi-scale Laplacian ratio (docs/18 D, ML-E5).
+
+    Compare full-resolution grey (≤640 px long edge) sharpness to the same
+    frame at 160 px. Texture close-ups stay sharp when downscaled; wide room
+    views lose high-frequency detail — ratio favours establishing shots.
+    """
+    sh_full = sharpness(g)
+    small = g.copy()
+    small.thumbnail((160, 160))
+    sh_small = sharpness(small)
+    if sh_small <= 0:
+        return sh_full
+    return sh_full / sh_small
+
+
 def exposure_clipped_fraction(g) -> float:
     """Fraction of pixels at or near 0 / 255 (blown windows, crushed shadows)."""
     hist = g.histogram()
@@ -289,6 +305,49 @@ def cover_score(establishing: float, cbr: float) -> float:
     return establishing * high_pen * low_pen
 
 
+def classical_features(
+        sh: float, smooth: float, cbr: float, clipped: float,
+        establishing: float, quality: float) -> dict[str, float]:
+    """Feature vector for learned IQA rerankers (ML-E6) — all PIL-derived."""
+    import math
+
+    return {
+        "sharpness": sh,
+        "log_sharpness": math.log1p(max(sh, 0.0)),
+        "smooth": smooth,
+        "cbr": cbr,
+        "log_cbr": math.log(max(cbr, 0.05)),
+        "clipped": clipped,
+        "establishing": establishing,
+        "quality": quality,
+        "cover": cover_score(establishing, cbr),
+    }
+
+
+def linear_iqa_score(features: dict[str, float], weights: dict) -> float:
+    """Dot product of *features* with exported linear weights (ML-E6)."""
+    names = weights["features"]
+    w = weights["weights"]
+    return sum(features.get(n, 0.0) * wi for n, wi in zip(names, w))
+
+
+def tier_eligibility(
+        sh: float, smooth: float, cbr: float, clipped: float, *,
+        room_median: float, room_p25: float) -> tuple[bool, bool]:
+    """(describe_eligible, presentation_eligible) for two-tier pools (ML-E3).
+
+    Describe pool stays permissive (all frames eligible — current ingest
+    density). Presentation pool applies strict E4 cover gates for hero/cover
+    surfaces only; production describe path is never hard-gated here.
+    """
+    describe = True
+    presentation = _passes_cover_gates(
+        sh, smooth, cbr, clipped,
+        room_median=room_median, room_p25=room_p25,
+    )
+    return describe, presentation
+
+
 def _assign_rank_one(photos: list[Photo], best: Photo) -> None:
     """Promote *best* to hero rank 1, shifting intervening ranks down."""
     heroes = [p for p in photos if p.hero is not None]
@@ -417,6 +476,22 @@ def elect_heroes(photos: list[Photo],
         p.hero = rank
 
 
+def mslap_score(path: Path) -> float:
+    """Multi-scale Laplacian ratio for one image file (ML-E5 eval harness)."""
+    from PIL import Image
+
+    try:
+        with Image.open(path) as im:
+            im.draft("L", (640, 640))
+            g = im.convert("L")
+            if max(g.size) > 640:
+                g.thumbnail((640, 640))
+            return mslap_ratio(g)
+    except Exception as e:
+        log.warning("could not compute mslap for %s (%s)", path, e)
+        return 0.0
+
+
 def _cover_metrics(path: Path) -> tuple[float, float, float, float]:
     """(sharpness, smooth_fraction, centre_border_ratio, clipped) for cover gates."""
     from PIL import Image
@@ -451,6 +526,17 @@ def curate(rooms: dict[str, list[Photo]], capture_dir: Path,
             scores[p.id] = frame_quality(full)
             cover[p.id] = _cover_metrics(full)
         establishing = {pid: s[2] for pid, s in scores.items()}
+        sharpnesses = [cover[p.id][0] for p in photos if p.id in cover]
+        room_median = _percentile(sharpnesses, 0.5)
+        room_p25 = _percentile(sharpnesses, 0.25)
+        for p in photos:
+            sh, smooth, cbr, clipped = cover[p.id]
+            desc, pres = tier_eligibility(
+                sh, smooth, cbr, clipped,
+                room_median=room_median, room_p25=room_p25,
+            )
+            p.describe_eligible = desc
+            p.presentation_eligible = pres
         elect_heroes(photos, scores, overrides)
         _ensure_cover_slot(photos, establishing, cover)
         _promote_cover_rank_one(photos, establishing, cover)

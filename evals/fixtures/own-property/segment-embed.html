@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html><head><meta charset='utf-8'>
+<title>ML-E1 segment embed</title>
+<style>
+body{font:14px system-ui;margin:24px;background:#111;color:#eee}
+.summary{background:#222;padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+h2{margin:28px 0 8px}.meta{color:#aaa}
+.row{display:flex;flex-wrap:wrap;gap:6px}
+figure{margin:0;width:150px}img{width:150px;border-radius:4px;display:block}
+figcaption{font-size:11px;color:#bbb;text-align:center}
+.boundary img{outline:3px solid #d33}
+.boundary figcaption{color:#f5c518;font-weight:600}
+.chart{margin:1rem 0;height:80px;display:flex;align-items:flex-end;gap:1px}
+.bar{background:#4a9;min-width:3px}
+.bar.peak{background:#d33}
+</style></head><body>
+<h1>ML-E1 — embedding changepoint segmentation</h1>
+<div class='summary'><h2>Metrics</h2><pre>
+{
+  &quot;experiment&quot;: &quot;ML-E1&quot;,
+  &quot;mode&quot;: &quot;synthetic&quot;,
+  &quot;encoder&quot;: &quot;synthetic-distance&quot;,
+  &quot;n_frames&quot;: 32,
+  &quot;every_s&quot;: 5.0,
+  &quot;n_detected_boundaries&quot;: 3,
+  &quot;detected_boundaries_s&quot;: [
+    37.5,
+    77.5,
+    117.5
+  ],
+  &quot;pass_bar_mean_error_s&quot;: 3.0,
+  &quot;gold_video&quot;: &quot;IMG_5512.MOV&quot;,
+  &quot;reference_boundaries_s&quot;: [
+    38.0,
+    105.0,
+    268.0,
+    395.0,
+    485.0,
+    545.0,
+    585.0,
+    655.0,
+    735.0
+  ],
+  &quot;boundary_errors_s&quot;: [
+    0.5,
+    27.5,
+    150.5,
+    277.5,
+    367.5,
+    427.5,
+    467.5,
+    537.5,
+    617.5
+  ],
+  &quot;mean_boundary_error_s&quot;: 319.28,
+  &quot;pass&quot;: false
+}
+</pre></div>
+<h2>Distance strip</h2>
+<div class='chart'>
+<div class='bar' style='height:16px' title='t≈0s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈5s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈10s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈15s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈20s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈25s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈30s d=0.080'></div>
+<div class='bar peak' style='height:74px' title='t≈35s d=0.450'></div>
+<div class='bar' style='height:63px' title='t≈40s d=0.380'></div>
+<div class='bar' style='height:16px' title='t≈45s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈50s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈55s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈60s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈65s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈70s d=0.080'></div>
+<div class='bar peak' style='height:74px' title='t≈75s d=0.450'></div>
+<div class='bar' style='height:63px' title='t≈80s d=0.380'></div>
+<div class='bar' style='height:16px' title='t≈85s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈90s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈95s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈100s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈105s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈110s d=0.080'></div>
+<div class='bar peak' style='height:74px' title='t≈115s d=0.450'></div>
+<div class='bar' style='height:63px' title='t≈120s d=0.380'></div>
+<div class='bar' style='height:16px' title='t≈125s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈130s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈135s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈140s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈145s d=0.080'></div>
+<div class='bar' style='height:16px' title='t≈150s d=0.080'></div>
+</div>
+<h2>segment_00</h2>
+<p class='meta'>0:00–0:35 (8 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00000.jpg' loading='lazy'><figcaption>0:00</figcaption></figure>
+<figure><img src='segment-embed-strip/t00005.jpg' loading='lazy'><figcaption>0:05</figcaption></figure>
+<figure><img src='segment-embed-strip/t00010.jpg' loading='lazy'><figcaption>0:10</figcaption></figure>
+<figure><img src='segment-embed-strip/t00015.jpg' loading='lazy'><figcaption>0:15</figcaption></figure>
+<figure><img src='segment-embed-strip/t00020.jpg' loading='lazy'><figcaption>0:20</figcaption></figure>
+<figure><img src='segment-embed-strip/t00025.jpg' loading='lazy'><figcaption>0:25</figcaption></figure>
+<figure><img src='segment-embed-strip/t00030.jpg' loading='lazy'><figcaption>0:30</figcaption></figure>
+<figure><img src='segment-embed-strip/t00035.jpg' loading='lazy'><figcaption>0:35</figcaption></figure>
+</div>
+<h2>segment_01</h2>
+<p class='meta'>0:40–1:15 (8 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00040.jpg' loading='lazy'><figcaption>0:40</figcaption></figure>
+<figure><img src='segment-embed-strip/t00045.jpg' loading='lazy'><figcaption>0:45</figcaption></figure>
+<figure><img src='segment-embed-strip/t00050.jpg' loading='lazy'><figcaption>0:50</figcaption></figure>
+<figure><img src='segment-embed-strip/t00055.jpg' loading='lazy'><figcaption>0:55</figcaption></figure>
+<figure><img src='segment-embed-strip/t00060.jpg' loading='lazy'><figcaption>1:00</figcaption></figure>
+<figure><img src='segment-embed-strip/t00065.jpg' loading='lazy'><figcaption>1:05</figcaption></figure>
+<figure><img src='segment-embed-strip/t00070.jpg' loading='lazy'><figcaption>1:10</figcaption></figure>
+<figure><img src='segment-embed-strip/t00075.jpg' loading='lazy'><figcaption>1:15</figcaption></figure>
+</div>
+<h2>segment_02</h2>
+<p class='meta'>1:20–1:55 (8 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00080.jpg' loading='lazy'><figcaption>1:20</figcaption></figure>
+<figure><img src='segment-embed-strip/t00085.jpg' loading='lazy'><figcaption>1:25</figcaption></figure>
+<figure><img src='segment-embed-strip/t00090.jpg' loading='lazy'><figcaption>1:30</figcaption></figure>
+<figure><img src='segment-embed-strip/t00095.jpg' loading='lazy'><figcaption>1:35</figcaption></figure>
+<figure><img src='segment-embed-strip/t00100.jpg' loading='lazy'><figcaption>1:40</figcaption></figure>
+<figure><img src='segment-embed-strip/t00105.jpg' loading='lazy'><figcaption>1:45</figcaption></figure>
+<figure><img src='segment-embed-strip/t00110.jpg' loading='lazy'><figcaption>1:50</figcaption></figure>
+<figure><img src='segment-embed-strip/t00115.jpg' loading='lazy'><figcaption>1:55</figcaption></figure>
+</div>
+<h2>segment_03</h2>
+<p class='meta'>2:00–2:35 (8 frames)</p><div class='row'>
+<figure class='boundary'><img src='segment-embed-strip/t00120.jpg' loading='lazy'><figcaption>2:00</figcaption></figure>
+<figure><img src='segment-embed-strip/t00125.jpg' loading='lazy'><figcaption>2:05</figcaption></figure>
+<figure><img src='segment-embed-strip/t00130.jpg' loading='lazy'><figcaption>2:10</figcaption></figure>
+<figure><img src='segment-embed-strip/t00135.jpg' loading='lazy'><figcaption>2:15</figcaption></figure>
+<figure><img src='segment-embed-strip/t00140.jpg' loading='lazy'><figcaption>2:20</figcaption></figure>
+<figure><img src='segment-embed-strip/t00145.jpg' loading='lazy'><figcaption>2:25</figcaption></figure>
+<figure><img src='segment-embed-strip/t00150.jpg' loading='lazy'><figcaption>2:30</figcaption></figure>
+<figure><img src='segment-embed-strip/t00155.jpg' loading='lazy'><figcaption>2:35</figcaption></figure>
+</div>
+</body></html>

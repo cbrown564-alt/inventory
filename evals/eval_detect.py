@@ -57,7 +57,7 @@ def label_matches_any_gold(label: str, gold_items: list[dict],
 
 
 def collect_room_labels(capture_dir: Path, room_name: str, photos: list,
-                        detector: Detector) -> tuple[set[str], int]:
+                        detector) -> tuple[set[str], int]:
     """Run detector on every photo in a room; return unique labels + det count."""
     seen: set[str] = set()
     total = 0
@@ -71,24 +71,30 @@ def collect_room_labels(capture_dir: Path, room_name: str, photos: list,
     return seen, total
 
 
-def evaluate_mode(capture_dir: Path, labels: dict, mode: DetectMode,
-                  *, match_threshold: float = 0.6, conf: float = 0.25,
-                  model: str | None = None, device: str | None = None,
-                  rooms_filter: set[str] | None = None) -> dict:
-    """Score one detection mode against gold labels."""
-    detector = Detector(
-        model_name=model or default_model(mode),
-        mode=mode,
-        conf=conf,
-        device=device,
-    )
-    rooms_photos = ingest(capture_dir, capture_dir / ".eval-detect-work")
+def evaluate_detector(
+        capture_dir: Path,
+        labels: dict,
+        detector,
+        *,
+        backend: str,
+        mode: str = "text",
+        model: str | None = None,
+        match_threshold: float = 0.6,
+        device: str | None = None,
+        conf: float = 0.25,
+        rooms_filter: set[str] | None = None,
+        rooms_photos: dict | None = None,
+) -> dict:
+    """Score one detector backend against gold labels."""
+    if rooms_photos is None:
+        rooms_photos = ingest(capture_dir, capture_dir / ".eval-detect-work")
     if not detector.available:
         return {
+            "backend": backend,
             "mode": mode,
-            "model": model or default_model(mode),
+            "model": model,
             "available": False,
-            "error": detector._load_error,
+            "error": getattr(detector, "_load_error", None),
         }
 
     stats = {
@@ -171,8 +177,9 @@ def evaluate_mode(capture_dir: Path, labels: dict, mode: DetectMode,
         stats["vocab_hits"] = sum(1 for v in HOUSEHOLD_VOCAB if v in all_labels)
 
     return {
+        "backend": backend,
         "mode": mode,
-        "model": model or default_model(mode),
+        "model": model,
         "device": device,
         "conf": conf,
         "available": True,
@@ -189,6 +196,31 @@ def evaluate_mode(capture_dir: Path, labels: dict, mode: DetectMode,
         "rooms": per_room,
         "_counts": stats,
     }
+
+
+def evaluate_mode(capture_dir: Path, labels: dict, mode: DetectMode,
+                  *, match_threshold: float = 0.6, conf: float = 0.25,
+                  model: str | None = None, device: str | None = None,
+                  rooms_filter: set[str] | None = None) -> dict:
+    """Score one YOLOE detection mode against gold labels."""
+    detector = Detector(
+        model_name=model or default_model(mode),
+        mode=mode,
+        conf=conf,
+        device=device,
+    )
+    return evaluate_detector(
+        capture_dir,
+        labels,
+        detector,
+        backend="yoloe",
+        mode=mode,
+        model=model or default_model(mode),
+        match_threshold=match_threshold,
+        device=device,
+        conf=conf,
+        rooms_filter=rooms_filter,
+    )
 
 
 def _pct(n: int, d: int) -> float | None:

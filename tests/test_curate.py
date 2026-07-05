@@ -295,6 +295,31 @@ def test_cover_gate_helpers_on_synthetics(tmp_path):
 HERO_GOLD = Path(__file__).resolve().parents[1] / "evals/fixtures/own-property/hero-gold.json"
 
 
+def test_two_tier_eligibility_flags_on_curate(tmp_path):
+    """ML-E3: describe permissive, presentation uses E4 gates."""
+    from homeinventory.curate import tier_eligibility
+
+    photos = [_frame(tmp_path, i, seed=i, blur=4.0 if i % 3 == 0 else 0.0)
+              for i in range(9)]
+    curate({"Kitchen": photos}, tmp_path, tmp_path / "work")
+    assert all(p.describe_eligible is True for p in photos)
+    assert any(p.presentation_eligible is False for p in photos)
+    assert any(p.presentation_eligible is True for p in photos)
+    # tier helper mirrors gate logic
+    assert tier_eligibility(10.0, 0.5, 2.0, 0.05,
+                            room_median=50.0, room_p25=20.0) == (True, False)
+
+
+def test_linear_iqa_score_dot_product():
+    from homeinventory.curate import linear_iqa_score
+
+    weights = {
+        "features": ["bias", "establishing"],
+        "weights": [0.5, 2.0],
+    }
+    assert linear_iqa_score({"bias": 1.0, "establishing": 0.8}, weights) == 2.1
+
+
 def test_rank1_matches_hero_gold_when_fixture_present():
     """Regression lock when hero-gold.json exists (docs/18 pass bar ≥7/9)."""
     if not HERO_GOLD.is_file():

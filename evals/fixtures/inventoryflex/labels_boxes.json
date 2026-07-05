@@ -1,0 +1,124 @@
+{
+  "_schema_version": 1,
+  "_source": "ML-E11 bbox gold template — replace _example entries with hand-labelled boxes (docs/19 §1.4).",
+  "_schema_doc": "Run `uv run python evals/label_boxes.py schema` for field definitions.",
+  "fixture": "inventoryflex",
+  "labels_ref": "evals/fixtures/inventoryflex/labels.json",
+  "split_ref": "evals/splits/inventoryflex.json",
+  "rooms": [
+    "Bathroom",
+    "Reception & Open Plan Kitchen"
+  ],
+  "target": {
+    "min_boxes": 50,
+    "max_boxes": 100,
+    "rooms": 2,
+    "notable_only": true
+  },
+  "boxes": [
+    {
+      "id": "example-bathroom-bath-p14-i00",
+      "_example": true,
+      "_note": "PLACEHOLDER — replace box coords after labelling",
+      "room": "Bathroom",
+      "photo": "p14_i00.jpg",
+      "item_name": "bath",
+      "gold_item": "bath",
+      "notable": true,
+      "box_xyxy": [120, 80, 520, 410],
+      "labeler": "example",
+      "verified": false
+    },
+    {
+      "id": "example-bathroom-wc-p14-i01",
+      "_example": true,
+      "_note": "PLACEHOLDER",
+      "room": "Bathroom",
+      "photo": "p14_i01.jpg",
+      "item_name": "toilet",
+      "gold_item": "toilet",
+      "notable": true,
+      "box_xyxy": [200, 150, 380, 420],
+      "labeler": "example",
+      "verified": false
+    },
+    {
+      "id": "example-bathroom-basin-p15-i00",
+      "_example": true,
+      "_note": "PLACEHOLDER",
+      "room": "Bathroom",
+      "photo": "p15_i00.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [90, 60, 310, 280],
+      "labeler": "example",
+      "verified": false
+    },
+    {
+      "id": "example-kitchen-hob-p25-i00",
+      "_example": true,
+      "_note": "PLACEHOLDER",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "item_name": "induction hob",
+      "gold_item": "induction hob",
+      "notable": true,
+      "box_xyxy": [140, 100, 420, 320],
+      "labeler": "example",
+      "verified": false
+    },
+    {
+      "id": "example-kitchen-oven-p25-i01",
+      "_example": true,
+      "_note": "PLACEHOLDER",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "item_name": "oven",
+      "gold_item": "oven",
+      "notable": true,
+      "box_xyxy": [180, 90, 400, 350],
+      "labeler": "example",
+      "verified": false
+    },
+    {
+      "id": "example-kitchen-fridge-p26-i00",
+      "_example": true,
+      "_note": "PLACEHOLDER",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i00.jpg",
+      "item_name": "fridge freezer",
+      "gold_item": "fridge freezer",
+      "notable": true,
+      "box_xyxy": [50, 40, 280, 480],
+      "labeler": "example",
+      "verified": false
+    },
+    {
+      "id": "example-kitchen-sink-p27-i00",
+      "_example": true,
+      "_note": "PLACEHOLDER",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i00.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [220, 160, 480, 300],
+      "labeler": "example",
+      "verified": false
+    },
+    {
+      "id": "example-bathroom-shower-p16-i00",
+      "_example": true,
+      "_note": "PLACEHOLDER",
+      "room": "Bathroom",
+      "photo": "p16_i00.jpg",
+      "item_name": "shower screen",
+      "gold_item": "shower screen",
+      "notable": true,
+      "box_xyxy": [60, 50, 540, 450],
+      "labeler": "example",
+      "verified": false
+    }
+  ]
+}

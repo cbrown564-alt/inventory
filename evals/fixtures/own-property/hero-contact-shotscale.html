@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset='utf-8'>
+<title>ML-E19 shot-scale contact sheet</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:1rem;background:#111;color:#eee}
+h1,h2{margin:0.5rem 0}
+.summary{background:#222;padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.cell{background:#222;border-radius:8px;overflow:hidden;border:2px solid #333}
+.cell.pick{border-color:#f5c518}
+.cell img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;background:#000}
+.meta{padding:8px;font-size:12px;line-height:1.4}
+.star{color:#f5c518;font-weight:bold}
+.metrics{color:#aaa}
+</style></head><body>
+<h1>ML-E19 — shot-scale (long vs close-up)</h1>
+<p>Report: /workspace/evals/fixtures/own-property/shotscale-smoke-report</p>
+<p>CLIP zero-shot margin: mean(long-shot prompts) − mean(close-up prompts). Pass bar: mean Spearman ρ vs hero-gold ≥ E5 cover scorer (classical baseline).</p>
+<div class='summary'><h2>Metrics</h2><pre>
+{
+  &quot;per_room&quot;: {
+    &quot;Kitchen&quot;: {
+      &quot;n_frames&quot;: 23,
+      &quot;spearman_shot_scale&quot;: 0.4,
+      &quot;spearman_cover_e5&quot;: 0.6,
+      &quot;top1_hit_cover_e5&quot;: false,
+      &quot;top3_hit_cover_e5&quot;: false,
+      &quot;top1_hit_shot_scale&quot;: false,
+      &quot;top3_hit_shot_scale&quot;: true
+    }
+  },
+  &quot;n_rooms&quot;: 1,
+  &quot;mean_spearman_shot_scale&quot;: 0.4,
+  &quot;mean_spearman_cover_e5&quot;: 0.6,
+  &quot;pass_bar&quot;: false,
+  &quot;top1_hit_rate_shot_scale&quot;: 0.0,
+  &quot;timing&quot;: {
+    &quot;infer_s&quot;: 40.36,
+    &quot;ms_per_frame&quot;: 1754.6,
+    &quot;backend&quot;: &quot;open_clip&quot;
+  },
+  &quot;prompts&quot;: {
+    &quot;long_shot&quot;: [
+      &quot;long shot of a room interior&quot;,
+      &quot;wide establishing shot showing the full room&quot;,
+      &quot;long shot showing floor walls and ceiling&quot;,
+      &quot;full room overview photograph&quot;
+    ],
+    &quot;close_up&quot;: [
+      &quot;close-up shot of an object or fixture&quot;,
+      &quot;extreme close-up detail photograph&quot;,
+      &quot;macro close-up of a household item&quot;,
+      &quot;tight crop filling the frame with one surface&quot;
+    ]
+  }
+}
+</pre></div>
+<h2>Kitchen</h2>
+<p><em>Need hob and cabinets visible; avoid drawer/bread-bin close-ups and hob-surface fill</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f005292.jpg' alt='IMG_5512_f005292.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f005292.jpg</strong><br>
+<span class='metrics'>
+margin=0.079 long=1.00 shot=1 hero=— gold=22
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900005.jpg' alt='IMG_5512_f900005.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900005.jpg</strong><br>
+<span class='metrics'>
+margin=0.076 long=1.00 shot=2 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f000981.jpg' alt='IMG_5512_f000981.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f000981.jpg</strong><br>
+<span class='metrics'>
+margin=0.073 long=1.00 shot=3 hero=1 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f001584.jpg' alt='IMG_5512_f001584.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f001584.jpg</strong><br>
+<span class='metrics'>
+margin=0.063 long=1.00 shot=4 hero=— gold=2
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f002529.jpg' alt='IMG_5512_f002529.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002529.jpg</strong><br>
+<span class='metrics'>
+margin=0.061 long=1.00 shot=5 hero=— gold=3
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900009.jpg' alt='IMG_5512_f900009.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900009.jpg</strong><br>
+<span class='metrics'>
+margin=0.042 long=0.98 shot=6 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f003393.jpg' alt='IMG_5512_f003393.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f003393.jpg</strong><br>
+<span class='metrics'>
+margin=0.038 long=0.98 shot=7 hero=— gold=23
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900006.jpg' alt='IMG_5512_f900006.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900006.jpg</strong><br>
+<span class='metrics'>
+margin=0.036 long=0.97 shot=8 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900016.jpg' alt='IMG_5512_f900016.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900016.jpg</strong><br>
+<span class='metrics'>
+margin=0.030 long=0.95 shot=9 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900013.jpg' alt='IMG_5512_f900013.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900013.jpg</strong><br>
+<span class='metrics'>
+margin=0.021 long=0.89 shot=10 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900018.jpg' alt='IMG_5512_f900018.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900018.jpg</strong><br>
+<span class='metrics'>
+margin=0.020 long=0.88 shot=11 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900019.jpg' alt='IMG_5512_f900019.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900019.jpg</strong><br>
+<span class='metrics'>
+margin=0.018 long=0.86 shot=12 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900010.jpg' alt='IMG_5512_f900010.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900010.jpg</strong><br>
+<span class='metrics'>
+margin=0.015 long=0.81 shot=13 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900021.jpg' alt='IMG_5512_f900021.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900021.jpg</strong><br>
+<span class='metrics'>
+margin=0.010 long=0.72 shot=14 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900014.jpg' alt='IMG_5512_f900014.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900014.jpg</strong><br>
+<span class='metrics'>
+margin=0.002 long=0.55 shot=15 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900020.jpg' alt='IMG_5512_f900020.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900020.jpg</strong><br>
+<span class='metrics'>
+margin=0.000 long=0.50 shot=16 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900011.jpg' alt='IMG_5512_f900011.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900011.jpg</strong><br>
+<span class='metrics'>
+margin=-0.004 long=0.41 shot=17 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900017.jpg' alt='IMG_5512_f900017.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900017.jpg</strong><br>
+<span class='metrics'>
+margin=-0.007 long=0.34 shot=18 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900022.jpg' alt='IMG_5512_f900022.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900022.jpg</strong><br>
+<span class='metrics'>
+margin=-0.010 long=0.26 shot=19 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900012.jpg' alt='IMG_5512_f900012.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900012.jpg</strong><br>
+<span class='metrics'>
+margin=-0.018 long=0.14 shot=20 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900008.jpg' alt='IMG_5512_f900008.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900008.jpg</strong><br>
+<span class='metrics'>
+margin=-0.021 long=0.11 shot=21 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900015.jpg' alt='IMG_5512_f900015.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900015.jpg</strong><br>
+<span class='metrics'>
+margin=-0.022 long=0.10 shot=22 hero=— gold=—
+</span></div></div>
+<div class='cell'>
+<img src='shotscale-smoke-report/work/frames/Kitchen/IMG_5512_f900007.jpg' alt='IMG_5512_f900007.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f900007.jpg</strong><br>
+<span class='metrics'>
+margin=-0.026 long=0.07 shot=23 hero=— gold=—
+</span></div></div>
+</div>
+</body></html>

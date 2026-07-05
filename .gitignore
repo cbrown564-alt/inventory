@@ -38,3 +38,8 @@ examples/videos/IMG_5512.MOV
 
 # segmentation spike outputs (personal frames)
 segment-spike*/
+
+# Tier A external dataset cache (see evals/external/README.md)
+evals/external/data/
+evals/fixtures/own-property/segment-embed-strip/
+evals/fixtures/own-property/shotscale-smoke-report/
