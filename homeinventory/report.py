@@ -229,13 +229,13 @@ def _display_path(photo_path: str, capture_dir: Path, out_dir: Path) -> str:
     the report folder — never an absolute path from the build machine."""
     p = Path(photo_path.replace("\\", "/"))
     if not p.is_absolute():
-        return str(p)
+        return str(p).replace("\\", "/")
     for root in (capture_dir, out_dir):
         try:
-            return str(p.relative_to(root.resolve()))
+            return str(p.relative_to(root.resolve())).replace("\\", "/")
         except ValueError:
             try:
-                return str(p.relative_to(root))
+                return str(p.relative_to(root)).replace("\\", "/")
             except ValueError:
                 continue
     return "/".join(p.parts[-3:])  # last resort: room/dir/file.jpg
