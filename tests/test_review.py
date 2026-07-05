@@ -972,6 +972,16 @@ def test_review_app_has_report_and_pdf_controls(server):
     assert "finish-checklist" in html
 
 
+def test_finish_route_serves_review_app(server):
+    """Optional /finish route opens the Finish checklist."""
+    base, _state, _out, _cap = server
+    status, html = _get_text(base + "/finish")
+    assert status == 200
+    assert 'id="finish-panel"' not in html  # rendered client-side
+    assert "renderFinish" in html
+    assert 'id="nav-finish"' in html
+
+
 def test_sign_blocks_without_address(server):
     """Signing requires a real property address on the cover."""
     base, _state, _out, _cap = server
