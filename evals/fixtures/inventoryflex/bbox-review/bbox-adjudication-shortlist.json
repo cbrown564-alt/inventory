@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "description": "Shortlist for human adjudication — start here before bulk accept/reject",
+  "instructions": "Open adjudication-gallery.html in a browser (serve bbox-review/ dir). Verdict: keep | drop | redraw",
+  "summary": {
+    "total_boxes": 124,
+    "pass1": {"accept": 40, "reject": 51, "relocate": 30, "uncertain": 3},
+    "pass2": {"accept": 35, "reject": 49, "relocate": 30, "uncertain": 3},
+    "agent_disagreements": 3,
+    "consensus_reject": 49,
+    "consensus_relocate": 29,
+    "both_uncertain": 3
+  },
+  "start_here": [
+    {
+      "tier": 1,
+      "reason": "agents disagree on keep vs drop",
+      "items": ["reception-open-plan-kitchen-mirror-p25_i00"]
+    },
+    {
+      "tier": 2,
+      "reason": "both agents uncertain",
+      "items": [
+        "reception-open-plan-kitchen-ceiling-p30_i09",
+        "reception-open-plan-kitchen-bar-chairs-p31_i04",
+        "reception-open-plan-kitchen-ceiling-p25_i06"
+      ]
+    },
+    {
+      "tier": 3,
+      "reason": "consensus reject — likely drop unless you disagree",
+      "items": [
+        "reception-open-plan-kitchen-balcony-door-p25_i10",
+        "reception-open-plan-kitchen-oven-p30_i07",
+        "reception-open-plan-kitchen-oven-p31_i10",
+        "bathroom-bath-p14_i03",
+        "bathroom-mirrored-cabinet-p15_i02",
+        "reception-open-plan-kitchen-fridge-freezer-p30_i01",
+        "reception-open-plan-kitchen-laminate-flooring-p30_i01",
+        "reception-open-plan-kitchen-laminate-flooring-p31_i01"
+      ]
+    },
+    {
+      "tier": 4,
+      "reason": "consensus relocate — keep item but redraw box",
+      "items": [
+        "bathroom-bath-p14_i07",
+        "reception-open-plan-kitchen-balcony-door-p26_i07",
+        "reception-open-plan-kitchen-kitchen-units-p25_i00",
+        "reception-open-plan-kitchen-induction-hob-p25_i00",
+        "reception-open-plan-kitchen-pendant-light-fittings-p25_i00"
+      ]
+    }
+  ]
+}

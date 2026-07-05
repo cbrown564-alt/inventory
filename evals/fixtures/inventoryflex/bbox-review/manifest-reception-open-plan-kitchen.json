@@ -1,0 +1,2333 @@
+{
+  "schema_version": 1,
+  "description": "ML-E11 bbox review pack \u2014 one crop per box for visual adjudication",
+  "verdict_values": [
+    "accept",
+    "reject",
+    "relocate",
+    "uncertain"
+  ],
+  "entries": [
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p25_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i10.jpg",
+      "gold_item": "balcony door",
+      "det_label": "window",
+      "det_confidence": 0.259,
+      "box_xyxy": [
+        0,
+        1,
+        736,
+        596
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-balcony-door-p25_i10.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i10.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box",
+        "huge_box"
+      ],
+      "risk_score": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i07.jpg",
+      "gold_item": "oven",
+      "det_label": "stove",
+      "det_confidence": 0.454,
+      "box_xyxy": [
+        0,
+        1,
+        800,
+        549
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p30_i07.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i07.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box",
+        "huge_box"
+      ],
+      "risk_score": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p31_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i10.jpg",
+      "gold_item": "oven",
+      "det_label": "stove",
+      "det_confidence": 0.263,
+      "box_xyxy": [
+        3,
+        0,
+        799,
+        568
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p31_i10.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i10.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box",
+        "huge_box"
+      ],
+      "risk_score": 5
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i01.jpg",
+      "gold_item": "balcony door",
+      "det_label": "window",
+      "det_confidence": 0.384,
+      "box_xyxy": [
+        76,
+        226,
+        766,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-balcony-door-p26_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i01.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i06.jpg",
+      "gold_item": "balcony door",
+      "det_label": "window",
+      "det_confidence": 0.485,
+      "box_xyxy": [
+        0,
+        1,
+        234,
+        416
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-balcony-door-p26_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i06.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i07.jpg",
+      "gold_item": "balcony door",
+      "det_label": "window",
+      "det_confidence": 0.271,
+      "box_xyxy": [
+        0,
+        0,
+        241,
+        259
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-balcony-door-p26_i07.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i07.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i08.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.476,
+      "box_xyxy": [
+        0,
+        0,
+        800,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i08.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i08.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box",
+        "huge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p30_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i09.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.455,
+      "box_xyxy": [
+        753,
+        0,
+        790,
+        18
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p30_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i09.jpg",
+      "risk_flags": [
+        "med_conf",
+        "tiny_box",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p30_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i01.jpg",
+      "gold_item": "fridge freezer",
+      "det_label": "refrigerator",
+      "det_confidence": 0.496,
+      "box_xyxy": [
+        0,
+        0,
+        201,
+        510
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-fridge-freezer-p30_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i01.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i01.jpg",
+      "gold_item": "fridge freezer",
+      "det_label": "refrigerator",
+      "det_confidence": 0.389,
+      "box_xyxy": [
+        46,
+        1,
+        649,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-fridge-freezer-p31_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i01.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i04.jpg",
+      "gold_item": "fridge freezer",
+      "det_label": "refrigerator",
+      "det_confidence": 0.372,
+      "box_xyxy": [
+        51,
+        0,
+        593,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-fridge-freezer-p31_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i04.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.304,
+      "box_xyxy": [
+        695,
+        307,
+        719,
+        414
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "tiny_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p26_i11",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i11.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.302,
+      "box_xyxy": [
+        0,
+        0,
+        133,
+        208
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p26_i11.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i11.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p27_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i06.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.371,
+      "box_xyxy": [
+        0,
+        94,
+        79,
+        334
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p27_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p27_i06.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p29_i05.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.36,
+      "box_xyxy": [
+        603,
+        0,
+        800,
+        131
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p29_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p29_i05.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p29_i09.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.373,
+      "box_xyxy": [
+        537,
+        3,
+        800,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p29_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p29_i09.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i01.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.25,
+      "box_xyxy": [
+        72,
+        0,
+        781,
+        539
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p30_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i01.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p30_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i01.jpg",
+      "gold_item": "laminate flooring",
+      "det_label": "door",
+      "det_confidence": 0.354,
+      "box_xyxy": [
+        548,
+        15,
+        799,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-laminate-flooring-p30_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i01.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p31_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i01.jpg",
+      "gold_item": "laminate flooring",
+      "det_label": "door",
+      "det_confidence": 0.472,
+      "box_xyxy": [
+        371,
+        0,
+        637,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-laminate-flooring-p31_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i01.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p28_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i07.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.3,
+      "box_xyxy": [
+        41,
+        8,
+        799,
+        577
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p28_i07.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p28_i07.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box",
+        "huge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p29_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p29_i03.jpg",
+      "gold_item": "oven",
+      "det_label": "stove",
+      "det_confidence": 0.397,
+      "box_xyxy": [
+        168,
+        340,
+        508,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p29_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p29_i03.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "gold_item": "sofa",
+      "det_label": "kettle",
+      "det_confidence": 0.438,
+      "box_xyxy": [
+        254,
+        348,
+        279,
+        392
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i06.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch",
+        "tiny_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i07.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.287,
+      "box_xyxy": [
+        0,
+        509,
+        317,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p26_i07.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i07.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i10.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.482,
+      "box_xyxy": [
+        0,
+        0,
+        59,
+        87
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p26_i10.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i10.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p28_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i04.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.253,
+      "box_xyxy": [
+        0,
+        0,
+        290,
+        330
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p28_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p28_i04.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p30_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i03.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.355,
+      "box_xyxy": [
+        344,
+        198,
+        449,
+        235
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p30_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i03.jpg",
+      "risk_flags": [
+        "med_conf",
+        "tiny_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.277,
+      "box_xyxy": [
+        343,
+        46,
+        371,
+        64
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "risk_flags": [
+        "low_conf",
+        "tiny_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.497,
+      "box_xyxy": [
+        439,
+        102,
+        475,
+        119
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p25_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i02.jpg",
+      "risk_flags": [
+        "med_conf",
+        "tiny_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.491,
+      "box_xyxy": [
+        573,
+        56,
+        606,
+        77
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p25_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i03.jpg",
+      "risk_flags": [
+        "med_conf",
+        "tiny_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p28_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i08.jpg",
+      "gold_item": "fridge freezer",
+      "det_label": "refrigerator",
+      "det_confidence": 0.359,
+      "box_xyxy": [
+        180,
+        131,
+        582,
+        480
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-fridge-freezer-p28_i08.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p28_i08.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.423,
+      "box_xyxy": [
+        248,
+        235,
+        380,
+        295
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i06.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i00.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.43,
+      "box_xyxy": [
+        27,
+        63,
+        706,
+        583
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p30_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i00.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p31_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i01.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.25,
+      "box_xyxy": [
+        145,
+        15,
+        394,
+        595
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p31_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i01.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "gold_item": "laminate flooring",
+      "det_label": "door",
+      "det_confidence": 0.3,
+      "box_xyxy": [
+        654,
+        94,
+        765,
+        465
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-laminate-flooring-p25_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i01.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "laminate flooring",
+      "det_label": "door",
+      "det_confidence": 0.384,
+      "box_xyxy": [
+        84,
+        97,
+        260,
+        491
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-laminate-flooring-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i09.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.425,
+      "box_xyxy": [
+        408,
+        0,
+        792,
+        77
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p27_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p27_i09.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i10.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.362,
+      "box_xyxy": [
+        100,
+        0,
+        303,
+        245
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p27_i10.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p27_i10.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p31_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i04.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.349,
+      "box_xyxy": [
+        619,
+        0,
+        800,
+        292
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p31_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i04.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i04.jpg",
+      "gold_item": "oven",
+      "det_label": "oven",
+      "det_confidence": 0.348,
+      "box_xyxy": [
+        431,
+        0,
+        800,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p30_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i04.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "pendant light fittings",
+      "det_label": "light fitting",
+      "det_confidence": 0.402,
+      "box_xyxy": [
+        0,
+        0,
+        505,
+        127
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-pendant-light-fittings-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p27_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i03.jpg",
+      "gold_item": "roller blinds",
+      "det_label": "blinds",
+      "det_confidence": 0.398,
+      "box_xyxy": [
+        591,
+        92,
+        800,
+        465
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-roller-blinds-p27_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p27_i03.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p30_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i09.jpg",
+      "gold_item": "roller blinds",
+      "det_label": "blinds",
+      "det_confidence": 0.307,
+      "box_xyxy": [
+        741,
+        402,
+        800,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-roller-blinds-p30_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i09.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i04.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.307,
+      "box_xyxy": [
+        0,
+        406,
+        720,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p28_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p28_i04.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i10",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i10.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.298,
+      "box_xyxy": [
+        282,
+        429,
+        536,
+        468
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p30_i10.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i10.jpg",
+      "risk_flags": [
+        "low_conf",
+        "tiny_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.444,
+      "box_xyxy": [
+        0,
+        404,
+        176,
+        556
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i04.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.329,
+      "box_xyxy": [
+        340,
+        466,
+        794,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p30_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i08.jpg",
+      "gold_item": "sofa",
+      "det_label": "kettle",
+      "det_confidence": 0.284,
+      "box_xyxy": [
+        19,
+        107,
+        96,
+        191
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p30_i08.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i08.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "washing machine",
+      "det_label": "dishwasher",
+      "det_confidence": 0.306,
+      "box_xyxy": [
+        252,
+        287,
+        297,
+        422
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-washing-machine-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p30_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i08.jpg",
+      "gold_item": "washing machine",
+      "det_label": "washing machine",
+      "det_confidence": 0.355,
+      "box_xyxy": [
+        515,
+        0,
+        800,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-washing-machine-p30_i08.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i08.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p30_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i09.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.32,
+      "box_xyxy": [
+        346,
+        339,
+        593,
+        523
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p30_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i09.jpg",
+      "risk_flags": [
+        "low_conf"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "coffee table",
+      "det_label": "coffee table",
+      "det_confidence": 0.678,
+      "box_xyxy": [
+        766,
+        456,
+        799,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-coffee-table-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "risk_flags": [
+        "tiny_box",
+        "edge_box"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-dining-table-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "dining table",
+      "det_label": "dining table",
+      "det_confidence": 0.291,
+      "box_xyxy": [
+        374,
+        301,
+        476,
+        405
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-dining-table-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "risk_flags": [
+        "low_conf"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.689,
+      "box_xyxy": [
+        690,
+        0,
+        800,
+        597
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i04.jpg",
+      "risk_flags": [
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.609,
+      "box_xyxy": [
+        650,
+        349,
+        800,
+        463
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "risk_flags": [
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p26_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i09.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.686,
+      "box_xyxy": [
+        0,
+        90,
+        157,
+        531
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p26_i09.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i09.jpg",
+      "risk_flags": [
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.251,
+      "box_xyxy": [
+        576,
+        125,
+        728,
+        298
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "risk_flags": [
+        "low_conf"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i03.jpg",
+      "gold_item": "oven",
+      "det_label": "oven",
+      "det_confidence": 0.309,
+      "box_xyxy": [
+        59,
+        15,
+        724,
+        588
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p30_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i03.jpg",
+      "risk_flags": [
+        "low_conf"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i03.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.373,
+      "box_xyxy": [
+        179,
+        102,
+        734,
+        492
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p28_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p28_i03.jpg",
+      "risk_flags": [
+        "med_conf"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.451,
+      "box_xyxy": [
+        433,
+        406,
+        796,
+        518
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i03.jpg",
+      "risk_flags": [
+        "med_conf"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p26_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i04.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.321,
+      "box_xyxy": [
+        78,
+        63,
+        721,
+        563
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p26_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i04.jpg",
+      "risk_flags": [
+        "low_conf"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.61,
+      "box_xyxy": [
+        0,
+        448,
+        72,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i02.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i04.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.519,
+      "box_xyxy": [
+        308,
+        0,
+        493,
+        123
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p26_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i04.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p31_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i04.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.791,
+      "box_xyxy": [
+        713,
+        47,
+        800,
+        245
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p31_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i04.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.592,
+      "box_xyxy": [
+        316,
+        105,
+        354,
+        131
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p25_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i06.jpg",
+      "risk_flags": [
+        "tiny_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p31_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i05.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.534,
+      "box_xyxy": [
+        385,
+        117,
+        440,
+        152
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p31_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i05.jpg",
+      "risk_flags": [
+        "tiny_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "coffee table",
+      "det_label": "coffee table",
+      "det_confidence": 0.75,
+      "box_xyxy": [
+        0,
+        441,
+        109,
+        598
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-coffee-table-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.735,
+      "box_xyxy": [
+        598,
+        115,
+        671,
+        221
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i01.jpg",
+      "risk_flags": [
+        "label_mismatch"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.536,
+      "box_xyxy": [
+        591,
+        359,
+        649,
+        513
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i02.jpg",
+      "risk_flags": [
+        "label_mismatch"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "gold_item": "kitchen units",
+      "det_label": "cabinet",
+      "det_confidence": 0.658,
+      "box_xyxy": [
+        289,
+        344,
+        443,
+        412
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-kitchen-units-p25_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i03.jpg",
+      "risk_flags": [
+        "label_mismatch"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i06.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.875,
+      "box_xyxy": [
+        339,
+        45,
+        561,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p27_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p27_i06.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "gold_item": "oven",
+      "det_label": "oven",
+      "det_confidence": 0.635,
+      "box_xyxy": [
+        722,
+        260,
+        800,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p25_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i02.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.631,
+      "box_xyxy": [
+        610,
+        310,
+        678,
+        322
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "risk_flags": [
+        "tiny_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.714,
+      "box_xyxy": [
+        352,
+        380,
+        440,
+        408
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p25_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i02.jpg",
+      "risk_flags": [
+        "tiny_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i08.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.542,
+      "box_xyxy": [
+        636,
+        398,
+        800,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p30_i08.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i08.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.668,
+      "box_xyxy": [
+        0,
+        391,
+        509,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i01.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p32_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p32_i01.jpg",
+      "gold_item": "washing machine",
+      "det_label": "washing machine",
+      "det_confidence": 0.755,
+      "box_xyxy": [
+        0,
+        0,
+        612,
+        294
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-washing-machine-p32_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p32_i01.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.667,
+      "box_xyxy": [
+        409,
+        311,
+        469,
+        412
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.615,
+      "box_xyxy": [
+        39,
+        315,
+        122,
+        431
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i01.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.879,
+      "box_xyxy": [
+        222,
+        359,
+        330,
+        488
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i03.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.655,
+      "box_xyxy": [
+        327,
+        387,
+        423,
+        515
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i04.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.889,
+      "box_xyxy": [
+        473,
+        336,
+        628,
+        493
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i11",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i11.jpg",
+      "gold_item": "bar chairs",
+      "det_label": "chair",
+      "det_confidence": 0.859,
+      "box_xyxy": [
+        228,
+        67,
+        718,
+        564
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-bar-chairs-p26_i11.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p26_i11.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p31_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i02.jpg",
+      "gold_item": "ceiling",
+      "det_label": "ceiling light",
+      "det_confidence": 0.611,
+      "box_xyxy": [
+        361,
+        25,
+        454,
+        92
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-ceiling-p31_i02.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i02.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "gold_item": "coffee table",
+      "det_label": "coffee table",
+      "det_confidence": 0.79,
+      "box_xyxy": [
+        439,
+        378,
+        540,
+        442
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-coffee-table-p25_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i03.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-dining-table-p25_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i04.jpg",
+      "gold_item": "dining table",
+      "det_label": "dining table",
+      "det_confidence": 0.568,
+      "box_xyxy": [
+        357,
+        406,
+        564,
+        514
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-dining-table-p25_i04.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i04.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.655,
+      "box_xyxy": [
+        119,
+        254,
+        211,
+        448
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p25_i03.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i03.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.64,
+      "box_xyxy": [
+        494,
+        225,
+        579,
+        362
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p25_i05.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i05.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p31_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i00.jpg",
+      "gold_item": "mirror",
+      "det_label": "mirror",
+      "det_confidence": 0.847,
+      "box_xyxy": [
+        295,
+        3,
+        591,
+        501
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-mirror-p31_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i00.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "gold_item": "oven",
+      "det_label": "oven",
+      "det_confidence": 0.531,
+      "box_xyxy": [
+        591,
+        223,
+        662,
+        371
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p25_i01.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i01.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "gold_item": "oven",
+      "det_label": "oven",
+      "det_confidence": 0.703,
+      "box_xyxy": [
+        492,
+        290,
+        604,
+        469
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-oven-p25_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i06.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.771,
+      "box_xyxy": [
+        340,
+        474,
+        495,
+        534
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p25_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i06.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i06.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.607,
+      "box_xyxy": [
+        206,
+        423,
+        586,
+        506
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p30_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i06.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i07.jpg",
+      "gold_item": "sink",
+      "det_label": "sink",
+      "det_confidence": 0.766,
+      "box_xyxy": [
+        160,
+        386,
+        702,
+        534
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sink-p30_i07.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p30_i07.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "gold_item": "sofa",
+      "det_label": "sofa",
+      "det_confidence": 0.762,
+      "box_xyxy": [
+        125,
+        318,
+        443,
+        549
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-sofa-p25_i00.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p25_i00.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p31_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i06.jpg",
+      "gold_item": "washing machine",
+      "det_label": "washing machine",
+      "det_confidence": 0.809,
+      "box_xyxy": [
+        113,
+        252,
+        396,
+        485
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops/reception-open-plan-kitchen-washing-machine-p31_i06.jpg",
+      "full_path": "full/reception-open-plan-kitchen/p31_i06.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    }
+  ],
+  "room": "Reception & Open Plan Kitchen"
+}

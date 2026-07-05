@@ -44,7 +44,8 @@ def _norm(s: str) -> str:
 
 
 def label_matches_gold(label: str, gold: dict, threshold: float) -> bool:
-    return run_eval.name_match(label, gold) >= threshold
+    from homeinventory.det_match import label_matches_gold as _match
+    return _match(label, gold, threshold)
 
 
 def gold_matches_any_label(gold: dict, labels: set[str], threshold: float) -> bool:

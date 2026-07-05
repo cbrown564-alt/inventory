@@ -109,7 +109,7 @@ Plan of record: `docs/19-ml-dl-exploration-plan.md`. External Tier A datasets:
 | **ML-E8** | Cover — VLM top-10 rerank | (manual spike) | Top-k VLM rerank via describe backend | cost log + contact sheet |
 | **ML-E9** | Capture — optical-flow pause detection | (planned) | Pause detector on walkthrough timeline | timeline HTML |
 | **ML-E10** | Detection — Grounding DINO vs YOLOE | `evals/eval_detect_gdino.py` | `python3 evals/eval_detect_gdino.py benchmarks/inventoryflex/capture evals/fixtures/inventoryflex/labels.json` | `detect-comparison-gdino.json` |
-| **ML-E11** | Data — bbox labels (2 rooms) | `evals/label_boxes.py` | `python3 evals/label_boxes.py gallery evals/fixtures/inventoryflex/labels_boxes.json` | `labels_boxes.json` |
+| **ML-E11** | Data — bbox labels (2 rooms) | `evals/label_boxes.py` | `uv run python evals/label_boxes.py bootstrap benchmarks/inventoryflex/capture evals/fixtures/inventoryflex/labels.json` | `labels_boxes.json`, `bbox-gallery.html` |
 | **ML-E12** | Detection — fine-tune on ML-E11 subset | (planned) | Train on `evals/splits/inventoryflex.json` train rooms | weights + eval JSON |
 | **ML-E13** | Segmentation — SegFormer floor+wall | (planned) | SegFormer spike on hero candidates | scatter plot |
 | **ML-E14** | Compare — Siamese pairs | (planned; needs paired fixture) | Embedding distance on check-in/out pairs | paired eval JSON |
@@ -212,7 +212,7 @@ Gold fixture: `evals/fixtures/own-property/hero-gold.json`. Experiment log:
 
 | Script | ML-E | Purpose | Typical command |
 |---|---|---|---|
-| `label_boxes.py` | E11 | Bbox schema, gallery, validate InventoryFlex boxes | `uv run python evals/label_boxes.py gallery benchmarks/inventoryflex/capture evals/fixtures/inventoryflex/labels.json` |
+| `label_boxes.py` | E11 | Bbox schema, gallery, validate, bootstrap InventoryFlex boxes | `uv run python evals/label_boxes.py bootstrap benchmarks/inventoryflex/capture evals/fixtures/inventoryflex/labels.json` |
 
 Split protocol: `evals/splits/inventoryflex.json`. External datasets:
 `evals/external/README.md`.

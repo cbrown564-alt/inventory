@@ -18,7 +18,7 @@ adoption. Hero heuristic experiments (E0–E5) stay in docs/18.*
 | **ML-E8** | not started | top-1 = 9/9 or unanimous eyeball | — | — |
 | **ML-E9** | not started | Pause frames in gold top-3 ≥80% | — | — |
 | **ML-E10** | fail | Recall ↑, noise ≤ YOLOE text | Notable recall +17.3 pp (76.0%); unmatched +13.8 pp (79.6%) | `evals/fixtures/inventoryflex/detect-comparison-gdino.json` |
-| **ML-E11** | harness ready | 50–100 verified boxes, 2 rooms | 8 placeholder rows (`verified: false`) | `evals/fixtures/inventoryflex/labels_boxes.json` |
+| **ML-E11** | pass | 50–100 verified boxes, 2 rooms | **101 verified** (19 Bath, 82 Kitchen); bootstrap v2 + agent trim + human review | `labels_boxes.json`, `bbox-review/` |
 | **ML-E12** | not started | +10 pp recall @0.5 IoU | — | — |
 | **ML-E13** | not started | ρ with establishing gold | — | — |
 | **ML-E14** | not started | — (exploratory) | — | — |
@@ -29,7 +29,7 @@ adoption. Hero heuristic experiments (E0–E5) stay in docs/18.*
 | **ML-E19** | fail | mean Spearman ρ ≥ E5 classical | ρ 0.07 vs cover 0.44 (9 rooms); 579 ms/frame (OpenCLIP CPU) | `hero-contact-shotscale.html` |
 | **ML-E20** | not started | FP <10% on IFlex | — | — |
 
-**Counts (5 Jul 2026):** 7 fail · 2 harness ready · 11 not started.
+**Counts (5 Jul 2026):** 7 fail · 1 pass · 1 harness ready · 11 not started.
 
 ## Global blockers
 
@@ -39,7 +39,6 @@ adoption. Hero heuristic experiments (E0–E5) stay in docs/18.*
 | **`torch` / encoder deps** | Install with `uv pip install open-clip-torch`; SigLIP needs transformers API fix in `ml_scorers.py` |
 | **External datasets not downloaded** (`evals/external/data/`) | ML-E16–E18, ML-E20 |
 | **No paired check-in/out fixture** | ML-E14 |
-| **ML-E11 bbox gold incomplete** | ML-E12 |
 
 Rebuild own-property fixture (when video present):
 
@@ -119,13 +118,15 @@ uv run python -m homeinventory.cli build capture-walkthrough -o report \
 
 ### ML-E11 — bbox gold subset
 
-- **Harness:** `evals/label_boxes.py` (gallery, validate, stats)
-- **Template:** 8 `_example` boxes in Bathroom + Kitchen; **0 verified**
-- **Split:** val rooms in `evals/splits/inventoryflex.json`
+- **Harness:** `evals/label_boxes.py` (bootstrap, trim-consensus, carousel, validate)
+- **Run (5 Jul 2026):** bootstrap v2 (`det_match.py` routing) → agent consensus trim → 60-box human carousel review
+- **Result:** **101 verified boxes** (19 Bathroom, 82 Kitchen); **pass: true**
+- **Artifacts:** `labels_boxes.json`, `bbox-review/` (agent + human review JSON, carousel HTML)
+- **Note:** Generic `ceiling`/flooring skipped; `ceiling light` routes to spotlights/pendants; ML-E12 unblocked
 
 ### ML-E12 — fine-tune probe
 
-- **Status:** not started — blocked on ML-E11 labels
+- **Status:** not started — ML-E11 gold committed; ready to run
 
 ### ML-E13 — SegFormer floor+wall fraction
 
@@ -184,4 +185,4 @@ uv run python -m homeinventory.cli build capture-walkthrough -o report \
 - [x] Blockers documented (video, report, torch, external data, ML-E11)
 - [x] Re-run ML-E1, ML-E4–E7, ML-E19 on full IMG_5512 `report/` when video available
 - [x] ML-E6 hero-gold top-1 after `train_iqa_linear.py --report report`
-- [ ] ML-E11 ≥50 verified boxes committed
+- [x] ML-E11 ≥50 verified boxes committed

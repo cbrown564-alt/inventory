@@ -1,0 +1,243 @@
+{
+  "reviewer": "composer-2.5",
+  "pass": 1,
+  "room": "Reception & Open Plan Kitchen",
+  "batch": "b",
+  "verdicts": [
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p30_i08",
+      "verdict": "reject",
+      "note": "Microwave interior, not washing machine"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p30_i09",
+      "verdict": "reject",
+      "note": "Cabinet shelf with pans, no chair"
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i05",
+      "verdict": "relocate",
+      "note": "Narrow vertical sliver of table edge only"
+    },
+    {
+      "id": "reception-open-plan-kitchen-dining-table-p25_i00",
+      "verdict": "reject",
+      "note": "Box on dining chair, not table"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i04",
+      "verdict": "relocate",
+      "note": "Narrow vertical slice of unit"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i05",
+      "verdict": "relocate",
+      "note": "Sideboard correct but cuts off right section"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p26_i09",
+      "verdict": "relocate",
+      "note": "Narrow vertical slice of sideboard"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i00",
+      "verdict": "reject",
+      "note": "Backsplash/shelving panel, not mirror"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i03",
+      "verdict": "accept",
+      "note": "Open oven cavity"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i03",
+      "verdict": "accept",
+      "note": "Sink basin well framed"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i03",
+      "verdict": "accept",
+      "note": "Sofa back cushions"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p26_i04",
+      "verdict": "relocate",
+      "note": "Clips cushion tops and right armrest"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i02",
+      "verdict": "relocate",
+      "note": "Cuts off left half of chair"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i04",
+      "verdict": "relocate",
+      "note": "Includes window; clips chair top"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p31_i04",
+      "verdict": "uncertain",
+      "note": "Heavy motion blur"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i06",
+      "verdict": "uncertain",
+      "note": "Tiny indistinct crop"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p31_i05",
+      "verdict": "reject",
+      "note": "Smoke detector, not ceiling"
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i00",
+      "verdict": "accept",
+      "note": "Round coffee table"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i01",
+      "verdict": "relocate",
+      "note": "Cabinet door; loose fit"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i02",
+      "verdict": "accept",
+      "note": "Cabinet drawer column"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i03",
+      "verdict": "relocate",
+      "note": "Cuts legs; overlaps chair"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i06",
+      "verdict": "accept",
+      "note": "Floor mirror full height"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i02",
+      "verdict": "relocate",
+      "note": "Shifted left; clips oven right edge"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i00",
+      "verdict": "reject",
+      "note": "Tiny pen-like object, not sink"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i02",
+      "verdict": "relocate",
+      "note": "Shifted left; includes bottle"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i08",
+      "verdict": "relocate",
+      "note": "Partial sink corner only"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i01",
+      "verdict": "accept",
+      "note": "Sofa right section"
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p32_i01",
+      "verdict": "relocate",
+      "note": "Bottom-right quadrant of washer only"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i00",
+      "verdict": "relocate",
+      "note": "Clips backrest top and leg tips"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i01",
+      "verdict": "relocate",
+      "note": "Includes table surface and leg"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i03",
+      "verdict": "accept",
+      "note": "Armchair with gold frame"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i04",
+      "verdict": "relocate",
+      "note": "Includes table; clips chair legs"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i05",
+      "verdict": "relocate",
+      "note": "Clips backrest and leg feet"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i11",
+      "verdict": "accept",
+      "note": "Full armchair"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p31_i02",
+      "verdict": "accept",
+      "note": "Recessed ceiling downlight"
+    },
+    {
+      "id": "reception-open-plan-kitchen-coffee-table-p25_i03",
+      "verdict": "accept",
+      "note": "Oval coffee table"
+    },
+    {
+      "id": "reception-open-plan-kitchen-dining-table-p25_i04",
+      "verdict": "relocate",
+      "note": "Table correct but includes chair backs"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i03",
+      "verdict": "accept",
+      "note": "Floor mirror with black frame"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i05",
+      "verdict": "reject",
+      "note": "Door with handle, not mirror"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p31_i00",
+      "verdict": "reject",
+      "note": "Open wall cabinet interior"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i01",
+      "verdict": "accept",
+      "note": "Built-in oven/microwave stack"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p25_i06",
+      "verdict": "accept",
+      "note": "Miele oven stack"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i06",
+      "verdict": "accept",
+      "note": "Undermount sink basin"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i06",
+      "verdict": "reject",
+      "note": "Microwave turntable, not sink"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i07",
+      "verdict": "reject",
+      "note": "Microwave turntable, not sink"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i00",
+      "verdict": "accept",
+      "note": "Full grey sofa"
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p31_i06",
+      "verdict": "accept",
+      "note": "Miele washer front panel"
+    }
+  ]
+}

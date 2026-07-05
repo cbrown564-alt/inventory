@@ -1,0 +1,248 @@
+{
+  "reviewer": "composer-2.5",
+  "pass": 1,
+  "room": "Reception & Open Plan Kitchen",
+  "batch": "a",
+  "verdicts": [
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p25_i10",
+      "verdict": "reject",
+      "note": "Fixed window with handle; not floor-level balcony door"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i07",
+      "verdict": "reject",
+      "note": "Microwave interior, not oven"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p31_i10",
+      "verdict": "reject",
+      "note": "Washing-machine drum, not oven"
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i01",
+      "verdict": "reject",
+      "note": "Elevated window opening; no door threshold"
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i06",
+      "verdict": "accept",
+      "note": "Glass door to balcony decking"
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p26_i07",
+      "verdict": "relocate",
+      "note": "Balcony door corner only; box too small"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p25_i08",
+      "verdict": "accept",
+      "note": "Upholstered bar/dining chair seat"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p30_i09",
+      "verdict": "uncertain",
+      "note": "Tiny blurry blob; likely ceiling fixture not whole ceiling"
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p30_i01",
+      "verdict": "reject",
+      "note": "Cabinet divider edge, not fridge"
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i01",
+      "verdict": "accept",
+      "note": "Open built-in refrigerator"
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p31_i04",
+      "verdict": "reject",
+      "note": "Interior door edge with damage"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i00",
+      "verdict": "relocate",
+      "note": "Cabinet edge only; needs wider box"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p26_i11",
+      "verdict": "reject",
+      "note": "Interior door corner and floor"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p27_i06",
+      "verdict": "reject",
+      "note": "Dark door and wall junction"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i05",
+      "verdict": "accept",
+      "note": "Dark cabinet/appliance front panel"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p29_i09",
+      "verdict": "accept",
+      "note": "Closed drawer/cabinet unit front"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i01",
+      "verdict": "accept",
+      "note": "Open base cabinet with shelves"
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p30_i01",
+      "verdict": "reject",
+      "note": "Open cabinet door, not flooring"
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p31_i01",
+      "verdict": "reject",
+      "note": "Refrigerator door interior"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p28_i07",
+      "verdict": "reject",
+      "note": "Empty kitchen cabinet, not mirror"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p29_i03",
+      "verdict": "reject",
+      "note": "Electric kettle top, not oven"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i06",
+      "verdict": "reject",
+      "note": "Kettle on counter, not sofa"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i07",
+      "verdict": "reject",
+      "note": "Area rug, not bar chair"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p26_i10",
+      "verdict": "relocate",
+      "note": "Stool leg fragment only"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p28_i04",
+      "verdict": "reject",
+      "note": "Kitchen faucet base, not chair"
+    },
+    {
+      "id": "reception-open-plan-kitchen-bar-chairs-p30_i03",
+      "verdict": "reject",
+      "note": "Appliance vent grille"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i00",
+      "verdict": "reject",
+      "note": "Appliance control buttons on wall/unit"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i02",
+      "verdict": "reject",
+      "note": "Wall switch/plaque, not ceiling"
+    },
+    {
+      "id": "reception-open-plan-kitchen-ceiling-p25_i03",
+      "verdict": "reject",
+      "note": "Small countertop appliance, not ceiling"
+    },
+    {
+      "id": "reception-open-plan-kitchen-fridge-freezer-p28_i08",
+      "verdict": "reject",
+      "note": "Pull-out waste bins in drawer"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p25_i06",
+      "verdict": "accept",
+      "note": "Dark integrated cabinet/appliance panel"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i00",
+      "verdict": "accept",
+      "note": "Utensil drawer insert in kitchen unit"
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p31_i01",
+      "verdict": "reject",
+      "note": "Refrigerator interior, not kitchen units"
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p25_i01",
+      "verdict": "reject",
+      "note": "Integrated fridge-freezer panels"
+    },
+    {
+      "id": "reception-open-plan-kitchen-laminate-flooring-p25_i05",
+      "verdict": "reject",
+      "note": "Interior door, not flooring"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i09",
+      "verdict": "reject",
+      "note": "Table/chair metal leg base"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i10",
+      "verdict": "reject",
+      "note": "Furniture leg corner on floor"
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p31_i04",
+      "verdict": "relocate",
+      "note": "Mirror frame corner only; box too tight"
+    },
+    {
+      "id": "reception-open-plan-kitchen-oven-p30_i04",
+      "verdict": "accept",
+      "note": "Miele oven interior cavity"
+    },
+    {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i05",
+      "verdict": "reject",
+      "note": "HVAC vent grille, not pendant light"
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p27_i03",
+      "verdict": "reject",
+      "note": "Balcony door frame corner, no blind"
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p30_i09",
+      "verdict": "reject",
+      "note": "Narrow glass sidelight, not roller blind"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p28_i04",
+      "verdict": "accept",
+      "note": "Stainless sink corner with overflow"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p30_i10",
+      "verdict": "reject",
+      "note": "Plate and bowl on shelf"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i04",
+      "verdict": "relocate",
+      "note": "Sofa cushions plus kitchen counter in box"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p25_i05",
+      "verdict": "relocate",
+      "note": "Sofa present but box spans floor and rug"
+    },
+    {
+      "id": "reception-open-plan-kitchen-sofa-p30_i08",
+      "verdict": "reject",
+      "note": "Blurry countertop appliance, not sofa"
+    },
+    {
+      "id": "reception-open-plan-kitchen-washing-machine-p25_i05",
+      "verdict": "reject",
+      "note": "White cabinet door in closet, not washer"
+    }
+  ]
+}

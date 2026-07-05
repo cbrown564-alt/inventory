@@ -48,14 +48,14 @@ def _match_names(pred: str, candidates: list[str]) -> tuple[float, bool]:
         if c_n in pred_n or pred_n in c_n:
             shorter, longer = sorted((c_n, pred_n), key=len)
             score = 0.9 + 0.1 * (len(shorter) / len(longer))
-            if score > best:
-                best = score
-                substring = True
+            substring = True
         else:
             score = difflib.SequenceMatcher(None, pred_n, c_n).ratio()
-            if score > best:
-                best = score
-                substring = False
+            if max(len(pred_n), len(c_n)) <= 5 and score < 0.85:
+                score = min(score, 0.55)
+            substring = False
+        if score > best:
+            best = score
     return best, substring
 
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<title>ML-E11 bbox adjudication queue</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:1rem;background:#111;color:#eee}
+h1{margin:0 0 0.5rem}
+.meta{color:#aaa;font-size:14px;margin-bottom:1rem}
+.card{background:#222;border-radius:8px;padding:12px;margin-bottom:16px;border-left:4px solid #f84}
+.card.p-high{border-color:#f33}
+.card.p-med{border-color:#fa4}
+.imgs{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0}
+.imgs img{max-height:220px;border-radius:4px;background:#000}
+.verdicts{font-size:13px;line-height:1.5}
+.tag{display:inline-block;padding:2px 6px;border-radius:4px;font-size:11px;margin-right:4px}
+.reject,.uncertain{background:#633}
+.relocate{background:#663}
+.accept{background:#363}
+.risk{background:#334}
+</style>
+</head><body>
+<h1>ML-E11 adjudication queue</h1>
+<p class="meta">Load <code>bbox-adjudication.json</code> after agent reviews complete. Open this file via local server or paste queue JSON below.</p>
+<div id="root"></div>
+<script>
+const QUEUE_URL = 'bbox-adjudication.json';
+async function load() {
+  let data;
+  try {
+    const r = await fetch(QUEUE_URL);
+    data = await r.json();
+  } catch (e) {
+    document.getElementById('root').innerHTML = '<p class="meta">Waiting for bbox-adjudication.json — run adjudicate after pass-2 review.</p>';
+    return;
+  }
+  const root = document.getElementById('root');
+  root.innerHTML = `<p class="meta">${data.needs_adjudication} boxes need your adjudication (of ${data.total_reviewed} reviewed)</p>`;
+  for (const q of data.queue) {
+    const pri = q.priority >= 5 ? 'p-high' : q.priority >= 3 ? 'p-med' : '';
+    const card = document.createElement('div');
+    card.className = 'card ' + pri;
+    card.innerHTML = `
+      <strong>${q.id}</strong> — ${q.gold_item}
+      <span class="tag risk">${(q.risk_flags||[]).join(', ')}</span>
+      <div class="verdicts">
+        Pass1: <span class="tag ${q.pass1_verdict}">${q.pass1_verdict}</span> ${q.pass1_note||''}<br>
+        Pass2: <span class="tag ${q.pass2_verdict||'missing'}">${q.pass2_verdict||'—'}</span> ${q.pass2_note||''}<br>
+        Reasons: ${(q.reasons||[]).join(' · ')}
+      </div>
+      <div class="imgs">
+        <img src="${q.crop_path}" alt="crop" loading="lazy">
+        <img src="${q.full_path}" alt="full" loading="lazy">
+      </div>`;
+    root.appendChild(card);
+  }
+}
+load();
+</script>
+</body></html>
