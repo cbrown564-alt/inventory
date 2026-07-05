@@ -227,15 +227,18 @@ def _timecode(seconds) -> str:
 def _display_path(photo_path: str, capture_dir: Path, out_dir: Path) -> str:
     """A path fit for the printed manifest: relative to the capture root or
     the report folder — never an absolute path from the build machine."""
-    p = Path(photo_path.replace("\\", "/"))
-    if not p.is_absolute():
-        return str(p)
+    normalized = photo_path.replace("\\", "/")
+    p = Path(normalized)
+    # POSIX-style /abs paths aren't pathlib-absolute on Windows; still treat
+    # them as machine-absolute so we never echo them verbatim in the manifest.
+    if not p.is_absolute() and not normalized.startswith("/"):
+        return p.as_posix()
     for root in (capture_dir, out_dir):
         try:
-            return str(p.relative_to(root.resolve()))
+            return p.relative_to(root.resolve()).as_posix()
         except ValueError:
             try:
-                return str(p.relative_to(root))
+                return p.relative_to(root).as_posix()
             except ValueError:
                 continue
     return "/".join(p.parts[-3:])  # last resort: room/dir/file.jpg
