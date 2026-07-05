@@ -135,11 +135,13 @@ def score_frame(path: Path, *, include_mslap: bool = True) -> dict:
 
 
 def score_siglip(paths: list[Path], *, backend: str = "siglip",
-                 device: str = "cpu") -> dict[str, float]:
+                 device: str = "cpu", model_id: str | None = None,
+                 pretrained: str | None = None) -> dict[str, float]:
     """{filename: relevance margin} for ML-E4."""
     from evals.ml_scorers import make_relevance_scorer
 
-    scorer = make_relevance_scorer(backend=backend, device=device)
+    scorer = make_relevance_scorer(
+        backend=backend, device=device, model_id=model_id, pretrained=pretrained)
     out: dict[str, float] = {}
     for path in paths:
         out[path.name] = scorer.score_path(path)
@@ -555,6 +557,11 @@ def main() -> int:
     ap.add_argument("--relevance-backend", default="siglip",
                     choices=["siglip", "openclip"],
                     help="encoder for --scorer siglip (Apache-2.0)")
+    ap.add_argument("--relevance-model", default=None,
+                    help="override encoder id for a fair GPU re-run, e.g. "
+                         "google/siglip-large-patch16-384 or ViT-L-14 (docs/23)")
+    ap.add_argument("--relevance-pretrained", default=None,
+                    help="openclip pretrained tag (e.g. laion2b_s32b_b82k)")
     ap.add_argument("--device", default="cpu",
                     help="torch device for --scorer siglip")
     args = ap.parse_args()
@@ -590,7 +597,8 @@ def main() -> int:
         paths = [e["path"] for entries in room_entries.values() for e in entries]
         try:
             siglip_by_name = score_siglip(
-                paths, backend=args.relevance_backend, device=args.device)
+                paths, backend=args.relevance_backend, device=args.device,
+                model_id=args.relevance_model, pretrained=args.relevance_pretrained)
         except ImportError as e:
             print(str(e), file=sys.stderr)
             return 1

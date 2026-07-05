@@ -42,6 +42,11 @@ def main() -> int:
                     help="HTML contact sheet path")
     ap.add_argument("--relevance-backend", default="siglip",
                     choices=["siglip", "openclip"])
+    ap.add_argument("--relevance-model", default=None,
+                    help="fair-test encoder id, e.g. google/siglip-large-patch16-384 "
+                         "or ViT-L-14 (docs/23); defaults are deliberately weak")
+    ap.add_argument("--relevance-pretrained", default=None,
+                    help="openclip pretrained tag (e.g. laion2b_s32b_b82k)")
     ap.add_argument("--device", default="cpu")
     args = ap.parse_args()
 
@@ -55,6 +60,10 @@ def main() -> int:
         "--relevance-backend", args.relevance_backend,
         "--device", args.device,
     ]
+    if args.relevance_model:
+        cmd += ["--relevance-model", args.relevance_model]
+    if args.relevance_pretrained:
+        cmd += ["--relevance-pretrained", args.relevance_pretrained]
     print(" ".join(cmd))
     proc = subprocess.run(cmd, cwd=str(ROOT))
     if proc.returncode != 0:

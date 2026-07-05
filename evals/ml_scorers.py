@@ -130,13 +130,40 @@ class OpenCLIPRelevanceScorer:
         return pos - neg
 
 
+# Recommended fair-test encoders for a CUDA re-run (docs/22 §3.2 / docs/23).
+# The ViT-B-32 / siglip-base-224 defaults are the *weakest* common variants and
+# are the reason ML-E4/E7/E19 read as failures on CPU. On an 8 GB GPU these all
+# fit for inference.
+FAIR_ENCODERS = {
+    "siglip": "google/siglip-large-patch16-384",   # ~1.7 GB, strong zero-shot
+    "siglip2": "google/siglip2-large-patch16-384",
+    "openclip": ("ViT-L-14", "laion2b_s32b_b82k"),
+}
+
+
 def make_relevance_scorer(
         backend: str = "siglip",
         device: str = "cpu",
+        model_id: str | None = None,
+        pretrained: str | None = None,
 ) -> SigLIPRelevanceScorer | OpenCLIPRelevanceScorer:
+    """Build a relevance scorer.
+
+    ``model_id`` overrides the (deliberately weak) defaults so a GPU re-run can
+    use a fair encoder, e.g. ``google/siglip-large-patch16-384`` for siglip or
+    ``ViT-L-14`` (+ ``pretrained='laion2b_s32b_b82k'``) for openclip.
+    """
     if backend == "siglip":
+        if model_id:
+            return SigLIPRelevanceScorer(model_id=model_id, device=device)
         return SigLIPRelevanceScorer(device=device)
     if backend == "openclip":
+        if model_id:
+            return OpenCLIPRelevanceScorer(
+                model_name=model_id,
+                pretrained=pretrained or "laion2b_s32b_b82k",
+                device=device,
+            )
         return OpenCLIPRelevanceScorer(device=device)
     raise ValueError(f"unknown relevance backend: {backend}")
 

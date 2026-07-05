@@ -63,9 +63,12 @@ CLOSE_UP_PROMPTS = [
 class ShotScaleScorer:
     """CLIP zero-shot long-shot vs close-up margin (Apache-2.0 encoder)."""
 
-    def __init__(self, device: str | None = None, backend: str = "open_clip"):
+    def __init__(self, device: str | None = None, backend: str = "open_clip",
+                 model_name: str = "ViT-B-32", pretrained: str = "openai"):
         self.device = device
         self.backend = backend
+        self.model_name = model_name
+        self.pretrained = pretrained
         self.available = True
         self._load_error: str | None = None
         self._model = None
@@ -82,9 +85,9 @@ class ShotScaleScorer:
                 import torch
 
                 model, _, preprocess = open_clip.create_model_and_transforms(
-                    "ViT-B-32", pretrained="openai",
+                    self.model_name, pretrained=self.pretrained,
                 )
-                tokenizer = open_clip.get_tokenizer("ViT-B-32")
+                tokenizer = open_clip.get_tokenizer(self.model_name)
                 dev = self._resolve_device(torch)
                 model = model.to(dev).eval()
                 text = LONG_SHOT_PROMPTS + CLOSE_UP_PROMPTS
@@ -322,6 +325,10 @@ def main() -> int:
     ap.add_argument("-o", "--output", type=Path, default=DEFAULT_OUT)
     ap.add_argument("--device", default=None)
     ap.add_argument("--backend", default="open_clip", choices=["open_clip", "transformers"])
+    ap.add_argument("--model", default="ViT-B-32",
+                    help="open_clip model name; use ViT-L-14 for a fair GPU re-run (docs/23)")
+    ap.add_argument("--pretrained", default="openai",
+                    help="open_clip pretrained tag; laion2b_s32b_b82k for ViT-L-14")
     args = ap.parse_args()
 
     report_dir = args.report_dir.resolve()
@@ -336,7 +343,8 @@ def main() -> int:
         print("no video frames found", file=sys.stderr)
         return 1
 
-    scorer = ShotScaleScorer(device=args.device, backend=args.backend)
+    scorer = ShotScaleScorer(device=args.device, backend=args.backend,
+                             model_name=args.model, pretrained=args.pretrained)
     if not scorer.available:
         scorer._load()  # populate _load_error
     if not scorer.available:
