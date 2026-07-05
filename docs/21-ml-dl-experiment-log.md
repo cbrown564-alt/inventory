@@ -10,7 +10,7 @@ adoption. Hero heuristic experiments (E0–E5) stay in docs/18.*
 |---|---|---|---|---|
 | **ML-E1** | fail | ≤3 s mean boundary error | 291.2 s mean (399 frames @ 2 s; DINOv2; 9/9 cuts) | `evals/fixtures/own-property/segment-embed.html` |
 | **ML-E2** | not started | Bleed items ↓ vs baseline | — | — |
-| **ML-E3** | harness ready | Describe recall unchanged; tokens ↓ | — | `evals/eval_describe_pool.py` |
+| **ML-E3** | fail | Describe recall unchanged; tokens ↓ | 5.3% drop (19 frames, IMG_5278 proxy); pres pool 52.6% | `describe-pool-metrics.json` |
 | **ML-E4** | fail | mean Spearman ρ ≥ 0.66 (E5) | ρ −0.21 (SigLIP); top-3 22% (9 rooms, 93 frames) | `hero-contact-siglip.html` |
 | **ML-E5** | fail | top-3 hit ≥ 100% (E5) | top-3 56%; top-1 33%; ρ 0.41 (9 rooms) | `hero-contact-mslap.html` |
 | **ML-E6** | fail | top-1 ≥ 8/9 on hero-gold | top-1 4/9; top-3 67%; train ρ vs MUSIQ 0.74 (260 frames) | `iqa-linear-weights.json`, `hero-contact-linear-musiq.html` |
@@ -29,7 +29,7 @@ adoption. Hero heuristic experiments (E0–E5) stay in docs/18.*
 | **ML-E19** | fail | mean Spearman ρ ≥ E5 classical | ρ 0.07 vs cover 0.44 (9 rooms); 579 ms/frame (OpenCLIP CPU) | `hero-contact-shotscale.html` |
 | **ML-E20** | not started | FP <10% on IFlex | — | — |
 
-**Counts (5 Jul 2026):** 8 fail · 1 pass · 1 harness ready · 10 not started.
+**Counts (5 Jul 2026):** 9 fail · 1 pass · 0 harness ready · 10 not started.
 
 ## Global blockers
 
@@ -68,7 +68,9 @@ uv run python -m homeinventory.cli build capture-walkthrough -o report \
 
 - **Harness:** `evals/eval_describe_pool.py`
 - **Implementation:** `tier_eligibility()` in `homeinventory/curate.py`
-- **Blocked:** needs `report/inventory.json` with video-sourced frames
+- **Run (5 Jul 2026):** offline build from `examples/videos/IMG_5278.mov` — 19 frames, 1 room (IMG_5512 full report pending)
+- **Result:** bottom-decile drop **5.3%** (bar G4 ≥15%); presentation-eligible **52.6%**; describe recall not measured; **pass: false**
+- **Artifact:** `evals/fixtures/own-property/describe-pool-metrics.json`
 
 ### ML-E4 — SigLIP / OpenCLIP relevance margin
 

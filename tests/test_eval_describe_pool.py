@@ -40,3 +40,12 @@ def test_describe_pool_bottom_decile_estimate(tmp_path):
     assert drop["n_frames"] == 4
     assert drop["would_drop_bottom_decile"] >= 1
     assert all(r["describe_eligible"] for r in scored)
+
+
+def test_describe_pool_committed_fixture():
+    path = pathlib.Path(__file__).resolve().parents[1] / (
+        "evals/fixtures/own-property/describe-pool-metrics.json")
+    data = json.loads(path.read_text(encoding="utf-8"))
+    assert data["experiment"] == "ML-E3"
+    assert data["pass"] is False
+    assert data["pool_drop"]["drop_pct"] < 15.0

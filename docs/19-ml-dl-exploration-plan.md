@@ -499,7 +499,7 @@ standard as docs/11 and docs/18.
 |---|---|---|---|---|---|
 | **ML-E1** | Segmentation | DINOv2/CLIP embedding changepoint | ≤3 s mean error vs manual on IMG_5512 | fail ([log](21-ml-dl-experiment-log.md#ml-e1--embedding-changepoint-segmentation)) | `evals/fixtures/own-property/segment-embed.html` |
 | **ML-E2** | Segmentation | VLM refine ±30 s windows | Bleed items ↓ vs baseline | not started | segment JSON + bleed recount |
-| **ML-E3** | Pre-process | Two-tier describe vs presentation pools | Describe recall unchanged; token count ↓ | harness ready | `evals/eval_describe_pool.py` |
+| **ML-E3** | Pre-process | Two-tier describe vs presentation pools | Describe recall unchanged; token count ↓ | fail ([log](21-ml-dl-experiment-log.md#ml-e3--two-tier-describe-vs-presentation-pools)) | `describe-pool-metrics.json` |
 | **ML-E4** | Relevance | SigLIP margin establishing vs close-up | ρ vs hero-gold ≥ E5 | harness ready | `hero-contact-siglip.html` |
 | **ML-E5** | Pre-process | Multi-scale Laplacian ratio | top-3 hit ≥ E5 | harness ready | `hero-contact-mslap.html` |
 | **ML-E6** | IQA | Linear model → MUSIQ rank | top-1 ≥ 8/9 | results ([log](21-ml-dl-experiment-log.md#ml-e6--linear-model--musiq-rank)) | `iqa-linear-weights.json` |
