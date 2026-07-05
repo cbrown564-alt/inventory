@@ -1,0 +1,43 @@
+{
+  "_source": "Room-held-out train/val protocol for InventoryFlex ML experiments (docs/19 §2.3, §4 Phase 0).",
+  "fixture": "inventoryflex",
+  "labels": "evals/fixtures/inventoryflex/labels.json",
+  "capture": "benchmarks/inventoryflex/capture",
+  "protocol": "room-held-out",
+  "description": "Entire rooms are assigned to train or val — never split items within a room. Use train rooms for fitting (fine-tune, threshold tuning, pseudo-label mining) and val rooms for held-out metrics. Detection bbox eval (ML-E11) and room-specific failure modes concentrate on the two val rooms.",
+  "rooms": [
+    "Entrance Hall",
+    "Walk In Wardrobe",
+    "Bathroom",
+    "Bedroom",
+    "Reception & Open Plan Kitchen",
+    "Balcony"
+  ],
+  "train_rooms": [
+    "Entrance Hall",
+    "Walk In Wardrobe",
+    "Bedroom",
+    "Balcony"
+  ],
+  "val_rooms": [
+    "Bathroom",
+    "Reception & Open Plan Kitchen"
+  ],
+  "rationale": {
+    "val_rooms": "Bathroom and Reception & Open Plan Kitchen are the ML-E11 bbox-labelling targets and the best/worst YOLOE recall rooms in docs/13 — held out so detection fine-tune (ML-E12) and mAP eval do not leak train signal.",
+    "train_rooms": "Four remaining rooms (33 notable gold items) supply describe/detection training signal without overlapping the bbox gold set."
+  },
+  "counts": {
+    "train_items_notable": 33,
+    "val_items_notable": 42,
+    "train_photos_approx": 96,
+    "val_photos_approx": 96
+  },
+  "experiments": {
+    "ML-E11": "bbox labels only in val_rooms (+ optional train pseudo-labels)",
+    "ML-E12": "fine-tune on train_rooms; mAP on val_rooms labels_boxes.json",
+    "ML-E10": "detector recall reported overall and per split",
+    "describe_eval": "run_eval.py on full fixture for CI; ML ablations should report train vs val separately"
+  },
+  "usage": "Filter rooms with train_rooms / val_rooms before exporting crops, computing metrics, or selecting photos. Do not move rooms between splits without updating labels_boxes.json and re-benchmarking."
+}

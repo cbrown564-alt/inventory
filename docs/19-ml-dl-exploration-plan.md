@@ -647,8 +647,10 @@ ML pre-filters are enabled — gate on InventoryFlex before ship.
 - [x] Decision gates and non-goals stated
 - [x] Recommended phased sequence
 - [x] Adjacent open datasets surveyed (§2.4)
-- [ ] Phase 0 data labelling started (ML-E11)
-- [ ] Tier A external datasets downloaded to `evals/external/` (ML-E16–E18)
+- [x] Phase 0 data labelling started (ML-E11) — `evals/label_segments.py`,
+  `evals/label_boxes.py`, `labels_boxes.json` template, `evals/splits/`
+- [ ] Tier A external datasets downloaded to `evals/external/data/` (ML-E16–E20)
+  — download URLs documented in `evals/external/README.md`
 
 This document is the **plan**; individual spikes update their experiment
 rows and may spawn focused docs (e.g. `20-segment-embedding-spike.md`) when
