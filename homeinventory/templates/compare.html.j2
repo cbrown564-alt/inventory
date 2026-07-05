@@ -7,12 +7,133 @@
 {% include "_favicon.j2" %}
 <style>
 {% include "_theme.css.j2" %}
+
+  :root { --reject: var(--danger); }
+
+  main { max-width: 960px; margin: 0 auto; padding: 28px 20px 60px; }
+  .kicker { font: 600 11px var(--ui); letter-spacing: .18em;
+            text-transform: uppercase; color: var(--brass); }
+  h1 { font: 600 clamp(24px, 3vw, 32px)/1.15 var(--display);
+       letter-spacing: -.01em; margin: 8px 0 6px; }
+  .meta { color: var(--muted); font-size: 13px; line-height: 1.5; }
+  .note { font-size: 13.5px; color: var(--ink); margin: 16px 0 24px;
+          padding: 12px 16px; background: var(--panel);
+          border-left: 3px solid var(--brass); }
+
+  h2 { font: 600 18px/1.3 var(--display); margin: 32px 0 10px; }
+  h3 { font: 600 15px/1.35 var(--display); margin: 24px 0 8px; }
+  h4 { font: 600 13px var(--ui); margin: 0 0 8px; }
+
 {% for cls, tone in class_tones.items() %}
-  .cls.{{ cls }} { color: var(--{{ tone }}); }
+  .cls.{{ cls }} { color: var(--{{ tone }}); font-weight: 600; }
 {% endfor %}
+
+  /* filter tabs */
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 16px;
+             position: sticky; top: 0; z-index: 10;
+             background: var(--paper); padding: 8px 0;
+             border-bottom: 1px solid var(--line); }
+  .filters button { font: 500 12px var(--ui); padding: 6px 12px;
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    background: var(--panel); color: var(--muted); cursor: pointer; }
+  .filters button:hover { border-color: var(--brass); color: var(--brass-bright); }
+  .filters button.active { background: var(--brass-soft); border-color: var(--brass);
+                           color: var(--brass-bright); font-weight: 600; }
+  .filters .count { font-variant-numeric: tabular-nums; opacity: .75; }
+
+  /* desktop table */
+  .table-wrap { overflow-x: auto; margin: 0 0 24px; }
+  table.delta { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.delta thead th {
+    text-align: left; background: var(--panel); color: var(--muted);
+    padding: 8px 10px; font: 600 11px var(--ui); letter-spacing: .06em;
+    text-transform: uppercase; border-bottom: 2px solid var(--brass);
+    position: sticky; top: 52px; z-index: 5;
+  }
+  table.delta td { border-bottom: 1px solid var(--line); padding: 10px;
+                   vertical-align: top; }
+  table.delta tr.hidden { display: none; }
+  .grade { font-variant: small-caps; white-space: nowrap; }
+  .worse { color: var(--danger); font-weight: 600; }
+  .better { color: var(--confirm); font-weight: 600; }
+  ul.defects { margin: 6px 0 0; padding-left: 18px; color: var(--danger);
+               font-size: 12.5px; }
+
+  /* mobile change cards */
+  .change-cards { display: none; }
+  .change-card { background: var(--panel); border: 1px solid var(--line);
+                 border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+  .change-card.hidden { display: none; }
+  .change-card .head { display: flex; flex-wrap: wrap; gap: 8px;
+                       align-items: baseline; margin-bottom: 8px; }
+  .change-card .name { font: 600 16px var(--display); }
+  .change-card .room { font-size: 12px; color: var(--muted); }
+  .change-card .grades { display: flex; gap: 12px; font-size: 13px;
+                         margin: 8px 0; flex-wrap: wrap; }
+  .change-card .grades span { background: var(--panel-2); padding: 3px 8px;
+                              border-radius: 4px; }
+
+  /* before/after swipe on mobile */
+  .pair-swipe { position: relative; overflow: hidden; border-radius: 8px;
+                background: var(--panel-2); touch-action: pan-y; }
+  .pair-track { display: flex; transition: transform .28s ease; }
+  .pair-slide { flex: 0 0 100%; padding: 10px; box-sizing: border-box; }
+  .pair-slide img { width: 100%; height: 180px; object-fit: cover;
+                     display: block; border-radius: 6px; border: 1px solid var(--line); }
+  .pair-slide .side-label { font: 600 11px var(--ui); letter-spacing: .08em;
+                            text-transform: uppercase; color: var(--muted);
+                            margin-bottom: 6px; }
+  .pair-dots { display: flex; justify-content: center; gap: 6px; padding: 8px 0 4px; }
+  .pair-dots button { width: 7px; height: 7px; border-radius: 50%; border: 0;
+                       background: var(--line-strong); padding: 0; cursor: pointer; }
+  .pair-dots button.active { background: var(--brass); }
+
+  /* desktop paired evidence */
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+          margin: 12px 0 20px; }
+  .pair .side { background: var(--panel); border: 1px solid var(--line);
+                border-radius: 8px; padding: 12px; }
+  .photos { display: flex; flex-wrap: wrap; gap: 8px; }
+  .photos figure { margin: 0; flex: 1 1 140px; max-width: 48%; }
+  .photos .frame { position: relative; }
+  .photos img { width: 100%; height: 140px; object-fit: cover; display: block;
+                border: 1px solid var(--line); border-radius: 4px; }
+  .photos figcaption { font: 10px var(--mono); color: var(--muted); margin-top: 4px; }
+  .region { position: absolute; border: 2px solid var(--danger);
+            background: rgba(163,35,31,.1); pointer-events: none; }
+  .region::after {
+    content: attr(data-label); position: absolute; left: -2px; bottom: 100%;
+    background: var(--danger); color: #fff; font: 10px var(--ui);
+    padding: 1px 5px; white-space: nowrap; max-width: 200px;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .missing { font-size: 12px; color: var(--muted); font-style: italic; }
+  .rationale { font-size: 13px; margin: 8px 0 16px; padding: 10px 12px;
+               background: var(--panel-2); border-radius: 6px; }
+  .rationale .who { font-weight: 600; color: var(--brass-bright); }
+
+  .empty-state { text-align: center; padding: 32px 20px; background: var(--panel);
+                 border: 1px dashed var(--line-strong); border-radius: 10px;
+                 margin: 20px 0; }
+  .empty-state p { color: var(--muted); margin: 0 0 12px; }
+  .empty-state .btn { text-decoration: none; display: inline-block; }
+
+  @media (max-width: 720px) {
+    .table-wrap, .pair-section .pair { display: none; }
+    .change-cards { display: block; }
+    .filters { top: 0; }
+    table.delta thead th { position: static; }
+  }
+  @media (min-width: 721px) {
+    .change-cards { display: none !important; }
+  }
 </style>
 </head>
 <body>
+<header class="app-header">
+  <a class="wordmark" href="/">Homeinventory</a>
+  <span class="header-chip">Compare</span>
+</header>
 <main>
   <div class="kicker">{{ labels.baseline }} vs {{ labels.followup }} comparison</div>
   <h1>{{ result.checkin.address or "Property" }}</h1>
@@ -28,51 +149,120 @@
   Classifications marked “unclassified” mean no rubric ran (offline) or the
   rubric failed — review by hand.</p>
 
-  <h2>1. Grade-delta summary</h2>
+  <h2>Grade-delta summary</h2>
   <p class="meta">{{ result.totals.matched }} items matched
     ({{ result.totals.changed }} changed, {{ result.totals.unchanged }} unchanged)
     &middot; {{ result.totals.removed }} not located at {{ labels.followup | lower }}
     &middot; {{ result.totals.added }} new at {{ labels.followup | lower }}</p>
-  <table class="delta">
-    <thead><tr>
-      <th>Item</th><th>Room</th><th>{{ labels.baseline }}</th><th>{{ labels.followup }}</th>
-      <th>Δ</th><th>Classification</th><th>Evidence</th>
-    </tr></thead>
-    <tbody>
+
+  {% if result.totals.changed %}
+  <div class="filters" role="tablist" aria-label="Filter by classification">
+    <button type="button" class="active" data-filter="all" role="tab" aria-selected="true">
+      All <span class="count">({{ result.totals.changed }})</span>
+    </button>
+    {% for cls in filter_classes %}
+    <button type="button" data-filter="{{ cls }}" role="tab" aria-selected="false">
+      {{ class_labels.get(cls, cls) }}
+      <span class="count" data-cls-count="{{ cls }}"></span>
+    </button>
+    {% endfor %}
+  </div>
+
+  <div class="table-wrap">
+    <table class="delta" id="delta-table">
+      <thead><tr>
+        <th>Item</th><th>Room</th><th>{{ labels.baseline }}</th><th>{{ labels.followup }}</th>
+        <th>Δ</th><th>Classification</th><th>Evidence</th>
+      </tr></thead>
+      <tbody>
+      {% for room in rooms %}{% for c in room.changed %}
+        <tr data-cls="{{ c.classification or 'unclassified' }}">
+          <td>{{ c.name }}{% if c.checkin_name != c.name %}
+              <div class="meta">{{ labels.baseline | lower }}: “{{ c.checkin_name }}”</div>{% endif %}
+            {% if c.new_defects %}<ul class="defects">
+              {% for d in c.new_defects %}<li>{{ d }}</li>{% endfor %}
+            </ul>{% endif %}
+          </td>
+          <td>{{ room.name }}</td>
+          <td class="grade">{{ c.checkin_condition or "—" }}</td>
+          <td class="grade">{{ c.checkout_condition or "—" }}</td>
+          <td class="{{ 'worse' if c.grade_delta and c.grade_delta > 0 else 'better' if c.grade_delta and c.grade_delta < 0 else '' }}">
+            {%- if c.grade_delta is none %}—
+            {%- elif c.grade_delta > 0 %}▼{{ c.grade_delta }}
+            {%- elif c.grade_delta < 0 %}▲{{ -c.grade_delta }}
+            {%- else %}0{% endif %}</td>
+          <td><span class="cls {{ c.classification or 'unclassified' }}">
+              {{ class_labels.get(c.classification or "unclassified") }}</span></td>
+          <td class="meta">{{ labels.baseline | lower }}: {{ c.checkin_photo_ids | join(", ") or "—" }}<br>
+              {{ labels.followup | lower }}: {{ c.checkout_photo_ids | join(", ") or "—" }}</td>
+        </tr>
+      {% endfor %}{% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="change-cards" id="change-cards">
     {% for room in rooms %}{% for c in room.changed %}
-      <tr>
-        <td>{{ c.name }}{% if c.checkin_name != c.name %}
-            <div class="meta">{{ labels.baseline | lower }}: “{{ c.checkin_name }}”</div>{% endif %}
-          {% if c.new_defects %}<ul class="defects">
-            {% for d in c.new_defects %}<li>{{ d }}</li>{% endfor %}
-          </ul>{% endif %}
-        </td>
-        <td>{{ room.name }}</td>
-        <td class="grade">{{ c.checkin_condition or "—" }}</td>
-        <td class="grade">{{ c.checkout_condition or "—" }}</td>
-        <td class="{{ 'worse' if c.grade_delta and c.grade_delta > 0 else 'better' if c.grade_delta and c.grade_delta < 0 else '' }}">
+    <article class="change-card" data-cls="{{ c.classification or 'unclassified' }}"
+             data-card-id="{{ room.name }}-{{ c.name }}">
+      <div class="head">
+        <span class="name">{{ c.name }}</span>
+        <span class="room">{{ room.name }}</span>
+        <span class="cls {{ c.classification or 'unclassified' }}">
+          {{ class_labels.get(c.classification or "unclassified") }}</span>
+      </div>
+      <div class="grades">
+        <span>{{ labels.baseline }}: <strong class="grade">{{ c.checkin_condition or "—" }}</strong></span>
+        <span>{{ labels.followup }}: <strong class="grade">{{ c.checkout_condition or "—" }}</strong></span>
+        <span class="{{ 'worse' if c.grade_delta and c.grade_delta > 0 else 'better' if c.grade_delta and c.grade_delta < 0 else '' }}">
           {%- if c.grade_delta is none %}—
           {%- elif c.grade_delta > 0 %}▼{{ c.grade_delta }}
           {%- elif c.grade_delta < 0 %}▲{{ -c.grade_delta }}
-          {%- else %}0{% endif %}</td>
-        <td><span class="cls {{ c.classification or 'unclassified' }}">
-            {{ class_labels.get(c.classification or "unclassified") }}</span></td>
-        <td class="meta">{{ labels.baseline | lower }}: {{ c.checkin_photo_ids | join(", ") or "—" }}<br>
-            {{ labels.followup | lower }}: {{ c.checkout_photo_ids | join(", ") or "—" }}</td>
-      </tr>
+          {%- else %}0{% endif %}</span>
+      </div>
+      {% if c.new_defects %}<ul class="defects">
+        {% for d in c.new_defects %}<li>{{ d }}</li>{% endfor %}
+      </ul>{% endif %}
+      <div class="pair-swipe" data-swipe>
+        <div class="pair-track">
+          {% for side_label, photos, cond in [
+              (labels.baseline, c.checkin_photos, c.checkin_condition),
+              (labels.followup, c.checkout_photos, c.checkout_condition)] %}
+          <div class="pair-slide">
+            <div class="side-label">{{ side_label }} — {{ cond or "not graded" }}</div>
+            {% if photos and photos[0].src %}
+            <img src="{{ photos[0].src }}" alt="{{ photos[0].id }}">
+            <figcaption class="meta">{{ photos[0].id }}{% if photos[0].seen_at %}
+              &middot; seen at {{ photos[0].seen_at }}{% if photos[0].source_video %} in {{ photos[0].source_video }}{% endif %}
+              {% elif photos[0].captured_at %} &middot; {{ photos[0].captured_at }}{% endif %}</figcaption>
+            {% else %}
+            <div class="missing">no photo evidence</div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        <div class="pair-dots">
+          <button type="button" class="active" aria-label="{{ labels.baseline }}"></button>
+          <button type="button" aria-label="{{ labels.followup }}"></button>
+        </div>
+      </div>
+    </article>
     {% endfor %}{% endfor %}
-    {% if not result.totals.changed %}
-      <tr><td colspan="7" class="meta">No gated changes found on matched items.</td></tr>
-    {% endif %}
-    </tbody>
-  </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <p>No gated changes found on matched items.</p>
+    <a class="btn" href="/">Back to project home</a>
+  </div>
+  {% endif %}
 
-  <h2>2. Paired photo evidence</h2>
+  <div class="pair-section">
+  <h2>Paired photo evidence</h2>
   {% for room in rooms %}{% for c in room.changed %}
   <h3>{{ room.name }} — {{ c.name }}
     <span class="cls {{ c.classification or 'unclassified' }}">
       {{ class_labels.get(c.classification or "unclassified") }}</span></h3>
-  <div class="pair">
+  <div class="pair" data-cls="{{ c.classification or 'unclassified' }}">
     {% for side_label, photos, cond, defects in [
         (labels.baseline, c.checkin_photos, c.checkin_condition, c.checkin_defects),
         (labels.followup, c.checkout_photos, c.checkout_condition, c.checkout_defects)] %}
@@ -91,7 +281,9 @@
                   style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
             {% endfor %}
           </div>
-          <figcaption>{{ p.id }}{% if p.captured_at %} &middot; {{ p.captured_at }}{% endif %}</figcaption>
+          <figcaption>{{ p.id }}{% if p.seen_at %}
+            &middot; seen at {{ p.seen_at }}{% if p.source_video %} in {{ p.source_video }}{% endif %}
+            {% elif p.captured_at %} &middot; {{ p.captured_at }}{% endif %}</figcaption>
         </figure>
         {% else %}
         <div class="missing">{{ p.id }}: photo file not available</div>
@@ -111,9 +303,11 @@
   {% endif %}
   {% endfor %}{% endfor %}
   {% if not result.totals.changed %}<p class="meta">Nothing to show.</p>{% endif %}
+  </div>
 
-  <h2>3. Items not located at {{ labels.followup | lower }}</h2>
+  <h2>Items not located at {{ labels.followup | lower }}</h2>
   {% if result.totals.removed %}
+  <div class="table-wrap">
   <table class="delta">
     <thead><tr><th>Item</th><th>Room</th><th>{{ labels.baseline }} condition</th>
       <th>{{ labels.baseline }} defects</th><th>{{ labels.baseline }} evidence</th></tr></thead>
@@ -126,12 +320,14 @@
     {% endfor %}{% endfor %}
     </tbody>
   </table>
+  </div>
   <p class="meta">“Not located” is an alignment verdict, not a liability
   verdict: confirm each before treating it as a loss.</p>
   {% else %}<p class="meta">None — every {{ labels.baseline | lower }} item was matched.</p>{% endif %}
 
-  <h2>4. Items new at {{ labels.followup | lower }}</h2>
+  <h2>Items new at {{ labels.followup | lower }}</h2>
   {% if result.totals.added %}
+  <div class="table-wrap">
   <table class="delta">
     <thead><tr><th>Item</th><th>Room</th><th>{{ labels.followup }} condition</th>
       <th>{{ labels.followup }} defects</th><th>{{ labels.followup }} evidence</th></tr></thead>
@@ -144,6 +340,7 @@
     {% endfor %}{% endfor %}
     </tbody>
   </table>
+  </div>
   {% else %}<p class="meta">None.</p>{% endif %}
 
   <footer class="meta" style="margin-top:36px; text-align:center;">
@@ -152,5 +349,69 @@
     require human review before any deduction discussion.
   </footer>
 </main>
+<script>
+"use strict";
+(function () {
+  var active = "all";
+  var rows = document.querySelectorAll("#delta-table tbody tr[data-cls]");
+  var cards = document.querySelectorAll(".change-card[data-cls]");
+  var pairs = document.querySelectorAll(".pair-section .pair[data-cls]");
+
+  function applyFilter(cls) {
+    active = cls;
+    rows.forEach(function (r) {
+      r.classList.toggle("hidden", cls !== "all" && r.getAttribute("data-cls") !== cls);
+    });
+    cards.forEach(function (c) {
+      c.classList.toggle("hidden", cls !== "all" && c.getAttribute("data-cls") !== cls);
+    });
+    pairs.forEach(function (p) {
+      p.style.display = (cls === "all" || p.getAttribute("data-cls") === cls)
+        ? "" : "none";
+    });
+    document.querySelectorAll(".filters button").forEach(function (b) {
+      var on = b.getAttribute("data-filter") === cls;
+      b.classList.toggle("active", on);
+      b.setAttribute("aria-selected", on ? "true" : "false");
+    });
+  }
+
+  document.querySelectorAll(".filters button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      applyFilter(btn.getAttribute("data-filter"));
+    });
+  });
+
+  var counts = {};
+  rows.forEach(function (r) {
+    var c = r.getAttribute("data-cls");
+    counts[c] = (counts[c] || 0) + 1;
+  });
+  document.querySelectorAll("[data-cls-count]").forEach(function (el) {
+    var c = el.getAttribute("data-cls-count");
+    el.textContent = "(" + (counts[c] || 0) + ")";
+  });
+
+  document.querySelectorAll("[data-swipe]").forEach(function (wrap) {
+    var track = wrap.querySelector(".pair-track");
+    var dots = wrap.querySelectorAll(".pair-dots button");
+    var idx = 0;
+    function go(n) {
+      idx = Math.max(0, Math.min(1, n));
+      track.style.transform = "translateX(-" + (idx * 100) + "%)";
+      dots.forEach(function (d, i) { d.classList.toggle("active", i === idx); });
+    }
+    dots.forEach(function (d, i) { d.addEventListener("click", function () { go(i); }); });
+    var startX = 0;
+    wrap.addEventListener("touchstart", function (e) {
+      startX = e.changedTouches[0].clientX;
+    }, { passive: true });
+    wrap.addEventListener("touchend", function (e) {
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+  });
+})();
+</script>
 </body>
 </html>

@@ -26,7 +26,6 @@
     flex-shrink: 0;
   }
   .addr { display: none; }
-  #btn-details { font-size: 12px; padding: 4px 10px; }
   #progress { flex: 1 1 auto; min-width: 120px; max-width: 320px; margin: 0 auto; }
   #progress .label { font-size: 12px; font-weight: 500; color: var(--muted);
                      font-variant-numeric: tabular-nums; }
@@ -37,9 +36,37 @@
   #save-state { font-size: 11px; color: var(--faint); white-space: nowrap; }
   #save-state.err { color: var(--danger); }
   .share { display: none; }
-  #btn-pdf { font-size: 12px; padding: 6px 12px; }
-  #btn-sign { font-size: 12px; padding: 6px 14px; }
   #btn-queue { display: none; font-size: 12px; }
+
+  /* X5: mobile overflow menu when shell nav collapses */
+  .header-more { display: none; position: relative; flex-shrink: 0; }
+  .header-more > summary { list-style: none; cursor: pointer; }
+  .header-more > summary::-webkit-details-marker { display: none; }
+  .header-more-btn {
+    font-size: 18px; line-height: 1; padding: 4px 10px; letter-spacing: .12em;
+  }
+  .header-more-panel {
+    display: none; position: absolute; top: calc(100% + 6px); right: 0;
+    z-index: 50; min-width: 200px; flex-direction: column; align-items: stretch;
+    gap: 4px; padding: 10px; background: var(--panel);
+    border: 1px solid var(--line-strong); border-radius: 10px;
+    box-shadow: var(--shadow);
+  }
+  .header-more[open] .header-more-panel { display: flex; }
+  .header-more-shell a {
+    font-size: 13px; font-weight: 500; color: var(--muted);
+    text-decoration: none; padding: 6px 10px; border-radius: 6px;
+  }
+  .header-more-shell a:hover { color: var(--ink); background: var(--panel-2); }
+  .header-more-shell a[aria-current="page"] {
+    color: var(--brass-bright); background: var(--brass-soft);
+  }
+  .header-more-finish {
+    font-size: 13px; font-weight: 500; color: var(--muted);
+    text-decoration: none; padding: 6px 10px; border-radius: 6px;
+    border-top: 1px solid var(--line); margin-top: 4px;
+  }
+  .header-more-finish:hover { color: var(--ink); background: var(--panel-2); }
 
   /* ---------- layout ---------- */
   #app { flex: 1; display: grid; grid-template-columns: 272px 1fr;
@@ -158,11 +185,12 @@
   }
   #stage { position: relative; background: #05070b;
            border: none; border-radius: 0; overflow: hidden;
-           height: clamp(320px, 58vh, 640px); }
+           height: clamp(280px, 52vh, 520px); }
   #stage .media { width: 100%; height: 100%; display: flex;
                   align-items: center; justify-content: center; }
-  #stage img, #stage video { max-width: 100%; max-height: 100%;
-                             display: block; }
+  #stage img, #stage video { width: 100%; height: 100%;
+                             max-width: 100%; max-height: 100%;
+                             object-fit: contain; display: block; }
   #stage img { cursor: zoom-in; }
   #stage .media.fading img { animation: stage-in .22s ease; }
   @keyframes stage-in { from { opacity: .25; } to { opacity: 1; } }
@@ -254,8 +282,15 @@
           padding: 12px 22px; border-bottom: 1px solid var(--line);
           display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .stage-foot { margin-top: 0; }
+  .stage-foot .spine-pinned { padding: 0 22px 12px; }
   .stage-foot .disclosure > summary { padding: 12px 22px; }
   .stage-foot .disclosure-body { padding: 0 22px 16px 44px; }
+  .rail-overview {
+    display: block; padding: 12px 18px 10px; font-size: 12px; font-weight: 600;
+    color: var(--brass-bright); text-decoration: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .rail-overview:hover { color: var(--ink); }
   .stage-toggle {
     display: block; width: calc(100% - 44px); margin: 0 22px 14px;
     text-align: center; font-size: 12px;
@@ -455,6 +490,134 @@
     border-radius: 8px; padding: 10px 12px; max-height: 220px;
     overflow: auto; }
 
+  /* ---------- overview (X1 orient) ---------- */
+  body.stage .review-subnav {
+    display: flex; gap: 2px; flex-shrink: 0;
+    border-left: 1px solid var(--line); padding-left: 12px; margin-left: 4px;
+  }
+  body.stage .review-subnav a {
+    font-size: 12px; padding: 4px 10px; border-radius: 999px;
+    color: var(--faint); text-decoration: none; white-space: nowrap;
+  }
+  body.stage .review-subnav a:hover { color: var(--muted); background: var(--panel); }
+  body.stage .review-subnav a[aria-current="page"] {
+    color: var(--ink); font-weight: 600;
+    box-shadow: inset 0 -2px 0 var(--brass);
+  }
+  .overview { max-width: 1120px; }
+  .overview-stats {
+    font-size: 13px; line-height: 1.55; color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .overview-stats .walkthrough { display: block; margin-top: 4px; color: var(--faint); }
+  .overview-ctas { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 24px; }
+  .overview-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  @media (max-width: 520px) {
+    .overview-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+    }
+    .overview { max-width: none; }
+    .overview-ctas .btn { flex: 1 1 auto; min-width: 0; font-size: 12px;
+                           padding: 8px 10px; }
+  }
+  .room-card {
+    border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    background: var(--panel); cursor: pointer; text-align: left;
+    padding: 0; font: inherit; color: inherit;
+    transition: border-color .15s;
+  }
+  .room-card:hover { border-color: var(--brass); }
+  .room-card .thumb {
+    aspect-ratio: 4 / 3; background: #05070b; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .room-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .room-card .thumb-empty {
+    color: var(--faint); font-size: 11px; letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .room-card .body { padding: 12px 14px 14px; }
+  .room-card .name {
+    font: 600 15px/1.3 var(--ui); margin: 0 0 4px; letter-spacing: -.01em;
+  }
+  .room-card .meta {
+    font-size: 12px; color: var(--muted); display: flex; gap: 6px;
+    align-items: center; flex-wrap: wrap;
+  }
+  .room-card .warn {
+    color: var(--danger); font-weight: 600; font-variant-numeric: tabular-nums;
+  }
+  .room-card .meter {
+    height: 3px; background: var(--line); border-radius: 2px;
+    overflow: hidden; margin-top: 10px;
+  }
+  .room-card .meter i {
+    display: block; height: 100%; background: var(--confirm);
+    transition: width .35s cubic-bezier(.16,1,.3,1);
+  }
+  .room-breadcrumb { margin-bottom: 14px; font-size: 13px; }
+  .room-breadcrumb a {
+    color: var(--muted); text-decoration: none;
+  }
+  .room-breadcrumb a:hover { color: var(--brass-bright); }
+  .room-breadcrumb .sep { color: var(--faint); margin: 0 6px; }
+  .coach-mark {
+    background: var(--brass-soft); border: 1px solid var(--brass);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 20px;
+    font-size: 13px; line-height: 1.5; color: var(--ink);
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .coach-mark p { margin: 0; flex: 1; }
+  .coach-mark button {
+    border: none; background: transparent; color: var(--faint);
+    cursor: pointer; font-size: 18px; line-height: 1; padding: 0 2px;
+  }
+  .wt-player {
+    margin-bottom: 20px; border: 1px solid var(--line); border-radius: 12px;
+    overflow: hidden; background: #05070b;
+  }
+  .wt-player video { width: 100%; display: block; max-height: 360px; }
+  .wt-player .bar {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    background: var(--panel); font-size: 12px; color: var(--muted);
+  }
+
+
+  /* ---------- finish checklist (X2) ---------- */
+  .finish { max-width: 640px; }
+  .finish h1 { font: 600 22px/1.25 var(--display); margin: 0 0 8px; }
+  .finish-intro { font-size: 13px; line-height: 1.55; color: var(--muted); margin: 0 0 24px; }
+  .finish-checklist { list-style: none; padding: 0; margin: 0; }
+  .finish-step { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 12px; background: var(--panel); overflow: hidden; }
+  .finish-step-head { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; }
+  .finish-step-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--line); color: var(--faint); }
+  .finish-step.ok .finish-step-icon { background: var(--confirm-soft); color: var(--confirm); }
+  .finish-step.warn .finish-step-icon { background: var(--pend-soft); color: var(--pend); }
+  .finish-step.blocker .finish-step-icon { background: var(--danger-soft); color: var(--danger); }
+  .finish-step-title { font: 600 14px/1.35 var(--ui); margin: 0; }
+  .finish-step-note { font-size: 12px; line-height: 1.45; color: var(--muted); margin: 4px 0 0; }
+  .finish-step-body { padding: 0 16px 16px 44px; border-top: 1px solid var(--line); }
+  .finish-step-body:empty { display: none; }
+  .finish-fields { display: grid; gap: 12px; padding-top: 14px; }
+  .finish-fields label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+  .finish-fields input, .finish-fields select { width: 100%; font: 13px var(--ui); padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); }
+  .finish-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .finish-sig-list { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  .finish-handoff { margin-top: 24px; padding: 20px; border-radius: 12px; background: var(--confirm-soft); border: 1px solid var(--confirm); }
+  .finish-handoff h2 { font: 600 16px/1.3 var(--ui); margin: 0 0 8px; }
+  .finish-handoff p { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+  .finish-handoff-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  @media (max-width: 480px) {
+    .finish { max-width: none; }
+    .finish-step-head { padding: 12px 14px; }
+    .finish-fields input, .finish-fields select { font-size: 16px; }
+    .finish-handoff-actions .btn { flex: 1 1 auto; min-width: 0; }
+    .finish-handoff-actions a.btn { text-align: center; }
+  }
+
   /* ---------- lightbox (inspect + pin) ---------- */
   #lightbox { position: fixed; inset: 0; z-index: 70;
               background: rgba(5, 7, 11, .96); display: none;
@@ -510,6 +673,11 @@
     #app { grid-template-columns: 1fr; }
     #btn-queue { display: inline-block; }
     body.stage .app-header { flex-wrap: wrap; padding: 10px 16px; }
+    body.stage .review-subnav {
+      order: 2; flex: 1 1 100%; border-left: none; padding-left: 0;
+      margin-left: 0; padding-top: 4px;
+    }
+    .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     #progress { order: 3; flex: 1 1 100%; max-width: none; margin: 0; }
     .header-end { margin-left: 0; }
     #rail { position: fixed; top: 0; bottom: 0; left: 0; width: 82vw;
@@ -523,8 +691,43 @@
     #detail { padding: 14px 12px 40px; }
     #stage { height: clamp(240px, 42vh, 420px); border-radius: 10px; }
   }
-  @media (hover: none), (max-width: 640px) {
+  @media (hover: none), (pointer: coarse) {
     .claim-foot { display: none; }
+    #lb-hint { display: none; }
+  }
+  @media (max-width: 480px) {
+    body.stage .app-header {
+      display: grid; grid-template-columns: auto 1fr auto;
+      grid-template-areas:
+        "queue brand more"
+        "modes modes modes"
+        "progress progress progress";
+      gap: 6px 8px; padding: 8px 10px; align-items: center;
+    }
+    #btn-queue { grid-area: queue; margin: 0; }
+    body.stage .wordmark { grid-area: brand; font-size: 11px;
+                          letter-spacing: .28em; min-width: 0; }
+    body.stage .app-nav { display: none; }
+    .header-more { display: block; grid-area: more; margin-left: 0; }
+    .header-more-btn { display: inline-block; }
+    .header-more-shell { display: flex; flex-direction: column; gap: 2px; }
+    .header-end { display: none; }
+    body.stage .review-subnav {
+      grid-area: modes; order: unset; flex: unset; width: 100%;
+      border-left: none; padding: 0; margin: 0;
+      overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    body.stage .review-subnav::-webkit-scrollbar { display: none; }
+    body.stage .review-subnav a { flex-shrink: 0; }
+    #progress { grid-area: progress; order: unset; flex: unset; width: 100%;
+                max-width: none; margin: 0; }
+    .addr { display: none; }
+    .overview-stats { font-size: 12px; }
+    .coach-mark { font-size: 12px; padding: 12px; }
+    .room-card .body { padding: 10px; }
+    .room-card .name { font-size: 14px; }
+    #detail { padding: 10px 10px 28px; }
   }
 </style>
 </head>
@@ -533,26 +736,43 @@
   <button class="btn ghost" id="btn-queue" aria-label="Show item list">☰ Items</button>
   {% set shell_base = route_prefix ~ "/" %}{% set shell_active = "review" %}
   {%- include "_shell.html.j2" %}
+  <nav class="review-subnav" aria-label="Review mode">
+    <a href="#overview" id="nav-overview" aria-current="page">Overview</a>
+    <a href="#items" id="nav-items">Items</a>
+    <a href="#rooms" id="nav-rooms">Rooms</a>
+    <a href="#finish" id="nav-finish">Finish</a>
+  </nav>
   <span class="addr" id="hdr-addr">{{ inv.property_address or "No address yet" }}</span>
-  <button class="btn ghost" id="btn-details">Details</button>
   <div id="progress">
     <div class="label"><span id="prog-n">0</span> of <span id="prog-d">0</span>
       items confirmed</div>
     <div class="track"><div class="fill" id="prog-fill"></div></div>
   </div>
-  {% if share_url %}<span class="share">{{ payload.share.link_noun }} link:
-    <a href="{{ share_url }}" target="_blank">{{ share_url }}</a></span>{% endif %}
+  {% if share_url %}<span class="share" id="share-link-label">{{ payload.share.link_noun }} link:
+    <a href="{{ share_url }}" id="share-url">{{ share_url }}</a></span>{% endif %}
   <div class="header-end">
     <span id="save-state" role="status">All changes saved</span>
-    <button class="btn" id="btn-pdf">Export PDF</button>
-    <button class="btn primary" id="btn-sign">Sign</button>
   </div>
+  <details class="header-more">
+    <summary class="btn ghost header-more-btn" aria-label="Navigation menu">⋯</summary>
+    <div class="header-more-panel">
+      <nav class="header-more-shell" aria-label="Sections">
+        <a href="{{ route_prefix ~ '/' }}"{% if shell_active == "review" %} aria-current="page"{% endif %}>Review</a>
+        <a href="{{ route_prefix ~ '/report' }}"{% if shell_active == "report" %} aria-current="page"{% endif %}>Report</a>
+        <a href="{{ route_prefix ~ '/issue' }}"{% if shell_active == "issue" %} aria-current="page"{% endif %}>Final issue</a>
+      </nav>
+      <a href="#finish" class="header-more-finish">Finish checklist</a>
+    </div>
+  </details>
 </header>
 
 <div id="app">
   <nav id="rail" aria-label="Item queue">
+    <a href="#overview" class="rail-overview" id="rail-overview">Overview</a>
     <div class="tools">
-      <input type="search" id="q-search" placeholder="Search items…"
+      <input type="search" id="q-search"
+             placeholder="Search items…"
+             data-placeholder-kbd="Search items · ⌘K or /"
              aria-label="Search items" autocomplete="off">
       <div class="filters" id="filters">
         <button data-f="all" aria-pressed="true">All</button>
@@ -564,8 +784,8 @@
         <summary>Sort &amp; bulk</summary>
         <div class="row2">
           <select id="sort" aria-label="Sort order">
+            <option value="conf" selected>Least confident first</option>
             <option value="room">By room</option>
-            <option value="conf">Least confident first</option>
           </select>
           <button class="btn" id="bulk">Accept remaining</button>
         </div>
@@ -626,6 +846,13 @@
   var photoTime = payload.photo_time || {};
   var signingRoles = payload.signing_roles || ["landlord", "agent"];
   var coverFields = payload.cover_fields || [];
+  var rolesMeta = payload.roles || {};
+  var shareSpec = payload.share || {};
+  var SHARE_URL = {{ share_url | tojson }};
+  var pdfMeta = payload.pdf_meta || { ready: false, stale: true };
+  var pdfStatus = "idle";
+  var pdfExportStarted = false;
+  var finishHost = null;
 
   var CONDITIONS = ["new", "excellent", "good", "fair", "poor"];
   var NOT_INSPECTED = ["not tested", "not visible"];
@@ -633,8 +860,9 @@
                 "requires cleaning"];
 
   var filter = "all";
-  var sortMode = "room";
+  var sortMode = "conf";
   var query = "";
+  var viewMode = "overview"; // overview | items | room | finish
   var sel = null;            // {type:"item", id} | {type:"room", name}
   var roomShowAll = {};      // room name -> true: disclosed tier revealed
   var collapsedRooms = {};   // room name -> true when collapsed in the rail
@@ -790,9 +1018,11 @@
   }
   function markDirty() {
     dirty = true;
+    pdfMeta.stale = true;
     setSaveState("Unsaved changes…");
     scheduleSave();
     renderProgress();
+    if (viewMode === "finish" && finishHost) renderFinish();
   }
   window.addEventListener("beforeunload", function (e) {
     if (dirty || saving) { e.preventDefault(); e.returnValue = ""; }
@@ -826,18 +1056,662 @@
     else if (sel && sel.type === "room") {
       var room = inv.rooms.find(function (r) { return r.name === sel.name; });
       if (room) renderRoom(room);
-    }
+    } else if (viewMode === "overview") renderOverview();
+    else if (viewMode === "finish") renderFinish();
     toast("Undid: " + entry.label);
   }
 
   /* ---------- progress ---------- */
+  function filterCounts() {
+    var pending = 0, defects = 0, noev = 0;
+    ix.items.forEach(function (it) {
+      if (!isDone(it)) pending++;
+      if ((it.defects || []).length || (it.rejected_defects || []).length) {
+        defects++;
+      }
+      if (!hasEvidence(it)) noev++;
+    });
+    return { all: ix.items.length, pending: pending, defects: defects,
+             noev: noev };
+  }
+  var FILTER_LABELS = {
+    all: "All", pending: "Unreviewed", defects: "Defects", noev: "No evidence"
+  };
+  function updateFilterBadges() {
+    var c = filterCounts();
+    document.getElementById("filters").querySelectorAll("button").forEach(
+      function (btn) {
+        var f = btn.getAttribute("data-f");
+        btn.textContent = FILTER_LABELS[f] + " " + c[f];
+      });
+  }
   function renderProgress() {
     var done = ix.items.filter(isDone).length;
     document.getElementById("prog-n").textContent = done;
     document.getElementById("prog-d").textContent = ix.items.length;
     document.getElementById("prog-fill").style.width =
       ix.items.length ? (100 * done / ix.items.length) + "%" : "0";
+    updateFilterBadges();
+    if (viewMode === "overview") refreshOverviewMeters();
   }
+  function confidenceBands(items) {
+    var bands = { low: 0, mid: 0, high: 0, unknown: 0 };
+    items.forEach(function (it) {
+      if (typeof it.confidence !== "number") bands.unknown++;
+      else if (it.confidence < 0.6) bands.low++;
+      else if (it.confidence < 0.8) bands.mid++;
+      else bands.high++;
+    });
+    return bands;
+  }
+  function formatConfidenceBands(bands) {
+    var lines = [];
+    if (bands.low) lines.push("Below 60%: " + bands.low);
+    if (bands.mid) lines.push("60–80%: " + bands.mid);
+    if (bands.high) lines.push("80%+: " + bands.high);
+    if (bands.unknown) lines.push("No score: " + bands.unknown);
+    return lines.join(" · ");
+  }
+
+  /* ---------- overview (X1 orient) ---------- */
+  var COACH_KEY = "hi-review-overview-coach";
+  var overviewHost = null;
+
+  function inventoryStats() {
+    var analysed = 0, shown = 0;
+    inv.rooms.forEach(function (room) {
+      (room.photos || []).forEach(function (p) {
+        if (!photoSrc[p.id]) return;
+        analysed++;
+        if (p.hero) shown++;
+      });
+    });
+    if (!shown) shown = analysed;
+    return {
+      rooms: inv.rooms.length,
+      items: ix.items.length,
+      analysed: analysed,
+      shown: shown
+    };
+  }
+  function primaryWalkthrough() {
+    var keys = Object.keys(videos);
+    if (!keys.length) return null;
+    var root = keys.filter(function (k) { return k.indexOf("/") < 0; });
+    var rel = root.length ? root[0] : keys[0];
+    return { rel: rel, meta: videos[rel] };
+  }
+  function roomHeroSrc(room) {
+    var heroes = (room.photos || [])
+      .filter(function (p) { return p.hero && photoSrc[p.id]; })
+      .sort(function (a, b) { return a.hero - b.hero; });
+    if (heroes.length) return photoSrc[heroes[0].id];
+    var first = (room.photos || []).filter(function (p) {
+      return photoSrc[p.id]; })[0];
+    return first ? photoSrc[first.id] : null;
+  }
+  function roomReviewDone(room) {
+    return (room.items || []).filter(isDone).length;
+  }
+  function roomWarnings(room) {
+    var n = 0;
+    (room.items || []).forEach(function (it) {
+      if (isDone(it)) return;
+      if ((it.defects || []).length) n++;
+      else if (typeof it.confidence === "number" && it.confidence < 0.7) n++;
+    });
+    return n;
+  }
+  function updateSubNav() {
+    var o = document.getElementById("nav-overview");
+    var i = document.getElementById("nav-items");
+    var r = document.getElementById("nav-rooms");
+    var f = document.getElementById("nav-finish");
+    o.removeAttribute("aria-current");
+    i.removeAttribute("aria-current");
+    r.removeAttribute("aria-current");
+    f.removeAttribute("aria-current");
+    if (viewMode === "overview") o.setAttribute("aria-current", "page");
+    else if (viewMode === "items") i.setAttribute("aria-current", "page");
+    else if (viewMode === "room") r.setAttribute("aria-current", "page");
+    else if (viewMode === "finish") f.setAttribute("aria-current", "page");
+  }
+  function setViewHash(mode, arg) {
+    var h = "";
+    if (mode === "overview") h = "overview";
+    else if (mode === "finish") h = "finish";
+    else if (mode === "item") h = "item-" + arg;
+    else if (mode === "room") h = "room-" + encodeURIComponent(arg);
+    else if (mode === "moment") h = "moment=" + arg;
+    var newHash = h ? "#" + h : "";
+    if (location.hash !== newHash) {
+      history.replaceState(null, "", location.pathname + location.search + newHash);
+    }
+  }
+  function refreshOverviewMeters() {
+    if (!overviewHost) return;
+    overviewHost.querySelectorAll(".room-card[data-room]").forEach(function (card) {
+      var name = card.getAttribute("data-room");
+      var room = inv.rooms.find(function (r) { return r.name === name; });
+      if (!room) return;
+      var total = (room.items || []).length;
+      var done = roomReviewDone(room);
+      var fill = card.querySelector(".meter i");
+      if (fill) fill.style.width = total ? (100 * done / total) + "%" : "0";
+      var warns = roomWarnings(room);
+      var warnEl = card.querySelector(".warn");
+      if (warns) {
+        if (!warnEl) {
+          var meta = card.querySelector(".meta");
+          warnEl = el("span", { "class": "warn" });
+          meta.appendChild(warnEl);
+        }
+        warnEl.textContent = " · " + warns + "\u26a0";
+      } else if (warnEl) warnEl.remove();
+    });
+  }
+  function maybeCoachMark(host) {
+    try {
+      if (localStorage.getItem(COACH_KEY)) return;
+      localStorage.setItem(COACH_KEY, "1");
+    } catch (e) { return; }
+    var box = el("div", { "class": "coach-mark", role: "note" });
+    box.appendChild(el("p", { text: "This is every room the walkthrough found. "
+      + "Open one to fix names; Start review when it looks right." }));
+    var dismiss = el("button", { type: "button", "aria-label": "Dismiss",
+      text: "\u00d7" });
+    dismiss.addEventListener("click", function () { box.remove(); });
+    box.appendChild(dismiss);
+    host.insertBefore(box, host.firstChild);
+  }
+  function renderOverview() {
+    viewMode = "overview";
+    overviewHost = null;
+    stageCtl = null;
+    var d = document.getElementById("detail");
+    d.innerHTML = "";
+    var host = el("div", { "class": "overview" });
+    overviewHost = host;
+    d.appendChild(host);
+    maybeCoachMark(host);
+
+    var stats = inventoryStats();
+    var statsLine = stats.rooms + " room" + (stats.rooms === 1 ? "" : "s")
+      + " \u00b7 " + stats.items + " item" + (stats.items === 1 ? "" : "s")
+      + " \u00b7 " + stats.analysed + " frame"
+      + (stats.analysed === 1 ? "" : "s") + " analysed"
+      + " \u00b7 " + stats.shown + " shown";
+    var statsEl = el("div", { "class": "overview-stats" });
+    statsEl.appendChild(el("span", { text: statsLine }));
+    var wt = primaryWalkthrough();
+    if (wt) {
+      statsEl.appendChild(el("span", { "class": "walkthrough",
+        text: "Walkthrough: " + wt.meta.name + " \u00b7 "
+              + fmtT(wt.meta.duration) }));
+    }
+    host.appendChild(statsEl);
+
+    var ctas = el("div", { "class": "overview-ctas" });
+    ctas.appendChild(el("button", {
+      "class": "btn primary", type: "button",
+      text: "Start review (least confident first)",
+      onclick: startReview
+    }));
+    if (wt) {
+      ctas.appendChild(el("button", {
+        "class": "btn", type: "button", text: "Watch walkthrough",
+        onclick: function () { showWalkthroughPlayer(host, wt); }
+      }));
+    }
+    host.appendChild(ctas);
+
+    var grid = el("div", { "class": "overview-grid" });
+    inv.rooms.forEach(function (room) {
+      var src = roomHeroSrc(room);
+      var total = (room.items || []).length;
+      var done = roomReviewDone(room);
+      var warns = roomWarnings(room);
+      var card = el("button", {
+        type: "button", "class": "room-card",
+        "data-room": room.name,
+        onclick: function () { select({ type: "room", name: room.name }); }
+      });
+      var thumb = el("div", { "class": "thumb" });
+      if (src) thumb.appendChild(el("img", { src: src, alt: "", loading: "lazy" }));
+      else thumb.appendChild(el("span", { "class": "thumb-empty", text: "No frames" }));
+      card.appendChild(thumb);
+      var body = el("div", { "class": "body" });
+      body.appendChild(el("h3", { "class": "name", text: room.name }));
+      var meta = el("div", { "class": "meta" });
+      meta.appendChild(el("span", {
+        text: total + " item" + (total === 1 ? "" : "s") }));
+      if (warns) meta.appendChild(el("span", { "class": "warn",
+        text: " \u00b7 " + warns + "\u26a0" }));
+      body.appendChild(meta);
+      var meter = el("div", { "class": "meter" });
+      var mfill = el("i", {});
+      mfill.style.width = total ? (100 * done / total) + "%" : "0";
+      meter.appendChild(mfill);
+      body.appendChild(meter);
+      card.appendChild(body);
+      grid.appendChild(card);
+    });
+    host.appendChild(grid);
+    updateSubNav();
+  }
+  function showWalkthroughPlayer(host, wt) {
+    var existing = host.querySelector(".wt-player");
+    if (existing) { existing.scrollIntoView({ block: "nearest" }); return; }
+    var box = el("div", { "class": "wt-player" });
+    var v = document.createElement("video");
+    v.src = wt.meta.src;
+    v.controls = true;
+    v.playsInline = true;
+    v.preload = "metadata";
+    box.appendChild(v);
+    var bar = el("div", { "class": "bar" });
+    bar.appendChild(el("span", { text: wt.meta.name + " \u00b7 "
+      + fmtT(wt.meta.duration) }));
+    box.appendChild(bar);
+    var stats = host.querySelector(".overview-stats");
+    stats.parentNode.insertBefore(box, stats.nextSibling);
+    box.scrollIntoView({ block: "nearest" });
+    v.play().catch(function () {});
+  }
+  function showOverview() {
+    sel = null;
+    closeAnnoForm();
+    renderOverview();
+    renderQueue();
+    setViewHash("overview");
+  }
+  function startReview() {
+    filter = "pending";
+    sortMode = "conf";
+    document.getElementById("filters").querySelectorAll("button").forEach(
+      function (x) {
+        x.setAttribute("aria-pressed",
+          x.getAttribute("data-f") === "pending" ? "true" : "false");
+      });
+    document.getElementById("sort").value = "conf";
+    renderQueue();
+    var open = ix.items.filter(function (i) { return !isDone(i); })
+      .sort(function (a, b) {
+        return (a.confidence == null ? 1.01 : a.confidence) -
+               (b.confidence == null ? 1.01 : b.confidence);
+      });
+    if (open.length) select({ type: "item", id: open[0].id });
+    else toast("All items are already reviewed");
+  }
+
+  /* ---------- finish checklist (X2) ---------- */
+  function addressFieldMeta() {
+    var pf = coverFields.find(function (f) { return f.name === "property_address"; });
+    return pf || { placeholder: "12 Example Road, London N1 1AA" };
+  }
+  function addressMissing() {
+    var addr = (inv.property_address || "").trim();
+    if (!addr) return true;
+    var ph = (addressFieldMeta().placeholder || "").trim();
+    if (ph && addr.toLowerCase() === ph.toLowerCase()) return true;
+    return false;
+  }
+  function genericRoomNames() {
+    return inv.rooms.filter(function (room) {
+      var n = (room.name || "").trim();
+      if (!n) return true;
+      if (/^room\s*\d+$/i.test(n)) return true;
+      if (/^(unknown|unnamed|untitled)$/i.test(n)) return true;
+      return false;
+    });
+  }
+  function ownerSignatures() {
+    var cp = rolesMeta.counterparty && rolesMeta.counterparty.key;
+    return (inv.signatures || []).filter(function (s) {
+      return !cp || s.role !== cp;
+    });
+  }
+  function hasOwnerSignature() { return ownerSignatures().length > 0; }
+  function pdfReady() {
+    if (pdfStatus === "running") return false;
+    if (dirty) return false;
+    return pdfMeta.ready && !pdfMeta.stale;
+  }
+  function buildDetailsFieldDefs() {
+    if (coverFields.length) {
+      var fields = coverFields.map(function (f) {
+        return { name: f.name, label: f.label,
+                 value: f.name === "property_address" ? inv.property_address :
+                        (f.name in inv ? inv[f.name] :
+                         (inv.parties || {})[f.name] || f.value || ""),
+                 placeholder: f.placeholder || "" };
+      });
+      fields.push(
+        { name: "inspected_by", label: "Prepared by",
+          value: inv.inspected_by, placeholder: "Full name" },
+        { name: "inspected_at", label: "Date of inspection", type: "date",
+          value: inv.inspected_at }
+      );
+      return fields;
+    }
+    return [
+      { name: "property_address", label: "Property address",
+        value: inv.property_address,
+        placeholder: "12 Example Road, London N1 1AA" },
+      { name: "property_type", label: "Property type",
+        value: inv.property_type,
+        placeholder: "1 bedroom furnished apartment" },
+      { name: "inspected_by", label: "Prepared by",
+        value: inv.inspected_by, placeholder: "Full name" },
+      { name: "agent_name", label: "Agent / company", value: inv.agent_name },
+      { name: "landlord_name", label: "Landlord", value: inv.landlord_name },
+      { name: "tenant_name", label: "Tenant", value: inv.tenant_name },
+      { name: "report_ref", label: "Report reference", value: inv.report_ref },
+      { name: "inspected_at", label: "Date of inspection", type: "date",
+        value: inv.inspected_at }
+    ];
+  }
+  function saveDetailsFromForm(formEl) {
+    var defs = buildDetailsFieldDefs();
+    var values = {};
+    defs.forEach(function (f) {
+      var input = formEl.querySelector('[name="' + f.name + '"]');
+      if (input) values[f.name] = input.value.trim();
+    });
+    pushUndo("edit report details", [inv]);
+    Object.keys(values).forEach(function (k) {
+      if (k in inv && k !== "parties") inv[k] = values[k];
+      else { inv.parties = inv.parties || {}; inv.parties[k] = values[k]; }
+    });
+    coverFields.forEach(function (f) {
+      if (values[f.name] != null) f.value = values[f.name];
+    });
+    document.getElementById("hdr-addr").textContent =
+      inv.property_address || "No address yet";
+    pdfMeta.stale = true;
+    markDirty();
+    toast("Details saved — they appear on the next report render");
+    renderFinish();
+  }
+  function finishStep(icon, title, note, bodyFn, state) {
+    var li = el("li", { "class": "finish-step" + (state ? " " + state : "") });
+    var head = el("div", { "class": "finish-step-head" });
+    head.appendChild(el("span", { "class": "finish-step-icon", text: icon }));
+    var text = el("div", {});
+    text.appendChild(el("p", { "class": "finish-step-title", text: title }));
+    if (note) text.appendChild(el("p", { "class": "finish-step-note", text: note }));
+    head.appendChild(text);
+    li.appendChild(head);
+    if (bodyFn) {
+      var body = el("div", { "class": "finish-step-body" });
+      bodyFn(body);
+      li.appendChild(body);
+    }
+    return li;
+  }
+  function copyShareLink() {
+    if (!SHARE_URL) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(SHARE_URL).then(function () {
+        toast("Link copied — send it to the " + (shareSpec.link_noun || "tenant"));
+      }).catch(function () { window.prompt("Copy link:", SHARE_URL); });
+    } else window.prompt("Copy link:", SHARE_URL);
+  }
+  function submitSign(nameInput, roleInput, signBtn) {
+    var name = (nameInput.value || "").trim();
+    var role = roleInput.value;
+    if (!name) { toast("Enter your full name to sign"); nameInput.focus(); return; }
+    if (addressMissing()) { toast("Add the property address before signing"); return; }
+    var pend = ix.items.filter(function (i) { return !isDone(i); }).length;
+    function doSign() {
+      signBtn.disabled = true;
+      flush({ manual: true }).then(function () {
+        return api("POST", "/api/sign", { name: name, role: role });
+      }).then(function () {
+        toast("Signed — the signature pins the saved inventory hash");
+        return reload();
+      }).then(function () { showFinish(true); })
+      .catch(function (e) { signBtn.disabled = false; toast(e.message); });
+    }
+    if (pend) {
+      ui.confirmDialog({
+        title: "Sign with " + pend + " unreviewed item" + (pend > 1 ? "s" : "") + "?",
+        message: pend + " items are still unreviewed.",
+        note: "Signing pins the current content hash to your name in the report's declaration.",
+        confirmLabel: "Sign anyway"
+      }).then(function (yes) { if (yes) doSign(); });
+    } else doSign();
+  }
+  function startPdfExport(openWhenDone) {
+    flush({ manual: true }).then(function () {
+      return api("POST", "/api/pdf", {});
+    }).then(function () {
+      pdfExportStarted = openWhenDone;
+      pollPdf();
+      renderFinish();
+    }).catch(function (e) {
+      var body = ui.el("div", {});
+      body.appendChild(ui.el("p", { text: e.message }));
+      body.appendChild(ui.el("p", { "class": "note",
+        text: "Without WeasyPrint you can still open the report and use Print → Save as PDF." }));
+      ui.open({ title: "PDF export unavailable", body: body, actions: [
+        { label: "Open report", onclick: function (close) {
+            close(); window.open(PREFIX + "/report", "_blank"); } },
+        { label: "Close", primary: true, onclick: function (close) { close(); } }] });
+    });
+  }
+  function pollPdf() {
+    api("GET", "/api/pdf").then(function (s) {
+      pdfStatus = s.status || "idle";
+      if (s.status === "running") {
+        setTimeout(pollPdf, 1500);
+        if (finishHost) renderFinish();
+        return;
+      }
+      if (s.status === "done") {
+        pdfMeta.ready = true;
+        pdfMeta.stale = false;
+        if (pdfExportStarted) {
+          pdfExportStarted = false;
+          toast("PDF ready — opening");
+          window.open(PREFIX + "/pdf", "_blank");
+        }
+      } else if (s.status === "failed" && pdfExportStarted) {
+        pdfExportStarted = false;
+        var body = ui.el("div", {});
+        body.appendChild(ui.el("p", { text: "The PDF could not be generated." }));
+        if (s.detail) body.appendChild(ui.el("p", { "class": "note", text: s.detail }));
+        ui.open({ title: "PDF export failed", body: body, actions: [
+          { label: "Close", primary: true, onclick: function (close) { close(); } }] });
+      }
+      if (finishHost) renderFinish();
+    }).catch(function () {});
+  }
+  function renderFinish() {
+    viewMode = "finish";
+    finishHost = null;
+    stageCtl = null;
+    sel = null;
+    closeAnnoForm();
+    var d = document.getElementById("detail");
+    d.innerHTML = "";
+    var host = el("div", { "class": "finish", id: "finish-panel" });
+    finishHost = host;
+    d.appendChild(host);
+    host.appendChild(el("h1", { text: "Finish" }));
+    host.appendChild(el("p", { "class": "finish-intro",
+      text: "Close the file: complete the cover details, export a fresh PDF, sign, then send the final issue." }));
+    var list = el("ol", { "class": "finish-checklist" });
+    var addrBad = addressMissing();
+    list.appendChild(finishStep(addrBad ? "!" : "\u2713", "Property details",
+      addrBad ? "The report cover needs a real address before you can sign."
+              : "Address, parties, and inspection date are set.",
+      function (body) {
+        var form = el("form", { "class": "finish-fields", id: "finish-details" });
+        buildDetailsFieldDefs().forEach(function (f) {
+          var field = el("div", {});
+          field.appendChild(el("label", { text: f.label, for: "fd-" + f.name }));
+          var input;
+          if (f.type === "select") {
+            input = el("select", { name: f.name, id: "fd-" + f.name });
+            (f.options || []).forEach(function (o) {
+              var val = typeof o === "string" ? o : o.value;
+              var op = el("option", { value: val, text: typeof o === "string" ? o : o.label });
+              if (val === (f.value || "")) op.selected = true;
+              input.appendChild(op);
+            });
+          } else {
+            input = el("input", {
+              type: f.type || "text", name: f.name, id: "fd-" + f.name,
+              value: f.value || "", placeholder: f.placeholder || "" });
+          }
+          field.appendChild(input);
+          form.appendChild(field);
+        });
+        form.addEventListener("submit", function (e) {
+          e.preventDefault(); saveDetailsFromForm(form);
+        });
+        var actions = el("div", { "class": "finish-actions" });
+        actions.appendChild(el("button", { type: "submit", "class": "btn primary", text: "Save details" }));
+        body.appendChild(form);
+        body.appendChild(actions);
+      }, addrBad ? "blocker" : "ok"));
+    var vague = genericRoomNames();
+    list.appendChild(finishStep(vague.length ? "!" : "\u2713", "Room names",
+      vague.length ? vague.length + " room(s) still have generic names — rename in Rooms if needed."
+                   : "Every room has a descriptive name.",
+      vague.length ? function (body) {
+        vague.forEach(function (room) {
+          body.appendChild(el("button", { type: "button", "class": "btn ghost",
+            text: "Rename " + room.name,
+            onclick: function () { select({ type: "room", name: room.name }); } }));
+        });
+      } : null, vague.length ? "warn" : "ok"));
+    var pend = ix.items.filter(function (i) { return !isDone(i); }).length;
+    list.appendChild(finishStep(pend ? "!" : "\u2713", "Items reviewed",
+      pend ? pend + " item(s) still unreviewed." : "Every item has been confirmed or rejected.",
+      pend ? function (body) {
+        body.appendChild(el("button", { type: "button", "class": "btn",
+          text: "Continue review", onclick: startReview }));
+      } : null, pend ? "warn" : "ok"));
+    var pdfState = pdfStatus === "running" ? "running" : pdfReady() ? "ready" : "stale";
+    list.appendChild(finishStep(
+      pdfState === "ready" ? "\u2713" : (pdfState === "running" ? "\u2026" : "!"),
+      "PDF generated",
+      pdfState === "running" ? "Preparing PDF\u2026"
+      : pdfState === "ready" ? "Server PDF matches the saved inventory."
+      : "Export a fresh PDF after your latest edits.",
+      function (body) {
+        var actions = el("div", { "class": "finish-actions" });
+        var label = pdfState === "running" ? "Preparing PDF\u2026"
+          : pdfMeta.ready ? "Re-export PDF" : "Export PDF";
+        actions.appendChild(el("button", {
+          type: "button", "class": "btn", text: label,
+          disabled: pdfState === "running" ? "disabled" : null,
+          onclick: function () { startPdfExport(true); } }));
+        if (pdfMeta.ready && pdfState !== "running") {
+          actions.appendChild(el("button", { type: "button", "class": "btn ghost",
+            text: "Open PDF", onclick: function () { window.open(PREFIX + "/pdf", "_blank"); } }));
+        }
+        body.appendChild(actions);
+      }, pdfState === "ready" ? "ok" : "warn"));
+    var signed = hasOwnerSignature();
+    var signBlocked = addressMissing();
+    list.appendChild(finishStep(
+      signed ? "\u2713" : (signBlocked ? "\u2717" : "\u2026"), "Your signature",
+      signed ? "Declaration signed on the report."
+             : signBlocked ? "Add the property address above before signing."
+             : "Signing pins the current content hash to your name.",
+      signed ? function (body) {
+        var ul = el("ul", { "class": "finish-sig-list" });
+        ownerSignatures().forEach(function (s) {
+          ul.appendChild(el("li", { text: s.name + " \u2014 " + s.role + " \u2014 signed " + s.signed_at }));
+        });
+        body.appendChild(ul);
+      } : function (body) {
+        var form = el("div", { "class": "finish-fields" });
+        var nameInput = el("input", { type: "text", id: "finish-sign-name",
+          value: inv.inspected_by || "", placeholder: "Full name" });
+        var roleInput = el("select", { id: "finish-sign-role" });
+        signingRoles.forEach(function (r) {
+          var op = el("option", { value: r, text: r });
+          if (r === (signingRoles[0] || "landlord")) op.selected = true;
+          roleInput.appendChild(op);
+        });
+        form.appendChild(el("label", { text: "Full name", for: "finish-sign-name" }));
+        form.appendChild(nameInput);
+        form.appendChild(el("label", { text: "Role", for: "finish-sign-role" }));
+        form.appendChild(roleInput);
+        body.appendChild(form);
+        var actions = el("div", { "class": "finish-actions" });
+        var signBtn = el("button", { type: "button", "class": "btn primary",
+          text: "Sign inventory", disabled: signBlocked ? "disabled" : null,
+          onclick: function () { submitSign(nameInput, roleInput, signBtn); } });
+        actions.appendChild(signBtn);
+        body.appendChild(actions);
+      }, signed ? "ok" : (signBlocked ? "blocker" : "warn")));
+    if (SHARE_URL) {
+      list.appendChild(finishStep("\u2026", (shareSpec.link_noun || "Tenant") + " link",
+        "Optional — send this read-only link for walk-through and countersign.",
+        function (body) {
+          body.appendChild(el("p", { "class": "finish-step-note", text: SHARE_URL }));
+          var actions = el("div", { "class": "finish-actions" });
+          actions.appendChild(el("button", { type: "button", "class": "btn",
+            text: "Copy link", onclick: copyShareLink }));
+          actions.appendChild(el("a", { href: SHARE_URL, target: "_blank",
+            "class": "btn ghost", text: "Open link" }));
+          body.appendChild(actions);
+        }, "ok"));
+    }
+    host.appendChild(list);
+    if (signed) {
+      var handoff = el("div", { "class": "finish-handoff", id: "finish-handoff" });
+      handoff.appendChild(el("h2", { text: "Ready to send" }));
+      handoff.appendChild(el("p", { text: "Your signature is on record. Open the clean final issue or copy the "
+        + (shareSpec.link_noun || "tenant") + " link." }));
+      var hact = el("div", { "class": "finish-handoff-actions" });
+      hact.appendChild(el("a", { href: PREFIX + "/issue", "class": "btn primary", text: "Open Final issue" }));
+      if (SHARE_URL) {
+        hact.appendChild(el("button", { type: "button", "class": "btn",
+          text: "Copy " + (shareSpec.link_noun || "tenant") + " link", onclick: copyShareLink }));
+      }
+      handoff.appendChild(hact);
+      host.appendChild(handoff);
+    }
+    updateSubNav();
+    renderQueue();
+  }
+  function showFinish(scrollHandoff) {
+    renderFinish();
+    setViewHash("finish");
+    if (scrollHandoff) {
+      var target = document.getElementById("finish-handoff");
+      if (target) target.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+  }
+  document.getElementById("nav-overview").addEventListener("click", function (e) {
+    e.preventDefault(); showOverview();
+  });
+  document.getElementById("rail-overview").addEventListener("click", function (e) {
+    e.preventDefault(); showOverview();
+  });
+  document.getElementById("nav-items").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (sel && sel.type === "item" && ix.byId[sel.id]) {
+      viewMode = "items";
+      updateSubNav();
+      renderItem(ix.byId[sel.id]);
+    } else startReview();
+  });
+  document.getElementById("nav-rooms").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (viewMode === "room" && sel && sel.type === "room") return;
+    showOverview();
+  });
+  document.getElementById("nav-finish").addEventListener("click", function (e) {
+    e.preventDefault();
+    showFinish();
+  });
 
   /* ---------- queue rail ---------- */
   var rail = document.getElementById("rail");
@@ -1039,15 +1913,20 @@
       refreshQueueRow(ix.byId[prev.id]);
     }
     if (s.type === "item") {
+      viewMode = "items";
       ensureRowRendered(s.id);
       expandRoomForItem(ix.byId[s.id]);
       syncRoomCollapse();
       refreshQueueRow(ix.byId[s.id]);
       renderItem(ix.byId[s.id]);
+      setViewHash("item", s.id);
     } else {
+      viewMode = "room";
       renderRoom(inv.rooms.find(function (r) { return r.name === s.name; }));
       renderQueue();
+      setViewHash("room", s.name);
     }
+    updateSubNav();
     var row = document.querySelector('[data-qid="' + (s.id || "") + '"]');
     if (row) row.scrollIntoView({ block: "nearest" });
     if (window.matchMedia("(max-width: 900px)").matches) setRail(false);
@@ -1130,7 +2009,10 @@
       ? el("div", { "class": "strip", role: "listbox",
                     "aria-label": "Evidence frames" })
       : null;
-    spine = el("div", { id: "spine", hidden: "hidden" });
+    var spinePinned = !!opts.item;
+    spine = el("div", { id: "spine", hidden: "hidden",
+      "class": spinePinned ? "spine-pinned" : "" });
+    if (spinePinned) foot.appendChild(spine);
     var extraHint = el("span", { "class": "disclosure-hint", text: "" });
     var extraSum = el("summary");
     extraSum.appendChild(el("span", { "class": "disclosure-title",
@@ -1138,11 +2020,14 @@
     extraSum.appendChild(extraHint);
     var extraBody = el("div", { "class": "disclosure-body" });
     if (strip) extraBody.appendChild(strip);
-    extraBody.appendChild(spine);
-    var extra = el("details", { "class": "disclosure" });
-    extra.appendChild(extraSum);
-    extra.appendChild(extraBody);
-    foot.appendChild(extra);
+    if (!spinePinned) extraBody.appendChild(spine);
+    var extra = null;
+    if (strip || !spinePinned) {
+      extra = el("details", { "class": "disclosure" });
+      extra.appendChild(extraSum);
+      extra.appendChild(extraBody);
+      foot.appendChild(extra);
+    }
     box.appendChild(foot);
 
     var ctl = {
@@ -1153,9 +2038,9 @@
     function updateStageExtraHint() {
       var bits = [];
       if (entries.length > 1) bits.push(entries.length + " frames");
-      if (!spine.hidden) bits.push("timeline");
+      if (!spinePinned && !spine.hidden) bits.push("timeline");
       extraHint.textContent = bits.length ? bits.join(" · ") : "walkthrough";
-      extra.hidden = !bits.length;
+      if (extra) extra.hidden = !bits.length;
     }
 
     function curEntry() { return ctl.entries[ctl.cur]; }
@@ -2057,6 +2942,17 @@
     var d = document.getElementById("detail");
     d.innerHTML = "";
     stageCtl = null;
+    overviewHost = null;
+
+    var crumb = el("nav", { "class": "room-breadcrumb", "aria-label": "Breadcrumb" });
+    var back = el("a", { href: "#overview", text: "Overview" });
+    back.addEventListener("click", function (e) {
+      e.preventDefault(); showOverview();
+    });
+    crumb.appendChild(back);
+    crumb.appendChild(el("span", { "class": "sep", text: "\u2192" }));
+    crumb.appendChild(el("span", { text: room.name }));
+    d.appendChild(crumb);
 
     var headline = el("div", { "class": "room-headline" });
     headline.appendChild(el("span", { "class": "claim-loc", text: "Room view" }));
@@ -2334,109 +3230,7 @@
       }, false));
   }
 
-  /* ---------- details (report metadata) ---------- */
-  document.getElementById("btn-details").addEventListener("click", function () {
-    var fields = coverFields.length ? coverFields.map(function (f) {
-      return { name: f.name, label: f.label, value: f.value || "",
-               placeholder: f.placeholder || "" };
-    }) : [
-        { name: "property_address", label: "Property address",
-          value: inv.property_address,
-          placeholder: "12 Example Road, London N1 1AA" },
-        { name: "property_type", label: "Property type",
-          value: inv.property_type,
-          placeholder: "1 bedroom furnished apartment" },
-        { name: "inspected_by", label: "Prepared by",
-          value: inv.inspected_by, placeholder: "Full name" },
-        { name: "agent_name", label: "Agent / company",
-          value: inv.agent_name },
-        { name: "landlord_name", label: "Landlord", value: inv.landlord_name },
-        { name: "tenant_name", label: "Tenant", value: inv.tenant_name },
-        { name: "report_ref", label: "Report reference",
-          value: inv.report_ref },
-        { name: "inspected_at", label: "Date of inspection", type: "date",
-          value: inv.inspected_at }
-      ];
-    ui.form({
-      title: "Report details",
-      note: "These appear on the report cover and in the declaration.",
-      submitLabel: "Save details",
-      fields: fields.concat(coverFields.length ? [
-        { name: "inspected_by", label: "Prepared by",
-          value: inv.inspected_by, placeholder: "Full name" },
-        { name: "inspected_at", label: "Date of inspection", type: "date",
-          value: inv.inspected_at }
-      ] : [])
-    }).then(function (values) {
-      if (!values) return;
-      pushUndo("edit report details", [inv]);
-      Object.keys(values).forEach(function (k) {
-        if (k in inv && k !== "parties") inv[k] = values[k];
-        else {
-          inv.parties = inv.parties || {};
-          inv.parties[k] = values[k];
-        }
-      });
-      document.getElementById("hdr-addr").textContent =
-        inv.property_address || "No address yet";
-      markDirty();
-      toast("Details saved — they appear on the next report render");
-    });
-  });
-
-  /* ---------- PDF export ---------- */
-  var pdfBtn = document.getElementById("btn-pdf");
-  function pollPdf() {
-    api("GET", "/api/pdf").then(function (s) {
-      if (s.status === "running") {
-        pdfBtn.disabled = true;
-        pdfBtn.textContent = "Preparing PDF…";
-        setTimeout(pollPdf, 1500);
-        return;
-      }
-      pdfBtn.disabled = false;
-      pdfBtn.textContent = "Export PDF";
-      if (s.status === "done" && pollPdf._started) {
-        pollPdf._started = false;
-        toast("PDF ready — opening");
-        window.open(PREFIX + "/pdf", "_blank");
-      } else if (s.status === "failed" && pollPdf._started) {
-        pollPdf._started = false;
-        var body = ui.el("div", {});
-        body.appendChild(ui.el("p", { text: "The PDF could not be generated." }));
-        if (s.detail) {
-          body.appendChild(ui.el("p", { "class": "note", text: s.detail }));
-        }
-        ui.open({ title: "PDF export failed", body: body, actions: [
-          { label: "Close", primary: true,
-            onclick: function (close) { close(); } }] });
-      }
-    }).catch(function () { /* server gone; stop polling */ });
-  }
-  pdfBtn.addEventListener("click", function () {
-    flush({ manual: true }).then(function () {
-      return api("POST", "/api/pdf", {});
-    }).then(function () {
-      pollPdf._started = true;
-      pollPdf();
-    }).catch(function (e) {
-      var body = ui.el("div", {});
-      body.appendChild(ui.el("p", { text: e.message }));
-      body.appendChild(ui.el("p", { "class": "note",
-        text: "Without WeasyPrint you can still open the report and use " +
-              "your browser's Print → Save as PDF; the server-generated " +
-              "PDF adds page numbers in the contents and the tenant-" +
-              "initials line on every page." }));
-      ui.open({ title: "PDF export unavailable", body: body, actions: [
-        { label: "Open report", onclick: function (close) {
-            close(); window.open(PREFIX + "/report", "_blank"); } },
-        { label: "Close", primary: true,
-          onclick: function (close) { close(); } }] });
-    });
-  });
-  pollPdf();   // reflect an export already in flight on page load
-
-  /* ---------- sign / reload ---------- */
+  /* ---------- finish helpers (reload / PDF poll) ---------- */
   function reload() {
     return api("GET", "/api/inventory").then(function (p) {
       inv = p.inventory; photoSrc = p.photo_src || {};
@@ -2453,36 +3247,16 @@
       } else if (sel && sel.type === "room") {
         var room = inv.rooms.find(function (r) { return r.name === sel.name; });
         if (room) renderRoom(room);
+      } else if (viewMode === "finish") {
+        renderFinish();
+      } else if (viewMode === "overview") {
+        renderOverview();
       } else if (ix.items.length) {
-        select({ type: "item", id: ix.items[0].id });
+        showOverview();
       }
     });
   }
-  document.getElementById("btn-sign").addEventListener("click", function () {
-    var pend = ix.items.filter(function (i) { return !isDone(i); }).length;
-    ui.form({
-      title: "Sign this inventory",
-      note: (pend ? pend + " items are still unreviewed. " : "") +
-            "Signing pins the current content hash to your name in the " +
-            "report's declaration.",
-      submitLabel: "Sign",
-      fields: [
-        { name: "name", label: "Full name", value: inv.inspected_by || "",
-          required: true },
-        { name: "role", label: "Role", type: "select",
-          value: signingRoles[0] || "landlord",
-          options: signingRoles }
-      ]
-    }).then(function (values) {
-      if (!values) return;
-      flush({ manual: true }).then(function () {
-        return api("POST", "/api/sign", values);
-      }).then(function () {
-        toast("Signed — the signature pins the saved inventory hash");
-        return reload();
-      }).catch(function (e) { toast(e.message); });
-    });
-  });
+  pollPdf();
 
   /* ---------- filters / sort / bulk ---------- */
   document.getElementById("filters").addEventListener("click", function (e) {
@@ -2498,6 +3272,23 @@
     sortMode = this.value; renderQueue();
   });
   var searchBox = document.getElementById("q-search");
+  if (!window.matchMedia("(hover: none), (pointer: coarse)").matches &&
+      searchBox.getAttribute("data-placeholder-kbd")) {
+    searchBox.placeholder = searchBox.getAttribute("data-placeholder-kbd");
+  }
+  var headerMore = document.querySelector(".header-more");
+  if (headerMore) {
+    headerMore.querySelectorAll("a").forEach(function (node) {
+      node.addEventListener("click", function () {
+        headerMore.removeAttribute("open");
+      });
+    });
+    document.addEventListener("click", function (e) {
+      if (headerMore.hasAttribute("open") && !headerMore.contains(e.target)) {
+        headerMore.removeAttribute("open");
+      }
+    });
+  }
   var searchTimer = null;
   function applySearch() {
     query = searchBox.value.trim().toLowerCase();
@@ -2527,11 +3318,14 @@
   document.getElementById("bulk").addEventListener("click", function () {
     var open = queueEntries().filter(function (i) { return !isDone(i); });
     if (!open.length) { toast("Nothing left to accept"); return; }
+    var bands = confidenceBands(open);
+    var bandLine = formatConfidenceBands(bands);
     ui.confirmDialog({
       title: "Accept " + open.length + " remaining item" +
              (open.length > 1 ? "s" : "") + "?",
       message: "Every visible unreviewed item is marked as confirmed by you.",
-      note: "You can undo this with ⌘Z / Ctrl+Z.",
+      note: (bandLine ? bandLine + ". " : "") +
+            "You can undo this with ⌘Z / Ctrl+Z.",
       confirmLabel: "Accept all"
     }).then(function (yes) {
       if (!yes) return;
@@ -2595,11 +3389,33 @@
     var h;
     try { h = decodeURIComponent(location.hash.replace(/^#/, "")); }
     catch (e) { h = location.hash.replace(/^#/, ""); }
-    if (!h) return false;
+    if (!h || h === "overview") {
+      if (ix.items.length) showOverview();
+      return h === "overview" || (!h && ix.items.length > 0);
+    }
+    if (h === "items") {
+      startReview();
+      return true;
+    }
+    if (h === "finish") {
+      if (ix.items.length) showFinish();
+      return true;
+    }
     var m = /^item-(.+)$/.exec(h);
     if (m && ix.byId[m[1]]) {
       select({ type: "item", id: m[1] });
       return true;
+    }
+    m = /^room-(.+)$/.exec(h);
+    if (m) {
+      var rname;
+      try { rname = decodeURIComponent(m[1]); }
+      catch (e2) { rname = m[1]; }
+      var room = inv.rooms.find(function (r) { return r.name === rname; });
+      if (room) {
+        select({ type: "room", name: room.name });
+        return true;
+      }
     }
     m = /^moment=(.+)$/.exec(h);
     if (m && ix.photoById[m[1]]) {
@@ -2619,18 +3435,16 @@
   window.addEventListener("hashchange", handleHash);
 
   /* ---------- boot ---------- */
+  if (/\/finish\/?$/.test(location.pathname)) {
+    var base = location.pathname.replace(/\/?finish\/?$/, "/") || "/";
+    history.replaceState(null, "", base + location.search + "#finish");
+  }
   renderProgress();
   renderQueue();
   if (handleHash()) {
-    // arrived on a deep link from the report
+    // deep link or explicit overview/items hash
   } else if (ix.items.length) {
-    // start on the least confident unreviewed item: the queue's whole point
-    var first = ix.items.filter(function (i) { return !isDone(i); })
-      .sort(function (a, b) {
-        return (a.confidence == null ? 1.01 : a.confidence) -
-               (b.confidence == null ? 1.01 : b.confidence);
-      })[0] || ix.items[0];
-    select({ type: "item", id: first.id });
+    showOverview();
   } else {
     document.getElementById("detail").appendChild(el("div", {
       "class": "ev-missing",

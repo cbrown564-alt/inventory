@@ -104,9 +104,21 @@ def scan_rooms(capture_dir: Path) -> list[dict]:
 
 def scan_capture(capture_dir: Path) -> dict:
     """Capture folder summary for the upload-first UI."""
+    from .videometa import probe
+
+    walkthroughs: list[dict] = []
+    for p in find_root_videos(capture_dir):
+        meta = probe(p) or {}
+        walkthroughs.append({
+            "name": p.name,
+            "path": p.name,
+            "size": p.stat().st_size,
+            "duration": meta.get("duration"),
+        })
     return {
         "rooms": scan_rooms(capture_dir),
-        "walkthrough_videos": len(find_root_videos(capture_dir)),
+        "walkthrough_videos": len(walkthroughs),
+        "walkthrough_files": walkthroughs,
     }
 
 

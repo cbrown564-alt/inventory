@@ -78,8 +78,8 @@ def test_report_embeds_review_layer(tmp_path):
                  "--backend", "offline", "--no-detect", "--no-pdf"]) == 0
     html = (out / "inventory.html").read_text(encoding="utf-8")
     assert 'id="hi-data"' in html          # embedded inventory JSON
-    assert "Review docket" in html         # the instrument layer
-    assert "Download review file" in html
+    assert "Review progress" in html       # read-only progress bar
+    assert "Continue in Review" in html
 
 
 def test_report_renders_review_states(tmp_path):
@@ -130,6 +130,8 @@ def server(tmp_path):
                                condition="good", confidence=0.4,
                                photo_ids=[p.id for p in room.photos]))
     (out / "inventory.json").write_text(inv.to_json(), encoding="utf-8")
+    from homeinventory.report import render
+    render(inv, cap, out, pdf=False)
     httpd = serve(cap, out, port=0, share=True, backend="offline",
                   open_browser=False)
     thread = threading.Thread(target=httpd.serve_forever, daemon=True)
@@ -149,6 +151,15 @@ def _req(method, url, body=None):
             return r.status, json.loads(r.read().decode("utf-8") or "{}")
     except urllib.error.HTTPError as e:
         return e.code, json.loads(e.read().decode("utf-8") or "{}")
+
+
+def _ensure_address(base, address="1 Test Street"):
+    """Set property address so signing is allowed."""
+    _, body = _req("GET", base + "/api/inventory")
+    inv = body["inventory"]
+    inv["property_address"] = address
+    status, _ = _req("PUT", base + "/api/inventory", inv)
+    assert status == 200
 
 
 def _get_text(url):
@@ -195,7 +206,8 @@ def test_issue_route_serves_final_copy(server):
     base, _state, out, _cap = server
     status, html = _get_text(base + "/issue")
     assert status == 200
-    assert "Review docket" not in html and 'id="hi-data"' not in html
+    assert "Review docket" not in html and "Review progress" not in html \
+        and 'id="hi-data"' not in html
     assert (out / "inventory-issue.html").exists()
     # the print-tier photo derivatives are served too
     with urllib.request.urlopen(base + "/photos/print/P001.jpg") as r:
@@ -254,6 +266,7 @@ def test_add_missing_item_with_photo(server):
 
 def test_owner_sign_pins_content_hash(server):
     base, _state, out, _cap = server
+    _ensure_address(base)
     status, resp = _req("POST", base + "/api/sign",
                         {"name": "C. Brown", "role": "landlord"})
     assert status == 200
@@ -954,13 +967,34 @@ def test_review_app_has_report_and_pdf_controls(server):
     base, _state, _out, _cap = server
     _, html = _get_text(base + "/")
     assert 'href="/report"' in html
-    assert 'id="btn-pdf"' in html
-    assert 'id="btn-details"' in html      # report metadata editor
+    assert 'id="nav-finish"' in html
+    assert 'href="#finish"' in html
+    assert "finish-checklist" in html
+
+
+def test_finish_route_serves_review_app(server):
+    """Optional /finish route opens the Finish checklist."""
+    base, _state, _out, _cap = server
+    status, html = _get_text(base + "/finish")
+    assert status == 200
+    assert 'id="finish-panel"' not in html  # rendered client-side
+    assert "renderFinish" in html
+    assert 'id="nav-finish"' in html
+
+
+def test_sign_blocks_without_address(server):
+    """Signing requires a real property address on the cover."""
+    base, _state, _out, _cap = server
+    status, resp = _req("POST", base + "/api/sign",
+                        {"name": "C. Brown", "role": "landlord"})
+    assert status == 400
+    assert "address" in resp["error"].lower()
 
 
 def test_sign_whitelist_tenancy(server):
     """Owner /api/sign accepts every signing role in the tenancy profile."""
     base, _state, _out, _cap = server
+    _ensure_address(base)
     for role in ("landlord", "agent", "tenant"):
         status, resp = _req("POST", base + "/api/sign",
                             {"name": f"Signer ({role})", "role": role})
@@ -989,6 +1023,10 @@ def test_sign_whitelist_deepclean(tmp_path):
     thread.start()
     base = f"http://127.0.0.1:{httpd.server_address[1]}"
     try:
+        _, body = _req("GET", base + "/api/inventory")
+        inv = body["inventory"]
+        inv["property_address"] = "1 Clean Street"
+        assert _req("PUT", base + "/api/inventory", inv)[0] == 200
         for role in ("customer", "cleaner"):
             status, resp = _req("POST", base + "/api/sign",
                                 {"name": f"Signer ({role})", "role": role})
@@ -1067,7 +1105,7 @@ def test_post_api_project_creates_deepclean_layout(tmp_path):
         assert (cap / "before").is_dir() and (cap / "after").is_dir()
         assert (out / "before").is_dir() and (out / "after").is_dir()
         status, html = _get_text(base + "/")
-        assert status == 200 and 'class="slots"' in html
+        assert status == 200 and 'class="stepper"' in html
         assert 'id="use-case-picker"' not in html
     finally:
         httpd.shutdown()

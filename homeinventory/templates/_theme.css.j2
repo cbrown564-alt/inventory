@@ -71,6 +71,17 @@ button, input, select, textarea { font-family: var(--ui); }
                border: 1px solid var(--line); border-radius: 999px;
                padding: 2px 10px; white-space: nowrap; }
 
+@media (max-width: 480px) {
+  .app-header { padding: 8px 12px; gap: 8px; }
+  .app-nav { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none;
+             -webkit-overflow-scrolling: touch; max-width: 100%; }
+  .app-nav::-webkit-scrollbar { display: none; }
+  .app-nav a { flex-shrink: 0; font-size: 12px; padding: 4px 9px; }
+  .wordmark { font-size: 11px; letter-spacing: .28em; }
+  .header-chip { font-size: 11px; max-width: 42vw; overflow: hidden;
+                 text-overflow: ellipsis; }
+}
+
 /* ---------- buttons ---------- */
 .btn {
   border: 1px solid var(--line-strong); background: transparent;

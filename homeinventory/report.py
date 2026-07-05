@@ -227,18 +227,25 @@ def _timecode(seconds) -> str:
 def _display_path(photo_path: str, capture_dir: Path, out_dir: Path) -> str:
     """A path fit for the printed manifest: relative to the capture root or
     the report folder — never an absolute path from the build machine."""
-    p = Path(photo_path.replace("\\", "/"))
-    if not p.is_absolute():
-        return str(p)
+    normalized = photo_path.replace("\\", "/")
+    p = Path(photo_path)
+    is_absolute = (
+        p.is_absolute()
+        or normalized.startswith("/")
+        or (len(normalized) > 1 and normalized[1] == ":")
+    )
+    if not is_absolute:
+        return normalized
     for root in (capture_dir, out_dir):
         try:
-            return str(p.relative_to(root.resolve()))
-        except ValueError:
+            return str(p.resolve().relative_to(root.resolve())).replace("\\", "/")
+        except (ValueError, OSError):
             try:
-                return str(p.relative_to(root))
+                return str(p.relative_to(root)).replace("\\", "/")
             except ValueError:
                 continue
-    return "/".join(p.parts[-3:])  # last resort: room/dir/file.jpg
+    parts = [part for part in normalized.strip("/").split("/") if part]
+    return "/".join(parts[-3:]) if parts else normalized.lstrip("/")
 
 
 # Appendix B prints photos at ~6 cm wide; a second, smaller derivative keeps

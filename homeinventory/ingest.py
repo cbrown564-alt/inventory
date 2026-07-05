@@ -226,15 +226,23 @@ def _load_segments(video: Path, work_dir: Path, *,
 def _ingest_root_video(video: Path, work_dir: Path, capture_dir: Path, add,
                        *, segment_model: str, segment_every: float,
                        segments_json: Optional[Path], no_segment: bool,
-                       lead_trim_s: float) -> None:
+                       lead_trim_s: float,
+                       on_segmented=None, on_extracting=None) -> None:
     if no_segment:
         for fr in extract_keyframes(video, work_dir / "frames" / "General",
                                     lead_trim_s=lead_trim_s):
             add("General", fr, source_video=video.name)
+        if on_segmented:
+            on_segmented(1, ["General"])
         return
     segments = _load_segments(video, work_dir, segment_model=segment_model,
                               every_s=segment_every,
                               segments_json=segments_json)
+    room_names = sorted({s.room for s in segments})
+    if on_segmented:
+        on_segmented(len(room_names), room_names)
+    if on_extracting:
+        on_extracting()
     for i, seg in enumerate(segments):
         seg_dur = max(seg.end_s - seg.start_s, 0.1)
         budget = segment_frame_budget(seg_dur)
@@ -253,7 +261,8 @@ def ingest(capture_dir: Path, work_dir: Path,
            segments_json: Optional[Path] = None,
            no_segment: bool = False,
            on_segmenting=None,
-           on_segmented=None) -> dict[str, list[Photo]]:
+           on_segmented=None,
+           on_extracting=None) -> dict[str, list[Photo]]:
     """Return {room_name: [Photo, ...]}. Video keyframes land in work_dir/frames.
 
     ``lead_trim_s`` is forwarded to keyframe extraction — use it when per-room
@@ -306,9 +315,9 @@ def ingest(capture_dir: Path, work_dir: Path,
                                segment_every=segment_every,
                                segments_json=segments_json,
                                no_segment=no_segment,
-                               lead_trim_s=lead_trim_s)
-            if on_segmented:
-                on_segmented(len(rooms))
+                               lead_trim_s=lead_trim_s,
+                               on_segmented=on_segmented,
+                               on_extracting=on_extracting)
 
     aliases = load_room_aliases(work_dir)
     if aliases:
