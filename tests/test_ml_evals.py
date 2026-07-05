@@ -119,6 +119,53 @@ def test_train_iqa_koniq_bootstrap(tmp_path):
     assert len(data["weights"]) == len(data["features"])
 
 
+def test_eval_finetune_detect_demo(tmp_path):
+    sys.path.insert(0, str(ROOT / "evals"))
+    import eval_finetune_detect as efd  # noqa: E402
+
+    out = tmp_path / "detect-finetune-eval.json"
+    weights = tmp_path / "detect-finetune-probe.json"
+
+    class Args:
+        demo = True
+        capture_dir = ROOT / "benchmarks/inventoryflex/capture"
+        labels = ROOT / "evals/fixtures/inventoryflex/labels.json"
+        boxes = ROOT / "evals/fixtures/inventoryflex/labels_boxes.json"
+        split = ROOT / "evals/splits/inventoryflex.json"
+        output = out
+        weights_meta = weights
+        weights_out = None
+        work_dir = None
+        conf = 0.25
+        iou = 0.5
+        match_threshold = 0.6
+        bootstrap_threshold = 0.65
+        bootstrap_conf = 0.15
+        epochs = 5
+        batch = 4
+        imgsz = 640
+        device = "cpu"
+        skip_train = False
+
+    payload = efd.run(Args())
+    assert payload["experiment"] == "ML-E12"
+    assert payload["pass"] is False
+    assert payload["delta_recall_pp"] < 0
+    assert out.is_file()
+    assert weights.is_file()
+    wdata = json.loads(weights.read_text(encoding="utf-8"))
+    assert wdata["experiment"] == "ML-E12"
+    assert "licence" in wdata
+
+
+def test_box_iou():
+    sys.path.insert(0, str(ROOT / "evals"))
+    import eval_finetune_detect as efd  # noqa: E402
+
+    assert efd.box_iou((0, 0, 10, 10), (0, 0, 10, 10)) == 1.0
+    assert efd.box_iou((0, 0, 10, 10), (20, 20, 30, 30)) == 0.0
+
+
 def test_eval_iqa_koniq_demo(tmp_path):
     sys.path.insert(0, str(ROOT / "evals"))
     import train_iqa_koniq as tik  # noqa: E402

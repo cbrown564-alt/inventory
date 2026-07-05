@@ -110,7 +110,7 @@ Plan of record: `docs/19-ml-dl-exploration-plan.md`. External Tier A datasets:
 | **ML-E9** | Capture — optical-flow pause detection | (planned) | Pause detector on walkthrough timeline | timeline HTML |
 | **ML-E10** | Detection — Grounding DINO vs YOLOE | `evals/eval_detect_gdino.py` | `python3 evals/eval_detect_gdino.py benchmarks/inventoryflex/capture evals/fixtures/inventoryflex/labels.json` | `detect-comparison-gdino.json` |
 | **ML-E11** | Data — bbox labels (2 rooms) | `evals/label_boxes.py` | `uv run python evals/label_boxes.py bootstrap benchmarks/inventoryflex/capture evals/fixtures/inventoryflex/labels.json` | `labels_boxes.json`, `bbox-gallery.html` |
-| **ML-E12** | Detection — fine-tune on ML-E11 subset | (planned) | Train on `evals/splits/inventoryflex.json` train rooms | weights + eval JSON |
+| **ML-E12** | Detection — fine-tune on ML-E11 subset | `evals/eval_finetune_detect.py` | `python3 evals/eval_finetune_detect.py benchmarks/inventoryflex/capture` | `detect-finetune-eval.json`, `detect-finetune-probe.json` |
 | **ML-E13** | Segmentation — SegFormer floor+wall | (planned) | SegFormer spike on hero candidates | scatter plot |
 | **ML-E14** | Compare — Siamese pairs | (planned; needs paired fixture) | Embedding distance on check-in/out pairs | paired eval JSON |
 | **ML-E15** | Defect — anomaly pre-filter zero-shot | (planned) | Zero-shot defect scorer on InventoryFlex | `defect-filter-report.json` |

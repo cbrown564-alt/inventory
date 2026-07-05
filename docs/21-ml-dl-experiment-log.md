@@ -19,7 +19,7 @@ adoption. Hero heuristic experiments (E0–E5) stay in docs/18.*
 | **ML-E9** | not started | Pause frames in gold top-3 ≥80% | — | — |
 | **ML-E10** | fail | Recall ↑, noise ≤ YOLOE text | Notable recall +17.3 pp (76.0%); unmatched +13.8 pp (79.6%) | `evals/fixtures/inventoryflex/detect-comparison-gdino.json` |
 | **ML-E11** | pass | 50–100 verified boxes, 2 rooms | **101 verified** (19 Bath, 82 Kitchen); bootstrap v2 + agent trim + human review | `labels_boxes.json`, `bbox-review/` |
-| **ML-E12** | not started | +10 pp recall @0.5 IoU | — | — |
+| **ML-E12** | fail | +10 pp recall @0.5 IoU | baseline 82.7%; finetuned 65.3% (−17.4 pp; 98 val boxes) | `detect-finetune-eval.json`, `detect-finetune-probe.json` |
 | **ML-E13** | not started | ρ with establishing gold | — | — |
 | **ML-E14** | not started | — (exploratory) | — | — |
 | **ML-E15** | not started | FP rate <10% on IFlex | — | — |
@@ -29,7 +29,7 @@ adoption. Hero heuristic experiments (E0–E5) stay in docs/18.*
 | **ML-E19** | fail | mean Spearman ρ ≥ E5 classical | ρ 0.07 vs cover 0.44 (9 rooms); 579 ms/frame (OpenCLIP CPU) | `hero-contact-shotscale.html` |
 | **ML-E20** | not started | FP <10% on IFlex | — | — |
 
-**Counts (5 Jul 2026):** 7 fail · 1 pass · 1 harness ready · 11 not started.
+**Counts (5 Jul 2026):** 8 fail · 1 pass · 1 harness ready · 10 not started.
 
 ## Global blockers
 
@@ -126,7 +126,12 @@ uv run python -m homeinventory.cli build capture-walkthrough -o report \
 
 ### ML-E12 — fine-tune probe
 
-- **Status:** not started — ML-E11 gold committed; ready to run
+- **Harness:** `evals/eval_finetune_detect.py`
+- **Train:** bootstrap pseudo-boxes from `train_rooms` (37 boxes, 4 rooms); YOLOE-seg 5 epochs CPU
+- **Val:** 98 verified boxes in `labels_boxes.json` (Bathroom + Kitchen val split)
+- **Run (5 Jul 2026):** baseline bbox recall@0.5 **82.7%** (81/98); fine-tuned **65.3%** (64/98); **pass: false** (bar +10 pp)
+- **Artifacts:** `detect-finetune-eval.json`, `detect-finetune-probe.json` (weights ~28 MB local only, `*.pt` gitignored)
+- **Note:** Train rooms lack Kitchen/Bathroom diversity; YOLOE fine-tune regressed val recall — defer to Apache pretrain path (ML-E18) pending AGPL decision (docs/19 §9 Q1)
 
 ### ML-E13 — SegFormer floor+wall fraction
 
