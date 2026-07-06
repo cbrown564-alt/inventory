@@ -355,6 +355,20 @@ class LocalBackend:
         # consumer-GPU constraints: few images per call keeps the KV cache on
         # the card; smaller encode dim cuts vision tokens with no real loss
         # for inventory work. merge_items() de-duplicates across batches.
+        # HI_BATCH_SIZE override: photos per Ollama call. Smaller batches mean
+        # shorter expected output and less KV-cache pressure but more calls and
+        # more merge work. NOTE: an attempt to fix gemma4:26b's malformed-JSON
+        # batch skips by halving batch_size (6 -> 3) did NOT work — the failing
+        # Bathroom batch failed identically at bs3, and probing showed the real
+        # cause is a temperature-0 repetition loop (`done_reason: length`,
+        # repeated-token tail), not batch composition. The fix for that lives
+        # in sampling (HI_REPEAT_PENALTY / HI_TEMPERATURE), not here; this knob
+        # is retained for the general ctx/throughput trade-off it exposes.
+        if os.environ.get("HI_BATCH_SIZE"):
+            try:
+                batch_size = int(os.environ["HI_BATCH_SIZE"])
+            except ValueError:
+                pass
         self.batch_size = batch_size
         self.max_dim = max_dim
         # HI_NUM_CTX override (no CLI flag): the 24K default spills ~30% of
@@ -401,6 +415,20 @@ class LocalBackend:
             except ValueError:
                 pass
         self.temperature = temperature
+        # HI_TIMEOUT override: makes the previously-hardcoded 900s per-batch
+        # socket deadline tunable without a code change or CLI flag. The
+        # default covers qwen3.5:9b on an 8 GB card; a heavyweight thinking
+        # model under spillover, or a deliberately large batch, can need
+        # longer, so set it per-run for those (e.g. HI_TIMEOUT=3600). Note
+        # this is general plumbing: on the gemma4:26b InventoryFlex run no
+        # batch actually timed out (the skipped batches failed with malformed
+        # JSON, not socket deadlines), so raising it alone will not recover
+        # that run's defect recall — see docs/03 for the real lever.
+        if os.environ.get("HI_TIMEOUT"):
+            try:
+                timeout = float(os.environ["HI_TIMEOUT"])
+            except ValueError:
+                pass
         self.timeout = timeout
 
     def _chat(self, messages: list[dict], temperature: float = 0.0) -> dict:

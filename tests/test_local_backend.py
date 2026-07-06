@@ -54,6 +54,33 @@ def test_local_backend_batches_and_collects(tmp_path, monkeypatch):
     assert summary.startswith("summary with 3 photos")  # longest kept
 
 
+def test_local_backend_timeout_from_env(monkeypatch):
+    # HI_TIMEOUT makes the hardcoded 900s per-batch socket deadline tunable.
+    # General plumbing: override applied, bad value falls back to default,
+    # unset stays at default.
+    monkeypatch.setenv("HI_TIMEOUT", "3600")
+    assert LocalBackend().timeout == 3600.0
+
+    monkeypatch.setenv("HI_TIMEOUT", "not-a-number")
+    assert LocalBackend().timeout == 900.0
+
+    monkeypatch.delenv("HI_TIMEOUT", raising=False)
+    assert LocalBackend().timeout == 900.0
+
+
+def test_local_backend_batch_size_from_env(monkeypatch):
+    # HI_BATCH_SIZE tunes photos-per-call (ctx/throughput trade-off). Override
+    # applied, bad value falls back to default, unset stays at default (6).
+    monkeypatch.setenv("HI_BATCH_SIZE", "3")
+    assert LocalBackend().batch_size == 3
+
+    monkeypatch.setenv("HI_BATCH_SIZE", "nope")
+    assert LocalBackend().batch_size == 6
+
+    monkeypatch.delenv("HI_BATCH_SIZE", raising=False)
+    assert LocalBackend().batch_size == 6
+
+
 def test_local_backend_captures_room_timing(tmp_path, monkeypatch):
     # Ollama returns ns durations + token counts; describe_room must convert,
     # accumulate across batches, and expose a room total on last_room_timing

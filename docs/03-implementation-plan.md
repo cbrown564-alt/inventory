@@ -98,15 +98,29 @@ and compare our output against the human-written report.
       `qwen3.5:9b` stays the lighter default. Run committed at
       `benchmarks/inventoryflex/report-gemma4-26b/`; full analysis in
       [`docs/04`](04-backend-comparison.md).
-- [ ] gemma4:26b follow-up — recover defect recall lost to batch timeouts.
-      Defect recall (57.7 vs claude's 71.3) is gemma4's weakest metric and
-      the one most sensitive to the 5 timeout-skipped batches: defect detail
-      lives in the verbose tail of each batch, exactly what truncation cuts.
-      The 900s socket timeout is a hardcoded `LocalBackend` default
-      (`describe.py`, not passed by the CLI) — add an `HI_TIMEOUT` env knob
-      alongside the existing `HI_*` overrides, raise it, and re-run the
-      fixture; now that there's a local model worth waiting for, completing
-      those batches should be worth several points of defect recall.
+- [ ] gemma4:26b follow-up — recover defect recall lost to repetition-loop
+      batch skips. Defect recall (57.7 vs claude's 71.3) is gemma4's weakest
+      metric. The InventoryFlex run (`report-gemma4-26b.log`) skipped **8 of
+      34 batches**, all failing `unterminated JSON object` after the temp-0.3
+      retry. A direct probe of the deterministically-failing Bathroom batch
+      (`p14_i00..02`) against gemma4:26b found the true cause: **`done_reason:
+      length`, `eval_count: 12288`, content tail `panel-st/panel-st/panel-st/…`**
+      — at temperature 0 the model falls into a token repetition loop and emits
+      garbage until the `num_predict` ceiling force-stops it, so the JSON is
+      never closed. (The `HI_REPEAT_PENALTY` comment in `describe.py` documents
+      this exact failure mode for qwen2.5vl:3b; gemma4:26b hits a stubborn
+      variant of it.) This is **not** a socket timeout (zero `timed out` in the
+      run; ~76s/batch at 23 tok/s) and **not** healthy-output truncation.
+      Empirically falsified levers: (a) `HI_BATCH_SIZE=3` — the same Bathroom
+      batch fails deterministically at bs3 too (probe + an attempted bs3 run,
+      log kept at `report-gemma4-26b-bs3-incomplete.log`, never completed);
+      (b) `HI_TIMEOUT` — nothing timed out. The real lever is sampling: a
+      higher `HI_REPEAT_PENALTY` and/or non-zero `HI_TEMPERATURE` to break the
+      loop, with `done_reason` checked in code (a `length` stop with a repeated
+      token tail should be retried at higher penalty rather than skipped). The
+      skipped batches drop items outright (Reception lost 3/15, Entrance Hall
+      1/5), which mechanically depresses both item and defect recall, so
+      recovering them is the cheapest available win.
 - [x] Optional GPU path; YOLOE prompt-free mode evaluation vs text-prompt vocabulary
       (`evals/eval_detect.py`, `--detect-mode`, `--device`; see `evals/README.md`)
 

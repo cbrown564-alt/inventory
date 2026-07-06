@@ -128,9 +128,11 @@ but cannot sustain the structured-JSON inventory contract.
 all 6 rooms in ~26 min. Requires ~32 GB system RAM for the weight footprint.
 
 Local tuning env vars (no CLI flags): `HI_NUM_CTX`, `HI_NUM_PREDICT`,
-`HI_REPEAT_PENALTY`, `HI_TEMPERATURE`. Per-batch timing is captured in checkpoint
-`timing` fields. Spillover diagnosis: `curl -s localhost:11434/api/ps` (VRAM/total
-split); a steep `eval_tok_per_s` drop vs a prior run indicates CPU offload.
+`HI_REPEAT_PENALTY`, `HI_TEMPERATURE`, `HI_TIMEOUT` (per-batch socket deadline,
+default 900s), `HI_BATCH_SIZE` (photos per Ollama call). Per-batch timing is
+captured in checkpoint `timing` fields. Spillover diagnosis:
+`curl -s localhost:11434/api/ps` (VRAM/total split); a steep `eval_tok_per_s`
+drop vs a prior run indicates CPU offload.
 
 ## Historical probe (June 2026)
 
