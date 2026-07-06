@@ -94,6 +94,30 @@ def gold_boundary_starts(path: Path) -> list[float]:
     return sorted(starts[1:]) if len(starts) > 1 else []
 
 
+def synth_baseline_from_gold(gold_path: Path) -> tuple[list[Segment], dict]:
+    """Demo/CI fallback baseline when no VLM ``segments.json`` is present.
+
+    The real baseline lives under ``segment-spike*/`` — a gitignored local
+    artifact, absent on a clean checkout. Reconstruct a plausible baseline from
+    the manual gold room starts, nudging each interior seam a few seconds off
+    the true cut so the oracle refine has something to snap back within the
+    window. Keeps ``--demo`` runnable standalone.
+    """
+    data = json.loads(gold_path.read_text(encoding="utf-8"))
+    rooms = sorted(
+        (r for r in (data.get("rooms") or []) if "start_s" in r),
+        key=lambda r: float(r["start_s"]),
+    )
+    segs: list[Segment] = []
+    for i, r in enumerate(rooms):
+        start = float(r["start_s"])
+        end = float(rooms[i + 1]["start_s"]) if i + 1 < len(rooms) else start + 60.0
+        if i > 0:  # nudge interior seams off the gold cut so refine can snap
+            start = max(0.0, start - 8.0)
+        segs.append(Segment(room=str(r["room"]), start_s=start, end_s=end))
+    return segs, {"synthetic": True, "source": gold_path.name}
+
+
 def classify_bleed_mechanism(exclusion: dict) -> str:
     """Heuristic tags aligned with docs/07 per-room bleed scan."""
     ev = (exclusion.get("evidence") or "").lower()
@@ -364,7 +388,10 @@ def run(args: argparse.Namespace) -> dict:
     gold_starts = gold_boundary_starts(args.gold.resolve())
 
     seg_path = args.segments.resolve() if args.segments else DEFAULT_SEGMENTS
-    baseline_segments, seg_meta = load_segments_doc(seg_path)
+    if seg_path.is_file():
+        baseline_segments, seg_meta = load_segments_doc(seg_path)
+    else:
+        baseline_segments, seg_meta = synth_baseline_from_gold(args.gold.resolve())
 
     mode = "demo-oracle"
     refine_logs: list[BoundaryRefine] = []

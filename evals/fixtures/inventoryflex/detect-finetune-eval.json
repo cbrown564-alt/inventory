@@ -1,21 +1,21 @@
 {
   "experiment": "ML-E12",
-  "date": "2026-07-05",
-  "capture_dir": "benchmarks/inventoryflex/capture",
-  "labels_boxes": "evals/fixtures/inventoryflex/labels_boxes.json",
-  "split": "evals/splits/inventoryflex.json",
+  "date": "2026-07-06",
+  "capture_dir": "benchmarks\\inventoryflex\\capture",
+  "labels_boxes": "evals\\fixtures\\inventoryflex\\labels_boxes.json",
+  "split": "evals\\splits\\inventoryflex.json",
   "pass_bar_pp": 10.0,
   "iou_threshold": 0.5,
   "baseline": {
     "iou_threshold": 0.5,
     "match_threshold": 0.6,
     "conf": 0.25,
-    "n_gold_boxes": 98,
-    "hits": 81,
-    "recall_pct": 82.7,
+    "n_gold_boxes": 128,
+    "hits": 89,
+    "recall_pct": 69.5,
     "per_room_recall_pct": {
-      "Bathroom": 93.8,
-      "Reception & Open Plan Kitchen": 80.5
+      "Bathroom": 84.2,
+      "Reception & Open Plan Kitchen": 67.0
     },
     "misses": [
       {
@@ -25,6 +25,62 @@
         "best_iou": 0.041,
         "expected_det_label": "tap",
         "best_label": "sink"
+      },
+      {
+        "id": "bathroom-smoke-alarm-p14_i00",
+        "room": "Bathroom",
+        "gold_item": "smoke alarm",
+        "best_iou": 0.0,
+        "expected_det_label": "smoke alarm",
+        "best_label": null
+      },
+      {
+        "id": "bathroom-smoke-alarm-p16_i02",
+        "room": "Bathroom",
+        "gold_item": "smoke alarm",
+        "best_iou": 0.0,
+        "expected_det_label": "smoke alarm",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-balcony-door-p25_i00",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "balcony door",
+        "best_iou": 0.0,
+        "expected_det_label": "patio door",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-balcony-door-p25_i03",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "balcony door",
+        "best_iou": 0.0,
+        "expected_det_label": "door",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-balcony-door-p25_i09",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "balcony door",
+        "best_iou": 0.0,
+        "expected_det_label": "patio door",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-balcony-door-p27_i05",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "balcony door",
+        "best_iou": 0.0,
+        "expected_det_label": "patio door",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-balcony-door-p30_i01",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "balcony door",
+        "best_iou": 0.0,
+        "expected_det_label": "door",
+        "best_label": null
       },
       {
         "id": "reception-open-plan-kitchen-canvas-picture-p25_i00",
@@ -67,11 +123,75 @@
         "best_label": null
       },
       {
-        "id": "reception-open-plan-kitchen-kitchen-units-p30_i01",
+        "id": "reception-open-plan-kitchen-floor-rug-p26_i11",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "floor rug",
+        "best_iou": 0.0,
+        "expected_det_label": "rug",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-kitchen-units-p28_i08",
         "room": "Reception & Open Plan Kitchen",
         "gold_item": "kitchen units",
         "best_iou": 0.0,
         "expected_det_label": "cabinet",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-kitchen-units-p30_i01",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "kitchen units",
+        "best_iou": 0.301,
+        "expected_det_label": "cabinet",
+        "best_label": "cabinet"
+      },
+      {
+        "id": "reception-open-plan-kitchen-kitchen-units-p30_i09",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "kitchen units",
+        "best_iou": 0.0,
+        "expected_det_label": "medicine cabinet",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-microwave-p25_i01",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "microwave",
+        "best_iou": 0.0,
+        "expected_det_label": "microwave",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-microwave-p25_i06",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "microwave",
+        "best_iou": 0.0,
+        "expected_det_label": "microwave",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-mirror-p25_i00",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "mirror",
+        "best_iou": 0.0,
+        "expected_det_label": "mirror",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-mirror-p25_i02",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "mirror",
+        "best_iou": 0.0,
+        "expected_det_label": "mirror",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-oven-p31_i01",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "oven",
+        "best_iou": 0.0,
+        "expected_det_label": "oven",
         "best_label": null
       },
       {
@@ -97,65 +217,9 @@
         "best_iou": 0.0,
         "expected_det_label": "lamp",
         "best_label": "ceiling light"
-      },
-      {
-        "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i04",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "pendant light fittings",
-        "best_iou": 0.0,
-        "expected_det_label": "lamp",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i06",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "pendant light fittings",
-        "best_iou": 0.0,
-        "expected_det_label": "lamp",
-        "best_label": "ceiling light"
-      },
-      {
-        "id": "reception-open-plan-kitchen-pendant-light-fittings-p30_i11",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "pendant light fittings",
-        "best_iou": 0.0,
-        "expected_det_label": "lamp",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-pendant-light-fittings-p31_i00",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "pendant light fittings",
-        "best_iou": 0.0,
-        "expected_det_label": "lamp",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-sink-p25_i01",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "sink",
-        "best_iou": 0.0,
-        "expected_det_label": "tap",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-sink-p25_i02",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "sink",
-        "best_iou": 0.111,
-        "expected_det_label": "tap",
-        "best_label": "sink"
-      },
-      {
-        "id": "reception-open-plan-kitchen-window-p26_i07",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "window",
-        "best_iou": 0.0,
-        "expected_det_label": "window",
-        "best_label": null
       }
     ],
-    "n_misses": 17,
+    "n_misses": 39,
     "backend": "yoloe-text",
     "model": "yoloe-11s-seg.pt"
   },
@@ -163,12 +227,12 @@
     "iou_threshold": 0.5,
     "match_threshold": 0.6,
     "conf": 0.25,
-    "n_gold_boxes": 98,
-    "hits": 64,
-    "recall_pct": 65.3,
+    "n_gold_boxes": 128,
+    "hits": 71,
+    "recall_pct": 55.5,
     "per_room_recall_pct": {
-      "Bathroom": 87.5,
-      "Reception & Open Plan Kitchen": 61.0
+      "Bathroom": 73.7,
+      "Reception & Open Plan Kitchen": 52.3
     },
     "misses": [
       {
@@ -188,7 +252,63 @@
         "best_label": null
       },
       {
+        "id": "bathroom-smoke-alarm-p14_i00",
+        "room": "Bathroom",
+        "gold_item": "smoke alarm",
+        "best_iou": 0.0,
+        "expected_det_label": "smoke alarm",
+        "best_label": null
+      },
+      {
+        "id": "bathroom-smoke-alarm-p14_i03",
+        "room": "Bathroom",
+        "gold_item": "smoke alarm",
+        "best_iou": 0.0,
+        "expected_det_label": "smoke alarm",
+        "best_label": null
+      },
+      {
+        "id": "bathroom-smoke-alarm-p16_i02",
+        "room": "Bathroom",
+        "gold_item": "smoke alarm",
+        "best_iou": 0.0,
+        "expected_det_label": "smoke alarm",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-balcony-door-p25_i00",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "balcony door",
+        "best_iou": 0.0,
+        "expected_det_label": "patio door",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-balcony-door-p25_i03",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "balcony door",
+        "best_iou": 0.0,
+        "expected_det_label": "door",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-balcony-door-p25_i09",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "balcony door",
+        "best_iou": 0.0,
+        "expected_det_label": "patio door",
+        "best_label": null
+      },
+      {
         "id": "reception-open-plan-kitchen-balcony-door-p27_i04",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "balcony door",
+        "best_iou": 0.0,
+        "expected_det_label": "patio door",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-balcony-door-p27_i05",
         "room": "Reception & Open Plan Kitchen",
         "gold_item": "balcony door",
         "best_iou": 0.0,
@@ -210,14 +330,6 @@
         "best_iou": 0.0,
         "expected_det_label": "patio door",
         "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-bar-chairs-p25_i08",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "bar chairs",
-        "best_iou": 0.077,
-        "expected_det_label": "chair",
-        "best_label": "chair"
       },
       {
         "id": "reception-open-plan-kitchen-bar-chairs-p26_i09",
@@ -284,6 +396,14 @@
         "best_label": null
       },
       {
+        "id": "reception-open-plan-kitchen-floor-rug-p26_i11",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "floor rug",
+        "best_iou": 0.0,
+        "expected_det_label": "rug",
+        "best_label": null
+      },
+      {
         "id": "reception-open-plan-kitchen-fridge-freezer-p31_i01",
         "room": "Reception & Open Plan Kitchen",
         "gold_item": "fridge freezer",
@@ -292,93 +412,37 @@
         "best_label": null
       },
       {
-        "id": "reception-open-plan-kitchen-kitchen-units-p29_i09",
+        "id": "reception-open-plan-kitchen-kitchen-units-p28_i07",
         "room": "Reception & Open Plan Kitchen",
         "gold_item": "kitchen units",
-        "best_iou": 0.314,
+        "best_iou": 0.0,
+        "expected_det_label": "medicine cabinet",
+        "best_label": null
+      },
+      {
+        "id": "reception-open-plan-kitchen-kitchen-units-p28_i08",
+        "room": "Reception & Open Plan Kitchen",
+        "gold_item": "kitchen units",
+        "best_iou": 0.0,
         "expected_det_label": "cabinet",
-        "best_label": "cabinet"
-      },
-      {
-        "id": "reception-open-plan-kitchen-mirror-p31_i04",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "mirror",
-        "best_iou": 0.0,
-        "expected_det_label": "mirror",
         "best_label": null
       },
       {
-        "id": "reception-open-plan-kitchen-oven-p30_i03",
+        "id": "reception-open-plan-kitchen-kitchen-units-p29_i05",
         "room": "Reception & Open Plan Kitchen",
-        "gold_item": "oven",
+        "gold_item": "kitchen units",
         "best_iou": 0.0,
-        "expected_det_label": "oven",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-oven-p30_i04",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "oven",
-        "best_iou": 0.0,
-        "expected_det_label": "oven",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i00",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "pendant light fittings",
-        "best_iou": 0.0,
-        "expected_det_label": "lamp",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i01",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "pendant light fittings",
-        "best_iou": 0.0,
-        "expected_det_label": "lamp",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i02",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "pendant light fittings",
-        "best_iou": 0.0,
-        "expected_det_label": "lamp",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i04",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "pendant light fittings",
-        "best_iou": 0.0,
-        "expected_det_label": "lamp",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i06",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "pendant light fittings",
-        "best_iou": 0.0,
-        "expected_det_label": "lamp",
-        "best_label": null
-      },
-      {
-        "id": "reception-open-plan-kitchen-pendant-light-fittings-p30_i11",
-        "room": "Reception & Open Plan Kitchen",
-        "gold_item": "pendant light fittings",
-        "best_iou": 0.0,
-        "expected_det_label": "lamp",
+        "expected_det_label": "cabinet",
         "best_label": null
       }
     ],
-    "n_misses": 34,
+    "n_misses": 57,
     "backend": "yoloe-text-finetuned",
-    "model": "evals/fixtures/inventoryflex/detect-finetune-best.pt"
+    "model": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\inventoryflex\\detect-finetune-best.pt"
   },
-  "delta_recall_pp": -17.4,
+  "delta_recall_pp": -14.0,
   "pass": false,
-  "recommendation": "reject fine-tune \u2014 val recall -17.4pp vs baseline; 37 train pseudo-boxes insufficient for YOLOE probe",
+  "recommendation": "reject fine-tune \u2014 val recall -14.0pp vs baseline; 39 train boxes insufficient for YOLOE probe",
   "train": {
     "train_rooms": [
       "Entrance Hall",
@@ -392,12 +456,13 @@
     ],
     "bootstrap_match_threshold": 0.65,
     "bootstrap_min_conf": 0.15,
-    "epochs": 5,
-    "device": "cpu",
-    "n_train_pseudo_boxes": 37,
-    "dataset": "/tmp/mle12-7x2bnedh/yolo-dataset",
-    "weights_file": "evals/fixtures/inventoryflex/detect-finetune-best.pt"
+    "epochs": 50,
+    "device": "cuda",
+    "train_box_source": "curated_verified",
+    "n_train_pseudo_boxes": 39,
+    "dataset": "C:\\Users\\cbrow\\AppData\\Local\\Temp\\mle12-vpz6wpe_\\yolo-dataset",
+    "weights_file": "evals\\fixtures\\inventoryflex\\detect-finetune-best.pt"
   },
-  "weights_meta": "evals/fixtures/inventoryflex/detect-finetune-probe.json",
+  "weights_meta": "evals\\fixtures\\inventoryflex\\detect-finetune-probe.json",
   "skip_train": false
 }

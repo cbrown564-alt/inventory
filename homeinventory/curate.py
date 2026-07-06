@@ -117,7 +117,7 @@ def sharpness(g) -> float:
 def smooth_fraction(g) -> float:
     """Fraction of pixels with near-zero Laplacian response (blur / empty wall)."""
     lap = _laplacian(g)
-    data = lap.get_flattened_data()
+    data = lap.get_flattened_data()  # 0–255 ints (Laplacian offset=128)
     if not data:
         return 0.0
     smooth = sum(1 for p in data if abs(p - 128) <= _SMOOTH_LAP_TOL)

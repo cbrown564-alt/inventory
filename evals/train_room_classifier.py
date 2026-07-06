@@ -48,102 +48,20 @@ from evals.eval_room_classifier import (  # noqa: E402
     normalize_true_room,
     resolve_frame_path,
 )
+from evals.embed_head import (  # noqa: E402
+    ClipEmbedder,
+    head_to_json,
+    predict_from_json,
+    train_linear_head,
+)
 
 DEFAULT_WEIGHTS = ROOT / "evals" / "fixtures" / "own-property" / "room-clf-weights.json"
 DEFAULT_EVAL = ROOT / "evals" / "fixtures" / "own-property" / "room-clf-eval.json"
 DEFAULT_BLEED = ROOT / "evals" / "fixtures" / "ownproperty-bleed-exclusions.json"
 
-
-# ---------------------------------------------------------------------------
-# Encoder (OpenCLIP, Apache-2.0). Fair default is ViT-L-14 on an 8 GB GPU.
-# ---------------------------------------------------------------------------
-
-class ClipEmbedder:
-    def __init__(self, model_name: str = "ViT-L-14",
-                 pretrained: str = "laion2b_s32b_b82k", device: str = "cpu"):
-        import open_clip
-        import torch
-
-        self.torch = torch
-        dev = device
-        if dev == "cuda" and not torch.cuda.is_available():
-            dev = "cpu"
-        self.device = dev
-        self.model, _, self.preprocess = open_clip.create_model_and_transforms(
-            model_name, pretrained=pretrained, device=dev)
-        self.model.eval()
-        self.dim = int(self.model.visual.output_dim)
-
-    def embed_pil(self, images: list) -> "list":
-        import torch
-
-        tensors = torch.stack([self.preprocess(im.convert("RGB")) for im in images])
-        tensors = tensors.to(self.device)
-        with torch.no_grad():
-            feats = self.model.encode_image(tensors)
-            feats = feats / feats.norm(dim=-1, keepdim=True)
-        return feats.cpu()
-
-    def embed_path(self, path: Path):
-        from PIL import Image
-
-        with Image.open(path) as im:
-            return self.embed_pil([im])[0]
-
-
-# ---------------------------------------------------------------------------
-# Linear head (torch logistic regression)
-# ---------------------------------------------------------------------------
-
-def train_linear_head(X, y, *, n_classes: int, device: str = "cpu",
-                      epochs: int = 60, lr: float = 0.05, weight_decay: float = 1e-4):
-    """Train a softmax head. X: (N,D) float tensor, y: (N,) long tensor."""
-    import torch
-    from torch import nn
-
-    dev = device if (device != "cuda" or torch.cuda.is_available()) else "cpu"
-    X = X.to(dev)
-    y = y.to(dev)
-    head = nn.Linear(X.shape[1], n_classes).to(dev)
-    opt = torch.optim.AdamW(head.parameters(), lr=lr, weight_decay=weight_decay)
-    lossf = nn.CrossEntropyLoss()
-    head.train()
-    for _ in range(epochs):
-        opt.zero_grad()
-        loss = lossf(head(X), y)
-        loss.backward()
-        opt.step()
-    head.eval()
-    with torch.no_grad():
-        acc = float((head(X).argmax(1) == y).float().mean().item())
-    return head, {"train_loss": round(float(loss.item()), 4),
-                  "train_acc": round(acc, 4), "epochs": epochs}
-
-
-def head_to_json(head, classes: list[str], encoder: dict, metrics: dict) -> dict:
-    W = head.weight.detach().cpu().tolist()
-    b = head.bias.detach().cpu().tolist()
-    return {
-        "experiment": "ML-E16",
-        "licence": "MIT (head) — OpenCLIP encoder Apache-2.0",
-        "kind": "linear-softmax-head-on-clip-embeddings",
-        "encoder": encoder,
-        "classes": classes,
-        "weight": W,   # (n_classes, dim)
-        "bias": b,     # (n_classes,)
-        "training": metrics,
-    }
-
-
-def predict_from_json(weights: dict, feat) -> tuple[str, float]:
-    import torch
-
-    W = torch.tensor(weights["weight"])
-    b = torch.tensor(weights["bias"])
-    logits = W @ feat + b
-    probs = torch.softmax(logits, dim=-1)
-    idx = int(probs.argmax().item())
-    return weights["classes"][idx], float(probs[idx].item())
+# Encoder loading, the linear-head training loop, and the JSON save/load
+# helpers live in evals/embed_head.py — shared with train_iqa_embed.py
+# (regression mode over the same embeddings, docs/23 §5).
 
 
 # ---------------------------------------------------------------------------
@@ -160,15 +78,23 @@ def load_indoor67_split(max_per_class: int):
     else:
         split = load_dataset(HF_DATASET, split="train")
 
-    int2str = None
+    # HF label column name varies by dataset build: keremberke's
+    # indoor-scene-classification uses "labels" (plural); some mirrors use
+    # singular "label". Support both rather than hardcoding one.
+    label_col = None
     feats = getattr(split, "features", {})
-    if "label" in feats and hasattr(feats["label"], "int2str"):
-        int2str = feats["label"].int2str
+    for candidate in ("labels", "label"):
+        if candidate in feats:
+            label_col = candidate
+            break
+    int2str = None
+    if label_col and hasattr(feats[label_col], "int2str"):
+        int2str = feats[label_col].int2str
 
     counts: dict[str, int] = {}
     out = []
     for row in split:
-        label = row.get("label")
+        label = row.get(label_col) if label_col else (row.get("labels") if "labels" in row else row.get("label"))
         name = int2str(label) if (int2str and isinstance(label, int)) else str(
             row.get("label_text") or label)
         name = str(name).lower().replace(" ", "_")

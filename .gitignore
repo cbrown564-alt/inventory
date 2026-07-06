@@ -26,6 +26,9 @@ benchmarks/*/report-*/inventory-issue.html
 # local smoke-test capture from docs/09 (regenerate with homeinventory capture)
 capture-smoke/
 
+# local walkthrough video staging for report/ rebuilds (docs/23) — not committed
+capture-walkthrough/
+
 # build/run logs (stdout captures from background builds)
 *.log
 

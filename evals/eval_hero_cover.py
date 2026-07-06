@@ -16,6 +16,9 @@ Usage:
     uv run python evals/eval_hero_cover.py report --scorer mslap \\
         -o evals/fixtures/own-property/hero-contact-mslap.html
     uv run python evals/eval_relevance_siglip.py report
+    uv run python evals/eval_hero_cover.py report --scorer embed-iqa \\
+        --embed-iqa-weights evals/fixtures/own-property/iqa-embed-weights.json \\
+        --device cuda
 """
 
 from __future__ import annotations
@@ -45,6 +48,9 @@ from homeinventory.curate import (  # noqa: E402
 
 DEFAULT_WEIGHTS = (
     ROOT / "evals" / "fixtures" / "own-property" / "iqa-linear-weights.json"
+)
+DEFAULT_EMBED_IQA_WEIGHTS = (
+    ROOT / "evals" / "fixtures" / "own-property" / "iqa-embed-weights.json"
 )
 
 _CLIP_PROMPTS = (
@@ -155,6 +161,38 @@ def load_linear_weights(path: Path | None) -> dict:
     return json.loads(p.read_text(encoding="utf-8"))
 
 
+def load_embed_iqa_weights(path: Path | None) -> dict:
+    p = path or DEFAULT_EMBED_IQA_WEIGHTS
+    if not p.is_file():
+        raise FileNotFoundError(
+            f"embed-iqa weights not found: {p} — run "
+            "evals/train_iqa_embed.py first (docs/23 §5)")
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
+def score_embed_iqa(paths: list[Path], weights: dict, *,
+                    device: str = "cpu") -> dict[str, float]:
+    """{filename: predicted quality} via the ML-E17 embedding regressor.
+
+    Encoder id/pretrained tag are read from the weights file's ``encoder``
+    metadata (written by train_iqa_embed.py) so scoring always uses the same
+    embedder the head was trained on.
+    """
+    from evals.embed_head import ClipEmbedder, predict_regression_from_json
+
+    encoder = weights.get("encoder", {})
+    embedder = ClipEmbedder(
+        encoder.get("model", "ViT-L-14"),
+        encoder.get("pretrained", "laion2b_s32b_b82k"),
+        device,
+    )
+    out: dict[str, float] = {}
+    for path in paths:
+        feat = embedder.embed_path(path)
+        out[path.name] = predict_regression_from_json(weights, feat)
+    return out
+
+
 def metrics_features(metrics: dict) -> dict[str, float]:
     return classical_features(
         metrics["sharpness"],
@@ -250,6 +288,8 @@ def scorer_sort_key(scorer: str, metrics: dict, *, gated: bool,
         return (metrics.get("mslap", 0.0), metrics["quality"])
     if scorer == "siglip":
         return (metrics.get("siglip", 0.0), metrics["quality"])
+    if scorer == "embed-iqa":
+        return (metrics.get("embed_iqa", 0.0), metrics["quality"])
     raise ValueError(f"unknown scorer: {scorer}")
 
 
@@ -316,6 +356,8 @@ def pick_rank_one(
         return max(entries, key=lambda e: metrics[e["name"]].get("mslap", 0.0))
     if scorer == "siglip":
         return max(entries, key=lambda e: metrics[e["name"]].get("siglip", 0.0))
+    if scorer == "embed-iqa":
+        return max(entries, key=lambda e: metrics[e["name"]].get("embed_iqa", 0.0))
     raise ValueError(f"unknown scorer: {scorer}")
 
 
@@ -537,7 +579,7 @@ def default_output(scorer: str) -> Path:
 
 SCORER_CHOICES = [
     "classical", "establishing", "hard-gates", "cover",
-    "linear-musiq", "clip-establishing", "mslap", "siglip",
+    "linear-musiq", "clip-establishing", "mslap", "siglip", "embed-iqa",
 ]
 
 
@@ -550,6 +592,9 @@ def main() -> int:
                     help="ranking method for cover selection (default: cover)")
     ap.add_argument("--weights", type=Path, default=None,
                     help="iqa-linear-weights.json for linear-musiq")
+    ap.add_argument("--embed-iqa-weights", type=Path, default=None,
+                    help="iqa-embed-weights.json for embed-iqa "
+                         "(evals/train_iqa_embed.py, docs/23 §5)")
     ap.add_argument("-o", "--output", type=Path, default=None,
                     help="HTML contact sheet path")
     ap.add_argument("--gold", type=Path, default=None,
@@ -606,6 +651,19 @@ def main() -> int:
             metrics = all_metrics[room_name]
             for e in entries:
                 metrics[e["name"]]["siglip"] = siglip_by_name.get(e["name"], 0.0)
+
+    if args.scorer == "embed-iqa":
+        embed_weights = load_embed_iqa_weights(args.embed_iqa_weights)
+        paths = [e["path"] for entries in room_entries.values() for e in entries]
+        try:
+            embed_by_name = score_embed_iqa(paths, embed_weights, device=args.device)
+        except ImportError as e:
+            print(str(e), file=sys.stderr)
+            return 1
+        for room_name, entries in room_entries.items():
+            metrics = all_metrics[room_name]
+            for e in entries:
+                metrics[e["name"]]["embed_iqa"] = embed_by_name.get(e["name"], 0.0)
 
     if args.scorer == "clip-establishing" and clip_timer["start"] is not None:
         import time

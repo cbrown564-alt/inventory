@@ -246,7 +246,9 @@ def run_finetune_probe(
     return best
 
 
-def _recommendation(baseline: float | None, finetuned: float | None) -> str:
+def _recommendation(
+        baseline: float | None, finetuned: float | None, n_train_boxes: int | None = None,
+) -> str:
     if baseline is None or finetuned is None:
         return "incomplete — baseline or fine-tuned eval unavailable"
     delta = round(finetuned - baseline, 1)
@@ -260,9 +262,10 @@ def _recommendation(baseline: float | None, finetuned: float | None) -> str:
             f"keep baseline — fine-tune delta +{delta}pp below +{PASS_BAR_PP}pp bar; "
             "need more train bbox labels or Apache detector path (ML-E18)"
         )
+    n_str = f"{n_train_boxes} " if n_train_boxes is not None else ""
     return (
         f"reject fine-tune — val recall {delta:+.1f}pp vs baseline; "
-        f"{37} train pseudo-boxes insufficient for YOLOE probe"
+        f"{n_str}train boxes insufficient for YOLOE probe"
     )
 
 
@@ -280,6 +283,7 @@ def build_payload(
     f_rec = finetuned.get("recall_pct") if finetuned else None
     delta = round(f_rec - b_rec, 1) if b_rec is not None and f_rec is not None else None
     passed = delta is not None and delta >= PASS_BAR_PP
+    n_train_boxes = train_meta.get("n_train_pseudo_boxes")
 
     weights_doc = {
         "experiment": "ML-E12",
@@ -317,7 +321,7 @@ def build_payload(
         "finetuned": finetuned,
         "delta_recall_pp": delta,
         "pass": passed,
-        "recommendation": _recommendation(b_rec, f_rec),
+        "recommendation": _recommendation(b_rec, f_rec, n_train_boxes),
         "train": train_meta,
         "weights_meta": _rel(weights_meta_path),
         "skip_train": skip_train,
@@ -415,20 +419,33 @@ def run(args: argparse.Namespace) -> dict:
     }
 
     if not args.skip_train:
-        print(f"bootstrapping train pseudo-labels from {len(train_rooms)} rooms …", flush=True)
-        boot_det = Detector(conf=args.bootstrap_conf, device=args.device)
-        train_boxes = bootstrap_boxes(
-            capture_dir=capture_dir,
-            labels=labels,
-            rooms=train_rooms,
-            detector=boot_det,
-            match_threshold=args.bootstrap_threshold,
-            min_conf=args.bootstrap_conf,
-            labeler="yoloe-bootstrap-train",
-            verified=False,
-        )
+        curated_train_boxes = [
+            b for b in boxes_doc.get("boxes", [])
+            if not b.get("_example") and b.get("verified") and b.get("room") in train_rooms
+        ]
+        if curated_train_boxes:
+            train_boxes = curated_train_boxes
+            train_meta["train_box_source"] = "curated_verified"
+            print(
+                f"using {len(train_boxes)} curated verified train boxes from "
+                f"{args.boxes.name} ({len(train_rooms)} rooms)", flush=True,
+            )
+        else:
+            print(f"bootstrapping train pseudo-labels from {len(train_rooms)} rooms …", flush=True)
+            boot_det = Detector(conf=args.bootstrap_conf, device=args.device)
+            train_boxes = bootstrap_boxes(
+                capture_dir=capture_dir,
+                labels=labels,
+                rooms=train_rooms,
+                detector=boot_det,
+                match_threshold=args.bootstrap_threshold,
+                min_conf=args.bootstrap_conf,
+                labeler="yoloe-bootstrap-train",
+                verified=False,
+            )
+            train_meta["train_box_source"] = "bootstrap"
+            print(f"  {len(train_boxes)} pseudo boxes", flush=True)
         train_meta["n_train_pseudo_boxes"] = len(train_boxes)
-        print(f"  {len(train_boxes)} pseudo boxes", flush=True)
 
         work_parent = args.work_dir.resolve() if args.work_dir else Path(tempfile.mkdtemp(prefix="mle12-"))
         work_dir = work_parent / "yolo-dataset"

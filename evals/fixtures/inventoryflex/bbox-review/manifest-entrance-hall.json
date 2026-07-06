@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "description": "ML-E11 bbox review pack \u2014 one crop per box for visual adjudication",
+  "verdict_values": [
+    "accept",
+    "reject",
+    "relocate",
+    "uncertain"
+  ],
+  "entries": [
+    {
+      "id": "entrance-hall-front-door-p07_i00",
+      "room": "Entrance Hall",
+      "photo": "p07_i00.jpg",
+      "gold_item": "front door",
+      "det_label": "door",
+      "det_confidence": 0.355,
+      "box_xyxy": [
+        602,
+        0,
+        799,
+        537
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\entrance-hall-front-door-p07_i00.jpg",
+      "full_path": "full\\entrance-hall\\p07_i00.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "entrance-hall-front-door-p07_i01",
+      "room": "Entrance Hall",
+      "photo": "p07_i01.jpg",
+      "gold_item": "front door",
+      "det_label": "extractor hood",
+      "det_confidence": 0.263,
+      "box_xyxy": [
+        205,
+        304,
+        630,
+        390
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\entrance-hall-front-door-p07_i01.jpg",
+      "full_path": "full\\entrance-hall\\p07_i01.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "entrance-hall-front-door-p07_i02",
+      "room": "Entrance Hall",
+      "photo": "p07_i02.jpg",
+      "gold_item": "front door",
+      "det_label": "door",
+      "det_confidence": 0.254,
+      "box_xyxy": [
+        0,
+        0,
+        199,
+        595
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\entrance-hall-front-door-p07_i02.jpg",
+      "full_path": "full\\entrance-hall\\p07_i02.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "entrance-hall-front-door-p07_i06",
+      "room": "Entrance Hall",
+      "photo": "p07_i06.jpg",
+      "gold_item": "front door",
+      "det_label": "door",
+      "det_confidence": 0.119,
+      "box_xyxy": [
+        540,
+        0,
+        799,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\entrance-hall-front-door-p07_i06.jpg",
+      "full_path": "full\\entrance-hall\\p07_i06.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "entrance-hall-front-door-p07_i10",
+      "room": "Entrance Hall",
+      "photo": "p07_i10.jpg",
+      "gold_item": "front door",
+      "det_label": "door",
+      "det_confidence": 0.262,
+      "box_xyxy": [
+        563,
+        0,
+        799,
+        595
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\entrance-hall-front-door-p07_i10.jpg",
+      "full_path": "full\\entrance-hall\\p07_i10.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "entrance-hall-front-door-p06_i05",
+      "room": "Entrance Hall",
+      "photo": "p06_i05.jpg",
+      "gold_item": "front door",
+      "det_label": "door",
+      "det_confidence": 0.417,
+      "box_xyxy": [
+        358,
+        132,
+        484,
+        398
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\entrance-hall-front-door-p06_i05.jpg",
+      "full_path": "full\\entrance-hall\\p06_i05.jpg",
+      "risk_flags": [
+        "med_conf"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "entrance-hall-front-door-p08_i00",
+      "room": "Entrance Hall",
+      "photo": "p08_i00.jpg",
+      "gold_item": "front door",
+      "det_label": "door",
+      "det_confidence": 0.601,
+      "box_xyxy": [
+        518,
+        0,
+        800,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\entrance-hall-front-door-p08_i00.jpg",
+      "full_path": "full\\entrance-hall\\p08_i00.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    }
+  ],
+  "room": "Entrance Hall"
+}

@@ -9,106 +9,30 @@
   ],
   "entries": [
     {
-      "id": "bathroom-bath-p14_i03",
+      "id": "bathroom-sink-p14_i00",
       "room": "Bathroom",
-      "photo": "p14_i03.jpg",
-      "gold_item": "bath",
-      "det_label": "shower",
-      "det_confidence": 0.271,
+      "photo": "p14_i00.jpg",
+      "gold_item": "sink",
+      "det_label": "tap",
+      "det_confidence": 0.488,
       "box_xyxy": [
-        0,
-        283,
-        109,
-        599
+        529,
+        347,
+        570,
+        375
       ],
       "image_size": [
         800,
         600
       ],
-      "crop_path": "crops/bathroom-bath-p14_i03.jpg",
-      "full_path": "full/bathroom/p14_i03.jpg",
-      "risk_flags": [
-        "low_conf",
-        "label_mismatch",
-        "edge_box"
-      ],
-      "risk_score": 4
-    },
-    {
-      "id": "bathroom-mirrored-cabinet-p15_i02",
-      "room": "Bathroom",
-      "photo": "p15_i02.jpg",
-      "gold_item": "mirrored cabinet",
-      "det_label": "mirror",
-      "det_confidence": 0.349,
-      "box_xyxy": [
-        9,
-        0,
-        800,
-        587
-      ],
-      "image_size": [
-        800,
-        600
-      ],
-      "crop_path": "crops/bathroom-mirrored-cabinet-p15_i02.jpg",
-      "full_path": "full/bathroom/p15_i02.jpg",
-      "risk_flags": [
-        "low_conf",
-        "edge_box",
-        "huge_box"
-      ],
-      "risk_score": 4
-    },
-    {
-      "id": "bathroom-mirrored-cabinet-p14_i04",
-      "room": "Bathroom",
-      "photo": "p14_i04.jpg",
-      "gold_item": "mirrored cabinet",
-      "det_label": "mirror",
-      "det_confidence": 0.325,
-      "box_xyxy": [
-        0,
-        1,
-        73,
-        596
-      ],
-      "image_size": [
-        800,
-        600
-      ],
-      "crop_path": "crops/bathroom-mirrored-cabinet-p14_i04.jpg",
-      "full_path": "full/bathroom/p14_i04.jpg",
-      "risk_flags": [
-        "low_conf",
-        "edge_box"
-      ],
-      "risk_score": 3
-    },
-    {
-      "id": "bathroom-mirrored-cabinet-p15_i03",
-      "room": "Bathroom",
-      "photo": "p15_i03.jpg",
-      "gold_item": "mirrored cabinet",
-      "det_label": "mirror",
-      "det_confidence": 0.361,
-      "box_xyxy": [
-        0,
-        98,
-        41,
-        591
-      ],
-      "image_size": [
-        800,
-        600
-      ],
-      "crop_path": "crops/bathroom-mirrored-cabinet-p15_i03.jpg",
-      "full_path": "full/bathroom/p15_i03.jpg",
+      "crop_path": "crops\\bathroom-sink-p14_i00.jpg",
+      "full_path": "full\\bathroom\\p14_i00.jpg",
       "risk_flags": [
         "med_conf",
-        "edge_box"
+        "label_mismatch",
+        "tiny_box"
       ],
-      "risk_score": 3
+      "risk_score": 4
     },
     {
       "id": "bathroom-mirrored-cabinet-p15_i08",
@@ -127,8 +51,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-mirrored-cabinet-p15_i08.jpg",
-      "full_path": "full/bathroom/p15_i08.jpg",
+      "crop_path": "crops\\bathroom-mirrored-cabinet-p15_i08.jpg",
+      "full_path": "full\\bathroom\\p15_i08.jpg",
       "risk_flags": [
         "med_conf",
         "edge_box"
@@ -152,8 +76,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-mirrored-cabinet-p15_i09.jpg",
-      "full_path": "full/bathroom/p15_i09.jpg",
+      "crop_path": "crops\\bathroom-mirrored-cabinet-p15_i09.jpg",
+      "full_path": "full\\bathroom\\p15_i09.jpg",
       "risk_flags": [
         "med_conf",
         "edge_box"
@@ -177,8 +101,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-mirrored-cabinet-p15_i10.jpg",
-      "full_path": "full/bathroom/p15_i10.jpg",
+      "crop_path": "crops\\bathroom-mirrored-cabinet-p15_i10.jpg",
+      "full_path": "full\\bathroom\\p15_i10.jpg",
       "risk_flags": [
         "med_conf",
         "edge_box"
@@ -202,35 +126,10 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-sink-p14_i01.jpg",
-      "full_path": "full/bathroom/p14_i01.jpg",
+      "crop_path": "crops\\bathroom-sink-p14_i01.jpg",
+      "full_path": "full\\bathroom\\p14_i01.jpg",
       "risk_flags": [
         "med_conf",
-        "edge_box"
-      ],
-      "risk_score": 3
-    },
-    {
-      "id": "bathroom-sink-p14_i08",
-      "room": "Bathroom",
-      "photo": "p14_i08.jpg",
-      "gold_item": "sink",
-      "det_label": "sink",
-      "det_confidence": 0.301,
-      "box_xyxy": [
-        2,
-        0,
-        799,
-        80
-      ],
-      "image_size": [
-        800,
-        600
-      ],
-      "crop_path": "crops/bathroom-sink-p14_i08.jpg",
-      "full_path": "full/bathroom/p14_i08.jpg",
-      "risk_flags": [
-        "low_conf",
         "edge_box"
       ],
       "risk_score": 3
@@ -252,11 +151,36 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-sink-p15_i10.jpg",
-      "full_path": "full/bathroom/p15_i10.jpg",
+      "crop_path": "crops\\bathroom-sink-p15_i10.jpg",
+      "full_path": "full\\bathroom\\p15_i10.jpg",
       "risk_flags": [
         "med_conf",
         "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "bathroom-smoke-alarm-p14_i00",
+      "room": "Bathroom",
+      "photo": "p14_i00.jpg",
+      "gold_item": "smoke alarm",
+      "det_label": "smoke alarm",
+      "det_confidence": 0.177,
+      "box_xyxy": [
+        179,
+        392,
+        206,
+        418
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bathroom-smoke-alarm-p14_i00.jpg",
+      "full_path": "full\\bathroom\\p14_i00.jpg",
+      "risk_flags": [
+        "low_conf",
+        "tiny_box"
       ],
       "risk_score": 3
     },
@@ -266,7 +190,7 @@
       "photo": "p14_i03.jpg",
       "gold_item": "smoke alarm",
       "det_label": "smoke alarm",
-      "det_confidence": 0.312,
+      "det_confidence": 0.317,
       "box_xyxy": [
         243,
         147,
@@ -277,11 +201,36 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-smoke-alarm-p14_i03.jpg",
-      "full_path": "full/bathroom/p14_i03.jpg",
+      "crop_path": "crops\\bathroom-smoke-alarm-p14_i03.jpg",
+      "full_path": "full\\bathroom\\p14_i03.jpg",
       "risk_flags": [
         "low_conf",
         "tiny_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "bathroom-smoke-alarm-p16_i02",
+      "room": "Bathroom",
+      "photo": "p16_i02.jpg",
+      "gold_item": "smoke alarm",
+      "det_label": "smoke alarm",
+      "det_confidence": 0.119,
+      "box_xyxy": [
+        572,
+        0,
+        630,
+        55
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bathroom-smoke-alarm-p16_i02.jpg",
+      "full_path": "full\\bathroom\\p16_i02.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
       ],
       "risk_score": 3
     },
@@ -302,34 +251,35 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-mirrored-cabinet-p14_i00.jpg",
-      "full_path": "full/bathroom/p14_i00.jpg",
+      "crop_path": "crops\\bathroom-mirrored-cabinet-p14_i00.jpg",
+      "full_path": "full\\bathroom\\p14_i00.jpg",
       "risk_flags": [
         "med_conf"
       ],
       "risk_score": 2
     },
     {
-      "id": "bathroom-sink-p14_i00",
+      "id": "bathroom-recessed-spotlights-p14_i03",
       "room": "Bathroom",
-      "photo": "p14_i00.jpg",
-      "gold_item": "sink",
-      "det_label": "sink",
-      "det_confidence": 0.336,
+      "photo": "p14_i03.jpg",
+      "gold_item": "recessed spotlights",
+      "det_label": "ceiling light",
+      "det_confidence": 0.539,
       "box_xyxy": [
-        352,
-        339,
-        570,
-        468
+        493,
+        163,
+        530,
+        190
       ],
       "image_size": [
         800,
         600
       ],
-      "crop_path": "crops/bathroom-sink-p14_i00.jpg",
-      "full_path": "full/bathroom/p14_i00.jpg",
+      "crop_path": "crops\\bathroom-recessed-spotlights-p14_i03.jpg",
+      "full_path": "full\\bathroom\\p14_i03.jpg",
       "risk_flags": [
-        "low_conf"
+        "label_mismatch",
+        "tiny_box"
       ],
       "risk_score": 2
     },
@@ -350,32 +300,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-sink-p15_i07.jpg",
-      "full_path": "full/bathroom/p15_i07.jpg",
-      "risk_flags": [
-        "low_conf"
-      ],
-      "risk_score": 2
-    },
-    {
-      "id": "bathroom-sink-p15_i08",
-      "room": "Bathroom",
-      "photo": "p15_i08.jpg",
-      "gold_item": "sink",
-      "det_label": "sink",
-      "det_confidence": 0.265,
-      "box_xyxy": [
-        486,
-        373,
-        647,
-        533
-      ],
-      "image_size": [
-        800,
-        600
-      ],
-      "crop_path": "crops/bathroom-sink-p15_i08.jpg",
-      "full_path": "full/bathroom/p15_i08.jpg",
+      "crop_path": "crops\\bathroom-sink-p15_i07.jpg",
+      "full_path": "full\\bathroom\\p15_i07.jpg",
       "risk_flags": [
         "low_conf"
       ],
@@ -398,8 +324,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-bath-p14_i00.jpg",
-      "full_path": "full/bathroom/p14_i00.jpg",
+      "crop_path": "crops\\bathroom-bath-p14_i00.jpg",
+      "full_path": "full\\bathroom\\p14_i00.jpg",
       "risk_flags": [
         "edge_box"
       ],
@@ -422,8 +348,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-bath-p14_i07.jpg",
-      "full_path": "full/bathroom/p14_i07.jpg",
+      "crop_path": "crops\\bathroom-bath-p14_i07.jpg",
+      "full_path": "full\\bathroom\\p14_i07.jpg",
       "risk_flags": [
         "edge_box"
       ],
@@ -446,58 +372,10 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-bath-p14_i11.jpg",
-      "full_path": "full/bathroom/p14_i11.jpg",
+      "crop_path": "crops\\bathroom-bath-p14_i11.jpg",
+      "full_path": "full\\bathroom\\p14_i11.jpg",
       "risk_flags": [
         "edge_box"
-      ],
-      "risk_score": 1
-    },
-    {
-      "id": "bathroom-bath-p15_i02",
-      "room": "Bathroom",
-      "photo": "p15_i02.jpg",
-      "gold_item": "bath",
-      "det_label": "bathtub",
-      "det_confidence": 0.69,
-      "box_xyxy": [
-        5,
-        317,
-        799,
-        600
-      ],
-      "image_size": [
-        800,
-        600
-      ],
-      "crop_path": "crops/bathroom-bath-p15_i02.jpg",
-      "full_path": "full/bathroom/p15_i02.jpg",
-      "risk_flags": [
-        "edge_box"
-      ],
-      "risk_score": 1
-    },
-    {
-      "id": "bathroom-ceiling-p14_i03",
-      "room": "Bathroom",
-      "photo": "p14_i03.jpg",
-      "gold_item": "ceiling",
-      "det_label": "ceiling light",
-      "det_confidence": 0.539,
-      "box_xyxy": [
-        493,
-        163,
-        530,
-        190
-      ],
-      "image_size": [
-        800,
-        600
-      ],
-      "crop_path": "crops/bathroom-ceiling-p14_i03.jpg",
-      "full_path": "full/bathroom/p14_i03.jpg",
-      "risk_flags": [
-        "tiny_box"
       ],
       "risk_score": 1
     },
@@ -518,8 +396,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-mirrored-cabinet-p14_i01.jpg",
-      "full_path": "full/bathroom/p14_i01.jpg",
+      "crop_path": "crops\\bathroom-mirrored-cabinet-p14_i01.jpg",
+      "full_path": "full\\bathroom\\p14_i01.jpg",
       "risk_flags": [
         "edge_box"
       ],
@@ -542,58 +420,10 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-mirrored-cabinet-p14_i03.jpg",
-      "full_path": "full/bathroom/p14_i03.jpg",
+      "crop_path": "crops\\bathroom-mirrored-cabinet-p14_i03.jpg",
+      "full_path": "full\\bathroom\\p14_i03.jpg",
       "risk_flags": [
         "edge_box"
-      ],
-      "risk_score": 1
-    },
-    {
-      "id": "bathroom-recessed-spotlights-p15_i01",
-      "room": "Bathroom",
-      "photo": "p15_i01.jpg",
-      "gold_item": "recessed spotlights",
-      "det_label": "light fitting",
-      "det_confidence": 0.536,
-      "box_xyxy": [
-        338,
-        206,
-        459,
-        448
-      ],
-      "image_size": [
-        800,
-        600
-      ],
-      "crop_path": "crops/bathroom-recessed-spotlights-p15_i01.jpg",
-      "full_path": "full/bathroom/p15_i01.jpg",
-      "risk_flags": [
-        "label_mismatch"
-      ],
-      "risk_score": 1
-    },
-    {
-      "id": "bathroom-recessed-spotlights-p15_i04",
-      "room": "Bathroom",
-      "photo": "p15_i04.jpg",
-      "gold_item": "recessed spotlights",
-      "det_label": "light fitting",
-      "det_confidence": 0.576,
-      "box_xyxy": [
-        325,
-        273,
-        492,
-        413
-      ],
-      "image_size": [
-        800,
-        600
-      ],
-      "crop_path": "crops/bathroom-recessed-spotlights-p15_i04.jpg",
-      "full_path": "full/bathroom/p15_i04.jpg",
-      "risk_flags": [
-        "label_mismatch"
       ],
       "risk_score": 1
     },
@@ -614,8 +444,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-toilet-p14_i02.jpg",
-      "full_path": "full/bathroom/p14_i02.jpg",
+      "crop_path": "crops\\bathroom-toilet-p14_i02.jpg",
+      "full_path": "full\\bathroom\\p14_i02.jpg",
       "risk_flags": [
         "edge_box"
       ],
@@ -638,8 +468,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-toilet-p16_i02.jpg",
-      "full_path": "full/bathroom/p16_i02.jpg",
+      "crop_path": "crops\\bathroom-toilet-p16_i02.jpg",
+      "full_path": "full\\bathroom\\p16_i02.jpg",
       "risk_flags": [
         "edge_box"
       ],
@@ -662,8 +492,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-bath-p14_i01.jpg",
-      "full_path": "full/bathroom/p14_i01.jpg",
+      "crop_path": "crops\\bathroom-bath-p14_i01.jpg",
+      "full_path": "full\\bathroom\\p14_i01.jpg",
       "risk_flags": [],
       "risk_score": 0
     },
@@ -684,8 +514,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-toilet-p15_i11.jpg",
-      "full_path": "full/bathroom/p15_i11.jpg",
+      "crop_path": "crops\\bathroom-toilet-p15_i11.jpg",
+      "full_path": "full\\bathroom\\p15_i11.jpg",
       "risk_flags": [],
       "risk_score": 0
     },
@@ -706,8 +536,8 @@
         800,
         600
       ],
-      "crop_path": "crops/bathroom-toilet-p16_i01.jpg",
-      "full_path": "full/bathroom/p16_i01.jpg",
+      "crop_path": "crops\\bathroom-toilet-p16_i01.jpg",
+      "full_path": "full\\bathroom\\p16_i01.jpg",
       "risk_flags": [],
       "risk_score": 0
     }

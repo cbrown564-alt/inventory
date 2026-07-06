@@ -4,6 +4,8 @@ import json
 import pathlib
 import sys
 
+import pytest
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
@@ -25,6 +27,63 @@ def _wide_img(path: pathlib.Path) -> None:
 def _flat_img(path: pathlib.Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     Image.new("L", (320, 180), color=128).save(path)
+
+
+def _write_grey_jpeg(path: pathlib.Path, value: int) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    Image.new("L", (64, 48), color=value).save(path, format="JPEG")
+
+
+def _synthetic_report(tmp_path: pathlib.Path, *, n_rooms: int = 1,
+                      frames_per_room: int = 3):
+    """Minimal CI-safe report/ + matching gold (no gitignored artifacts).
+
+    Mirrors tests/test_eval_hero_cover.py::_synthetic_report but parametrised
+    over room and frame count so the rerank pass bar (top-1 on N gold rooms)
+    and the surface eval's ``>= 5 labelled frames`` spearman gate can both be
+    met without the real report/ tree, which is gitignored and absent on CI.
+    The gold's top-1 is a real frame in each room, so the cover baseline ranks
+    it in the top-k and the demo rerank picks it; every frame is labelled so
+    the surface spearman is defined.
+    """
+    report = tmp_path / "report"
+    inv_rooms = []
+    gold_rooms = {}
+    greys = [30 + int(190 * i / max(1, frames_per_room - 1))
+             for i in range(frames_per_room)]
+    hero_idx = frames_per_room // 2
+    for r in range(n_rooms):
+        room_name = f"Room {r:02d}"
+        seg = f"{room_name.replace(' ', '_')}_seg00"
+        frames_dir = report / "work" / "frames" / seg
+        names = []
+        photos = []
+        for i, val in enumerate(greys):
+            fn = f"clip{r:02d}_f{i + 1:06d}.jpg"
+            _write_grey_jpeg(frames_dir / fn, val)
+            names.append(fn)
+            photos.append({
+                "id": f"P{r:02d}{i}",
+                "path": str(frames_dir / fn),
+                "source_video": "clip.MOV",
+                "hero": 1 if i == hero_idx else None,
+            })
+        inv_rooms.append({"name": room_name, "photos": photos})
+        # Hero first (rerank target), then a full ranked split so the surface
+        # eval sees every frame labelled (needs >= 5).
+        ordered = [names[hero_idx]] + [n for n in names if n != names[hero_idx]]
+        half = max(1, len(ordered) // 2)
+        gold_rooms[room_name] = {
+            "top": ordered[:half],
+            "bottom": ordered[half:],
+            "notes": "synthetic",
+        }
+    report.mkdir(parents=True, exist_ok=True)
+    (report / "inventory.json").write_text(
+        json.dumps({"rooms": inv_rooms}), encoding="utf-8")
+    gold_path = tmp_path / "hero-gold.json"
+    gold_path.write_text(json.dumps({"rooms": gold_rooms}), encoding="utf-8")
+    return report, gold_path
 
 
 def test_mslap_ratio_textured_above_flat(tmp_path):
@@ -117,6 +176,27 @@ def test_train_iqa_koniq_bootstrap(tmp_path):
     assert data["training"]["mode"] == "bootstrap-musiq-proxy"
     assert "disclaimer" in data
     assert len(data["weights"]) == len(data["features"])
+
+
+def test_train_room_classifier_self_test():
+    """embed_head.py refactor (docs/23 §5): room classifier's --self-test
+    (synthetic embeddings, no download) must still pass unchanged."""
+    pytest.importorskip("torch")
+    sys.path.insert(0, str(ROOT / "evals"))
+    import train_room_classifier as trc  # noqa: E402
+
+    assert trc.self_test() == 0
+
+
+def test_train_iqa_embed_self_test():
+    """ML-E17 (correct): embedding regression head, synthetic self-test path
+    (no KonIQ download) — mirrors train_room_classifier.py's --self-test but
+    in regression mode (docs/23 §5)."""
+    pytest.importorskip("torch")
+    sys.path.insert(0, str(ROOT / "evals"))
+    import train_iqa_embed as tie  # noqa: E402
+
+    assert tie.self_test() == 0
 
 
 def test_eval_finetune_detect_demo(tmp_path):
@@ -254,7 +334,9 @@ def test_eval_segment_vlm_refine_demo(tmp_path):
     class Args:
         video = None
         demo = True
-        segments = ROOT / "segment-spike-multi/gemini-3.5-flash/segments.json"
+        # No VLM segments.json on a clean checkout (segment-spike*/ is
+        # gitignored) → run() synthesises the baseline from segment-gold.
+        segments = None
         gold = ROOT / "evals/fixtures/own-property/segment-gold.json"
         bleed = ROOT / "evals/fixtures/ownproperty-bleed-exclusions.json"
         report = None
@@ -273,9 +355,13 @@ def test_eval_vlm_rerank_demo(tmp_path):
     sys.path.insert(0, str(ROOT / "evals"))
     import eval_vlm_rerank as evr  # noqa: E402
 
+    # PASS_BAR_TOP1 is 9/9 — synthesise nine gold rooms whose top-1 the demo
+    # rerank recovers. The real report/ tree is gitignored (absent on CI).
+    report, gold_path = _synthetic_report(tmp_path, n_rooms=9)
+
     class Args:
-        report_dir = pathlib.Path("report")
-        gold = ROOT / "evals/fixtures/own-property/hero-gold.json"
+        report_dir = report
+        gold = gold_path
         output = tmp_path / "hero-vlm-rerank.html"
         json_output = tmp_path / "hero-vlm-rerank-metrics.json"
         demo = True
@@ -347,9 +433,13 @@ def test_eval_segformer_surface_demo_writes_artifacts(tmp_path):
     sys.path.insert(0, str(ROOT / "evals"))
     import eval_segformer_surface as ess  # noqa: E402
 
+    # Synthetic report/ (the real one is gitignored, absent on CI). Six frames
+    # per room so the surface spearman gate (>= 5 labelled frames) is met.
+    report, gold_path = _synthetic_report(tmp_path, n_rooms=2, frames_per_room=6)
+
     class Args:
-        report_dir = ROOT / "report"
-        gold = ROOT / "evals/fixtures/own-property/hero-gold.json"
+        report_dir = report
+        gold = gold_path
         html_output = tmp_path / "segformer-surface.html"
         json_output = tmp_path / "segformer-surface-metrics.json"
         demo = True

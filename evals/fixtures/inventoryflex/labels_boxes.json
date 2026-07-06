@@ -7,12 +7,15 @@
   "split_ref": "evals/splits/inventoryflex.json",
   "rooms": [
     "Bathroom",
-    "Reception & Open Plan Kitchen"
+    "Bedroom",
+    "Entrance Hall",
+    "Reception & Open Plan Kitchen",
+    "Walk In Wardrobe"
   ],
   "target": {
-    "min_boxes": 50,
-    "max_boxes": 100,
-    "rooms": 2,
+    "min_boxes": 300,
+    "max_boxes": 400,
+    "rooms": 5,
     "notable_only": true
   },
   "boxes": [
@@ -315,6 +318,78 @@
       "needs_redraw": true
     },
     {
+      "id": "bathroom-smoke-alarm-p14_i00",
+      "room": "Bathroom",
+      "photo": "p14_i00.jpg",
+      "item_name": "smoke alarm",
+      "gold_item": "smoke alarm",
+      "notable": true,
+      "box_xyxy": [
+        179,
+        392,
+        206,
+        418
+      ],
+      "det_label": "smoke alarm",
+      "det_confidence": 0.177,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bathroom-smoke-alarm-p14_i03",
+      "room": "Bathroom",
+      "photo": "p14_i03.jpg",
+      "item_name": "smoke alarm",
+      "gold_item": "smoke alarm",
+      "notable": true,
+      "box_xyxy": [
+        243,
+        147,
+        289,
+        177
+      ],
+      "det_label": "smoke alarm",
+      "det_confidence": 0.317,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bathroom-smoke-alarm-p16_i02",
+      "room": "Bathroom",
+      "photo": "p16_i02.jpg",
+      "item_name": "smoke alarm",
+      "gold_item": "smoke alarm",
+      "notable": true,
+      "box_xyxy": [
+        572,
+        0,
+        630,
+        55
+      ],
+      "det_label": "smoke alarm",
+      "det_confidence": 0.119,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "bathroom-toilet-p14_i02",
       "room": "Bathroom",
       "photo": "p14_i02.jpg",
@@ -387,6 +462,678 @@
       "verified": true
     },
     {
+      "id": "bedroom-bedside-lamps-p18_i00",
+      "room": "Bedroom",
+      "photo": "p18_i00.jpg",
+      "item_name": "bedside lamps",
+      "gold_item": "bedside lamps",
+      "notable": true,
+      "box_xyxy": [
+        392,
+        286,
+        454,
+        376
+      ],
+      "det_label": "lamp",
+      "det_confidence": 0.914,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-bedside-lamps-p18_i01",
+      "room": "Bedroom",
+      "photo": "p18_i01.jpg",
+      "item_name": "bedside lamps",
+      "gold_item": "bedside lamps",
+      "notable": true,
+      "box_xyxy": [
+        387,
+        301,
+        462,
+        419
+      ],
+      "det_label": "lamp",
+      "det_confidence": 0.946,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-carpet-p19_i07",
+      "room": "Bedroom",
+      "photo": "p19_i07.jpg",
+      "item_name": "carpet",
+      "gold_item": "carpet",
+      "notable": true,
+      "box_xyxy": [
+        638,
+        395,
+        800,
+        600
+      ],
+      "det_label": "chair",
+      "det_confidence": 0.613,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-carpet-p20_i04",
+      "room": "Bedroom",
+      "photo": "p20_i04.jpg",
+      "item_name": "carpet",
+      "gold_item": "carpet",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        497,
+        649,
+        599
+      ],
+      "det_label": "carpet",
+      "det_confidence": 0.137,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-carpet-p20_i06",
+      "room": "Bedroom",
+      "photo": "p20_i06.jpg",
+      "item_name": "carpet",
+      "gold_item": "carpet",
+      "notable": true,
+      "box_xyxy": [
+        382,
+        1,
+        800,
+        599
+      ],
+      "det_label": "carpet",
+      "det_confidence": 0.102,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-chest-of-drawers-p18_i00",
+      "room": "Bedroom",
+      "photo": "p18_i00.jpg",
+      "item_name": "chest of drawers",
+      "gold_item": "chest of drawers",
+      "notable": true,
+      "box_xyxy": [
+        42,
+        506,
+        151,
+        599
+      ],
+      "det_label": "chest of drawers",
+      "det_confidence": 0.156,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-chest-of-drawers-p18_i01",
+      "room": "Bedroom",
+      "photo": "p18_i01.jpg",
+      "item_name": "chest of drawers",
+      "gold_item": "chest of drawers",
+      "notable": true,
+      "box_xyxy": [
+        97,
+        402,
+        269,
+        552
+      ],
+      "det_label": "chest of drawers",
+      "det_confidence": 0.797,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-chest-of-drawers-p18_i04",
+      "room": "Bedroom",
+      "photo": "p18_i04.jpg",
+      "item_name": "chest of drawers",
+      "gold_item": "chest of drawers",
+      "notable": true,
+      "box_xyxy": [
+        370,
+        1,
+        524,
+        125
+      ],
+      "det_label": "chest of drawers",
+      "det_confidence": 0.785,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-chest-of-drawers-p20_i07",
+      "room": "Bedroom",
+      "photo": "p20_i07.jpg",
+      "item_name": "chest of drawers",
+      "gold_item": "chest of drawers",
+      "notable": true,
+      "box_xyxy": [
+        164,
+        35,
+        720,
+        535
+      ],
+      "det_label": "desk",
+      "det_confidence": 0.438,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-double-bed-p18_i00",
+      "room": "Bedroom",
+      "photo": "p18_i00.jpg",
+      "item_name": "double bed",
+      "gold_item": "double bed",
+      "notable": true,
+      "box_xyxy": [
+        107,
+        271,
+        724,
+        599
+      ],
+      "det_label": "bed",
+      "det_confidence": 0.678,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-double-bed-p18_i01",
+      "room": "Bedroom",
+      "photo": "p18_i01.jpg",
+      "item_name": "double bed",
+      "gold_item": "double bed",
+      "notable": true,
+      "box_xyxy": [
+        58,
+        411,
+        800,
+        599
+      ],
+      "det_label": "bed",
+      "det_confidence": 0.677,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-double-bed-p18_i02",
+      "room": "Bedroom",
+      "photo": "p18_i02.jpg",
+      "item_name": "double bed",
+      "gold_item": "double bed",
+      "notable": true,
+      "box_xyxy": [
+        258,
+        468,
+        799,
+        599
+      ],
+      "det_label": "bed",
+      "det_confidence": 0.437,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-double-bed-p18_i03",
+      "room": "Bedroom",
+      "photo": "p18_i03.jpg",
+      "item_name": "double bed",
+      "gold_item": "double bed",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        478,
+        748,
+        599
+      ],
+      "det_label": "bed",
+      "det_confidence": 0.848,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-double-bed-p18_i04",
+      "room": "Bedroom",
+      "photo": "p18_i04.jpg",
+      "item_name": "double bed",
+      "gold_item": "double bed",
+      "notable": true,
+      "box_xyxy": [
+        6,
+        122,
+        799,
+        600
+      ],
+      "det_label": "bed",
+      "det_confidence": 0.743,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-double-bed-p18_i05",
+      "room": "Bedroom",
+      "photo": "p18_i05.jpg",
+      "item_name": "double bed",
+      "gold_item": "double bed",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        0,
+        800,
+        600
+      ],
+      "det_label": "bed",
+      "det_confidence": 0.788,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-double-bed-p19_i00",
+      "room": "Bedroom",
+      "photo": "p19_i00.jpg",
+      "item_name": "double bed",
+      "gold_item": "double bed",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        1,
+        799,
+        590
+      ],
+      "det_label": "bed",
+      "det_confidence": 0.666,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-double-bed-p19_i08",
+      "room": "Bedroom",
+      "photo": "p19_i08.jpg",
+      "item_name": "double bed",
+      "gold_item": "double bed",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        420,
+        744,
+        599
+      ],
+      "det_label": "bed",
+      "det_confidence": 0.249,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-double-bed-p19_i09",
+      "room": "Bedroom",
+      "photo": "p19_i09.jpg",
+      "item_name": "double bed",
+      "gold_item": "double bed",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        334,
+        800,
+        600
+      ],
+      "det_label": "bed",
+      "det_confidence": 0.578,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-roller-blind-p19_i01",
+      "room": "Bedroom",
+      "photo": "p19_i01.jpg",
+      "item_name": "roller blind",
+      "gold_item": "roller blind",
+      "notable": true,
+      "box_xyxy": [
+        38,
+        165,
+        707,
+        505
+      ],
+      "det_label": "blinds",
+      "det_confidence": 0.18,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "bedroom-window-p19_i10",
+      "room": "Bedroom",
+      "photo": "p19_i10.jpg",
+      "item_name": "window",
+      "gold_item": "window",
+      "notable": true,
+      "box_xyxy": [
+        443,
+        445,
+        799,
+        600
+      ],
+      "det_label": "window",
+      "det_confidence": 0.152,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "entrance-hall-front-door-p06_i05",
+      "room": "Entrance Hall",
+      "photo": "p06_i05.jpg",
+      "item_name": "front door",
+      "gold_item": "front door",
+      "notable": true,
+      "box_xyxy": [
+        358,
+        132,
+        484,
+        398
+      ],
+      "det_label": "door",
+      "det_confidence": 0.417,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "entrance-hall-front-door-p07_i00",
+      "room": "Entrance Hall",
+      "photo": "p07_i00.jpg",
+      "item_name": "front door",
+      "gold_item": "front door",
+      "notable": true,
+      "box_xyxy": [
+        602,
+        0,
+        799,
+        537
+      ],
+      "det_label": "door",
+      "det_confidence": 0.355,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "entrance-hall-front-door-p07_i01",
+      "room": "Entrance Hall",
+      "photo": "p07_i01.jpg",
+      "item_name": "front door",
+      "gold_item": "front door",
+      "notable": true,
+      "box_xyxy": [
+        205,
+        304,
+        630,
+        390
+      ],
+      "det_label": "extractor hood",
+      "det_confidence": 0.263,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "entrance-hall-front-door-p07_i02",
+      "room": "Entrance Hall",
+      "photo": "p07_i02.jpg",
+      "item_name": "front door",
+      "gold_item": "front door",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        0,
+        199,
+        595
+      ],
+      "det_label": "door",
+      "det_confidence": 0.254,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "entrance-hall-front-door-p07_i06",
+      "room": "Entrance Hall",
+      "photo": "p07_i06.jpg",
+      "item_name": "front door",
+      "gold_item": "front door",
+      "notable": true,
+      "box_xyxy": [
+        540,
+        0,
+        799,
+        600
+      ],
+      "det_label": "door",
+      "det_confidence": 0.119,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "entrance-hall-front-door-p07_i10",
+      "room": "Entrance Hall",
+      "photo": "p07_i10.jpg",
+      "item_name": "front door",
+      "gold_item": "front door",
+      "notable": true,
+      "box_xyxy": [
+        563,
+        0,
+        799,
+        595
+      ],
+      "det_label": "door",
+      "det_confidence": 0.262,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "entrance-hall-front-door-p08_i00",
+      "room": "Entrance Hall",
+      "photo": "p08_i00.jpg",
+      "item_name": "front door",
+      "gold_item": "front door",
+      "notable": true,
+      "box_xyxy": [
+        518,
+        0,
+        800,
+        599
+      ],
+      "det_label": "door",
+      "det_confidence": 0.601,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        264,
+        207,
+        349,
+        339
+      ],
+      "det_label": "patio door",
+      "det_confidence": 0.176,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "reception-open-plan-kitchen-balcony-door-p25_i01",
       "room": "Reception & Open Plan Kitchen",
       "photo": "p25_i01.jpg",
@@ -405,6 +1152,30 @@
       "verified": true
     },
     {
+      "id": "reception-open-plan-kitchen-balcony-door-p25_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i03.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        108,
+        88,
+        572
+      ],
+      "det_label": "door",
+      "det_confidence": 0.158,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "reception-open-plan-kitchen-balcony-door-p25_i05",
       "room": "Reception & Open Plan Kitchen",
       "photo": "p25_i05.jpg",
@@ -421,6 +1192,30 @@
       "det_confidence": 0.384,
       "labeler": "yoloe-bootstrap",
       "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p25_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i09.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        64,
+        64,
+        799,
+        599
+      ],
+      "det_label": "patio door",
+      "det_confidence": 0.236,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
     },
     {
       "id": "reception-open-plan-kitchen-balcony-door-p26_i02",
@@ -457,6 +1252,30 @@
       "det_confidence": 0.261,
       "labeler": "yoloe-bootstrap",
       "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-balcony-door-p27_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i05.jpg",
+      "item_name": "balcony door",
+      "gold_item": "balcony door",
+      "notable": true,
+      "box_xyxy": [
+        102,
+        0,
+        774,
+        599
+      ],
+      "det_label": "patio door",
+      "det_confidence": 0.161,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
     },
     {
       "id": "reception-open-plan-kitchen-balcony-door-p30_i01",
@@ -906,6 +1725,30 @@
       "verified": true
     },
     {
+      "id": "reception-open-plan-kitchen-dining-table-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "item_name": "dining table",
+      "gold_item": "dining table",
+      "notable": true,
+      "box_xyxy": [
+        374,
+        302,
+        476,
+        405
+      ],
+      "det_label": "dining table",
+      "det_confidence": 0.286,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "reception-open-plan-kitchen-dining-table-p25_i04",
       "room": "Reception & Open Plan Kitchen",
       "photo": "p25_i04.jpg",
@@ -994,6 +1837,30 @@
       "det_confidence": 0.716,
       "labeler": "yoloe-bootstrap",
       "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-floor-rug-p26_i11",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i11.jpg",
+      "item_name": "floor rug",
+      "gold_item": "floor rug",
+      "notable": true,
+      "box_xyxy": [
+        709,
+        432,
+        800,
+        544
+      ],
+      "det_label": "rug",
+      "det_confidence": 0.202,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
     },
     {
       "id": "reception-open-plan-kitchen-fridge-freezer-p31_i01",
@@ -1150,6 +2017,54 @@
       "verified": true
     },
     {
+      "id": "reception-open-plan-kitchen-kitchen-units-p28_i07",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i07.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        42,
+        7,
+        799,
+        577
+      ],
+      "det_label": "medicine cabinet",
+      "det_confidence": 0.469,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-kitchen-units-p28_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i08.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        588,
+        258,
+        799,
+        568
+      ],
+      "det_label": "cabinet",
+      "det_confidence": 0.232,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "reception-open-plan-kitchen-kitchen-units-p29_i05",
       "room": "Reception & Open Plan Kitchen",
       "photo": "p29_i05.jpg",
@@ -1242,6 +2157,126 @@
       }
     },
     {
+      "id": "reception-open-plan-kitchen-kitchen-units-p30_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i09.jpg",
+      "item_name": "kitchen units",
+      "gold_item": "kitchen units",
+      "notable": true,
+      "box_xyxy": [
+        164,
+        4,
+        605,
+        349
+      ],
+      "det_label": "medicine cabinet",
+      "det_confidence": 0.2,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-microwave-p25_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i01.jpg",
+      "item_name": "microwave",
+      "gold_item": "microwave",
+      "notable": true,
+      "box_xyxy": [
+        596,
+        223,
+        662,
+        284
+      ],
+      "det_label": "microwave",
+      "det_confidence": 0.159,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-microwave-p25_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i06.jpg",
+      "item_name": "microwave",
+      "gold_item": "microwave",
+      "notable": true,
+      "box_xyxy": [
+        492,
+        290,
+        601,
+        368
+      ],
+      "det_label": "microwave",
+      "det_confidence": 0.209,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "item_name": "mirror",
+      "gold_item": "mirror",
+      "notable": true,
+      "box_xyxy": [
+        577,
+        125,
+        728,
+        298
+      ],
+      "det_label": "mirror",
+      "det_confidence": 0.246,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p25_i02",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i02.jpg",
+      "item_name": "mirror",
+      "gold_item": "mirror",
+      "notable": true,
+      "box_xyxy": [
+        236,
+        127,
+        416,
+        358
+      ],
+      "det_label": "mirror",
+      "det_confidence": 0.121,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "reception-open-plan-kitchen-mirror-p25_i03",
       "room": "Reception & Open Plan Kitchen",
       "photo": "p25_i03.jpg",
@@ -1260,6 +2295,30 @@
       "verified": true
     },
     {
+      "id": "reception-open-plan-kitchen-mirror-p25_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i05.jpg",
+      "item_name": "mirror",
+      "gold_item": "mirror",
+      "notable": true,
+      "box_xyxy": [
+        494,
+        225,
+        579,
+        362
+      ],
+      "det_label": "mirror",
+      "det_confidence": 0.65,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "reception-open-plan-kitchen-mirror-p27_i06",
       "room": "Reception & Open Plan Kitchen",
       "photo": "p27_i06.jpg",
@@ -1276,6 +2335,30 @@
       "det_confidence": 0.875,
       "labeler": "yoloe-bootstrap",
       "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-mirror-p27_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i09.jpg",
+      "item_name": "mirror",
+      "gold_item": "mirror",
+      "notable": true,
+      "box_xyxy": [
+        409,
+        0,
+        792,
+        77
+      ],
+      "det_label": "mirror",
+      "det_confidence": 0.421,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
     },
     {
       "id": "reception-open-plan-kitchen-mirror-p31_i04",
@@ -1396,6 +2479,30 @@
       }
     },
     {
+      "id": "reception-open-plan-kitchen-oven-p31_i01",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i01.jpg",
+      "item_name": "oven",
+      "gold_item": "oven",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        335,
+        151,
+        517
+      ],
+      "det_label": "oven",
+      "det_confidence": 0.196,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "reception-open-plan-kitchen-pendant-light-fittings-p25_i00",
       "room": "Reception & Open Plan Kitchen",
       "photo": "p25_i00.jpg",
@@ -1504,6 +2611,30 @@
       "verified": true
     },
     {
+      "id": "reception-open-plan-kitchen-pendant-light-fittings-p30_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i05.jpg",
+      "item_name": "pendant light fittings",
+      "gold_item": "pendant light fittings",
+      "notable": true,
+      "box_xyxy": [
+        325,
+        89,
+        412,
+        138
+      ],
+      "det_label": "ceiling light",
+      "det_confidence": 0.18,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "reception-open-plan-kitchen-pendant-light-fittings-p30_i09",
       "room": "Reception & Open Plan Kitchen",
       "photo": "p30_i09.jpg",
@@ -1592,6 +2723,150 @@
       "det_confidence": 0.534,
       "labeler": "yoloe-bootstrap",
       "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p26_i06",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i06.jpg",
+      "item_name": "roller blinds",
+      "gold_item": "roller blinds",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        96,
+        215,
+        378
+      ],
+      "det_label": "blinds",
+      "det_confidence": 0.216,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p26_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i09.jpg",
+      "item_name": "roller blinds",
+      "gold_item": "roller blinds",
+      "notable": true,
+      "box_xyxy": [
+        335,
+        0,
+        612,
+        115
+      ],
+      "det_label": "blinds",
+      "det_confidence": 0.244,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p27_i03",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i03.jpg",
+      "item_name": "roller blinds",
+      "gold_item": "roller blinds",
+      "notable": true,
+      "box_xyxy": [
+        591,
+        91,
+        800,
+        465
+      ],
+      "det_label": "blinds",
+      "det_confidence": 0.41,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p27_i04",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p27_i04.jpg",
+      "item_name": "roller blinds",
+      "gold_item": "roller blinds",
+      "notable": true,
+      "box_xyxy": [
+        561,
+        0,
+        799,
+        599
+      ],
+      "det_label": "blinds",
+      "det_confidence": 0.111,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-roller-blinds-p30_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i09.jpg",
+      "item_name": "roller blinds",
+      "gold_item": "roller blinds",
+      "notable": true,
+      "box_xyxy": [
+        741,
+        402,
+        800,
+        600
+      ],
+      "det_label": "blinds",
+      "det_confidence": 0.289,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "reception-open-plan-kitchen-sink-p25_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p25_i00.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        601,
+        248,
+        641,
+        315
+      ],
+      "det_label": "tap",
+      "det_confidence": 0.632,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
     },
     {
       "id": "reception-open-plan-kitchen-sink-p25_i01",
@@ -1689,6 +2964,30 @@
       }
     },
     {
+      "id": "reception-open-plan-kitchen-sink-p28_i05",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p28_i05.jpg",
+      "item_name": "sink",
+      "gold_item": "sink",
+      "notable": true,
+      "box_xyxy": [
+        2,
+        0,
+        798,
+        600
+      ],
+      "det_label": "desk",
+      "det_confidence": 0.679,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "reception-open-plan-kitchen-sink-p30_i08",
       "room": "Reception & Open Plan Kitchen",
       "photo": "p30_i08.jpg",
@@ -1705,6 +3004,30 @@
       "det_confidence": 0.542,
       "labeler": "yoloe-bootstrap",
       "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-smoke-alarm-p31_i00",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p31_i00.jpg",
+      "item_name": "smoke alarm",
+      "gold_item": "smoke alarm",
+      "notable": true,
+      "box_xyxy": [
+        25,
+        536,
+        47,
+        563
+      ],
+      "det_label": "smoke alarm",
+      "det_confidence": 0.149,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
     },
     {
       "id": "reception-open-plan-kitchen-sofa-p25_i00",
@@ -1825,6 +3148,30 @@
       "verified": true
     },
     {
+      "id": "reception-open-plan-kitchen-washing-machine-p30_i08",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p30_i08.jpg",
+      "item_name": "washing machine",
+      "gold_item": "washing machine",
+      "notable": true,
+      "box_xyxy": [
+        515,
+        0,
+        800,
+        599
+      ],
+      "det_label": "washing machine",
+      "det_confidence": 0.355,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
       "id": "reception-open-plan-kitchen-washing-machine-p31_i06",
       "room": "Reception & Open Plan Kitchen",
       "photo": "p31_i06.jpg",
@@ -1931,17 +3278,323 @@
       "det_confidence": 0.271,
       "labeler": "yoloe-bootstrap",
       "verified": true
+    },
+    {
+      "id": "reception-open-plan-kitchen-window-p26_i09",
+      "room": "Reception & Open Plan Kitchen",
+      "photo": "p26_i09.jpg",
+      "item_name": "window",
+      "gold_item": "window",
+      "notable": true,
+      "box_xyxy": [
+        284,
+        0,
+        642,
+        151
+      ],
+      "det_label": "window",
+      "det_confidence": 0.119,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-built-in-wardrobe-p10_i01",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i01.jpg",
+      "item_name": "built-in wardrobe",
+      "gold_item": "built-in wardrobe",
+      "notable": true,
+      "box_xyxy": [
+        104,
+        0,
+        550,
+        600
+      ],
+      "det_label": "wardrobe",
+      "det_confidence": 0.325,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-carpet-p10_i03",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i03.jpg",
+      "item_name": "carpet",
+      "gold_item": "carpet",
+      "notable": true,
+      "box_xyxy": [
+        0,
+        275,
+        800,
+        600
+      ],
+      "det_label": "carpet",
+      "det_confidence": 0.239,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-door-p10_i00",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i00.jpg",
+      "item_name": "door",
+      "gold_item": "door",
+      "notable": true,
+      "box_xyxy": [
+        449,
+        55,
+        686,
+        582
+      ],
+      "det_label": "door",
+      "det_confidence": 0.528,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-door-p10_i01",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i01.jpg",
+      "item_name": "door",
+      "gold_item": "door",
+      "notable": true,
+      "box_xyxy": [
+        520,
+        0,
+        799,
+        600
+      ],
+      "det_label": "door",
+      "det_confidence": 0.338,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-door-p10_i04",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i04.jpg",
+      "item_name": "door",
+      "gold_item": "door",
+      "notable": true,
+      "box_xyxy": [
+        24,
+        0,
+        800,
+        599
+      ],
+      "det_label": "door",
+      "det_confidence": 0.129,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-door-p10_i07",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i07.jpg",
+      "item_name": "door",
+      "gold_item": "door",
+      "notable": true,
+      "box_xyxy": [
+        345,
+        0,
+        655,
+        572
+      ],
+      "det_label": "door",
+      "det_confidence": 0.422,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-door-p10_i09",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i09.jpg",
+      "item_name": "door",
+      "gold_item": "door",
+      "notable": true,
+      "box_xyxy": [
+        605,
+        0,
+        800,
+        421
+      ],
+      "det_label": "door",
+      "det_confidence": 0.147,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-door-p11_i00",
+      "room": "Walk In Wardrobe",
+      "photo": "p11_i00.jpg",
+      "item_name": "door",
+      "gold_item": "door",
+      "notable": true,
+      "box_xyxy": [
+        696,
+        20,
+        757,
+        600
+      ],
+      "det_label": "door",
+      "det_confidence": 0.117,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-door-p11_i01",
+      "room": "Walk In Wardrobe",
+      "photo": "p11_i01.jpg",
+      "item_name": "door",
+      "gold_item": "door",
+      "notable": true,
+      "box_xyxy": [
+        601,
+        0,
+        800,
+        600
+      ],
+      "det_label": "door",
+      "det_confidence": 0.104,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-door-p11_i02",
+      "room": "Walk In Wardrobe",
+      "photo": "p11_i02.jpg",
+      "item_name": "door",
+      "gold_item": "door",
+      "notable": true,
+      "box_xyxy": [
+        434,
+        0,
+        800,
+        599
+      ],
+      "det_label": "door",
+      "det_confidence": 0.141,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-door-p11_i03",
+      "room": "Walk In Wardrobe",
+      "photo": "p11_i03.jpg",
+      "item_name": "door",
+      "gold_item": "door",
+      "notable": true,
+      "box_xyxy": [
+        1,
+        0,
+        546,
+        599
+      ],
+      "det_label": "door",
+      "det_confidence": 0.353,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
+    },
+    {
+      "id": "walk-in-wardrobe-door-p11_i05",
+      "room": "Walk In Wardrobe",
+      "photo": "p11_i05.jpg",
+      "item_name": "door",
+      "gold_item": "door",
+      "notable": true,
+      "box_xyxy": [
+        560,
+        0,
+        799,
+        596
+      ],
+      "det_label": "door",
+      "det_confidence": 0.173,
+      "labeler": "agent-review-2026-07-06",
+      "verified": true,
+      "agent_review": {
+        "reviewer": "claude-agent",
+        "method": "visual contact-sheet inspection of render-review crops",
+        "verdict": "accept",
+        "reviewed_at": "2026-07-06T00:00:00Z"
+      }
     }
   ],
-  "_trim": {
-    "consensus_reject_keys": 49,
-    "stats": {
-      "bootstrap": 138,
-      "consensus_drop": 12,
-      "human_drop": 25,
-      "human_keep": 16,
-      "human_redraw": 3,
-      "kept_bootstrap": 82
-    }
+  "_agent_review_2026_07_06": {
+    "note": "Bootstrap re-run at loosened thresholds (conf>=0.1, name-match>=0.5) across Bathroom, Reception & Open Plan Kitchen, Bedroom, Entrance Hall, Walk In Wardrobe to scale toward docs/23 ML-E12 target of >=300 boxes / >=4 rooms. All 251 new candidate boxes (plus 3 pre-existing needs_redraw boxes) were visually reviewed via tiled contact-sheet crops against the source photos; only 69 were visually confirmed correct (box location + gold item match) and marked verified. The rest were rejected as noise (wrong object, mismatched label, or box too ambiguous/tiny to confirm) -- see report for the systematic failure modes observed. Reaching 300 *verified* boxes was not achievable at defensible quality from this detector/vocab on this photo set; final total reflects genuine reviewed gold, not padded volume.",
+    "accepted_new": 69,
+    "rejected_new": 182
   }
 }

@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "description": "ML-E11 bbox review pack \u2014 one crop per box for visual adjudication",
+  "verdict_values": [
+    "accept",
+    "reject",
+    "relocate",
+    "uncertain"
+  ],
+  "entries": [
+    {
+      "id": "walk-in-wardrobe-door-p10_i04",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i04.jpg",
+      "gold_item": "door",
+      "det_label": "door",
+      "det_confidence": 0.129,
+      "box_xyxy": [
+        24,
+        0,
+        800,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-door-p10_i04.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p10_i04.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box",
+        "huge_box"
+      ],
+      "risk_score": 4
+    },
+    {
+      "id": "walk-in-wardrobe-built-in-wardrobe-p10_i01",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i01.jpg",
+      "gold_item": "built-in wardrobe",
+      "det_label": "wardrobe",
+      "det_confidence": 0.325,
+      "box_xyxy": [
+        104,
+        0,
+        550,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-built-in-wardrobe-p10_i01.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p10_i01.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "walk-in-wardrobe-carpet-p10_i03",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i03.jpg",
+      "gold_item": "carpet",
+      "det_label": "carpet",
+      "det_confidence": 0.239,
+      "box_xyxy": [
+        0,
+        275,
+        800,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-carpet-p10_i03.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p10_i03.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "walk-in-wardrobe-door-p10_i01",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i01.jpg",
+      "gold_item": "door",
+      "det_label": "door",
+      "det_confidence": 0.338,
+      "box_xyxy": [
+        520,
+        0,
+        799,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-door-p10_i01.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p10_i01.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "walk-in-wardrobe-door-p10_i07",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i07.jpg",
+      "gold_item": "door",
+      "det_label": "door",
+      "det_confidence": 0.422,
+      "box_xyxy": [
+        345,
+        0,
+        655,
+        572
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-door-p10_i07.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p10_i07.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "walk-in-wardrobe-door-p10_i09",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i09.jpg",
+      "gold_item": "door",
+      "det_label": "door",
+      "det_confidence": 0.147,
+      "box_xyxy": [
+        605,
+        0,
+        800,
+        421
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-door-p10_i09.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p10_i09.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "walk-in-wardrobe-door-p11_i00",
+      "room": "Walk In Wardrobe",
+      "photo": "p11_i00.jpg",
+      "gold_item": "door",
+      "det_label": "door",
+      "det_confidence": 0.117,
+      "box_xyxy": [
+        696,
+        20,
+        757,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-door-p11_i00.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p11_i00.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "walk-in-wardrobe-door-p11_i01",
+      "room": "Walk In Wardrobe",
+      "photo": "p11_i01.jpg",
+      "gold_item": "door",
+      "det_label": "door",
+      "det_confidence": 0.104,
+      "box_xyxy": [
+        601,
+        0,
+        800,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-door-p11_i01.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p11_i01.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "walk-in-wardrobe-door-p11_i02",
+      "room": "Walk In Wardrobe",
+      "photo": "p11_i02.jpg",
+      "gold_item": "door",
+      "det_label": "door",
+      "det_confidence": 0.141,
+      "box_xyxy": [
+        434,
+        0,
+        800,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-door-p11_i02.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p11_i02.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "walk-in-wardrobe-door-p11_i03",
+      "room": "Walk In Wardrobe",
+      "photo": "p11_i03.jpg",
+      "gold_item": "door",
+      "det_label": "door",
+      "det_confidence": 0.353,
+      "box_xyxy": [
+        1,
+        0,
+        546,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-door-p11_i03.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p11_i03.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "walk-in-wardrobe-door-p11_i05",
+      "room": "Walk In Wardrobe",
+      "photo": "p11_i05.jpg",
+      "gold_item": "door",
+      "det_label": "door",
+      "det_confidence": 0.173,
+      "box_xyxy": [
+        560,
+        0,
+        799,
+        596
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-door-p11_i05.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p11_i05.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "walk-in-wardrobe-door-p10_i00",
+      "room": "Walk In Wardrobe",
+      "photo": "p10_i00.jpg",
+      "gold_item": "door",
+      "det_label": "door",
+      "det_confidence": 0.528,
+      "box_xyxy": [
+        449,
+        55,
+        686,
+        582
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\walk-in-wardrobe-door-p10_i00.jpg",
+      "full_path": "full\\walk-in-wardrobe\\p10_i00.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    }
+  ],
+  "room": "Walk In Wardrobe"
+}

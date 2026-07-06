@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset='utf-8'>
+<title>Hero cover contact — siglip</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:1rem;background:#111;color:#eee}
+h1,h2{margin:0.5rem 0}
+.summary{background:#222;padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.cell{background:#222;border-radius:8px;overflow:hidden;border:2px solid #333}
+.cell.pick{border-color:#f5c518}
+.cell img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;background:#000}
+.meta{padding:8px;font-size:12px;line-height:1.4}
+.star{color:#f5c518;font-weight:bold}
+.metrics{color:#aaa}
+</style></head><body>
+<h1>Hero cover — scorer: siglip</h1>
+<p>Report: C:\Users\cbrow\Code\inventory\report</p>
+<div class='summary'><h2>Metrics</h2><pre>
+{
+  &quot;per_room&quot;: {
+    &quot;Hallway&quot;: {
+      &quot;n_frames&quot;: 8,
+      &quot;pick&quot;: &quot;IMG_5512_f009864.jpg&quot;,
+      &quot;pick_sharpness&quot;: 430.2,
+      &quot;room_median_sharpness&quot;: 464.0,
+      &quot;blur_reject&quot;: true,
+      &quot;top1_hit&quot;: false,
+      &quot;top3_hit&quot;: false,
+      &quot;spearman&quot;: 0.9
+    },
+    &quot;Living Room&quot;: {
+      &quot;n_frames&quot;: 8,
+      &quot;pick&quot;: &quot;IMG_5512_f008676.jpg&quot;,
+      &quot;pick_sharpness&quot;: 549.9,
+      &quot;room_median_sharpness&quot;: 514.6,
+      &quot;blur_reject&quot;: false,
+      &quot;top1_hit&quot;: false,
+      &quot;top3_hit&quot;: true,
+      &quot;spearman&quot;: -0.2
+    },
+    &quot;Kitchen&quot;: {
+      &quot;n_frames&quot;: 24,
+      &quot;pick&quot;: &quot;IMG_5512_f001593.jpg&quot;,
+      &quot;pick_sharpness&quot;: 429.2,
+      &quot;room_median_sharpness&quot;: 443.2,
+      &quot;blur_reject&quot;: true,
+      &quot;top1_hit&quot;: false,
+      &quot;top3_hit&quot;: false,
+      &quot;spearman&quot;: 0.2
+    },
+    &quot;Bedroom 1&quot;: {
+      &quot;n_frames&quot;: 16,
+      &quot;pick&quot;: &quot;IMG_5512_f017289.jpg&quot;,
+      &quot;pick_sharpness&quot;: 184.3,
+      &quot;room_median_sharpness&quot;: 241.1,
+      &quot;blur_reject&quot;: true,
+      &quot;top1_hit&quot;: false,
+      &quot;top3_hit&quot;: true,
+      &quot;spearman&quot;: 0.4
+    },
+    &quot;Bathroom&quot;: {
+      &quot;n_frames&quot;: 8,
+      &quot;pick&quot;: &quot;IMG_5512_f012132.jpg&quot;,
+      &quot;pick_sharpness&quot;: 258.0,
+      &quot;room_median_sharpness&quot;: 278.9,
+      &quot;blur_reject&quot;: true,
+      &quot;top1_hit&quot;: false,
+      &quot;top3_hit&quot;: false,
+      &quot;spearman&quot;: -0.6
+    },
+    &quot;En-suite Shower Room&quot;: {
+      &quot;n_frames&quot;: 8,
+      &quot;pick&quot;: &quot;IMG_5512_f022212.jpg&quot;,
+      &quot;pick_sharpness&quot;: 165.9,
+      &quot;room_median_sharpness&quot;: 139.7,
+      &quot;blur_reject&quot;: false,
+      &quot;top1_hit&quot;: true,
+      &quot;top3_hit&quot;: true,
+      &quot;spearman&quot;: 0.9
+    },
+    &quot;Loft Room&quot;: {
+      &quot;n_frames&quot;: 7,
+      &quot;pick&quot;: &quot;IMG_5512_f015246.jpg&quot;,
+      &quot;pick_sharpness&quot;: 177.9,
+      &quot;room_median_sharpness&quot;: 158.9,
+      &quot;blur_reject&quot;: false,
+      &quot;top1_hit&quot;: false,
+      &quot;top3_hit&quot;: false,
+      &quot;spearman&quot;: -0.3
+    },
+    &quot;Stairs and Landing&quot;: {
+      &quot;n_frames&quot;: 4,
+      &quot;pick&quot;: &quot;IMG_5512_f014076.jpg&quot;,
+      &quot;pick_sharpness&quot;: 125.1,
+      &quot;room_median_sharpness&quot;: 209.1,
+      &quot;blur_reject&quot;: true,
+      &quot;top1_hit&quot;: false,
+      &quot;top3_hit&quot;: true,
+      &quot;spearman&quot;: null
+    },
+    &quot;WC&quot;: {
+      &quot;n_frames&quot;: 4,
+      &quot;pick&quot;: &quot;IMG_5512_f013005.jpg&quot;,
+      &quot;pick_sharpness&quot;: 170.8,
+      &quot;room_median_sharpness&quot;: 169.8,
+      &quot;blur_reject&quot;: false,
+      &quot;top1_hit&quot;: false,
+      &quot;top3_hit&quot;: false,
+      &quot;spearman&quot;: null
+    }
+  },
+  &quot;n_rooms&quot;: 9,
+  &quot;top1_hit_rate&quot;: 11.1,
+  &quot;top3_hit_rate&quot;: 44.4,
+  &quot;mean_spearman&quot;: 0.186,
+  &quot;blur_reject_rate&quot;: 55.6
+}
+</pre></div>
+<h2>Hallway</h2>
+<p><em>Wide hallway with wallpaper, rug and doorway context reads best; f000144 is a wrong-room bleed frame (shows the living room TV/sofa through the doorway, not the hallway itself); f010080 is a coat-cupboard close-up.</em></p>
+<div class='grid'>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Hallway_seg04\IMG_5512_f009864.jpg' alt='IMG_5512_f009864.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f009864.jpg</strong><br>
+<span class='metrics'>
+sh=430 est=0.69 mslap=0.46 hero=— siglip=1 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Hallway_seg00\IMG_5512_f000081.jpg' alt='IMG_5512_f000081.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000081.jpg</strong><br>
+<span class='metrics'>
+sh=451 est=0.82 mslap=0.30 hero=— siglip=2 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Hallway_seg04\IMG_5512_f010341.jpg' alt='IMG_5512_f010341.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010341.jpg</strong><br>
+<span class='metrics'>
+sh=352 est=0.72 mslap=0.44 hero=— siglip=3 gold=— gate=OUT
+</span></div></div>
+<div class='cell pick'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Hallway_seg04\IMG_5512_f009738.jpg' alt='IMG_5512_f009738.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f009738.jpg</strong><br>
+<span class='metrics'>
+sh=1313 est=0.89 mslap=0.56 hero=1 siglip=4 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Hallway_seg00\IMG_5512_f000009.jpg' alt='IMG_5512_f000009.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000009.jpg</strong><br>
+<span class='metrics'>
+sh=925 est=0.70 mslap=0.50 hero=3 siglip=5 gold=2
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Hallway_seg00\IMG_5512_f000144.jpg' alt='IMG_5512_f000144.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000144.jpg</strong><br>
+<span class='metrics'>
+sh=477 est=0.77 mslap=0.33 hero=— siglip=6 gold=7
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Hallway_seg00\IMG_5512_f000045.jpg' alt='IMG_5512_f000045.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000045.jpg</strong><br>
+<span class='metrics'>
+sh=954 est=0.69 mslap=0.50 hero=2 siglip=7 gold=3
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Hallway_seg04\IMG_5512_f010080.jpg' alt='IMG_5512_f010080.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010080.jpg</strong><br>
+<span class='metrics'>
+sh=429 est=0.83 mslap=0.34 hero=— siglip=8 gold=8 gate=OUT
+</span></div></div>
+</div>
+<h2>Living Room</h2>
+<p><em>Weak pool: this segment is mostly Kitchen-bleed frames at its start (segment boundary drift) plus a blurred lamp close-up. f009108 (window/table nook) is the only frame that is genuinely establishing for this room. f009441 is actually the hallway again (further boundary bleed, matches the Hallway top pick&#x27;s tree/rug), and f008676 is a motion-blurred lamp close-up -- both avoid-worthy under docs/18&#x27;s wrong-room and motion-blur failure modes.</em></p>
+<div class='grid'>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Living Room_seg03\IMG_5512_f008676.jpg' alt='IMG_5512_f008676.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f008676.jpg</strong><br>
+<span class='metrics'>
+sh=550 est=0.79 mslap=0.43 hero=— siglip=1 gold=7
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Living Room_seg03\IMG_5512_f008604.jpg' alt='IMG_5512_f008604.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f008604.jpg</strong><br>
+<span class='metrics'>
+sh=431 est=0.80 mslap=0.54 hero=— siglip=2 gold=— gate=OUT
+</span></div></div>
+<div class='cell pick'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Living Room_seg03\IMG_5512_f009108.jpg' alt='IMG_5512_f009108.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f009108.jpg</strong><br>
+<span class='metrics'>
+sh=723 est=0.87 mslap=0.38 hero=1 siglip=3 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Living Room_seg03\IMG_5512_f009441.jpg' alt='IMG_5512_f009441.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f009441.jpg</strong><br>
+<span class='metrics'>
+sh=934 est=0.84 mslap=0.42 hero=2 siglip=4 gold=8
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Living Room_seg01\IMG_5512_f000216.jpg' alt='IMG_5512_f000216.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000216.jpg</strong><br>
+<span class='metrics'>
+sh=405 est=0.66 mslap=0.26 hero=— siglip=5 gold=3 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Living Room_seg01\IMG_5512_f000234.jpg' alt='IMG_5512_f000234.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000234.jpg</strong><br>
+<span class='metrics'>
+sh=479 est=0.66 mslap=0.31 hero=— siglip=6 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Living Room_seg01\IMG_5512_f000261.jpg' alt='IMG_5512_f000261.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000261.jpg</strong><br>
+<span class='metrics'>
+sh=324 est=0.75 mslap=0.28 hero=— siglip=7 gold=2 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Living Room_seg03\IMG_5512_f008280.jpg' alt='IMG_5512_f008280.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f008280.jpg</strong><br>
+<span class='metrics'>
+sh=660 est=0.86 mslap=0.48 hero=3 siglip=8 gold=—
+</span></div></div>
+</div>
+<h2>Kitchen</h2>
+<p><em>Pool skews heavily toward cabinet/appliance-interior close-ups (open cabinets, fridge, oven). f004068 (sink/splashback/washing machine) and f000495 (counter corner) are the widest, least object-fill shots; f007920 adds window/table context despite clutter. f002214 is a blank, textureless cupboard-interior void; f006102 is a dirty oven-interior close-up -- both fail the &#x27;no object close-up / no empty blur&#x27; bar.</em></p>
+<div class='grid'>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f001593.jpg' alt='IMG_5512_f001593.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f001593.jpg</strong><br>
+<span class='metrics'>
+sh=429 est=0.80 mslap=0.40 hero=— siglip=1 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f001584.jpg' alt='IMG_5512_f001584.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f001584.jpg</strong><br>
+<span class='metrics'>
+sh=471 est=0.82 mslap=0.42 hero=— siglip=2 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f002898.jpg' alt='IMG_5512_f002898.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002898.jpg</strong><br>
+<span class='metrics'>
+sh=380 est=0.73 mslap=0.39 hero=— siglip=3 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f000495.jpg' alt='IMG_5512_f000495.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000495.jpg</strong><br>
+<span class='metrics'>
+sh=464 est=0.78 mslap=0.39 hero=— siglip=4 gold=2
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f007920.jpg' alt='IMG_5512_f007920.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f007920.jpg</strong><br>
+<span class='metrics'>
+sh=536 est=0.73 mslap=0.36 hero=— siglip=5 gold=3
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f007182.jpg' alt='IMG_5512_f007182.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f007182.jpg</strong><br>
+<span class='metrics'>
+sh=610 est=0.89 mslap=0.41 hero=5 siglip=6 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f004977.jpg' alt='IMG_5512_f004977.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004977.jpg</strong><br>
+<span class='metrics'>
+sh=144 est=0.81 mslap=0.46 hero=— siglip=7 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f000981.jpg' alt='IMG_5512_f000981.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000981.jpg</strong><br>
+<span class='metrics'>
+sh=531 est=0.82 mslap=0.42 hero=— siglip=8 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f000855.jpg' alt='IMG_5512_f000855.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f000855.jpg</strong><br>
+<span class='metrics'>
+sh=280 est=0.85 mslap=0.35 hero=— siglip=9 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f002862.jpg' alt='IMG_5512_f002862.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002862.jpg</strong><br>
+<span class='metrics'>
+sh=272 est=0.78 mslap=0.32 hero=— siglip=10 gold=— gate=OUT
+</span></div></div>
+<div class='cell pick'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f005589.jpg' alt='IMG_5512_f005589.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f005589.jpg</strong><br>
+<span class='metrics'>
+sh=630 est=0.86 mslap=0.30 hero=1 siglip=11 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f004572.jpg' alt='IMG_5512_f004572.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004572.jpg</strong><br>
+<span class='metrics'>
+sh=377 est=0.78 mslap=0.39 hero=— siglip=12 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f006579.jpg' alt='IMG_5512_f006579.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006579.jpg</strong><br>
+<span class='metrics'>
+sh=474 est=0.82 mslap=0.34 hero=— siglip=13 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f007695.jpg' alt='IMG_5512_f007695.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f007695.jpg</strong><br>
+<span class='metrics'>
+sh=173 est=0.78 mslap=0.25 hero=— siglip=14 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f005292.jpg' alt='IMG_5512_f005292.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f005292.jpg</strong><br>
+<span class='metrics'>
+sh=750 est=0.88 mslap=0.37 hero=3 siglip=15 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f006102.jpg' alt='IMG_5512_f006102.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006102.jpg</strong><br>
+<span class='metrics'>
+sh=910 est=0.72 mslap=0.41 hero=4 siglip=16 gold=24
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f006948.jpg' alt='IMG_5512_f006948.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006948.jpg</strong><br>
+<span class='metrics'>
+sh=163 est=0.89 mslap=0.22 hero=— siglip=17 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f006039.jpg' alt='IMG_5512_f006039.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f006039.jpg</strong><br>
+<span class='metrics'>
+sh=1118 est=0.69 mslap=0.47 hero=2 siglip=18 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f004068.jpg' alt='IMG_5512_f004068.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004068.jpg</strong><br>
+<span class='metrics'>
+sh=457 est=0.84 mslap=0.30 hero=— siglip=19 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f003519.jpg' alt='IMG_5512_f003519.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f003519.jpg</strong><br>
+<span class='metrics'>
+sh=248 est=0.77 mslap=0.31 hero=— siglip=20 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f002376.jpg' alt='IMG_5512_f002376.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002376.jpg</strong><br>
+<span class='metrics'>
+sh=631 est=0.87 mslap=0.36 hero=6 siglip=21 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f004374.jpg' alt='IMG_5512_f004374.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f004374.jpg</strong><br>
+<span class='metrics'>
+sh=179 est=0.86 mslap=0.26 hero=— siglip=22 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f002214.jpg' alt='IMG_5512_f002214.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f002214.jpg</strong><br>
+<span class='metrics'>
+sh=121 est=0.78 mslap=0.59 hero=— siglip=23 gold=23 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Kitchen_seg02\IMG_5512_f003528.jpg' alt='IMG_5512_f003528.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f003528.jpg</strong><br>
+<span class='metrics'>
+sh=247 est=0.75 mslap=0.29 hero=— siglip=24 gold=— gate=OUT
+</span></div></div>
+</div>
+<h2>Bedroom 1</h2>
+<p><em>f021384 (bed, headboard, bedside table) is the one clean establishing shot; f018468 (eaves storage nook) and f017073 (ceiling slope + doorway) are distant seconds. Bottom picks are a blurred blanket/curtain close-up and a sock-drawer close-up. Two frames (IMG_5512_f017973.jpg, IMG_5512_f018036.jpg) were excluded from consideration entirely -- they are mirror/window reflections that incidentally capture the person filming, not usable hero candidates on privacy grounds regardless of composition quality.</em></p>
+<div class='grid'>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f017289.jpg' alt='IMG_5512_f017289.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017289.jpg</strong><br>
+<span class='metrics'>
+sh=184 est=0.86 mslap=0.44 hero=— siglip=1 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f021384.jpg' alt='IMG_5512_f021384.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f021384.jpg</strong><br>
+<span class='metrics'>
+sh=155 est=0.85 mslap=0.31 hero=— siglip=2 gold=1 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f018036.jpg' alt='IMG_5512_f018036.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f018036.jpg</strong><br>
+<span class='metrics'>
+sh=356 est=0.92 mslap=0.31 hero=— siglip=3 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f017973.jpg' alt='IMG_5512_f017973.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017973.jpg</strong><br>
+<span class='metrics'>
+sh=252 est=0.71 mslap=0.28 hero=— siglip=4 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f017550.jpg' alt='IMG_5512_f017550.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017550.jpg</strong><br>
+<span class='metrics'>
+sh=166 est=0.82 mslap=0.35 hero=— siglip=5 gold=— gate=OUT
+</span></div></div>
+<div class='cell pick'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f020214.jpg' alt='IMG_5512_f020214.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f020214.jpg</strong><br>
+<span class='metrics'>
+sh=568 est=0.87 mslap=0.32 hero=1 siglip=6 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f017073.jpg' alt='IMG_5512_f017073.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f017073.jpg</strong><br>
+<span class='metrics'>
+sh=131 est=0.86 mslap=0.31 hero=— siglip=7 gold=3 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f021186.jpg' alt='IMG_5512_f021186.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f021186.jpg</strong><br>
+<span class='metrics'>
+sh=385 est=0.87 mslap=0.33 hero=— siglip=8 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f018801.jpg' alt='IMG_5512_f018801.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f018801.jpg</strong><br>
+<span class='metrics'>
+sh=724 est=0.95 mslap=0.34 hero=3 siglip=9 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f019665.jpg' alt='IMG_5512_f019665.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f019665.jpg</strong><br>
+<span class='metrics'>
+sh=174 est=0.88 mslap=0.36 hero=— siglip=10 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f019161.jpg' alt='IMG_5512_f019161.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f019161.jpg</strong><br>
+<span class='metrics'>
+sh=312 est=0.88 mslap=0.25 hero=— siglip=11 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f019827.jpg' alt='IMG_5512_f019827.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f019827.jpg</strong><br>
+<span class='metrics'>
+sh=476 est=0.82 mslap=0.37 hero=4 siglip=12 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f020898.jpg' alt='IMG_5512_f020898.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f020898.jpg</strong><br>
+<span class='metrics'>
+sh=109 est=0.87 mslap=0.29 hero=— siglip=13 gold=15 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f019485.jpg' alt='IMG_5512_f019485.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f019485.jpg</strong><br>
+<span class='metrics'>
+sh=1149 est=0.72 mslap=0.53 hero=2 siglip=14 gold=16
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f018468.jpg' alt='IMG_5512_f018468.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f018468.jpg</strong><br>
+<span class='metrics'>
+sh=231 est=0.70 mslap=0.29 hero=— siglip=15 gold=2 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bedroom 1_seg09\IMG_5512_f020547.jpg' alt='IMG_5512_f020547.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f020547.jpg</strong><br>
+<span class='metrics'>
+sh=157 est=0.78 mslap=0.25 hero=— siglip=16 gold=— gate=OUT
+</span></div></div>
+</div>
+<h2>Bathroom</h2>
+<p><em>f011070 and f010845 both show the toilet+sink+tile suite well; f012132 is a clean shower-enclosure shot. f011340 is a wrong-room bleed frame (shows a bedroom/office with a desk chair, not the bathroom); f011871 is a dark, motion-blurred doorway pass.</em></p>
+<div class='grid'>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bathroom_seg05\IMG_5512_f012132.jpg' alt='IMG_5512_f012132.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f012132.jpg</strong><br>
+<span class='metrics'>
+sh=258 est=0.74 mslap=0.44 hero=— siglip=1 gold=3 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bathroom_seg05\IMG_5512_f011340.jpg' alt='IMG_5512_f011340.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011340.jpg</strong><br>
+<span class='metrics'>
+sh=149 est=0.85 mslap=0.29 hero=— siglip=2 gold=7 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bathroom_seg05\IMG_5512_f011601.jpg' alt='IMG_5512_f011601.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011601.jpg</strong><br>
+<span class='metrics'>
+sh=230 est=0.85 mslap=0.30 hero=— siglip=3 gold=— gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bathroom_seg05\IMG_5512_f011871.jpg' alt='IMG_5512_f011871.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011871.jpg</strong><br>
+<span class='metrics'>
+sh=141 est=0.92 mslap=0.48 hero=— siglip=4 gold=8 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bathroom_seg05\IMG_5512_f010629.jpg' alt='IMG_5512_f010629.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010629.jpg</strong><br>
+<span class='metrics'>
+sh=300 est=0.41 mslap=0.40 hero=— siglip=5 gold=—
+</span></div></div>
+<div class='cell pick'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bathroom_seg05\IMG_5512_f012510.jpg' alt='IMG_5512_f012510.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f012510.jpg</strong><br>
+<span class='metrics'>
+sh=531 est=0.79 mslap=0.44 hero=1 siglip=6 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bathroom_seg05\IMG_5512_f010845.jpg' alt='IMG_5512_f010845.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f010845.jpg</strong><br>
+<span class='metrics'>
+sh=599 est=0.63 mslap=0.50 hero=3 siglip=7 gold=2
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Bathroom_seg05\IMG_5512_f011070.jpg' alt='IMG_5512_f011070.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f011070.jpg</strong><br>
+<span class='metrics'>
+sh=821 est=0.84 mslap=0.53 hero=2 siglip=8 gold=1
+</span></div></div>
+</div>
+<h2>En-suite Shower Room</h2>
+<p><em>Weak pool dominated by shower-head/fixture close-ups. f022212 (tiled shower corner with fixture) is the best available; f022149 and f023715 are ceiling/floor/door-edge shots that at least show more than one surface. f023319 (dark, blurred cabinet interior) and f023526 (motion-blurred countertop) are the clearest blur violations.</em></p>
+<div class='grid'>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\En-suite Shower Room_seg10\IMG_5512_f022212.jpg' alt='IMG_5512_f022212.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f022212.jpg</strong><br>
+<span class='metrics'>
+sh=166 est=0.94 mslap=0.49 hero=— siglip=1 gold=1
+</span></div></div>
+<div class='cell pick'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\En-suite Shower Room_seg10\IMG_5512_f021879.jpg' alt='IMG_5512_f021879.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f021879.jpg</strong><br>
+<span class='metrics'>
+sh=463 est=0.89 mslap=0.82 hero=1 siglip=2 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\En-suite Shower Room_seg10\IMG_5512_f022149.jpg' alt='IMG_5512_f022149.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f022149.jpg</strong><br>
+<span class='metrics'>
+sh=192 est=0.84 mslap=0.68 hero=2 siglip=3 gold=2
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\En-suite Shower Room_seg10\IMG_5512_f022581.jpg' alt='IMG_5512_f022581.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f022581.jpg</strong><br>
+<span class='metrics'>
+sh=146 est=0.87 mslap=0.24 hero=— siglip=4 gold=—
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\En-suite Shower Room_seg10\IMG_5512_f023715.jpg' alt='IMG_5512_f023715.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f023715.jpg</strong><br>
+<span class='metrics'>
+sh=109 est=0.83 mslap=0.46 hero=— siglip=5 gold=3 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\En-suite Shower Room_seg10\IMG_5512_f023526.jpg' alt='IMG_5512_f023526.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f023526.jpg</strong><br>
+<span class='metrics'>
+sh=133 est=0.90 mslap=0.39 hero=— siglip=6 gold=8 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\En-suite Shower Room_seg10\IMG_5512_f023319.jpg' alt='IMG_5512_f023319.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f023319.jpg</strong><br>
+<span class='metrics'>
+sh=121 est=0.94 mslap=0.41 hero=3 siglip=7 gold=7 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\En-suite Shower Room_seg10\IMG_5512_f023013.jpg' alt='IMG_5512_f023013.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f023013.jpg</strong><br>
+<span class='metrics'>
+sh=117 est=0.87 mslap=0.44 hero=— siglip=8 gold=— gate=OUT
+</span></div></div>
+</div>
+<h2>Loft Room</h2>
+<p><em>f014922 is a strong wide establishing shot (sofa/beanbag, lamp, full room depth). f016038 (skylight nook + radiator) and f015246 (framed shirt + whiteboard wall) are reasonable seconds. f016263 is a dark, blurred skylight close-up; f016695 is a severely motion-blurred door/landing transition.</em></p>
+<div class='grid'>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Loft Room_seg08\IMG_5512_f015246.jpg' alt='IMG_5512_f015246.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f015246.jpg</strong><br>
+<span class='metrics'>
+sh=178 est=0.86 mslap=0.20 hero=— siglip=1 gold=3
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Loft Room_seg08\IMG_5512_f016695.jpg' alt='IMG_5512_f016695.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016695.jpg</strong><br>
+<span class='metrics'>
+sh=159 est=0.82 mslap=0.40 hero=— siglip=2 gold=7
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Loft Room_seg08\IMG_5512_f015633.jpg' alt='IMG_5512_f015633.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f015633.jpg</strong><br>
+<span class='metrics'>
+sh=114 est=0.85 mslap=0.47 hero=— siglip=3 gold=— gate=OUT
+</span></div></div>
+<div class='cell pick'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Loft Room_seg08\IMG_5512_f014922.jpg' alt='IMG_5512_f014922.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f014922.jpg</strong><br>
+<span class='metrics'>
+sh=396 est=0.91 mslap=0.52 hero=1 siglip=4 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Loft Room_seg08\IMG_5512_f016263.jpg' alt='IMG_5512_f016263.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016263.jpg</strong><br>
+<span class='metrics'>
+sh=143 est=0.87 mslap=0.38 hero=3 siglip=5 gold=6 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Loft Room_seg08\IMG_5512_f016038.jpg' alt='IMG_5512_f016038.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f016038.jpg</strong><br>
+<span class='metrics'>
+sh=134 est=0.90 mslap=0.35 hero=— siglip=6 gold=2 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Loft Room_seg08\IMG_5512_f015777.jpg' alt='IMG_5512_f015777.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f015777.jpg</strong><br>
+<span class='metrics'>
+sh=374 est=0.56 mslap=0.71 hero=2 siglip=7 gold=— gate=OUT
+</span></div></div>
+</div>
+<h2>Stairs and Landing</h2>
+<p><em>Only 4 frames total, all reasonable. f014211 and f014391 are clean, symmetric full-flight staircase views; f014679 is the landing corridor (no stairs visible, but represents the &#x27;Landing&#x27; half of the room name). f014076 is the weakest -- an off-angle, partially cropped view -- so it doubles as the bottom pick alongside the landing shot&#x27;s lack of staircase content.</em></p>
+<div class='grid'>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Stairs and Landing_seg07\IMG_5512_f014076.jpg' alt='IMG_5512_f014076.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f014076.jpg</strong><br>
+<span class='metrics'>
+sh=125 est=0.87 mslap=0.38 hero=— siglip=1 gold=3 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Stairs and Landing_seg07\IMG_5512_f014679.jpg' alt='IMG_5512_f014679.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f014679.jpg</strong><br>
+<span class='metrics'>
+sh=190 est=0.79 mslap=0.47 hero=3 siglip=2 gold=4 gate=OUT
+</span></div></div>
+<div class='cell pick'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Stairs and Landing_seg07\IMG_5512_f014211.jpg' alt='IMG_5512_f014211.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f014211.jpg</strong><br>
+<span class='metrics'>
+sh=228 est=0.85 mslap=0.39 hero=1 siglip=3 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\Stairs and Landing_seg07\IMG_5512_f014391.jpg' alt='IMG_5512_f014391.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f014391.jpg</strong><br>
+<span class='metrics'>
+sh=271 est=0.84 mslap=0.57 hero=2 siglip=4 gold=2
+</span></div></div>
+</div>
+<h2>WC</h2>
+<p><em>Caveat: none of this room&#x27;s 4 frames actually show a WC/toilet fixture -- this looks like a segmentation-boundary artifact (the pool is an understairs storage nook plus stairs/landing bleed, not a genuine WC). f013374 (storage nook) is the least-bad pick; f013005/f013014 are near-duplicate blurred doorway passes and f013905 is a handrail close-up that is really Stairs-and-Landing content. Treat this room&#x27;s gold as low-confidence given the underlying pool has no on-topic frame at all.</em></p>
+<div class='grid'>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\WC_seg06\IMG_5512_f013005.jpg' alt='IMG_5512_f013005.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013005.jpg</strong><br>
+<span class='metrics'>
+sh=171 est=0.64 mslap=0.55 hero=2 siglip=1 gold=3
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\WC_seg06\IMG_5512_f013014.jpg' alt='IMG_5512_f013014.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013014.jpg</strong><br>
+<span class='metrics'>
+sh=169 est=0.58 mslap=0.49 hero=— siglip=2 gold=2 gate=OUT
+</span></div></div>
+<div class='cell'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\WC_seg06\IMG_5512_f013905.jpg' alt='IMG_5512_f013905.jpg'>
+<div class='meta'>
+<strong>IMG_5512_f013905.jpg</strong><br>
+<span class='metrics'>
+sh=118 est=0.86 mslap=0.52 hero=3 siglip=3 gold=4 gate=OUT
+</span></div></div>
+<div class='cell pick'>
+<img src='C:\Users\cbrow\Code\inventory\report\work\frames\WC_seg06\IMG_5512_f013374.jpg' alt='IMG_5512_f013374.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>IMG_5512_f013374.jpg</strong><br>
+<span class='metrics'>
+sh=183 est=0.83 mslap=0.29 hero=1 siglip=4 gold=1
+</span></div></div>
+</div>
+</body></html>

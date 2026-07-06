@@ -1,0 +1,498 @@
+{
+  "schema_version": 1,
+  "description": "ML-E11 bbox review pack \u2014 one crop per box for visual adjudication",
+  "verdict_values": [
+    "accept",
+    "reject",
+    "relocate",
+    "uncertain"
+  ],
+  "entries": [
+    {
+      "id": "bedroom-carpet-p20_i04",
+      "room": "Bedroom",
+      "photo": "p20_i04.jpg",
+      "gold_item": "carpet",
+      "det_label": "carpet",
+      "det_confidence": 0.137,
+      "box_xyxy": [
+        0,
+        497,
+        649,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-carpet-p20_i04.jpg",
+      "full_path": "full\\bedroom\\p20_i04.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "bedroom-carpet-p20_i06",
+      "room": "Bedroom",
+      "photo": "p20_i06.jpg",
+      "gold_item": "carpet",
+      "det_label": "carpet",
+      "det_confidence": 0.102,
+      "box_xyxy": [
+        382,
+        1,
+        800,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-carpet-p20_i06.jpg",
+      "full_path": "full\\bedroom\\p20_i06.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "bedroom-chest-of-drawers-p18_i00",
+      "room": "Bedroom",
+      "photo": "p18_i00.jpg",
+      "gold_item": "chest of drawers",
+      "det_label": "chest of drawers",
+      "det_confidence": 0.156,
+      "box_xyxy": [
+        42,
+        506,
+        151,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-chest-of-drawers-p18_i00.jpg",
+      "full_path": "full\\bedroom\\p18_i00.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "bedroom-chest-of-drawers-p20_i07",
+      "room": "Bedroom",
+      "photo": "p20_i07.jpg",
+      "gold_item": "chest of drawers",
+      "det_label": "desk",
+      "det_confidence": 0.438,
+      "box_xyxy": [
+        164,
+        35,
+        720,
+        535
+      ],
+      "image_size": [
+        799,
+        600
+      ],
+      "crop_path": "crops\\bedroom-chest-of-drawers-p20_i07.jpg",
+      "full_path": "full\\bedroom\\p20_i07.jpg",
+      "risk_flags": [
+        "med_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "bedroom-double-bed-p18_i02",
+      "room": "Bedroom",
+      "photo": "p18_i02.jpg",
+      "gold_item": "double bed",
+      "det_label": "bed",
+      "det_confidence": 0.437,
+      "box_xyxy": [
+        258,
+        468,
+        799,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-double-bed-p18_i02.jpg",
+      "full_path": "full\\bedroom\\p18_i02.jpg",
+      "risk_flags": [
+        "med_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "bedroom-double-bed-p19_i08",
+      "room": "Bedroom",
+      "photo": "p19_i08.jpg",
+      "gold_item": "double bed",
+      "det_label": "bed",
+      "det_confidence": 0.249,
+      "box_xyxy": [
+        0,
+        420,
+        744,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-double-bed-p19_i08.jpg",
+      "full_path": "full\\bedroom\\p19_i08.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "bedroom-roller-blind-p19_i01",
+      "room": "Bedroom",
+      "photo": "p19_i01.jpg",
+      "gold_item": "roller blind",
+      "det_label": "blinds",
+      "det_confidence": 0.18,
+      "box_xyxy": [
+        38,
+        165,
+        707,
+        505
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-roller-blind-p19_i01.jpg",
+      "full_path": "full\\bedroom\\p19_i01.jpg",
+      "risk_flags": [
+        "low_conf",
+        "label_mismatch"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "bedroom-window-p19_i10",
+      "room": "Bedroom",
+      "photo": "p19_i10.jpg",
+      "gold_item": "window",
+      "det_label": "window",
+      "det_confidence": 0.152,
+      "box_xyxy": [
+        443,
+        445,
+        799,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-window-p19_i10.jpg",
+      "full_path": "full\\bedroom\\p19_i10.jpg",
+      "risk_flags": [
+        "low_conf",
+        "edge_box"
+      ],
+      "risk_score": 3
+    },
+    {
+      "id": "bedroom-carpet-p19_i07",
+      "room": "Bedroom",
+      "photo": "p19_i07.jpg",
+      "gold_item": "carpet",
+      "det_label": "chair",
+      "det_confidence": 0.613,
+      "box_xyxy": [
+        638,
+        395,
+        800,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-carpet-p19_i07.jpg",
+      "full_path": "full\\bedroom\\p19_i07.jpg",
+      "risk_flags": [
+        "label_mismatch",
+        "edge_box"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "bedroom-double-bed-p18_i05",
+      "room": "Bedroom",
+      "photo": "p18_i05.jpg",
+      "gold_item": "double bed",
+      "det_label": "bed",
+      "det_confidence": 0.788,
+      "box_xyxy": [
+        0,
+        0,
+        800,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-double-bed-p18_i05.jpg",
+      "full_path": "full\\bedroom\\p18_i05.jpg",
+      "risk_flags": [
+        "edge_box",
+        "huge_box"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "bedroom-double-bed-p19_i00",
+      "room": "Bedroom",
+      "photo": "p19_i00.jpg",
+      "gold_item": "double bed",
+      "det_label": "bed",
+      "det_confidence": 0.666,
+      "box_xyxy": [
+        0,
+        1,
+        799,
+        590
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-double-bed-p19_i00.jpg",
+      "full_path": "full\\bedroom\\p19_i00.jpg",
+      "risk_flags": [
+        "edge_box",
+        "huge_box"
+      ],
+      "risk_score": 2
+    },
+    {
+      "id": "bedroom-chest-of-drawers-p18_i04",
+      "room": "Bedroom",
+      "photo": "p18_i04.jpg",
+      "gold_item": "chest of drawers",
+      "det_label": "chest of drawers",
+      "det_confidence": 0.785,
+      "box_xyxy": [
+        370,
+        1,
+        524,
+        125
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-chest-of-drawers-p18_i04.jpg",
+      "full_path": "full\\bedroom\\p18_i04.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "bedroom-double-bed-p18_i00",
+      "room": "Bedroom",
+      "photo": "p18_i00.jpg",
+      "gold_item": "double bed",
+      "det_label": "bed",
+      "det_confidence": 0.678,
+      "box_xyxy": [
+        107,
+        271,
+        724,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-double-bed-p18_i00.jpg",
+      "full_path": "full\\bedroom\\p18_i00.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "bedroom-double-bed-p18_i01",
+      "room": "Bedroom",
+      "photo": "p18_i01.jpg",
+      "gold_item": "double bed",
+      "det_label": "bed",
+      "det_confidence": 0.677,
+      "box_xyxy": [
+        58,
+        411,
+        800,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-double-bed-p18_i01.jpg",
+      "full_path": "full\\bedroom\\p18_i01.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "bedroom-double-bed-p18_i03",
+      "room": "Bedroom",
+      "photo": "p18_i03.jpg",
+      "gold_item": "double bed",
+      "det_label": "bed",
+      "det_confidence": 0.848,
+      "box_xyxy": [
+        0,
+        478,
+        748,
+        599
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-double-bed-p18_i03.jpg",
+      "full_path": "full\\bedroom\\p18_i03.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "bedroom-double-bed-p18_i04",
+      "room": "Bedroom",
+      "photo": "p18_i04.jpg",
+      "gold_item": "double bed",
+      "det_label": "bed",
+      "det_confidence": 0.743,
+      "box_xyxy": [
+        6,
+        122,
+        799,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-double-bed-p18_i04.jpg",
+      "full_path": "full\\bedroom\\p18_i04.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "bedroom-double-bed-p19_i09",
+      "room": "Bedroom",
+      "photo": "p19_i09.jpg",
+      "gold_item": "double bed",
+      "det_label": "bed",
+      "det_confidence": 0.578,
+      "box_xyxy": [
+        0,
+        334,
+        800,
+        600
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-double-bed-p19_i09.jpg",
+      "full_path": "full\\bedroom\\p19_i09.jpg",
+      "risk_flags": [
+        "edge_box"
+      ],
+      "risk_score": 1
+    },
+    {
+      "id": "bedroom-bedside-lamps-p18_i00",
+      "room": "Bedroom",
+      "photo": "p18_i00.jpg",
+      "gold_item": "bedside lamps",
+      "det_label": "lamp",
+      "det_confidence": 0.914,
+      "box_xyxy": [
+        392,
+        286,
+        454,
+        376
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-bedside-lamps-p18_i00.jpg",
+      "full_path": "full\\bedroom\\p18_i00.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "bedroom-bedside-lamps-p18_i01",
+      "room": "Bedroom",
+      "photo": "p18_i01.jpg",
+      "gold_item": "bedside lamps",
+      "det_label": "lamp",
+      "det_confidence": 0.946,
+      "box_xyxy": [
+        387,
+        301,
+        462,
+        419
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-bedside-lamps-p18_i01.jpg",
+      "full_path": "full\\bedroom\\p18_i01.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    },
+    {
+      "id": "bedroom-chest-of-drawers-p18_i01",
+      "room": "Bedroom",
+      "photo": "p18_i01.jpg",
+      "gold_item": "chest of drawers",
+      "det_label": "chest of drawers",
+      "det_confidence": 0.797,
+      "box_xyxy": [
+        97,
+        402,
+        269,
+        552
+      ],
+      "image_size": [
+        800,
+        600
+      ],
+      "crop_path": "crops\\bedroom-chest-of-drawers-p18_i01.jpg",
+      "full_path": "full\\bedroom\\p18_i01.jpg",
+      "risk_flags": [],
+      "risk_score": 0
+    }
+  ],
+  "room": "Bedroom"
+}

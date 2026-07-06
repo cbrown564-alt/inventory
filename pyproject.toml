@@ -38,6 +38,7 @@ ml = [
     "onnx>=1.16",
     "onnxruntime>=1.18",
     "fiftyone>=0.25",
+    "sentencepiece>=0.2",
 ]
 all = ["homeinventory[detect,claude,pdf]"]
 dev = ["pytest>=8"]

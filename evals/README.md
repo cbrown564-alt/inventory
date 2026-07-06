@@ -192,10 +192,12 @@ Requires a walkthrough build output dir (`report/` or similar) with
 | `eval_mslap_cover.py` | E5 | Multi-scale Laplacian ratio contact sheet | `uv run python evals/eval_mslap_cover.py report --gold evals/fixtures/own-property/hero-gold.json` |
 | `eval_shot_scale.py` | E19 | CLIP long-shot vs close-up margin vs hero-gold | `uv run python evals/eval_shot_scale.py report --gold evals/fixtures/own-property/hero-gold.json` |
 | `train_iqa_linear.py` | E6 | Ridge regression classical features → MUSIQ; writes MIT weights | `uv run python evals/train_iqa_linear.py --report report -o evals/fixtures/own-property/iqa-linear-weights.json` |
+| `train_iqa_embed.py` | E17 | Linear *regression* head on OpenCLIP embeddings → KonIQ MOS (the licence-clean, embedding-based E17 per docs/23 §5 — needs KonIQ unpacked to `evals/external/data/koniq10k/`); `--self-test` for a no-download sanity check | `uv run python evals/train_iqa_embed.py --encoder-model ViT-L-14 --pretrained laion2b_s32b_b82k --device cuda` |
 | `export_onnx.py` | E6/E17 | Optional ONNX export stub for linear IQA weights | `uv run python evals/export_onnx.py evals/fixtures/own-property/iqa-linear-weights.json` |
 
 `eval_hero_cover.py --scorer` values: `cover` (product E5), `hard-gates`,
-`mslap`, `relevance`, `clip`, `linear-musiq`.
+`mslap`, `relevance`, `clip`, `linear-musiq`, `embed-iqa` (E17, needs
+`--embed-iqa-weights` from `train_iqa_embed.py`).
 
 Gold fixture: `evals/fixtures/own-property/hero-gold.json`. Experiment log:
 `docs/21-ml-dl-experiment-log.md`.
@@ -222,6 +224,7 @@ Split protocol: `evals/splits/inventoryflex.json`. External datasets:
 | Module | Purpose |
 |---|---|
 | `ml_scorers.py` | Optional torch encoders (OpenCLIP, DINOv2, SigLIP) for E1/E4 harnesses |
+| `embed_head.py` | Shared embed + linear-head engine (OpenCLIP embedder, classifier/regressor training loops, JSON save/load) used by `train_room_classifier.py` (E16, classification) and `train_iqa_embed.py` (E17, regression) |
 
 Install eval-only torch stack when needed:
 
