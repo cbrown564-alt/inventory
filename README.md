@@ -26,8 +26,8 @@ source .venv/bin/activate         # .venv\Scripts\activate on Windows
 
 # Credentials once — the journey never mentions backends or keys again
 cat > .env <<'EOF'
-ANTHROPIC_API_KEY=...
-# GEMINI_API_KEY=...   # walkthrough segmentation (default gemini-3.5-flash)
+GEMINI_API_KEY=...          # default describe + walkthrough segmentation
+# ANTHROPIC_API_KEY=...    # optional — opus backup for hard items (Phase 2)
 EOF
 
 mkdir -p capture report
@@ -219,6 +219,7 @@ walkthrough video → VLM room segmentation → per-room keyframes
 Full index: [`docs/README.md`](docs/README.md).
 
 - [`docs/00-north-star.md`](docs/00-north-star.md) — **north star**: end goal, v1 success criteria, deferred list
+- [`docs/24-first-tester-runbook.md`](docs/24-first-tester-runbook.md) — **Phase 1 exit**: first-tester script + friction log
 - [`docs/01-scope-and-architecture.md`](docs/01-scope-and-architecture.md) — scope, architecture, UX, evals
 - [`docs/02-research.md`](docs/02-research.md) — TDS/AIIC standards, YOLOE, VLM condition-grading, competitor gaps
 - [`docs/03-implementation-plan.md`](docs/03-implementation-plan.md) — milestones M0 (this prototype) → M5 (frozen ledger)

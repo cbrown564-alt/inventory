@@ -19,9 +19,13 @@
 
 ## Reading paths
 
-**New contributor — product today**
+**Product today**
 
 1. [00](00-north-star.md) → [12](12-video-first-journey.md) → [10](10-product-quality-review.md) → [04](04-backend-comparison.md)
+
+**Phase 1 — first-tester exit**
+
+1. [24](24-first-tester-runbook.md) → run on a real property → commit friction log
 
 **UX next work**
 
@@ -51,6 +55,7 @@
 | # | File | Status | Summary |
 |---|---|---|---|
 | 00 | [north-star](00-north-star.md) | active | End goal, v1 scope, singular path |
+| 24 | [first-tester-runbook](24-first-tester-runbook.md) | active | Phase 1 exit gate script + friction log |
 | 01 | [scope-and-architecture](01-scope-and-architecture.md) | active* | Pipeline architecture (*§3.3/§4 superseded by 12) |
 | 02 | [research](02-research.md) | active | TDS/AIIC standards, YOLOE, VLM landscape |
 | 03 | [implementation-plan](03-implementation-plan.md) | record | Milestones M0→M5 (frozen ledger) |

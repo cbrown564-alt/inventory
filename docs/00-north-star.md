@@ -80,13 +80,13 @@ or model names (docs/12).
 ## The singular path (sequenced)
 
 ```text
-Phase 0 — CONSOLIDATE (this session)
+Phase 0 — CONSOLIDATE ✓ (Jul 2026)
   docs/00 + doc index + pipeline.run_build()
   → one doc to read, one code path to build
 
-Phase 1 — SHIP THE JOURNEY
+Phase 1 — SHIP THE JOURNEY (in progress)
   Video upload → segment → build → review → sign → PDF
-  → first-tester run with friction log
+  → first-tester run with friction log (docs/24)
 
 Phase 2 — SHIP PROVEN QUALITY WINS
   E8 VLM cover rerank, E2 seam refine, E10 GDINO + verify
@@ -121,10 +121,11 @@ Phase 4 — COST REDUCTION (post-v1, only if Phase 1–3 pass)
 ## Definition of done (v1)
 
 - [ ] First-tester completes one real tenancy end-to-end in the browser
+      — runbook: [`24-first-tester-runbook.md`](24-first-tester-runbook.md)
 - [ ] Friction log addressed or ticketed
 - [ ] Native-res benchmark shows defect recall ≥75%
-- [ ] Default build uses gemini-3.5-flash; opus available for hard items
+- [x] Default build uses gemini-3.5-flash; opus available for hard items
 - [ ] E8 + E2 + E10 wired into production build path
-- [ ] All user-facing flows reachable from the UI (docs/10 bar)
+- [x] All user-facing flows reachable from the UI (docs/10 bar; X1–X6 shipped)
 
 When every box is checked, v1 ships. Everything else is v2.

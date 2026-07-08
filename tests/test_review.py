@@ -1289,3 +1289,87 @@ def test_compare_serving_paths_and_trailing_slash(tmp_path):
     finally:
         httpd.shutdown()
         httpd.server_close()
+
+
+# --------------------------------------------------------------------------
+# Phase 1 journey verification (docs/17 §Verification, docs/24)
+# --------------------------------------------------------------------------
+
+def test_review_defaults_to_overview_mode(server):
+    """X1: client bootstraps in overview, not item 1."""
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert 'viewMode = "overview"' in html
+    assert 'id="nav-overview"' in html
+    assert "renderOverview" in html
+
+
+def test_start_page_redirects_to_overview_after_build(fresh_server):
+    """X4: build completion sends user to /#overview."""
+    base, _httpd, _out, _cap = fresh_server
+    _, html = _get_text(base + "/")
+    assert 'location.href = PREFIX + "/#overview"' in html
+    assert "roomChips" in html
+
+
+def test_report_continue_links_to_overview(server):
+    """docs/15 M1: report deep-links back to overview."""
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/report")
+    assert 'href="./#overview"' in html or 'href="#overview"' in html
+
+
+def test_finish_sign_issue_chain(server):
+    """X2: address → sign → issue reachable without hunting."""
+    base, _state, out, _cap = server
+    _, html = _get_text(base + "/")
+    assert 'href="#finish"' in html
+    assert 'href="/issue"' in html
+
+    status, resp = _req("POST", base + "/api/sign",
+                        {"name": "C. Brown", "role": "landlord"})
+    assert status == 400 and "address" in resp["error"].lower()
+
+    _ensure_address(base, "Flat 2, 1 Example Street")
+    status, resp = _req("POST", base + "/api/sign",
+                        {"name": "C. Brown", "role": "landlord"})
+    assert status == 200, resp
+
+    status, html = _get_text(base + "/issue")
+    assert status == 200
+    assert "Flat 2" in html or "Example Street" in html
+
+    inv = json.loads((out / "inventory.json").read_text(encoding="utf-8"))
+    assert inv["signatures"]
+
+
+def test_offline_create_build_review_flow(fresh_server):
+    """docs/24 steps 2–9 skeleton: upload → build → inventory → overview shell."""
+    base, _httpd, out, _cap = fresh_server
+    assert _upload(base, "Kitchen", "k1.jpg", _jpeg_bytes())[0] == 200
+    assert _upload(base, "Living Room", "l1.jpg", _jpeg_bytes())[0] == 200
+
+    status, resp = _req("POST", base + "/api/build", {"confirm": "yes"})
+    assert status == 200, resp
+
+    deadline = time.time() + 120
+    while time.time() < deadline:
+        status, resp = _req("GET", base + "/api/build")
+        if resp["status"] in ("done", "failed"):
+            break
+        time.sleep(0.2)
+    assert resp["status"] == "done", resp
+
+    _, html = _get_text(base + "/")
+    assert 'viewMode = "overview"' in html
+    assert (out / "inventory.json").is_file()
+    assert (out / "inventory.html").is_file()
+
+    inv = Inventory.from_json((out / "inventory.json").read_text(encoding="utf-8"))
+    if inv.item_count() == 0:
+        for room in inv.rooms:
+            code = "".join(c for c in room.name.upper() if c.isalpha())[:3]
+            room.items.append(Item(id=f"{code}-001", name=f"{room.name} shelf",
+                                   condition="good", confidence=0.35,
+                                   photo_ids=[p.id for p in room.photos]))
+        (out / "inventory.json").write_text(inv.to_json(), encoding="utf-8")

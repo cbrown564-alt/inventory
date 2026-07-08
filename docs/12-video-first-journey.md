@@ -79,8 +79,22 @@ real device and killed. The web app is the product; the CLI is plumbing.
 
 ## Still open
 
-1. **First-tester run** — owner drives real tenancy + cleaning jobs;
-   friction log. Blocked on owner time, not code. Success criteria: docs/00.
+1. **First-tester run** — owner drives real tenancy using
+   [`24-first-tester-runbook.md`](24-first-tester-runbook.md); commit friction
+   log. Blocked on owner time, not code.
+
+## Shipped (experience redesign X1–X6, Jul 2026)
+
+Orient-first review journey landed (PR #9, docs/17):
+
+- **X1** — room gallery overview as default landing
+- **X2** — unified Finish checklist (address → sign → issue)
+- **X3** — verify polish (confidence sort, spine, read-only docket)
+- **X4** — start page upload metadata + build stepper + redirect to overview
+- **X5** — mobile pass (390px smoke)
+- **X6** — project stepper, compare mobile, tenant gallery
+
+Automated regression: `tests/test_review.py` (Phase 1 journey section; offline skeleton of docs/17 §Verification).
 
 ## Closed since this doc was written
 

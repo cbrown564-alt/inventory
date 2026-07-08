@@ -482,36 +482,39 @@ to Overview with the expanded nav.
 
 Ordered for incremental delivery; each lands a user-visible phase.
 
-### X1 — Orient (highest leverage)
+**Status: X1–X6 shipped 5 Jul 2026 (PR #9).** Phase 1 exit is the
+first-tester run — [`24-first-tester-runbook.md`](24-first-tester-runbook.md).
+
+### X1 — Orient (highest leverage) ✓
 
 Room gallery overview as default `/` landing; stats bar; Start review CTA;
 breadcrumb into existing room view. Done = first open after build answers
 "did it get everything?" in one screen.
 
-### X2 — Finish flow
+### X2 — Finish flow ✓
 
 Unified checklist replacing scattered Details / PDF / Sign; address
 blocker on cover; post-sign handoff to Issue + tenant link. Done = a new
 user can complete details and sign without hunting header buttons.
 
-### X3 — Verify polish
+### X3 — Verify polish ✓
 
 Spine always visible in Items mode; confidence-first default; report
 docket read-only; search hint; accept-remaining guard. Done = item review
 feels like Linear cadence (docs/14 bar).
 
-### X4 — Start & wait story
+### X4 — Start & wait story ✓
 
 Upload metadata row; build stepper with room chips; auto-redirect to
 Overview; rebuild hierarchy fix. Done = create phase matches polish of
 review phase.
 
-### X5 — Mobile pass
+### X5 — Mobile pass ✓
 
 Overview grid 2-col; header collapse; report/issue full-bleed; tenant sign
 bar as final step. Done = 390px smoke pass on every route.
 
-### X6 — Secondary journeys
+### X6 — Secondary journeys ✓
 
 Project stepper; compare filters + mobile cards; tenant overview landing.
 Done = deep-clean and share paths get the same orient-first rule.
