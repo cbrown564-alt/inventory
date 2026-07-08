@@ -33,6 +33,9 @@ real device and killed. The web app is the product; the CLI is plumbing.
 - **Segmentation model: `gemini-3.5-flash` preferred** (owner's call —
   pennies, zero invented rooms; errors are review-repairable);
   `claude-sonnet-5` is the quality alternative. See docs/11.
+- **Describe backend: `gemini-3.5-flash` default** via `--backend openai`;
+  `claude-opus-4-8` is the expensive backup for complex items (docs/00).
+  Tiered routing (gemini draft → opus on hard tail) is Phase 2.
 - **Credentials configured once** in a gitignored `.env`
   (`homeinventory/dotenv.py`); the journey never mentions keys, backends
   or models. Spend confirms become plain language with a rough cost
@@ -76,14 +79,28 @@ real device and killed. The web app is the product; the CLI is plumbing.
 
 ## Still open
 
-2. **Evaluate gemini-3.5-flash on the core describe task** — harness ready;
-   needs `GEMINI_API_KEY` in `.env` to run on the InventoryFlex fixture.
-   Command: `homeinventory build benchmarks/inventoryflex/capture -o
-   benchmarks/inventoryflex/report-gemini35flash --backend openai --model
-   gemini-3.5-flash` then `python evals/run_eval.py …/inventory.json
-   evals/fixtures/inventoryflex/labels.json`. Record in docs/04.
-5. **First-tester run** — owner drives real tenancy + cleaning jobs;
-   friction log. Blocked on owner time, not code.
+1. **First-tester run** — owner drives real tenancy using
+   [`24-first-tester-runbook.md`](24-first-tester-runbook.md); commit friction
+   log. Blocked on owner time, not code.
+
+## Shipped (experience redesign X1–X6, Jul 2026)
+
+Orient-first review journey landed (PR #9, docs/17):
+
+- **X1** — room gallery overview as default landing
+- **X2** — unified Finish checklist (address → sign → issue)
+- **X3** — verify polish (confidence sort, spine, read-only docket)
+- **X4** — start page upload metadata + build stepper + redirect to overview
+- **X5** — mobile pass (390px smoke)
+- **X6** — project stepper, compare mobile, tenant gallery
+
+Automated regression: `tests/test_review.py` (Phase 1 journey section; offline skeleton of docs/17 §Verification).
+
+## Closed since this doc was written
+
+- **gemini-3.5-flash describe eval** — done; recorded in docs/04 (July 2026).
+  Gemini is now the **default describe backend**; opus is the expensive backup
+  for complex items (docs/00).
 
 ## Deferred (unchanged decisions)
 

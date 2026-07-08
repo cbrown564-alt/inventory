@@ -1,5 +1,11 @@
 # 22 — ML/DL programme review and roadmap
 
+> **Status: active (strategy).** §2 scoreboard categorisation is **pre-GPU**
+> (5 Jul 2026). Authoritative pass/fail status is
+> [`21-ml-dl-experiment-log.md`](21-ml-dl-experiment-log.md) after the 6 Jul
+> GPU re-run (docs/23). E4/E7/E19 flipped from "under-powered" to confirmed
+> real negatives; E16 partial pass. v1 scope and sequencing: docs/00.
+
 *5 Jul 2026. A post-mortem of ML-E1–E20 (docs/21) and a roadmap forward.
 16 of 20 spikes did not pass. This document argues that the headline
 number is **misleading** — most "failures" are un-run or under-powered

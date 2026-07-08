@@ -150,7 +150,8 @@ def test_build_item_schema_deepclean_omits_est_value_band():
 def test_get_backend_deepclean_uses_cleaning_prompt(monkeypatch):
     from homeinventory.describe import get_backend
 
-    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    monkeypatch.setenv("GEMINI_API_KEY", "g-key")
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     backend = get_backend("openai", use_case="deepclean")
     assert "TDS" not in backend.system_prompt
     assert "Cleaning Condition Report" in backend.system_prompt
@@ -217,7 +218,8 @@ def test_deepclean_compare_gate_and_labels(tmp_path):
 def test_get_backend_tenancy_uses_tds_prompt(monkeypatch):
     from homeinventory.describe import get_backend
 
-    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    monkeypatch.setenv("GEMINI_API_KEY", "g-key")
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     backend = get_backend("openai", use_case="tenancy")
     assert "TDS" in backend.system_prompt
     assert "est_value_band" in backend.item_schema["properties"]["items"]["items"]["properties"]

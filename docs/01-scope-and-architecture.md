@@ -1,5 +1,11 @@
 # Home Inventory AI — Scope, Architecture, UX and Evals
 
+> **Status: active (architecture reference).** Capture UX in §3.3 and §4 is
+> **superseded** by the video-first pivot — see
+> [`12-video-first-journey.md`](12-video-first-journey.md) and
+> [`00-north-star.md`](00-north-star.md). Backend policy: gemini-3.5-flash
+> default; opus backup for complex items.
+
 ## 1. Problem statement
 
 Letting agents charge ~£165 for a professional inventory / schedule-of-condition report
@@ -90,29 +96,26 @@ checkout.json)` plus photo pairs; no pipeline changes needed.
 
 ### 3.3 Photos vs video
 
-Both supported. Recommendation to users: **guided photos beat one continuous video**
-for quality (sharp, well-framed, deliberate coverage; video frames suffer motion blur
-and ~1080p effective resolution), but video is accepted and reduced to keyframes.
-The capture guide (§4) makes photos nearly as fast as video.
+Both supported at the pipeline level. **Product policy (Jul 2026): one walkthrough
+video uploaded in the browser** is the primary capture path — see docs/12. Folder
+per-room photos remain supported for benchmarks, CLI power users, and the
+InventoryFlex fixture. Video is segmented into rooms automatically; keyframes are
+extracted per segment.
 
 ## 4. UX
 
-Prototype is a CLI; the same flow maps directly onto a future mobile/web app.
+The **web app is the product**; the CLI is plumbing (docs/12). Primary journey:
 
-1. **`homeinventory guide`** — prints a per-room capture checklist (wide shots of each
-   wall, floor, ceiling; close-ups of appliances, existing damage, meters, keys,
-   alarms). ~15–25 photos per room.
-2. **Capture**: user photographs the property, dropping files into
-   `capture/<Room Name>/…` (or one video per room). Folder = room name; this is the
-   simplest reliable room-assignment UX and avoids fragile room classification.
-3. **`homeinventory build capture/ -o report/ --backend claude`** — runs the pipeline,
-   writes `report/inventory.html`, `inventory.pdf`, `inventory.json`,
-   `manifest.json`, and `photos/` (renumbered, captioned copies + crops).
-4. **Review loop**: AI output is a *draft*; the user reviews the HTML, edits
-   `inventory.json` (or re-runs single rooms), rebuilds. Human-in-the-loop is what
-   makes the report defensible — the tool drafts, the person attests.
-5. **v2: `homeinventory compare checkin/ checkout/`** — paired report: per item,
-   check-in vs check-out photo, grade delta, "fair wear and tear" vs "damage" flag.
+1. Open `homeinventory review capture/ -o report/` — upload one walkthrough video
+2. Confirm spend — build runs invisibly (segment → describe → curate → PDF)
+3. Review room-by-room in the browser, fix grades/defects, sign
+4. Download the attested PDF
+
+CLI equivalents (`homeinventory build`, folder capture, `--backend openai
+--model gemini-3.5-flash`) remain for automation and benchmarks. Human-in-the-loop
+review is what makes the report defensible — the tool drafts, the person attests.
+
+Check-in vs check-out comparison is shipped (`homeinventory compare`; docs/08).
 
 ## 5. Evals
 

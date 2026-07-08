@@ -15,15 +15,11 @@
 from __future__ import annotations
 
 import argparse
-import json
 import logging
-import re
-import shutil
 import sys
-from dataclasses import asdict
 from pathlib import Path
 
-from .schema import Inventory, Item, Room
+from .schema import Inventory
 
 log = logging.getLogger("homeinventory")
 
@@ -61,269 +57,9 @@ def cmd_guide(args) -> int:
     return 0
 
 
-def _full_path(capture_dir: Path, path: str) -> Path:
-    p = Path(path)
-    return p if p.is_absolute() else capture_dir / p
-
-
-def _checkpoint_name(room_name: str) -> str:
-    return re.sub(r"[^\w\- ]+", "_", room_name) + ".json"
-
-
-def _load_prior(args, out_dir: Path) -> tuple[Inventory | None, bool]:
-    """Return (prior inventory, preserve_hand_edits) for a rebuild."""
-    inv_path = out_dir / "inventory.json"
-    only = {r.strip().lower() for r in args.room.split(",")} if args.room else None
-    preserve = args.from_json is not None
-    if preserve:
-        path = Path(args.from_json) if args.from_json else inv_path
-        if not path.is_file():
-            print(f"error: --from-json file not found: {path}", file=sys.stderr)
-            return None, True
-        return Inventory.from_json(path.read_text(encoding="utf-8")), True
-    if only and inv_path.exists():
-        return Inventory.from_json(inv_path.read_text(encoding="utf-8")), False
-    return None, False
-
-
 def cmd_build(args) -> int:
-    from .describe import FatalBackendError, get_backend
-    from .ingest import ingest
-    from .integrity import build_manifest
-    from .merge import merge_items, merge_room_with_prior, room_code
-    from .progress import BuildProgress
-    from .report import render
-    from .usecases import DEFAULT_USE_CASE, get_use_case
-
-    capture_dir = Path(args.capture_dir)
-    out_dir = Path(args.out)
-    if not capture_dir.is_dir():
-        print(f"error: capture dir not found: {capture_dir}", file=sys.stderr)
-        return 2
-    out_dir.mkdir(parents=True, exist_ok=True)
-    work_dir = out_dir / "work"
-    progress_path = getattr(args, "progress_file", None)
-    if progress_path:
-        progress_path = Path(progress_path)
-    progress = BuildProgress()
-    progress.start(progress_path)
-
-    seg_json = getattr(args, "segments_json", None)
-    if seg_json:
-        seg_json = Path(seg_json)
-
-    def _on_segmenting():
-        progress.segmenting(progress_path)
-
-    def _on_segmented(n_rooms: int, room_names: list[str] | None = None):
-        progress.segmented(progress_path, n_rooms, room_names)
-
-    def _on_extracting():
-        progress.extracting(progress_path)
-
-    # 1. ingest
-    try:
-        rooms_photos = ingest(
-            capture_dir, work_dir,
-            lead_trim_s=getattr(args, "trim_lead", 0.0),
-            segment_model=getattr(args, "segment_model", "gemini-3.5-flash"),
-            segment_every=getattr(args, "segment_every", 5.0),
-            segments_json=seg_json,
-            no_segment=getattr(args, "no_segment", False),
-            on_segmenting=_on_segmenting,
-            on_segmented=_on_segmented,
-            on_extracting=_on_extracting,
-        )
-    except Exception as e:
-        progress.failed(progress_path, str(e))
-        print(f"error: ingest failed: {e}", file=sys.stderr)
-        return 2
-    if not rooms_photos:
-        print("error: no photos or videos found (see `homeinventory guide`)",
-              file=sys.stderr)
-        return 2
-    n_photos = sum(len(v) for v in rooms_photos.values())
-    log.info("ingested %d photos across %d rooms", n_photos, len(rooms_photos))
-
-    # 2. integrity manifest
-    build_manifest(capture_dir, rooms_photos, out_dir / "manifest.json")
-
-    # 2b. curation: score every frame and elect each room's hero set — the
-    # few, high-quality, distinct frames shown by default (docs/15). Runs
-    # after the manifest so reviewer overrides key on sha256.
-    from .curate import curate
-    curate(rooms_photos, capture_dir, work_dir)
-
-    only = {r.strip().lower() for r in args.room.split(",")} if args.room else None
-    selected = {name: photos for name, photos in rooms_photos.items()
-                if not only or name.lower() in only}
-    if not selected:
-        print(f"error: --room matched nothing; available rooms: "
-              f"{', '.join(sorted(rooms_photos))}", file=sys.stderr)
-        return 2
-
-    prior, preserve_edits = _load_prior(args, out_dir)
-    if prior is None and args.from_json is not None:
-        return 2
-
-    use_case = args.use_case or (prior.use_case if prior else DEFAULT_USE_CASE)
-
-    # 3. detect (only the rooms being built)
-    detector = _detector_from_args(args)
-    detections: dict[str, list] = {}
-    if detector:
-        for photos in selected.values():
-            for p in photos:
-                detections[p.id] = detector.detect(_full_path(capture_dir, p.path),
-                                                   crops_dir=work_dir / "crops")
-        if not detector.available:
-            log.warning("detector unavailable — continuing without crops/hints")
-
-    # partial rebuild keeps every room not named in --room; --from-json also
-    # preserves hand-edits inside rebuilt rooms
-
-    # 4-5. describe + merge, room by room, checkpointing as we go
-    try:
-        backend = get_backend(args.backend, model=args.model,
-                              base_url=args.base_url, use_case=use_case)
-    except FatalBackendError as e:
-        print(f"error: {e}", file=sys.stderr)
-        return 2
-    inv = Inventory(
-        property_address=args.address or (prior.property_address if prior else ""),
-        inspected_by=args.inspector or (prior.inspected_by if prior else ""),
-        agent_name=args.agent_name or (prior.agent_name if prior else ""),
-        agent_phone=args.agent_phone or (prior.agent_phone if prior else ""),
-        property_type=args.property_type or (prior.property_type if prior else ""),
-        tenant_name=args.tenant or (prior.tenant_name if prior else ""),
-        landlord_name=args.landlord or (prior.landlord_name if prior else ""),
-        report_ref=args.report_ref or (prior.report_ref if prior else ""),
-        describe_backend=f"{backend.name}"
-                         + (f" ({getattr(backend, 'model', None)})"
-                            if getattr(backend, "model", None) else ""),
-        notes=args.notes or (prior.notes if prior else ""),
-    )
-    inv.use_case = use_case
-    # A customised title survives rebuilds; the bare dataclass default (the
-    # tenancy title) is replaced by the profile's, healing pre-fix builds.
-    default_title = Inventory.__dataclass_fields__["report_type"].default
-    prior_title = prior.report_type if prior else ""
-    inv.report_type = (prior_title
-                       if prior_title and prior_title != default_title
-                       else get_use_case(use_case).report_type)
-    inv.parties = dict(prior.parties if prior else {})
-    for spec in args.party:
-        key, _, name = spec.partition("=")
-        if key:
-            inv.parties[key] = name
-    if prior and preserve_edits:
-        inv.inspected_at = prior.inspected_at
-        inv.signatures = list(prior.signatures)
-        if prior.schedule_summary:
-            inv.schedule_summary = list(prior.schedule_summary)
-    used_codes: set[str] = set()
-    if prior:  # reserve item-id prefixes we are keeping
-        for r in prior.rooms:
-            if only and r.name.lower() in only and not preserve_edits:
-                continue
-            for it in r.items:
-                code = it.id.rsplit("-", 1)[0]
-                if code:
-                    used_codes.add(code)
-
-    ckpt_dir = work_dir / "checkpoints"
-    if not args.resume and ckpt_dir.exists():
-        shutil.rmtree(ckpt_dir)
-    ckpt_dir.mkdir(parents=True, exist_ok=True)
-
-    built: dict[str, Room] = {}
-    failures: list[str] = []
-    room_names = sorted(selected)
-    for ri, room_name in enumerate(room_names, start=1):
-        progress.describing(progress_path, ri, len(room_names), room_name)
-        photos = selected[room_name]
-        ckpt = ckpt_dir / _checkpoint_name(room_name)
-        if args.resume and ckpt.exists():
-            log.info("reusing checkpoint for %s", room_name)
-            data = json.loads(ckpt.read_text(encoding="utf-8"))
-            summary = data["summary"]
-            items = [Item(**i).normalise() for i in data["items"]]
-        else:
-            paths = [_full_path(capture_dir, p.path) for p in photos]
-            log.info("describing %s (%d photos, backend=%s)…",
-                     room_name, len(photos), backend.name)
-            try:
-                summary, items = backend.describe_room(room_name, photos, paths,
-                                                       detections)
-            except FatalBackendError as e:
-                print(f"error: {e}", file=sys.stderr)
-                return 2
-            except Exception as e:
-                log.error("describe failed for %s: %s", room_name, e)
-                failures.append(room_name)
-                built[room_name] = Room(
-                    name=room_name,
-                    summary=f"[DESCRIBE FAILED: {e}] Re-run with --resume to "
-                            "retry this room without re-describing the others.",
-                    items=[], photos=photos)
-                continue
-            ckpt.write_text(json.dumps(
-                {"summary": summary, "items": [asdict(i) for i in items],
-                 # LocalBackend records per-room Ollama timing (total wall
-                 # time, prompt/eval token counts + throughput). Absent on
-                 # other backends and on --resume (kept from the prior ckpt).
-                 "timing": getattr(backend, "last_room_timing", None)},
-                ensure_ascii=False), encoding="utf-8")
-        code = room_code(room_name, used_codes)
-        prior_room = None
-        if prior and preserve_edits:
-            for r in prior.rooms:
-                if r.name.lower() == room_name.lower():
-                    prior_room = r
-                    break
-        if prior_room:
-            new_room = Room(name=room_name, summary=summary,
-                            items=items, photos=photos)
-            built[room_name] = merge_room_with_prior(prior_room, new_room, code)
-        else:
-            items = merge_items(items, code)
-            built[room_name] = Room(name=room_name, summary=summary,
-                                    items=items, photos=photos)
-
-    # 5b. detector close-ups for the schedule (docs/15 M4) — VLM items
-    # borrow the best matching YOLOE crop from their own cited photos
-    if detections:
-        from .merge import attach_detector_crops
-        for room in built.values():
-            attach_detector_crops(room.items, detections)
-
-    if prior:
-        built_by_lower = {k.lower(): k for k in built}
-        rooms: list[Room] = []
-        for r in prior.rooms:
-            key = built_by_lower.pop(r.name.lower(), None)
-            rooms.append(built[key] if key else r)
-        rooms.extend(built[built_by_lower[k]] for k in sorted(built_by_lower))
-        inv.rooms = rooms
-    else:
-        inv.rooms = [built[k] for k in sorted(built)]
-
-    # 6. report
-    progress.rendering(progress_path)
-    outputs = render(inv, capture_dir, out_dir, pdf=not args.no_pdf)
-    progress.done(progress_path)
-    print(f"\n{inv.item_count()} items across {len(inv.rooms)} rooms, "
-          f"{inv.photo_count()} photos.")
-    for kind, path in outputs.items():
-        print(f"  {kind:5} {path}")
-    if failures:
-        print(f"\nWARNING: describe failed for: {', '.join(failures)}. "
-              "Re-run the same command with --resume to retry only those rooms.",
-              file=sys.stderr)
-        return 1
-    print("\nReview the report, edit inventory.json if needed, and re-render "
-          "with: homeinventory render", flush=True)
-    return 0
+    from .pipeline import BuildOptions, run_build
+    return run_build(BuildOptions.from_args(args)).exit_code
 
 
 def cmd_curate_only(args) -> int:
@@ -546,13 +282,13 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("capture_dir")
     b.add_argument("-o", "--out", default="report")
     b.add_argument("--backend", choices=["claude", "openai", "local", "offline"],
-                   default="claude")
+                   default="openai")
     b.add_argument("--model", default=None,
-                   help="model id for the backend: claude default "
-                        "claude-opus-4-8 (claude-haiku-4-5 is the budget "
-                        "option); openai default gpt-4.1-mini (gemini-* "
-                        "models route to Google automatically); local "
-                        "default qwen3.5:9b (any Ollama vision model)")
+                   help="model id for the backend: openai default "
+                        "gemini-3.5-flash (via Google compat endpoint); "
+                        "claude default claude-opus-4-8 (expensive backup for "
+                        "hard items); local default qwen3.5:9b (any Ollama "
+                        "vision model)")
     b.add_argument("--base-url", default=None,
                    help="override the API base URL for --backend openai "
                         "(any OpenAI-compatible server)")
@@ -633,7 +369,7 @@ def main(argv: list[str] | None = None) -> int:
                     help="also serve a token-protected tenant link on the LAN "
                          "(comments + countersignature)")
     rv.add_argument("--backend", choices=["claude", "openai", "local", "offline"],
-                    default="claude", help="backend used by 'Re-describe room'")
+                    default="openai", help="backend used by 'Re-describe room'")
     rv.add_argument("--model", default=None)
     rv.add_argument("--base-url", default=None)
     rv.add_argument("--no-open", action="store_true",

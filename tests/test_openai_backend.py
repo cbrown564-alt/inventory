@@ -41,7 +41,7 @@ def test_explicit_base_url_wins(monkeypatch):
 def test_describe_room_payload_and_parse(tmp_path, monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "sk-x")
     photos, paths = _photos(tmp_path, 2)
-    b = OpenAICompatBackend()
+    b = OpenAICompatBackend(model="gpt-4.1-mini")
     sent = {}
 
     def fake_post(payload):
@@ -67,7 +67,7 @@ def test_describe_room_payload_and_parse(tmp_path, monkeypatch):
 def test_truncation_detected(tmp_path, monkeypatch):
     monkeypatch.setenv("OPENAI_API_KEY", "sk-x")
     photos, paths = _photos(tmp_path, 1)
-    b = OpenAICompatBackend()
+    b = OpenAICompatBackend(model="gpt-4.1-mini")
     monkeypatch.setattr(b, "_post", lambda payload: {
         "choices": [{"finish_reason": "length", "message": {"content": "{"}}]})
     with pytest.raises(RuntimeError, match="truncated"):
