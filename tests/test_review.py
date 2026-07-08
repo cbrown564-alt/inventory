@@ -689,18 +689,14 @@ def test_build_e2e_offline(fresh_server):
     status, resp = _req("GET", base + "/api/build")
     assert status == 200 and resp["status"] == "idle"
 
-    # correct confirm starts the pinned £0 command
+    # correct confirm starts an in-process build (no subprocess)
     status, resp = _req("POST", base + "/api/build", {"confirm": "yes"})
     assert status == 200, resp
-    import sys as _sys
     with state.lock:
-        cmd = state.build["cmd"]
+        assert state.build["status"] == "running"
+        assert "progress_path" in state.build
     progress = str(out / "work" / "build-progress.json")
-    assert cmd == [_sys.executable, "-m", "homeinventory.cli", "build",
-                   str(_cap), "-o", str(out),
-                   "--backend", "offline",
-                   "--progress-file", progress,
-                   "--no-detect"]
+    assert state.build["progress_path"] == progress
 
     deadline = time.time() + 120
     while time.time() < deadline:
@@ -720,16 +716,18 @@ def test_build_e2e_offline(fresh_server):
 
 
 def test_build_and_redescribe_concurrency_409(fresh_server):
-    base, state, _out, _cap = fresh_server
+    base, state, out, _cap = fresh_server
     with state.lock:
-        state.build = {"status": "running", "detail": "", "cmd": None}
+        state.build = {"status": "running", "detail": "",
+                       "progress_path": str(out / "work" / "build-progress.json")}
     status, _ = _req("POST", base + "/api/build", {"confirm": "yes"})
     assert status == 409
     status, _ = _req("POST", base + "/api/redescribe",
                      {"room": "Kitchen", "confirm": "yes"})
     assert status == 409                        # build blocks redescribe
     with state.lock:
-        state.build = {"status": "idle", "detail": "", "cmd": None}
+        state.build = {"status": "idle", "detail": "",
+                       "progress_path": None}
         state.redescribe = {"status": "running", "room": "X", "detail": ""}
     status, _ = _req("POST", base + "/api/build", {"confirm": "yes"})
     assert status == 409                        # redescribe blocks build

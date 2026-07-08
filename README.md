@@ -214,20 +214,34 @@ walkthrough video → VLM room segmentation → per-room keyframes
 
 ## Docs
 
+**Start here:** [`docs/00-north-star.md`](docs/00-north-star.md) — v1 end goal, scope, singular path.
+
+Full index: [`docs/README.md`](docs/README.md).
+
+- [`docs/00-north-star.md`](docs/00-north-star.md) — **north star**: end goal, v1 success criteria, deferred list
 - [`docs/01-scope-and-architecture.md`](docs/01-scope-and-architecture.md) — scope, architecture, UX, evals
 - [`docs/02-research.md`](docs/02-research.md) — TDS/AIIC standards, YOLOE, VLM condition-grading, competitor gaps
-- [`docs/03-implementation-plan.md`](docs/03-implementation-plan.md) — milestones M0 (this prototype) → M5
+- [`docs/03-implementation-plan.md`](docs/03-implementation-plan.md) — milestones M0 (this prototype) → M5 (frozen ledger)
 - [`docs/04-backend-comparison.md`](docs/04-backend-comparison.md) — describe backends on first real footage
 - [`docs/05-review-experience.md`](docs/05-review-experience.md) — review UX design space (Levels 0–4) and what's built
 - [`docs/06-professional-report-benchmark.md`](docs/06-professional-report-benchmark.md) — pipeline vs a professional clerk's published report (M1)
 - [`docs/07-own-property-run.md`](docs/07-own-property-run.md) — first full own-property run (M2)
 - [`docs/08-compare.md`](docs/08-compare.md) — check-in vs check-out comparison: alignment, wear-vs-damage rubric, IMS agreement (M4)
-- [`docs/09-web-ui-and-capture.md`](docs/09-web-ui-and-capture.md) — web UI delta (M5a); guided capture retired (M5b)
+- [`docs/09-web-ui-and-capture.md`](docs/09-web-ui-and-capture.md) — web UI delta (M5a); guided capture archived (M5b)
 - [`docs/10-product-quality-review.md`](docs/10-product-quality-review.md) — product-quality pass: PDF evidence chain, unified web app
 - [`docs/11-video-segmentation.md`](docs/11-video-segmentation.md) — room segmentation from one walkthrough video: six-model benchmark
 - [`docs/12-video-first-journey.md`](docs/12-video-first-journey.md) — **plan of record**: video-first journey pivot, done/remaining/acceptance criteria
 - [`docs/13-yoloe-detection.md`](docs/13-yoloe-detection.md) — YOLOE detection eval on InventoryFlex; impact on describe scores
 - [`docs/14-frontend-craft.md`](docs/14-frontend-craft.md) — evidence-room review design principles (Frame.io, player craft, InventoryBase)
+- [`docs/15-curation-and-one-app.md`](docs/15-curation-and-one-app.md) — hero curation + one-app shell (shipped)
+- [`docs/16-report-redesign.md`](docs/16-report-redesign.md) — report catalogue layout (shipped)
+- [`docs/17-experience-redesign.md`](docs/17-experience-redesign.md) — orient→finish UX plan
+- [`docs/18-hero-image-selection.md`](docs/18-hero-image-selection.md) — cover scorer experiments
+- [`docs/19-ml-dl-exploration-plan.md`](docs/19-ml-dl-exploration-plan.md) — ML/DL exploration plan (ML-E1–E20)
+- [`docs/20-ios-native-app.md`](docs/20-ios-native-app.md) — iOS native app plan (post-v1)
+- [`docs/21-ml-dl-experiment-log.md`](docs/21-ml-dl-experiment-log.md) — ML experiment status tracker
+- [`docs/22-ml-programme-review-and-roadmap.md`](docs/22-ml-programme-review-and-roadmap.md) — ML post-mortem and roadmap
+- [`docs/23-gpu-rerun-runbook.md`](docs/23-gpu-rerun-runbook.md) — GPU re-run execution runbook
 - [`evals/README.md`](evals/README.md) — fixture format and quality metrics
 
 ## Status
@@ -247,9 +261,9 @@ the `local` backend has two viable £0 paths: `qwen3.5:9b` (lighter), or the
 including claude), ~23 tok/s on an 8 GB GPU + 32 GB RAM box, a genuine
 **draft for review** rather than an unreviewed report. Dense models ≤4B fit
 the card but are too weak; MoE sidesteps that by riding system RAM for the
-weights. **`gemini-3.5-flash` describe eval is recorded** (July 2026): clears
-the hallucination ceiling but sits ~21 pts below claude on condition-exact —
-so it is the **segmentation default**, not the signed-output describe default.
+weights. **`gemini-3.5-flash` is the default describe backend** (July 2026,
+docs/00); **`claude-opus-4-8` is the premium backup** for complex items.
+See [`docs/04`](docs/04-backend-comparison.md) for benchmark scores.
 **M4 (check-in vs check-out comparison) is shipped** — `homeinventory
 compare` aligns the two reports lexically, classifies deteriorations with a
 TDS-grounded wear-vs-damage rubric (per-class agreement vs a professional

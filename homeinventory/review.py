@@ -58,7 +58,8 @@ log = logging.getLogger(__name__)
 # Backend default models, mirrored from describe.get_backend so the UI can
 # name what a confirmed build/redescribe would actually run (spend guard:
 # no paid backend without a per-request confirm naming it).
-_BACKEND_DEFAULT_MODEL = {"claude": "claude-opus-4-8", "openai": "gpt-4.1-mini",
+_BACKEND_DEFAULT_MODEL = {"claude": "claude-opus-4-8",
+                          "openai": "gemini-3.5-flash",
                           "local": "qwen3.5:9b"}
 BUILD_CONFIRM = "yes"
 _USE_CASE_OUTCOMES = {
@@ -72,12 +73,12 @@ def spend_info(backend: str, model: Optional[str] = None) -> dict:
     if backend == "offline":
         return {"label": "Draft mode", "estimate": "£0",
                 "note": "No AI — useful for testing the journey."}
-    if backend == "claude":
-        return {"label": "Full-quality report", "estimate": "~£1–3",
-                "note": "Best for the signed PDF."}
     if backend == "openai":
         return {"label": "Smart report", "estimate": "pennies–£1",
-                "note": "Good for iteration — review the output carefully."}
+                "note": "Default quality path — review the output carefully."}
+    if backend == "claude":
+        return {"label": "Premium report", "estimate": "~£1–3",
+                "note": "Best for hard items and the signed PDF."}
     if backend == "local":
         return {"label": "On-device draft", "estimate": "£0",
                 "note": "Runs on your machine — slower, needs review."}
@@ -93,7 +94,7 @@ class ProjectState:
     """Project-level state: use case, compare job, session map."""
 
     def __init__(self, capture_dir: Path, out_dir: Path,
-                 backend: str = "claude", model: Optional[str] = None,
+                 backend: str = "openai", model: Optional[str] = None,
                  base_url: Optional[str] = None, share: bool = False,
                  no_detect: bool = False, use_case: Optional[str] = None):
         self.capture_dir = capture_dir
@@ -537,25 +538,33 @@ class SessionState:
         return self.project._busy()
 
     def start_redescribe(self, room: str) -> bool:
+        from .pipeline import BuildOptions, run_build
+
         with self.lock:
             if self._busy():
                 return False
             self.redescribe = {"status": "running", "room": room, "detail": ""}
-        cmd = [sys.executable, "-m", "homeinventory.cli", "build",
-               str(self.capture_dir), "-o", str(self.out_dir),
-               "--room", room, "--from-json", "--backend", self.backend, "--no-pdf"]
-        cmd += self._build_flags()
+        opts = BuildOptions(
+            capture_dir=self.capture_dir,
+            out_dir=self.out_dir,
+            backend=self.backend,
+            model=self.model,
+            base_url=self.base_url,
+            use_case=self.uc.key if self.uc.key != DEFAULT_USE_CASE else None,
+            room=room,
+            from_json=str(self.out_dir / "inventory.json"),
+            no_detect=self.no_detect,
+            no_pdf=True,
+        )
 
         def run():
             try:
-                proc = subprocess.run(cmd, capture_output=True, text=True,
-                                      timeout=1800)
-                ok = proc.returncode == 0
+                result = run_build(opts)
                 with self.lock:
                     self.redescribe = {
-                        "status": "done" if ok else "failed", "room": room,
-                        "detail": (proc.stdout if ok else
-                                   (proc.stderr or proc.stdout))[-2000:],
+                        "status": "done" if result.exit_code == 0 else "failed",
+                        "room": room,
+                        "detail": result.detail,
                     }
             except Exception as e:
                 with self.lock:
@@ -579,31 +588,35 @@ class SessionState:
         return flags
 
     def start_build(self) -> bool:
+        from .pipeline import BuildOptions, run_build
+
         with self.lock:
             if self._busy():
                 return False
             progress_path = self.out_dir / "work" / "build-progress.json"
-            cmd = [sys.executable, "-m", "homeinventory.cli", "build",
-                   str(self.capture_dir), "-o", str(self.out_dir),
-                   "--backend", self.backend,
-                   "--progress-file", str(progress_path)]
-            if self.inv_path.exists():
-                cmd.append("--from-json")
-            cmd += self._build_flags()
-            self.build = {"status": "running", "detail": "", "cmd": cmd,
-                            "progress_path": str(progress_path)}
+            opts = BuildOptions(
+                capture_dir=self.capture_dir,
+                out_dir=self.out_dir,
+                backend=self.backend,
+                model=self.model,
+                base_url=self.base_url,
+                use_case=self.uc.key if self.uc.key != DEFAULT_USE_CASE else None,
+                from_json=str(self.out_dir / "inventory.json")
+                if self.inv_path.exists() else None,
+                progress_file=progress_path,
+                no_detect=self.no_detect,
+            )
+            self.build = {"status": "running", "detail": "",
+                          "progress_path": str(progress_path)}
 
         def run():
             try:
-                proc = subprocess.run(cmd, capture_output=True, text=True,
-                                      timeout=3600)
-                ok = proc.returncode == 0
+                result = run_build(opts)
+                ok = result.exit_code == 0
                 with self.lock:
                     self.build = {
                         "status": "done" if ok else "failed",
-                        "detail": (proc.stdout if ok else
-                                   (proc.stderr or proc.stdout))[-2000:],
-                        "cmd": cmd,
+                        "detail": result.detail,
                         "progress_path": str(progress_path),
                     }
                 if ok and self.project.is_multi and self.project.all_sessions_built():
@@ -612,7 +625,6 @@ class SessionState:
             except Exception as e:
                 with self.lock:
                     self.build = {"status": "failed", "detail": str(e),
-                                  "cmd": cmd,
                                   "progress_path": str(progress_path)}
         threading.Thread(target=run, daemon=True).start()
         self.ack("reviewer", self.uc.owner_role.key, "build",
@@ -1414,7 +1426,7 @@ class ReviewHandler(BaseHandler):
 
 
 def serve(capture_dir: Path, out_dir: Path, port: int = 8484,
-          share: bool = False, backend: str = "claude",
+          share: bool = False, backend: str = "openai",
           model: Optional[str] = None, base_url: Optional[str] = None,
           open_browser: bool = True,
           no_detect: bool = False,

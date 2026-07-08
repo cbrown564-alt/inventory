@@ -2,13 +2,12 @@
 
 Four backends:
 
-* ``claude``  — Claude vision with a JSON-schema-constrained output. Highest
-  quality; costs pennies per property. Default model is claude-opus-4-8;
-  pass --model claude-haiku-4-5 / claude-sonnet-4-6 to trade quality for cost.
 * ``openai``  — any provider speaking the OpenAI chat-completions protocol:
-  OpenAI itself (default gpt-4.1-mini), Google Gemini via its
-  OpenAI-compatibility endpoint (--model gemini-3.1-flash-lite picks the
-  right base URL automatically), or a custom --base-url.
+  OpenAI itself, Google Gemini via its OpenAI-compatibility endpoint
+  (default ``gemini-3.5-flash`` — the product default describe backend),
+  or a custom --base-url.
+* ``claude``  — Claude vision with a JSON-schema-constrained output. Premium
+  backup for hard items; default model is claude-opus-4-8.
 * ``local``   — open-weight VLM via a local Ollama server (default
   qwen3.5:9b). Fully offline, £0 per run. Photos are sent in small batches so
   the KV cache fits consumer GPUs; the merge pass de-duplicates across
@@ -550,7 +549,7 @@ class OpenAICompatBackend:
     """
     name = "openai"
 
-    DEFAULT_MODEL = "gpt-4.1-mini"
+    DEFAULT_MODEL = "gemini-3.5-flash"
     GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai"
 
     def __init__(self, model: Optional[str] = None, base_url: Optional[str] = None,
