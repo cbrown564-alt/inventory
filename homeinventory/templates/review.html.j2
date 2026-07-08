@@ -10,14 +10,13 @@
 
   html, body { height: 100%; }
   body { display: flex; flex-direction: column; }
-  body.stage { background: var(--paper); }
 
   /* ---------- header ---------- */
-  body.stage .app-header {
+  .app-header {
     padding: 10px 22px; gap: 12px 18px; flex-wrap: nowrap;
   }
-  body.stage .app-nav a { font-size: 12px; padding: 4px 10px; border-radius: 999px; }
-  body.stage .app-nav a[aria-current="page"] {
+  .app-nav a { font-size: 12px; padding: 4px 10px; border-radius: 999px; }
+  .app-nav a[aria-current="page"] {
     background: transparent; color: var(--ink); font-weight: 600;
     box-shadow: inset 0 -2px 0 var(--brass);
   }
@@ -242,7 +241,7 @@
   #spine .chapters { display: flex; gap: 2px; height: 18px;
                      margin-bottom: 8px; }
   #spine .chap { position: relative; border-radius: 3px; overflow: hidden;
-                 background: var(--paper); cursor: pointer; min-width: 4px; }
+                 background: var(--panel-2); cursor: pointer; min-width: 4px; }
   #spine .chap span { position: absolute; inset: 0; display: block;
                       font: 9px/18px var(--ui); letter-spacing: .04em;
                       text-transform: uppercase; color: var(--faint);
@@ -311,16 +310,7 @@
   .claim-loc { font-family: var(--mono); font-size: 11px; color: var(--faint);
                letter-spacing: .02em; }
   .claim-loc .sep { color: var(--line-strong); margin: 0 4px; }
-  .badge { font-size: 9px; font-weight: 600; letter-spacing: .06em;
-           text-transform: uppercase; border-radius: 999px; padding: 3px 8px;
-           line-height: 1.3; }
-  .badge.ok { color: var(--confirm); background: var(--confirm-soft); }
-  .badge.no { color: var(--danger); background: var(--danger-soft); }
-  .badge.pend { color: var(--brass-bright); background: var(--brass-soft); }
-  .badge.prov { color: var(--faint); background: transparent;
-                border: 1px solid var(--line); text-transform: none;
-                letter-spacing: 0; font-weight: 500; font-family: var(--ui);
-                font-size: 10px; }
+  /* .badge — shared component (see _theme.css.j2) */
   .claim-warn {
     font-size: 12px; line-height: 1.45; color: var(--muted);
     border-left: 2px solid var(--pend); padding: 0 0 0 12px;
@@ -395,18 +385,7 @@
     background: var(--paper); color: var(--ink); }
   .sec-empty { font-size: 12px; color: var(--faint); font-style: italic; }
 
-  .chip {
-    display: inline-flex; align-items: center; gap: 6px; margin: 2px 6px 2px 0;
-    font-size: 12.5px; color: var(--danger); background: var(--danger-soft);
-    border: 1px solid transparent; border-radius: 999px; padding: 3px 11px;
-    cursor: pointer; user-select: none;
-  }
-  .chip:hover { border-color: var(--danger); }
-  .chip:active { transform: scale(.97); }
-  .chip.struck { color: var(--faint); background: var(--panel-2);
-                 text-decoration: line-through; }
-  .chip.struck:hover { border-color: var(--line-strong); }
-  .chip .x { font-size: 11px; opacity: .6; }
+  /* .chip — shared component (see _theme.css.j2) */
   .def-add { display: flex; gap: 6px; margin-top: 8px; }
   .def-add input { flex: 1; font: 12.5px var(--ui); padding: 6px 10px;
     border: 1px solid var(--line); border-radius: 6px;
@@ -518,83 +497,108 @@
     border-radius: 8px; padding: 10px 12px; max-height: 220px;
     overflow: auto; }
 
-  /* ---------- overview (X1 orient) ---------- */
-  body.stage .review-subnav {
+  /* ---------- overview (X1 orient — the trust-critical first screen) ---------- */
+  .review-subnav {
     display: flex; gap: 2px; flex-shrink: 0;
     border-left: 1px solid var(--line); padding-left: 12px; margin-left: 4px;
   }
-  body.stage .review-subnav a {
+  .review-subnav a {
     font-size: 12px; padding: 4px 10px; border-radius: 999px;
     color: var(--faint); text-decoration: none; white-space: nowrap;
   }
-  body.stage .review-subnav a:hover { color: var(--muted); background: var(--panel); }
-  body.stage .review-subnav a[aria-current="page"] {
+  .review-subnav a:hover { color: var(--muted); background: var(--panel); }
+  .review-subnav a[aria-current="page"] {
     color: var(--ink); font-weight: 600;
     box-shadow: inset 0 -2px 0 var(--brass);
   }
-  body.stage #detail:has(.overview) {
-    display: flex; flex-direction: column;
-  }
   .overview {
-    width: 100%; max-width: none; flex: 1;
-    display: flex; flex-direction: column; min-height: 0;
+    width: 100%; max-width: 1200px; margin: 0 auto;
+  }
+  .overview-head {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap; margin: 2px 0 0;
+    padding-bottom: 18px; border-bottom: 2px solid var(--ink);
+  }
+  .overview-title {
+    font: 600 clamp(30px, 4.2vw, 46px)/1 var(--display); letter-spacing: -.02em;
+    margin: 0; color: var(--ink);
   }
   .overview-stats {
-    flex-shrink: 0;
-    font-size: 13px; line-height: 1.55; color: var(--muted);
-    font-variant-numeric: tabular-nums;
+    font: var(--fs-sm)/1.7 var(--mono); color: var(--muted);
+    font-variant-numeric: tabular-nums; text-align: right;
   }
-  .overview-stats .walkthrough { display: block; margin-top: 4px; color: var(--faint); }
+  .overview-stats .walkthrough { display: block; margin-top: 2px; color: var(--faint); }
   .overview-ctas {
-    flex-shrink: 0;
-    display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0 24px;
+    display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0 30px;
   }
+  /* two orientations, one register grammar (docs/25 Ledger): the two richest
+     rooms are promoted to landscape plates, the rest stay portrait. */
+  .overview-features {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 34px;
+  }
+  .overview-features:empty { display: none; margin: 0; }
   .overview-grid {
-    flex: 1; min-height: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
-    grid-auto-rows: minmax(0, 1fr);
-    gap: clamp(10px, 1.2vw, 16px);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px 22px;
+  }
+  @media (max-width: 620px) {
+    .overview-features { grid-template-columns: 1fr; gap: 26px; }
   }
   @media (max-width: 520px) {
+    .overview { max-width: none; }
     .overview-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;
     }
     .overview-ctas .btn { flex: 1 1 auto; min-width: 0; font-size: 12px;
-                           padding: 8px 10px; }
+                           padding: 10px 12px; }
+    .overview-title { font-size: var(--fs-xl); }
   }
+  /* catalogue plate: bordered figure, caption always beneath (docs/25) */
   .room-card {
-    border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
-    background: var(--panel); cursor: pointer; text-align: left;
+    border: 0; background: none; cursor: pointer; text-align: left;
     padding: 0; font: inherit; color: inherit;
-    display: flex; flex-direction: column; min-height: 0; min-width: 0;
-    transition: border-color .15s;
+    display: flex; flex-direction: column; min-width: 0;
   }
-  .room-card:hover { border-color: var(--brass); }
   .room-card .thumb {
-    flex: 1 1 auto; min-height: 100px;
-    background: #05070b; overflow: hidden;
+    aspect-ratio: 4 / 5; background: var(--panel-2); overflow: hidden;
     display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line-strong); border-radius: 4px;
+    transition: transform .4s cubic-bezier(.16,1,.3,1),
+                box-shadow .3s ease, border-color .3s ease;
   }
-  .room-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .room-card.land .thumb { aspect-ratio: 3 / 2; }
+  .room-card .thumb img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .room-card:hover .thumb, .room-card:focus-visible .thumb {
+    transform: translateY(-4px); box-shadow: var(--e-2);
+    border-color: var(--brass);
+  }
   .room-card .thumb-empty {
-    color: var(--faint); font-size: 11px; letter-spacing: .04em;
+    color: var(--faint); font-size: var(--fs-xs); letter-spacing: .06em;
     text-transform: uppercase;
   }
-  .room-card .body { flex-shrink: 0; padding: 12px 14px 14px; }
-  .room-card .name {
-    font: 600 15px/1.3 var(--ui); margin: 0 0 4px; letter-spacing: -.01em;
+  .room-card .body { flex-shrink: 0; padding: 12px 2px 0; }
+  .room-card .pno {
+    display: block; font: 600 var(--fs-2xs)/1 var(--mono); color: var(--brass);
+    letter-spacing: .14em; text-transform: uppercase; margin-bottom: 6px;
   }
+  .room-card .name {
+    font: 600 var(--fs-lg)/1.14 var(--display); margin: 0;
+    letter-spacing: -.01em; color: var(--ink);
+  }
+  .room-card.land .name { font-size: var(--fs-xl); }
   .room-card .meta {
-    font-size: 12px; color: var(--muted); display: flex; gap: 6px;
-    align-items: center; flex-wrap: wrap;
+    margin-top: 6px; font: var(--fs-sm)/1.5 var(--mono); color: var(--muted);
+    letter-spacing: .01em;
   }
   .room-card .warn {
     color: var(--danger); font-weight: 600; font-variant-numeric: tabular-nums;
   }
   .room-card .meter {
-    height: 3px; background: var(--line); border-radius: 2px;
-    overflow: hidden; margin-top: 10px;
+    height: 2px; background: var(--line);
+    overflow: hidden; margin-top: 11px;
   }
   .room-card .meter i {
     display: block; height: 100%; background: var(--confirm);
@@ -715,8 +719,8 @@
   @media (max-width: 900px) {
     #app { grid-template-columns: 1fr; }
     #btn-queue { display: inline-block; }
-    body.stage .app-header { flex-wrap: wrap; padding: 10px 16px; }
-    body.stage .review-subnav {
+    .app-header { flex-wrap: wrap; padding: 10px 16px; }
+    .review-subnav {
       order: 2; flex: 1 1 100%; border-left: none; padding-left: 0;
       margin-left: 0; padding-top: 4px;
     }
@@ -739,7 +743,7 @@
     #lb-hint { display: none; }
   }
   @media (max-width: 480px) {
-    body.stage .app-header {
+    .app-header {
       display: grid; grid-template-columns: auto 1fr auto;
       grid-template-areas:
         "queue brand more"
@@ -748,21 +752,21 @@
       gap: 6px 8px; padding: 8px 10px; align-items: center;
     }
     #btn-queue { grid-area: queue; margin: 0; }
-    body.stage .wordmark { grid-area: brand; font-size: 11px;
+    .wordmark { grid-area: brand; font-size: 11px;
                           letter-spacing: .28em; min-width: 0; }
-    body.stage .app-nav { display: none; }
+    .app-nav { display: none; }
     .header-more { display: block; grid-area: more; margin-left: 0; }
     .header-more-btn { display: inline-block; }
     .header-more-shell { display: flex; flex-direction: column; gap: 2px; }
     .header-end { display: none; }
-    body.stage .review-subnav {
+    .review-subnav {
       grid-area: modes; order: unset; flex: unset; width: 100%;
       border-left: none; padding: 0; margin: 0;
       overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
     }
-    body.stage .review-subnav::-webkit-scrollbar { display: none; }
-    body.stage .review-subnav a { flex-shrink: 0; }
+    .review-subnav::-webkit-scrollbar { display: none; }
+    .review-subnav a { flex-shrink: 0; }
     #progress { grid-area: progress; order: unset; flex: unset; width: 100%;
                 max-width: none; margin: 0; }
     .addr { display: none; }
@@ -777,7 +781,7 @@
   }
 </style>
 </head>
-<body class="stage">
+<body>
 <header class="app-header">
   <button class="btn ghost" id="btn-queue" aria-label="Show item list">☰ Items</button>
   {% set shell_base = route_prefix ~ "/" %}{% set shell_active = "review" %}
@@ -1253,7 +1257,7 @@
           warnEl = el("span", { "class": "warn" });
           meta.appendChild(warnEl);
         }
-        warnEl.textContent = " · " + warns + "\u26a0";
+        warnEl.textContent = " · " + warns + " to check";
       } else if (warnEl) warnEl.remove();
     });
   }
@@ -1296,7 +1300,11 @@
         text: "Walkthrough: " + wt.meta.name + " \u00b7 "
               + fmtT(wt.meta.duration) }));
     }
-    host.appendChild(statsEl);
+    var head = el("div", { "class": "overview-head" });
+    var title = ((inv.property_address || "").trim()) || "Rooms found";
+    head.appendChild(el("h1", { "class": "overview-title", text: title }));
+    head.appendChild(statsEl);
+    host.appendChild(head);
 
     var ctas = el("div", { "class": "overview-ctas" });
     ctas.appendChild(el("button", {
@@ -1312,14 +1320,25 @@
     }
     host.appendChild(ctas);
 
+    // rank by item count; the two richest rooms become landscape features
+    var ranked = inv.rooms.map(function (room, i) {
+      return { room: room, i: i, n: (room.items || []).length };
+    }).sort(function (a, b) { return b.n - a.n || a.i - b.i; });
+    var isFeature = {};
+    if (inv.rooms.length >= 3) {
+      ranked.slice(0, 2).forEach(function (r) { isFeature[r.i] = true; });
+    }
+    var features = el("div", { "class": "overview-features" });
     var grid = el("div", { "class": "overview-grid" });
-    inv.rooms.forEach(function (room) {
+    var plateNo = 0;
+    function addPlate(room, land) {
+      plateNo++;
       var src = roomHeroSrc(room);
       var total = (room.items || []).length;
       var done = roomReviewDone(room);
       var warns = roomWarnings(room);
       var card = el("button", {
-        type: "button", "class": "room-card",
+        type: "button", "class": "room-card" + (land ? " land" : ""),
         "data-room": room.name,
         onclick: function () { select({ type: "room", name: room.name }); }
       });
@@ -1328,12 +1347,14 @@
       else thumb.appendChild(el("span", { "class": "thumb-empty", text: "No frames" }));
       card.appendChild(thumb);
       var body = el("div", { "class": "body" });
+      body.appendChild(el("span", { "class": "pno",
+        text: "Plate " + (plateNo < 10 ? "0" : "") + plateNo }));
       body.appendChild(el("h3", { "class": "name", text: room.name }));
       var meta = el("div", { "class": "meta" });
       meta.appendChild(el("span", {
         text: total + " item" + (total === 1 ? "" : "s") }));
       if (warns) meta.appendChild(el("span", { "class": "warn",
-        text: " \u00b7 " + warns + "\u26a0" }));
+        text: " \u00b7 " + warns + " to check" }));
       body.appendChild(meta);
       var meter = el("div", { "class": "meter" });
       var mfill = el("i", {});
@@ -1341,8 +1362,15 @@
       meter.appendChild(mfill);
       body.appendChild(meter);
       card.appendChild(body);
-      grid.appendChild(card);
+      (land ? features : grid).appendChild(card);
+    }
+    // features first (in item-rank order), then the rest in walkthrough order
+    ranked.filter(function (r) { return isFeature[r.i]; })
+      .forEach(function (r) { addPlate(r.room, true); });
+    inv.rooms.forEach(function (room, i) {
+      if (!isFeature[i]) addPlate(room, false);
     });
+    host.appendChild(features);
     host.appendChild(grid);
     updateSubNav();
   }
@@ -1523,20 +1551,26 @@
     } else window.prompt("Copy link:", SHARE_URL);
   }
   function submitSign(nameInput, roleInput, signBtn) {
+    if (signBtn.dataset.inFlight === "1") return;   /* double-click guard (F5) */
     var name = (nameInput.value || "").trim();
     var role = roleInput.value;
     if (!name) { toast("Enter your full name to sign"); nameInput.focus(); return; }
     if (addressMissing()) { toast("Add the property address before signing"); return; }
+    signBtn.disabled = true;
+    signBtn.dataset.inFlight = "1";
     var pend = ix.items.filter(function (i) { return !isDone(i); }).length;
     function doSign() {
-      signBtn.disabled = true;
       flush({ manual: true }).then(function () {
         return api("POST", "/api/sign", { name: name, role: role });
       }).then(function () {
         toast("Signed — the signature pins the saved inventory hash");
         return reload();
       }).then(function () { showFinish(true); })
-      .catch(function (e) { signBtn.disabled = false; toast(e.message); });
+      .catch(function (e) {
+        signBtn.disabled = false;
+        delete signBtn.dataset.inFlight;
+        toast(e.message);
+      });
     }
     if (pend) {
       ui.confirmDialog({
@@ -1544,7 +1578,10 @@
         message: pend + " items are still unreviewed.",
         note: "Signing pins the current content hash to your name in the report's declaration.",
         confirmLabel: "Sign anyway"
-      }).then(function (yes) { if (yes) doSign(); });
+      }).then(function (yes) {
+        if (yes) doSign();
+        else { signBtn.disabled = false; delete signBtn.dataset.inFlight; }
+      });
     } else doSign();
   }
   function startPdfExport(openWhenDone) {

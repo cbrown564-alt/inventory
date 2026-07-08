@@ -277,6 +277,48 @@ def test_owner_sign_pins_content_hash(server):
     assert sig["inventory_sha256"] == on_disk.content_sha256()
 
 
+def test_duplicate_owner_sign_is_noop_when_content_unchanged(server):
+    """Re-signing unchanged content must not append a duplicate row (docs/24 F5)."""
+    base, _state, out, _cap = server
+    _ensure_address(base)
+    _req("POST", base + "/api/sign", {"name": "C. Brown", "role": "landlord"})
+    status, _ = _req("POST", base + "/api/sign",
+                     {"name": "C. Brown", "role": "landlord"})
+    assert status == 200
+    on_disk = Inventory.from_json(
+        (out / "inventory.json").read_text(encoding="utf-8"))
+    landlord = [s for s in on_disk.signatures if s["role"] == "landlord"]
+    assert len(landlord) == 1
+
+
+def test_duplicate_tenant_countersign_is_noop(server):
+    """Tenant re-countersigning unchanged content is a no-op (docs/24 F5)."""
+    base, state, out, _cap = server
+    t = state.tenant_token
+    _req("POST", base + f"/api/t/{t}/sign", {"name": "T. Okafor"})
+    _req("POST", base + f"/api/t/{t}/sign", {"name": "T. Okafor"})
+    on_disk = Inventory.from_json(
+        (out / "inventory.json").read_text(encoding="utf-8"))
+    tenants = [s for s in on_disk.signatures if s["role"] == "tenant"]
+    assert len(tenants) == 1
+
+
+def test_tenant_token_persists_across_restart(server):
+    """A saved share link must survive a server restart (docs/24 F4)."""
+    base, state, out, cap = server
+    persisted_token = state.tenant_token
+    assert (out / "share.json").is_file()
+    # a fresh serve() with share=True must reuse the persisted token
+    httpd = serve(cap, out, port=0, share=True, backend="offline",
+                  open_browser=False)
+    try:
+        assert httpd.project_state.tenant_token == persisted_token
+    finally:
+        # shutdown() deadlocks without a running serve_forever loop, so just
+        # release the bound socket.
+        httpd.server_close()
+
+
 def test_tenant_token_gate(server):
     base, state, _out, _cap = server
     status, _ = _get_text(base + f"/t/{state.tenant_token}")

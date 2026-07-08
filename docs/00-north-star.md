@@ -120,12 +120,86 @@ Phase 4 — COST REDUCTION (post-v1, only if Phase 1–3 pass)
 
 ## Definition of done (v1)
 
-- [ ] First-tester completes one real tenancy end-to-end in the browser
-      — runbook: [`24-first-tester-runbook.md`](24-first-tester-runbook.md)
-- [ ] Friction log addressed or ticketed
-- [ ] Native-res benchmark shows defect recall ≥75%
-- [x] Default build uses gemini-3.5-flash; opus available for hard items
-- [ ] E8 + E2 + E10 wired into production build path
-- [x] All user-facing flows reachable from the UI (docs/10 bar; X1–X6 shipped)
+*The test is not "did the steps execute" — the first-tester run proved
+they do. The test is: **would a landlord who can afford £165 for peace
+of mind choose this instead?** That is a visual-trust and completeness
+bar, not a plumbing checklist. The criteria below encode it directly.*
 
-When every box is checked, v1 ships. Everything else is v2.
+### Pillar 1 — The product earns trust at first glance
+
+The first thing a landlord sees is the overview — room cards with hero
+images. If those images are bad (wrong room, object close-up, motion
+blur), no amount of correct text recovers. Visual polish is not
+decoration; for a real-estate product it *is* the value proposition.
+
+- [ ] **One design system across every surface** — start, review,
+      tenant, report, PDF share one palette, type scale, spacing
+      grammar, and component library. No third theme. Scoping doc:
+      [`25-design-overhaul.md`](25-design-overhaul.md).
+- [ ] **The review surface is rebuilt to the craft bar** (docs/14) —
+      light/airy consistency with the landing page (the "two worlds"
+      split is re-evaluated), generous type and spacing, hover/affordance
+      polish matching the start page, no 9px density.
+- [ ] **First-screen trust sign-off** — owner looks at the overview on
+      a fresh build and says *"I'd send this to a landlord"* without
+      qualification. This is the gate the old DoD lacked.
+
+### Pillar 2 — The evidence is trustworthy by construction
+
+Heroes must depict the right room, well-framed, because the user chose
+the right capture strategy and the pipeline selects representative
+frames — not because a heuristic picked the least-bad option from a
+pool that may contain the wrong room entirely.
+
+- [ ] **Capture strategy validated** (photo vs video, at multiple
+      volumes, measured on accuracy / image quality / time / effort) —
+      the deepest open question and the one that determines the
+      pipeline's shape. Experiment design:
+      [`26-capture-strategy-experiment.md`](26-capture-strategy-experiment.md).
+- [ ] **Heroes depict the named room** — a semantic check (not just
+      greyscale Laplacian heuristics that the scorer's own docstring
+      admits reward textured surfaces) confirms each rank-1 cover is
+      a recognisable establishing view of the room it labels.
+- [ ] **Pipeline can flag a bad segment**, not silently pick the
+      least-bad frame — "no confident cover" surfaces for re-capture
+      or manual review rather than shipping a staircase as a kitchen.
+
+### Pillar 3 — The report is accurate and complete
+
+The existing quality bar — kept, because a beautiful report that is
+wrong is still worthless.
+
+- [ ] Native-res benchmark shows notable recall ≥90%, hallucination
+      ≤5%, defect recall ≥75% (docs/10; currently resolution-bound at
+      64–71% defect recall).
+- [ ] E8 + E2 + E10 wired into the production build path.
+
+### Pillar 4 — The journey is low-friction end-to-end
+
+The first-tester run (8 Jul 2026) proved the journey executes. These
+are the remaining frictions that erode trust enough to send someone
+back to the £165 option.
+
+- [x] First-tester completes one real tenancy end-to-end in the browser
+      — runbook: [`24-first-tester-runbook.md`](24-first-tester-runbook.md);
+      log: [`24-friction-log-2026-07-08.md`](24-friction-log-2026-07-08.md)
+- [x] Default build uses gemini-3.5-flash; opus available for hard items
+- [x] All user-facing flows reachable from the UI (docs/10 bar; X1–X6
+      shipped)
+- [ ] F1 Windows PDF resolved (WeasyPrint deps or browser-print fallback)
+      — the journey's deliverable must exist on the OS a landlord uses
+- [ ] F2–F6 frictions addressed or explicitly ticketed with a reason
+
+### Distance summary (honest)
+
+| Pillar | Status |
+|---|---|
+| **1 — Trust at first glance** | **Not started.** Requires design overhaul + review rebuild. Largest design-surface gap. |
+| **2 — Trustworthy by construction** | **Not started.** Capture strategy is genuine research; hero/pipeline fixes are coupled to its outcome. |
+| **3 — Accurate & complete** | **Partially met.** Defect recall below bar; quality wins (E8/E2/E10) proven but unwired. |
+| **4 — Low-friction journey** | **Mostly met.** Journey executes; PDF-on-Windows is the remaining major friction. |
+
+**v1 ships when every box is checked.** The old DoD was 4/6 done because
+it measured the journey mechanically; the real bar — Pillars 1 and 2 —
+is the bulk of the remaining work and is what "for pennies, not £165"
+actually requires. Everything not listed here is v2.

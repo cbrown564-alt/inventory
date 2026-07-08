@@ -46,22 +46,24 @@ in the log table below.
 
 | # | Step | Expected observable | Pass? | Friction notes |
 |---|---|---|---|---|
-| 1 | Open the app (no prior build) | Start page: filming guide + video drop zone; plain-language spend copy (not backend names) | | |
-| 2 | Drop walkthrough video | Upload row shows filename, size; build button enables | | |
-| 3 | Confirm build | Dialog shows estimated cost in plain language; accept with `yes` | | |
-| 4 | Wait for build | Staged progress: watching footage → finding rooms → extracting frames → drafting items → rendering report; **room name chips** appear after segmentation | | |
-| 5 | Build completes | Browser lands on **Overview** (`/#overview`), not item 1 of N | | |
-| 6 | Overview | Stats bar (rooms · items · frames); room gallery with hero thumbs; *Start review* CTA visible | | |
-| 7 | Open one room card | Room view: hero frames, rename/merge tools reachable | | |
-| 8 | *Start review* | Item queue opens; least-confident items first; walkthrough spine visible | | |
-| 9 | Confirm 3–5 items | Overview meters update when returning to `#overview` | | |
-| 10 | Finish checklist (`#finish`) | Blocks sign until **property address** set on cover | | |
-| 11 | Set address + sign | Signature recorded; hash pinned in inventory | | |
-| 12 | Final issue (`/issue`) | Clean sendable document; address on cover | | |
-| 13 | Report round-trip | Report → *Continue in Review* → Overview (same tab) | | |
-| 14 | PDF | PDF exists at build completion **or** exports from Finish without hunting | | |
-| 15 | Mobile (390px) | Overview 2-col grid; Finish reachable; no broken layout | | |
-| 16 | Tenant link (optional) | `--share` link opens; tenant can comment; countersign works | | |
+| 1 | Open the app (no prior build) | Start page: filming guide + video drop zone; plain-language spend copy (not backend names) | **Pass** | 8 Jul 2026 run |
+| 2 | Drop walkthrough video | Upload row shows filename, size; build button enables | **Pass** | `IMG_5512.MOV` |
+| 3 | Confirm build | Dialog shows estimated cost in plain language; accept with `yes` | **Pass** | |
+| 4 | Wait for build | Staged progress: watching footage → finding rooms → extracting frames → drafting items → rendering report; **room name chips** appear after segmentation | **Pass** | ~16 min; see F3 in friction log |
+| 5 | Build completes | Browser lands on **Overview** (`/#overview`), not item 1 of N | **Pass** | |
+| 6 | Overview | Stats bar (rooms · items · frames); room gallery with hero thumbs; *Start review* CTA visible | **Pass** | 10 rooms · 186 items · 92 frames |
+| 7 | Open one room card | Room view: hero frames, rename/merge tools reachable | **Pass** | Hallway tested |
+| 8 | *Start review* | Item queue opens; least-confident items first; walkthrough spine visible | **Pass** | *Play this moment* per item |
+| 9 | Confirm 3–5 items | Overview meters update when returning to `#overview` | **Pass** | 6 confirmed |
+| 10 | Finish checklist (`#finish`) | Blocks sign until **property address** set on cover | **Pass** | |
+| 11 | Set address + sign | Signature recorded; hash pinned in inventory | **Pass** | `acknowledgements.jsonl` chain |
+| 12 | Final issue (`/issue`) | Clean sendable document; address on cover | **Pass** | |
+| 13 | Report round-trip | Report → *Continue in Review* → Overview (same tab) | **Partial** | Lands on `#items` not `#overview` — F2 |
+| 14 | PDF | PDF exists at build completion **or** exports from Finish without hunting | **Fail** | WeasyPrint missing on Windows — F1 |
+| 15 | Mobile (390px) | Overview 2-col grid; Finish reachable; no broken layout | **Pass** | |
+| 16 | Tenant link (optional) | `--share` link opens; tenant can comment; countersign works | **Pass** | Token ephemeral on restart — F4 |
+
+*Full friction detail: [`24-friction-log-2026-07-08.md`](24-friction-log-2026-07-08.md)*
 
 ---
 
@@ -71,8 +73,12 @@ Use one row per issue — even small ones. Tag severity so Phase 2 can prioritis
 
 | ID | Step | Severity | What happened | Expected | Fix / ticket |
 |---|---|---|---|---|---|
-| F1 | | blocker / major / minor / nit | | | |
-| F2 | | | | | |
+| F1 | 14 | major | WeasyPrint `libgobject-2.0-0` missing on Windows; no PDF at build or Finish | One-click PDF | Windows deps or browser-print fallback |
+| F2 | 13 | minor | *Continue in Review* → `#items` not `#overview` | Overview round-trip | Fix deep-link in report template/JS |
+| F3 | 4 | minor | ~16 min build on 13 min video | Acceptable latency | ETA in progress UI (Phase 2) |
+| F4 | 16 | minor | Tenant token invalid after server restart | Stable share link | Persist token or regen warning |
+| F5 | 11 | nit | Duplicate landlord sign entries | Single sign | Debounce sign action |
+| F6 | 10 | nit | Sign allowed with 180/186 unreviewed | Optional hard gate | Product decision |
 
 **Severity guide:**
 
@@ -87,14 +93,17 @@ Use one row per issue — even small ones. Tag severity so Phase 2 can prioritis
 
 From docs/00 — check when the run finishes:
 
-- [ ] Steps 1–14 pass without a **blocker**
-- [ ] Friction log committed (this file or `docs/24-friction-log-YYYY-MM-DD.md`)
-- [ ] Every **blocker** and **major** has a fix plan or explicit deferral with reason
-- [ ] Build used gemini default (check `inventory.json` → `describe_backend`)
-- [ ] Signed PDF or HTML issue is sendable to a tenant/agent
+- [x] Steps 1–14 pass without a **blocker** (step 14 major — HTML workaround OK)
+- [x] Friction log committed ([`24-friction-log-2026-07-08.md`](24-friction-log-2026-07-08.md))
+- [x] Every **blocker** and **major** has a fix plan or explicit deferral with reason (F1: Windows PDF)
+- [x] Build used gemini default (`describe_backend`: `openai (gemini-3.5-flash)`)
+- [x] Signed HTML issue sendable to a tenant/agent (`/issue`; PDF pending F1)
 
 When all boxes are checked, Phase 1 is **done** and Phase 2 (E2/E8/E10 wiring)
 starts.
+
+**8 Jul 2026 run:** Journey complete; **conditional** Phase 1 exit — F1 (Windows PDF)
+must be fixed before claiming PDF delivery on Windows. See friction log.
 
 ---
 

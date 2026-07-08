@@ -1,11 +1,16 @@
-{#- Design system for every served surface. Two worlds, one product
-    (docs/14): the *paper* scheme (default) is the document world — start
-    page, tenant walk-through, project home, compare; the *stage* scheme
-    (body.stage) is the evidence room — the review app, where footage is
-    judged on a dark surround. Brass is the identity accent in both.
-    System faces only; no external fonts — nothing leaves the machine. -#}
+{#- One design system, one palette (docs/25). Every served surface — start,
+    review, tenant, project, compare, report — is the light *paper* world.
+    Dark is no longer a body-wide theme: it survives only as a *scoped* mode
+    on the media-inspection surfaces (the review stage, lightbox and video
+    player) where a dark surround genuinely sharpens the frame under
+    inspection. Those surfaces set their own dark values locally; the
+    `.stage`/`body.stage` scope below is retained for that scoped use and as
+    back-compat, not as a page theme. Brass is the identity accent throughout.
+    Display serif is bundled (self-hosted Fraunces, see _fonts.css.j2); UI and
+    mono stay system faces. Nothing leaves the machine. -#}
+{% include "_fonts.css.j2" %}
 :root {
-  /* paper — the document world */
+  /* paper — the one document world */
   --paper: #f6f3ec; --panel: #fffdf8; --panel-2: #f1ede3;
   --ink: #22262d; --muted: #626b76; --faint: #969ca6;
   --line: #e4dfd3; --line-strong: #c8c1b0;
@@ -14,9 +19,26 @@
   --danger: #a3312a; --danger-soft: #f7e9e8;
   --pend: #718093; --pend-soft: #eceff2;
   --tenant: #6d4d92;
+
+  /* type scale — replaces the old 9/10/11px ad-hoc sizes (docs/25 A) */
+  --fs-2xs: 10px; --fs-xs: 11px; --fs-sm: 12.5px; --fs-base: 14px;
+  --fs-md: 15.5px; --fs-lg: 18px; --fs-xl: 22px; --fs-2xl: 28px;
+  --lh-tight: 1.25; --lh-snug: 1.4; --lh-base: 1.55; --lh-loose: 1.65;
+
+  /* spacing scale */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+  --sp-6: 24px; --sp-7: 32px; --sp-8: 48px;
+
+  /* radius + elevation */
+  --r-sm: 7px; --r-md: 10px; --r-lg: 14px; --r-pill: 999px;
+  --e-1: 0 1px 2px rgba(43, 36, 20, .05),
+         0 3px 10px -5px rgba(43, 36, 20, .16);
+  --e-2: 0 4px 12px -6px rgba(43, 36, 20, .22),
+         0 12px 30px -18px rgba(43, 36, 20, .3);
   --shadow: 0 18px 44px -22px rgba(43, 36, 20, .35);
-  --display: "New York", "Iowan Old Style", "Palatino", Charter, Georgia,
-             "Times New Roman", serif;
+
+  --display: "Fraunces", "New York", "Iowan Old Style", "Palatino", Charter,
+             Georgia, "Times New Roman", serif;
   --ui: "Avenir Next", Avenir, "Segoe UI Variable Text", "Segoe UI",
         system-ui, Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, "SF Mono", Menlo, "Cascadia Code", Consolas,
@@ -26,7 +48,7 @@
   --accent-soft: var(--brass-soft);
 }
 body.stage {
-  /* stage — the evidence room */
+  /* scoped dark — used by the media-inspection surfaces only (docs/25) */
   --paper: #0e1116; --panel: #151a22; --panel-2: #1c232e;
   --ink: #e8ecf1; --muted: #94a1b2; --faint: #5f6c7c;
   --line: #232c38; --line-strong: #384457;
@@ -104,6 +126,54 @@ button, input, select, textarea { font-family: var(--ui); }
 .btn.ghost { border-color: transparent; color: var(--muted); }
 .btn.ghost:hover { color: var(--ink); border-color: var(--line-strong); }
 .btn:disabled { opacity: .45; cursor: default; transform: none; }
+
+/* ---------- cards (one raised panel, defined once — docs/25) ---------- */
+.card {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: var(--r-lg); box-shadow: var(--e-1);
+  transition: transform .18s cubic-bezier(.16, 1, .3, 1),
+              box-shadow .18s ease, border-color .18s ease;
+}
+.card:hover, .card:focus-visible {
+  transform: translateY(-3px); box-shadow: var(--e-2);
+  border-color: var(--brass);
+}
+
+/* ---------- badges (status pills) ---------- */
+.badge {
+  display: inline-flex; align-items: center; font-size: var(--fs-2xs);
+  font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  border-radius: var(--r-pill); padding: 3px 8px; line-height: 1.3;
+}
+.badge.ok { color: var(--confirm); background: var(--confirm-soft); }
+.badge.no { color: var(--danger); background: var(--danger-soft); }
+.badge.pend { color: var(--brass-bright); background: var(--brass-soft); }
+.badge.prov {
+  color: var(--faint); background: transparent; border: 1px solid var(--line);
+  text-transform: none; letter-spacing: 0; font-weight: 500;
+  font-family: var(--ui);
+}
+
+/* ---------- chips (removable defect tags) ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; margin: 2px 6px 2px 0;
+  font: var(--fs-sm) var(--ui); color: var(--danger);
+  background: var(--danger-soft); border: 1px solid transparent;
+  border-radius: var(--r-pill); padding: 3px 11px; cursor: pointer;
+  user-select: none; transition: border-color .12s, transform .06s;
+}
+.chip:hover { border-color: var(--danger); }
+.chip:active { transform: scale(.97); }
+.chip.struck {
+  color: var(--faint); background: var(--panel-2);
+  text-decoration: line-through;
+}
+.chip.struck:hover { border-color: var(--line-strong); }
+.chip .x { font-size: 11px; opacity: .6; }
+.chip-add {
+  background: var(--panel); color: var(--muted); border-style: dashed;
+  text-decoration: none;
+}
 
 /* ---------- modal ---------- */
 .ui-modal-backdrop {

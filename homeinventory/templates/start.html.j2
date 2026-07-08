@@ -21,9 +21,20 @@
   .banner-note { margin: 10px 0 0; font-size: 13px; line-height: 1.55;
                  color: var(--muted); max-width: 58ch; }
 
+  /* ledger hero: periodical nameplate + two-column body (docs/25) */
+  .ledger-hero { border: 1px solid var(--line-strong); border-radius: 16px;
+    background: var(--panel); box-shadow: var(--e-1); overflow: hidden;
+    margin-top: 22px; }
+  .nameplate { display: flex; align-items: center; justify-content: center;
+    gap: 18px; padding: 12px 20px; border-bottom: 2px solid var(--ink); }
+  .nameplate .np-side { flex: 1; font: 600 11px/1 var(--mono);
+    letter-spacing: .14em; text-transform: uppercase; color: var(--faint); }
+  .nameplate .np-side.r { text-align: right; }
+  .nameplate .np-name { font: 600 15px/1 var(--display); letter-spacing: .42em;
+    text-transform: uppercase; color: var(--ink); white-space: nowrap; }
   .hero { display: grid; grid-template-columns: minmax(0, 1.05fr)
-          minmax(0, 1fr); gap: 56px; align-items: start;
-          padding-top: 54px; }
+          minmax(0, 1fr); gap: 48px; align-items: start;
+          padding: 44px 40px; }
   h1 { font: 600 clamp(30px, 4.2vw, 44px)/1.12 var(--display);
        letter-spacing: -.015em; margin: 0 0 14px; color: var(--ink); }
   h1 em { font-style: italic; color: var(--brass); }
@@ -57,42 +68,41 @@
   .outcome-preview em { font-style: normal; color: var(--ink);
                          font-weight: 600; }
 
-  .slate { background:
-      radial-gradient(420px 200px at 50% -60px, #1a2029 0%, #0e1116 70%);
-    border: 1px solid #2a3340; border-radius: 14px; padding: 18px;
-    box-shadow: var(--shadow); }
-  #drop { border: 2px dashed rgba(200, 163, 92, .45); border-radius: 10px;
-    padding: 44px 20px; text-align: center; color: #94a1b2;
+  .slate { background: var(--panel-2);
+    border: 1px solid var(--line-strong); border-radius: 14px; padding: 18px;
+    box-shadow: var(--e-1); }
+  #drop { border: 1.5px dashed var(--line-strong); border-radius: 10px;
+    padding: 44px 20px; text-align: center; color: var(--muted);
     cursor: pointer; transition: border-color .18s, background .18s;
-    font-size: 13.5px; }
-  #drop:hover, #drop.over { border-color: #e5c47f;
-    background: rgba(200, 163, 92, .07); }
+    font-size: 13.5px; background: var(--panel); }
+  #drop:hover, #drop.over { border-color: var(--brass);
+    background: var(--brass-soft); }
   #drop .play { width: 46px; height: 46px; border-radius: 50%; margin: 0
-    auto 12px; border: 1.5px solid rgba(200, 163, 92, .55); display: flex;
+    auto 12px; border: 1.5px solid var(--brass); display: flex;
     align-items: center; justify-content: center; }
   #drop .play svg { display: block; margin-left: 3px; }
-  #drop strong { color: #e8ecf1; display: block; font-size: 15px;
-                 margin-bottom: 3px; }
+  #drop strong { color: var(--ink); display: block;
+    font: 600 16px/1.2 var(--display); margin-bottom: 3px; }
   .slate .formats { margin: 12px 4px 0; font: 11px var(--mono);
-                    color: #5f6c7c; text-align: center; }
+                    color: var(--faint); text-align: center; }
 
   /* upload rows — filename, duration, size, remove/replace */
   #up-list { margin-top: 12px; display: grid; gap: 8px; }
-  .up-file { background: rgba(255, 255, 255, .04); border: 1px solid #2a3340;
+  .up-file { background: var(--panel); border: 1px solid var(--line);
              border-radius: 8px; padding: 10px 12px; }
   .up-file .up-top { display: flex; align-items: flex-start; gap: 10px;
                       justify-content: space-between; }
-  .up-file .nm { font-family: var(--mono); font-size: 12px; color: #e8ecf1;
+  .up-file .nm { font-family: var(--mono); font-size: 12px; color: var(--ink);
                  overflow: hidden; text-overflow: ellipsis;
                  white-space: nowrap; max-width: 100%; }
-  .up-file .dims { font-size: 12px; color: #94a1b2; margin-top: 3px;
+  .up-file .dims { font-size: 12px; color: var(--muted); margin-top: 3px;
                    font-variant-numeric: tabular-nums; }
   .up-file .up-actions { display: flex; gap: 4px; flex-shrink: 0; }
   .up-file .up-actions .btn { padding: 4px 8px; font-size: 11.5px; }
-  .up-file .st { font-size: 12px; color: #94a1b2; margin-top: 6px; }
-  .up-file .st.err { color: #e06459; }
-  .up-file .st.ok { color: #45b681; }
-  .up-file .track { margin-top: 6px; height: 3px; background: #232c38;
+  .up-file .st { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .up-file .st.err { color: var(--danger); }
+  .up-file .st.ok { color: var(--confirm); }
+  .up-file .track { margin-top: 6px; height: 3px; background: var(--line);
                     border-radius: 2px; overflow: hidden; }
   .up-file .fill { display: block; height: 100%; width: 0;
                    background: var(--brass); transition: width .2s; }
@@ -150,13 +160,10 @@
     margin: 0 0 30px; }
   .cards { display: grid; grid-template-columns: repeat(auto-fit,
            minmax(280px, 1fr)); gap: 16px; }
-  .card { text-align: left; background: var(--panel);
-    border: 1px solid var(--line-strong); border-radius: 12px;
-    padding: 22px 22px 20px; cursor: pointer;
-    transition: border-color .15s, transform .15s, box-shadow .15s;
-    border-top: 3px solid var(--brass); }
-  .card:hover { border-color: var(--brass); transform: translateY(-2px);
-                box-shadow: var(--shadow); }
+  /* .card base lives in _theme.css.j2 (bg, border, radius, elevation,
+     hover lift); the picker only adds its document-world specifics */
+  .card { text-align: left; cursor: pointer; padding: 22px 22px 20px;
+          border-top: 3px solid var(--brass); }
   .card strong { display: block; font: 600 19px/1.25 var(--display);
                  margin-bottom: 7px; color: var(--ink); }
   .card span { color: var(--muted); font-size: 13.5px; line-height: 1.55; }
@@ -171,7 +178,9 @@
   }
   @media (max-width: 480px) {
     main { padding: 0 12px 48px; }
-    .hero { gap: 24px; padding-top: 20px; }
+    .hero { gap: 24px; padding: 24px 18px; }
+    .nameplate .np-side { display: none; }
+    .nameplate { justify-content: center; }
     h1 { font-size: 28px; }
     .banner.rebuild { padding: 14px; margin-top: 16px; }
     .banner-row { flex-direction: column; align-items: stretch; }
@@ -232,7 +241,13 @@
 </div>
 {% endif %}
 
-<div class="hero">
+<div class="ledger-hero">
+  <div class="nameplate">
+    <span class="np-side">Est. MMXXVI</span>
+    <span class="np-name">Homeinventory</span>
+    <span class="np-side r">TDS &middot; credible</span>
+  </div>
+  <div class="hero">
   <section id="filming-guide" class="pitch">
     <h1>Walk the property once.<br>Leave with <em>evidence</em>.</h1>
     <p class="sub">Film one continuous walkthrough on your phone and drop
@@ -264,7 +279,7 @@
                aria-label="Choose or drop your walkthrough video">
             <div class="play">
               <svg width="16" height="18" viewBox="0 0 16 18" aria-hidden="true">
-                <path d="M1 1.5v15l14-7.5z" fill="none" stroke="#c8a35c"
+                <path d="M1 1.5v15l14-7.5z" fill="none" stroke="#9a7729"
                       stroke-width="1.6" stroke-linejoin="round"/>
               </svg>
             </div>
@@ -295,6 +310,7 @@
       </div>
     </div>
   </section>
+  </div>
 </div>
 {% endif %}
 

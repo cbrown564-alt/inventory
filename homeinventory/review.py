@@ -105,8 +105,7 @@ class ProjectState:
         self.no_detect = no_detect
         self.use_case = use_case
         self.lock = threading.Lock()
-        self.tenant_token: Optional[str] = (
-            secrets.token_urlsafe(16) if share else None)
+        self.tenant_token: Optional[str] = self._resolve_tenant_token(share)
         self.compare = {"status": "idle", "detail": "", "cmd": None}
         self.sessions: dict[str, SessionState] = {}
         self._init_sessions()
@@ -114,6 +113,45 @@ class ProjectState:
     @property
     def project_path(self) -> Path:
         return self.out_dir / "project.json"
+
+    @property
+    def share_path(self) -> Path:
+        """Persisted tenant token so a saved share link survives restarts
+        (docs/24 F4). Only written when sharing is explicitly enabled."""
+        return self.out_dir / "share.json"
+
+    def _resolve_tenant_token(self, share: bool) -> Optional[str]:
+        """Mint a fresh token, or reuse the persisted one so an existing link
+        keeps working after a server restart."""
+        if not share:
+            return None
+        existing = self._load_share_token()
+        token = existing or secrets.token_urlsafe(16)
+        if not existing:
+            self._save_share_token(token)
+        return token
+
+    def _load_share_token(self) -> Optional[str]:
+        if not self.share_path.is_file():
+            return None
+        try:
+            data = json.loads(self.share_path.read_text(encoding="utf-8"))
+            token = data.get("tenant_token")
+            if isinstance(token, str) and token:
+                return token
+        except (json.JSONDecodeError, TypeError, KeyError, OSError):
+            pass
+        return None
+
+    def _save_share_token(self, token: str) -> None:
+        try:
+            self.out_dir.mkdir(parents=True, exist_ok=True)
+            self.share_path.write_text(
+                json.dumps({"tenant_token": token}, indent=2),
+                encoding="utf-8")
+        except OSError as e:
+            log.warning("could not persist tenant token to %s (%s)",
+                        self.share_path, e)
 
     @property
     def legacy_inv_path(self) -> Path:
@@ -771,6 +809,17 @@ def _signature(inv: Inventory, name: str, role: str, via: str) -> dict:
             "inventory_sha256": inv.content_sha256(), "via": via}
 
 
+def _already_signed(inv: Inventory, name: str, role: str) -> bool:
+    """Has this party already signed the current (unchanged) content? Re-signing
+    identical content is a no-op rather than a duplicate row (docs/24 F5)."""
+    sha = inv.content_sha256()
+    return any(
+        s.get("name") == name and s.get("role") == role
+        and s.get("inventory_sha256") == sha
+        for s in inv.signatures
+    )
+
+
 def _address_ok(inv: Inventory, uc: UseCase) -> bool:
     """Cover address must be set to a real value before signing."""
     addr = (inv.property_address or "").strip()
@@ -1364,9 +1413,10 @@ class ReviewHandler(BaseHandler):
                     return
                 with st.lock:
                     inv = st.load()
-                    inv.signatures.append(_signature(
-                        inv, name, role, "review server (level 2)"))
-                    st.save(inv)
+                    if not _already_signed(inv, name, role):
+                        inv.signatures.append(_signature(
+                            inv, name, role, "review server (level 2)"))
+                        st.save(inv)
                 st.ack(name, role, "sign")
                 self._json({"ok": True, "signatures": st.load().signatures})
                 return
@@ -1416,10 +1466,11 @@ class ReviewHandler(BaseHandler):
             return
         with st.lock:
             inv = st.load()
-            inv.signatures.append(_signature(
-                inv, name, st.uc.counterparty_role.key,
-                "shared review link (level 3)"))
-            st.save(inv)
+            if not _already_signed(inv, name, st.uc.counterparty_role.key):
+                inv.signatures.append(_signature(
+                    inv, name, st.uc.counterparty_role.key,
+                    "shared review link (level 3)"))
+                st.save(inv)
         st.ack(name, st.uc.counterparty_role.key, "sign",
                "acknowledged receipt and countersigned")
         self._json({"ok": True})
@@ -1464,7 +1515,8 @@ def serve(capture_dir: Path, out_dir: Path, port: int = 8484,
               f"http://{_lan_ip()}:{actual_port}/t/{project.tenant_token}",
               flush=True)
         print("  Anyone with this link can read the inventory, comment and "
-              "countersign.\n  It dies with this process; restart for a new link.")
+              "countersign.\n  It is saved to share.json and persists across "
+              "restarts (re-run with --share to reuse it).")
     if open_browser:
         import webbrowser
         threading.Timer(0.4, webbrowser.open,

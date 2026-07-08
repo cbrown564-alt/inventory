@@ -5,18 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ inv.report_type }} — {{ inv.property_address or "Property" }}</title>
 <style>
+{% include "_theme.css.j2" %}
+
+  /* The report is the document-world expression of the ONE shared system
+     (docs/25): colour, type scale and components all come from
+     _theme.css.j2. This block only aliases the report's own semantic token
+     names onto the shared palette and sets document-specific values — no
+     third palette. */
   :root {
-    --ink: #21252c; --muted: #5c626d; --rule: #ded8ca; --accent: #262c36;
-    --brass: #9a7729; --band: #f5f2ea; --paper: #fffdf9;
-    /* review instrument palette */
-    --confirm: #0e6b46; --confirm-soft: #e7f3ed;
-    --reject: #a3231f; --reject-soft: #f9ecec;
-    --pend: #8a6d1f; --pend-soft: #faf4e3;
-    --serif: "New York", "Iowan Old Style", "Palatino", Charter, Georgia, "Times New Roman", serif;
-    --ui: "Avenir Next", Avenir, -apple-system, "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --mono: ui-monospace, "SF Mono", Menlo, "Cascadia Code", Consolas, "Liberation Mono", monospace;
+    --paper: var(--panel);        /* the document is white paper, not the warm page bg */
+    --rule: var(--line);
+    --band: var(--panel-2);
+    --accent: var(--ink);         /* headings & chrome are ink; brass stays the accent rule */
+    --reject: var(--danger); --reject-soft: var(--danger-soft);
+    --pend: var(--brass-bright); --pend-soft: var(--brass-soft);
+    --serif: var(--display);
   }
-  * { box-sizing: border-box; }
   body {
     font-family: var(--serif);
     color: var(--ink); margin: 0; font-size: 11pt; line-height: 1.45;
@@ -56,8 +60,8 @@
                 border-radius: 2px; margin-bottom: 3px; }
   /* grades wear small-caps; defect text stays sentence case */
   .grade-word { white-space: nowrap; font-variant: small-caps; }
-  .grade-word.poor { color: #a3231f; font-weight: 700; }
-  .grade-word.fair { color: #9a6200; }
+  .grade-word.poor { color: var(--reject); font-weight: 700; }
+  .grade-word.fair { color: var(--brass-bright); }
   .defects { color: var(--reject); }
   .defects li { margin: 0; }
   .cond-cell .defects { margin-top: 3px; font-size: 8.5pt; }
@@ -159,7 +163,7 @@
     /* review-mode chrome, restated for the grid (row ring, not cell rims) */
     body.reviewing section.room tr.item-row.active td { background: none;
       border: none; }
-    body.reviewing section.room tr.item-row.active { background: #f6f9fc;
+    body.reviewing section.room tr.item-row.active { background: var(--brass-soft);
       box-shadow: inset 0 0 0 1px var(--accent); border-radius: 4px; }
     /* the frame around the entries (docs/16 R2) */
     .room-meta { font: 500 8.5pt var(--ui); letter-spacing: .08em;
@@ -333,9 +337,9 @@
   /* ---------- the review docket (JS-revealed instrument layer) ---------- */
   #docket {
     display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
-    font-family: var(--ui); font-size: 13px; color: #20242b;
-    background: #fcfcfb; border-top: 1px solid #c9cdd4;
-    box-shadow: 0 -8px 24px -16px rgba(21, 64, 107, .45);
+    font-family: var(--ui); font-size: 13px; color: var(--ink);
+    background: var(--panel); border-top: 1px solid var(--line-strong);
+    box-shadow: 0 -8px 24px -16px rgba(43, 36, 20, .35);
   }
   #docket.on { display: block; }
   #docket .bar { max-width: 1240px; margin: 0 auto; padding: 9px 18px;
@@ -343,37 +347,38 @@
   #docket .brand { letter-spacing: .18em; text-transform: uppercase;
                    font-size: 10px; color: var(--accent); font-weight: 600; }
   #progress { flex: 1 1 180px; min-width: 140px; }
-  #progress .track { height: 4px; background: #e3e6ea; border-radius: 2px;
+  #progress .track { height: 4px; background: var(--line); border-radius: 2px;
                      overflow: hidden; margin-top: 4px; }
   #progress .fill { height: 100%; width: 0; background: var(--confirm);
                     transition: width .35s cubic-bezier(.16,1,.3,1); }
   #progress .label { font-size: 11px; color: var(--muted);
                      font-variant-numeric: tabular-nums; }
   .dk-btn {
-    font: 600 12px var(--ui); color: #20242b; background: #fff;
-    border: 1px solid #c9cdd4; border-radius: 3px; padding: 6px 12px;
+    font: 600 12px var(--ui); color: var(--ink); background: var(--panel);
+    border: 1px solid var(--line-strong); border-radius: 6px; padding: 6px 12px;
     cursor: pointer; transition: border-color .15s, background .15s;
   }
-  .dk-btn:hover { border-color: var(--accent); }
+  .dk-btn:hover { border-color: var(--brass); color: var(--brass-bright); }
   .dk-btn:active { transform: translateY(1px); }
-  .dk-btn.primary { background: var(--accent); border-color: var(--accent);
-                    color: #fff; }
-  .dk-btn.primary:hover { background: #0f3257; }
-  .dk-btn[aria-pressed="true"] { background: var(--accent); color: #fff;
+  .dk-btn.primary { background: var(--brass); border-color: var(--brass);
+                    color: #14100a; }
+  .dk-btn.primary:hover { background: var(--brass-bright);
+                          border-color: var(--brass-bright); color: #14100a; }
+  .dk-btn[aria-pressed="true"] { background: var(--accent); color: var(--panel);
                                  border-color: var(--accent); }
   #dirty-dot { width: 8px; height: 8px; border-radius: 50%;
                background: transparent; }
   #dirty-dot.dirty { background: var(--pend); }
   .kbd-hint { font-size: 10px; color: var(--muted); }
   @media (hover: none), (pointer: coarse) { .kbd-hint { display: none; } }
-  .kbd-hint kbd { font-family: var(--mono); background: #eef0f3;
-                  border: 1px solid #d4d8de; border-radius: 2px;
+  .kbd-hint kbd { font-family: var(--mono); background: var(--panel-2);
+                  border: 1px solid var(--line); border-radius: 2px;
                   padding: 0 4px; font-size: 10px; }
 
   /* ---------- in-place review controls ---------- */
   body.reviewing main { padding-bottom: 96px; }
   body.reviewing tr.item-row { cursor: pointer; }
-  body.reviewing tr.item-row.active td { background: #f6f9fc;
+  body.reviewing tr.item-row.active td { background: var(--brass-soft);
       border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent); }
   body.reviewing tr.item-row.pending-mark td:first-child {
       box-shadow: inset 3px 0 0 var(--pend); }
@@ -381,25 +386,15 @@
       box-shadow: inset 3px 0 0 var(--confirm); }
   body.reviewing tr.item-row.reject-mark td:first-child {
       box-shadow: inset 3px 0 0 var(--reject); }
-  .rv-select { font: 12px var(--ui); padding: 2px 4px; border: 1px solid #c9cdd4;
-               border-radius: 3px; background: #fff; max-width: 100%; }
-  .rv-edit[contenteditable="true"] { outline: 1px dashed #b7bdc6;
+  .rv-select { font: 12px var(--ui); padding: 2px 4px;
+               border: 1px solid var(--line-strong);
+               border-radius: 6px; background: var(--panel); max-width: 100%; }
+  .rv-edit[contenteditable="true"] { outline: 1px dashed var(--line-strong);
       outline-offset: 2px; min-width: 40px; display: inline-block; }
   .rv-edit[contenteditable="true"]:focus { outline: 1.5px solid var(--accent); }
-  .chip {
-    display: inline-flex; align-items: center; gap: 5px; margin: 1px 3px 1px 0;
-    font: 12px var(--ui); color: var(--reject); background: var(--reject-soft);
-    border: 1px solid #e4c6c5; border-radius: 999px; padding: 1px 8px;
-    cursor: pointer; user-select: none;
-  }
-  .chip:active { transform: scale(.97); }
-  .chip.struck { color: var(--muted); background: #f1f2f4;
-                 border-color: #d8dbe0; text-decoration: line-through; }
-  .chip .x { font-size: 10px; opacity: .65; }
-  .chip-add { background: #fff; color: var(--muted); border-style: dashed;
-              text-decoration: none; }
+  /* .chip / .chip-add — shared components (see _theme.css.j2) */
   tr.rv-evidence td {
-    background: #f8f9fa; border-bottom: 2px solid var(--accent);
+    background: var(--panel-2); border-bottom: 2px solid var(--accent);
     padding: 10px 12px;
   }
   .rv-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
@@ -418,7 +413,8 @@
   .rv-comments .who { font-weight: 600; color: var(--accent); font-size: 11px; }
   .rv-comment-box { display: flex; gap: 6px; margin-top: 6px; }
   .rv-comment-box input { flex: 1; font: 12px var(--ui); padding: 5px 8px;
-                          border: 1px solid #c9cdd4; border-radius: 3px; }
+                          border: 1px solid var(--line-strong);
+                          border-radius: 6px; }
   @keyframes ev-flash {
     0% { outline: 4px solid var(--accent); outline-offset: 3px; }
     100% { outline: 4px solid transparent; outline-offset: 3px; }
@@ -426,38 +422,14 @@
   .flash { animation: ev-flash 1.6s ease-out 2; }
   #toast {
     position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%) translateY(8px);
-    background: #20242b; color: #fff; font: 13px var(--ui); padding: 8px 16px;
-    border-radius: 4px; opacity: 0; pointer-events: none;
+    background: var(--ink); color: #f4f1ea; font: 13px var(--ui); padding: 8px 16px;
+    border-radius: 8px; border: 1px solid var(--brass-soft);
+    opacity: 0; pointer-events: none;
     transition: opacity .25s, transform .25s; z-index: 50;
   }
   #toast.show { opacity: .96; transform: translateX(-50%) translateY(0); }
 
-  /* ---------- shared modal styles (screen-only instrument chrome) ------- */
-  .btn { border: 1px solid #c9cdd4; background: #fff; color: #20242b;
-         border-radius: 6px; padding: 7px 14px; font: 500 13px var(--ui);
-         cursor: pointer; }
-  .btn:hover { border-color: var(--accent); }
-  .btn.primary { background: var(--accent); border-color: var(--accent);
-                 color: #fff; }
-  .btn.ghost { border-color: transparent; color: var(--muted); }
-  .btn.ghost:hover { border-color: #c9cdd4; color: #20242b; }
-  .ui-modal-backdrop { position: fixed; inset: 0; z-index: 90;
-    background: rgba(28,36,48,.45); display: flex; align-items: center;
-    justify-content: center; padding: 16px; font-family: var(--ui); }
-  .ui-modal { background: #fff; border: 1px solid #d8dbe0;
-    border-radius: 10px; width: 460px; max-width: 100%; max-height: 90vh;
-    overflow: auto; box-shadow: 0 24px 60px -20px rgba(15,29,46,.5); }
-  .ui-modal .ui-title { padding: 18px 20px 0; font: 600 15px var(--ui); }
-  .ui-modal .ui-body { padding: 10px 20px 4px; font: 14px/1.5 var(--ui); }
-  .ui-modal .ui-body .note { color: var(--muted); font-size: 13px; }
-  .ui-modal .ui-actions { display: flex; justify-content: flex-end; gap: 8px;
-                          padding: 12px 20px 16px; }
-  .ui-field { margin: 10px 0; }
-  .ui-field label { display: block; font: 600 11px var(--ui);
-    letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
-    margin-bottom: 4px; }
-  .ui-field input, .ui-field select { width: 100%; font: 14px var(--ui);
-    padding: 8px 10px; border: 1px solid #c9cdd4; border-radius: 6px; }
+  /* .btn, .ui-modal, .ui-field — shared components (see _theme.css.j2) */
 
   @media print {
     .photos img { height: 130px; }
@@ -812,10 +784,8 @@ rather than silently deleted.</p>
     document.getElementById("prog-d").textContent = c.total;
     document.getElementById("prog-fill").style.width =
       c.total ? (100 * c.done / c.total) + "%" : "0";
-    var link = document.getElementById("btn-continue-review");
-    if (link && c.done < c.total) {
-      link.setAttribute("href", "./#items");
-    }
+    /* "Continue in Review" always opens at Overview; the progress meter above
+       is what signals that items still need reviewing (docs/24 F2). */
   }
 
   /* file://: strip shell links that would dead-end */
