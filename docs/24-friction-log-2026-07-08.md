@@ -47,12 +47,12 @@ property address sanitised.*
 
 | ID | Step | Severity | What happened | Expected | Fix / ticket |
 |---|---|---|---|---|---|
-| F1 | 14 | **major** | Build log: `PDF generation unavailable (cannot load library 'libgobject-2.0-0')`. Finish checklist shows `! PDF generated`. Export PDF button does nothing useful. | PDF at build completion or one-click export from Finish | Install WeasyPrint/GTK deps on Windows **or** add browser-print fallback with clear UX when native PDF unavailable |
-| F2 | 13 | minor | Report → *Continue in Review* deep-links to `#items` (last item) not `#overview` | Land on Overview in same tab | Update `btn-continue-review` href in `report.html.j2` to `#overview` (template already has this; JS may override — investigate deep-link handler) |
-| F3 | 4 | minor | ~16 min build on 13 min video with no mid-build cancel/back | Acceptable for v1 but long; progress bar helps | Phase 2: surface ETA; consider chunking feedback |
-| F4 | 16 | minor | Tenant token is in-memory; restarting server without `--share` or with new PID invalidates saved link (403) | Link survives for session handoff | Persist token in `project.json` or show regen warning on Finish |
-| F5 | 11 | nit | Landlord signed twice (duplicate entries in `acknowledgements.jsonl`) | Single sign event | Debounce sign button or reject duplicate within window |
-| F6 | 10 | nit | Finish allows sign with 180/186 items unreviewed (warning only) | Stricter gate optional | Product decision: keep warning vs hard block |
+| F1 | 14 | **major** | Build log: `PDF generation unavailable (cannot load library 'libgobject-2.0-0')`. Finish checklist shows `! PDF generated`. Export PDF button does nothing useful. | PDF at build completion or one-click export from Finish | **Fixed (9 Jul):** browser-print fallback via final issue when WeasyPrint unavailable (`pdf_meta.weasyprint_available`, Finish CTA). Native WeasyPrint still preferred when installed. |
+| F2 | 13 | minor | Report → *Continue in Review* deep-links to `#items` (last item) not `#overview` | Land on Overview in same tab | **Fixed (9 Jul):** report docket click handler `location.assign(…#overview)` clears stale item hashes |
+| F3 | 4 | minor | ~16 min build on 13 min video with no mid-build cancel/back | Acceptable for v1 but long; progress bar helps | **Ticketed:** Phase 2 ETA / cancel; not a v1 ship blocker |
+| F4 | 16 | minor | Tenant token is in-memory; restarting server without `--share` or with new PID invalidates saved link (403) | Link survives for session handoff | **Ticketed:** persist token in `project.json` or Finish regen warning |
+| F5 | 11 | nit | Landlord signed twice (duplicate entries in `acknowledgements.jsonl`) | Single sign event | **Fixed earlier:** client `inFlight` guard + server `_already_signed` no-op |
+| F6 | 10 | nit | Finish allows sign with 180/186 items unreviewed (warning only) | Stricter gate optional | **Ticketed / product decision:** keep warning (peace-of-mind over hard block for v1) |
 
 ---
 

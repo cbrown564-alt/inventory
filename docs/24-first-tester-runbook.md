@@ -58,8 +58,8 @@ in the log table below.
 | 10 | Finish checklist (`#finish`) | Blocks sign until **property address** set on cover | **Pass** | |
 | 11 | Set address + sign | Signature recorded; hash pinned in inventory | **Pass** | `acknowledgements.jsonl` chain |
 | 12 | Final issue (`/issue`) | Clean sendable document; address on cover | **Pass** | |
-| 13 | Report round-trip | Report → *Continue in Review* → Overview (same tab) | **Partial** | Lands on `#items` not `#overview` — F2 |
-| 14 | PDF | PDF exists at build completion **or** exports from Finish without hunting | **Fail** | WeasyPrint missing on Windows — F1 |
+| 13 | Report round-trip | Report → *Continue in Review* → Overview (same tab) | **Pass** (fixed 9 Jul) | F2: docket forces `#overview` |
+| 14 | PDF | PDF exists at build completion **or** exports from Finish without hunting | **Pass** (fallback) | F1: browser Print → Save as PDF via final issue when WeasyPrint missing |
 | 15 | Mobile (390px) | Overview 2-col grid; Finish reachable; no broken layout | **Pass** | |
 | 16 | Tenant link (optional) | `--share` link opens; tenant can comment; countersign works | **Pass** | Token ephemeral on restart — F4 |
 

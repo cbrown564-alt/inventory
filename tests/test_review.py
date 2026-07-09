@@ -861,21 +861,28 @@ def test_pdf_export_and_serve(server):
 
 def test_pdf_503_when_weasyprint_missing(server, monkeypatch):
     import sys as _sys
+    import homeinventory.review as review_mod
     monkeypatch.setitem(_sys.modules, "weasyprint", None)  # import -> error
+    review_mod._WEASYPRINT_OK = False          # force unavailable path (F1)
     base, _state, out, _cap = server
     status, resp = _req("POST", base + "/api/pdf", {})
     assert status == 503                       # never a silent 200
     assert "pip install homeinventory[pdf]" in resp["error"]
+    assert resp.get("fallback") == "print"
+    assert resp.get("weasyprint_available") is False
 
 
 def test_pdf_export_conflict_409(server):
+    import homeinventory.review as review_mod
     from homeinventory.report import import_weasyprint
     base, state, _out, _cap = server
     try:
         import_weasyprint()                    # same probe the server uses
         available = True
+        review_mod._WEASYPRINT_OK = True
     except Exception:
         available = False                      # any load failure -> 503 path
+        review_mod._WEASYPRINT_OK = False
     with state.lock:
         state.pdf = {"status": "running", "detail": ""}
     try:
@@ -1371,10 +1378,24 @@ def test_start_page_redirects_to_overview_after_build(fresh_server):
 
 
 def test_report_continue_links_to_overview(server):
-    """docs/15 M1: report deep-links back to overview."""
+    """docs/15 M1 / docs/24 F2: report deep-links back to overview."""
     base, _state, _out, _cap = server
     _, html = _get_text(base + "/report")
     assert 'href="./#overview"' in html or 'href="#overview"' in html
+    assert 'location.assign(path + "#overview")' in html
+
+
+def test_craft_c2_spine_print_preview_pins(server):
+    """Craft C2: overview spine, print PDF fallback, landlord preview, pins."""
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "buildOverviewSpine" in html
+    assert "openPrintPdfFallback" in html
+    assert "Preview as landlord" in html
+    assert "roomCoverWeak" in html
+    assert "pinExhibitIndex" in html
+    assert "weasyprint_available" in html
+    assert "PDF (browser print)" in html
 
 
 def test_finish_sign_issue_chain(server):

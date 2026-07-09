@@ -832,6 +832,25 @@ def _address_ok(inv: Inventory, uc: UseCase) -> bool:
     return True
 
 
+_WEASYPRINT_OK: bool | None = None
+
+
+def _weasyprint_available(*, force: bool = False) -> bool:
+    """Probe WeasyPrint once per process (docs/24 F1 / craft N)."""
+    global _WEASYPRINT_OK
+    if force:
+        _WEASYPRINT_OK = None
+    if _WEASYPRINT_OK is not None:
+        return _WEASYPRINT_OK
+    try:
+        from .report import import_weasyprint
+        import_weasyprint()
+        _WEASYPRINT_OK = True
+    except Exception:
+        _WEASYPRINT_OK = False
+    return _WEASYPRINT_OK
+
+
 def _pdf_meta(st: SessionState) -> dict:
     pdf_path = st.out_dir / "inventory.pdf"
     inv_path = st.inv_path
@@ -843,7 +862,11 @@ def _pdf_meta(st: SessionState) -> dict:
         stale = True
     else:
         stale = False
-    return {"ready": ready, "stale": stale}
+    return {
+        "ready": ready,
+        "stale": stale,
+        "weasyprint_available": _weasyprint_available(),
+    }
 
 
 class ReviewHandler(BaseHandler):
@@ -1310,17 +1333,23 @@ class ReviewHandler(BaseHandler):
                 self._json({"ok": True, "status": "running"})
                 return
             if path == "/api/pdf":
-                try:
-                    from .report import import_weasyprint
-                    import_weasyprint()
-                except Exception:
-                    self._err(503, "PDF export needs WeasyPrint — "
-                                   "pip install homeinventory[pdf]")
+                if not _weasyprint_available():
+                    self._json({
+                        "ok": False,
+                        "status": "unavailable",
+                        "weasyprint_available": False,
+                        "error": ("Server PDF needs WeasyPrint "
+                                  "(pip install homeinventory[pdf]). "
+                                  "Use Print → Save as PDF from the "
+                                  "final issue instead."),
+                        "fallback": "print",
+                    }, 503)
                     return
                 if not st.start_pdf():
                     self._err(409, "a PDF export is already running")
                     return
-                self._json({"ok": True, "status": "running"})
+                self._json({"ok": True, "status": "running",
+                            "weasyprint_available": True})
                 return
             if path == "/api/inventory":
                 body = self._body()

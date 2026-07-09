@@ -468,16 +468,22 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
         p.id: _display_path(p.path, capture_dir, out_dir)
         for room in inv.rooms for p in room.photos
     }
-    # defect regions grouped by photo, for the photo strips and Appendix B
+    # defect regions grouped by photo, for the photo strips and Appendix B.
+    # Exhibit numbers are stable per item (sort by photo, then y/x).
     regions_by_photo: dict[str, list[dict]] = defaultdict(list)
     for room in inv.rooms:
         for item in room.items:
             if item.rejected:
                 continue
-            for reg in item.defect_regions:
-                if reg.get("photo_id"):
-                    regions_by_photo[reg["photo_id"]].append(
-                        {"item_id": item.id, **reg})
+            regs = sorted(
+                [r for r in item.defect_regions if r.get("photo_id")],
+                key=lambda r: (r.get("photo_id") or "",
+                               float(r.get("y") or 0),
+                               float(r.get("x") or 0)),
+            )
+            for i, reg in enumerate(regs, start=1):
+                regions_by_photo[reg["photo_id"]].append(
+                    {"item_id": item.id, "exhibit": i, **reg})
     # photos the printed document must show: cited as evidence by a live
     # item, or carrying a defect-region annotation
     keep_ids = set(regions_by_photo)

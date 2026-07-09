@@ -132,14 +132,14 @@ images. If those images are bad (wrong room, object close-up, motion
 blur), no amount of correct text recovers. Visual polish is not
 decoration; for a real-estate product it *is* the value proposition.
 
-- [ ] **One design system across every surface** — start, review,
+- [x] **One design system across every surface** — start, review,
       tenant, report, PDF share one palette, type scale, spacing
       grammar, and component library. No third theme. Scoping doc:
       [`25-design-overhaul.md`](25-design-overhaul.md).
-- [ ] **The review surface is rebuilt to the craft bar** (docs/14) —
+- [x] **The review surface is rebuilt to the craft bar** (docs/14) —
       light/airy consistency with the landing page (the "two worlds"
       split is re-evaluated), generous type and spacing, hover/affordance
-      polish matching the start page, no 9px density.
+      polish matching the start page, no 9px density. Craft C1+C2 landed.
 - [ ] **First-screen trust sign-off** — owner looks at the overview on
       a fresh build and says *"I'd send this to a landlord"* without
       qualification. This is the gate the old DoD lacked.
@@ -186,18 +186,20 @@ back to the £165 option.
 - [x] Default build uses gemini-3.5-flash; opus available for hard items
 - [x] All user-facing flows reachable from the UI (docs/10 bar; X1–X6
       shipped)
-- [ ] F1 Windows PDF resolved (WeasyPrint deps or browser-print fallback)
-      — the journey's deliverable must exist on the OS a landlord uses
-- [ ] F2–F6 frictions addressed or explicitly ticketed with a reason
+- [x] F1 Windows PDF resolved (WeasyPrint deps or browser-print fallback)
+      — Finish offers Print → Save as PDF via final issue when WeasyPrint
+      is missing (9 Jul craft N)
+- [x] F2–F6 frictions addressed or explicitly ticketed with a reason
+      (F2/F5 fixed; F3/F4/F6 ticketed in docs/24)
 
 ### Distance summary (honest)
 
 | Pillar | Status |
 |---|---|
-| **1 — Trust at first glance** | **Not started.** Requires design overhaul + review rebuild. Largest design-surface gap. |
-| **2 — Trustworthy by construction** | **Not started.** Capture strategy is genuine research; hero/pipeline fixes are coupled to its outcome. |
+| **1 — Trust at first glance** | **Mostly met.** Design system + review craft landed; first-screen owner sign-off remains. |
+| **2 — Trustworthy by construction** | **Not started.** Capture strategy is genuine research; hero/pipeline fixes are coupled to its outcome. Interim cover-warn UI only. |
 | **3 — Accurate & complete** | **Partially met.** Defect recall below bar; quality wins (E8/E2/E10) proven but unwired. |
-| **4 — Low-friction journey** | **Mostly met.** Journey executes; PDF-on-Windows is the remaining major friction. |
+| **4 — Low-friction journey** | **Met for v1 HTML path.** Browser-print PDF fallback ships; native WeasyPrint still preferred. |
 
 **v1 ships when every box is checked.** The old DoD was 4/6 done because
 it measured the journey mechanically; the real bar — Pillars 1 and 2 —

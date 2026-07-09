@@ -549,15 +549,35 @@
   }
   .overview-ctas {
     display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
-    margin: 22px 0 28px;
+    margin: 22px 0 20px;
   }
   .overview-ctas .btn.primary {
     padding: 12px 22px; font-size: var(--fs-base);
   }
   .overview-ctas .btn.ghost { color: var(--muted); }
+  /* overview walkthrough spine (Craft C2-D) */
+  .overview-spine {
+    margin: 0 0 28px; padding: 14px 16px 12px;
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: var(--r-md); box-shadow: var(--e-1);
+  }
+  .overview-spine .spine-label {
+    font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .12em;
+    text-transform: uppercase; color: var(--faint); margin: 0 0 10px;
+  }
+  .overview-spine #spine { margin-top: 0; }
+  .overview-spine #spine .chapters { height: 22px; margin-bottom: 6px; }
+  .overview-spine #spine .chap span { font: 10px/22px var(--ui); }
   .register-label {
     font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .14em;
     text-transform: uppercase; color: var(--faint); margin: 0 0 16px;
+  }
+  .room-card.cover-warn .thumb {
+    border-color: var(--pend);
+  }
+  .room-card .cover-flag {
+    display: block; margin-top: 6px; font: 600 var(--fs-2xs)/1.3 var(--ui);
+    letter-spacing: .04em; text-transform: uppercase; color: var(--pend);
   }
   /* two orientations, one register grammar (docs/25 Ledger) */
   .overview-features {
@@ -814,8 +834,12 @@
     background: rgba(224,100,89,.12); }
   #lb-canvas .box .lbl { position: absolute; left: -2px; bottom: 100%;
     background: var(--danger); color: #fff; font: 11px var(--ui);
-    padding: 1px 6px; white-space: nowrap; max-width: 260px; overflow: hidden;
+    padding: 1px 6px; white-space: nowrap; max-width: 280px; overflow: hidden;
     text-overflow: ellipsis; }
+  #lb-canvas .box .lbl .ex {
+    font-family: var(--mono); font-weight: 700; margin-right: 4px;
+    opacity: .95;
+  }
   #lb-canvas .box.draft { border-style: dashed;
                           background: rgba(224,100,89,.07); }
   #lb-bottom { display: flex; align-items: center; justify-content: center;
@@ -1372,14 +1396,59 @@
     var rel = root.length ? root[0] : keys[0];
     return { rel: rel, meta: videos[rel] };
   }
-  function roomHeroSrc(room) {
+  function roomHeroPhoto(room) {
     var heroes = (room.photos || [])
       .filter(function (p) { return p.hero && photoSrc[p.id]; })
       .sort(function (a, b) { return a.hero - b.hero; });
-    if (heroes.length) return photoSrc[heroes[0].id];
-    var first = (room.photos || []).filter(function (p) {
-      return photoSrc[p.id]; })[0];
-    return first ? photoSrc[first.id] : null;
+    if (heroes.length) return heroes[0];
+    return (room.photos || []).filter(function (p) {
+      return photoSrc[p.id]; })[0] || null;
+  }
+  function roomHeroSrc(room) {
+    var p = roomHeroPhoto(room);
+    return p ? photoSrc[p.id] : null;
+  }
+  /* Interim bad-hero honesty (C2-H) until pipeline cover_confident lands. */
+  function roomCoverWeak(room) {
+    var p = roomHeroPhoto(room);
+    if (!p) return { weak: true, reason: "No cover frame" };
+    if (p.presentation_eligible === false) {
+      return { weak: true, reason: "Cover may not establish the room" };
+    }
+    if (typeof p.quality === "number" && p.quality < 0.25) {
+      return { weak: true, reason: "Low-quality cover" };
+    }
+    return { weak: false, reason: "" };
+  }
+  function pinExhibitIndex(it, reg) {
+    var regs = (it.defect_regions || []).slice().sort(function (a, b) {
+      if (a.photo_id !== b.photo_id) {
+        return (a.photo_id || "").localeCompare(b.photo_id || "");
+      }
+      return (a.y - b.y) || (a.x - b.x);
+    });
+    for (var i = 0; i < regs.length; i++) {
+      if (regs[i] === reg ||
+          (regs[i].photo_id === reg.photo_id &&
+           regs[i].x === reg.x && regs[i].y === reg.y &&
+           regs[i].w === reg.w && regs[i].h === reg.h &&
+           regs[i].defect === reg.defect)) {
+        return i + 1;
+      }
+    }
+    return regs.length || 1;
+  }
+  function openPrintPdfFallback() {
+    var url = PREFIX + "/issue";
+    var w = window.open(url, "_blank");
+    toast("Opened final issue — use Print → Save as PDF");
+    if (w) {
+      try {
+        setTimeout(function () {
+          try { w.focus(); } catch (e) {}
+        }, 400);
+      } catch (e2) {}
+    }
   }
   function roomReviewDone(room) {
     return (room.items || []).filter(isDone).length;
@@ -1519,7 +1588,17 @@
         onclick: function () { showWalkthroughPlayer(host, wt); }
       }));
     }
+    ctas.appendChild(el("button", {
+      "class": "btn ghost", type: "button",
+      text: "Preview as landlord",
+      title: "Open the clean final issue the landlord would receive",
+      onclick: function () { window.open(PREFIX + "/issue", "_blank"); }
+    }));
     host.appendChild(ctas);
+
+    if (wt && wt.meta && wt.meta.duration) {
+      host.appendChild(buildOverviewSpine(wt));
+    }
 
     host.appendChild(el("p", { "class": "register-label",
       text: "Room plates" }));
@@ -1541,8 +1620,11 @@
       var total = (room.items || []).length;
       var doneN = roomReviewDone(room);
       var warns = roomWarnings(room);
+      var cover = roomCoverWeak(room);
       var card = el("button", {
-        type: "button", "class": "room-card" + (land ? " land" : ""),
+        type: "button",
+        "class": "room-card" + (land ? " land" : "") +
+                 (cover.weak ? " cover-warn" : ""),
         "data-room": room.name,
         style: "animation-delay:" + Math.min(plateNo * 0.04, 0.48) + "s",
         onclick: function () { select({ type: "room", name: room.name }); }
@@ -1561,6 +1643,10 @@
       if (warns) metaEl.appendChild(el("span", { "class": "warn",
         text: " \u00b7 " + warns + " to check" }));
       body.appendChild(metaEl);
+      if (cover.weak) {
+        body.appendChild(el("span", { "class": "cover-flag",
+          text: cover.reason }));
+      }
       var meter = el("div", { "class": "meter" });
       var mfill = el("i", {});
       mfill.style.width = total ? (100 * doneN / total) + "%" : "0";
@@ -1578,29 +1664,87 @@
     host.appendChild(grid);
     updateSubNav();
   }
-  function showWalkthroughPlayer(host, wt) {
+  function buildOverviewSpine(wt) {
+    var wrap = el("div", { "class": "overview-spine" });
+    wrap.appendChild(el("p", { "class": "spine-label",
+      text: "Walkthrough spine" }));
+    var spine = el("div", { id: "spine" });
+    var meta = wt.meta;
+    var segs = meta.segments || [];
+    var chapters = el("div", { "class": "chapters" });
+    segs.forEach(function (s) {
+      var w = Math.max(4, 100 * ((s.end - s.start) / meta.duration));
+      var chap = el("div", { "class": "chap",
+        title: (s.room || "Room") + " \u00b7 " + fmtT(s.start),
+        style: "flex:" + w,
+        onclick: function () {
+          showWalkthroughPlayer(overviewHost, wt, s.start);
+        } });
+      chap.appendChild(el("span", { text: s.room || "" }));
+      chapters.appendChild(chap);
+    });
+    spine.appendChild(chapters);
+    var scrub = el("div", { "class": "scrub" });
+    scrub.appendChild(el("div", { "class": "rail-line" }));
+    Object.keys(photoTime).forEach(function (pid) {
+      var pt = photoTime[pid];
+      if (!pt || pt.video !== wt.rel || meta.duration <= 0) return;
+      var left = (100 * pt.t / meta.duration);
+      var tick = el("div", { "class": "tick cited",
+        style: "left:" + left + "%",
+        title: "seen at " + fmtT(pt.t) });
+      scrub.appendChild(tick);
+    });
+    var playhead = el("div", { "class": "playhead", style: "left:0%" });
+    scrub.appendChild(playhead);
+    scrub.addEventListener("click", function (e) {
+      var r = scrub.getBoundingClientRect();
+      var t = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width))
+              * meta.duration;
+      showWalkthroughPlayer(overviewHost, wt, t);
+    });
+    spine.appendChild(scrub);
+    wrap.appendChild(spine);
+    return wrap;
+  }
+  function showWalkthroughPlayer(host, wt, seekT) {
     var existing = host.querySelector(".wt-player");
-    if (existing) { existing.scrollIntoView({ block: "nearest" }); return; }
-    var box = el("div", { "class": "wt-player" });
-    var v = document.createElement("video");
-    v.src = wt.meta.src;
-    v.controls = true;
-    v.playsInline = true;
-    v.preload = "metadata";
-    box.appendChild(v);
-    var bar = el("div", { "class": "bar" });
-    bar.appendChild(exhibitCaption({
-      extra: wt.meta.name + " \u00b7 " + fmtT(wt.meta.duration)
-    }));
-    box.appendChild(bar);
-    var ctas = host.querySelector(".overview-ctas");
-    if (ctas && ctas.nextSibling) {
-      host.insertBefore(box, ctas.nextSibling);
+    var box, v;
+    if (existing) {
+      box = existing;
+      v = existing.querySelector("video");
+      box.scrollIntoView({ block: "nearest" });
     } else {
-      host.appendChild(box);
+      box = el("div", { "class": "wt-player" });
+      v = document.createElement("video");
+      v.src = wt.meta.src;
+      v.controls = true;
+      v.playsInline = true;
+      v.preload = "metadata";
+      box.appendChild(v);
+      var bar = el("div", { "class": "bar" });
+      bar.appendChild(exhibitCaption({
+        extra: wt.meta.name + " \u00b7 " + fmtT(wt.meta.duration)
+      }));
+      box.appendChild(bar);
+      var spineEl = host.querySelector(".overview-spine");
+      if (spineEl && spineEl.nextSibling) {
+        host.insertBefore(box, spineEl.nextSibling);
+      } else {
+        var ctas = host.querySelector(".overview-ctas");
+        if (ctas && ctas.nextSibling) host.insertBefore(box, ctas.nextSibling);
+        else host.appendChild(box);
+      }
+      box.scrollIntoView({ block: "nearest" });
     }
-    box.scrollIntoView({ block: "nearest" });
-    v.play().catch(function () {});
+    function seekAndPlay() {
+      if (seekT != null && !isNaN(seekT)) {
+        try { v.currentTime = Math.max(0, seekT); } catch (err) {}
+      }
+      v.play().catch(function () {});
+    }
+    if (v.readyState >= 1) seekAndPlay();
+    else v.addEventListener("loadedmetadata", seekAndPlay, { once: true });
   }
   function showOverview() {
     sel = null;
@@ -1794,6 +1938,10 @@
     } else doSign();
   }
   function startPdfExport(openWhenDone) {
+    if (pdfMeta.weasyprint_available === false) {
+      openPrintPdfFallback();
+      return;
+    }
     flush({ manual: true }).then(function () {
       return api("POST", "/api/pdf", {});
     }).then(function () {
@@ -1801,14 +1949,18 @@
       pollPdf();
       renderFinish();
     }).catch(function (e) {
+      pdfMeta.weasyprint_available = false;
       var body = ui.el("div", {});
-      body.appendChild(ui.el("p", { text: e.message }));
+      body.appendChild(ui.el("p", {
+        text: e.message || "Server PDF is unavailable on this machine."
+      }));
       body.appendChild(ui.el("p", { "class": "note",
-        text: "Without WeasyPrint you can still open the report and use Print → Save as PDF." }));
-      ui.open({ title: "PDF export unavailable", body: body, actions: [
-        { label: "Open report", onclick: function (close) {
-            close(); window.open(PREFIX + "/report", "_blank"); } },
-        { label: "Close", primary: true, onclick: function (close) { close(); } }] });
+        text: "Open the final issue and use your browser\u2019s Print \u2192 Save as PDF. That is the attested deliverable." }));
+      ui.open({ title: "Use browser print instead", body: body, actions: [
+        { label: "Open final issue", primary: true, onclick: function (close) {
+            close(); openPrintPdfFallback(); } },
+        { label: "Close", onclick: function (close) { close(); } }] });
+      if (finishHost) renderFinish();
     });
   }
   function pollPdf() {
@@ -1917,24 +2069,44 @@
         body.appendChild(el("button", { type: "button", "class": "btn",
           text: "Continue review", onclick: startReview }));
       } : null, pend ? "warn" : "ok"));
-    var pdfState = pdfStatus === "running" ? "running" : pdfReady() ? "ready" : "stale";
+    var pdfUnavailable = pdfMeta.weasyprint_available === false;
+    var pdfState = pdfUnavailable ? "print"
+      : pdfStatus === "running" ? "running"
+      : pdfReady() ? "ready" : "stale";
     list.appendChild(finishStep(
       pdfState === "ready" ? "\u2713" : (pdfState === "running" ? "\u2026" : "!"),
-      "PDF generated",
+      pdfUnavailable ? "PDF (browser print)" : "PDF generated",
       pdfState === "running" ? "Preparing PDF\u2026"
       : pdfState === "ready" ? "Server PDF matches the saved inventory."
+      : pdfUnavailable
+        ? "WeasyPrint is not available here. Print the final issue to PDF from the browser."
       : "Export a fresh PDF after your latest edits.",
       function (body) {
         var actions = el("div", { "class": "finish-actions" });
-        var label = pdfState === "running" ? "Preparing PDF\u2026"
-          : pdfMeta.ready ? "Re-export PDF" : "Export PDF";
-        actions.appendChild(el("button", {
-          type: "button", "class": "btn", text: label,
-          disabled: pdfState === "running" ? "disabled" : null,
-          onclick: function () { startPdfExport(true); } }));
-        if (pdfMeta.ready && pdfState !== "running") {
-          actions.appendChild(el("button", { type: "button", "class": "btn ghost",
-            text: "Open PDF", onclick: function () { window.open(PREFIX + "/pdf", "_blank"); } }));
+        if (pdfUnavailable) {
+          actions.appendChild(el("button", {
+            type: "button", "class": "btn primary",
+            text: "Open final issue to print",
+            onclick: openPrintPdfFallback }));
+          actions.appendChild(el("a", {
+            href: PREFIX + "/issue", target: "_blank", "class": "btn ghost",
+            text: "Open final issue" }));
+        } else {
+          var label = pdfState === "running" ? "Preparing PDF\u2026"
+            : pdfMeta.ready ? "Re-export PDF" : "Export PDF";
+          actions.appendChild(el("button", {
+            type: "button", "class": "btn", text: label,
+            disabled: pdfState === "running" ? "disabled" : null,
+            onclick: function () { startPdfExport(true); } }));
+          if (pdfMeta.ready && pdfState !== "running") {
+            actions.appendChild(el("button", { type: "button", "class": "btn ghost",
+              text: "Open PDF", onclick: function () {
+                window.open(PREFIX + "/pdf", "_blank"); } }));
+          }
+          actions.appendChild(el("button", {
+            type: "button", "class": "btn ghost",
+            text: "Print fallback",
+            onclick: openPrintPdfFallback }));
         }
         body.appendChild(actions);
       }, pdfState === "ready" ? "ok" : "warn"));
@@ -2011,6 +2183,11 @@
           text: "Copy " + (shareSpec.link_noun || "tenant") + " link",
           onclick: copyShareLink }));
       }
+      hact.appendChild(el("button", {
+        type: "button", "class": "btn ghost",
+        text: "Preview as landlord",
+        onclick: function () { window.open(PREFIX + "/issue", "_blank"); }
+      }));
       handoff.appendChild(hact);
       host.appendChild(handoff);
     }
@@ -3232,7 +3409,11 @@
         b.style.top = (reg.y * ih) + "px";
         b.style.width = (reg.w * iw) + "px";
         b.style.height = (reg.h * ih) + "px";
-        b.appendChild(el("span", { "class": "lbl", text: reg.defect }));
+        var lbl = el("span", { "class": "lbl" });
+        lbl.appendChild(el("span", { "class": "ex",
+          text: "Ex " + pinExhibitIndex(cur.it, reg) }));
+        lbl.appendChild(document.createTextNode(reg.defect || "defect"));
+        b.appendChild(lbl);
         canvas.appendChild(b);
       });
     }

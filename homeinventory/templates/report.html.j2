@@ -543,7 +543,7 @@ rather than silently deleted.</p>
       <div class="frame">
         <img src="{{ photo_src[photo.id] }}" alt="{{ photo.id }}" loading="lazy">
         {% for reg in regions_by_photo.get(photo.id, []) %}
-          <span class="region" data-label="{{ reg.item_id }} · {{ reg.defect }}"
+          <span class="region" data-label="Ex {{ reg.exhibit }} · {{ reg.item_id }} · {{ reg.defect }}"
                 style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
         {% endfor %}
       </div>
@@ -692,7 +692,7 @@ rather than silently deleted.</p>
       <span class="frame">
         <img src="{{ photo_print_src[photo.id] }}" alt="{{ photo.id }}">
         {% for reg in regions_by_photo.get(photo.id, []) %}
-          <span class="region" data-label="{{ reg.item_id }} · {{ reg.defect }}"
+          <span class="region" data-label="Ex {{ reg.exhibit }} · {{ reg.item_id }} · {{ reg.defect }}"
                 style="left:{{ '%.2f' | format(reg.x * 100) }}%;top:{{ '%.2f' | format(reg.y * 100) }}%;width:{{ '%.2f' | format(reg.w * 100) }}%;height:{{ '%.2f' | format(reg.h * 100) }}%;"></span>
         {% endfor %}
       </span>
@@ -762,7 +762,8 @@ rather than silently deleted.</p>
       <div class="label"><span id="prog-n">0</span> of <span id="prog-d">0</span> items confirmed</div>
       <div class="track"><div class="fill" id="prog-fill"></div></div>
     </div>
-    <a class="dk-btn primary deep-link" id="btn-continue-review" href="./#overview">Continue in Review</a>
+    <a class="dk-btn primary deep-link" id="btn-continue-review"
+       href="./#overview">Continue in Review</a>
   </div>
 </div>
 <div id="toast" role="status"></div>
@@ -813,6 +814,16 @@ rather than silently deleted.</p>
         span.textContent = a.textContent;
         a.parentNode.replaceChild(span, a);
       });
+  }
+
+  /* Force Overview (docs/24 F2) — avoid stale #item-* from bfcache/history. */
+  var cont = document.getElementById("btn-continue-review");
+  if (cont) {
+    cont.addEventListener("click", function (e) {
+      e.preventDefault();
+      var path = location.pathname.replace(/\/?report\/?$/, "/") || "/";
+      location.assign(path + "#overview");
+    });
   }
 
   document.getElementById("docket").classList.add("on");

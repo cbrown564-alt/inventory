@@ -217,9 +217,8 @@ Remaining (not yet done):
 
 - **First-screen trust sign-off** against docs/00 Pillar 1 (owner looks at
   a fresh-build overview and says *"I'd send this to a landlord"*).
-- **Craft C2 candidates** (held): persistent spine on overview (D),
-  bad-hero honesty (H), defect pin exhibits (I), landlord preview (J),
-  browser-print PDF (N).
+- **Pipeline cover_confident** for product-grade bad-hero honesty (H) —
+  interim UI uses `presentation_eligible` / low `quality` today.
 
 Progress since Craft Sprint C1 (9 Jul 2026):
 
@@ -237,6 +236,19 @@ Progress since Craft Sprint C1 (9 Jul 2026):
 - **G — Finish as closing ceremony.** Finish opens with the same deed
   grammar (address, SHA seal, closing copy) and "Attested and ready"
   handoff.
+
+Progress since Craft Sprint C2 (9 Jul 2026):
+
+- **D — Overview spine.** Room-chaptered walkthrough spine on the overview;
+  chapter/scrub seeks the inline player.
+- **H — Bad-hero honesty (interim).** Room plates flag weak covers via
+  `presentation_eligible === false` or `quality < 0.25`.
+- **I — Pin exhibits.** Lightbox and report overlays number pins
+  `Ex N · defect`.
+- **J — Landlord preview.** Overview CTA + Finish handoff open `/issue`.
+- **N / F1 — Browser-print PDF fallback.** `pdf_meta.weasyprint_available`;
+  Finish offers Print → Save as PDF via final issue when WeasyPrint is
+  missing. F2 continue-review forces `#overview`.
 
 ## Related
 
