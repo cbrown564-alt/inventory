@@ -8,7 +8,14 @@
                    served apps, "./" in the report document (relative links
                    survive both "/report" and "/s/<key>/report").
       shell_active "review" | "report" | "issue" — the current section. -#}
-<a class="wordmark" href="{{ shell_base }}">Homeinventory</a>
+<a class="wordmark" href="{{ shell_base }}">
+  <svg class="wordmark-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 5v14" />
+    <path d="M18 5v14" />
+    <path d="M6 12l6-4 6 4" />
+  </svg>
+  Home Inventory
+</a>
 <nav class="app-nav" aria-label="Sections">
   <a href="{{ shell_base }}"{% if shell_active == "review" %} aria-current="page"{% endif %}>Review</a>
   <a href="{{ shell_base }}report"{% if shell_active == "report" %} aria-current="page"{% endif %}>Report</a>

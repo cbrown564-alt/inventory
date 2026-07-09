@@ -46,3 +46,9 @@ segment-spike*/
 evals/external/data/
 evals/fixtures/own-property/segment-embed-strip/
 evals/fixtures/own-property/shotscale-smoke-report/
+
+# local agent / tooling scratch
+.zcode/
+
+# local report backups (not source of truth)
+report-backup-*/
