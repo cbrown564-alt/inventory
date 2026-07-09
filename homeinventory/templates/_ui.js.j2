@@ -15,16 +15,27 @@ var ui = (function () {
     return n;
   }
 
-  function toast(msg) {
+  function toast(msg, opts) {
     var t = document.getElementById("toast");
     if (!t) {
       t = el("div", { id: "toast", role: "status" });
       document.body.appendChild(t);
     }
-    t.textContent = msg;
+    t.innerHTML = "";
+    t.appendChild(document.createTextNode(msg));
+    if (opts && opts.undo) {
+      var btn = el("button", { "class": "undo-link", type: "button",
+        text: opts.undoLabel || "Undo" });
+      btn.addEventListener("click", function () {
+        t.classList.remove("show");
+        opts.undo();
+      });
+      t.appendChild(btn);
+    }
     t.classList.add("show");
     clearTimeout(toast._t);
-    toast._t = setTimeout(function () { t.classList.remove("show"); }, 2600);
+    toast._t = setTimeout(function () { t.classList.remove("show"); },
+      (opts && opts.ms) || 3200);
   }
 
   /* Base modal. opts: {title, body: Node, actions: [{label, primary, danger,

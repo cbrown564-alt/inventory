@@ -8,52 +8,61 @@
 <style>
 {% include "_theme.css.j2" %}
 
-  body { font-size: 15px; line-height: 1.55; }
+  body { font-size: var(--fs-md); line-height: 1.55; }
   main { max-width: 760px; margin: 0 auto; padding: 24px 22px 48px; }
 
   @media (max-width: 480px) {
     main { max-width: none; padding: 16px 12px 40px; }
-    .room-gallery { gap: 10px; }
+    .room-gallery { gap: 14px 12px; }
     .sign-section { margin-top: 32px; padding-top: 20px; position: static; }
     .sign-form input, .sign-form button { flex: 1 1 100%; min-width: 0; width: 100%; }
     .ev img { height: 96px; }
   }
 
-  .masthead { padding: 24px 0 20px; border-bottom: 2px solid var(--ink); }
-  .masthead .kicker { font-size: 11px; font-weight: 600; letter-spacing: .18em;
-    text-transform: uppercase; color: var(--accent-ink); }
-  .masthead h1 { font: 600 clamp(26px, 4vw, 32px)/1.15 var(--display);
-    letter-spacing: -.015em; margin: 8px 0 4px; }
-  .masthead .meta { color: var(--muted); font-size: 13px; }
-  .howto { margin: 18px 0 6px; padding: 14px 18px; background: var(--panel);
-    border-left: 3px solid var(--accent); font-size: 14px; }
+  .masthead { padding: 28px 0 20px; border-bottom: 2px solid var(--ink); }
+  .masthead .kicker { font-size: var(--fs-xs); font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase; color: var(--brass-bright); }
+  .masthead h1 { font: 600 clamp(26px, 4vw, 34px)/1.15 var(--display);
+    letter-spacing: -.015em; margin: 10px 0 6px; }
+  .masthead .meta { color: var(--muted); font-size: var(--fs-base); }
+  .howto { margin: 20px 0 8px; padding: 14px 16px; background: var(--brass-soft);
+    border: 1px solid rgba(154, 119, 41, .28); border-radius: var(--r-md);
+    font-size: var(--fs-base); line-height: 1.55; color: var(--ink); }
 
-  .progress-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-                  margin: 20px 0 8px; font-size: 13px; color: var(--muted); }
+  .progress-bar { display: flex; align-items: center; gap: var(--sp-3);
+                  flex-wrap: wrap; margin: 22px 0 10px;
+                  font-size: var(--fs-base); color: var(--muted); }
   .progress-bar strong { color: var(--ink); font-variant-numeric: tabular-nums; }
 
-  /* room gallery */
+  /* room gallery — catalogue plates aligned with review overview */
   .room-gallery { display: grid; grid-template-columns: repeat(2, 1fr);
-                  gap: 12px; margin: 20px 0 28px; }
+                  gap: 20px 16px; margin: 22px 0 32px; }
   @media (min-width: 520px) {
-    .room-gallery { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .room-gallery { grid-template-columns: repeat(3, 1fr); gap: 22px 18px; }
   }
-  .room-card { display: block; text-align: left; padding: 0; border: 1px solid var(--line);
-               border-radius: 10px; background: var(--panel); cursor: pointer;
-               overflow: hidden; transition: border-color .15s, box-shadow .15s; }
-  .room-card:hover { border-color: var(--brass); box-shadow: var(--shadow); }
-  .room-card.viewed { border-color: var(--confirm-soft); }
+  .room-card { display: flex; flex-direction: column; text-align: left;
+               padding: 0; border: 0; background: none; cursor: pointer;
+               font: inherit; color: inherit; min-width: 0; }
   .room-card .thumb { aspect-ratio: 4/3; background: var(--panel-2);
-                      position: relative; overflow: hidden; }
+                      position: relative; overflow: hidden;
+                      border: 1px solid var(--line-strong); border-radius: 4px;
+                      transition: transform .35s cubic-bezier(.16,1,.3,1),
+                                  box-shadow .25s ease, border-color .25s ease; }
+  .room-card:hover .thumb, .room-card:focus-visible .thumb {
+    transform: translateY(-3px); box-shadow: var(--e-2); border-color: var(--brass);
+  }
+  .room-card.viewed .thumb { border-color: var(--confirm); }
   .room-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .room-card .thumb .placeholder { display: flex; align-items: center;
-    justify-content: center; height: 100%; color: var(--faint); font-size: 12px; }
-  .room-card .body { padding: 10px 12px 12px; }
-  .room-card .name { font: 600 15px var(--display); margin: 0 0 2px; color: var(--ink); }
-  .room-card .sub { font-size: 12px; color: var(--muted); }
+    justify-content: center; height: 100%; color: var(--faint);
+    font-size: var(--fs-xs); letter-spacing: .06em; text-transform: uppercase; }
+  .room-card .body { padding: 12px 2px 0; }
+  .room-card .name { font: 600 var(--fs-lg)/1.2 var(--display); margin: 0 0 4px;
+                     color: var(--ink); }
+  .room-card .sub { font: var(--fs-sm)/1.45 var(--mono); color: var(--muted); }
   .room-card .viewed-badge { position: absolute; top: 8px; right: 8px;
-    background: var(--confirm); color: #fff; font: 600 10px var(--ui);
-    padding: 2px 7px; border-radius: 999px; }
+    background: var(--confirm); color: #fff; font: 600 var(--fs-2xs) var(--ui);
+    padding: 3px 8px; border-radius: var(--r-pill); }
 
   .room-nav { display: flex; align-items: center; gap: 10px; margin: 16px 0 8px; }
   .room-nav .back { font: 500 13px var(--ui); color: var(--brass-bright);
@@ -117,25 +126,26 @@
   .sign-section h2 { font-size: 18px; margin: 0 0 8px; }
   .sign-section .lead { font-size: 14px; color: var(--muted); margin: 0 0 16px; }
   .sign-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-  .sign-form input { font: 14px var(--ui); padding: 10px 12px; min-width: 200px;
-    flex: 1 1 200px; border: 1px solid var(--line-strong); border-radius: 6px; }
-  .sign-form button { font: 600 14px var(--ui); padding: 10px 20px;
-    background: var(--brass); color: #14100a; border: none;
-    border-radius: 7px; cursor: pointer; }
-  .sign-form button:hover { background: var(--brass-bright); }
-  .sign-done { padding: 14px 16px; background: var(--accent-soft);
-               border-radius: 8px; color: var(--accent-ink); font-weight: 500; }
+  .sign-form input { font: var(--fs-md) var(--ui); padding: 11px 12px;
+    min-width: 200px; flex: 1 1 200px; border: 1px solid var(--line-strong);
+    border-radius: var(--r-sm); background: var(--panel); color: var(--ink); }
+  .sign-done { padding: 14px 16px; background: var(--brass-soft);
+               border: 1px solid rgba(154, 119, 41, .28);
+               border-radius: var(--r-md); color: var(--brass-bright);
+               font-weight: 500; }
 
   .sigblock { margin-top: 32px; border-top: 1px solid var(--line);
               padding-top: 18px; }
-  .sigblock h2 { font-size: 16px; margin: 0 0 8px; }
-  .sigcard { border-left: 3px solid var(--accent); background: var(--panel);
-             padding: 10px 14px; margin: 10px 0; font-size: 14px; }
-  .sigcard .hash { font-family: var(--mono); font-size: 10px;
+  .sigblock h2 { font-size: var(--fs-lg); margin: 0 0 8px;
+                 font-family: var(--display); font-weight: 600; }
+  .sigcard { background: var(--panel); border: 1px solid var(--line);
+             border-radius: var(--r-md); padding: 12px 14px; margin: 10px 0;
+             font-size: var(--fs-base); }
+  .sigcard .hash { font-family: var(--mono); font-size: var(--fs-2xs);
                    color: var(--muted); word-break: break-all; }
 
   .finish-cta { margin: 24px 0; text-align: center; }
-  .finish-cta .btn { font-size: 14px; padding: 10px 22px; }
+  .finish-cta .btn { font-size: var(--fs-base); padding: 11px 22px; }
 
   #toast { bottom: 18px; }
 </style>
@@ -343,8 +353,8 @@
       var form = el("div", { "class": "sign-form" });
       var nameInput = el("input", { id: "sign-name", type: "text",
         placeholder: "Your full name", value: savedName });
-      var signBtn = el("button", { id: "sign-btn", type: "button",
-        text: "Acknowledge & countersign" });
+      var signBtn = el("button", { id: "sign-btn", "class": "btn primary",
+        type: "button", text: "Acknowledge & countersign" });
       signBtn.addEventListener("click", function () {
         var name = nameInput.value.trim();
         if (!name) { toast("Type your full name first"); return; }

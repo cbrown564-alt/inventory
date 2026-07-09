@@ -199,16 +199,44 @@ Progress since sign-off:
   images, a serif document title + room names, light thumb placeholder, and
   hover lift + shadow + image-zoom parity with the start page.
 
+Progress since Ledger commit (9 Jul 2026):
+
+- **Review queue + claim detail de-densified** (Workstream B). Rail widened
+  to 300px; queue/claim/finish/nav retokenised onto `--fs-*` / `--sp-*` /
+  `--r-*`. Active queue row uses brass-soft fill (no side-stripe). Claim
+  title is display serif; warnings and missing-evidence callouts use soft
+  fills instead of left borders. Finish checklist is a calm document
+  surface with larger type and elevation.
+- **Tenant / project / compare audited.** Tenant room gallery matches the
+  catalogue-plate grammar; howto/sig cards lose side-stripes; project drop
+  zones are light paper (no dark slate); compare intro note uses the soft
+  brass callout. Shared `.btn.primary` on tenant countersign.
+- **Start picker** wrapped in the same ledger plate as the upload hero.
+
 Remaining (not yet done):
 
-- **Tenant / project / compare** — already light, but not yet audited
-  against the extended token scale / shared components.
-- **Review queue + claim detail de-densification** (Workstream B) — the
-  overview is rebuilt; the item queue and claim card still want a readable
-  type-scale/spacing pass on the new tokens.
-- **Craft pass (Workstream C)** — accessibility (focus, semantics),
-  evidential-gravity typography — and the §6 first-screen trust sign-off
-  gate.
+- **First-screen trust sign-off** against docs/00 Pillar 1 (owner looks at
+  a fresh-build overview and says *"I'd send this to a landlord"*).
+- **Craft C2 candidates** (held): persistent spine on overview (D),
+  bad-hero honesty (H), defect pin exhibits (I), landlord preview (J),
+  browser-print PDF (N).
+
+Progress since Craft Sprint C1 (9 Jul 2026):
+
+- **A — Overview as a deed.** Masthead with register kicker, address as
+  display title, inspection date / room·item counts, SHA seal + confirmed
+  meter, staggered plate entrance, single primary "Start review" CTA.
+- **C — Exhibit caption system.** Shared `.exhibit` / `.exhibit-seal` in
+  `_theme.css.j2`; `exhibitCaption()` used in stage provenance, lightbox,
+  and walkthrough bar. Payload now includes `content_sha256`.
+- **B — Claim conveyor.** Confirm/reject animates the claim out, advances,
+  and offers Undo on the toast.
+- **E+F — Evidence expand + ±1s scrub.** Video mode expands the stage
+  (`evidence-focus`); HUD gains a ±1s control that seeks around the cited
+  moment.
+- **G — Finish as closing ceremony.** Finish opens with the same deed
+  grammar (address, SHA seal, closing copy) and "Attested and ready"
+  handoff.
 
 ## Related
 

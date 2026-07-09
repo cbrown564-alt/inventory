@@ -896,6 +896,7 @@ class ReviewHandler(BaseHandler):
         videos, photo_time = st.video_meta(inv)
         payload = {
             "inventory": asdict(inv),
+            "content_sha256": inv.content_sha256(),
             "photo_src": st.photo_src(inv),
             "crop_src": st.crop_src(inv),
             "videos": videos,

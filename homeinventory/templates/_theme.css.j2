@@ -83,6 +83,13 @@ button, input, select, textarea { font-family: var(--ui); }
   text-decoration: none;
 }
 .wordmark::after { content: "."; color: var(--faint); letter-spacing: 0; }
+.wordmark-logo {
+  display: inline-block;
+  vertical-align: -2px;
+  margin-right: 6px;
+  width: 14px;
+  height: 14px;
+}
 .app-nav { display: flex; gap: 2px; }
 .app-nav a { font-size: 13px; font-weight: 500; color: var(--muted);
              text-decoration: none; padding: 5px 11px; border-radius: 6px; }
@@ -114,9 +121,9 @@ button, input, select, textarea { font-family: var(--ui); }
 .btn:hover { border-color: var(--brass); color: var(--brass-bright); }
 .btn:active { transform: translateY(1px); }
 .btn.primary { background: var(--brass); border-color: var(--brass);
-               color: #14100a; font-weight: 600; }
+               color: #fffdf8; font-weight: 600; }
 .btn.primary:hover { background: var(--brass-bright);
-                     border-color: var(--brass-bright); color: #14100a; }
+                     border-color: var(--brass-bright); color: #fffdf8; }
 .btn.confirm { background: var(--confirm); border-color: var(--confirm);
                color: #fff; font-weight: 600; }
 .btn.confirm:hover { filter: brightness(1.12); color: #fff; }
@@ -234,6 +241,24 @@ button, input, select, textarea { font-family: var(--ui); }
           padding: 1px 6px; white-space: nowrap; max-width: 260px;
           overflow: hidden; text-overflow: ellipsis; }
 
+/* ---------- exhibit caption (docs/14 P2/P6 — one grammar everywhere) ---------- */
+.exhibit {
+  font-family: var(--mono); font-size: var(--fs-xs); line-height: 1.45;
+  color: var(--faint); letter-spacing: .01em;
+  font-variant-numeric: tabular-nums;
+}
+.exhibit .tc { color: var(--brass-bright); }
+.exhibit .room { color: var(--muted); }
+.exhibit .pid { color: var(--faint); }
+.exhibit-seal {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: var(--fs-2xs); color: var(--faint);
+  letter-spacing: .04em; border: 1px solid var(--line); border-radius: var(--r-pill);
+  padding: 4px 10px; background: var(--panel);
+}
+.exhibit-seal b { color: var(--brass-bright); font-weight: 600;
+                  letter-spacing: .08em; text-transform: uppercase; }
+
 /* ---------- toast ---------- */
 #toast {
   position: fixed; bottom: 18px; left: 50%; z-index: 100;
@@ -244,6 +269,11 @@ button, input, select, textarea { font-family: var(--ui); }
   transition: opacity .25s, transform .25s;
 }
 #toast.show { opacity: .98; transform: translateX(-50%); }
+#toast .undo-link {
+  margin-left: 12px; color: var(--brass-bright); background: none; border: 0;
+  font: inherit; cursor: pointer; text-decoration: underline;
+  text-underline-offset: 2px;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important;

@@ -1346,6 +1346,22 @@ def test_review_defaults_to_overview_mode(server):
     assert "renderOverview" in html
 
 
+def test_craft_c1_deed_exhibit_conveyor(server):
+    """Craft C1: deed overview, exhibit captions, conveyor, ±1s scrub."""
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "deed-masthead" in html
+    assert "exhibitCaption" in html
+    assert "content_sha256" in html
+    assert "conveyorStep" in html
+    assert "scrubAroundMoment" in html
+    assert "evidence-focus" in html
+    assert "Closing the register" in html
+    assert "Attested and ready" in html
+    assert "finish-handoff-mark" in html
+    assert "Signed & sealed" in html
+
+
 def test_start_page_redirects_to_overview_after_build(fresh_server):
     """X4: build completion sends user to /#overview."""
     base, _httpd, _out, _cap = fresh_server

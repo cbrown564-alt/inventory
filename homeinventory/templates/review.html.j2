@@ -13,29 +13,29 @@
 
   /* ---------- header ---------- */
   .app-header {
-    padding: 10px 22px; gap: 12px 18px; flex-wrap: nowrap;
+    padding: 12px 22px; gap: 12px 18px; flex-wrap: nowrap;
   }
-  .app-nav a { font-size: 12px; padding: 4px 10px; border-radius: 999px; }
+  .app-nav a { font-size: var(--fs-sm); padding: 5px 11px; border-radius: var(--r-sm); }
   .app-nav a[aria-current="page"] {
     background: transparent; color: var(--ink); font-weight: 600;
     box-shadow: inset 0 -2px 0 var(--brass);
   }
   .header-end {
-    display: flex; align-items: center; gap: 8px; margin-left: auto;
+    display: flex; align-items: center; gap: var(--sp-2); margin-left: auto;
     flex-shrink: 0;
   }
   .addr { display: none; }
   #progress { flex: 1 1 auto; min-width: 120px; max-width: 320px; margin: 0 auto; }
-  #progress .label { font-size: 12px; font-weight: 500; color: var(--muted);
+  #progress .label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted);
                      font-variant-numeric: tabular-nums; }
   #progress .track { height: 3px; background: var(--line); border-radius: 2px;
                      overflow: hidden; margin-top: 6px; }
   #progress .fill { height: 100%; width: 0; background: var(--confirm);
                     transition: width .35s cubic-bezier(.16,1,.3,1); }
-  #save-state { font-size: 11px; color: var(--faint); white-space: nowrap; }
+  #save-state { font-size: var(--fs-xs); color: var(--faint); white-space: nowrap; }
   #save-state.err { color: var(--danger); }
   .share { display: none; }
-  #btn-queue { display: none; font-size: 12px; }
+  #btn-queue { display: none; font-size: var(--fs-sm); }
 
   /* X5: mobile overflow menu when shell nav collapses */
   .header-more { display: none; position: relative; flex-shrink: 0; }
@@ -68,39 +68,39 @@
   .header-more-finish:hover { color: var(--ink); background: var(--panel-2); }
 
   /* ---------- layout ---------- */
-  #app { flex: 1; display: grid; grid-template-columns: 272px 1fr;
+  #app { flex: 1; display: grid; grid-template-columns: 300px 1fr;
          min-height: 0; }
 
-  /* ---------- queue rail ---------- */
+  /* ---------- queue rail (de-densified — docs/25 Workstream B) ---------- */
   #rail { border-right: 1px solid var(--line); background: var(--paper);
           overflow-y: auto; }
   #rail .tools { position: sticky; top: 0; background: var(--paper);
-                 padding: 16px 18px 14px; border-bottom: 1px solid var(--line);
-                 z-index: 5; }
-  #q-search { width: 100%; font: 13px var(--ui); padding: 9px 12px;
-              margin-bottom: 12px; border: 1px solid var(--line);
-              border-radius: 8px; background: var(--panel);
-              color: var(--ink); }
+                 padding: var(--sp-4) var(--sp-4) var(--sp-3);
+                 border-bottom: 1px solid var(--line); z-index: 5; }
+  #q-search { width: 100%; font: var(--fs-base) var(--ui);
+              padding: 10px 12px; margin-bottom: var(--sp-3);
+              border: 1px solid var(--line); border-radius: var(--r-sm);
+              background: var(--panel); color: var(--ink); }
   #q-search::placeholder { color: var(--faint); }
   #q-search:focus { outline: none; border-color: var(--brass); }
   .filters { display: flex; gap: 6px; flex-wrap: wrap; }
   .filters button {
     border: 1px solid transparent; background: transparent;
-    color: var(--faint); border-radius: 999px; font-size: 11px;
-    font-weight: 500; padding: 4px 10px; cursor: pointer;
+    color: var(--faint); border-radius: var(--r-pill); font-size: var(--fs-xs);
+    font-weight: 500; padding: 5px 11px; cursor: pointer;
   }
   .filters button:hover { color: var(--muted); background: var(--panel); }
   .filters button[aria-pressed="true"] {
     background: var(--panel); border-color: var(--line);
     color: var(--ink); font-weight: 600;
   }
-  .tools .row2 { display: flex; gap: 8px; margin-top: 12px;
+  .tools .row2 { display: flex; gap: var(--sp-2); margin-top: var(--sp-3);
                  align-items: center; }
-  .tools-more { margin-top: 10px; border-top: 1px solid var(--line);
-                padding-top: 10px; }
+  .tools-more { margin-top: var(--sp-3); border-top: 1px solid var(--line);
+                padding-top: var(--sp-3); }
   .tools-more > summary {
-    font-size: 11px; font-weight: 500; color: var(--faint); cursor: pointer;
-    list-style: none; padding: 2px 0; user-select: none;
+    font-size: var(--fs-xs); font-weight: 500; color: var(--faint);
+    cursor: pointer; list-style: none; padding: 2px 0; user-select: none;
   }
   .tools-more > summary::-webkit-details-marker { display: none; }
   .tools-more > summary::before {
@@ -108,27 +108,27 @@
     transition: transform .15s;
   }
   .tools-more[open] > summary::before { transform: rotate(90deg); }
-  .tools select { flex: 1; font: 12px var(--ui); border: 1px solid var(--line);
-                  border-radius: 8px; padding: 7px 10px;
-                  background: var(--panel); color: var(--muted); }
-  #bulk { font-size: 12px; padding: 7px 12px; white-space: nowrap; }
+  .tools select { flex: 1; font: var(--fs-sm) var(--ui);
+                  border: 1px solid var(--line); border-radius: var(--r-sm);
+                  padding: 8px 10px; background: var(--panel); color: var(--muted); }
+  #bulk { font-size: var(--fs-sm); padding: 8px 12px; white-space: nowrap; }
 
   .room-group { border-bottom: 1px solid var(--line); }
   .room-group:last-child { border-bottom: none; }
   .room-head {
-    padding: 13px 18px 11px; font-size: 10px; font-weight: 600;
+    padding: 14px 18px 12px; font-size: var(--fs-xs); font-weight: 600;
     letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
     cursor: pointer; user-select: none;
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
   }
   .room-head .chev {
-    font-size: 9px; color: var(--faint); width: 10px; flex-shrink: 0;
+    font-size: var(--fs-2xs); color: var(--faint); width: 10px; flex-shrink: 0;
     transition: transform .15s;
   }
   .room-group.collapsed .room-head .chev { transform: rotate(-90deg); }
   .room-group.collapsed .room-items { display: none; }
-  .room-head:hover { color: var(--muted); }
-  .room-head .n { font-family: var(--mono); font-size: 10px;
+  .room-head:hover { color: var(--muted); background: var(--panel); }
+  .room-head .n { font-family: var(--mono); font-size: var(--fs-xs);
                   letter-spacing: 0; text-transform: none; margin-left: auto;
                   color: var(--faint); }
   .room-head .meter { height: 2px; background: var(--line); margin-top: 8px;
@@ -137,49 +137,51 @@
   .room-head .meter i { display: block; height: 100%;
                         background: var(--confirm); }
   .q-item {
-    display: grid; grid-template-columns: 8px 1fr auto; gap: 10px;
-    align-items: start; padding: 11px 18px 11px 16px; cursor: pointer;
-    border-left: 2px solid transparent;
+    display: grid; grid-template-columns: 8px 1fr auto; gap: 12px;
+    align-items: start; padding: 12px 18px; cursor: pointer;
+    border-radius: 0; transition: background .12s ease;
   }
   .q-item:hover { background: var(--panel); }
   .q-item.active {
-    background: var(--panel);
-    border-left-color: var(--brass);
+    background: var(--brass-soft);
   }
   .q-item.active .name { color: var(--ink); }
   .q-item.active .name .item-title { font-weight: 600; }
-  .q-item .dot { width: 6px; height: 6px; border-radius: 50%;
+  .q-item .dot { width: 7px; height: 7px; border-radius: 50%;
                  border: 1.5px solid var(--line-strong); flex-shrink: 0;
-                 margin-top: 5px; }
+                 margin-top: 6px; }
   .q-item.done .dot { background: var(--confirm); border-color: var(--confirm); }
   .q-item.bad .dot { background: var(--danger); border-color: var(--danger); }
-  .q-item .name { font-weight: 400; font-size: 13px; line-height: 1.4;
+  .q-item .name { font-weight: 400; font-size: var(--fs-base); line-height: 1.4;
                   overflow: hidden; color: var(--muted); min-width: 0; }
   .q-item .name .item-title { display: block; overflow: hidden;
                               text-overflow: ellipsis; white-space: nowrap; }
-  .q-item .name .ref { display: block; font-family: var(--mono); font-size: 10px;
-                       color: var(--faint); margin-bottom: 2px; }
-  .q-item .name .sub { display: block; font-size: 11px; color: var(--faint);
+  .q-item .name .ref { display: block; font-family: var(--mono);
+                       font-size: var(--fs-2xs); color: var(--faint);
+                       margin-bottom: 2px; }
+  .q-item .name .sub { display: block; font-size: var(--fs-xs); color: var(--faint);
                        font-weight: 400; margin-top: 2px; }
   .q-item.bad .name { text-decoration: line-through; color: var(--faint); }
-  .conf { width: 32px; flex-shrink: 0; padding-top: 4px; }
+  .conf { width: 36px; flex-shrink: 0; padding-top: 5px; }
   .conf .t { height: 2px; background: var(--line); border-radius: 1px;
              overflow: hidden; }
   .conf .f { height: 100%; background: var(--pend); }
-  .conf .v { font-family: var(--mono); font-size: 9px; color: var(--faint);
-             text-align: right; display: block; }
-  .empty-queue { padding: 32px 20px; color: var(--muted); font-size: 13px;
-                 line-height: 1.5; text-align: center; }
+  .conf .v { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--faint);
+             text-align: right; display: block; margin-top: 2px; }
+  .empty-queue { padding: var(--sp-7) var(--sp-5); color: var(--muted);
+                 font-size: var(--fs-base); line-height: 1.5; text-align: center; }
   #rail-backdrop { display: none; }
 
   /* ---------- detail pane ---------- */
-  #detail { overflow-y: auto; padding: 20px 24px 48px; min-width: 0; }
-  .work { display: grid; grid-template-columns: minmax(0, 1fr) 420px;
-          gap: 24px; align-items: start; }
+  #detail { overflow-y: auto; padding: var(--sp-5) var(--sp-6) var(--sp-8);
+            min-width: 0; }
+  .work { display: grid; grid-template-columns: minmax(0, 1fr) 440px;
+          gap: var(--sp-6); align-items: start;
+          transition: grid-template-columns .35s cubic-bezier(.16, 1, .3, 1); }
 
   /* ----- the evidence stage ----- */
   .stage-col {
-    min-width: 0; border: 1px solid var(--line); border-radius: 12px;
+    min-width: 0; border: 1px solid var(--line); border-radius: var(--r-lg);
     overflow: hidden; background: var(--panel);
   }
   #stage { position: relative; background: #05070b;
@@ -285,62 +287,64 @@
   .stage-foot .disclosure > summary { padding: 12px 22px; }
   .stage-foot .disclosure-body { padding: 0 22px 16px 44px; }
   .rail-overview {
-    display: block; padding: 12px 18px 10px; font-size: 12px; font-weight: 600;
-    color: var(--brass-bright); text-decoration: none;
+    display: block; padding: 14px 18px 12px; font-size: var(--fs-sm);
+    font-weight: 600; color: var(--brass-bright); text-decoration: none;
     border-bottom: 1px solid var(--line);
   }
-  .rail-overview:hover { color: var(--ink); }
+  .rail-overview:hover { color: var(--ink); background: var(--panel); }
   .stage-toggle {
     display: block; width: calc(100% - 44px); margin: 0 22px 14px;
-    text-align: center; font-size: 12px;
+    text-align: center; font-size: var(--fs-sm);
   }
   .prov .tc { font-family: var(--mono); color: var(--muted); }
   .prov .vid { font-family: var(--mono); color: var(--faint); }
 
-  /* ----- claim card ----- */
+  /* ----- claim card (readable type + spacing — docs/25 B) ----- */
   .claim { background: var(--panel); border: 1px solid var(--line);
-           border-radius: 12px; position: sticky; top: 12px;
+           border-radius: var(--r-lg); position: sticky; top: 12px;
            max-height: calc(100vh - 90px); display: flex;
-           flex-direction: column; min-width: 0; overflow: hidden; }
+           flex-direction: column; min-width: 0; overflow: hidden;
+           box-shadow: var(--e-1); }
   .claim-verdict {
-    padding: 22px 22px 20px; flex-shrink: 0;
+    padding: var(--sp-5) var(--sp-5) var(--sp-5); flex-shrink: 0;
   }
-  .claim-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
-                margin-bottom: 14px; }
-  .claim-loc { font-family: var(--mono); font-size: 11px; color: var(--faint);
-               letter-spacing: .02em; }
+  .claim-meta { display: flex; gap: var(--sp-2); align-items: center;
+                flex-wrap: wrap; margin-bottom: var(--sp-4); }
+  .claim-loc { font-family: var(--mono); font-size: var(--fs-xs);
+               color: var(--faint); letter-spacing: .02em; }
   .claim-loc .sep { color: var(--line-strong); margin: 0 4px; }
   /* .badge — shared component (see _theme.css.j2) */
   .claim-warn {
-    font-size: 12px; line-height: 1.45; color: var(--muted);
-    border-left: 2px solid var(--pend); padding: 0 0 0 12px;
-    margin: 0 0 16px;
+    font-size: var(--fs-sm); line-height: 1.5; color: var(--muted);
+    background: var(--pend-soft); border-radius: var(--r-sm);
+    padding: 10px 12px; margin: 0 0 var(--sp-4);
   }
   .claim-warn b { color: var(--ink); font-weight: 600; }
   .claim-identity { margin-bottom: 0; }
   #d-name {
-    display: block; font: 600 20px/1.35 var(--ui); letter-spacing: -.015em;
+    display: block; font: 600 22px/1.3 var(--display); letter-spacing: -.015em;
     color: var(--ink); border: none; background: transparent; width: 100%;
     margin: 0; padding: 0; resize: none; overflow: hidden;
-    field-sizing: content; min-height: 1.35em;
+    field-sizing: content; min-height: 1.3em;
   }
   #d-name:hover { opacity: .92; }
   #d-name:focus { outline: none; opacity: 1; }
   #d-desc {
-    display: block; font: 14px/1.6 var(--ui); color: var(--muted);
+    display: block; font: var(--fs-md)/1.6 var(--ui); color: var(--muted);
     width: 100%; min-height: 0; border: none; background: transparent;
-    resize: none; padding: 0; margin: 10px 0 0; overflow: visible;
+    resize: none; padding: 0; margin: 12px 0 0; overflow: visible;
     field-sizing: content;
   }
   #d-desc:hover { color: var(--ink); }
   #d-desc:focus { outline: none; color: var(--ink); }
   #actions {
-    margin: 20px 0 0; padding: 18px 0 0; border-top: 1px solid var(--line);
+    margin: var(--sp-5) 0 0; padding: var(--sp-4) 0 0;
+    border-top: 1px solid var(--line);
   }
   #actions .row { display: flex; gap: 10px; }
   #actions .row .btn {
-    flex: 1; padding: 12px 14px; font-size: 14px; font-weight: 600;
-    border-radius: 8px;
+    flex: 1; padding: 13px 14px; font-size: var(--fs-base); font-weight: 600;
+    border-radius: var(--r-sm);
   }
   .claim .scroll {
     overflow-y: auto; padding: 0; flex: 1; min-height: 0;
@@ -353,87 +357,88 @@
   }
   .disclosure:last-child { border-bottom: none; }
   .disclosure > summary {
-    display: grid; grid-template-columns: 12px 1fr; gap: 3px 10px;
-    align-items: start; padding: 14px 22px; cursor: pointer;
+    display: grid; grid-template-columns: 12px 1fr; gap: 4px 12px;
+    align-items: start; padding: 15px 22px; cursor: pointer;
     list-style: none; user-select: none;
   }
   .disclosure > summary::-webkit-details-marker { display: none; }
   .disclosure > summary::before {
-    content: "▸"; font-size: 10px; color: var(--faint); grid-row: 1 / -1;
+    content: "▸"; font-size: var(--fs-xs); color: var(--faint); grid-row: 1 / -1;
     align-self: start; margin-top: 2px; transition: transform .15s;
   }
   .disclosure[open] > summary::before { transform: rotate(90deg); }
   .disclosure-title {
-    font-size: 11px; font-weight: 600; letter-spacing: .07em;
+    font-size: var(--fs-xs); font-weight: 600; letter-spacing: .07em;
     text-transform: uppercase; color: var(--faint); grid-column: 2;
   }
   .disclosure-hint {
-    font-size: 13px; line-height: 1.45; color: var(--muted);
+    font-size: var(--fs-base); line-height: 1.45; color: var(--muted);
     grid-column: 2; white-space: normal; overflow: visible;
     word-break: break-word;
   }
   .disclosure-hint.em { color: var(--danger); }
   .disclosure-hint.ok { color: var(--confirm); }
-  .disclosure-body { padding: 0 22px 16px 44px; }
+  .disclosure-body { padding: 0 22px 18px 44px; }
   .disclosure-body .grades { margin: 0; padding: 0; border: none; }
-  .grades { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .grades label { display: block; font-size: 10px; font-weight: 600;
+  .grades { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
+  .grades label { display: block; font-size: var(--fs-xs); font-weight: 600;
     letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
-    margin-bottom: 5px; }
-  .grades select { width: 100%; font: 13px var(--ui); padding: 7px 9px;
-    border: 1px solid var(--line); border-radius: 7px;
+    margin-bottom: 6px; }
+  .grades select { width: 100%; font: var(--fs-base) var(--ui);
+    padding: 9px 10px; border: 1px solid var(--line); border-radius: var(--r-sm);
     background: var(--paper); color: var(--ink); }
-  .sec-empty { font-size: 12px; color: var(--faint); font-style: italic; }
+  .sec-empty { font-size: var(--fs-sm); color: var(--faint); font-style: italic; }
 
   /* .chip — shared component (see _theme.css.j2) */
-  .def-add { display: flex; gap: 6px; margin-top: 8px; }
-  .def-add input { flex: 1; font: 12.5px var(--ui); padding: 6px 10px;
-    border: 1px solid var(--line); border-radius: 6px;
+  .def-add { display: flex; gap: 6px; margin-top: 10px; }
+  .def-add input { flex: 1; font: var(--fs-sm) var(--ui); padding: 8px 11px;
+    border: 1px solid var(--line); border-radius: var(--r-sm);
     background: var(--paper); color: var(--ink); }
   .def-add input::placeholder { color: var(--faint); }
 
   .ev-missing {
-    font-size: 13px; line-height: 1.45; color: var(--muted);
-    border-left: 2px solid var(--pend); padding: 0 0 0 12px; margin: 0;
+    font-size: var(--fs-base); line-height: 1.5; color: var(--muted);
+    background: var(--pend-soft); border-radius: var(--r-sm);
+    padding: 10px 12px; margin: 0;
   }
 
   /* comments */
-  .c-line { padding: 10px 0; border-top: 1px solid var(--line);
-            font-size: 13px; line-height: 1.45; }
+  .c-line { padding: 12px 0; border-top: 1px solid var(--line);
+            font-size: var(--fs-base); line-height: 1.5; }
   .c-line:first-child { border-top: none; padding-top: 0; }
-  .c-line .who { font-weight: 600; font-size: 12px; }
+  .c-line .who { font-weight: 600; font-size: var(--fs-sm); }
   .c-line .who.tenant { color: var(--tenant); }
   .c-line .who.landlord, .c-line .who.agent { color: var(--brass-bright); }
-  .c-line .at { font-family: var(--mono); font-size: 10px;
+  .c-line .at { font-family: var(--mono); font-size: var(--fs-2xs);
                 color: var(--faint); margin-left: 8px; }
-  .c-add { display: flex; gap: 6px; margin-top: 8px; }
-  .c-add input { flex: 1; font: 12.5px var(--ui); padding: 7px 10px;
-    border: 1px solid var(--line); border-radius: 6px;
+  .c-add { display: flex; gap: 6px; margin-top: 10px; }
+  .c-add input { flex: 1; font: var(--fs-sm) var(--ui); padding: 8px 11px;
+    border: 1px solid var(--line); border-radius: var(--r-sm);
     background: var(--paper); color: var(--ink); }
   .c-add input::placeholder { color: var(--faint); }
 
   /* claim card actions — separated from claim text above */
   .claim-foot { padding: 0; border-top: 1px solid var(--line); flex-shrink: 0; }
-  .claim-foot .disclosure > summary { padding: 10px 22px; }
-  .claim-foot .disclosure-body { padding: 0 22px 12px 44px; }
+  .claim-foot .disclosure > summary { padding: 12px 22px; }
+  .claim-foot .disclosure-body { padding: 0 22px 14px 44px; }
   .claim-foot .disclosure-title {
-    font-size: 11px; color: var(--faint); text-transform: none;
+    font-size: var(--fs-xs); color: var(--faint); text-transform: none;
     letter-spacing: 0; font-weight: 500;
   }
-  .kbd-row { display: flex; gap: 8px 12px; flex-wrap: wrap; }
-  .kbd { font-family: var(--mono); font-size: 9px; color: var(--faint);
-         background: transparent; border: 1px solid var(--line);
-         border-radius: 3px; padding: 1px 4px; }
-  .kbd-label { font-size: 10px; color: var(--faint); opacity: .75; }
+  .kbd-row { display: flex; gap: 8px 14px; flex-wrap: wrap; }
+  .kbd { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--faint);
+         background: var(--panel-2); border: 1px solid var(--line);
+         border-radius: 4px; padding: 2px 6px; }
+  .kbd-label { font-size: var(--fs-xs); color: var(--faint); opacity: .8; }
 
   /* ---------- review nav banner (items + rooms) ---------- */
   .review-nav {
-    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap;
     background: var(--panel); border: 1px solid var(--line);
-    border-radius: 10px; padding: 10px 14px; margin-bottom: 18px;
+    border-radius: var(--r-md); padding: 12px 16px; margin-bottom: var(--sp-5);
   }
   .review-nav-back {
-    font-size: 13px; color: var(--muted); text-decoration: none;
+    font-size: var(--fs-base); color: var(--muted); text-decoration: none;
     flex-shrink: 0;
   }
   .review-nav-back:hover { color: var(--brass-bright); }
@@ -445,39 +450,40 @@
     text-align: center; min-width: 0; flex: 1 1 auto;
   }
   .review-nav-title {
-    font: 600 18px/1.25 var(--ui); letter-spacing: -.015em;
+    font: 600 20px/1.25 var(--display); letter-spacing: -.015em;
     margin: 0 0 2px; white-space: nowrap; overflow: hidden;
     text-overflow: ellipsis;
   }
   .review-nav-pos {
-    font-size: 12px; color: var(--faint);
+    font-size: var(--fs-sm); color: var(--faint);
     font-variant-numeric: tabular-nums;
   }
   .review-nav-btn {
-    font-size: 12px; padding: 6px 10px; white-space: nowrap;
+    font-size: var(--fs-sm); padding: 7px 12px; white-space: nowrap;
     flex-shrink: 0; max-width: 34%;
     overflow: hidden; text-overflow: ellipsis;
   }
   .review-nav-btn:disabled { opacity: .35; cursor: default; }
-  .room-grid { display: grid; grid-template-columns: minmax(0, 1fr) 420px;
-               gap: 24px; align-items: start; }
+  .room-grid { display: grid; grid-template-columns: minmax(0, 1fr) 440px;
+               gap: var(--sp-6); align-items: start; }
   .room-panel {
     background: var(--panel); border: 1px solid var(--line);
-    border-radius: 12px; overflow: hidden; position: sticky; top: 12px;
+    border-radius: var(--r-lg); overflow: hidden; position: sticky; top: 12px;
     max-height: calc(100vh - 90px); display: flex; flex-direction: column;
+    box-shadow: var(--e-1);
   }
   .room-panel-body {
     overflow-y: auto; flex: 1; min-height: 0;
   }
-  .panel-note { font-size: 13px; line-height: 1.5; color: var(--muted);
-                margin: 0 0 12px; }
-  .room-summary { width: 100%; min-height: 80px; font: 14px/1.55 var(--ui);
-    border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
+  .panel-note { font-size: var(--fs-base); line-height: 1.5; color: var(--muted);
+                margin: 0 0 var(--sp-3); }
+  .room-summary { width: 100%; min-height: 80px; font: var(--fs-md)/1.55 var(--ui);
+    border: 1px solid var(--line); border-radius: var(--r-sm); padding: 10px 12px;
     background: var(--paper); color: var(--ink); resize: vertical; }
   .add-form { display: grid; gap: 10px; }
   .add-form + .add-form { margin-top: 10px; }
-  .add-form input, .add-form select { font: 13px var(--ui); padding: 9px 12px;
-    border: 1px solid var(--line); border-radius: 8px;
+  .add-form input, .add-form select { font: var(--fs-base) var(--ui);
+    padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r-sm);
     background: var(--paper); color: var(--ink); }
   .add-form input::placeholder { color: var(--faint); }
   .uncited { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -497,13 +503,13 @@
     border-radius: 8px; padding: 10px 12px; max-height: 220px;
     overflow: auto; }
 
-  /* ---------- overview (X1 orient — the trust-critical first screen) ---------- */
+  /* ---------- overview — deed / catalogue register (Craft C1-A) ---------- */
   .review-subnav {
     display: flex; gap: 2px; flex-shrink: 0;
     border-left: 1px solid var(--line); padding-left: 12px; margin-left: 4px;
   }
   .review-subnav a {
-    font-size: 12px; padding: 4px 10px; border-radius: 999px;
+    font-size: var(--fs-sm); padding: 5px 11px; border-radius: var(--r-sm);
     color: var(--faint); text-decoration: none; white-space: nowrap;
   }
   .review-subnav a:hover { color: var(--muted); background: var(--panel); }
@@ -514,25 +520,46 @@
   .overview {
     width: 100%; max-width: 1200px; margin: 0 auto;
   }
-  .overview-head {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    gap: 24px; flex-wrap: wrap; margin: 2px 0 0;
-    padding-bottom: 18px; border-bottom: 2px solid var(--ink);
+  .deed-masthead {
+    margin: 2px 0 0; padding-bottom: 22px;
+    border-bottom: 2px solid var(--ink);
   }
-  .overview-title {
-    font: 600 clamp(30px, 4.2vw, 46px)/1 var(--display); letter-spacing: -.02em;
-    margin: 0; color: var(--ink);
+  .deed-kicker {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; margin-bottom: 14px;
   }
-  .overview-stats {
-    font: var(--fs-sm)/1.7 var(--mono); color: var(--muted);
-    font-variant-numeric: tabular-nums; text-align: right;
+  .deed-kicker .kind {
+    font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .16em;
+    text-transform: uppercase; color: var(--brass);
   }
-  .overview-stats .walkthrough { display: block; margin-top: 2px; color: var(--faint); }
+  .deed-masthead .overview-title {
+    font: 600 clamp(30px, 4.2vw, 46px)/1.05 var(--display);
+    letter-spacing: -.02em; margin: 0 0 12px; color: var(--ink);
+    max-width: 22ch;
+  }
+  .deed-meta {
+    display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline;
+    font: var(--fs-sm)/1.6 var(--mono); color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .deed-meta .walkthrough { color: var(--faint); }
+  .deed-seal-row {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    margin-top: 14px;
+  }
   .overview-ctas {
-    display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0 30px;
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    margin: 22px 0 28px;
   }
-  /* two orientations, one register grammar (docs/25 Ledger): the two richest
-     rooms are promoted to landscape plates, the rest stay portrait. */
+  .overview-ctas .btn.primary {
+    padding: 12px 22px; font-size: var(--fs-base);
+  }
+  .overview-ctas .btn.ghost { color: var(--muted); }
+  .register-label {
+    font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .14em;
+    text-transform: uppercase; color: var(--faint); margin: 0 0 16px;
+  }
+  /* two orientations, one register grammar (docs/25 Ledger) */
   .overview-features {
     display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 34px;
   }
@@ -552,13 +579,21 @@
     }
     .overview-ctas .btn { flex: 1 1 auto; min-width: 0; font-size: 12px;
                            padding: 10px 12px; }
-    .overview-title { font-size: var(--fs-xl); }
+    .deed-masthead .overview-title { font-size: var(--fs-xl); }
   }
-  /* catalogue plate: bordered figure, caption always beneath (docs/25) */
+  /* catalogue plate: bordered figure, caption always beneath */
   .room-card {
     border: 0; background: none; cursor: pointer; text-align: left;
     padding: 0; font: inherit; color: inherit;
     display: flex; flex-direction: column; min-width: 0;
+    opacity: 0; transform: translateY(10px);
+    animation: plate-in .55s cubic-bezier(.16, 1, .3, 1) forwards;
+  }
+  @keyframes plate-in {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .room-card { opacity: 1; transform: none; animation: none; }
   }
   .room-card .thumb {
     aspect-ratio: 4 / 5; background: var(--panel-2); overflow: hidden;
@@ -633,36 +668,125 @@
   }
 
 
-  /* ---------- finish checklist (X2) ---------- */
-  .finish { max-width: 640px; }
-  .finish h1 { font: 600 22px/1.25 var(--display); margin: 0 0 8px; }
-  .finish-intro { font-size: 13px; line-height: 1.55; color: var(--muted); margin: 0 0 24px; }
+  /* ---------- finish checklist — closing ceremony (Craft C1-G) ---------- */
+  .finish { max-width: 720px; }
+  .finish-deed {
+    margin: 0 0 var(--sp-6); padding-bottom: 20px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .finish-deed .kind {
+    font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .16em;
+    text-transform: uppercase; color: var(--brass); margin: 0 0 10px;
+  }
+  .finish h1 { font: 600 clamp(26px, 3.5vw, 36px)/1.12 var(--display);
+               letter-spacing: -.015em; margin: 0 0 10px; }
+  .finish-intro { font-size: var(--fs-md); line-height: 1.6; color: var(--muted);
+                  margin: 0; max-width: 48ch; }
+  .finish-seal-row { margin-top: 14px; }
   .finish-checklist { list-style: none; padding: 0; margin: 0; }
-  .finish-step { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 12px; background: var(--panel); overflow: hidden; }
-  .finish-step-head { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; }
-  .finish-step-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--line); color: var(--faint); }
+  .finish-step { border: 1px solid var(--line); border-radius: var(--r-lg);
+                 margin-bottom: var(--sp-3); background: var(--panel);
+                 overflow: hidden; box-shadow: var(--e-1); }
+  .finish-step-head { display: flex; align-items: flex-start; gap: var(--sp-3);
+                      padding: 16px 18px; }
+  .finish-step-icon { flex-shrink: 0; width: 24px; height: 24px;
+                      border-radius: 50%; display: flex; align-items: center;
+                      justify-content: center; font-size: var(--fs-sm);
+                      font-weight: 700; background: var(--line); color: var(--faint); }
   .finish-step.ok .finish-step-icon { background: var(--confirm-soft); color: var(--confirm); }
   .finish-step.warn .finish-step-icon { background: var(--pend-soft); color: var(--pend); }
   .finish-step.blocker .finish-step-icon { background: var(--danger-soft); color: var(--danger); }
-  .finish-step-title { font: 600 14px/1.35 var(--ui); margin: 0; }
-  .finish-step-note { font-size: 12px; line-height: 1.45; color: var(--muted); margin: 4px 0 0; }
-  .finish-step-body { padding: 0 16px 16px 44px; border-top: 1px solid var(--line); }
+  .finish-step-title { font: 600 var(--fs-md)/1.35 var(--ui); margin: 0; }
+  .finish-step-note { font-size: var(--fs-sm); line-height: 1.5; color: var(--muted);
+                      margin: 5px 0 0; }
+  .finish-step-body { padding: 0 18px 18px 50px; border-top: 1px solid var(--line); }
   .finish-step-body:empty { display: none; }
-  .finish-fields { display: grid; gap: 12px; padding-top: 14px; }
-  .finish-fields label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
-  .finish-fields input, .finish-fields select { width: 100%; font: 13px var(--ui); padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); }
-  .finish-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-  .finish-sig-list { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
-  .finish-handoff { margin-top: 24px; padding: 20px; border-radius: 12px; background: var(--confirm-soft); border: 1px solid var(--confirm); }
-  .finish-handoff h2 { font: 600 16px/1.3 var(--ui); margin: 0 0 8px; }
-  .finish-handoff p { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
-  .finish-handoff-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .finish-fields { display: grid; gap: var(--sp-3); padding-top: 16px; }
+  .finish-fields label { display: block; font-size: var(--fs-xs); font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 5px; }
+  .finish-fields input, .finish-fields select { width: 100%;
+    font: var(--fs-base) var(--ui); padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: var(--r-sm);
+    background: var(--paper); color: var(--ink); }
+  .finish-actions { display: flex; gap: var(--sp-2); flex-wrap: wrap;
+                    margin-top: var(--sp-3); }
+  .finish-sig-list { font-size: var(--fs-sm); color: var(--muted); margin: 0 0 12px; }
+  /* closing seal — paper + ink rule + brass, not mint-on-brass */
+  .finish-handoff {
+    margin-top: var(--sp-7); padding: 0; border-radius: var(--r-lg);
+    background: var(--panel); border: 1px solid var(--line-strong);
+    box-shadow: var(--e-2); overflow: hidden;
+  }
+  .finish-handoff-inner { padding: 22px 24px 20px; }
+  .finish-handoff-mark {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .finish-handoff-mark .seal {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--brass); color: #14100a; font: 700 14px/1 var(--ui);
+  }
+  .finish-handoff-mark .kind {
+    font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .14em;
+    text-transform: uppercase; color: var(--brass-bright);
+  }
+  .finish-handoff h2 {
+    font: 600 clamp(22px, 2.8vw, 28px)/1.2 var(--display);
+    letter-spacing: -.015em; margin: 0 0 8px; color: var(--ink);
+  }
+  .finish-handoff p {
+    font-size: var(--fs-base); line-height: 1.55; color: var(--muted);
+    margin: 0 0 18px; max-width: 46ch;
+  }
+  .finish-handoff-actions {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    padding: 14px 24px 18px; background: var(--panel-2);
+    border-top: 1px solid var(--line);
+  }
+  .finish-handoff-actions .btn {
+    text-decoration: none; padding: 11px 18px; font-size: var(--fs-base);
+  }
+  .finish-handoff-actions a.btn { text-decoration: none; }
+  .finish-handoff-actions .btn.primary { min-width: 10em; }
   @media (max-width: 480px) {
     .finish { max-width: none; }
-    .finish-step-head { padding: 12px 14px; }
+    .finish-step-head { padding: 14px; }
     .finish-fields input, .finish-fields select { font-size: 16px; }
-    .finish-handoff-actions .btn { flex: 1 1 auto; min-width: 0; }
-    .finish-handoff-actions a.btn { text-align: center; }
+    .finish-handoff-inner { padding: 18px 16px 16px; }
+    .finish-handoff-actions { padding: 12px 16px 14px; }
+    .finish-handoff-actions .btn { flex: 1 1 auto; min-width: 0; text-align: center; }
+  }
+
+  /* ---------- claim conveyor + evidence expand (Craft C1-B / E) ---------- */
+  .work {
+    transition: grid-template-columns .35s cubic-bezier(.16, 1, .3, 1);
+  }
+  .work.evidence-focus {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+  .work.evidence-focus .claim { opacity: .72; }
+  .work.evidence-focus #stage {
+    height: clamp(320px, 62vh, 640px);
+  }
+  .claim {
+    transition: opacity .28s ease, transform .32s cubic-bezier(.16, 1, .3, 1);
+  }
+  .claim.conveyor-out {
+    opacity: 0; transform: translateX(18px); pointer-events: none;
+  }
+  .claim.conveyor-in {
+    animation: claim-in .34s cubic-bezier(.16, 1, .3, 1);
+  }
+  @keyframes claim-in {
+    from { opacity: 0; transform: translateX(-14px); }
+    to { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .work { transition: none; }
+    .claim.conveyor-out { opacity: 1; transform: none; }
+    .claim.conveyor-in { animation: none; }
+    .work.evidence-focus { grid-template-columns: minmax(0, 1fr) 440px; }
   }
 
   /* ---------- lightbox (inspect + pin) ---------- */
@@ -770,7 +894,7 @@
     #progress { grid-area: progress; order: unset; flex: unset; width: 100%;
                 max-width: none; margin: 0; }
     .addr { display: none; }
-    .overview-stats { font-size: 12px; }
+    .deed-meta { font-size: 12px; gap: 4px 12px; }
     .coach-mark { font-size: 12px; padding: 12px; }
     .room-card .body { padding: 10px; }
     .room-card .name { font-size: 14px; }
@@ -1023,6 +1147,62 @@
     var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), r = s % 60;
     return h ? h + ":" + pad2(m) + ":" + pad2(r) : m + ":" + pad2(r);
   }
+  function shortSha(hex) {
+    if (!hex) return "";
+    return (hex + "").slice(0, 8);
+  }
+  function humanDate(iso) {
+    if (!iso) return "";
+    var s = (iso + "").slice(0, 10);
+    try {
+      var d = new Date(s + "T12:00:00");
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString(undefined, {
+          day: "numeric", month: "short", year: "numeric"
+        });
+      }
+    } catch (e) {}
+    return s;
+  }
+  /* Exhibit caption: "seen at 04:12 · Kitchen · P042" (docs/14 P2/P6). */
+  function exhibitCaption(opts) {
+    var parts = [];
+    if (opts.t != null && opts.t !== "") {
+      parts.push({ kind: "seen", t: opts.t });
+    }
+    if (opts.room) parts.push({ kind: "room", text: opts.room });
+    if (opts.pid) parts.push({ kind: "pid", text: opts.pid });
+    if (opts.extra) parts.push({ kind: "extra", text: opts.extra });
+    var node = el("span", { "class": "exhibit" });
+    parts.forEach(function (p, i) {
+      if (i) node.appendChild(document.createTextNode(" \u00b7 "));
+      if (p.kind === "seen") {
+        node.appendChild(document.createTextNode("seen at "));
+        node.appendChild(el("span", { "class": "tc", text: fmtT(p.t) }));
+      } else if (p.kind === "room") {
+        node.appendChild(el("span", { "class": "room", text: p.text }));
+      } else if (p.kind === "pid") {
+        node.appendChild(el("span", { "class": "pid", text: p.text }));
+      } else {
+        node.appendChild(document.createTextNode(p.text));
+      }
+    });
+    return node;
+  }
+  function contentSeal() {
+    var sha = payload.content_sha256 || "";
+    if (!sha) return null;
+    var seal = el("span", { "class": "exhibit-seal",
+      title: "Content SHA-256 " + sha });
+    seal.appendChild(el("b", { text: "SHA" }));
+    seal.appendChild(document.createTextNode(shortSha(sha)));
+    return seal;
+  }
+  function prefersReducedMotion() {
+    try {
+      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch (e) { return false; }
+  }
 
   /* ---------- autosave ---------- */
   var dirty = false;
@@ -1260,6 +1440,12 @@
         warnEl.textContent = " · " + warns + " to check";
       } else if (warnEl) warnEl.remove();
     });
+    var seals = overviewHost.querySelectorAll(".deed-seal-row .exhibit-seal");
+    if (seals.length >= 2) {
+      var doneN = ix.items.filter(isDone).length;
+      seals[seals.length - 1].textContent =
+        doneN + " / " + ix.items.length + " confirmed";
+    }
   }
   function maybeCoachMark(host) {
     try {
@@ -1287,38 +1473,56 @@
     maybeCoachMark(host);
 
     var stats = inventoryStats();
-    var statsLine = stats.rooms + " room" + (stats.rooms === 1 ? "" : "s")
-      + " \u00b7 " + stats.items + " item" + (stats.items === 1 ? "" : "s")
-      + " \u00b7 " + stats.analysed + " frame"
-      + (stats.analysed === 1 ? "" : "s") + " analysed"
-      + " \u00b7 " + stats.shown + " shown";
-    var statsEl = el("div", { "class": "overview-stats" });
-    statsEl.appendChild(el("span", { text: statsLine }));
+    var mast = el("header", { "class": "deed-masthead" });
+    var kicker = el("div", { "class": "deed-kicker" });
+    kicker.appendChild(el("span", { "class": "kind",
+      text: "Inventory register" }));
+    mast.appendChild(kicker);
+    var title = ((inv.property_address || "").trim()) || "Property inventory";
+    mast.appendChild(el("h1", { "class": "overview-title", text: title }));
+    var meta = el("div", { "class": "deed-meta" });
+    if (inv.inspected_at) {
+      meta.appendChild(el("span", {
+        text: "Inspected " + humanDate(inv.inspected_at) }));
+    }
+    meta.appendChild(el("span", {
+      text: stats.rooms + " room" + (stats.rooms === 1 ? "" : "s")
+        + " \u00b7 " + stats.items + " item" + (stats.items === 1 ? "" : "s")
+    }));
+    meta.appendChild(el("span", {
+      text: stats.shown + " of " + stats.analysed + " frames shown"
+    }));
     var wt = primaryWalkthrough();
     if (wt) {
-      statsEl.appendChild(el("span", { "class": "walkthrough",
-        text: "Walkthrough: " + wt.meta.name + " \u00b7 "
-              + fmtT(wt.meta.duration) }));
+      meta.appendChild(el("span", { "class": "walkthrough",
+        text: wt.meta.name + " \u00b7 " + fmtT(wt.meta.duration) }));
     }
-    var head = el("div", { "class": "overview-head" });
-    var title = ((inv.property_address || "").trim()) || "Rooms found";
-    head.appendChild(el("h1", { "class": "overview-title", text: title }));
-    head.appendChild(statsEl);
-    host.appendChild(head);
+    mast.appendChild(meta);
+    var sealRow = el("div", { "class": "deed-seal-row" });
+    var seal = contentSeal();
+    if (seal) sealRow.appendChild(seal);
+    var done = ix.items.filter(isDone).length;
+    sealRow.appendChild(el("span", { "class": "exhibit-seal",
+      text: done + " / " + ix.items.length + " confirmed" }));
+    mast.appendChild(sealRow);
+    host.appendChild(mast);
 
     var ctas = el("div", { "class": "overview-ctas" });
     ctas.appendChild(el("button", {
       "class": "btn primary", type: "button",
-      text: "Start review (least confident first)",
+      text: "Start review",
       onclick: startReview
     }));
     if (wt) {
       ctas.appendChild(el("button", {
-        "class": "btn", type: "button", text: "Watch walkthrough",
+        "class": "btn ghost", type: "button", text: "Watch walkthrough",
         onclick: function () { showWalkthroughPlayer(host, wt); }
       }));
     }
     host.appendChild(ctas);
+
+    host.appendChild(el("p", { "class": "register-label",
+      text: "Room plates" }));
 
     // rank by item count; the two richest rooms become landscape features
     var ranked = inv.rooms.map(function (room, i) {
@@ -1335,11 +1539,12 @@
       plateNo++;
       var src = roomHeroSrc(room);
       var total = (room.items || []).length;
-      var done = roomReviewDone(room);
+      var doneN = roomReviewDone(room);
       var warns = roomWarnings(room);
       var card = el("button", {
         type: "button", "class": "room-card" + (land ? " land" : ""),
         "data-room": room.name,
+        style: "animation-delay:" + Math.min(plateNo * 0.04, 0.48) + "s",
         onclick: function () { select({ type: "room", name: room.name }); }
       });
       var thumb = el("div", { "class": "thumb" });
@@ -1350,21 +1555,20 @@
       body.appendChild(el("span", { "class": "pno",
         text: "Plate " + (plateNo < 10 ? "0" : "") + plateNo }));
       body.appendChild(el("h3", { "class": "name", text: room.name }));
-      var meta = el("div", { "class": "meta" });
-      meta.appendChild(el("span", {
+      var metaEl = el("div", { "class": "meta" });
+      metaEl.appendChild(el("span", {
         text: total + " item" + (total === 1 ? "" : "s") }));
-      if (warns) meta.appendChild(el("span", { "class": "warn",
+      if (warns) metaEl.appendChild(el("span", { "class": "warn",
         text: " \u00b7 " + warns + " to check" }));
-      body.appendChild(meta);
+      body.appendChild(metaEl);
       var meter = el("div", { "class": "meter" });
       var mfill = el("i", {});
-      mfill.style.width = total ? (100 * done / total) + "%" : "0";
+      mfill.style.width = total ? (100 * doneN / total) + "%" : "0";
       meter.appendChild(mfill);
       body.appendChild(meter);
       card.appendChild(body);
       (land ? features : grid).appendChild(card);
     }
-    // features first (in item-rank order), then the rest in walkthrough order
     ranked.filter(function (r) { return isFeature[r.i]; })
       .forEach(function (r) { addPlate(r.room, true); });
     inv.rooms.forEach(function (room, i) {
@@ -1385,11 +1589,16 @@
     v.preload = "metadata";
     box.appendChild(v);
     var bar = el("div", { "class": "bar" });
-    bar.appendChild(el("span", { text: wt.meta.name + " \u00b7 "
-      + fmtT(wt.meta.duration) }));
+    bar.appendChild(exhibitCaption({
+      extra: wt.meta.name + " \u00b7 " + fmtT(wt.meta.duration)
+    }));
     box.appendChild(bar);
-    var stats = host.querySelector(".overview-stats");
-    stats.parentNode.insertBefore(box, stats.nextSibling);
+    var ctas = host.querySelector(".overview-ctas");
+    if (ctas && ctas.nextSibling) {
+      host.insertBefore(box, ctas.nextSibling);
+    } else {
+      host.appendChild(box);
+    }
     box.scrollIntoView({ block: "nearest" });
     v.play().catch(function () {});
   }
@@ -1640,9 +1849,21 @@
     var host = el("div", { "class": "finish", id: "finish-panel" });
     finishHost = host;
     d.appendChild(host);
-    host.appendChild(el("h1", { text: "Finish" }));
-    host.appendChild(el("p", { "class": "finish-intro",
-      text: "Close the file: complete the cover details, export a fresh PDF, sign, then send the final issue." }));
+    var deed = el("header", { "class": "finish-deed" });
+    deed.appendChild(el("p", { "class": "kind", text: "Closing the register" }));
+    var addrTitle = ((inv.property_address || "").trim()) || "Property inventory";
+    deed.appendChild(el("h1", { text: addrTitle }));
+    deed.appendChild(el("p", { "class": "finish-intro",
+      text: "Confirm the cover, sign the content hash, then issue the attested report." }));
+    var sealRow = el("div", { "class": "finish-seal-row" });
+    var seal = contentSeal();
+    if (seal) sealRow.appendChild(seal);
+    if (inv.inspected_at) {
+      sealRow.appendChild(el("span", { "class": "exhibit-seal",
+        text: humanDate(inv.inspected_at) }));
+    }
+    deed.appendChild(sealRow);
+    host.appendChild(deed);
     var list = el("ol", { "class": "finish-checklist" });
     var addrBad = addressMissing();
     list.appendChild(finishStep(addrBad ? "!" : "\u2713", "Property details",
@@ -1768,14 +1989,27 @@
     host.appendChild(list);
     if (signed) {
       var handoff = el("div", { "class": "finish-handoff", id: "finish-handoff" });
-      handoff.appendChild(el("h2", { text: "Ready to send" }));
-      handoff.appendChild(el("p", { text: "Your signature is on record. Open the clean final issue or copy the "
-        + (shareSpec.link_noun || "tenant") + " link." }));
+      var inner = el("div", { "class": "finish-handoff-inner" });
+      var mark = el("div", { "class": "finish-handoff-mark" });
+      mark.appendChild(el("span", { "class": "seal", "aria-hidden": "true",
+        text: "\u2713" }));
+      mark.appendChild(el("span", { "class": "kind", text: "Signed & sealed" }));
+      inner.appendChild(mark);
+      inner.appendChild(el("h2", { text: "Attested and ready" }));
+      inner.appendChild(el("p", {
+        text: "Your signature seals this inventory. Open the clean final issue"
+          + " or share the " + (shareSpec.link_noun || "tenant") + " link."
+      }));
+      handoff.appendChild(inner);
       var hact = el("div", { "class": "finish-handoff-actions" });
-      hact.appendChild(el("a", { href: PREFIX + "/issue", "class": "btn primary", text: "Open Final issue" }));
+      hact.appendChild(el("a", {
+        href: PREFIX + "/issue", "class": "btn primary",
+        text: "Open final issue"
+      }));
       if (SHARE_URL) {
         hact.appendChild(el("button", { type: "button", "class": "btn",
-          text: "Copy " + (shareSpec.link_noun || "tenant") + " link", onclick: copyShareLink }));
+          text: "Copy " + (shareSpec.link_noun || "tenant") + " link",
+          onclick: copyShareLink }));
       }
       handoff.appendChild(hact);
       host.appendChild(handoff);
@@ -2178,6 +2412,7 @@
       if (ctl.video) { ctl.video.pause(); }
       ctl.mode = "frame";
       ctl.cur = idx;
+      setEvidenceFocus(false);
       var e = curEntry();
       media.innerHTML = "";
       media.classList.remove("fading");
@@ -2204,11 +2439,14 @@
       var pt = timeOfCur();
       if (ctl.mode === "frame") {
         var chip = el("span", { "class": "hud-chip" });
-        chip.appendChild(document.createTextNode(
-          ctl.roomName + " · " + (e.label || "")));
         if (pt) {
-          chip.appendChild(document.createTextNode(" · "));
+          chip.appendChild(document.createTextNode("seen at "));
           chip.appendChild(el("span", { "class": "tc", text: fmtT(pt.t) }));
+          chip.appendChild(document.createTextNode(
+            " \u00b7 " + ctl.roomName + (e.label ? " \u00b7 " + e.label : "")));
+        } else {
+          chip.appendChild(document.createTextNode(
+            ctl.roomName + (e.label ? " \u00b7 " + e.label : "")));
         }
         hudTL.appendChild(chip);
         var n = e.pid && opts.item ? pinsOn(opts.item, e.pid) : 0;
@@ -2235,6 +2473,10 @@
             text: "▶ Play this moment",
             title: "Watch the walkthrough around this frame (v)",
             onclick: function () { enterVideo(null, true); } }));
+          hudBL.appendChild(el("button", { "class": "hud-btn",
+            text: "\u00b11s",
+            title: "Scrub one second either side of this frame",
+            onclick: function () { scrubAroundMoment(); } }));
         }
       } else {
         var v = ctl.video;
@@ -2249,6 +2491,10 @@
         hudBL.appendChild(el("button", { "class": "hud-btn", text: "+1f",
           title: "Forward one frame (.)",
           onclick: function () { frameStep(1); } }));
+        hudBL.appendChild(el("button", { "class": "hud-btn",
+          text: "\u00b11s",
+          title: "Rewind one second and play through the moment",
+          onclick: function () { scrubAroundMoment(); } }));
         var tc = el("span", { "class": "hud-chip" });
         tc.appendChild(el("span", { "class": "tc", id: "stage-tc",
           text: fmtT(v ? v.currentTime : 0) }));
@@ -2256,9 +2502,9 @@
           " / " + fmtT(videos[ctl.vrel].duration)));
         hudBL.appendChild(tc);
         hudTL.appendChild(el("span", { "class": "hud-chip",
-          text: "Walkthrough · " + videos[ctl.vrel].name }));
+          text: "Walkthrough \u00b7 " + videos[ctl.vrel].name }));
         hudTR.appendChild(el("button", { "class": "hud-btn",
-          text: "✕ Back to still", title: "Esc",
+          text: "\u2715 Back to still", title: "Esc",
           onclick: function () { showFrame(ctl.cur); } }));
       }
     }
@@ -2272,6 +2518,7 @@
       var t = (atT != null) ? atT : Math.max((pt ? pt.t : 0) - 1.2, 0);
       ctl.mode = "video";
       ctl.vrel = rel;
+      setEvidenceFocus(true);
       media.innerHTML = "";
       media.classList.remove("fading");
       var v = document.createElement("video");
@@ -2317,6 +2564,22 @@
       v.pause();
       var fps = videos[ctl.vrel].fps || 30;
       v.currentTime = Math.max(0, v.currentTime + dir / fps);
+    }
+    /* Craft C1-F: scrub ±1s around the cited moment. */
+    function scrubAroundMoment() {
+      var pt = timeOfCur();
+      var center = pt ? pt.t : (ctl.video ? ctl.video.currentTime : 0);
+      var start = Math.max(0, center - 1);
+      if (ctl.mode !== "video") {
+        enterVideo(start, true);
+        return;
+      }
+      var v = ctl.video;
+      if (!v) { enterVideo(start, true); return; }
+      setEvidenceFocus(true);
+      try { v.currentTime = start; } catch (err) {}
+      v.play().catch(function () {});
+      drawHud();
     }
 
     /* ----- filmstrip ----- */
@@ -2471,30 +2734,40 @@
       var e = curEntry();
       var pt = timeOfCur();
       if (ctl.mode === "video") {
-        prov.appendChild(el("span",
-          { text: "Watching the walkthrough — the report cites the marked " +
-                  "frames." }));
+        prov.appendChild(exhibitCaption({
+          t: ctl.video ? ctl.video.currentTime : (pt && pt.t),
+          room: ctl.roomName,
+          extra: "watching walkthrough"
+        }));
         return;
       }
       if (pt) {
-        prov.appendChild(el("span", {}, [
-          document.createTextNode("Seen at "),
-          el("span", { "class": "tc", text: fmtT(pt.t) }),
-          document.createTextNode(" in "),
-          el("span", { "class": "vid", text: videos[pt.video].name })
-        ]));
+        prov.appendChild(exhibitCaption({
+          t: pt.t, room: ctl.roomName, pid: e && e.pid
+        }));
       } else if (e && e.kind === "crop") {
-        prov.appendChild(el("span",
-          { text: "Detector close-up — open a cited photo for context." }));
+        prov.appendChild(exhibitCaption({
+          room: ctl.roomName, extra: "detector close-up"
+        }));
+      } else if (e && e.pid) {
+        prov.appendChild(exhibitCaption({
+          room: ctl.roomName, pid: e.pid, extra: "photo capture"
+        }));
       } else {
-        prov.appendChild(el("span", { text: "From photo capture." }));
+        prov.appendChild(exhibitCaption({ extra: "From photo capture." }));
       }
       var ph = e && e.pid ? ix.photoById[e.pid] : null;
       if (ph && ph.captured_at) {
+        prov.appendChild(document.createTextNode(" \u00b7 "));
         prov.appendChild(el("span", { "class": "vid",
           text: "taken " + (ph.captured_at + "").slice(0, 16)
                   .replace("T", " ") }));
       }
+    }
+
+    function setEvidenceFocus(on) {
+      var work = box.closest(".work");
+      if (work) work.classList.toggle("evidence-focus", !!on);
     }
 
     // keyboard hooks (wired by the global handler)
@@ -2599,13 +2872,36 @@
   function confirmItem(it) {
     pushUndo("confirm " + it.id, [it]);
     it.reviewed = true; it.rejected = false;
-    markDirty(); refreshQueueRow(it); step(1);
+    markDirty(); refreshQueueRow(it);
+    conveyorStep(1, "Confirmed");
   }
   function rejectItem(it) {
     pushUndo((it.rejected ? "restore " : "reject ") + it.id, [it]);
     it.rejected = !it.rejected;
     if (it.rejected) it.reviewed = false;
-    markDirty(); refreshQueueRow(it); renderItem(it);
+    markDirty(); refreshQueueRow(it);
+    if (it.rejected) conveyorStep(1, "Rejected");
+    else renderItem(it);
+  }
+  function conveyorStep(delta, label) {
+    var claim = document.querySelector(".claim");
+    var reduce = prefersReducedMotion();
+    function go() {
+      step(delta);
+      var next = document.querySelector(".claim");
+      if (next && !reduce) next.classList.add("conveyor-in");
+      toast(label || "Saved", {
+        undo: function () { undo(); },
+        undoLabel: "Undo",
+        ms: 3800
+      });
+    }
+    if (claim && !reduce) {
+      claim.classList.add("conveyor-out");
+      setTimeout(go, 180);
+    } else {
+      go();
+    }
   }
   function renderItem(it) {
     var room = ix.roomOf[it.id];
@@ -2953,9 +3249,17 @@
         : "Scroll to zoom · drag to pan · double-click a pin to remove it";
     }
     function show() {
-      document.getElementById("lb-pid").textContent =
-        (cur.label || "") + (cur.pid && photoTime[cur.pid]
-          ? " · " + fmtT(photoTime[cur.pid].t) : "");
+      var pidEl = document.getElementById("lb-pid");
+      pidEl.innerHTML = "";
+      var pt = cur.pid && photoTime[cur.pid] ? photoTime[cur.pid] : null;
+      var room = cur.it && ix.roomOf[cur.it.id] ? ix.roomOf[cur.it.id].name : "";
+      if (pt || cur.pid || room) {
+        pidEl.appendChild(exhibitCaption({
+          t: pt ? pt.t : null, room: room, pid: cur.pid || cur.label
+        }));
+      } else {
+        pidEl.textContent = cur.label || "";
+      }
       document.getElementById("lb-title").textContent =
         cur.it ? cur.it.name || "" : "";
       playBtn.hidden = !(cur.pid && photoTime[cur.pid] &&

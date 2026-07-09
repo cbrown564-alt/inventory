@@ -31,6 +31,12 @@
   .cover {
     text-align: center; padding: 120px 24px 60px; page-break-after: always;
   }
+  .cover-logo {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 24px;
+    display: block;
+  }
   .cover h1 { font-size: 27pt; margin-bottom: 4px; }
   .cover h1::after { content: ""; display: block; width: 72px;
     border-bottom: 2px solid var(--brass); margin: 18px auto 0; }
@@ -43,8 +49,9 @@
   section.room { page-break-before: always; }
   h2 { font-size: 15pt; border-bottom: 2px solid var(--brass);
        padding-bottom: 4px; margin-top: 28px; }
-  .summary { background: var(--band); padding: 10px 14px; border-left: 3px solid
-             var(--brass); margin: 12px 0 18px; }
+  .summary { background: var(--band); padding: 10px 14px;
+             border: 1px solid var(--rule); border-radius: 4px;
+             margin: 12px 0 18px; }
   table.items { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
   table.items th {
     text-align: left; background: var(--band); color: var(--ink);
@@ -148,7 +155,7 @@
     /* absence says "none noted" on screen; print keeps the words */
     section.room .def-cell > .meta { display: none; }
     section.room .def-cell .defects { list-style: none; margin: 0;
-      padding: 1px 0 1px 10px; border-left: 2px solid var(--reject);
+      padding: 6px 10px; background: var(--danger-soft); border-radius: 4px;
       max-width: 62ch; font-size: 9.5pt; line-height: 1.45; }
     section.room .photo-cell { grid-area: photo; margin-top: 8px;
       font-size: 8pt; min-width: 0; }
@@ -168,9 +175,10 @@
     /* the frame around the entries (docs/16 R2) */
     .room-meta { font: 500 8.5pt var(--ui); letter-spacing: .08em;
       text-transform: uppercase; color: var(--muted); margin: 8px 0 14px; }
-    section.room .summary, .summary { background: none;
-      border-left: 2px solid var(--brass); padding: 2px 0 2px 14px;
-      font-style: italic; font-size: 10.5pt; line-height: 1.55; }
+    section.room .summary, .summary { background: var(--band);
+      border: 1px solid var(--rule); border-radius: 4px;
+      padding: 10px 14px; font-style: italic; font-size: 10.5pt;
+      line-height: 1.55; }
     section.room h3 { font: 600 8.5pt var(--ui); letter-spacing: .14em;
       text-transform: uppercase; color: var(--muted);
       border-bottom: 1px solid var(--rule); padding-bottom: 3px;
@@ -193,8 +201,9 @@
   .declaration { border: 1px solid var(--rule); padding: 16px; margin-top: 24px; }
   .sigline { display: inline-block; width: 250px; border-bottom: 1px solid
              var(--ink); margin: 28px 16px 4px 0; }
-  .sigcard { border-left: 3px solid var(--confirm); background: var(--confirm-soft);
-             padding: 8px 12px; margin: 10px 0; font-size: 9.5pt; }
+  .sigcard { border: 1px solid var(--confirm); background: var(--confirm-soft);
+             border-radius: 6px; padding: 8px 12px; margin: 10px 0;
+             font-size: 9.5pt; }
   .sigcard .hash { font-family: var(--mono); font-size: 7.5pt;
                    color: var(--muted); word-break: break-all; }
   footer { color: var(--muted); font-size: 8pt; text-align: center;
@@ -361,9 +370,9 @@
   .dk-btn:hover { border-color: var(--brass); color: var(--brass-bright); }
   .dk-btn:active { transform: translateY(1px); }
   .dk-btn.primary { background: var(--brass); border-color: var(--brass);
-                    color: #14100a; }
+                    color: #fffdf8; }
   .dk-btn.primary:hover { background: var(--brass-bright);
-                          border-color: var(--brass-bright); color: #14100a; }
+                          border-color: var(--brass-bright); color: #fffdf8; }
   .dk-btn[aria-pressed="true"] { background: var(--accent); color: var(--panel);
                                  border-color: var(--accent); }
   #dirty-dot { width: 8px; height: 8px; border-radius: 50%;
@@ -448,6 +457,11 @@
 {% endif %}
 <main>
 <div class="cover">
+  <svg class="cover-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 5v14" />
+    <path d="M18 5v14" />
+    <path d="M6 12l6-4 6 4" />
+  </svg>
   {% if inv.agent_name %}<div class="agent-name">{{ inv.agent_name }}</div>{% endif %}
   <div class="kicker">Property Inventory</div>
   <h1>{{ inv.report_type }}</h1>

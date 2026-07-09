@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>New report — Homeinventory</title>
+<title>New report — Home Inventory</title>
 {% include "_favicon.j2" %}
 <style>
 {% include "_theme.css.j2" %}
@@ -153,23 +153,28 @@
                 color: var(--ink); }
   .build-fail-actions { display: flex; gap: 8px; }
 
-  /* report-type picker */
-  #use-case-picker { max-width: 720px; margin: 60px auto 0; }
-  #use-case-picker h1 { text-align: center; }
+  /* report-type picker — same ledger grammar as the upload hero */
+  #use-case-picker { max-width: 760px; margin: 48px auto 0; }
+  #use-case-picker .picker-plate {
+    border: 1px solid var(--line-strong); border-radius: 16px;
+    background: var(--panel); box-shadow: var(--e-1); overflow: hidden;
+    padding: 36px 32px 32px;
+  }
+  #use-case-picker h1 { text-align: center; margin-bottom: 10px; }
   #use-case-picker .lede { text-align: center; color: var(--muted);
-    margin: 0 0 30px; }
+    margin: 0 auto 28px; max-width: 42ch; font-size: var(--fs-md);
+    line-height: 1.6; }
   .cards { display: grid; grid-template-columns: repeat(auto-fit,
-           minmax(280px, 1fr)); gap: 16px; }
-  /* .card base lives in _theme.css.j2 (bg, border, radius, elevation,
-     hover lift); the picker only adds its document-world specifics */
+           minmax(260px, 1fr)); gap: 14px; }
+  /* .card base lives in _theme.css.j2; picker adds document-world specifics */
   .card { text-align: left; cursor: pointer; padding: 22px 22px 20px;
           border-top: 3px solid var(--brass); }
   .card strong { display: block; font: 600 19px/1.25 var(--display);
                  margin-bottom: 7px; color: var(--ink); }
-  .card span { color: var(--muted); font-size: 13.5px; line-height: 1.55; }
-  .card .outcome { display: block; margin-top: 10px; font-size: 12.5px;
+  .card span { color: var(--muted); font-size: var(--fs-base); line-height: 1.55; }
+  .card .outcome { display: block; margin-top: 12px; font-size: var(--fs-sm);
                    font-weight: 600; color: var(--brass-bright); }
-  #picker-status.err { color: var(--danger); margin-top: 12px;
+  #picker-status.err { color: var(--danger); margin-top: 14px;
                        text-align: center; }
 
   @media (max-width: 900px) {
@@ -187,12 +192,20 @@
     .banner-row .btn { width: 100%; text-align: center; }
     #drop { padding: 32px 16px; }
     .build-card { padding: 22px 18px 18px; }
+    #use-case-picker .picker-plate { padding: 28px 18px 22px; }
   }
 </style>
 </head>
 <body>
 <header class="app-header">
-  <span class="wordmark">Homeinventory</span>
+  <span class="wordmark">
+  <svg class="wordmark-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 5v14" />
+    <path d="M18 5v14" />
+    <path d="M6 12l6-4 6 4" />
+  </svg>
+  Home Inventory
+</span>
   <nav class="app-nav" aria-label="Sections">
     <a href="/start" aria-current="page">New report</a>
     {% if has_inventory %}
@@ -210,21 +223,23 @@
 
 {% if show_picker|default(false) %}
 <section id="use-case-picker">
-  <h1>What are you evidencing?</h1>
-  <p class="lede">Pick the report type — it sets the sections, the grades
-    and who signs.</p>
-  <div class="cards">
-  {% for u in use_cases|default([]) %}
-    <button class="card" data-use-case="{{ u.key }}" type="button">
-      <strong>{{ u.name }}</strong>
-      <span>{{ u.description }}</span>
-      {% if u.outcome|default("") %}
-      <span class="outcome">{{ u.outcome }}</span>
-      {% endif %}
-    </button>
-  {% endfor %}
+  <div class="picker-plate">
+    <h1>What are you evidencing?</h1>
+    <p class="lede">Pick the report type. It sets the sections, the grades,
+      and who signs.</p>
+    <div class="cards">
+    {% for u in use_cases|default([]) %}
+      <button class="card" data-use-case="{{ u.key }}" type="button">
+        <strong>{{ u.name }}</strong>
+        <span>{{ u.description }}</span>
+        {% if u.outcome|default("") %}
+        <span class="outcome">{{ u.outcome }}</span>
+        {% endif %}
+      </button>
+    {% endfor %}
+    </div>
+    <div id="picker-status"></div>
   </div>
-  <div id="picker-status"></div>
 </section>
 {% endif %}
 
@@ -244,7 +259,7 @@
 <div class="ledger-hero">
   <div class="nameplate">
     <span class="np-side">Est. MMXXVI</span>
-    <span class="np-name">Homeinventory</span>
+    <span class="np-name">Home Inventory</span>
     <span class="np-side r">TDS &middot; credible</span>
   </div>
   <div class="hero">
