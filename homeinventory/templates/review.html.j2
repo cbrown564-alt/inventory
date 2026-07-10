@@ -24,6 +24,25 @@
     display: flex; align-items: center; gap: var(--sp-2); margin-left: auto;
     flex-shrink: 0;
   }
+  .pair-phone { white-space: nowrap; }
+  .pairing-code {
+    display: grid; grid-template-columns: 164px 1fr; gap: var(--sp-4);
+    align-items: center; margin: var(--sp-4) 0;
+    padding: var(--sp-3); background: var(--panel-2);
+    border: 1px solid var(--line); border-radius: var(--r-md);
+  }
+  .pairing-code img {
+    display: block; width: 164px; height: 164px; padding: 8px;
+    background: var(--panel); border-radius: var(--r-sm);
+  }
+  .pairing-code p { margin: 0; }
+  .pairing-code .eyebrow {
+    margin-bottom: var(--sp-1); font-size: var(--fs-xs); font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--brass-bright);
+  }
+  @media (max-width: 480px) {
+    .pairing-code { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  }
   .addr { display: none; }
   #progress { flex: 1 1 auto; min-width: 120px; max-width: 320px; margin: 0 auto; }
   #progress .label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted);
@@ -908,6 +927,9 @@
              color: #c8d0da; }
   #lb-hint { font-size: 11px; color: #5f6c7c; }
 
+  /* Mobile review keeps the decisive evidence actions in thumb reach. */
+  #mobile-action { display: none; }
+
   /* annotation label popover (shared by lightbox pins) */
   #anno-form { position: fixed; z-index: 95; background: var(--panel);
     border: 1px solid var(--line); border-radius: 12px; padding: 14px;
@@ -984,7 +1006,15 @@
     .review-nav { padding: 8px 10px; gap: 8px; }
     .review-nav-btn .review-nav-btn-label { display: none; }
     .review-nav-title { font-size: 16px; }
-    #detail { padding: 10px 10px 28px; }
+    #detail { padding: 10px 10px calc(144px + env(safe-area-inset-bottom)); }
+    #mobile-action { display: flex; align-items: center; gap: 8px;
+      position: fixed; left: 0; right: 0;
+      bottom: 0; z-index: 40; padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+      background: linear-gradient(to bottom, rgba(246,243,236,0), var(--paper) 35%); }
+    #mobile-action[hidden] { display: none; }
+    #mobile-primary { flex: 1 1 auto; box-shadow: var(--e-2); }
+    #mobile-secondary { flex: 0 0 auto; min-width: 118px; }
+    #mobile-action.single #mobile-primary { width: 100%; }
   }
 </style>
 </head>
@@ -1008,6 +1038,8 @@
   {% if share_url %}<span class="share" id="share-link-label">{{ payload.share.link_noun }} link:
     <a href="{{ share_url }}" id="share-url">{{ share_url }}</a></span>{% endif %}
   <div class="header-end">
+    {% if pairing_available|default(false) %}<button class="btn ghost pair-phone" type="button">Pair phone</button>{% endif %}
+    {% if paired_phone %}<span class="header-chip">Paired phone</span>{% endif %}
     <span id="save-state" role="status">All changes saved</span>
   </div>
   <details class="header-more">
@@ -1018,6 +1050,7 @@
         <a href="{{ route_prefix ~ '/report' }}"{% if shell_active == "report" %} aria-current="page"{% endif %}>Report</a>
         <a href="{{ route_prefix ~ '/issue' }}"{% if shell_active == "issue" %} aria-current="page"{% endif %}>Final issue</a>
       </nav>
+      {% if pairing_available|default(false) %}<button class="btn ghost pair-phone" type="button">Pair phone</button>{% endif %}
       <a href="#finish" class="header-more-finish">Finish checklist</a>
     </div>
   </details>
@@ -1052,6 +1085,10 @@
   </nav>
   <div id="rail-backdrop"></div>
   <section id="detail"></section>
+</div>
+<div id="mobile-action" hidden>
+  <button id="mobile-secondary" class="btn" type="button" hidden></button>
+  <button id="mobile-primary" class="btn primary" type="button"></button>
 </div>
 
 <div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo inspector">
@@ -1106,10 +1143,89 @@
   var rolesMeta = payload.roles || {};
   var shareSpec = payload.share || {};
   var SHARE_URL = {{ share_url | tojson }};
+  var PAIR_URL = {{ pair_url|default('', true) | tojson }};
+  var PAIR_QR_SRC = {{ pair_qr_src|default('', true) | tojson }};
+  var PAIRING_AVAILABLE = {{ pairing_available|default(false) | tojson }};
   var pdfMeta = payload.pdf_meta || { ready: false, stale: true };
   var pdfStatus = "idle";
   var pdfExportStarted = false;
   var finishHost = null;
+
+  function copyPairLink() {
+    if (!PAIR_URL) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(PAIR_URL).then(function () {
+        toast("Pairing link copied");
+      }).catch(function () { toast("Select and copy the pairing link"); });
+      return;
+    }
+    toast("Select and copy the pairing link");
+  }
+  function openPairing() {
+    var body = el("div", {});
+    if (!PAIR_URL) {
+      body.appendChild(el("p", { text: "This review server is listening only on this computer, so your phone cannot pair with it yet." }));
+      body.appendChild(el("p", { "class": "note", text: "Stop the server, then restart the same command with --share appended. The server will print an authenticated owner link and this button will copy it." }));
+      ui.open({ title: "Turn on phone pairing", body: body, actions: [
+        { label: "Close", primary: true, onclick: function (close) { close(); } }
+      ] });
+      return;
+    }
+    body.appendChild(el("p", { text: "Scan this with your phone camera while both devices are on the same Wi-Fi network." }));
+    var pairingCode = el("div", { "class": "pairing-code" });
+    pairingCode.appendChild(el("img", {
+      src: PAIR_QR_SRC, alt: "QR code for owner access to this evidence record"
+    }));
+    var pairingCopy = el("div", {});
+    pairingCopy.appendChild(el("p", { "class": "eyebrow", text: "Open on this phone" }));
+    pairingCopy.appendChild(el("p", { text: "Your phone will open this same review, with full owner access." }));
+    pairingCode.appendChild(pairingCopy);
+    body.appendChild(pairingCode);
+    body.appendChild(el("p", { "class": "note", text: "Treat this link like a key. Do not send it to a tenant or include it in the final issue." }));
+    ui.open({ title: "Pair your phone", body: body, actions: [
+      { label: "Close", ghost: true, onclick: function (close) { close(); } },
+      { label: "Copy link instead", primary: true, onclick: function (close) {
+        copyPairLink(); close(); } }
+    ] });
+  }
+  document.querySelectorAll(".pair-phone").forEach(function (btn) {
+    btn.addEventListener("click", openPairing);
+  });
+
+  /* Mobile is a review instrument, not a squeezed desktop workspace. Keep
+     the phase's decisive action within thumb reach. */
+  var mobileAction = document.getElementById("mobile-action");
+  var mobilePrimary = document.getElementById("mobile-primary");
+  var mobileSecondary = document.getElementById("mobile-secondary");
+  var mobileQuery = window.matchMedia("(max-width: 480px)");
+  function updateMobileAction() {
+    if (!mobileAction || !mobilePrimary || !mobileSecondary) return;
+    if (!mobileQuery.matches) { mobileAction.hidden = true; return; }
+    var label = "", action = null, secondaryLabel = "", secondaryAction = null;
+    if (viewMode === "overview") {
+      label = "Start review";
+      action = startReview;
+    } else if (viewMode === "items" && sel && sel.type === "item" && ix.byId[sel.id]) {
+      label = "Confirm and next";
+      action = function () { confirmItem(ix.byId[sel.id]); };
+      secondaryLabel = "Add defect";
+      secondaryAction = openDefectEntry;
+    } else if (viewMode === "room") {
+      label = "Review unconfirmed items";
+      action = startReview;
+    }
+    mobileAction.hidden = !action;
+    if (!action) return;
+    mobilePrimary.textContent = label;
+    mobilePrimary.onclick = action;
+    mobileSecondary.hidden = !secondaryAction;
+    mobileAction.classList.toggle("single", !secondaryAction);
+    if (secondaryAction) {
+      mobileSecondary.textContent = secondaryLabel;
+      mobileSecondary.onclick = secondaryAction;
+    }
+  }
+  mobileQuery.addEventListener("change", updateMobileAction);
 
   var CONDITIONS = ["new", "excellent", "good", "fair", "poor"];
   var NOT_INSPECTED = ["not tested", "not visible"];
@@ -1125,6 +1241,71 @@
   var roomShowAll = {};      // room name -> true: disclosed tier revealed
   var collapsedRooms = {};   // room name -> true when collapsed in the rail
   var el = ui.el, toast = ui.toast;
+
+  /* A local draft is a short safety net, not an alternate source of truth.
+     It is restored only when the server record is still the one it began
+     from, then saved back through the normal audit trail. */
+  var DRAFT_KEY = "hi-review-draft:" + (PREFIX || location.pathname);
+  var RESUME_KEY = "hi-review-resume:" + (PREFIX || location.pathname);
+  var draftTimer = null;
+  function saveLocalDraft() {
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({
+        version: 1, saved_at: Date.now(),
+        base_sha256: payload.content_sha256 || "", inventory: inv
+      }));
+    } catch (e) { /* Local storage is a best-effort resilience layer. */ }
+  }
+  function scheduleLocalDraft() {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(saveLocalDraft, 300);
+  }
+  function clearLocalDraft() {
+    clearTimeout(draftTimer);
+    try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+  }
+  function restoreLocalDraft() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null");
+      if (!saved || !saved.inventory || !saved.saved_at ||
+          Date.now() - saved.saved_at > 7 * 24 * 60 * 60 * 1000) return false;
+      var expected = payload.content_sha256 || "";
+      if (expected && saved.base_sha256 !== expected) return false;
+      inv = saved.inventory;
+      dirty = true;
+      pdfMeta.stale = true;
+      setSaveState("Recovered local changes — saving…");
+      scheduleSave();
+      return true;
+    } catch (e) { return false; }
+  }
+  function rememberReviewPosition() {
+    try {
+      localStorage.setItem(RESUME_KEY, JSON.stringify({
+        saved_at: Date.now(), mode: viewMode,
+        item_id: sel && sel.type === "item" ? sel.id : "",
+        room_name: sel && sel.type === "room" ? sel.name : ""
+      }));
+    } catch (e) {}
+  }
+  function resumeReviewPosition() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(RESUME_KEY) || "null");
+      if (!saved || !saved.saved_at ||
+          Date.now() - saved.saved_at > 14 * 24 * 60 * 60 * 1000) return false;
+      if (saved.item_id) {
+        startReview(saved.item_id);
+        return true;
+      }
+      if (saved.room_name && inv.rooms.some(function (r) {
+        return r.name === saved.room_name;
+      })) {
+        select({ type: "room", name: saved.room_name });
+        return true;
+      }
+    } catch (e) {}
+    return false;
+  }
 
   function disclosure(title, hint, bodyFn, open) {
     var det = el("details", { "class": "disclosure" });
@@ -1317,6 +1498,7 @@
     return api("PUT", url, inv).then(function () {
       saving = false;
       if (dirty) { scheduleSave(); return; }
+      clearLocalDraft();
       setSaveState("All changes saved");
     }).catch(function (e) {
       saving = false;
@@ -1334,12 +1516,29 @@
     dirty = true;
     pdfMeta.stale = true;
     setSaveState("Unsaved changes…");
+    scheduleLocalDraft();
     scheduleSave();
     renderProgress();
     if (viewMode === "finish" && finishHost) renderFinish();
   }
   window.addEventListener("beforeunload", function (e) {
+    if (dirty || saving) saveLocalDraft();
     if (dirty || saving) { e.preventDefault(); e.returnValue = ""; }
+  });
+  window.addEventListener("offline", function () {
+    if (dirty || saving) {
+      saveLocalDraft();
+      setSaveState("Offline — changes kept on this phone");
+    }
+  });
+  window.addEventListener("online", function () {
+    if (dirty) {
+      setSaveState("Back online — saving…");
+      flush();
+    }
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "hidden" && (dirty || saving)) saveLocalDraft();
   });
 
   /* ---------- undo ---------- */
@@ -1710,6 +1909,12 @@
       title: "Open the clean final issue the landlord would receive",
       onclick: function () { window.open(PREFIX + "/issue", "_blank"); }
     }));
+    if (PAIRING_AVAILABLE) {
+      ctas.appendChild(el("button", {
+        "class": "btn ghost pair-phone", type: "button",
+        text: "Pair phone", onclick: openPairing
+      }));
+    }
     host.appendChild(ctas);
 
     if (wt && wt.meta && wt.meta.duration) {
@@ -1788,6 +1993,7 @@
     host.appendChild(features);
     host.appendChild(grid);
     updateSubNav();
+    updateMobileAction();
   }
   function buildOverviewSpine(wt) {
     var wrap = el("div", { "class": "overview-spine" });
@@ -1896,7 +2102,7 @@
     }
     select({ type: "room", name: room.name });
   }
-  function startReview() {
+  function startReview(preferredId) {
     filter = "pending";
     sortMode = "conf";
     document.getElementById("filters").querySelectorAll("button").forEach(
@@ -1911,8 +2117,14 @@
         return (a.confidence == null ? 1.01 : a.confidence) -
                (b.confidence == null ? 1.01 : b.confidence);
       });
-    if (open.length) select({ type: "item", id: open[0].id });
-    else toast("All items are already reviewed");
+    var preferred = preferredId && ix.byId[preferredId] &&
+      !isDone(ix.byId[preferredId]) ? ix.byId[preferredId] : null;
+    if (preferred) select({ type: "item", id: preferred.id });
+    else if (open.length) select({ type: "item", id: open[0].id });
+    else {
+      toast("All items are already reviewed");
+      updateMobileAction();
+    }
   }
 
   /* ---------- finish checklist (X2) ---------- */
@@ -2271,8 +2483,8 @@
         body.appendChild(actions);
       }, signed ? "ok" : (signBlocked ? "blocker" : "warn")));
     if (SHARE_URL) {
-      list.appendChild(finishStep("\u2026", (shareSpec.link_noun || "Tenant") + " link",
-        "Optional — send this read-only link for walk-through and countersign.",
+      list.appendChild(finishStep("\u2026", "Tenant review and countersign",
+        "Send this next. The tenant can walk every room, comment on a specific item, and countersign the same record.",
         function (body) {
           body.appendChild(el("p", { "class": "finish-step-note", text: SHARE_URL }));
           var actions = el("div", { "class": "finish-actions" });
@@ -2282,6 +2494,10 @@
             "class": "btn ghost", text: "Open link" }));
           body.appendChild(actions);
         }, "ok"));
+    } else {
+      list.appendChild(finishStep("!", "Tenant review and countersign",
+        "No tenant link is available in this local session. Enable sharing before issuing the record so the tenant can comment and countersign.",
+        null, "warn"));
     }
     host.appendChild(list);
     if (signed) {
@@ -2318,6 +2534,7 @@
     }
     updateSubNav();
     renderQueue();
+    updateMobileAction();
   }
   function showFinish(scrollHandoff) {
     renderFinish();
@@ -2571,6 +2788,8 @@
       }
     }
     updateSubNav();
+    updateMobileAction();
+    rememberReviewPosition();
     var row = document.querySelector('[data-qid="' + (s.id || "") + '"]');
     if (row) row.scrollIntoView({ block: "nearest" });
     if (window.matchMedia("(max-width: 900px)").matches) setRail(false);
@@ -3189,10 +3408,19 @@
     var claim = document.querySelector(".claim");
     var reduce = prefersReducedMotion();
     function go() {
-      step(delta);
+      var remaining = queueEntries().filter(function (candidate) {
+        return !isDone(candidate);
+      });
+      var message = label || "Saved";
+      if (remaining.length) {
+        select({ type: "item", id: remaining[delta < 0 ? remaining.length - 1 : 0].id });
+      } else {
+        showFinish();
+        message = "All items reviewed — ready to finish";
+      }
       var next = document.querySelector(".claim");
       if (next && !reduce) next.classList.add("conveyor-in");
-      toast(label || "Saved", {
+      toast(message, {
         undo: function () { undo(); },
         undoLabel: "Undo",
         ms: 3800
@@ -3387,12 +3615,12 @@
     }
     drawChips();
     var defHint = defectSummary(it);
-    scroll.appendChild(disclosure("Defects",
+    var defectsDisclosure = disclosure("Defects",
       { text: defHint, em: hasDefects && (it.defects || []).length },
       function (body) {
         body.appendChild(chipWrap);
         var addBox = el("div", { "class": "def-add" });
-        var addIn = el("input", { type: "text",
+        var addIn = el("input", { type: "text", id: "item-defect-input",
           placeholder: "Add a defect (press Enter)…" });
         addIn.addEventListener("keydown", function (e) {
           e.stopPropagation();
@@ -3404,7 +3632,9 @@
         });
         addBox.appendChild(addIn);
         body.appendChild(addBox);
-      }, hasDefects));
+      }, hasDefects);
+    defectsDisclosure.id = "item-defects";
+    scroll.appendChild(defectsDisclosure);
 
     // comments
     var cwrap2 = el("div", {});
@@ -3453,6 +3683,14 @@
       body.appendChild(kb);
     }, false));
     claim.appendChild(foot);
+  }
+  function openDefectEntry() {
+    var section = document.getElementById("item-defects");
+    var input = document.getElementById("item-defect-input");
+    if (!section || !input) return;
+    section.open = true;
+    section.scrollIntoView({ block: "center", behavior: "smooth" });
+    setTimeout(function () { input.focus(); }, 220);
   }
 
   function gradeBlock(label, opts, current, onset) {
@@ -4268,10 +4506,16 @@
     var base = location.pathname.replace(/\/?finish\/?$/, "/") || "/";
     history.replaceState(null, "", base + location.search + "#finish");
   }
+  var recoveredLocalDraft = restoreLocalDraft();
+  if (recoveredLocalDraft) {
+    ix = index();
+  }
   renderProgress();
   renderQueue();
   if (handleHash()) {
     // deep link or explicit overview/items hash
+  } else if (ix.items.length && resumeReviewPosition()) {
+    if (recoveredLocalDraft) toast("Recovered local changes from this phone");
   } else if (ix.items.length) {
     showOverview();
   } else {

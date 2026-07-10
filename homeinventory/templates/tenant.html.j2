@@ -68,6 +68,9 @@
   .room-nav .back { font: 500 13px var(--ui); color: var(--brass-bright);
                     background: none; border: 0; cursor: pointer; padding: 0; }
   .room-nav .back:hover { text-decoration: underline; }
+  .room-nav .position { margin-left: auto; color: var(--muted);
+                         font: var(--fs-xs) var(--mono); }
+  .room-next { display: flex; justify-content: flex-end; margin: 26px 0 8px; }
 
   h2.room { font-size: 13px; font-weight: 600; letter-spacing: .14em;
     text-transform: uppercase; color: var(--muted); margin: 32px 0 6px;
@@ -133,6 +136,9 @@
                border: 1px solid rgba(154, 119, 41, .28);
                border-radius: var(--r-md); color: var(--brass-bright);
                font-weight: 500; }
+  .sign-section.locked { background: var(--panel-2); border: 1px solid var(--line);
+                         border-radius: var(--r-md); padding: 18px; }
+  .sign-section.locked h2 { margin-top: 0; }
 
   .sigblock { margin-top: 32px; border-top: 1px solid var(--line);
               padding-top: 18px; }
@@ -193,6 +199,23 @@
 
   function viewedCount() {
     return inv.rooms.filter(function (_, i) { return viewed[i]; }).length;
+  }
+
+  function firstUnviewedIndex() {
+    for (var i = 0; i < inv.rooms.length; i++) {
+      if (!viewed[i]) return i;
+    }
+    return -1;
+  }
+
+  function showCountersign() {
+    view.mode = "gallery";
+    view.roomIndex = null;
+    render();
+    requestAnimationFrame(function () {
+      var sign = document.getElementById("sign-section");
+      if (sign) sign.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }
 
   function formatTimecode(sec) {
@@ -295,13 +318,21 @@
     });
     m.appendChild(grid);
 
-    if (viewedCount() === inv.rooms.length && inv.rooms.length > 0) {
+    var next = firstUnviewedIndex();
+    if (next >= 0) {
+      var continueCta = el("div", { "class": "finish-cta" });
+      var continueBtn = el("button", { "class": "btn primary", type: "button",
+        text: viewedCount() ? "Continue with " + inv.rooms[next].name
+                            : "Begin with " + inv.rooms[next].name });
+      continueBtn.addEventListener("click", function () { openRoom(next); });
+      continueCta.appendChild(continueBtn);
+      m.appendChild(continueCta);
+    } else if (inv.rooms.length > 0) {
       var cta = el("div", { "class": "finish-cta" });
       var btn = el("button", { "class": "btn primary", type: "button",
         text: "Continue to countersign" });
       btn.addEventListener("click", function () {
-        document.getElementById("sign-section").scrollIntoView(
-          { behavior: "smooth", block: "start" });
+        showCountersign();
       });
       cta.appendChild(btn);
       m.appendChild(cta);
@@ -327,6 +358,8 @@
       render();
     });
     nav.appendChild(back);
+    nav.appendChild(el("span", { "class": "position",
+      text: "Room " + (ri + 1) + " of " + inv.rooms.length }));
     m.appendChild(nav);
 
     m.appendChild(el("h2", { "class": "room", text: (ri + 1) + ". " + room.name }));
@@ -335,6 +368,17 @@
     (room.items || []).forEach(function (it) {
       m.appendChild(itemCard(it, room.photos || []));
     });
+    var next = ri + 1;
+    var nextAction = el("div", { "class": "room-next" });
+    var nextBtn = el("button", { type: "button", "class": "btn primary",
+      text: next < inv.rooms.length ? "Next room: " + inv.rooms[next].name
+                                    : "Review and countersign" });
+    nextBtn.addEventListener("click", function () {
+      if (next < inv.rooms.length) openRoom(next);
+      else showCountersign();
+    });
+    nextAction.appendChild(nextBtn);
+    m.appendChild(nextAction);
   }
 
   function renderSign(m) {
@@ -343,6 +387,17 @@
     });
     var sec = el("div", { "class": "sign-section", id: "sign-section" });
     sec.appendChild(el("h2", { text: "Countersign" }));
+    var nextRoom = firstUnviewedIndex();
+    if (!mine && nextRoom >= 0) {
+      sec.classList.add("locked");
+      sec.appendChild(el("p", { "class": "lead",
+        text: "Walk through each room before countersigning. You can add a comment to any item as you go." }));
+      sec.appendChild(el("button", { type: "button", "class": "btn primary",
+        text: "Continue with " + inv.rooms[nextRoom].name,
+        onclick: function () { openRoom(nextRoom); } }));
+      m.appendChild(sec);
+      return;
+    }
     if (mine) {
       sec.appendChild(el("div", { "class": "sign-done",
         text: "Countersigned — thank you. Your comments and signature are on record." }));

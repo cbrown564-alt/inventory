@@ -134,6 +134,13 @@ button, input, select, textarea { font-family: var(--ui); }
 .btn.ghost:hover { color: var(--ink); border-color: var(--line-strong); }
 .btn:disabled { opacity: .45; cursor: default; transform: none; }
 
+@media (hover: none), (pointer: coarse) {
+  .btn { min-height: 44px; display: inline-flex; align-items: center;
+         justify-content: center; }
+  .app-nav a { min-height: 44px; display: inline-flex; align-items: center; }
+  .ui-field input, .ui-field select { min-height: 44px; }
+}
+
 /* ---------- cards (one raised panel, defined once — docs/25) ---------- */
 .card {
   background: var(--panel); border: 1px solid var(--line);

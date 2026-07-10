@@ -107,6 +107,16 @@ def scan_capture(capture_dir: Path) -> dict:
     from .videometa import probe
 
     walkthroughs: list[dict] = []
+    root_photos: list[dict] = []
+    if capture_dir.is_dir():
+        for p in sorted(capture_dir.iterdir(), key=lambda item: item.name.lower()):
+            if p.is_file() and p.suffix.lower() in IMAGE_EXTS:
+                root_photos.append({
+                    "name": p.name,
+                    "path": p.name,
+                    "size": p.stat().st_size,
+                    "kind": "photo",
+                })
     for p in find_root_videos(capture_dir):
         meta = probe(p) or {}
         walkthroughs.append({
@@ -114,11 +124,15 @@ def scan_capture(capture_dir: Path) -> dict:
             "path": p.name,
             "size": p.stat().st_size,
             "duration": meta.get("duration"),
+            "kind": "walkthrough",
         })
     return {
         "rooms": scan_rooms(capture_dir),
         "walkthrough_videos": len(walkthroughs),
         "walkthrough_files": walkthroughs,
+        "root_photos": len(root_photos),
+        "root_photo_files": root_photos,
+        "root_files": root_photos + walkthroughs,
     }
 
 
@@ -149,6 +163,7 @@ class BaseHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store")
+        self.send_header("Referrer-Policy", "no-referrer")
         self.end_headers()
         self.wfile.write(body)
 
@@ -201,6 +216,7 @@ class BaseHandler(BaseHTTPRequestHandler):
         if status == 206:
             self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
         self.send_header("Cache-Control", "no-store")
+        self.send_header("Referrer-Policy", "no-referrer")
         self.end_headers()
         with open(path, "rb") as f:
             f.seek(start)

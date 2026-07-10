@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-10T00:00:00+01:00",
+  "title": "Design System: Home Inventory",
+  "extensions": {
+    "colorMeta": {
+      "primary": {"role": "primary", "displayName": "Archive Brass", "canonical": "#9a7729", "tonalRamp": ["#30250d", "#4a3914", "#654f1c", "#7d5e1b", "#9a7729", "#b99548", "#d5bd81", "#f0e7d2"]},
+      "paper": {"role": "neutral", "displayName": "Ledger Paper", "canonical": "#f6f3ec", "tonalRamp": ["#2a2925", "#49463e", "#69645a", "#898276", "#aaa295", "#cbc4b8", "#e5dfd4", "#f6f3ec"]},
+      "ink": {"role": "neutral", "displayName": "Document Ink", "canonical": "#22262d", "tonalRamp": ["#15171b", "#22262d", "#3e434b", "#5b626c", "#79808a", "#989ea6", "#b9bec5", "#dce0e4"]},
+      "media": {"role": "neutral", "displayName": "Inspection Dark", "canonical": "#0e1116", "tonalRamp": ["#080a0d", "#0e1116", "#1e242d", "#37414e", "#586471", "#7c8791", "#a7afb5", "#d9dddf"]}
+    },
+    "typographyMeta": {
+      "display": {"displayName": "Document Display", "purpose": "Property identity, room names, completion headings, and final issue titles."},
+      "body": {"displayName": "Working Sans", "purpose": "All product controls, help text, and readable body copy."},
+      "mono": {"displayName": "Exhibit Mono", "purpose": "Timecodes, evidence IDs, and hashes only."}
+    },
+    "shadows": [
+      {"name": "low-lift", "value": "0 1px 2px rgba(43, 36, 20, .05), 0 3px 10px -5px rgba(43, 36, 20, .16)", "purpose": "Resting paper cards and fields."},
+      {"name": "action-lift", "value": "0 4px 12px -6px rgba(43, 36, 20, .22), 0 12px 30px -18px rgba(43, 36, 20, .3)", "purpose": "Hover or focus on an actionable plate."}
+    ],
+    "motion": [
+      {"name": "state", "value": "150ms cubic-bezier(.16, 1, .3, 1)", "purpose": "State feedback and card lift only."},
+      {"name": "reduced", "value": "10ms", "purpose": "Used under prefers-reduced-motion."}
+    ],
+    "breakpoints": [
+      {"name": "phone", "value": "480px"},
+      {"name": "touch-first", "value": "768px"}
+    ]
+  },
+  "components": [
+    {"name": "Primary Button", "kind": "button", "refersTo": "button-primary", "description": "Advances the current phase.", "html": "<button class=\"ds-btn-primary\">Continue review</button>", "css": ".ds-btn-primary{min-height:44px;background:#9a7729;color:#fffdf8;border:1px solid #9a7729;border-radius:7px;padding:7px 14px;font:600 14px system-ui;cursor:pointer;transition:background 150ms cubic-bezier(.16,1,.3,1),transform 150ms cubic-bezier(.16,1,.3,1)}.ds-btn-primary:hover{background:#7d5e1b}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:2px solid #9a7729;outline-offset:2px}"},
+    {"name": "Evidence Card", "kind": "card", "refersTo": "card", "description": "A room or task plate that carries one clear next action.", "html": "<article class=\"ds-card\"><span class=\"ds-kicker\">Evidence room</span><h3>Kitchen</h3><p>24 items, 3 still need review.</p></article>", "css": ".ds-card{padding:20px;background:#fffdf8;color:#22262d;border:1px solid #e4dfd3;border-radius:14px;box-shadow:0 1px 2px rgba(43,36,20,.05),0 3px 10px -5px rgba(43,36,20,.16);transition:transform 150ms cubic-bezier(.16,1,.3,1),box-shadow 150ms cubic-bezier(.16,1,.3,1)}.ds-card:hover{transform:translateY(-3px);box-shadow:0 4px 12px -6px rgba(43,36,20,.22),0 12px 30px -18px rgba(43,36,20,.3)}.ds-card h3{margin:8px 0;font:600 22px Georgia,serif}.ds-card p{margin:0;color:#626b76;font:14px system-ui}.ds-kicker{color:#7d5e1b;font:600 11px system-ui;letter-spacing:.08em;text-transform:uppercase}"},
+    {"name": "Text Field", "kind": "input", "refersTo": "input", "description": "A labelled field with an explicit keyboard focus state.", "html": "<label class=\"ds-field\">Property address<input value=\"Flat 2, Example Street\"></label>", "css": ".ds-field{display:grid;gap:4px;color:#626b76;font:600 12px system-ui}.ds-field input{min-height:44px;padding:8px 10px;background:#f6f3ec;color:#22262d;border:1px solid #c8c1b0;border-radius:7px;font:14px system-ui}.ds-field input:focus{outline:2px solid #9a7729;outline-offset:-1px;border-color:#9a7729}"},
+    {"name": "Evidence Chip", "kind": "chip", "refersTo": "chip", "description": "A compact status or provenance marker, never a replacement for explanatory text.", "html": "<span class=\"ds-chip\">Seen at 04:12</span>", "css": ".ds-chip{display:inline-flex;align-items:center;min-height:28px;padding:3px 11px;border-radius:999px;background:#f0e7d2;color:#7d5e1b;font:600 12px system-ui}"},
+    {"name": "Section Navigation", "kind": "nav", "refersTo": "navigation", "description": "Consistent, horizontally scrollable section navigation on a phone.", "html": "<nav class=\"ds-nav\"><a>Review</a><a>Report</a><a class=\"is-active\">Final issue</a></nav>", "css": ".ds-nav{display:flex;gap:2px;overflow-x:auto;padding:4px;background:#fffdf8}.ds-nav a{flex:0 0 auto;padding:8px 10px;border-radius:7px;color:#626b76;font:600 13px system-ui}.ds-nav a.is-active{color:#7d5e1b;background:#f0e7d2}.ds-nav a:focus-visible{outline:2px solid #9a7729;outline-offset:1px}"}
+  ],
+  "narrative": {
+    "northStar": "The evidence folio",
+    "overview": "Warm paper surfaces carry orientation, progress, reports, comments, and decisions. A dark inspection surface is earned only when a photo or video is being inspected closely. The product should feel like a beautifully prepared property file, not a generic AI tool.",
+    "keyCharacteristics": ["Warm documentary surfaces", "Serif identity with sans controls", "Brass used sparingly", "Dark media only for inspection", "Mobile-first evidence work"],
+    "rules": [{"name": "Evidence-Only Dark Rule", "body": "Dark backgrounds are reserved for player and lightbox evidence inspection.", "section": "colors"}, {"name": "Brass Rarity Rule", "body": "Brass guides action, selection, and provenance, never decoration.", "section": "colors"}, {"name": "Readable Field Rule", "body": "Active review surfaces do not trade readable text for density.", "section": "typography"}],
+    "dos": ["Do lead each screen with one question and one next action.", "Do keep claim, evidence, timestamp, and source video together on mobile.", "Do make progress visible in plain language."],
+    "donts": ["Don't use gradients, magic-wand language, or generic AI SaaS dashboards.", "Don't use a dark application shell, tiny type, or desktop-only workflow.", "Don't treat legal seals, hashes, or timestamps as decoration."]
+  }
+}

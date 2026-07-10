@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import io
 import json
 import logging
 import re
@@ -39,6 +40,8 @@ from pathlib import Path
 from typing import Optional
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+import qrcode
+import qrcode.image.svg
 
 # Server plumbing + the single copy of the browser-upload contract live in
 # webbase (extracted for M5b so the phone capture server reuses them
@@ -52,6 +55,31 @@ from .schema import Inventory, Item, Photo, cover_value
 from .integrity import sha256_file
 from .usecases import DEFAULT_USE_CASE, REGISTRY, get_use_case, use_case_for
 from .usecases.base import UseCase
+
+
+def _pair_qr_data_url(url: str) -> str:
+    """Return a self-contained QR image for an owner pairing capability URL.
+
+    Owner pairing links grant full edit access, so this stays entirely local:
+    the QR SVG is generated in-process and embedded in the review page rather
+    than being sent to a hosted QR-code service.
+    """
+    if not url:
+        return ""
+    code = qrcode.QRCode(
+        error_correction=qrcode.constants.ERROR_CORRECT_M,
+        box_size=10,
+        border=2,
+    )
+    code.add_data(url)
+    code.make(fit=True)
+    stream = io.BytesIO()
+    code.make_image(
+        image_factory=qrcode.image.svg.SvgPathImage,
+        fill_color="#22262d",
+    ).save(stream)
+    encoded = base64.b64encode(stream.getvalue()).decode("ascii")
+    return f"data:image/svg+xml;base64,{encoded}"
 
 log = logging.getLogger(__name__)
 
@@ -106,6 +134,7 @@ class ProjectState:
         self.use_case = use_case
         self.lock = threading.Lock()
         self.tenant_token: Optional[str] = self._resolve_tenant_token(share)
+        self.owner_token: Optional[str] = self._resolve_owner_token(share)
         self.compare = {"status": "idle", "detail": "", "cmd": None}
         self.sessions: dict[str, SessionState] = {}
         self._init_sessions()
@@ -152,6 +181,45 @@ class ProjectState:
         except OSError as e:
             log.warning("could not persist tenant token to %s (%s)",
                         self.share_path, e)
+
+    @property
+    def owner_pairing_path(self) -> Path:
+        """Local-only owner capability for a paired phone.
+
+        This deliberately lives apart from the tenant share record. A tenant
+        link is read/comment/countersign access; an owner pairing link can
+        change the evidence record and must never be confused with it.
+        """
+        return self.out_dir / "owner-pairing.json"
+
+    def _resolve_owner_token(self, share: bool) -> Optional[str]:
+        if not share:
+            return None
+        existing = self._load_owner_token()
+        token = existing or secrets.token_urlsafe(24)
+        if not existing:
+            self._save_owner_token(token)
+        return token
+
+    def _load_owner_token(self) -> Optional[str]:
+        if not self.owner_pairing_path.is_file():
+            return None
+        try:
+            data = json.loads(self.owner_pairing_path.read_text(encoding="utf-8"))
+            token = data.get("owner_token")
+            return token if isinstance(token, str) and token else None
+        except (json.JSONDecodeError, TypeError, KeyError, OSError):
+            return None
+
+    def _save_owner_token(self, token: str) -> None:
+        try:
+            self.out_dir.mkdir(parents=True, exist_ok=True)
+            self.owner_pairing_path.write_text(
+                json.dumps({"owner_token": token}, indent=2),
+                encoding="utf-8")
+        except OSError as e:
+            log.warning("could not persist owner pairing token to %s (%s)",
+                        self.owner_pairing_path, e)
 
     @property
     def legacy_inv_path(self) -> Path:
@@ -325,14 +393,14 @@ class ProjectState:
         threading.Thread(target=run, daemon=True).start()
         return True
 
-    def session_status(self) -> list[dict]:
+    def session_status(self, route_prefix: str = "") -> list[dict]:
         out = []
         for spec in self.uc.sessions:
             st = self.sessions[spec.key]
             built = st.inv_path.exists()
             entry = {
                 "key": spec.key, "label": spec.label, "built": built,
-                "prefix": st.route_prefix,
+                "prefix": route_prefix + st.route_prefix,
             }
             if built:
                 inv = st.load()
@@ -409,12 +477,16 @@ class SessionState:
     def scan_capture(self) -> dict:
         return scan_capture(self.capture_dir)
 
-    def remove_walkthrough(self, name: str) -> None:
-        """Delete a root walkthrough video from the capture folder."""
+    def remove_capture_file(self, name: str) -> None:
+        """Delete one root-level upload from the pre-build evidence set."""
         safe = _safe_component(name)
         if not safe or safe != name:
             raise ValueError("invalid filename")
-        allowed = {p.name for p in find_root_videos(self.capture_dir)}
+        from .ingest import IMAGE_EXTS, VIDEO_EXTS
+        allowed = {
+            p.name for p in self.capture_dir.iterdir()
+            if p.is_file() and p.suffix.lower() in IMAGE_EXTS | VIDEO_EXTS
+        }
         if safe not in allowed:
             raise FileNotFoundError(f"no such walkthrough: {safe}")
         (self.capture_dir / safe).unlink()
@@ -459,8 +531,8 @@ class SessionState:
                 f.write(json.dumps(rec, ensure_ascii=False) + "\n")
             return rec
 
-    def photo_src(self, inv: Inventory) -> dict[str, str]:
-        prefix = self.route_prefix
+    def photo_src(self, inv: Inventory, route_prefix: Optional[str] = None) -> dict[str, str]:
+        prefix = self.route_prefix if route_prefix is None else route_prefix
         out = {}
         for room in inv.rooms:
             for p in room.photos:
@@ -468,8 +540,8 @@ class SessionState:
                     out[p.id] = f"{prefix}/photos/{p.id}.jpg"
         return out
 
-    def crop_src(self, inv: Inventory) -> dict[str, str]:
-        prefix = self.route_prefix
+    def crop_src(self, inv: Inventory, route_prefix: Optional[str] = None) -> dict[str, str]:
+        prefix = self.route_prefix if route_prefix is None else route_prefix
         out = {}
         crops = self.out_dir / "work" / "crops"
         for room in inv.rooms:
@@ -481,12 +553,14 @@ class SessionState:
                     out[it.id] = f"{prefix}/crops/{name}"
         return out
 
-    def video_meta(self, inv: Inventory) -> tuple[dict, dict]:
+    def video_meta(self, inv: Inventory,
+                   route_prefix: Optional[str] = None) -> tuple[dict, dict]:
         """(videos, photo_time) linking evidence frames to their moment in
         the source footage. Probe results cache for the server's life."""
         from .videometa import video_payload
+        prefix = self.route_prefix if route_prefix is None else route_prefix
         return video_payload(inv, self.capture_dir, self.out_dir / "work",
-                             self.route_prefix, self._video_probe_cache)
+                             prefix, self._video_probe_cache)
 
     def video_file(self, rel: str) -> Optional[Path]:
         """Resolve a capture-relative video path safely, or None."""
@@ -878,6 +952,27 @@ class ReviewHandler(BaseHandler):
         expected = self.project.tenant_token
         return bool(expected) and secrets.compare_digest(token, expected)
 
+    def _owner_token_ok(self, token: str) -> bool:
+        expected = self.project.owner_token
+        return bool(expected) and secrets.compare_digest(token, expected)
+
+    def _owner_path(self, path: str) -> tuple[str, str, bool, bool]:
+        """Return (stripped_path, prefix, authenticated, was_owner_path)."""
+        m = re.fullmatch(r"/o/([\w\-]+)(/.*)?", path)
+        if not m:
+            return path, "", False, False
+        token = m.group(1)
+        if not self._owner_token_ok(token):
+            return path, "", False, True
+        return m.group(2) or "/", f"/o/{token}", True, True
+
+    def _owner_pair_url(self) -> str:
+        token = self.project.owner_token
+        if not token:
+            return ""
+        port = self.server.server_address[1]
+        return f"http://{_lan_ip()}:{port}/o/{token}"
+
     def _resolve_path(self, path: str) -> tuple[Optional[str], str, bool]:
         """Return (session_key, subpath, tenant_compare_share).
 
@@ -906,7 +1001,8 @@ class ReviewHandler(BaseHandler):
             return self.project.session(session_key)
         return self.project.session()
 
-    def _review_payload(self, st: SessionState, inv: Inventory, **extra) -> dict:
+    def _review_payload(self, st: SessionState, inv: Inventory,
+                        route_prefix: Optional[str] = None, **extra) -> dict:
         uc = st.uc
         roles: dict = {
             "owner": {"key": uc.owner_role.key, "label": uc.owner_role.label},
@@ -916,12 +1012,13 @@ class ReviewHandler(BaseHandler):
         if uc.agent_role:
             roles["agent"] = {"key": uc.agent_role.key,
                               "label": uc.agent_role.label}
-        videos, photo_time = st.video_meta(inv)
+        prefix = st.route_prefix if route_prefix is None else route_prefix
+        videos, photo_time = st.video_meta(inv, prefix)
         payload = {
             "inventory": asdict(inv),
             "content_sha256": inv.content_sha256(),
-            "photo_src": st.photo_src(inv),
-            "crop_src": st.crop_src(inv),
+            "photo_src": st.photo_src(inv, prefix),
+            "crop_src": st.crop_src(inv, prefix),
             "videos": videos,
             "photo_time": photo_time,
             "backend": st.backend,
@@ -948,16 +1045,60 @@ class ReviewHandler(BaseHandler):
         payload.update(extra)
         return payload
 
-    def _render_app(self, st: SessionState, template: str, **extra) -> str:
+    def _render_app(self, st: SessionState, template: str,
+                    route_prefix: Optional[str] = None, **extra) -> str:
         inv = st.load()
         env = Environment(loader=FileSystemLoader(TEMPLATES),
                           autoescape=select_autoescape(["html"]))
+        prefix = st.route_prefix if route_prefix is None else route_prefix
         return env.get_template(template).render(
-            inv=inv, payload=self._review_payload(st, inv, **extra),
+            inv=inv, payload=self._review_payload(st, inv, prefix, **extra),
             share_url=extra.get("share_url", ""),
-            route_prefix=st.route_prefix)
+            pair_url=extra.get("pair_url", ""),
+            pair_qr_src=_pair_qr_data_url(extra.get("pair_url", "")),
+            paired_phone=extra.get("paired_phone", False),
+            pairing_available=extra.get("pairing_available", False),
+            route_prefix=prefix)
 
-    def _render_start(self, st: SessionState, *, show_picker: bool | None = None) -> str:
+    def _render_workspace(self, st: SessionState, *, route_prefix: str = "",
+                          show_picker: bool = False, **extra) -> str:
+        """Render the phone-first field workspace.
+
+        The workspace is deliberately a new surface over the existing
+        evidence contract.  Capture, review and issue all continue to use the
+        same upload API, Inventory schema, acknowledgement trail and renderer;
+        the old evidence-room interface remains available at ``/review`` while
+        users need its more specialised controls.
+        """
+        env = Environment(loader=FileSystemLoader(TEMPLATES),
+                          autoescape=select_autoescape(["html"]))
+        has_inventory = st.inv_path.exists()
+        inv = st.load() if has_inventory else None
+        share_url = ""
+        if st.tenant_token:
+            share_url = f"{st.route_prefix}/t/{st.tenant_token}" \
+                if self.project.is_multi else f"/t/{st.tenant_token}"
+        return env.get_template("workspace.html.j2").render(
+            prebuild=not has_inventory,
+            inv=inv,
+            payload=(self._review_payload(st, inv, route_prefix, **extra)
+                     if inv else {}),
+            capture=st.scan_capture(),
+            spend=spend_info(st.backend, st.model),
+            walkthrough_room=WALKTHROUGH_ROOM,
+            has_inventory=has_inventory,
+            show_picker=show_picker,
+            use_case=st.uc.key,
+            use_case_label=st.uc.display_name,
+            use_cases=[{"key": u.key, "label": u.display_name,
+                        "description": u.description,
+                        "outcome": _USE_CASE_OUTCOMES.get(u.key, "")}
+                       for u in REGISTRY.values()],
+            share_url=share_url,
+            route_prefix=route_prefix)
+
+    def _render_start(self, st: SessionState, *, show_picker: bool | None = None,
+                      route_prefix: Optional[str] = None) -> str:
         proj = self.project
         env = Environment(loader=FileSystemLoader(TEMPLATES),
                           autoescape=select_autoescape(["html"]))
@@ -965,6 +1106,7 @@ class ReviewHandler(BaseHandler):
             show_picker = (not proj.project_path.exists() and not proj.is_legacy
                            and not st.inv_path.exists())
         picker = show_picker
+        prefix = st.route_prefix if route_prefix is None else route_prefix
         return env.get_template("start.html.j2").render(
             capture=st.scan_capture(), backend=st.backend,
             spend=spend_info(st.backend, st.model),
@@ -978,9 +1120,9 @@ class ReviewHandler(BaseHandler):
                         "description": u.description,
                         "outcome": _USE_CASE_OUTCOMES.get(u.key, "")}
                        for u in REGISTRY.values()],
-            route_prefix=st.route_prefix)
+            route_prefix=prefix)
 
-    def _render_project(self) -> str:
+    def _render_project(self, route_prefix: str = "") -> str:
         proj = self.project
         env = Environment(loader=FileSystemLoader(TEMPLATES),
                           autoescape=select_autoescape(["html"]))
@@ -991,10 +1133,11 @@ class ReviewHandler(BaseHandler):
             use_case_label=proj.uc.display_name,
             backend_label=proj.backend_label,
             backend=proj.backend,
-            sessions=proj.session_status(),
+            sessions=proj.session_status(route_prefix),
             compare_ready=compare_ready,
             compare_built=compare_built,
-            compare_running=proj.compare["status"] == "running")
+            compare_running=proj.compare["status"] == "running",
+            route_prefix=route_prefix)
 
     def _serve_compare(self, subpath: str, share: bool = False) -> None:
         proj = self.project
@@ -1053,6 +1196,11 @@ class ReviewHandler(BaseHandler):
     def _route_get(self):
         proj = self.project
         raw = self.path.split("?", 1)[0]
+        raw, owner_prefix, owner_authenticated, owner_path = self._owner_path(raw)
+        if owner_path and not owner_authenticated:
+            self._err(403, "invalid or expired owner pairing link")
+            return
+        owner_ok = self._is_local() or owner_authenticated
 
         # share compare (read-only, any client)
         m = re.fullmatch(r"/t/([\w\-]+)/compare(/.*)?", raw)
@@ -1130,10 +1278,10 @@ class ReviewHandler(BaseHandler):
 
         # project-level compare (owner or share handled above)
         if path == "/compare":
-            self._redirect("/compare/")
+            self._redirect(owner_prefix + "/compare/")
             return
         if path == "/compare/" or path.startswith("/compare/"):
-            if not self._is_local() and not path.startswith("/t/"):
+            if not owner_ok and not path.startswith("/t/"):
                 self._err(403, "owner routes are localhost-only")
                 return
             sub = path[len("/compare"):] if path.startswith("/compare") else "/"
@@ -1141,19 +1289,19 @@ class ReviewHandler(BaseHandler):
             return
 
         if path == "/api/compare":
-            if not self._is_local():
+            if not owner_ok:
                 self._err(403, "owner routes are localhost-only")
                 return
             with proj.lock:
                 self._json(dict(proj.compare))
             return
 
-        if not self._is_local():
+        if not owner_ok:
             self._err(403, "owner routes are localhost-only")
             return
 
         if path == "/" and proj.is_multi and session_key is None:
-            self._html(self._render_project())
+            self._html(self._render_project(route_prefix=owner_prefix))
             return
 
         if st is None:
@@ -1166,17 +1314,32 @@ class ReviewHandler(BaseHandler):
                 return
 
         if path in ("/", "/finish"):
-            if not st.inv_path.exists():
-                self._html(self._render_start(st))
-                return
+            route_prefix = owner_prefix + st.route_prefix
+            self._html(self._render_workspace(
+                st, route_prefix=route_prefix,
+                show_picker=(not proj.project_path.exists() and not proj.is_legacy
+                             and not st.inv_path.exists())))
+            return
+        if path == "/review":
+            # Transitional evidence desk: preserves every specialist review
+            # control while the field workspace owns the default journey.
             share_url = ""
             if st.tenant_token:
                 share_url = f"{st.route_prefix}/t/{st.tenant_token}" \
                     if proj.is_multi else f"/t/{st.tenant_token}"
-            self._html(self._render_app(st, "review.html.j2", share_url=share_url))
+            local_owner = self._is_local()
+            pair_url = self._owner_pair_url() if local_owner else ""
+            self._html(self._render_app(
+                st, "review.html.j2",
+                route_prefix=owner_prefix + st.route_prefix,
+                share_url=share_url, pair_url=pair_url,
+                paired_phone=owner_authenticated,
+                pairing_available=bool(pair_url)))
             return
         if path == "/start":
-            self._html(self._render_start(st, show_picker=False))
+            self._html(self._render_workspace(
+                st, show_picker=False,
+                route_prefix=owner_prefix + st.route_prefix))
             return
         if path == "/pdf":
             self._file(st.out_dir / "inventory.pdf", "application/pdf")
@@ -1204,10 +1367,11 @@ class ReviewHandler(BaseHandler):
             return
         if path == "/api/inventory":
             inv = st.load()
-            videos, photo_time = st.video_meta(inv)
+            route_prefix = owner_prefix + st.route_prefix
+            videos, photo_time = st.video_meta(inv, route_prefix)
             self._json({"inventory": asdict(inv),
-                        "photo_src": st.photo_src(inv),
-                        "crop_src": st.crop_src(inv),
+                        "photo_src": st.photo_src(inv, route_prefix),
+                        "crop_src": st.crop_src(inv, route_prefix),
                         "videos": videos, "photo_time": photo_time})
             return
         if path == "/api/redescribe":
@@ -1221,6 +1385,10 @@ class ReviewHandler(BaseHandler):
         try:
             raw = self.path.split("?", 1)[0]
             query = self.path.split("?", 1)[1] if "?" in self.path else ""
+            raw, _owner_prefix, owner_authenticated, owner_path = self._owner_path(raw)
+            if owner_path and not owner_authenticated:
+                self._err(403, "invalid or expired owner pairing link")
+                return
             session_key, path, _ = self._resolve_path(raw)
 
             m = re.fullmatch(r"/api/t/([\w\-]+)/comments", path)
@@ -1240,7 +1408,7 @@ class ReviewHandler(BaseHandler):
                 self._tenant_sign(st, self._body())
                 return
 
-            if not self._is_local():
+            if not (self._is_local() or owner_authenticated):
                 self._err(403, "owner routes are localhost-only")
                 return
 
@@ -1311,7 +1479,7 @@ class ReviewHandler(BaseHandler):
                         self._err(409, "cannot remove while a build is running")
                         return
                     try:
-                        st.remove_walkthrough(name)
+                        st.remove_capture_file(name)
                     except ValueError as e:
                         self._err(400, str(e))
                         return
@@ -1541,10 +1709,14 @@ def serve(capture_dir: Path, out_dir: Path, port: int = 8484,
     print(f"\nReview app:  http://127.0.0.1:{actual_port}/", flush=True)
     if share:
         noun = project.uc.share_page.link_noun
+        print("Owner phone pairing: "
+              f"http://{_lan_ip()}:{actual_port}/o/{project.owner_token}",
+              flush=True)
         print(f"{noun.capitalize()} link: "
               f"http://{_lan_ip()}:{actual_port}/t/{project.tenant_token}",
               flush=True)
-        print("  Anyone with this link can read the inventory, comment and "
+        print("  The owner pairing link has full edit access. Treat it like a key.\n"
+              "  Anyone with the tenant link can read the inventory, comment and "
               "countersign.\n  It is saved to share.json and persists across "
               "restarts (re-run with --share to reuse it).")
     if open_browser:

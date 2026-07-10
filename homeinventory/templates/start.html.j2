@@ -71,6 +71,16 @@
   .slate { background: var(--panel-2);
     border: 1px solid var(--line-strong); border-radius: 14px; padding: 18px;
     box-shadow: var(--e-1); }
+  .capture-route { display: grid; grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px; align-items: end; margin: 12px 0 0; }
+  .capture-route label { display: grid; gap: 4px; font-size: 11px; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .capture-route input { min-width: 0; width: 100%; padding: 9px 10px;
+    border: 1px solid var(--line-strong); border-radius: var(--r-sm);
+    background: var(--panel); color: var(--ink); font: var(--fs-base) var(--ui);
+    letter-spacing: 0; text-transform: none; }
+  .capture-route p { margin: 0 0 2px; color: var(--muted); font-size: 12px;
+    line-height: 1.45; max-width: 25ch; }
   #drop { border: 1.5px dashed var(--line-strong); border-radius: 10px;
     padding: 44px 20px; text-align: center; color: var(--muted);
     cursor: pointer; transition: border-color .18s, background .18s;
@@ -95,6 +105,9 @@
   .up-file .nm { font-family: var(--mono); font-size: 12px; color: var(--ink);
                  overflow: hidden; text-overflow: ellipsis;
                  white-space: nowrap; max-width: 100%; }
+  .up-file .kind { display: inline-block; margin: 0 0 3px; font-size: 10px;
+    font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--brass-bright); }
   .up-file .dims { font-size: 12px; color: var(--muted); margin-top: 3px;
                    font-variant-numeric: tabular-nums; }
   .up-file .up-actions { display: flex; gap: 4px; flex-shrink: 0; }
@@ -191,6 +204,11 @@
     .banner-row { flex-direction: column; align-items: stretch; }
     .banner-row .btn { width: 100%; text-align: center; }
     #drop { padding: 32px 16px; }
+    .capture-route { grid-template-columns: 1fr; align-items: start; }
+    .capture-route p { max-width: none; }
+    #build { position: sticky; bottom: 0; z-index: 5; padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
+             background: linear-gradient(to bottom, rgba(246,243,236,0), var(--paper) 28%); }
+    #build .btn { width: 100%; }
     .build-card { padding: 22px 18px 18px; }
     #use-case-picker .picker-plate { padding: 28px 18px 22px; }
   }
@@ -219,7 +237,8 @@
 </header>
 <main>
 {% set cap = capture|default({"rooms": [], "walkthrough_videos": 0,
-                              "walkthrough_files": []}) %}
+                              "walkthrough_files": [], "root_photos": 0,
+                              "root_files": []}) %}
 
 {% if show_picker|default(false) %}
 <section id="use-case-picker">
@@ -264,20 +283,18 @@
   </div>
   <div class="hero">
   <section id="filming-guide" class="pitch">
-    <h1>Walk the property once.<br>Leave with <em>evidence</em>.</h1>
-    <p class="sub">Film one continuous walkthrough on your phone and drop
-      it here. The rooms are found, every item is drafted, and each claim
-      stays tied to the second of footage that proves it — you review
-      and sign.</p>
-    <p class="guide-kicker">Before you film</p>
+    <h1>Capture the property.<br>Keep the <em>evidence</em>.</h1>
+    <p class="sub">Add a narrated walkthrough, photo sets organised by room,
+      or both. The app prepares the record, then you review every important
+      claim before anyone signs it.</p>
+    <p class="guide-kicker">Capture well</p>
     <ul class="guide">
-      <li><span><b>Walk slowly</b> — steady pans, not rushed sweeps.</span></li>
-      <li><span><b>Say each room's name aloud</b> as you enter
-        (Kitchen, Bedroom 1…).</span></li>
-      <li><span><b>Pause for a wide shot</b> in each room, then close-ups
-        of any defects.</span></li>
-      <li><span><b>Keep rolling</b> — one continuous video is fine; the
-        rooms are found for you.</span></li>
+      <li><span><b>For video:</b> walk slowly, say each room name, and pause
+        on wide shots and defects.</span></li>
+      <li><span><b>For photos:</b> add one room at a time, including a wide
+        shot and close-ups of condition.</span></li>
+      <li><span><b>Keep the originals:</b> timestamps and source media make
+        the final record more credible.</span></li>
     </ul>
   </section>
 
@@ -291,33 +308,41 @@
         </div>
         <div class="slate">
           <div id="drop" role="button" tabindex="0"
-               aria-label="Choose or drop your walkthrough video">
+               aria-label="Choose or drop property photos or a walkthrough video">
             <div class="play">
               <svg width="16" height="18" viewBox="0 0 16 18" aria-hidden="true">
                 <path d="M1 1.5v15l14-7.5z" fill="none" stroke="#9a7729"
                       stroke-width="1.6" stroke-linejoin="round"/>
               </svg>
             </div>
-            <strong>Drop your walkthrough video</strong>
-            or click to choose a file
+            <strong>Add property evidence</strong>
+            photos, a walkthrough video, or both
           </div>
-          <input type="file" id="up-files" accept="video/*" hidden>
+          <input type="file" id="up-files" accept="image/*,video/*" multiple hidden>
+          <div class="capture-route">
+            <label for="photo-room">Room name for photos
+              <input id="photo-room" type="text" autocomplete="off"
+                     placeholder="For example, Kitchen">
+            </label>
+            <p>Only used for photos. A walkthrough is automatically organised
+              into rooms.</p>
+          </div>
           <div id="up-list"></div>
-          <p class="formats">MP4 · MOV · MKV · WebM — up to 2 GiB. Stays on
-            your machine.</p>
+          <p class="formats">JPEG · PNG · HEIC · MP4 · MOV · MKV · WebM.
+            Photos stay in the named room; video is up to 2 GiB.</p>
         </div>
       </div>
 
       <div class="build" id="build">
         {% if has_inventory %}
         <button class="btn danger" id="btn-build"
-                {% if not cap.walkthrough_videos and not cap.rooms %}disabled{% endif %}>
-          Rebuild from video</button>
-        <span class="rebuild-note">Destructive — re-runs room finding and
-          item drafting on your video.</span>
+                {% if not cap.walkthrough_videos and not cap.root_photos and not cap.rooms %}disabled{% endif %}>
+          Rebuild from evidence</button>
+        <span class="rebuild-note">Re-runs room finding and item drafting.
+          Your confirmed and hand-added items are kept.</span>
         {% else %}
         <button class="btn primary" id="btn-build"
-                {% if not cap.walkthrough_videos and not cap.rooms %}disabled{% endif %}>
+                {% if not cap.walkthrough_videos and not cap.root_photos and not cap.rooms %}disabled{% endif %}>
           Build the report</button>
         {% endif %}
         <span class="spend"><b>{{ spend.label }}</b> · est.
@@ -359,7 +384,7 @@
   var WALKTHROUGH = {{ walkthrough_room|default("__walkthrough__", true) | tojson }};
   var PREFIX = {{ route_prefix|default("", true) | tojson }};
   var HAS_INVENTORY = {{ has_inventory|default(false) | tojson }};
-  var SERVER_FILES = {{ cap.walkthrough_files|default([]) | tojson }};
+  var SERVER_FILES = {{ cap.root_files|default([]) | tojson }};
   var el = ui.el, toast = ui.toast;
 
   function api(method, url, body) {
@@ -415,6 +440,7 @@
     var row = el("div", { "class": "up-file", "data-name": opts.name });
     var top = el("div", { "class": "up-top" });
     var meta = el("div", {});
+    if (opts.kind) meta.appendChild(el("div", { "class": "kind", text: opts.kind }));
     meta.appendChild(el("div", { "class": "nm", text: opts.name }));
     var dims = el("div", { "class": "dims",
       text: dimsText(opts.size, opts.duration) });
@@ -489,6 +515,7 @@
       name: vf.name,
       size: vf.size,
       duration: vf.duration,
+      kind: vf.kind,
       status: "ready",
       statusClass: "ok"
     });
@@ -504,7 +531,7 @@
     job.row._st.textContent = "uploading";
     job.row._st.className = "st";
     job.row.querySelector(".track").hidden = false;
-    ui.uploadMedia(PREFIX, job.file, WALKTHROUGH, {
+    ui.uploadMedia(PREFIX, job.file, job.room, {
       onProgress: function (loaded, total) {
         job.row._fill.style.width = Math.round(100 * loaded / total) + "%";
       },
@@ -529,10 +556,21 @@
 
   function addFiles(files, replaceName, replaceServer) {
     Array.prototype.forEach.call(files, function (f) {
-      if (!f.type.startsWith("video/") &&
-          !/\.(mp4|mov|mkv|webm|avi|m4v)$/i.test(f.name)) {
-        toast("Please upload a walkthrough video (MP4, MOV, MKV, WebM)");
+      var isPhoto = f.type.startsWith("image/") || /\.(jpe?g|png|heic|heif)$/i.test(f.name);
+      var isVideo = f.type.startsWith("video/") || /\.(mp4|mov|mkv|webm|avi|m4v)$/i.test(f.name);
+      if (!isPhoto && !isVideo) {
+        toast("Choose a property photo or walkthrough video");
         return;
+      }
+      var photoRoom = document.getElementById("photo-room");
+      var room = WALKTHROUGH;
+      if (isPhoto) {
+        room = (photoRoom && photoRoom.value || "").trim();
+        if (!room) {
+          toast("Name the room these photos cover first");
+          if (photoRoom) photoRoom.focus();
+          return;
+        }
       }
       function enqueue() {
         if (replaceName) {
@@ -549,16 +587,17 @@
           name: f.name,
           size: f.size,
           duration: 0,
+          kind: isPhoto ? "photo · " + room : "walkthrough",
           status: "queued",
           uploading: true,
           local: true,
           file: f
         });
         upList.appendChild(row);
-        probeClientDuration(f, function (dur) {
+        if (isVideo) probeClientDuration(f, function (dur) {
           row._dims.textContent = dimsText(f.size, dur);
         });
-        startUpload({ file: f, row: row });
+        startUpload({ file: f, row: row, room: room });
         syncBuildBtn();
       }
       if (replaceName && replaceServer) {

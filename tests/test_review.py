@@ -1,7 +1,9 @@
 """Tests for the review experience: schema round-trip (Level 1 data),
 the local review server (Level 2) and the multi-party flow (Level 3)."""
 
+import base64
 import json
+import re
 import threading
 import time
 import urllib.request
@@ -319,6 +321,51 @@ def test_tenant_token_persists_across_restart(server):
         httpd.server_close()
 
 
+def test_owner_pairing_is_authenticated_and_persists(server):
+    """A paired phone gets owner routes only through its own capability URL."""
+    base, state, out, cap = server
+    token = state.project.owner_token
+    assert token
+    assert (out / "owner-pairing.json").is_file()
+
+    status, html = _get_text(base + f"/o/{token}/")
+    assert status == 200
+    assert f'var PREFIX = "/o/{token}"' in html
+    assert "Pair your phone" in html
+    match = re.search(r'var PAIR_QR_SRC = "(data:image/svg\+xml;base64,[^"]+)"', html)
+    assert match, "owner pairing should render a self-contained QR code"
+    assert base64.b64decode(match.group(1).split(",", 1)[1]).startswith(b"<?xml")
+
+    status, payload = _req("GET", base + f"/o/{token}/api/inventory")
+    assert status == 200
+    assert all(src.startswith(f"/o/{token}/photos/")
+               for src in payload["photo_src"].values())
+
+    paired_inv = payload["inventory"]
+    paired_inv["rooms"][0]["items"][0]["name"] = "Paired-phone edit"
+    status, _ = _req("PUT", base + f"/o/{token}/api/inventory?autosave=1",
+                     paired_inv)
+    assert status == 200
+    _, local_payload = _req("GET", base + "/api/inventory")
+    assert local_payload["inventory"]["rooms"][0]["items"][0]["name"] == \
+        "Paired-phone edit"
+
+    status, bad = _req("GET", base + "/o/not-a-valid-owner/")
+    assert status == 403
+    assert "owner pairing" in bad["error"]
+    status, bad = _req("PUT", base + "/o/not-a-valid-owner/api/inventory",
+                       paired_inv)
+    assert status == 403
+    assert "owner pairing" in bad["error"]
+
+    httpd = serve(cap, out, port=0, share=True, backend="offline",
+                  open_browser=False)
+    try:
+        assert httpd.project_state.owner_token == token
+    finally:
+        httpd.server_close()
+
+
 def test_tenant_token_gate(server):
     base, state, _out, _cap = server
     status, _ = _get_text(base + f"/t/{state.tenant_token}")
@@ -546,7 +593,8 @@ def test_start_page_empty_capture(fresh_server):
     status, html = _get_text(base + "/start")
     assert status == 200
     assert 'id="filming-guide"' in html
-    assert "Drop your walkthrough video" in html
+    assert "Add property evidence" in html
+    assert 'accept="image/*,video/*"' in html
     assert 'id="btn-build"' in html
     assert "one folder per" not in html
 
@@ -567,6 +615,24 @@ def test_start_page_lists_capture_via_api(tmp_path):
         rooms = {r["name"]: r for r in body["rooms"]}
         assert rooms["Kitchen"]["photos"] == 2
         assert rooms["Living Room"]["videos"] == 1
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_capture_summary_includes_root_photo_set(tmp_path):
+    cap = tmp_path / "capture"
+    _img(cap / "arrival.jpg")
+    out = tmp_path / "report"
+    base, httpd = _start_server(cap, out)
+    try:
+        assert _req("POST", base + "/api/project",
+                    {"use_case": "tenancy"})[0] == 200
+        status, body = _req("GET", base + "/api/rooms")
+        assert status == 200
+        assert body["root_photos"] == 1
+        assert body["root_files"][0]["kind"] == "photo"
+        assert body["root_files"][0]["name"] == "arrival.jpg"
     finally:
         httpd.shutdown()
         httpd.server_close()
@@ -1017,6 +1083,29 @@ def test_review_app_has_report_and_pdf_controls(server):
     assert 'id="nav-finish"' in html
     assert 'href="#finish"' in html
     assert "finish-checklist" in html
+    assert 'id="mobile-primary"' in html
+    assert "Tenant review and countersign" in html
+    assert "Pair phone" in html
+
+
+def test_review_mobile_journey_resumes_and_recovers_local_changes(server):
+    """Field review preserves its place and protects unsaved phone edits."""
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "hi-review-resume:" in html
+    assert "hi-review-draft:" in html
+    assert "Offline — changes kept on this phone" in html
+    assert "Add defect" in html
+    assert "All items reviewed — ready to finish" in html
+
+
+def test_tenant_walkthrough_precedes_countersign(server):
+    """Tenant review guides room-by-room evidence inspection before signing."""
+    base, state, _out, _cap = server
+    _, html = _get_text(base + f"/t/{state.tenant_token}")
+    assert "Walk through each room before countersigning" in html
+    assert "Continue with " in html
+    assert "Review and countersign" in html
 
 
 def test_finish_route_serves_review_app(server):

@@ -160,7 +160,7 @@ are built, the comparison sheet appears automatically.</p>
     <h3>Compare</h3>
     {% if compare_built %}
     <p class="state ok">Comparison ready</p>
-    <a class="btn primary" href="/compare/">Open comparison sheet</a>
+    <a class="btn primary" href="{{ route_prefix }}/compare/">Open comparison sheet</a>
     {% elif compare_running %}
     <p class="state pending" id="compare-status">Building comparison…</p>
     {% elif compare_ready %}
@@ -178,7 +178,7 @@ are built, the comparison sheet appears automatically.</p>
   <h2>Comparison sheet</h2>
   {% if compare_built %}
   <p class="ok">Ready — changed items, classifications, and paired photos.</p>
-  <a class="btn primary" href="/compare/">Open comparison sheet</a>
+  <a class="btn primary" href="{{ route_prefix }}/compare/">Open comparison sheet</a>
   {% elif compare_running %}
   <p id="compare-status-detail">Building comparison…</p>
   {% elif compare_ready %}
@@ -198,6 +198,7 @@ are built, the comparison sheet appears automatically.</p>
 "use strict";
 (function () {
   var WALK = "__walkthrough__";
+  var PREFIX = {{ route_prefix|default("", true) | tojson }};
 
   function upload(prefix, file, statusEl) {
     statusEl.textContent = "Uploading…";
@@ -246,7 +247,7 @@ are built, the comparison sheet appears automatically.</p>
   }
 
   function pollCompare() {
-    fetch("/api/compare").then(function (r) { return r.json(); })
+    fetch(PREFIX + "/api/compare").then(function (r) { return r.json(); })
       .then(function (s) {
         var statusEls = document.querySelectorAll(
           "#compare-status, #compare-status-detail");
@@ -257,7 +258,7 @@ are built, the comparison sheet appears automatically.</p>
           setTimeout(pollCompare, 2000);
         } else if (s.status === "done") {
           ui.toast("Comparison ready — opening sheet");
-          setTimeout(function () { location.href = "/compare/"; }, 600);
+          setTimeout(function () { location.href = PREFIX + "/compare/"; }, 600);
         } else if (s.status === "failed") {
           statusEls.forEach(function (el) {
             if (el) {
