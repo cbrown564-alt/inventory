@@ -1061,7 +1061,8 @@ class ReviewHandler(BaseHandler):
             route_prefix=prefix)
 
     def _render_workspace(self, st: SessionState, *, route_prefix: str = "",
-                          show_picker: bool = False, **extra) -> str:
+                          show_picker: bool = False,
+                          initial_screen: str = "overview", **extra) -> str:
         """Render the phone-first field workspace.
 
         The workspace is deliberately a new surface over the existing
@@ -1095,6 +1096,7 @@ class ReviewHandler(BaseHandler):
                         "outcome": _USE_CASE_OUTCOMES.get(u.key, "")}
                        for u in REGISTRY.values()],
             share_url=share_url,
+            initial_screen=initial_screen,
             route_prefix=route_prefix)
 
     def _render_start(self, st: SessionState, *, show_picker: bool | None = None,
@@ -1318,7 +1320,8 @@ class ReviewHandler(BaseHandler):
             self._html(self._render_workspace(
                 st, route_prefix=route_prefix,
                 show_picker=(not proj.project_path.exists() and not proj.is_legacy
-                             and not st.inv_path.exists())))
+                             and not st.inv_path.exists()),
+                initial_screen="finish" if path == "/finish" else "overview"))
             return
         if path == "/review":
             # Transitional evidence desk: preserves every specialist review

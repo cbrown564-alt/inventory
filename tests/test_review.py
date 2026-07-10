@@ -172,7 +172,8 @@ def _get_text(url):
 def test_owner_app_and_inventory_api(server):
     base, _state, _out, _cap = server
     status, html = _get_text(base + "/")
-    assert status == 200 and 'id="hi-data"' in html
+    assert status == 200 and 'id="field-workspace"' in html
+    assert 'href="/review"' in html
     status, body = _req("GET", base + "/api/inventory")
     assert status == 200
     assert {r["name"] for r in body["inventory"]["rooms"]} == \
@@ -182,7 +183,7 @@ def test_owner_app_and_inventory_api(server):
 
 def test_owner_app_has_search_and_final_issue_link(server):
     base, _state, _out, _cap = server
-    _, html = _get_text(base + "/")
+    _, html = _get_text(base + "/review")
     assert 'id="q-search"' in html             # text search over the queue
     assert 'href="/issue"' in html             # final issue reachable from UI
 
@@ -191,7 +192,7 @@ def test_one_app_shell_round_trip(server):
     """docs/15 M1: review ⇄ report is one app — shared shell, same-tab
     nav, deep links both ways; the final issue stays a clean document."""
     base, _state, _out, _cap = server
-    _, review_html = _get_text(base + "/")
+    _, review_html = _get_text(base + "/review")
     assert 'href="/report"' in review_html          # review → report
     assert 'target="_blank" rel="noopener">Report' not in review_html
     assert "hashchange" in review_html              # report → review landing
@@ -328,7 +329,7 @@ def test_owner_pairing_is_authenticated_and_persists(server):
     assert token
     assert (out / "owner-pairing.json").is_file()
 
-    status, html = _get_text(base + f"/o/{token}/")
+    status, html = _get_text(base + f"/o/{token}/review")
     assert status == 200
     assert f'var PREFIX = "/o/{token}"' in html
     assert "Pair your phone" in html
@@ -488,7 +489,7 @@ def test_demoted_frame_survives_rebuild(server):
 
 def test_review_app_offers_highlight_control(server):
     base, _state, _out, _cap = server
-    _, html = _get_text(base + "/")
+    _, html = _get_text(base + "/review")
     assert "/api/curation" in html
     assert "Highlight" in html
 
@@ -592,10 +593,11 @@ def test_start_page_empty_capture(fresh_server):
     assert 'id="use-case-picker"' in html_root
     status, html = _get_text(base + "/start")
     assert status == 200
-    assert 'id="filming-guide"' in html
-    assert "Add property evidence" in html
-    assert 'accept="image/*,video/*"' in html
-    assert 'id="btn-build"' in html
+    assert "Take a walkthrough. We’ll take it from there." in html
+    assert "Choose video from Camera" in html
+    assert 'id="video-input"' in html
+    assert 'id="photo-input"' in html
+    assert "Three optional filming tips" in html
     assert "one folder per" not in html
 
 
@@ -818,9 +820,10 @@ def test_build_e2e_offline(fresh_server):
     assert status == 200
     assert {r["name"] for r in body["inventory"]["rooms"]} == \
         {"Kitchen", "Living Room"}
-    # "/" now serves the review app instead of the start page
+    # "/" now serves the field workspace instead of the capture page.
     status, html = _get_text(base + "/")
-    assert status == 200 and 'id="hi-data"' in html
+    assert status == 200 and 'id="field-workspace"' in html
+    assert "Review only the claims that still need your judgement." in html
 
 
 def test_build_and_redescribe_concurrency_409(fresh_server):
@@ -893,7 +896,7 @@ def test_rename_room_then_redescribe_survives(server):
 
 def test_redescribe_ui_uses_spend_copy(server):
     base, _state, _out, _cap = server
-    status, html = _get_text(base + "/")
+    status, html = _get_text(base + "/review")
     assert status == 200
     assert "AI model:" not in html
     assert "Re-describe" in html
@@ -1078,7 +1081,7 @@ def test_report_route_rerenders_when_stale(server):
 def test_review_app_has_report_and_pdf_controls(server):
     """docs/10: the deliverable must be reachable from the review app."""
     base, _state, _out, _cap = server
-    _, html = _get_text(base + "/")
+    _, html = _get_text(base + "/review")
     assert 'href="/report"' in html
     assert 'id="nav-finish"' in html
     assert 'href="#finish"' in html
@@ -1091,7 +1094,7 @@ def test_review_app_has_report_and_pdf_controls(server):
 def test_review_mobile_journey_resumes_and_recovers_local_changes(server):
     """Field review preserves its place and protects unsaved phone edits."""
     base, _state, _out, _cap = server
-    _, html = _get_text(base + "/")
+    _, html = _get_text(base + "/review")
     assert "hi-review-resume:" in html
     assert "hi-review-draft:" in html
     assert "Offline — changes kept on this phone" in html
@@ -1108,14 +1111,14 @@ def test_tenant_walkthrough_precedes_countersign(server):
     assert "Review and countersign" in html
 
 
-def test_finish_route_serves_review_app(server):
-    """Optional /finish route opens the Finish checklist."""
+def test_finish_route_opens_field_finish_workspace(server):
+    """Optional /finish opens the phone-first issuing workspace."""
     base, _state, _out, _cap = server
     status, html = _get_text(base + "/finish")
     assert status == 200
-    assert 'id="finish-panel"' not in html  # rendered client-side
-    assert "renderFinish" in html
-    assert 'id="nav-finish"' in html
+    assert 'id="field-workspace"' in html
+    assert 'var INITIAL_SCREEN = "finish"' in html
+    assert "Close the file calmly." in html
 
 
 def test_sign_blocks_without_address(server):
@@ -1179,7 +1182,7 @@ def test_sign_whitelist_deepclean(tmp_path):
 def test_share_link_wording_uses_link_noun(server):
     """Review app share label comes from the profile's link_noun."""
     base, state, _out, _cap = server
-    status, html = _get_text(base + "/")
+    status, html = _get_text(base + "/review")
     assert status == 200
     assert f'{state.uc.share_page.link_noun} link:' in html
 
@@ -1434,18 +1437,18 @@ def test_compare_serving_paths_and_trailing_slash(tmp_path):
 # --------------------------------------------------------------------------
 
 def test_review_defaults_to_overview_mode(server):
-    """X1: client bootstraps in overview, not item 1."""
+    """The field workspace starts at rooms, not the first item."""
     base, _state, _out, _cap = server
     _, html = _get_text(base + "/")
-    assert 'viewMode = "overview"' in html
-    assert 'id="nav-overview"' in html
-    assert "renderOverview" in html
+    assert 'id="field-workspace"' in html
+    assert 'var screen = "overview"' in html
+    assert "Review only the claims that still need your judgement." in html
 
 
 def test_craft_c1_deed_exhibit_conveyor(server):
     """Craft C1: deed overview, exhibit captions, conveyor, ±1s scrub."""
     base, _state, _out, _cap = server
-    _, html = _get_text(base + "/")
+    _, html = _get_text(base + "/review")
     assert "deed-masthead" in html
     assert "exhibitCaption" in html
     assert "content_sha256" in html
@@ -1459,11 +1462,11 @@ def test_craft_c1_deed_exhibit_conveyor(server):
 
 
 def test_start_page_redirects_to_overview_after_build(fresh_server):
-    """X4: build completion sends user to /#overview."""
+    """The capture surface opens the room workspace after a build."""
     base, _httpd, _out, _cap = fresh_server
-    _, html = _get_text(base + "/")
-    assert 'location.href = PREFIX + "/#overview"' in html
-    assert "roomChips" in html
+    _, html = _get_text(base + "/start")
+    assert 'location.href = PREFIX + "/"' in html
+    assert "Preparing your draft" in html
 
 
 def test_report_continue_links_to_overview(server):
@@ -1477,7 +1480,7 @@ def test_report_continue_links_to_overview(server):
 def test_craft_c2_spine_print_preview_pins(server):
     """Craft C2: overview spine, print PDF fallback, landlord preview, pins."""
     base, _state, _out, _cap = server
-    _, html = _get_text(base + "/")
+    _, html = _get_text(base + "/review")
     assert "buildOverviewSpine" in html
     assert "openPrintPdfFallback" in html
     assert "Preview as landlord" in html
@@ -1491,7 +1494,8 @@ def test_finish_sign_issue_chain(server):
     """X2: address → sign → issue reachable without hunting."""
     base, _state, out, _cap = server
     _, html = _get_text(base + "/")
-    assert 'href="#finish"' in html
+    assert 'data-screen="finish"' in html
+    assert "Sign this version" in html
     assert 'href="/issue"' in html
 
     status, resp = _req("POST", base + "/api/sign",
@@ -1529,7 +1533,7 @@ def test_offline_create_build_review_flow(fresh_server):
     assert resp["status"] == "done", resp
 
     _, html = _get_text(base + "/")
-    assert 'viewMode = "overview"' in html
+    assert 'id="field-workspace"' in html
     assert (out / "inventory.json").is_file()
     assert (out / "inventory.html").is_file()
 

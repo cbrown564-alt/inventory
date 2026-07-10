@@ -83,4 +83,5 @@
 | 25 | [design-overhaul](25-design-overhaul.md) | active | One design system across all surfaces |
 | 26 | [capture-strategy-experiment](26-capture-strategy-experiment.md) | active | Photo vs video capture experiment design |
 | 27 | [mobile-owner-pairing-friction-log](27-mobile-owner-pairing-friction-log-2026-07-10.md) | active | QR owner-pairing incident and LAN reliability gate |
+| 28 | [camera-first-mobile-rebuild](28-camera-first-mobile-rebuild.md) | active | Camera-first mobile workspace, experiment guardrails and native-assist boundary |
 | — | [market-research-2026-07](market-research-2026-07.md) | active | Competitive map, evidential spec, pricing anchors |

@@ -47,6 +47,35 @@ M5b (phone guided capture) was killed as a capture-*UX* failure on a real
 device — that verdict does not transfer to the photo *format* itself.
 Sunk cost already doesn't count here; neither does the M5b scar tissue.
 
+## The more precise video question
+
+"One continuous video" is too vague to test. A casual, portrait, silent
+walkthrough is a different product input from a deliberate inspection video.
+The phone-first rebuild treats this as a concrete hypothesis:
+
+> If the landlord films landscape, says each room name at its doorway, takes
+> a stable establishing hold, and pauses on material defects, can one
+> continuous video produce the right room boundaries and heroes **without**
+> creating enough report errors and review repairs to erase its capture-time
+> advantage?
+
+Video is viable only if all four parts are true:
+
+1. **Room identity:** the system assigns the right name to the right run of
+   footage; boundary bleed is low enough that it does not contaminate the
+   room schedule.
+2. **Establishing evidence:** each room has an on-room, usable wide image
+   without a manual hunt through frames.
+3. **Report quality:** item, condition, cleanliness and defect scores remain
+   at the same signed-report standard as the photo alternatives.
+4. **Whole-journey effort:** lower capture effort is not simply repaid as
+   more reviewer edits, rejects, missing-item additions, recaptures and time
+   to issue.
+
+The experiment therefore measures *review burden* as an outcome, not merely
+model accuracy. A video arm that is pleasant to film but leaves a landlord
+with 40 repairs is not the low-friction product it appears to be.
+
 ## The decision this experiment must make
 
 One product question, with a clear answer shape:
@@ -55,15 +84,21 @@ One product question, with a clear answer shape:
 
 Candidate answers (the experiment's arms):
 
-1. **V1 — One continuous walkthrough video** (current product).
-2. **V2 — One video per room** (segmentation becomes trivial; effort rises).
-3. **P1 — Staged photos, light volume** (~3–4 per room, ~30 property-wide).
-4. **P2 — Staged photos, heavy volume** (~8–10 per room, ~80 property-wide).
-5. **H1 — Hybrid**: one walkthrough video for coverage/comprehensiveness +
+1. **V0 — Ordinary continuous walkthrough**: the current baseline, with no
+   required narration or establishing hold.
+2. **V1 — Narrated continuous walkthrough**: landscape; room name spoken at
+   every doorway; a three-second establishing hold; deliberate defect pauses.
+3. **V2 — One video per room** (segmentation becomes trivial; effort rises).
+4. **P1 — Staged photos, light volume** (~3–4 per room, ~30 property-wide).
+5. **P2 — Staged photos, heavy volume** (~8–10 per room, ~80 property-wide).
+6. **H1 — Hybrid**: one walkthrough video for coverage/comprehensiveness +
    optional staged photos for detail rooms. (Exploratory — only if V/P
    arms show a clear split in what each is good at.)
 
-Arms 1–4 are the core matrix; H1 is conditional on their outcome.
+V0 establishes whether deliberate filming instruction actually earns its
+place; V1 is the product hypothesis. P1/P2 prevent us from assuming that
+video wins merely because it is easier to explain. V2 and H1 are diagnostic
+arms, used if their additional effort is needed to explain a split.
 
 ## Axes of evaluation
 
@@ -77,6 +112,8 @@ axis** — the decision is a trade-off, and we report it as one.
 | **Capture time** | Wall-clock minutes the landlord spends *capturing* (not reviewing) | Timed capture sessions |
 | **Effort / friction** | Cognitive + physical load: decisions, retakes, navigation, holding steady | Observer notes + NASA-TLX-style self-report (low/med/high) |
 | **Cost** | Build token/spend per property | Build confirms (token usage + $) |
+| **Review burden** | Work needed to turn the draft into a defensible issued record | Minutes to issue; items accepted unchanged; material edits; rejected claims/defects; missing-item additions; `not visible`; re-captures |
+| **Room/hero correctness** | Whether the capture strategy gives the pipeline usable room structure and a representative cover | Room-name accuracy; boundary-bleed audit; human pass/fail for each rank-1 hero: recognisable, establishing and in the named room |
 
 **The critical trade-off we are explicitly looking for:** does staged
 photography buy enough accuracy + image-quality improvement to justify the
@@ -103,7 +140,8 @@ and shared across arms — so arms are compared against the same truth.
 
 | Arm | Protocol |
 |---|---|
-| **V1** | One continuous video, phone held steadily, pause at each doorway (existing runbook, docs/24). |
+| **V0** | One continuous video, phone held steadily, pause at each doorway (existing runbook, docs/24). No required narration, orientation or establishing hold. |
+| **V1** | One continuous **landscape** video. At each doorway: say the room name, hold a wide establishing view for three seconds, then sweep the room; hold again on defects, meters and safety items. |
 | **V2** | One video per room, ~30–60 s each, named at capture (e.g. file or prompt per room). |
 | **P1** | 3–4 photos per room: one doorway establishing, two detail angles. ~30 total. |
 | **P2** | 8–10 photos per room: establishing + corners + key fittings + defects. ~80 total. |
@@ -141,6 +179,9 @@ image_qual:  mean hero rating (1–5), % heroes "establishing & on-room"
 capture_min: minutes from "start filming" to "done capturing"
 effort:      TLX band (low/med/high) + observer friction notes
 cost:        tokens + $ for the build
+review:      minutes to issue; accepts unchanged / edits / rejects / additions /
+             not-visible marks / re-captures
+structure:   room-name correctness, boundary-bleed count, hero pass rate
 ```
 
 ### Decision criteria
@@ -151,9 +192,13 @@ We are **not** looking for a single winner on accuracy. The decision rule:
   at acceptable effort** → photos become the default capture; video
   becomes secondary. Pipeline simplifies dramatically (segmentation
   problem dissolves).
-- **If video matches photo image quality after the hero/segmentation fixes
-  (Pillar 2) AND wins effort** → video stays default; photo-mode is a
-  power-user option. Pipeline work stays the priority.
+- **If V1 matches the photo arms on signed-report quality, room/hero
+  correctness, and *total* capture-plus-review time** → the narrated
+  continuous walkthrough stays the default; photo-mode is a first-class
+  alternative, not a buried power-user option.
+- **If V1 is materially better than V0 but still loses the review-burden
+  comparison** → the filming protocol is useful evidence, but not enough to
+  justify video as the default. Test V2/H1 to locate the break-even point.
 - **If the split is conditional** (e.g. photos better for detail/defects,
   video better for coverage) → H1 hybrid becomes the product; design the
   start page around it.
@@ -168,7 +213,8 @@ built is built on the right assumption.
 
 ```text
 Step 0 — Build photo-mode ingest + capture-time room naming (scaffolding)
-Step 1 — Capture Property A under all four arms (V1 already exists)
+Step 1 — Capture Property A under V0, V1, P1 and P2 (reuse the existing
+         footage only for V0 when it truly matches the baseline protocol)
 Step 2 — Build + review each to A's gold; score the scorecard
 Step 3 — Decision checkpoint on A alone: is the signal strong enough to
          call it, or do we need B?
@@ -205,7 +251,8 @@ direction, only to stress-test it.
 
 | Arm | Property A | Property B | Decision |
 |---|---|---|---|
-| V1 (one video) | | | |
+| V0 (ordinary continuous video) | | | |
+| V1 (narrated continuous video) | | | |
 | V2 (video per room) | | | |
 | P1 (light photos) | | | |
 | P2 (heavy photos) | | | |
