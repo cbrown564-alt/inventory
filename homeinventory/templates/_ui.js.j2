@@ -313,7 +313,9 @@ var ui = (function () {
   }
 
   /* Stream a photo or walkthrough video to /api/upload. Files above 64 MiB
-     upload in 32 MiB slices — Safari drops single-shot XHR bodies ~1 GiB+. */
+     upload in 32 MiB slices — Safari drops single-shot XHR bodies ~1 GiB+.
+     Their opaque id is retained locally, so choosing the same video again
+     after a blip resumes from the server's recorded offset. */
   function uploadMedia(prefix, file, room, hooks) {
     hooks = hooks || {};
     var CHUNK = 32 * 1024 * 1024;
@@ -353,18 +355,57 @@ var ui = (function () {
       });
     }
     function uploadChunked() {
-      var uploadId = "";
-      if (window.crypto && crypto.getRandomValues) {
+      var storageKey = "hi-upload:" + prefix + ":" + room + ":" +
+        file.name + ":" + file.size + ":" + (file.lastModified || 0);
+      function storedId() {
+        try { return window.localStorage.getItem(storageKey) || ""; }
+        catch (e) { return ""; }
+      }
+      function remember(id) {
+        try { window.localStorage.setItem(storageKey, id); } catch (e) {}
+      }
+      function forget() {
+        try { window.localStorage.removeItem(storageKey); } catch (e) {}
+      }
+      function newId() {
         var buf = new Uint8Array(8);
         crypto.getRandomValues(buf);
-        uploadId = Array.prototype.map.call(buf, function (b) {
+        return Array.prototype.map.call(buf, function (b) {
           return (b < 16 ? "0" : "") + b.toString(16);
         }).join("");
-      } else {
-        uploadId = String(Date.now()) + Math.random().toString(16).slice(2);
+      }
+      var uploadId = storedId();
+      if (!uploadId) {
+        if (window.crypto && crypto.getRandomValues) uploadId = newId();
+        else uploadId = String(Date.now()) + Math.random().toString(16).slice(2);
+        remember(uploadId);
       }
       var offset = 0;
-      function sendSlice() {
+      function status() {
+        return new Promise(function (resolve, reject) {
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", prefix + "/api/upload/" + uploadId);
+          xhr.onload = function () {
+            var resp = parseResp(xhr);
+            if (xhr.status === 200) resolve(resp);
+            else if (xhr.status === 404) resolve({ ok: true, received: 0 });
+            else reject(new Error(resp.error || ("upload status failed (" + xhr.status + ")")));
+          };
+          xhr.onerror = function () { reject(new Error("network error while checking upload progress")); };
+          xhr.send();
+        });
+      }
+      function resumeAfterError(error, tries) {
+        if (tries >= 3) return Promise.reject(error);
+        return new Promise(function (resolve) { setTimeout(resolve, 500 * (tries + 1)); })
+          .then(status)
+          .then(function (state) {
+            if (state.complete) return state;
+            offset = Math.max(0, Math.min(file.size, state.received || 0));
+            return sendSlice(tries + 1);
+          });
+      }
+      function sendSlice(tries) {
         return new Promise(function (resolve, reject) {
           var end = Math.min(offset + CHUNK, file.size);
           var xhr = new XMLHttpRequest();
@@ -382,19 +423,24 @@ var ui = (function () {
           xhr.onload = function () {
             var resp = parseResp(xhr);
             if (xhr.status !== 200) {
-              reject(new Error(resp.error || ("failed (" + xhr.status + ")")));
+              var error = new Error(resp.error || ("failed (" + xhr.status + ")"));
+              if (xhr.status === 409 || xhr.status >= 500) {
+                resumeAfterError(error, tries).then(resolve, reject);
+              } else {
+                reject(error);
+              }
               return;
             }
             if (resp.complete === false) {
               offset = resp.received || end;
-              resolve(sendSlice());
+              resolve(sendSlice(0));
               return;
             }
             resolve(resp);
           };
           xhr.onerror = function () {
-            reject(new Error("network error — try again; large uploads are "
-                             + "sent in slices so a blip can be retried"));
+            resumeAfterError(new Error("network error while uploading"), tries)
+              .then(resolve, reject);
           };
           xhr.onabort = function () {
             reject(new Error("upload cancelled"));
@@ -402,7 +448,14 @@ var ui = (function () {
           xhr.send(file.slice(offset, end));
         });
       }
-      return sendSlice();
+      return status().then(function (state) {
+        if (state.complete) return state;
+        offset = Math.max(0, Math.min(file.size, state.received || 0));
+        return sendSlice(0);
+      }).then(function (resp) {
+        forget();
+        return resp;
+      });
     }
     var job = file.size > THRESH ? uploadChunked() : uploadSingle();
     return job.then(function (resp) {

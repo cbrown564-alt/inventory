@@ -135,6 +135,18 @@ scoped tenant invitations, version locks and an exportable evidence archive.
 The LAN owner capability link in docs/27 remains a local prototype fallback;
 it is not the mobile-first sharing model.
 
+### Current prototype increment
+
+The default video control opens the device's existing video library rather
+than forcing a second browser-camera recording. For large files, the local
+server now retains a byte offset while the upload is incomplete and a small
+completion receipt once it is safely stored. The browser checks that state and
+retries from the recorded offset after a transient failure; if the page is
+reloaded, choosing the same file continues that upload instead of creating a
+duplicate. This is resumable transfer, not background web processing: Safari
+may still suspend the page, and the user may need to choose the video again
+after leaving it.
+
 ## Near-term proof sequence
 
 1. Test V0/V1/P1/P2 from docs/26 on at least two properties and include the

@@ -282,6 +282,53 @@ class BaseHandler(BaseHTTPRequestHandler):
                 digest.update(chunk)
         return digest.hexdigest()
 
+    def _upload_status(self, capture_dir: Path, upload_id: str) -> Optional[dict]:
+        """Return the durable state of a chunked upload.
+
+        A completed slice can reach the server just as a phone drops the
+        response.  Keeping a small receipt beside an in-progress upload lets
+        the browser ask what actually happened before it sends more bytes.
+        This is intentionally an owner-only route (enforced by review.py),
+        and exposes progress only for the supplied opaque upload id.
+        """
+        if not re.fullmatch(r"[\w\-]{8,64}", upload_id):
+            self._err(400, "invalid upload id")
+            return None
+        if not capture_dir.is_dir():
+            self._err(404, "no upload found")
+            return None
+
+        meta_name = f".upload-{upload_id}.meta.json"
+        receipt_name = f".upload-{upload_id}.complete.json"
+        metas = list(capture_dir.rglob(meta_name))
+        receipts = list(capture_dir.rglob(receipt_name))
+        if len(metas) + len(receipts) > 1:
+            self._err(409, "ambiguous upload state")
+            return None
+        if receipts:
+            try:
+                return json.loads(receipts[0].read_text(encoding="utf-8"))
+            except (OSError, ValueError, TypeError):
+                self._err(409, "upload receipt is unreadable")
+                return None
+        if not metas:
+            self._err(404, "no upload found")
+            return None
+
+        meta_path = metas[0]
+        tmp = meta_path.with_name(f".upload-{upload_id}.part")
+        if not tmp.is_file():
+            self._err(409, "upload state is incomplete — restart")
+            return None
+        try:
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            total = int(meta["total"])
+        except (OSError, ValueError, KeyError, TypeError):
+            self._err(409, "upload state is unreadable — restart")
+            return None
+        return {"ok": True, "complete": False, "received": tmp.stat().st_size,
+                "total": total}
+
     def _upload_chunked(self, capture_dir: Path, lock, room: str,
                         filename: str, upload_id: str, offset: int,
                         total: int, n: int) -> Optional[dict]:
@@ -309,9 +356,14 @@ class BaseHandler(BaseHTTPRequestHandler):
         room_dir.mkdir(parents=True, exist_ok=True)
         tmp = room_dir / f".upload-{upload_id}.part"
         meta_path = room_dir / f".upload-{upload_id}.meta.json"
+        receipt_path = room_dir / f".upload-{upload_id}.complete.json"
         at_root = room == WALKTHROUGH_ROOM
 
         if offset == 0:
+            if tmp.exists() or meta_path.exists() or receipt_path.exists():
+                self.close_connection = True
+                self._err(409, "upload already exists — resume it first")
+                return None
             head = self.rfile.read(n)
             if len(head) != n:
                 self.close_connection = True
@@ -343,6 +395,10 @@ class BaseHandler(BaseHTTPRequestHandler):
                                f"got {offset}")
                 return None
             meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            if meta.get("total") != total or meta.get("filename") != filename:
+                self.close_connection = True
+                self._err(409, "upload metadata does not match this file")
+                return None
             ext = meta["ext"]
             with open(tmp, "ab") as f:
                 got = 0
@@ -370,17 +426,22 @@ class BaseHandler(BaseHTTPRequestHandler):
             digest = self._upload_digest(dest)
         except Exception as e:
             tmp.unlink(missing_ok=True)
+            meta_path.unlink(missing_ok=True)
             self.close_connection = True
             self._err(400, f"upload failed: {e}")
             return None
+        is_image = ext in (".jpg", ".png", ".heic")
+        payload = {"ok": True, "complete": True,
+                   "room": "" if at_root else room,
+                   "stored_as": dest.name,
+                   "path": dest.name if at_root else f"{room}/{dest.name}",
+                   "kind": "photo" if is_image else "video",
+                   "sha256": digest, "bytes": total}
+        try:
+            receipt_path.write_text(json.dumps(payload), encoding="utf-8")
         finally:
             meta_path.unlink(missing_ok=True)
-        is_image = ext in (".jpg", ".png", ".heic")
-        return {"ok": True, "complete": True, "room": "" if at_root else room,
-                "stored_as": dest.name,
-                "path": dest.name if at_root else f"{room}/{dest.name}",
-                "kind": "photo" if is_image else "video",
-                "sha256": digest, "bytes": total}
+        return payload
 
     def _upload_stream_common(self, capture_dir: Path, lock) -> Optional[dict]:
         """Streamed binary upload (photos AND videos): raw file bytes as the

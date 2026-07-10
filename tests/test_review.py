@@ -996,8 +996,24 @@ def test_stream_upload_walkthrough_video_lands_at_capture_root(fresh_server):
     assert status == 200 and body["walkthrough_videos"] == 1
 
 
+def test_camera_first_picker_uses_the_existing_video_library(fresh_server):
+    """The primary handoff must not force a second browser-camera capture."""
+    base, _state, _out, _cap = fresh_server
+    status, html = _get_text(base + "/start")
+    assert status == 200
+    video_input = re.search(r'<input id="video-input"[^>]*>', html)
+    assert video_input and 'capture=' not in video_input.group(0)
+    assert "Choose video from Camera" in html
+    assert "resumeAfterError" in html
+    assert '"/api/upload/" + uploadId' in html
+
+
 def test_chunked_upload_large_walkthrough_video(fresh_server):
-    """Safari-safe chunked upload: many slices reassemble to one file."""
+    """Chunked uploads report a durable offset and final receipt.
+
+    This is what lets a phone retry after a dropped response without sending
+    the whole walkthrough again.
+    """
     base, _state, _out, cap = fresh_server
     head = _mp4_bytes()
     body = head + b"\x00" * (512 * 1024 - len(head))
@@ -1014,9 +1030,13 @@ def test_chunked_upload_large_walkthrough_video(fresh_server):
         if offset < len(body):
             assert resp.get("complete") is False
             assert resp["received"] == offset
+            status, saved = _req("GET", base + f"/api/upload/{upload_id}")
+            assert status == 200 and saved["received"] == offset
         else:
             assert resp.get("complete") is True
             assert resp["stored_as"] == "big.mp4"
+            status, saved = _req("GET", base + f"/api/upload/{upload_id}")
+            assert status == 200 and saved == resp
     on_disk = cap / "big.mp4"
     assert on_disk.read_bytes() == body
     assert hashlib.sha256(body).hexdigest() == resp["sha256"]

@@ -931,7 +931,9 @@ def _pdf_meta(st: SessionState) -> dict:
     ready = pdf_path.is_file()
     stale = True
     if ready and inv_path.is_file():
-        stale = inv_path.stat().st_mtime > pdf_path.stat().st_mtime
+        # Equal timestamps are ambiguous on filesystems with coarse mtimes:
+        # a just-saved inventory can otherwise look older than its PDF.
+        stale = inv_path.stat().st_mtime >= pdf_path.stat().st_mtime
     elif not ready:
         stale = True
     else:
@@ -1354,7 +1356,10 @@ class ReviewHandler(BaseHandler):
             with st.lock:
                 if st.inv_path.exists() and (
                         not html.exists()
-                        or html.stat().st_mtime < st.inv_path.stat().st_mtime):
+                        # Treat equal mtimes as stale too.  Windows can write
+                        # an autosaved JSON edit and its prior HTML within one
+                        # timestamp tick, which must never hide the edit.
+                        or html.stat().st_mtime <= st.inv_path.stat().st_mtime):
                     st.rerender()
             self._file(html, "text/html; charset=utf-8")
             return
@@ -1367,6 +1372,12 @@ class ReviewHandler(BaseHandler):
             return
         if path == "/api/rooms":
             self._json(st.scan_capture())
+            return
+        m = re.fullmatch(r"/api/upload/([\w\-]{8,64})", path)
+        if m:
+            payload = self._upload_status(st.capture_dir, m.group(1))
+            if payload is not None:
+                self._json(payload)
             return
         if path == "/api/inventory":
             inv = st.load()
