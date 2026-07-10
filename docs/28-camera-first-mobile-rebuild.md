@@ -75,6 +75,32 @@ does not, the product changes based on evidence: room clips, a light hybrid,
 or photos may become the appropriate default. We must not let simplicity of
 the UI become a claim that a weak source video makes a strong report.
 
+### Audio is now an explicit pipeline experiment
+
+The 10 July Property A run revealed that the product asked the landlord to say
+room names but discarded the audio before segmentation and curation. That is
+not a valid test of narrated capture. Docs/26 now predeclares a side-by-side
+audio ablation over the same V1 file:
+
+- visual segmentation + visual hero selection (control);
+- audio-assisted segmentation only;
+- audio-assisted hero selection only, with control segments frozen; and
+- both audio-assisted components together.
+
+The shared input is a persisted, timestamped transcript/cue artifact containing
+confidence-bearing room-name cues and bounded post-name establishing windows.
+Segmentation treats speech as a hint, not a hard boundary. Hero selection uses
+the nominated window as a prior, not permission to bypass blur, exposure,
+close-up or room-relevance gates. Quiet, low-confidence or conflicting audio
+falls back silently to the visual path.
+
+The promotion unit is the component, not “audio” as a bundle. Room speech ships
+only if it improves name/boundary correctness without more invented rooms or
+bleed. Establishing speech/holds ship only if they improve human rank-1 hero
+pass without regressions. The comparison also records transcript correction,
+latency, tokens/cost and review-to-issue burden; narration remains an optional
+hint until those deltas are positive on at least Properties A and B.
+
 ## Web first; native assistance only when it earns silence
 
 The mobile web product should ship the camera handoff, resumable upload,
@@ -163,13 +189,23 @@ walkthrough, not a demand to recapture the property.
 
 ## Near-term proof sequence
 
-1. Test V0/V1/P1/P2 from docs/26 on at least two properties and include the
-   review-burden measurement.
-2. Test the camera-first handoff with ordinary landlords: can they finish a
-   recording, hand it off, return later and issue without being coached?
-3. Build the hosted project spine before further LAN pairing polish.
-4. Spike native quiet assistance with one narrow target—room-boundary speech
-   plus a high-value coverage check—and compare it against no assistance for
-   false prompts, capture time, battery, and final report quality.
-5. Promote only interventions that lower total burden and pass the same
+1. Close Property A: independent gold, review-to-issue burden, P1, curated P2,
+   tagged-doorway photo heroes, and the replayable four-cell audio ablation on
+   the existing narrated V1 bytes.
+2. Take only the leading two or three capture arms to Property B and record the
+   default, first-class alternative and any hybrid trigger in docs/26.
+3. Test the resulting camera-first handoff with ordinary landlords: can they
+   finish capture, hand it off, return later and issue without being coached?
+4. Close the product-trust gaps that depend on the capture result: semantic
+   on-room heroes, explicit bad-segment/no-cover states, capture provenance in
+   embedded image metadata, default tenant countersign, and owner visual
+   sign-off.
+5. Build the hosted project spine before further LAN pairing polish. This is
+   required before promising remote phone-to-computer handoff, but it does not
+   substitute for the capture and trust gates above.
+6. Spike native quiet assistance only after the recorded-audio ablation shows
+   value, starting with room-boundary speech plus one high-value coverage check;
+   compare it against no live assistance for false prompts, capture time,
+   battery, and final report quality.
+7. Promote only interventions that lower total burden and pass the same
    signed-report evidence bar as the cloud path.

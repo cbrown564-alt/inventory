@@ -7,6 +7,7 @@ from PIL import Image
 
 from homeinventory.cli import main
 from homeinventory.ingest import ingest
+from homeinventory.pipeline import _checkpoint_identity, _checkpoint_matches
 from homeinventory.report import render
 from homeinventory.schema import Inventory, Item, Photo, Room
 
@@ -29,6 +30,33 @@ def test_ingest_rooms_and_relative_paths(tmp_path):
     for ps in rooms.values():
         for p in ps:
             assert not Path(p.path).is_absolute()
+
+
+def test_checkpoint_reuse_is_bound_to_evidence_backend_and_use_case():
+    class Backend:
+        name = "claude"
+        model = "claude-opus-4-8"
+
+    photos = [Photo(id="P001", path="Kitchen/a.jpg", room="Kitchen",
+                    sha256="abc")]
+    identity = _checkpoint_identity(photos, Backend(), "tenancy")
+    assert _checkpoint_matches({"checkpoint": identity}, identity)
+    assert not _checkpoint_matches({}, identity)  # legacy checkpoint: safe miss
+
+    changed_photo = [Photo(id="P001", path="Kitchen/a.jpg", room="Kitchen",
+                           sha256="different")]
+    assert not _checkpoint_matches(
+        {"checkpoint": identity},
+        _checkpoint_identity(changed_photo, Backend(), "tenancy"))
+
+    other_backend = Backend()
+    other_backend.model = "claude-haiku-4-5"
+    assert not _checkpoint_matches(
+        {"checkpoint": identity},
+        _checkpoint_identity(photos, other_backend, "tenancy"))
+    assert not _checkpoint_matches(
+        {"checkpoint": identity},
+        _checkpoint_identity(photos, Backend(), "contents"))
 
 
 def test_render_writes_utf8(tmp_path):

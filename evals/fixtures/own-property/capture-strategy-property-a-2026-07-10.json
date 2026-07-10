@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "status": "preliminary — Opus matrix complete; no independent property-level gold, review-to-issue timing, or audio ablation",
+  "property": "A — Own property",
+  "run_date": "2026-07-10",
+  "comparison_basis": {
+    "gemini": "End-to-end automatic segmentation for V0/V1; capture-time room groups for P2+; Gemini 3.5 Flash description; detection and PDF disabled.",
+    "opus_controlled": "The original Gemini automatic segmentation is frozen for V0/V1 so only the description model changes; Claude Opus 4.8 description; detection and PDF disabled.",
+    "opus_manual_structure_upper_bound": "V1 is also run against a manually audited 12-segment/10-room structure. This is an upper-bound diagnostic, not a backend-only comparison with automatic V1 Gemini.",
+    "proxy_accuracy": "Existing human-reviewed report/inventory.json, nine rooms and 179 items. It is not independent gold and omits Loft Office; use only for directional comparison. The current run_eval.py defect denominator includes only matched gold items, so defect recall is conditional rather than whole-property recall."
+  },
+  "arms": {
+    "V0_gemini": {
+      "capture_seconds": 803.49,
+      "evidence_images": 89,
+      "source_median_megapixels": 2.1,
+      "median_sharpness_laplacian_at_1080": 148.0,
+      "automatic_segments": 11,
+      "automatic_room_labels": 9,
+      "canonical_rooms": 10,
+      "draft_items": 149,
+      "hero_establishing_pass": {"passes": 2, "rooms": 10, "percent": 20},
+      "proxy_eval": {"item_recall": 50.3, "hallucination_rate": 38.3, "naming_accuracy": 78.9, "condition_exact": 93.3, "condition_within_one": 100.0, "defect_recall": 66.1},
+      "structure_note": "Loft Office was omitted and folded into the loft schedule."
+    },
+    "V1_gemini": {
+      "capture_seconds": 1280.013,
+      "evidence_images": 136,
+      "source_median_megapixels": 2.1,
+      "median_sharpness_laplacian_at_1080": 477.9,
+      "automatic_segments": 20,
+      "automatic_room_labels": 11,
+      "canonical_rooms": 10,
+      "draft_items": 206,
+      "hero_establishing_pass": {"passes": 5, "rooms": 10, "percent": 50},
+      "proxy_eval": {"item_recall": 46.9, "hallucination_rate": 50.9, "naming_accuracy": 73.8, "condition_exact": 90.5, "condition_within_one": 100.0, "defect_recall": 76.7},
+      "structure_note": "Introduced a false Bedroom 2, used Loft Room rather than Loft Office, and visibly bled en-suite/bedroom evidence across schedules. Spoken room names were not consumed because the pipeline has no audio path."
+    },
+    "P2plus_gemini": {
+      "capture_seconds": 1859.0,
+      "native_photos": 166,
+      "source_median_megapixels": 24.5,
+      "median_sharpness_laplacian_at_1080": 493.0,
+      "automatic_segments": 0,
+      "capture_labelled_rooms": 10,
+      "canonical_rooms": 10,
+      "draft_items": 205,
+      "hero_establishing_pass": {"passes": 4, "rooms": 10, "percent": 40},
+      "proxy_eval": {"item_recall": 50.3, "hallucination_rate": 49.2, "naming_accuracy": 75.6, "condition_exact": 88.9, "condition_within_one": 100.0, "defect_recall": 75.4},
+      "structure_note": "Room structure is correct by capture-time labelling. This is P2+, not the predeclared roughly-80-photo P2 arm. The current hero scorer often selected detail photos rather than establishing views."
+    },
+    "V0_opus_controlled": {
+      "status": "complete",
+      "evidence_images": 89,
+      "draft_items": 231,
+      "input_tokens": 180776,
+      "output_tokens": 31494,
+      "estimated_cost_usd_at_5_25_per_million": 1.69,
+      "proxy_eval": {"item_recall": 68.2, "hallucination_rate": 45.9, "naming_accuracy": 66.4, "condition_exact": 95.9, "condition_within_one": 100.0, "defect_recall": 75.0}
+    },
+    "V1_opus_controlled": {
+      "status": "complete — original Gemini automatic segments frozen",
+      "automatic_rooms": 11,
+      "evidence_images": 136,
+      "draft_items": 286,
+      "input_tokens": 270002,
+      "output_tokens": 40330,
+      "estimated_cost_usd_at_5_25_per_million": 2.36,
+      "proxy_eval": {"item_recall": 53.6, "hallucination_rate": 58.8, "naming_accuracy": 70.8, "condition_exact": 92.7, "condition_within_one": 100.0, "defect_recall": 66.7},
+      "structure_note": "Preserves Gemini's false Bedroom 2, Loft Room label and 20-fragment/11-room schedule; valid backend-only comparison with V1_gemini."
+    },
+    "V1_opus_manual_structure_upper_bound": {
+      "status": "complete — manually audited structure",
+      "capture_labelled_rooms": 10,
+      "manual_segments": 12,
+      "evidence_images": 117,
+      "draft_items": 285,
+      "input_tokens": 233497,
+      "output_tokens": 40804,
+      "estimated_cost_usd_at_5_25_per_million": 2.19,
+      "proxy_eval": {"item_recall": 50.3, "hallucination_rate": 62.5, "naming_accuracy": 68.9, "condition_exact": 95.6, "condition_within_one": 100.0, "defect_recall": 74.5},
+      "structure_note": "Diagnostic upper bound with the false Bedroom 2 removed and Loft Office restored; not a backend-only comparison with automatic V1 Gemini."
+    },
+    "P2plus_opus": {
+      "status": "complete",
+      "capture_labelled_rooms": 10,
+      "native_photos": 166,
+      "draft_items": 291,
+      "input_tokens": 414755,
+      "output_tokens": 40716,
+      "estimated_cost_usd_at_5_25_per_million": 3.09,
+      "proxy_eval": {"item_recall": 61.5, "hallucination_rate": 53.5, "naming_accuracy": 64.5, "condition_exact": 90.0, "condition_within_one": 100.0, "defect_recall": 78.8},
+      "structure_note": "Room structure is supplied by capture-time labels. This remains P2+, not the predeclared roughly-80-photo P2 arm."
+    }
+  },
+  "opus_segmentation_diagnostic": {
+    "V0": {
+      "segments": 19,
+      "room_labels": 12,
+      "draft_items": 294,
+      "total_input_tokens_including_segmentation": 305401,
+      "total_output_tokens_including_segmentation": 41109,
+      "estimated_cost_usd_at_5_25_per_million": 2.55
+    },
+    "V1": {
+      "status": "invalid output; drafting stopped",
+      "segments": 41,
+      "room_labels": 14,
+      "invalid_examples": ["Kitchen 85→80", "Living Room 165→140", "En-suite Shower Room 320→215"],
+      "segmentation_input_tokens": 124248,
+      "segmentation_output_tokens": 1046,
+      "estimated_segmentation_cost_usd_at_5_25_per_million": 0.65
+    }
+  },
+  "decision": "No default switch on Property A alone. V1 does not meet the predeclared whole-journey criterion; P2+ proves the structural and resolution advantage of labelled photos but not the standard P2 effort/quality trade-off. Build independent gold and measure review-to-issue burden before the checkpoint can close."
+}

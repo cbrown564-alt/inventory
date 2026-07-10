@@ -35,7 +35,7 @@ real device and killed. The web app is the product; the CLI is plumbing.
   `claude-sonnet-5` is the quality alternative. See docs/11.
 - **Describe backend: `gemini-3.5-flash` default** via `--backend openai`;
   `claude-opus-4-8` is the expensive backup for complex items (docs/00).
-  Tiered routing (gemini draft → opus on hard tail) is Phase 2.
+  Tiered routing (gemini draft → opus on hard tail) is Phase 4.
 - **Credentials configured once** in a gitignored `.env`
   (`homeinventory/dotenv.py`); the journey never mentions keys, backends
   or models. Spend confirms become plain language with a rough cost

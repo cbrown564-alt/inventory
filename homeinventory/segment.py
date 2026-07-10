@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Optional
@@ -141,6 +142,7 @@ def sample_strip(video: Path, every_s: float = 5.0, width: int = 448,
 def _chunk_content(chunk: list[SampledFrame], duration_s: float,
                    every_s: float, prior_rooms: list[str],
                    prior_end_room: Optional[str],
+                   audio_cues: Optional[dict] = None,
                    provider: str = "anthropic") -> list[dict]:
     import base64
     content: list[dict] = []
@@ -156,6 +158,9 @@ def _chunk_content(chunk: list[SampledFrame], duration_s: float,
             f"segment with that exact name. Reuse earlier names exactly for "
             f"any room the camera returns to."
         )
+    if audio_cues:
+        from .audio_cues import segmentation_hint
+        intro += segmentation_hint(audio_cues, chunk[0].t_s, chunk[-1].t_s)
     content.append({"type": "text", "text": intro})
     for f in chunk:
         content.append({"type": "text", "text": f"t={f.t_s:.0f}s:"})
@@ -178,17 +183,38 @@ def _normalise(segments: list[Segment], duration_s: float) -> list[Segment]:
     neighbours. Boundary corrections beat gaps: downstream keyframe
     extraction tolerates a boundary being a second or two off, but a gap
     would silently drop footage from the schedule."""
-    segs = [s for s in sorted(segments, key=lambda s: s.start_s)
-            if s.end_s > s.start_s]
+    duration_s = max(float(duration_s), 0.0)
+    segs: list[Segment] = []
+    for source in segments:
+        if not (math.isfinite(source.start_s) and math.isfinite(source.end_s)):
+            continue
+        start = min(max(float(source.start_s), 0.0), duration_s)
+        end = min(max(float(source.end_s), 0.0), duration_s)
+        room = source.room.strip()
+        if not room or end <= start:
+            continue
+        segs.append(Segment(room, start, end))
+    segs.sort(key=lambda s: s.start_s)
     if not segs:
         return [Segment("Property", 0.0, duration_s)]
-    segs[0].start_s = 0.0
+
+    # Build a monotonic seam sequence from the raw interval pairs. Model
+    # chunks can overlap wildly or return boundaries outside the video; using
+    # monotonic seams guarantees that repair cannot create a negative span.
+    seams = [0.0]
     for prev, cur in zip(segs, segs[1:]):
-        cur.start_s = prev.end_s = round((prev.end_s + cur.start_s) / 2, 2) \
-            if abs(cur.start_s - prev.end_s) > 0.01 else prev.end_s
-    segs[-1].end_s = duration_s
+        seam = prev.end_s if abs(cur.start_s - prev.end_s) <= 0.01 \
+            else round((prev.end_s + cur.start_s) / 2, 2)
+        seams.append(min(max(seam, seams[-1]), duration_s))
+    seams.append(duration_s)
+
+    repaired = [Segment(seg.room, seams[i], seams[i + 1])
+                for i, seg in enumerate(segs)
+                if seams[i + 1] > seams[i]]
+    if not repaired:
+        return [Segment("Property", 0.0, duration_s)]
     merged: list[Segment] = []
-    for s in segs:
+    for s in repaired:
         if merged and merged[-1].room.strip().lower() == s.room.strip().lower():
             merged[-1].end_s = s.end_s
         else:
@@ -242,7 +268,8 @@ def _call_openai(backend, content: list[dict], usage: dict) -> str:
 
 def segment_frames(frames: list[SampledFrame], duration: float,
                    every_s: float, model: str = DEFAULT_MODEL,
-                   width: int = 448) -> tuple[list[Segment], dict]:
+                   width: int = 448,
+                   audio_cues: Optional[dict] = None) -> tuple[list[Segment], dict]:
     """Return (segments, meta) for a pre-sampled strip. meta carries
     sampling params and token usage so runs are comparable across models."""
     if not frames:
@@ -263,7 +290,8 @@ def segment_frames(frames: list[SampledFrame], duration: float,
         chunk = frames[i:i + _MAX_IMAGES_PER_CALL]
         prior_end_room = segments[-1].room if segments else None
         content = _chunk_content(chunk, duration, every_s, rooms_so_far,
-                                 prior_end_room, provider=provider)
+                                 prior_end_room, audio_cues,
+                                 provider=provider)
         if provider == "anthropic":
             text = _call_anthropic(client, model, content, usage)
         else:
@@ -281,17 +309,21 @@ def segment_frames(frames: list[SampledFrame], duration: float,
     meta = {"duration_s": round(duration, 2),
             "every_s": every_s, "width": width, "model": model,
             "api_calls": calls, "frames": len(frames), "usage": usage}
+    if audio_cues:
+        meta["audio_cues_sha256"] = audio_cues["sha256"]
     return segments, meta
 
 
 def segment_video(video: Path, every_s: float = 5.0,
                   model: str = DEFAULT_MODEL,
-                  width: int = 448) -> tuple[list[Segment], dict]:
+                  width: int = 448,
+                  audio_cues: Optional[dict] = None) -> tuple[list[Segment], dict]:
     duration = video_duration_s(video)
     frames = sample_strip(video, every_s=every_s, width=width)
     log.info("sampled %d frames over %.0fs", len(frames), duration)
     segments, meta = segment_frames(frames, duration, every_s,
-                                    model=model, width=width)
+                                    model=model, width=width,
+                                    audio_cues=audio_cues)
     return segments, {**meta, "video": video.name}
 
 

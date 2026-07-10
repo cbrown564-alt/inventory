@@ -83,3 +83,48 @@ truth, so there is no headroom a 4× price buys.
   machinery preserves hand-edits).
 - Multi-visit rooms (sonnet found Bedroom 1 twice, correctly): segments
   grouped by name into one room's photo set.
+
+## Audio-assisted segmentation ablation (opened 10 Jul 2026)
+
+The visual-only segmenter cannot test the narrated-video hypothesis in
+docs/26: spoken “this is the kitchen” cues are currently discarded. Add audio
+as a controlled input over the same video, not as a new capture arm.
+
+The segmentation comparison is:
+
+- **S0:** current timestamped visual strip only;
+- **S1:** the identical strip/model/prompt plus timestamped, normalized
+  room-name cues from one frozen transcript artifact.
+
+Everything else stays fixed: source video, sampled frames, segmentation model,
+normalizer, keyframe extractor and gold boundaries. S1 cues are soft evidence.
+They may raise the probability of a nearby boundary/name, but cannot create a
+hard cut, override impossible timing, or survive when confidence is below the
+predeclared threshold. Missing, quiet or contradictory audio must reproduce S0.
+
+Report S1−S0 on exact room-name accuracy, semantic room-name accuracy,
+boundary error, missed/invented rooms, segment count, invalid/overlapping
+segments, boundary-bleed schedules, review corrections, latency, tokens and
+cost. Preserve the timestamped cue artifact and its ASR model/version so both
+runs are replayable. Validate the final segment list before extraction; the 10
+July Opus diagnostic produced negative-duration chunk seams, proving that
+schema-valid model output is not sufficient without post-merge invariants.
+
+Hero assistance is a separate H0/H1 ablation owned by docs/26. Its H1 run must
+freeze S0 segments when isolating hero lift, otherwise a better hero could be a
+segmentation effect rather than an audio-establishing effect.
+
+**Timing guardrail implemented (10 Jul):** both fresh model output and cached
+`--segments-json` replays are normalized against the actual video duration.
+Non-finite, empty, negative-duration and wholly out-of-range spans are dropped;
+surviving spans are clamped and rebuilt from monotonic contiguous seams before
+keyframe extraction. Resume checkpoints are also bound to the ordered evidence
+SHA-256 set, backend/model and use case, so changing segmentation cannot silently
+reuse a room description produced from different frames.
+
+**Replay plumbing implemented (11 Jul):** `homeinventory build` accepts one
+validated `--audio-cues-json` artifact and independent
+`--audio-segment-cues` / `--audio-hero-cues` switches. Audio-assisted segment
+caches are isolated from visual-only caches and record the cue-artifact hash.
+Only confident, timestamped room names enter the segmentation prompt; the
+transcript itself remains research evidence and never enters item description.

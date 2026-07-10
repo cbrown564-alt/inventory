@@ -7,7 +7,7 @@ import pytest
 from PIL import Image
 
 from homeinventory.cli import main
-from homeinventory.ingest import extract_keyframes, ingest
+from homeinventory.ingest import _load_segments, extract_keyframes, ingest
 
 
 def _img(path: Path):
@@ -67,6 +67,34 @@ def test_ingest_preserves_folder_rooms_with_segments(tmp_path):
     }), encoding="utf-8")
     rooms = ingest(cap, work)
     assert "Bathroom" in rooms and "Kitchen" in rooms
+
+
+def test_load_segments_repairs_invalid_cached_model_output(tmp_path):
+    pytest.importorskip("cv2")
+    import cv2
+    import numpy as np
+
+    video = tmp_path / "walk.avi"
+    writer = cv2.VideoWriter(str(video), cv2.VideoWriter_fourcc(*"MJPG"), 10,
+                             (48, 32))
+    for _ in range(100):
+        writer.write(np.zeros((32, 48, 3), dtype=np.uint8))
+    writer.release()
+    cache = tmp_path / "segments.json"
+    cache.write_text(json.dumps({"segments": [
+        {"room": "Hallway", "start_s": -5.0, "end_s": 4.0},
+        {"room": "Kitchen", "start_s": 8.0, "end_s": 3.0},
+        {"room": "Living Room", "start_s": 5.0, "end_s": 50.0},
+    ]}), encoding="utf-8")
+
+    segments = _load_segments(video, tmp_path / "work",
+                              segment_model="unused", every_s=5.0,
+                              segments_json=cache)
+    assert [s.room for s in segments] == ["Hallway", "Living Room"]
+    assert segments[0].start_s == 0.0
+    assert segments[-1].end_s == pytest.approx(10.0, abs=0.1)
+    assert all(a.end_s == b.start_s for a, b in zip(segments, segments[1:]))
+    assert all(s.start_s < s.end_s for s in segments)
 
 
 def test_ingest_applies_room_aliases(tmp_path):

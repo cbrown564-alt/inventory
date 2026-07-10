@@ -1,0 +1,22 @@
+{
+  "video": "IMG_5677.MOV",
+  "duration_s": 1280.013,
+  "every_s": 10.0,
+  "source": "manual visual audit",
+  "labeler": "Codex",
+  "notes": "Approximate boundaries from a 10-second scrub strip. Spoken narration was not transcribed because the current product pipeline has no speech-recognition path. Hallway and Stairs and Landing are revisited and intentionally reuse canonical room names.",
+  "segments": [
+    {"room": "Hallway", "start_s": 0.0, "end_s": 25.0},
+    {"room": "Living Room", "start_s": 25.0, "end_s": 195.0},
+    {"room": "Kitchen", "start_s": 195.0, "end_s": 545.0},
+    {"room": "Bathroom", "start_s": 545.0, "end_s": 650.0},
+    {"room": "Hallway", "start_s": 650.0, "end_s": 715.0},
+    {"room": "Bedroom 1", "start_s": 715.0, "end_s": 755.0},
+    {"room": "En-suite Shower Room", "start_s": 755.0, "end_s": 820.0},
+    {"room": "Stairs and Landing", "start_s": 820.0, "end_s": 940.0},
+    {"room": "Loft Office", "start_s": 940.0, "end_s": 1030.0},
+    {"room": "Loft Bedroom", "start_s": 1030.0, "end_s": 1140.0},
+    {"room": "Loft Shower Room", "start_s": 1140.0, "end_s": 1245.0},
+    {"room": "Stairs and Landing", "start_s": 1245.0, "end_s": 1280.013}
+  ]
+}

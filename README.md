@@ -27,7 +27,7 @@ source .venv/bin/activate         # .venv\Scripts\activate on Windows
 # Credentials once — the journey never mentions backends or keys again
 cat > .env <<'EOF'
 GEMINI_API_KEY=...          # default describe + walkthrough segmentation
-# ANTHROPIC_API_KEY=...    # optional — opus backup for hard items (Phase 2)
+# ANTHROPIC_API_KEY=...    # optional — opus backup for hard items (Phase 4)
 EOF
 
 mkdir -p capture report
@@ -289,9 +289,14 @@ spine with chaptered scrub bar, *Play this moment* seeking, timecoded exhibits
 in report/PDF/manifest. **Paper-world surfaces** (5 Jul 2026): start hero,
 project home, report identity pass, exhibit timecodes throughout. **YOLOE
 detection eval** documented in [`docs/13`](docs/13-yoloe-detection.md).
-C2PA/e-signature, hosted login, and multi-property stay deferred
-([`docs/03`](docs/03-implementation-plan.md)). **Still open:** first-tester
-run (owner drives real tenancy + cleaning jobs; friction log).
+C2PA/e-signature and multi-property stay deferred
+([`docs/03`](docs/03-implementation-plan.md)). The first-tester tenancy run and
+friction log completed on 8 Jul; the Windows PDF fallback shipped on 9 Jul.
+The next product gate is the capture-strategy decision in [`docs/26`](docs/26-capture-strategy-experiment.md):
+finish Property A gold/review burden, P1 and curated P2, isolate recorded-audio
+contribution, then validate the leading arms on Property B. Hosted login and the
+remote project spine follow that evidence gate; local model tuning is bounded
+post-quality work rather than a v1 blocker.
 
 **Product-quality pass, 3 Jul 2026** ([`docs/10`](docs/10-product-quality-review.md)):
 the PDF's evidence chain now closes end-to-end (item → photo refs → Appendix

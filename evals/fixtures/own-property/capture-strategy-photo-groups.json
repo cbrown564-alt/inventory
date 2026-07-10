@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "property": "A — Own property",
+  "arm": "P2+",
+  "source_dir": "examples/photos",
+  "captured_on": "2026-07-10",
+  "capture_timezone": "Europe/London",
+  "capture_start": "2026-07-10T17:17:32+01:00",
+  "capture_end": "2026-07-10T17:48:31+01:00",
+  "photo_count": 166,
+  "protocol_note": "Heavier than the predeclared P2 target of roughly 80 photos; retain as P2+ and do not claim it measures standard P2 effort.",
+  "grouping_method": "Manual contact-sheet audit of the filename-ordered capture, reconciled to the ten-room Property A reference. Revisited rooms are represented by multiple ranges.",
+  "groups": [
+    {
+      "room": "Hallway",
+      "ranges": [[5678, 5683], [5739, 5744]]
+    },
+    {
+      "room": "Living Room",
+      "ranges": [[5684, 5684], [5710, 5712], [5724, 5737]]
+    },
+    {
+      "room": "Kitchen",
+      "ranges": [[5685, 5709], [5713, 5723], [5738, 5738]]
+    },
+    {
+      "room": "Bathroom",
+      "ranges": [[5745, 5757]]
+    },
+    {
+      "room": "Bedroom 1",
+      "ranges": [[5758, 5764]]
+    },
+    {
+      "room": "En-suite Shower Room",
+      "ranges": [[5765, 5773]]
+    },
+    {
+      "room": "Stairs and Landing",
+      "ranges": [[5774, 5789]]
+    },
+    {
+      "room": "Loft Office",
+      "ranges": [[5790, 5802]]
+    },
+    {
+      "room": "Loft Bedroom",
+      "ranges": [[5803, 5803], [5823, 5844]],
+      "missing_sequence_numbers": [5830]
+    },
+    {
+      "room": "Loft Shower Room",
+      "ranges": [[5804, 5822]]
+    }
+  ]
+}

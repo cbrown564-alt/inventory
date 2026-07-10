@@ -428,6 +428,12 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--segments-json", default=None,
                    help="reuse a pre-computed segments.json (skips the VLM "
                         "segmentation call)")
+    b.add_argument("--audio-cues-json", default=None,
+                   help="frozen timestamped narration-cue artifact")
+    b.add_argument("--audio-segment-cues", action="store_true",
+                   help="use confident spoken room names as segmentation hints")
+    b.add_argument("--audio-hero-cues", action="store_true",
+                   help="prefer visually eligible frames in narrated wide-view holds")
     b.add_argument("--progress-file", default=None,
                    help="write staged build progress JSON for the web UI")
     b.add_argument("--no-detect", action="store_true",

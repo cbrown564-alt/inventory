@@ -33,7 +33,7 @@
 
 **ML next work**
 
-1. [00](00-north-star.md) §Phase 2 → [21](21-ml-dl-experiment-log.md) (status) → [23](23-gpu-rerun-runbook.md) (commands) → [22](22-ml-programme-review-and-roadmap.md) (strategy)
+1. [00](00-north-star.md) §Next major milestones → [26](26-capture-strategy-experiment.md) (current gate) → [21](21-ml-dl-experiment-log.md) (ML status) → [23](23-gpu-rerun-runbook.md) (commands) → [22](22-ml-programme-review-and-roadmap.md) (ML strategy)
 
 **Historical / debug**
 

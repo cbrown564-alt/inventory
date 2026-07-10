@@ -452,6 +452,34 @@ def _promote_cover_rank_one(
     _assign_rank_one(photos, best)
 
 
+def _promote_audio_establishing(
+        room_name: str, photos: list[Photo], audio_cues: dict) -> None:
+    """Prefer a visually eligible frame inside a confident narrated hold."""
+    from .videometa import frame_index
+
+    source = audio_cues["source"]
+    fps = source["fps"]
+    video = Path(source["video"]).name.lower()
+    cues = [c for c in audio_cues.get("establishing_cues", [])
+            if c["room"].strip().lower() == room_name.strip().lower()
+            and c["confidence"] >= 0.7]
+    candidates = []
+    for photo in photos:
+        if not photo.source_video or Path(photo.source_video).name.lower() != video:
+            continue
+        index = frame_index(photo.path)
+        if index is None or photo.presentation_eligible is not True:
+            continue
+        t_s = index / fps
+        if any(c["start_s"] <= t_s <= c["end_s"] for c in cues):
+            candidates.append(photo)
+    if candidates:
+        best = max(candidates, key=lambda p: p.quality or 0.0)
+        if best.hero is None:
+            best.hero = max((p.hero or 0 for p in photos), default=0) + 1
+        _assign_rank_one(photos, best)
+
+
 def elect_heroes(photos: list[Photo],
                  scores: dict[str, tuple[float, Optional[bytes], float]],
                  overrides: dict[str, str]) -> None:
@@ -541,7 +569,7 @@ def _cover_metrics(path: Path) -> tuple[float, float, float, float]:
 
 
 def curate(rooms: dict[str, list[Photo]], capture_dir: Path,
-           work_dir: Path) -> None:
+           work_dir: Path, *, audio_cues: Optional[dict] = None) -> None:
     """Score every photo and elect each room's hero set (build step 2b).
 
     Runs after the integrity manifest so overrides key on sha256. Mutates
@@ -571,6 +599,8 @@ def curate(rooms: dict[str, list[Photo]], capture_dir: Path,
         elect_heroes(photos, scores, overrides)
         _ensure_cover_slot(photos, establishing, cover)
         _promote_cover_rank_one(photos, establishing, cover)
+        if audio_cues:
+            _promote_audio_establishing(room_name, photos, audio_cues)
         n_hero = sum(1 for p in photos if p.hero)
         if n_hero < len(photos):
             log.info("curated %s: %d of %d frames shown by default",

@@ -1,0 +1,32 @@
+{
+  "duration_s": 1280.01,
+  "every_s": 5.0,
+  "width": 448,
+  "model": "gemini-3.5-flash",
+  "api_calls": 3,
+  "frames": 256,
+  "usage": {"input_tokens": 284747, "output_tokens": 901},
+  "video": "IMG_5677.MOV",
+  "segments": [
+    {"room": "Hallway", "start_s": 0.0, "end_s": 30.0},
+    {"room": "Living Room", "start_s": 30.0, "end_s": 115.0},
+    {"room": "Kitchen", "start_s": 115.0, "end_s": 535.0},
+    {"room": "Hallway", "start_s": 535.0, "end_s": 545.0},
+    {"room": "Bathroom", "start_s": 545.0, "end_s": 650.0},
+    {"room": "Hallway", "start_s": 650.0, "end_s": 720.0},
+    {"room": "Bedroom 1", "start_s": 720.0, "end_s": 755.0},
+    {"room": "En-suite Shower Room", "start_s": 755.0, "end_s": 810.0},
+    {"room": "Bedroom 1", "start_s": 810.0, "end_s": 820.0},
+    {"room": "Hallway", "start_s": 820.0, "end_s": 830.0},
+    {"room": "Bedroom 2", "start_s": 830.0, "end_s": 845.0},
+    {"room": "Stairs and Landing", "start_s": 845.0, "end_s": 935.0},
+    {"room": "Loft Room", "start_s": 935.0, "end_s": 1025.0},
+    {"room": "Loft Bedroom", "start_s": 1025.0, "end_s": 1140.0},
+    {"room": "Loft Shower Room", "start_s": 1140.0, "end_s": 1230.0},
+    {"room": "Loft Bedroom", "start_s": 1230.0, "end_s": 1235.0},
+    {"room": "Loft Shower Room", "start_s": 1235.0, "end_s": 1250.0},
+    {"room": "Loft Bedroom", "start_s": 1250.0, "end_s": 1265.0},
+    {"room": "Stairs and Landing", "start_s": 1265.0, "end_s": 1270.0},
+    {"room": "Loft Room", "start_s": 1270.0, "end_s": 1280.0133333333333}
+  ]
+}
