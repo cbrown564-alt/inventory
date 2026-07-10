@@ -103,6 +103,35 @@ def build_item_schema(uc: UseCase) -> dict:
 from .usecases.tenancy import ITEM_SCHEMA, SYSTEM_PROMPT, VALUE_BANDS  # noqa: E402
 
 
+COMPACT_LOCAL_ITEM_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "items": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string"},
+                    "condition": {"type": "string", "enum": CONDITION_GRADES},
+                    "defects": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                    },
+                    "photo_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                    },
+                },
+                "required": ["name", "condition", "defects", "photo_ids"],
+                "additionalProperties": False,
+            },
+        },
+    },
+    "required": ["items"],
+    "additionalProperties": False,
+}
+
+
 class DescribeBackend(Protocol):
     name: str
 
@@ -345,10 +374,21 @@ class LocalBackend:
                  num_predict: int = 12288, repeat_penalty: float = 1.1,
                  temperature: float = 0.0, timeout: float = 900.0,
                  system_prompt: str = SYSTEM_PROMPT,
-                 item_schema: dict | None = None):
+                 item_schema: dict | None = None,
+                 compact_schema: bool = False):
         self.model = model or self.DEFAULT_MODEL
         self.system_prompt = system_prompt
         self.item_schema = item_schema if item_schema is not None else ITEM_SCHEMA
+        # The full tenancy schema makes a local VLM generate descriptive and
+        # administrative fields that Python can safely default afterwards.
+        # Compact mode deliberately asks the VLM only for visual claims.  It is
+        # opt-in while the two-room quality check in docs/29 is outstanding.
+        compact_env = os.environ.get("HI_COMPACT_SCHEMA")
+        if compact_env is not None:
+            compact_schema = compact_env.strip().lower() in {"1", "true", "yes", "on"}
+        self.compact_schema = compact_schema
+        self.response_schema = (COMPACT_LOCAL_ITEM_SCHEMA if compact_schema
+                                else self.item_schema)
         self.host = (host or os.environ.get("OLLAMA_HOST")
                      or "http://localhost:11434").rstrip("/")
         # consumer-GPU constraints: few images per call keeps the KV cache on
@@ -451,7 +491,7 @@ class LocalBackend:
             "model": self.model,
             "messages": messages,
             "stream": False,
-            "format": self.item_schema,
+            "format": self.response_schema,
             "options": {"num_ctx": self.num_ctx, "temperature": temperature,
                         "num_predict": self.num_predict,
                         "repeat_penalty": self.repeat_penalty},
@@ -500,6 +540,13 @@ class LocalBackend:
                 "item schedule for everything visible in THESE photos."
                 + _detection_hints(batch_photos, detections)
             )
+            if self.compact_schema:
+                prompt += (
+                    "\nReturn only the compact visual schedule required by the JSON "
+                    "schema: item name, condition, visible defects, and supporting "
+                    "photo IDs. Do not add a narrative, category, cleanliness, "
+                    "quantity, value, confidence, or description."
+                )
             log.info("  local batch %d/%d (%d photos)…", b, len(batches),
                      len(batch_photos))
             msgs = [

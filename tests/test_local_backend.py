@@ -3,7 +3,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from homeinventory.describe import LocalBackend, _parse_items
+from homeinventory.describe import COMPACT_LOCAL_ITEM_SCHEMA, LocalBackend, _parse_items
 from homeinventory.schema import Photo
 
 
@@ -90,6 +90,38 @@ def test_local_backend_thinking_override_from_env(monkeypatch):
 
     monkeypatch.setenv("HI_THINK", "yes")
     assert LocalBackend().think is True
+
+
+def test_local_backend_compact_schema_from_env(monkeypatch):
+    monkeypatch.setenv("HI_COMPACT_SCHEMA", "true")
+    backend = LocalBackend()
+    assert backend.compact_schema is True
+    assert backend.response_schema == COMPACT_LOCAL_ITEM_SCHEMA
+
+    monkeypatch.setenv("HI_COMPACT_SCHEMA", "not-a-bool")
+    backend = LocalBackend(compact_schema=True)
+    assert backend.compact_schema is False
+    assert backend.response_schema == backend.item_schema
+
+
+def test_local_backend_compact_schema_uses_visual_contract(tmp_path):
+    photos, paths = _photos(tmp_path, 1)
+    backend = LocalBackend(compact_schema=True)
+    captured = {}
+
+    def fake_chat(messages, temperature=0.0):
+        captured["messages"] = messages
+        return {"message": {"content": json.dumps({
+            "items": [{"name": "Wall", "condition": "good", "defects": [],
+                       "photo_ids": ["P001"]}],
+        })}}
+
+    backend._chat = fake_chat
+    _, items = backend.describe_room("Living Room", photos, paths, {})
+
+    assert "Return only the compact visual schedule" in captured["messages"][-1]["content"]
+    assert items[0].name == "Wall"
+    assert items[0].category == "other"  # deterministic default after compaction
 
 
 def test_local_backend_captures_room_timing(tmp_path, monkeypatch):

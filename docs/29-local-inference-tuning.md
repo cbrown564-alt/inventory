@@ -125,6 +125,37 @@ For Qwen, test `think: false` with the compact schema and a deterministic JSON
 repair/validation pass. The live experiment proves the speed gain exists but
 also proves the current one-pass schema is incompatible.
 
+**Implemented 10 July (awaiting the two-room quality check):** set
+`HI_COMPACT_SCHEMA=true` to have the local backend request only `name`,
+`condition`, `defects`, and `photo_ids`. The canonical output contract remains
+unchanged: Python deterministically supplies category (`other`), description,
+cleanliness, quantity, value band, and confidence defaults. Compact mode is
+opt-in; use it with `HI_THINK=false` for the Qwen experiment and record the
+setting in the run name. It does not yet perform JSON repair — grammar-valid
+compact output is required before a repair policy is introduced.
+
+**Probe result, 10 July:** the six-photo Entrance Hall compact-contract probe
+of `qwen3.5:9b` with `think: false`, 12K context, 4K output budget, Flash
+Attention and Q8 KV cache **stopped normally but returned a Markdown table,
+not JSON**. It emitted no hidden-thinking field, used 2,324 prompt tokens in
+25.478 s and 543 generated tokens in 37.706 s (14.4 generated tok/s); the
+80.364 s total includes a 17.011 s cold load. This confirms the known Ollama
+behaviour: disabling Qwen thinking prevents the response `format` grammar from
+being applied. Do not promote compact/no-think Qwen to a full run. A future
+two-pass experiment needs an explicitly scoped text-to-JSON repair call and
+its own quality gate; parsing the Markdown table heuristically would not be
+evidence-safe.
+
+**Gemma compact probe, 10 July:** `gemma4:26b` with the compact schema at 12K
+context and a 4K output budget returned schema-valid JSON (`done_reason: stop`)
+with 253 visible output tokens at 22.3 generated tok/s. It was not faster in
+wall-clock time: 218.765 s total, including 44.848 s cold loading and 6,747
+characters of hidden thinking. This validates the compact response contract but
+is not evidence of a throughput improvement. The initial probe omitted the
+application's canonical `P###` labels, so its numeric photo references cannot
+be used to judge attribution; `benchmarks/probe_local.py` now mirrors the
+application's ordered photo-ID prompt for the next run.
+
 ### 2. Keep detector hints; reduce redundant vision work
 
 The no-detector sample missed obvious non-wall items. Production comparisons
@@ -161,8 +192,8 @@ thermal throttling can otherwise swamp a 5–10% inference optimisation.
 
 | Priority | Model/path | Purpose | Stop condition |
 |---:|---|---|---|
-| 1 | Gemma 4 26B, compact schema | Preserve quality while reducing output and retries | No recall loss on two-room sample |
-| 2 | Qwen 3.5 9B, no-think + compact schema + repair | Recover the observed speed gain | Any unrepairable batch or material grading loss |
+| 1 | Gemma 4 26B, compact schema | JSON contract passed on one batch; performance inconclusive | No recall loss on two-room sample |
+| 2 | Qwen 3.5 9B, no-think + compact schema + repair | **Stopped:** grammar dropped and returned Markdown | Requires a separately validated second-pass repair design |
 | 3 | Qwen3-VL 8B Instruct | Mature 8B vision baseline near the VRAM boundary | Spill remains severe or schema fails twice |
 | 4 | Ministral 3 8B | Edge-oriented alternative | Worse recall/JSON than Qwen3-VL |
 | 5 | MiniCPM-V 4.6 | Caption/visual candidate pre-pass only | Do not test as full schedule again without a smaller schema |
@@ -181,4 +212,3 @@ GPU upgrade.
 - [Qwen3-VL 8B Instruct model card](https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct)
 - [llama.cpp CUDA and hybrid CPU/GPU support](https://github.com/ggml-org/llama.cpp)
 - [Qwen 3.5 vision-projector Flash Attention regression](https://github.com/ggml-org/llama.cpp/issues/21272)
-

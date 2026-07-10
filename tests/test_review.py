@@ -271,7 +271,9 @@ def test_attach_streamed_close_photo_to_existing_claim(server):
     """Phone review can link one close-up to its uncertain claim without
     re-running the draft or leaving an uncited upload behind."""
     base, _state, out, cap = server
-    source = _jpeg_bytes()
+    # The seeded sample already contains a white JPEG. Use a distinct exhibit
+    # here so this test exercises creation before it exercises retry dedupe.
+    source = _jpeg_bytes("navy")
     status, uploaded = _upload(base, "Kitchen", "meter-detail.heic", source)
     assert status == 200, uploaded
     assert uploaded["path"] == "Kitchen/meter-detail.jpg"
@@ -620,10 +622,10 @@ def fresh_server(tmp_path):
     httpd.server_close()
 
 
-def _jpeg_bytes() -> bytes:
+def _jpeg_bytes(colour: str = "white") -> bytes:
     from io import BytesIO
     buf = BytesIO()
-    Image.new("RGB", (64, 48), "white").save(buf, format="JPEG")
+    Image.new("RGB", (64, 48), colour).save(buf, format="JPEG")
     return buf.getvalue()
 
 
@@ -1204,6 +1206,9 @@ def test_field_workspace_queues_exceptions_before_routine_claims(server):
     assert 'item.category === "meter"' in html
     assert "No more decisions need your judgement" in html
     assert "Routine claims remain available in the full evidence desk" in html
+    assert 'text: "Decision " + queuePosition + " of " + queue.length' in html
+    assert "Retry linking photo" in html
+    assert "The photo is saved, but is not linked yet." in html
 
 
 def test_tenant_walkthrough_precedes_countersign(server):
