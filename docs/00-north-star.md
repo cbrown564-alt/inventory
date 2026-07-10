@@ -16,6 +16,40 @@ The competition is not other tools; it is not bothering.
 
 ---
 
+## Market position (July 2026)
+
+*From [`market-research-2026-07.md`](market-research-2026-07.md). Reshapes
+emphasis, not direction.*
+
+- **The consumer lane is open.** Every AI-native video-first entrant
+  (iListingAI, Amnis, KapturAI, Inspecto, Paraspot) targets professionals
+  — clerks, agents, portfolio managers. Nobody serves the self-managing
+  landlord, which is exactly our target. RentCheck (4.8★, ~18k App Store
+  ratings; US, photo-only, no AI) proves the consumer demand exists.
+- **"Video → AI report" is not a moat** — at least five UK players ship
+  it, and speed messaging is commoditised ("90% faster", "under 5
+  minutes"). We differentiate on trust/evidence quality (Pillars 1–2),
+  consumer accessibility, and report design — not speed, not the pipeline.
+- **The trust bar is the scheme evidential spec** (TDS/DPS/mydeposits):
+  timestamps in file metadata, written report with embedded photos,
+  time-referenced video, both-party signatures, tamper evidence. The four
+  independence-discount mitigations the schemes imply — tenant
+  countersign, embedded dated photos, tamper-evident audit trail, frames
+  linked to the unedited source video — are all shipped. They are the
+  headline claim; price is the supporting act.
+- **Comparison is the decisive artefact.** Adjudicators decide by
+  comparing check-in vs check-out; without both, landlord claims are
+  "highly likely to be rejected". The check-in report is the baseline for
+  a future comparison and should be framed and sold that way — think
+  per-tenancy (check-in + check-out + compare), not per-report
+  (competitors anchor PAYG at £9–10/report; free floor exists).
+- **Retention is a free differentiator.** iListingAI's £9 tier deletes
+  reports after 7 days; a tenancy matures at 12+ months. Local-first means
+  the landlord keeps their evidence forever. If a hosted version ever
+  ships, retention-until-dispute-window is a commitment, not a paid tier.
+
+---
+
 ## v1 success criteria
 
 | Dimension | Target | Measured on |
@@ -35,10 +69,16 @@ The competition is not other tools; it is not bothering.
 3. Confirm spend in plain language
 4. Wait (segment → describe → curate → PDF — all invisible)
 5. Review room-by-room, fix grades/defects, sign
-6. Download the attested PDF
+6. Send the tenant link to review, comment, and countersign
+   (today `--share`; the journey ends here by default, not behind a flag —
+   mydeposits gives max weight only when both parties sign)
+7. Download the attested PDF
 
 Deep-clean and check-in/check-out are **secondary journeys** on the same
-shape (docs/12). The CLI remains plumbing for power users and CI.
+shape (docs/12) — secondary in *sequence*, not importance: the check-in vs
+check-out comparison is the artefact adjudicators actually decide on, so
+the check-in journey must frame itself as the baseline for that future
+compare. The CLI remains plumbing for power users and CI.
 
 ---
 
@@ -71,7 +111,7 @@ or model names (docs/12).
 | **2** | [`10-product-quality-review.md`](10-product-quality-review.md) + [`04-backend-comparison.md`](04-backend-comparison.md) | Quality bar + benchmark scores |
 | **3** | [`03-implementation-plan.md`](03-implementation-plan.md) | Milestone ledger (frozen; no new open items) |
 | **4** | 06–09, 15–16 | Shipped feature records |
-| **5** | 02, 11, 13, 18, 21 | Research / spike reference |
+| **5** | 02, 11, 13, 18, 21, market-research-2026-07 | Research / spike reference |
 | **6** | 19, 21, 22, 23 | ML programme (subordinate to v1) |
 | **7** | [`20-ios-native-app.md`](20-ios-native-app.md) | Post-v1 |
 
@@ -163,6 +203,15 @@ pool that may contain the wrong room entirely.
 - [ ] **Pipeline can flag a bad segment**, not silently pick the
       least-bad frame — "no confident cover" surfaces for re-capture
       or manual review rather than shipping a staircase as a kitchen.
+- [ ] **Report meets the deposit-scheme evidential spec point-by-point**
+      ([`market-research-2026-07.md`](market-research-2026-07.md)):
+      capture timestamps in the *file metadata* of every embedded image
+      (DPS checks metadata, not printed dates — extracted video frames
+      need this written in, with provenance to the source video's
+      timestamp), written report with embedded photos, video referenced
+      by exact timecodes, both-party signatures, tamper-evident trail.
+      Most items are shipped; audit against the spec and close the
+      frame-metadata gap.
 
 ### Pillar 3 — The report is accurate and complete
 
@@ -191,15 +240,20 @@ back to the £165 option.
       is missing (9 Jul craft N)
 - [x] F2–F6 frictions addressed or explicitly ticketed with a reason
       (F2/F5 fixed; F3/F4/F6 ticketed in docs/24)
+- [ ] **Tenant countersign is a default journey step, not a flag** — the
+      review flow ends with "send to tenant to countersign"; `--share`
+      becomes the plumbing under it. Independence is the credibility test
+      a DIY inventory must pass, and both-party signatures are the
+      max-weight condition (market-research-2026-07).
 
 ### Distance summary (honest)
 
 | Pillar | Status |
 |---|---|
 | **1 — Trust at first glance** | **Mostly met.** Design system + review craft landed; first-screen owner sign-off remains. |
-| **2 — Trustworthy by construction** | **Not started.** Capture strategy is genuine research; hero/pipeline fixes are coupled to its outcome. Interim cover-warn UI only. |
+| **2 — Trustworthy by construction** | **Not started.** Capture strategy is genuine research; hero/pipeline fixes are coupled to its outcome. Interim cover-warn UI only. Evidential-spec audit new — most mitigations shipped, frame-metadata gap to close. |
 | **3 — Accurate & complete** | **Partially met.** Defect recall below bar; quality wins (E8/E2/E10) proven but unwired. |
-| **4 — Low-friction journey** | **Met for v1 HTML path.** Browser-print PDF fallback ships; native WeasyPrint still preferred. |
+| **4 — Low-friction journey** | **Mostly met.** Browser-print PDF fallback ships; native WeasyPrint still preferred. Countersign-as-default step remains. |
 
 **v1 ships when every box is checked.** The old DoD was 4/6 done because
 it measured the journey mechanically; the real bar — Pillars 1 and 2 —

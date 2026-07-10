@@ -27,6 +27,26 @@ frame selection, curation, even the review UX. Building v1 on an untested
 capture assumption is the highest-leverage risk in the project. We resolve
 it before investing further in video-specific pipeline work.
 
+### Market evidence for the photo arms (Jul 2026)
+
+Two findings from [`market-research-2026-07.md`](market-research-2026-07.md)
+raise the prior on P1/P2 — they are not strawmen for video to beat:
+
+- **RentCheck**, the only consumer-validated product in the category
+  (4.8★ from ~18k App Store ratings), is a guided room-by-room **photo**
+  checklist. No video, no AI. The most successful consumer capture UX in
+  this space is essentially P1/P2's protocol, resident-led.
+- **The deposit-scheme evidential spec privileges photos.** The core
+  adjudication artefact is a written report with embedded dated
+  photographs; raw video is supplementary and must be time-referenced to
+  be usable at all. Native photos carry capture timestamps in file
+  metadata (which DPS checks); frames extracted from video do not unless
+  we write them in.
+
+M5b (phone guided capture) was killed as a capture-*UX* failure on a real
+device — that verdict does not transfer to the photo *format* itself.
+Sunk cost already doesn't count here; neither does the M5b scar tissue.
+
 ## The decision this experiment must make
 
 One product question, with a clear answer shape:
@@ -198,6 +218,7 @@ direction, only to stress-test it.
 ## Related
 
 - North star: [`00-north-star.md`](00-north-star.md) Pillar 2
+- Market research (RentCheck precedent, evidential spec): [`market-research-2026-07.md`](market-research-2026-07.md)
 - Hero selection (image-quality methodology): [`18-hero-image-selection.md`](18-hero-image-selection.md)
 - Segmentation (the problem photos bypass): [`11-video-segmentation.md`](11-video-segmentation.md)
 - Product plan of record: [`12-video-first-journey.md`](12-video-first-journey.md)

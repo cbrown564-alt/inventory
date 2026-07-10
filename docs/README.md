@@ -13,7 +13,7 @@
 | **Milestone ledger** | [03](03-implementation-plan.md) | Historical — what shipped when (frozen) |
 | **Feature records** | [06](06-professional-report-benchmark.md)–[09](09-web-ui-and-capture.md), [15](15-curation-and-one-app.md)–[16](16-report-redesign.md) | Deep dive on a shipped milestone |
 | **Design reference** | [05](05-review-experience.md), [14](14-frontend-craft.md), [17](17-experience-redesign.md) | Review UX principles and next work |
-| **Technical spikes** | [02](02-research.md), [11](11-video-segmentation.md), [13](13-yoloe-detection.md), [18](18-hero-image-selection.md) | Background research and eval methodology |
+| **Technical spikes** | [02](02-research.md), [11](11-video-segmentation.md), [13](13-yoloe-detection.md), [18](18-hero-image-selection.md), [26](26-capture-strategy-experiment.md), [market-research](market-research-2026-07.md) | Background research and eval methodology |
 | **ML programme** | [19](19-ml-dl-exploration-plan.md), [21](21-ml-dl-experiment-log.md), [22](22-ml-programme-review-and-roadmap.md), [23](23-gpu-rerun-runbook.md) | ML experiments — subordinate to docs/00 |
 | **Future** | [20](20-ios-native-app.md) | Post-v1 iOS track |
 
@@ -79,3 +79,7 @@
 | 21 | [ml-dl-experiment-log](21-ml-dl-experiment-log.md) | active | ML status tracker (authoritative) |
 | 22 | [ml-programme-review-and-roadmap](22-ml-programme-review-and-roadmap.md) | active* | ML strategy (*§2 pre-GPU; see 21) |
 | 23 | [gpu-rerun-runbook](23-gpu-rerun-runbook.md) | active | GPU execution runbook |
+| 24 | [friction-log-2026-07-08](24-friction-log-2026-07-08.md) | record | First-tester run friction log |
+| 25 | [design-overhaul](25-design-overhaul.md) | active | One design system across all surfaces |
+| 26 | [capture-strategy-experiment](26-capture-strategy-experiment.md) | active | Photo vs video capture experiment design |
+| — | [market-research-2026-07](market-research-2026-07.md) | active | Competitive map, evidential spec, pricing anchors |
