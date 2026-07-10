@@ -48,7 +48,8 @@ import qrcode.image.svg
 # verbatim). sniff_extension/_safe_component stay importable from here.
 from .webbase import (TEMPLATES, BaseHandler, WALKTHROUGH_ROOM, _safe_component,  # noqa: F401
                       lan_ip as _lan_ip, scan_capture, scan_rooms, sniff_extension)
-from .ingest import ROOM_ALIASES_FILE, find_root_videos
+from .ingest import (IMAGE_EXTS, ROOM_ALIASES_FILE, exif_capture_time,
+                     find_root_videos)
 from .progress import BuildProgress
 from .dotenv import load_dotenv
 from .schema import Inventory, Item, Photo, cover_value
@@ -610,10 +611,7 @@ class SessionState:
                 dest = self.capture_dir / room.name / fname
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 dest.write_bytes(base64.b64decode(photo_b64))
-                pid = f"P{1 + sum(len(r.photos) for r in inv.rooms):03d}"
-                taken = {p.id for r in inv.rooms for p in r.photos}
-                while pid in taken:
-                    pid = f"P{int(pid[1:]) + 1:03d}"
+                pid = self._next_photo_id(inv)
                 photo = Photo(id=pid, path=f"{room.name}/{fname}",
                               room=room.name, sha256=sha256_file(dest),
                               captured_at=_now(),
@@ -628,6 +626,96 @@ class SessionState:
         with self.lock:
             self.rerender()
         return asdict(item)
+
+    @staticmethod
+    def _next_photo_id(inv: Inventory) -> str:
+        """Return the next unused stable exhibit id for a reviewed photo."""
+        taken = {p.id for room in inv.rooms for p in room.photos}
+        number = 1
+        while f"P{number:03d}" in taken:
+            number += 1
+        return f"P{number:03d}"
+
+    def attach_review_photo(self, item_id: str, source_path: str,
+                            author: str = "reviewer") -> dict:
+        """Attach an already streamed close-up to one existing claim.
+
+        ``/api/upload`` is deliberately the only binary ingress.  This
+        follow-up operation only accepts its room-relative stored path, checks
+        that it is an original image in the claim's room, then gives that
+        original a stable exhibit id, hash-manifest row and item link.  It
+        means a phone reviewer can add one decisive close-up without creating
+        an uncited orphan or having to run another capture workflow.
+        """
+        item_id = (item_id or "").strip()
+        raw_path = (source_path or "").strip().replace("\\", "/")
+        parts = raw_path.split("/")
+        if (not item_id or not raw_path
+                or any(part in ("", ".", "..") for part in parts)):
+            raise ValueError("item_id and a plain room-relative photo path are required")
+
+        with self.lock:
+            inv = self.load()
+            room = None
+            item = None
+            for candidate_room in inv.rooms:
+                found = next((candidate for candidate in candidate_room.items
+                              if candidate.id == item_id), None)
+                if found is not None:
+                    room, item = candidate_room, found
+                    break
+            if room is None or item is None:
+                raise KeyError(f"no such item: {item_id}")
+
+            capture_root = self.capture_dir.resolve()
+            room_dir = (self.capture_dir / room.name).resolve()
+            source = (self.capture_dir.joinpath(*parts)).resolve()
+            try:
+                source.relative_to(capture_root)
+            except ValueError as e:
+                raise ValueError("photo path escapes the capture folder") from e
+            if source.parent != room_dir:
+                raise ValueError("photo must be uploaded to the item's room")
+            if not source.is_file() or source.suffix.lower() not in IMAGE_EXTS:
+                raise ValueError("uploaded evidence must be a recognised photo")
+
+            portable_path = source.relative_to(capture_root).as_posix()
+            source_hash = sha256_file(source)
+            photo = next((candidate for candidate in room.photos
+                          if candidate.path.replace("\\", "/") == portable_path),
+                         None)
+            # If the phone repeated a completed single-shot upload after it
+            # lost the attachment response, retain the duplicate original in
+            # capture but do not manufacture a second exhibit for identical
+            # bytes.  This mirrors the resumable video rule at the evidence
+            # record level rather than relying only on a browser retry.
+            if photo is None:
+                photo = next((candidate for candidate in room.photos
+                              if candidate.sha256 == source_hash), None)
+            created = photo is None
+            linked = False
+            if photo is None:
+                photo = Photo(
+                    id=self._next_photo_id(inv), path=portable_path,
+                    room=room.name, sha256=source_hash,
+                    captured_at=exif_capture_time(source),
+                    note=f"close photo added during mobile review by {author}",
+                )
+                room.photos.append(photo)
+                self._append_manifest_entry(photo, source)
+            if photo.id not in item.photo_ids:
+                item.photo_ids.append(photo.id)
+                linked = True
+            if created or linked:
+                self.save(inv)
+
+        if created or linked:
+            self.ack(author, self.uc.owner_role.key, "attach_review_photo",
+                     portable_path, item_id)
+            with self.lock:
+                self.rerender()
+        return {"photo": asdict(photo), "item_id": item_id,
+                "created": created, "linked": linked}
 
     def _append_manifest_entry(self, photo: Photo, full: Path) -> None:
         mpath = self.out_dir / "manifest.json"
@@ -1481,6 +1569,17 @@ class ReviewHandler(BaseHandler):
                 st.ack("reviewer", st.uc.owner_role.key, "upload_media",
                        payload["path"])
                 self._json(payload)
+                return
+            if path == "/api/evidence/attach":
+                b = self._body()
+                try:
+                    result = st.attach_review_photo(
+                        b.get("item_id") or "", b.get("path") or "",
+                        b.get("author") or "reviewer")
+                except (ValueError, KeyError) as e:
+                    self._err(400, str(e))
+                    return
+                self._json({"ok": True, **result})
                 return
             if path == "/api/capture/remove":
                 b = self._body()

@@ -429,6 +429,15 @@ class LocalBackend:
             except ValueError:
                 pass
         self.timeout = timeout
+        # Experimental Ollama thinking override.  Leave unset to preserve the
+        # model default.  This is useful for measuring whether reasoning-token
+        # overhead is worth it on constrained local hardware; some Ollama/model
+        # combinations may not honour both ``think: false`` and JSON schema
+        # enforcement, so callers must still validate the returned content.
+        think_env = os.environ.get("HI_THINK")
+        self.think = None if think_env is None else (
+            think_env.strip().lower() in {"1", "true", "yes", "on"}
+        )
 
     def _chat(self, messages: list[dict], temperature: float = 0.0) -> dict:
         # Budget note for thinking models (qwen3.5+): they emit a `thinking`
@@ -447,6 +456,8 @@ class LocalBackend:
                         "num_predict": self.num_predict,
                         "repeat_penalty": self.repeat_penalty},
         }
+        if self.think is not None:
+            payload["think"] = self.think
         body = json.dumps(payload).encode()
         req = urllib.request.Request(
             f"{self.host}/api/chat", data=body,

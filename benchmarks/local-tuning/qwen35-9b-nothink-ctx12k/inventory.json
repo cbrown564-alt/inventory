@@ -1,0 +1,106 @@
+{
+  "property_address": "",
+  "inspected_by": "",
+  "inspected_at": "2026-07-10",
+  "report_type": "Inventory & Schedule of Condition",
+  "agent_name": "",
+  "agent_phone": "",
+  "property_type": "",
+  "tenant_name": "",
+  "landlord_name": "",
+  "report_ref": "",
+  "use_case": "tenancy",
+  "parties": {},
+  "schedule_summary": [],
+  "rooms": [
+    {
+      "name": "Entrance Hall",
+      "summary": "",
+      "items": [],
+      "photos": [
+        {
+          "id": "P001",
+          "path": "Entrance Hall\\p06_i00.jpg",
+          "room": "Entrance Hall",
+          "sha256": "2b55e90f3840532fb684373c9c1b55afc0e1575d98ebaaf38c24ef7a61723a8d",
+          "captured_at": null,
+          "source_video": null,
+          "note": null,
+          "hero": 2,
+          "quality": 0.149,
+          "describe_eligible": true,
+          "presentation_eligible": true
+        },
+        {
+          "id": "P002",
+          "path": "Entrance Hall\\p06_i01.jpg",
+          "room": "Entrance Hall",
+          "sha256": "10c959c518e90328288828848b8aa890ffa69d4b1dfe55b252064a8892493ab8",
+          "captured_at": null,
+          "source_video": null,
+          "note": null,
+          "hero": 3,
+          "quality": 0.061,
+          "describe_eligible": true,
+          "presentation_eligible": false
+        },
+        {
+          "id": "P003",
+          "path": "Entrance Hall\\p06_i02.jpg",
+          "room": "Entrance Hall",
+          "sha256": "d14631af3b22792e5cbf4e88cd4a51d6f48dcd0854de58f6e8243b9ee72cd1ad",
+          "captured_at": null,
+          "source_video": null,
+          "note": null,
+          "hero": 4,
+          "quality": 0.058,
+          "describe_eligible": true,
+          "presentation_eligible": false
+        },
+        {
+          "id": "P004",
+          "path": "Entrance Hall\\p06_i03.jpg",
+          "room": "Entrance Hall",
+          "sha256": "1bd85c11240e37960f0fdd5cf7a2f824c349444a92b1450b0ec2dc325b888fc3",
+          "captured_at": null,
+          "source_video": null,
+          "note": null,
+          "hero": 5,
+          "quality": 0.077,
+          "describe_eligible": true,
+          "presentation_eligible": false
+        },
+        {
+          "id": "P005",
+          "path": "Entrance Hall\\p06_i04.jpg",
+          "room": "Entrance Hall",
+          "sha256": "6fa04ea2cd161a9eec8b5036f5881dcc155b13be14648159c12992935156fe26",
+          "captured_at": null,
+          "source_video": null,
+          "note": null,
+          "hero": 6,
+          "quality": 1.0,
+          "describe_eligible": true,
+          "presentation_eligible": true
+        },
+        {
+          "id": "P006",
+          "path": "Entrance Hall\\p06_i05.jpg",
+          "room": "Entrance Hall",
+          "sha256": "539b28af0a71fafa65049b08d89e6660ac8d2d17af8ffa88e5b172cb28eab207",
+          "captured_at": null,
+          "source_video": null,
+          "note": null,
+          "hero": 1,
+          "quality": 0.413,
+          "describe_eligible": true,
+          "presentation_eligible": true
+        }
+      ]
+    }
+  ],
+  "notes": "",
+  "tool_version": "0.1.0",
+  "describe_backend": "local (qwen3.5:9b)",
+  "signatures": []
+}

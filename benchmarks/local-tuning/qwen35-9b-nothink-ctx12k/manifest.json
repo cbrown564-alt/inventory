@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-07-10T19:38:37+00:00",
+  "algorithm": "sha256",
+  "files": [
+    {
+      "photo_id": "P001",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i00.jpg",
+      "sha256": "2b55e90f3840532fb684373c9c1b55afc0e1575d98ebaaf38c24ef7a61723a8d",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 29323
+    },
+    {
+      "photo_id": "P002",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i01.jpg",
+      "sha256": "10c959c518e90328288828848b8aa890ffa69d4b1dfe55b252064a8892493ab8",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 17647
+    },
+    {
+      "photo_id": "P003",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i02.jpg",
+      "sha256": "d14631af3b22792e5cbf4e88cd4a51d6f48dcd0854de58f6e8243b9ee72cd1ad",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 25040
+    },
+    {
+      "photo_id": "P004",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i03.jpg",
+      "sha256": "1bd85c11240e37960f0fdd5cf7a2f824c349444a92b1450b0ec2dc325b888fc3",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 31952
+    },
+    {
+      "photo_id": "P005",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i04.jpg",
+      "sha256": "6fa04ea2cd161a9eec8b5036f5881dcc155b13be14648159c12992935156fe26",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 70082
+    },
+    {
+      "photo_id": "P006",
+      "room": "Entrance Hall",
+      "file": "Entrance Hall\\p06_i05.jpg",
+      "sha256": "539b28af0a71fafa65049b08d89e6660ac8d2d17af8ffa88e5b172cb28eab207",
+      "captured_at": null,
+      "source_video": null,
+      "bytes": 47642
+    }
+  ]
+}

@@ -267,6 +267,74 @@ def test_add_missing_item_with_photo(server):
     assert any(f["photo_id"] == new_photo.id for f in manifest["files"])
 
 
+def test_attach_streamed_close_photo_to_existing_claim(server):
+    """Phone review can link one close-up to its uncertain claim without
+    re-running the draft or leaving an uncited upload behind."""
+    base, _state, out, cap = server
+    source = _jpeg_bytes()
+    status, uploaded = _upload(base, "Kitchen", "meter-detail.heic", source)
+    assert status == 200, uploaded
+    assert uploaded["path"] == "Kitchen/meter-detail.jpg"
+
+    status, attached = _req("POST", base + "/api/evidence/attach", {
+        "item_id": "KIT-001", "path": uploaded["path"], "author": "C. Brown",
+    })
+    assert status == 200, attached
+    assert attached["created"] and attached["linked"]
+    photo = attached["photo"]
+    assert photo["room"] == "Kitchen"
+    assert photo["sha256"] == hashlib.sha256(source).hexdigest()
+    assert "mobile review" in photo["note"]
+
+    on_disk = Inventory.from_json(
+        (out / "inventory.json").read_text(encoding="utf-8"))
+    item = next(item for room in on_disk.rooms for item in room.items
+                if item.id == "KIT-001")
+    assert photo["id"] in item.photo_ids
+    manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
+    assert any(entry["photo_id"] == photo["id"]
+               and entry["sha256"] == photo["sha256"]
+               for entry in manifest["files"])
+    assert (cap / photo["path"]).read_bytes() == source
+
+    # Re-attaching the same original is idempotent: no duplicate exhibit or
+    # item link is created if a retry reaches the endpoint twice.
+    status, retried = _req("POST", base + "/api/evidence/attach", {
+        "item_id": "KIT-001", "path": uploaded["path"], "author": "C. Brown",
+    })
+    assert status == 200, retried
+    assert not retried["created"] and not retried["linked"]
+
+    # A repeated one-shot phone upload has a different stored filename, but
+    # the identical original bytes must still resolve to the same exhibit.
+    status, repeated_upload = _upload(base, "Kitchen", "meter-detail.heic", source)
+    assert status == 200, repeated_upload
+    assert repeated_upload["path"] != uploaded["path"]
+    status, repeated = _req("POST", base + "/api/evidence/attach", {
+        "item_id": "KIT-001", "path": repeated_upload["path"],
+    })
+    assert status == 200, repeated
+    assert repeated["photo"]["id"] == photo["id"]
+    assert not repeated["created"] and not repeated["linked"]
+
+
+def test_attach_close_photo_rejects_other_room_and_non_photo(server):
+    base, _state, _out, _cap = server
+    status, uploaded = _upload(base, "Living Room", "wide.jpg", _jpeg_bytes())
+    assert status == 200, uploaded
+    status, body = _req("POST", base + "/api/evidence/attach", {
+        "item_id": "KIT-001", "path": uploaded["path"],
+    })
+    assert status == 400 and "item's room" in body["error"]
+
+    status, video = _upload(base, "Kitchen", "walk.bin", _mp4_bytes())
+    assert status == 200, video
+    status, body = _req("POST", base + "/api/evidence/attach", {
+        "item_id": "KIT-001", "path": video["path"],
+    })
+    assert status == 400 and "recognised photo" in body["error"]
+
+
 def test_owner_sign_pins_content_hash(server):
     base, _state, out, _cap = server
     _ensure_address(base)

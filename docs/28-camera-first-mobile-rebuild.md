@@ -155,6 +155,12 @@ instead of turning phone review into a clerking exercise. This is a deliberate
 queueing rule, not an accuracy claim or an automatic acceptance: the original
 evidence and the full draft remain inspectable before issue.
 
+When an exception needs a decisive close-up, the phone review now offers **Add
+close photo** on that claim. The original streams into the existing named-room
+capture store, then becomes a hash-manifested exhibit linked directly to that
+claim; a retry cannot duplicate the exhibit. It is a quiet supplement to a
+walkthrough, not a demand to recapture the property.
+
 ## Near-term proof sequence
 
 1. Test V0/V1/P1/P2 from docs/26 on at least two properties and include the

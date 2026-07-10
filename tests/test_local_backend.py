@@ -81,6 +81,17 @@ def test_local_backend_batch_size_from_env(monkeypatch):
     assert LocalBackend().batch_size == 6
 
 
+def test_local_backend_thinking_override_from_env(monkeypatch):
+    monkeypatch.delenv("HI_THINK", raising=False)
+    assert LocalBackend().think is None
+
+    monkeypatch.setenv("HI_THINK", "false")
+    assert LocalBackend().think is False
+
+    monkeypatch.setenv("HI_THINK", "yes")
+    assert LocalBackend().think is True
+
+
 def test_local_backend_captures_room_timing(tmp_path, monkeypatch):
     # Ollama returns ns durations + token counts; describe_room must convert,
     # accumulate across batches, and expose a room total on last_room_timing
