@@ -113,7 +113,7 @@ The AI drafts; a human confirms and signs. Three ways in, lightest first
    home has before/after video drop slots; the comparison sheet auto-starts when
    the second session build lands (`--use-case deepclean`).
 
-   **Tenant countersign** (`--share`): prints a token-protected link to open
+   **Tenant countersign** (default): prints a token-protected link to open
    on the tenant's phone — they walk the rooms, comment per item, and
    countersign. Comments, signatures (each pinning a SHA-256 of the content
    signed) and a hash-chained `acknowledgements.jsonl` trail are stored with
@@ -250,7 +250,8 @@ Full index: [`docs/README.md`](docs/README.md).
 M0 prototype, plus the full review stack from
 [`docs/05`](docs/05-review-experience.md): in-report review mode, local
 review server (`homeinventory review`), tenant comment-and-countersign
-(`--share`), and the pre-build coverage check (`homeinventory check`).
+(use `--no-share` for an owner-only session), and the pre-build coverage check
+(`homeinventory check`).
 M1 (benchmark against a professional clerk's published report) is done —
 see [`docs/06`](docs/06-professional-report-benchmark.md). **M3 (open-source
 parity) is closed** — all three backends are scored against the gold fixture

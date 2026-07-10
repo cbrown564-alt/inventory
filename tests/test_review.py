@@ -189,6 +189,30 @@ def test_owner_app_and_inventory_api(server):
     assert body["photo_src"]  # photos are exported and mapped
 
 
+def test_review_cli_enables_tenant_countersign_by_default(tmp_path, monkeypatch):
+    seen = {}
+
+    class DummyServer:
+        def serve_forever(self):
+            pass
+
+        def server_close(self):
+            pass
+
+    def fake_serve(*args, **kwargs):
+        seen.update(kwargs)
+        return DummyServer()
+
+    monkeypatch.setattr("homeinventory.review.serve", fake_serve)
+    assert main(["review", str(tmp_path / "capture"),
+                 "-o", str(tmp_path / "report"), "--no-open"]) == 0
+    assert seen["share"] is True
+    assert main(["review", str(tmp_path / "capture"),
+                 "-o", str(tmp_path / "report"), "--no-open",
+                 "--no-share"]) == 0
+    assert seen["share"] is False
+
+
 def test_owner_app_has_search_and_final_issue_link(server):
     base, _state, _out, _cap = server
     _, html = _get_text(base + "/review")

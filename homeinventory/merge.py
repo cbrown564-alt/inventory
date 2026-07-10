@@ -508,4 +508,8 @@ def merge_room_with_prior(prior_room: Room | None, new_room: Room,
     items = kept + fresh
     photos = _merge_photos(prior_room.photos, new_room.photos)
     return Room(name=new_room.name, summary=new_room.summary,
-                items=items, photos=photos)
+                items=items, photos=photos,
+                cover_state=new_room.cover_state,
+                cover_reason=new_room.cover_reason,
+                segment_state=new_room.segment_state,
+                segment_reason=new_room.segment_reason)

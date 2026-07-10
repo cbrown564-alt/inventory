@@ -159,7 +159,7 @@ coverage panel of photos no item cites, add-missed-item with photo upload
 (saved into the capture folder, hashed, appended to the manifest), and a
 re-describe-room button that shells out to `build --room`.
 
-**Level 3** — `--share` mints a token and serves a tenant walk-through at
+**Level 3** — enabled by default; mints a token and serves a tenant walk-through at
 `/t/<token>`: per-item comments stored on the items (`role: "tenant"`),
 acknowledge-and-countersign appending a tenant signature over the content
 hash (which now includes their own comments). Every mutation — saves,

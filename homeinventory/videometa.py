@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional
 from urllib.parse import quote
@@ -41,7 +43,19 @@ def probe(path: Path) -> Optional[dict]:
     cap.release()
     if fps <= 0:
         return None
-    return {"fps": fps, "duration": round(n / fps, 2) if n else 0.0}
+    result = {"fps": fps, "duration": round(n / fps, 2) if n else 0.0}
+    try:
+        proc = subprocess.run([
+            "ffprobe", "-v", "error", "-show_entries",
+            "format_tags=creation_time", "-of", "json", str(path)],
+            capture_output=True, text=True, timeout=10, check=True)
+        tags = (json.loads(proc.stdout).get("format") or {}).get("tags") or {}
+        created = tags.get("creation_time")
+        if created:
+            result["created_at"] = str(created)
+    except (OSError, subprocess.SubprocessError, ValueError, json.JSONDecodeError):
+        pass
+    return result
 
 
 def frame_index(photo_path: str) -> Optional[int]:
@@ -123,6 +137,15 @@ def video_payload(inv, capture_dir: Path, work_dir: Path, src_prefix: str,
             videos[rel] = meta
             idx = frame_index(ph.path)
             if idx is not None:
-                photo_time[ph.id] = {"video": rel,
-                                     "t": round(idx / meta["fps"], 2)}
+                seconds = round(idx / meta["fps"], 2)
+                timing = {"video": rel, "t": seconds}
+                if meta.get("created_at"):
+                    try:
+                        created = datetime.fromisoformat(
+                            meta["created_at"].replace("Z", "+00:00"))
+                        timing["captured_at"] = (created + timedelta(
+                            seconds=seconds)).isoformat()
+                    except ValueError:
+                        pass
+                photo_time[ph.id] = timing
     return videos, photo_time

@@ -7,8 +7,9 @@ from PIL import Image
 
 from homeinventory.cli import main
 from homeinventory.ingest import ingest
-from homeinventory.pipeline import _checkpoint_identity, _checkpoint_matches
-from homeinventory.report import render
+from homeinventory.pipeline import (_checkpoint_identity, _checkpoint_matches,
+                                    _room_evidence_state)
+from homeinventory.report import _export_photos, render
 from homeinventory.schema import Inventory, Item, Photo, Room
 
 
@@ -57,6 +58,38 @@ def test_checkpoint_reuse_is_bound_to_evidence_backend_and_use_case():
     assert not _checkpoint_matches(
         {"checkpoint": identity},
         _checkpoint_identity(photos, Backend(), "contents"))
+
+
+def test_room_evidence_state_never_infers_semantic_confidence():
+    photo = Photo(id="P001", path="frame.jpg", room="Kitchen",
+                  source_video="walk.mov", hero=1,
+                  presentation_eligible=True)
+    state = _room_evidence_state("Kitchen", [photo])
+    assert state["cover_state"] == "unverified"
+    assert state["segment_state"] == "unverified"
+    photo.room_match = False
+    assert _room_evidence_state("Kitchen", [photo])["cover_state"] == \
+        "no_confident_cover"
+    assert _room_evidence_state("General", [photo])["segment_state"] == \
+        "no_confident_segment"
+
+
+def test_exported_jpeg_embeds_capture_and_video_provenance(tmp_path):
+    cap = tmp_path / "capture"
+    _img(cap / "frame.jpg")
+    photo = Photo(id="P001", path="frame.jpg", room="Kitchen",
+                  captured_at="2026-07-10T17:17:32+01:00",
+                  source_video="walk.mov")
+    inv = Inventory(rooms=[Room(name="Kitchen", photos=[photo])])
+    out = tmp_path / "report"
+    _export_photos(inv, cap, out,
+                   photo_time={"P001": {"video": "walk.mov", "t": 12.345}})
+    with Image.open(out / "photos" / "P001.jpg") as image:
+        exif = image.getexif()
+        metadata = json.loads(exif[270])
+        assert metadata["source_video"] == "walk.mov"
+        assert metadata["source_time_seconds"] == 12.345
+        assert exif[36867] == "2026:07:10 17:17:32"
 
 
 def test_render_writes_utf8(tmp_path):

@@ -46,6 +46,23 @@ def test_video_payload_without_cv2_or_videos_degrades(tmp_path):
     assert videos == {} and photo_time == {}
 
 
+def test_video_creation_time_is_applied_to_extracted_frame(tmp_path,
+                                                            monkeypatch):
+    video = tmp_path / "walk.mov"
+    video.write_bytes(b"video")
+    inv = Inventory(rooms=[Room(name="Kitchen", photos=[
+        Photo(id="P001", path="walk_f000060.jpg", room="Kitchen",
+              source_video="walk.mov")])])
+    monkeypatch.setattr("homeinventory.videometa.capture_videos",
+                        lambda _capture: {"walk.mov": video})
+    monkeypatch.setattr("homeinventory.videometa.probe", lambda _path: {
+        "fps": 30.0, "duration": 10.0,
+        "created_at": "2026-07-10T16:00:00Z"})
+    _, times = video_payload(inv, tmp_path, tmp_path / "work", "", {})
+    assert times["P001"]["t"] == 2.0
+    assert times["P001"]["captured_at"] == "2026-07-10T16:00:02+00:00"
+
+
 @pytest.fixture()
 def video_server(tmp_path):
     cv2 = pytest.importorskip("cv2")

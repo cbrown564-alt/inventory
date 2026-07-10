@@ -46,6 +46,7 @@ def build_manifest(capture_dir: Path, rooms: dict[str, list[Photo]],
     out_dir = out_path.parent.resolve()
     entries = []
     videos: dict[str, dict] = {}
+    video_fps: dict[str, float] = {}
     for room, photos in rooms.items():
         for p in photos:
             full = (capture_dir / p.path) if not Path(p.path).is_absolute() else Path(p.path)
@@ -58,7 +59,7 @@ def build_manifest(capture_dir: Path, rooms: dict[str, list[Photo]],
                     rec_path = os.path.relpath(p.path, out_dir)
                 except ValueError:  # different drive on Windows
                     pass
-            entries.append({
+            entry = {
                 "photo_id": p.id,
                 "room": room,
                 "file": rec_path,
@@ -66,15 +67,32 @@ def build_manifest(capture_dir: Path, rooms: dict[str, list[Photo]],
                 "captured_at": p.captured_at,
                 "source_video": p.source_video,
                 "bytes": full.stat().st_size,
-            })
+            }
             if p.source_video and p.source_video not in videos:
                 vid = _find_video(capture_dir, room, p.source_video)
                 if vid is not None:
+                    try:
+                        from .videometa import probe
+                        meta = probe(vid) or {}
+                        if meta.get("fps"):
+                            video_fps[p.source_video] = float(meta["fps"])
+                    except Exception:
+                        pass
                     videos[p.source_video] = {
                         "file": os.path.relpath(vid, capture_dir),
                         "sha256": sha256_file(vid),
                         "bytes": vid.stat().st_size,
                     }
+            if p.source_video:
+                try:
+                    from .videometa import frame_index
+                    index = frame_index(p.path)
+                    fps = video_fps.get(p.source_video)
+                    if index is not None and fps:
+                        entry["source_time_seconds"] = round(index / fps, 3)
+                except Exception:
+                    pass
+            entries.append(entry)
     manifest = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "algorithm": "sha256",
