@@ -736,6 +736,78 @@ class OfflineBackend:
         return summary, items
 
 
+def _hard_item(item: Item, threshold: float = 0.75) -> bool:
+    """Route uncertain grades and material defect claims to the expert tier."""
+    return (item.confidence is None or item.confidence < threshold
+            or bool(item.defects) or item.condition is None
+            or item.cleanliness is None)
+
+
+class TieredBackend:
+    """Gemini draft for every item; Opus verifies only the hard tail."""
+    name = "tiered"
+
+    def __init__(self, draft: DescribeBackend, expert: DescribeBackend | None = None,
+                 expert_model: str = "claude-opus-4-8",
+                 system_prompt: str = SYSTEM_PROMPT,
+                 item_schema: dict | None = None):
+        self.draft = draft
+        self.expert = expert
+        self.expert_model = expert_model
+        self.system_prompt = system_prompt
+        self.item_schema = item_schema or ITEM_SCHEMA
+        self.model = f"{getattr(draft, 'model', 'draft')} -> {expert_model}"
+
+    def _expert(self) -> DescribeBackend | None:
+        if self.expert is not None:
+            return self.expert
+        try:
+            self.expert = ClaudeBackend(model=self.expert_model,
+                                        system_prompt=self.system_prompt,
+                                        item_schema=self.item_schema)
+        except Exception as exc:
+            log.warning("expert tier unavailable; keeping draft hard items: %s", exc)
+            return None
+        return self.expert
+
+    def describe_room(self, room_name, photos, photo_paths, detections):
+        summary, draft_items = self.draft.describe_room(
+            room_name, photos, photo_paths, detections)
+        hard = [item for item in draft_items if _hard_item(item)]
+        if not hard:
+            self.last_room_timing = {"draft_only": True, "hard_items": 0}
+            return summary, draft_items
+        expert = self._expert()
+        if expert is None:
+            self.last_room_timing = {"draft_only": True,
+                                     "hard_items": len(hard),
+                                     "expert_unavailable": True}
+            return summary, draft_items
+
+        names = ", ".join(json.dumps(item.name) for item in hard)
+        base_prompt = getattr(expert, "system_prompt", self.system_prompt)
+        instruction = (
+            "Review only the draft items named below. Preserve each item name. "
+            "Correct its description, grades, visible defects, photo IDs and "
+            "confidence. Return no other items.\nDraft item names: " + names)
+        setattr(expert, "system_prompt", base_prompt + "\n\n" + instruction)
+        try:
+            _expert_summary, corrected = expert.describe_room(
+                room_name, photos, photo_paths, detections)
+        finally:
+            setattr(expert, "system_prompt", base_prompt)
+
+        corrected_by_name = {i.name.strip().casefold(): i for i in corrected}
+        hard_names = {i.name.strip().casefold() for i in hard}
+        result = [corrected_by_name.get(i.name.strip().casefold(), i)
+                  if i.name.strip().casefold() in hard_names else i
+                  for i in draft_items]
+        self.last_room_timing = {"draft_only": False, "hard_items": len(hard),
+                                 "corrected_items": len(corrected_by_name.keys()
+                                                        & hard_names)}
+        return summary, result
+
+
 def get_backend(name: str, model: Optional[str] = None,
                 base_url: Optional[str] = None,
                 use_case: Optional[str] = None) -> DescribeBackend:
@@ -750,9 +822,13 @@ def get_backend(name: str, model: Optional[str] = None,
     if name == "openai":
         return OpenAICompatBackend(model=model, base_url=base_url,
                                    system_prompt=prompt, item_schema=schema)
+    if name == "tiered":
+        draft = OpenAICompatBackend(model=model, base_url=base_url,
+                                    system_prompt=prompt, item_schema=schema)
+        return TieredBackend(draft, system_prompt=prompt, item_schema=schema)
     if name == "local":
         return LocalBackend(model=model, system_prompt=prompt, item_schema=schema)
     if name == "offline":
         return OfflineBackend()
     raise ValueError(f"unknown describe backend: {name!r} "
-                     "(expected claude|openai|local|offline)")
+                     "(expected tiered|claude|openai|local|offline)")

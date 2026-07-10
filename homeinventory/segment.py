@@ -317,14 +317,58 @@ def segment_frames(frames: list[SampledFrame], duration: float,
 def segment_video(video: Path, every_s: float = 5.0,
                   model: str = DEFAULT_MODEL,
                   width: int = 448,
-                  audio_cues: Optional[dict] = None) -> tuple[list[Segment], dict]:
+                  audio_cues: Optional[dict] = None,
+                  refine_seams: bool = True) -> tuple[list[Segment], dict]:
     duration = video_duration_s(video)
     frames = sample_strip(video, every_s=every_s, width=width)
     log.info("sampled %d frames over %.0fs", len(frames), duration)
     segments, meta = segment_frames(frames, duration, every_s,
                                     model=model, width=width,
                                     audio_cues=audio_cues)
+    if refine_seams and len(segments) > 1:
+        segments, refine_meta = refine_segment_seams(
+            frames, segments, duration, every_s, model=model)
+        meta["seam_refine"] = refine_meta
     return segments, {**meta, "video": video.name}
+
+
+def refine_segment_seams(frames: list[SampledFrame], segments: list[Segment],
+                         duration: float, every_s: float, *, model: str,
+                         radius_s: float = 30.0) -> tuple[list[Segment], dict]:
+    """E2 cascade: re-examine a small visual interval around each cheap seam."""
+    seams = [segments[0].start_s]
+    refined = 0
+    calls = 0
+    for left, right in zip(segments, segments[1:]):
+        original = left.end_s
+        start = max(0.0, original - radius_s)
+        end = min(duration, original + radius_s)
+        local = [SampledFrame(round(f.t_s - start, 2), f.jpeg)
+                 for f in frames if start <= f.t_s <= end]
+        proposed = original
+        if len(local) >= 2:
+            try:
+                local_segments, _ = segment_frames(
+                    local, end - start, every_s, model=model)
+                calls += 1
+                left_name, right_name = left.room.casefold(), right.room.casefold()
+                for a, b in zip(local_segments, local_segments[1:]):
+                    if a.room.casefold() == left_name and b.room.casefold() == right_name:
+                        proposed = start + a.end_s
+                        break
+            except Exception as exc:
+                log.warning("seam refine failed at %.1fs: %s", original, exc)
+        lo = seams[-1]
+        proposed = min(max(proposed, lo), duration)
+        if abs(proposed - original) > 0.01:
+            refined += 1
+        seams.append(proposed)
+    seams.append(duration)
+    result = [Segment(seg.room, seams[i], seams[i + 1])
+              for i, seg in enumerate(segments) if seams[i + 1] > seams[i]]
+    return _normalise(result, duration), {
+        "enabled": True, "radius_s": radius_s, "api_calls": calls,
+        "seams_changed": refined}
 
 
 # ---------------------------------------------------------------------------

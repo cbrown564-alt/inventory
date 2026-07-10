@@ -7,7 +7,8 @@ import os
 
 from homeinventory.audio_cues import load_audio_cues, segmentation_hint
 from homeinventory.dotenv import load_dotenv
-from homeinventory.segment import Segment, _normalise
+from homeinventory.segment import (SampledFrame, Segment, _normalise,
+                                   refine_segment_seams)
 
 
 def test_normalise_forces_contiguity_and_merges_same_room():
@@ -88,6 +89,21 @@ def test_audio_cue_artifact_rejects_non_finite_values(tmp_path):
         assert "finite" in str(exc)
     else:
         raise AssertionError("non-finite fps accepted")
+
+
+def test_seam_refine_rechecks_bounded_interval_and_moves_boundary(monkeypatch):
+    frames = [SampledFrame(float(t), b"jpg") for t in range(0, 101, 5)]
+    segments = [Segment("Hallway", 0, 50), Segment("Kitchen", 50, 100)]
+
+    def fake_segment(local, duration, every_s, model):
+        assert duration == 60
+        return [Segment("Hallway", 0, 25), Segment("Kitchen", 25, 60)], {}
+
+    monkeypatch.setattr("homeinventory.segment.segment_frames", fake_segment)
+    result, meta = refine_segment_seams(frames, segments, 100, 5,
+                                        model="model-a")
+    assert result[0].end_s == result[1].start_s == 45
+    assert meta["api_calls"] == 1 and meta["seams_changed"] == 1
 
 
 def test_load_dotenv_sets_without_overriding(tmp_path, monkeypatch):

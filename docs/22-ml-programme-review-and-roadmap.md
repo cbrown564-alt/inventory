@@ -207,6 +207,12 @@ accurate** it moves.
 
 ### 5.1 Near-term wins — ship what already works (1–2 weeks)
 
+**Production status (11 Jul 2026): shipped.** The build path now performs the
+E8 bounded semantic cover rerank with evidence/model-bound caching, E2 bounded
+seam refinement, and E10 Grounding DINO proposals followed by a cheap
+cross-frame/high-confidence verification stage. GDINO is the default detector;
+the optional ML dependency remains fail-soft when weights are unavailable.
+
 - **Ship E8 (VLM cover rerank) behind the build-confirm.** 9/9 on gold at
   ~$0.20/build, cacheable by frame sha256. Cover is a per-room, ~9-call,
   *bounded* task — the VLM here is cheap **and** accurate. Stop trying to beat
@@ -223,6 +229,13 @@ accurate** it moves.
   the AGPL decision in docs/19 §9 Q1.
 
 ### 5.2 Attack the real bottleneck — the describe step (3–6 weeks)
+
+**Production status (11 Jul 2026): tiered routing shipped.** Gemini drafts the
+room; only low-confidence items, visible defect claims and missing/ambiguous
+grades are sent to Opus. Expert output is name-bound to the routed draft set so
+it cannot expand the report with unrelated items. If the optional expert stack
+or credentials are unavailable, the draft survives and the human review queue
+remains the final fallback.
 
 This is where cost and the 20% error live, and it's the gap in the current
 programme.

@@ -14,10 +14,34 @@ Do not spend more full-fixture time on dense models at or above 12B on this
 six-photo batch in eight minutes. Qwen 27B NVFP4 does not provide its native
 FP4 speed path on this Ada GPU and the existing Q4 model spills heavily.
 
-The best next quality experiment is a **compact, non-thinking structured-output
-path for Qwen 3.5 9B**, not a larger Qwen checkpoint. The best next model-swap
-experiment is **Qwen3-VL 8B Instruct** (non-thinking where possible), followed
-by Ministral 3 8B. Both need a one-batch contract test before any larger run.
+The compact, non-thinking Qwen 3.5 9B path is stopped: disabling thinking
+dropped the response grammar and returned Markdown rather than evidence-safe
+JSON. Do not resume it without a separately designed and validated repair
+stage. The next model-swap experiment is **Qwen3-VL 8B Instruct**, followed by
+Ministral 3 8B. Both need a one-batch contract test before any larger run.
+
+### Planning boundary
+
+Local inference is a bounded cost-reduction track, not the current v1 gate.
+Capture-strategy validation, trustworthy evidence construction and the
+native-resolution accuracy bar in docs/00 take precedence. Do not spend a full
+fixture on another model until the current step passes its stop condition.
+
+The next two actions are:
+
+1. Run the Gemma 4 26B compact schema on a two-room sample and reject it if
+   recall regresses against the canonical local path.
+2. Contract-test Qwen3-VL 8B Instruct on one batch; expand only if it remains
+   acceptably resident and produces schema-valid evidence-linked output.
+
+Keep `gemma4:26b` as the quality-oriented local draft until a controlled fixture
+comparison supports replacement. These experiments must not delay docs/26's
+Property A/B capture decision or docs/00 Milestones 1–4.
+
+The repository-controlled repetition-loop guard is shipped: local decoding
+uses `repeat_penalty=1.1`, rejects truncated/malformed JSON, and retries once at
+temperature 0.3 before quarantining only the failed batch. The remaining
+two-room Gemma check is model/data evidence, not missing runtime plumbing.
 
 ## Hardware and software observed
 

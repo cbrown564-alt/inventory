@@ -26,8 +26,8 @@ source .venv/bin/activate         # .venv\Scripts\activate on Windows
 
 # Credentials once — the journey never mentions backends or keys again
 cat > .env <<'EOF'
-GEMINI_API_KEY=...          # default describe + walkthrough segmentation
-# ANTHROPIC_API_KEY=...    # optional — opus backup for hard items (Phase 4)
+GEMINI_API_KEY=...          # default draft + walkthrough segmentation
+# ANTHROPIC_API_KEY=...    # optional — opus verification for hard items
 EOF
 
 mkdir -p capture report
@@ -263,8 +263,10 @@ the `local` backend has two viable £0 paths: `qwen3.5:9b` (lighter), or the
 including claude), ~23 tok/s on an 8 GB GPU + 32 GB RAM box, a genuine
 **draft for review** rather than an unreviewed report. Dense models ≤4B fit
 the card but are too weak; MoE sidesteps that by riding system RAM for the
-weights. **`gemini-3.5-flash` is the default describe backend** (July 2026,
-docs/00); **`claude-opus-4-8` is the premium backup** for complex items.
+weights. **Tiered describe is the default** (July 2026):
+`gemini-3.5-flash` drafts the room and Opus verifies only the hard tail
+(docs/00). **`claude-opus-4-8` remains available as the premium full-room
+backend** for complex cases.
 See [`docs/04`](docs/04-backend-comparison.md) for benchmark scores.
 **M4 (check-in vs check-out comparison) is shipped** — `homeinventory
 compare` aligns the two reports lexically, classifies deteriorations with a

@@ -97,6 +97,28 @@ def test_load_segments_repairs_invalid_cached_model_output(tmp_path):
     assert all(s.start_s < s.end_s for s in segments)
 
 
+def test_implicit_pre_refine_model_cache_is_recomputed(tmp_path, monkeypatch):
+    from homeinventory.segment import Segment
+
+    video = tmp_path / "walk.avi"
+    work = tmp_path / "work"
+    cache = work / "segments" / "walk.json"
+    cache.parent.mkdir(parents=True)
+    cache.write_text(json.dumps({"model": "old-model", "segments": [
+        {"room": "General", "start_s": 0, "end_s": 10}]}), encoding="utf-8")
+    calls = []
+
+    def fake_segment(*args, **kwargs):
+        calls.append(kwargs)
+        return [Segment("Kitchen", 0, 10)], {"seam_refine": {"enabled": True}}
+
+    monkeypatch.setattr("homeinventory.segment.segment_video", fake_segment)
+    result = _load_segments(video, work, segment_model="new-model", every_s=5,
+                            segments_json=None, refine_seams=True)
+    assert [s.room for s in result] == ["Kitchen"]
+    assert calls
+
+
 def test_ingest_applies_room_aliases(tmp_path):
     """Review renames/merges (work/room-aliases.json) survive re-ingest."""
     cap = tmp_path / "capture"

@@ -33,9 +33,9 @@ real device and killed. The web app is the product; the CLI is plumbing.
 - **Segmentation model: `gemini-3.5-flash` preferred** (owner's call —
   pennies, zero invented rooms; errors are review-repairable);
   `claude-sonnet-5` is the quality alternative. See docs/11.
-- **Describe backend: `gemini-3.5-flash` default** via `--backend openai`;
-  `claude-opus-4-8` is the expensive backup for complex items (docs/00).
-  Tiered routing (gemini draft → opus on hard tail) is Phase 4.
+- **Describe backend: tiered by default** — `gemini-3.5-flash` drafts every
+  item; `claude-opus-4-8` verifies the low-confidence, defect-bearing or
+  ambiguous-grade tail (docs/00).
 - **Credentials configured once** in a gitignored `.env`
   (`homeinventory/dotenv.py`); the journey never mentions keys, backends
   or models. Spend confirms become plain language with a rough cost
@@ -99,7 +99,7 @@ Automated regression: `tests/test_review.py` (Phase 1 journey section; offline s
 ## Closed since this doc was written
 
 - **gemini-3.5-flash describe eval** — done; recorded in docs/04 (July 2026).
-  Gemini is now the **default describe backend**; opus is the expensive backup
+  Gemini is the **default draft model**; opus is the hard-tail verifier
   for complex items (docs/00).
 
 ## Deferred (unchanged decisions)

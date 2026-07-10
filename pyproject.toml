@@ -19,7 +19,8 @@ dependencies = [
 # swap in CUDA (or CPU) AFTER installing, see README quick start:
 #   uv pip install --reinstall-package torch --reinstall-package torchvision \
 #       torch torchvision --index-url https://download.pytorch.org/whl/cu128
-detect = ["ultralytics>=8.3", "opencv-python-headless>=4.9"]
+detect = ["ultralytics>=8.3", "opencv-python-headless>=4.9",
+          "transformers>=4.44"]
 # Claude vision describe backend
 claude = ["anthropic>=0.40"]
 # PDF output (HTML report works without it)
