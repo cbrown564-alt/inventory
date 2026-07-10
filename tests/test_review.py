@@ -1122,6 +1122,22 @@ def test_review_mobile_journey_resumes_and_recovers_local_changes(server):
     assert "All items reviewed — ready to finish" in html
 
 
+def test_field_workspace_queues_exceptions_before_routine_claims(server):
+    """The default phone queue asks only for claims that need a judgement.
+
+    Routine, well-evidenced claims remain available from the specialist desk;
+    the phone flow must surface uncertainty, missing evidence and the
+    consequential safety/meter categories first (docs/28).
+    """
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "function needsAttention(item)" in html
+    assert 'item.category === "safety"' in html
+    assert 'item.category === "meter"' in html
+    assert "No more decisions need your judgement" in html
+    assert "Routine claims remain available in the full evidence desk" in html
+
+
 def test_tenant_walkthrough_precedes_countersign(server):
     """Tenant review guides room-by-room evidence inspection before signing."""
     base, state, _out, _cap = server

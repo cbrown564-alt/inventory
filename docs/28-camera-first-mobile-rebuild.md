@@ -147,6 +147,14 @@ duplicate. This is resumable transfer, not background web processing: Safari
 may still suspend the page, and the user may need to choose the video again
 after leaving it.
 
+The phone review queue is now genuinely exceptions-first. It brings forward
+only an unreviewed item with low or unknown draft confidence, missing linked
+evidence or condition data, a drafted defect, or a safety/meter category.
+Routine well-evidenced claims remain available in the specialist evidence desk
+instead of turning phone review into a clerking exercise. This is a deliberate
+queueing rule, not an accuracy claim or an automatic acceptance: the original
+evidence and the full draft remain inspectable before issue.
+
 ## Near-term proof sequence
 
 1. Test V0/V1/P1/P2 from docs/26 on at least two properties and include the
