@@ -19,7 +19,10 @@ condition descriptions. Candidates downloaded to `benchmarks/samples/`:
 | [The Inventory Manager sample](https://theinventorymanager.co.uk/wp-content/uploads/2019/12/Sample-TIM-report.pdf) | Held in reserve (smaller, lower photo density) |
 | [IMS Check-Out sample](https://inventory-managementsolutions.co.uk/wp-content/uploads/2013/07/Check-Out-Report-IMS-sample.pdf) | Check-out format — useful later for Milestone 4 (compare) |
 
-The InventoryFlex sample is a genuinely professional artefact: per-item
+The InventoryFlex sample is a genuinely professional artefact, but only as a
+report-format and low-resolution regression reference. The public download does
+not provide its original photographs, so it is not a native-resolution gold
+standard and cannot support the Phase 4 quality claim in docs/30. Its per-item
 Name/Description/Condition tables ("Brass finished Yale lock", "Miele oven model
 H2860B"), defect localisation ("Noticeable angle chip low level leading edge to
 exterior door"), and per-room photo grids.
