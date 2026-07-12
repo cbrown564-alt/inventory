@@ -147,19 +147,37 @@ class ProjectState:
     @property
     def share_path(self) -> Path:
         """Persisted tenant token so a saved share link survives restarts
-        (docs/24 F4). Only written when sharing is explicitly enabled."""
+        (docs/24 F4). Written by ``enable_share()`` or ``--share``."""
         return self.out_dir / "share.json"
 
     def _resolve_tenant_token(self, share: bool) -> Optional[str]:
-        """Mint a fresh token, or reuse the persisted one so an existing link
-        keeps working after a server restart."""
-        if not share:
-            return None
+        """Load a persisted token on startup; mint only when sharing is
+        pre-enabled with ``--share`` or later via ``enable_share()``."""
         existing = self._load_share_token()
-        token = existing or secrets.token_urlsafe(16)
-        if not existing:
-            self._save_share_token(token)
-        return token
+        if share:
+            token = existing or secrets.token_urlsafe(16)
+            if not existing:
+                self._save_share_token(token)
+            return token
+        return existing
+
+    def enable_share(self) -> str:
+        """Mint or reuse the tenant share token and persist to share.json."""
+        with self.lock:
+            existing = self.tenant_token or self._load_share_token()
+            token = existing or secrets.token_urlsafe(16)
+            if not existing:
+                self._save_share_token(token)
+            self.tenant_token = token
+            return token
+
+    def tenant_share_url(self, route_prefix: str = "") -> str:
+        """Relative tenant walk-through URL for the given session prefix."""
+        if not self.tenant_token:
+            return ""
+        if route_prefix:
+            return f"{route_prefix}/t/{self.tenant_token}"
+        return f"/t/{self.tenant_token}"
 
     def _load_share_token(self) -> Optional[str]:
         if not self.share_path.is_file():
@@ -1549,6 +1567,24 @@ class ReviewHandler(BaseHandler):
                     self._err(409, "a build, re-describe or compare is already running")
                     return
                 self._json({"ok": True, "status": "running"})
+                return
+
+            if path == "/api/share/enable":
+                token = proj.enable_share()
+                if session_key is None:
+                    if proj.is_multi:
+                        self._err(404, "not found")
+                        return
+                    st = proj.session()
+                else:
+                    try:
+                        st = self._session_for(session_key)
+                    except KeyError:
+                        self._err(404, "not found")
+                        return
+                share_url = proj.tenant_share_url(st.route_prefix)
+                self._json({"ok": True, "share_url": share_url,
+                            "tenant_token": token})
                 return
 
             if session_key is None:

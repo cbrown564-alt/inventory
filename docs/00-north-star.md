@@ -212,7 +212,7 @@ pool that may contain the wrong room entirely.
       footage timecode retained via ``videometa.photo_time``), written report
       with embedded photos, video referenced by exact timecodes, both-party
       signatures, tamper-evident trail. Frame-metadata gap closed; tenant
-      countersign-as-default remains a Pillar 4 item.
+      countersign ships as a default Finish step (Pillar 4).
 
 ### Pillar 3 — The report is accurate and complete
 
@@ -241,11 +241,12 @@ back to the £165 option.
       is missing (9 Jul craft N)
 - [x] F2–F6 frictions addressed or explicitly ticketed with a reason
       (F2/F5 fixed; F3/F4/F6 ticketed in docs/24)
-- [ ] **Tenant countersign is a default journey step, not a flag** — the
-      review flow ends with "send to tenant to countersign"; `--share`
-      becomes the plumbing under it. Independence is the credibility test
-      a DIY inventory must pass, and both-party signatures are the
-      max-weight condition (market-research-2026-07).
+- [x] **Tenant countersign is a default journey step, not a flag** — the
+      review flow ends with "send to tenant to countersign"; Finish mints
+      the link via **Create tenant link**; `--share` pre-enables it and
+      phone pairing. Independence is the credibility test a DIY inventory
+      must pass, and both-party signatures are the max-weight condition
+      (market-research-2026-07).
 
 ### Distance summary (honest)
 
@@ -254,7 +255,7 @@ back to the £165 option.
 | **1 — Trust at first glance** | **Mostly met.** Design system + review craft landed; first-screen owner sign-off remains. |
 | **2 — Trustworthy by construction** | **In progress.** Capture scaffolding (`--photo-mode`) ready; experiment unrun. Hero/pipeline semantic cover still open. Evidential-spec frame-metadata closed (docs/29). |
 | **3 — Accurate & complete** | **Partially met.** Defect recall below bar; quality wins (E8/E2/E10) proven but unwired. |
-| **4 — Low-friction journey** | **Mostly met.** Browser-print PDF fallback ships; countersign-as-default Finish step remains. |
+| **4 — Low-friction journey** | **Met.** Browser-print PDF fallback ships; Finish mints tenant countersign link by default. |
 
 **v1 ships when every box is checked.** The old DoD was 4/6 done because
 it measured the journey mechanically; the real bar — Pillars 1 and 2 —

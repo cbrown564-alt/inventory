@@ -35,7 +35,7 @@ homeinventory review capture/ -o report/
 # → open http://127.0.0.1:8484/
 ```
 
-Use `--share` if you will test the tenant countersign link on a phone.
+Use `--share` to pre-enable the tenant link and phone pairing on startup.
 
 ---
 
@@ -61,7 +61,7 @@ in the log table below.
 | 13 | Report round-trip | Report → *Continue in Review* → Overview (same tab) | **Pass** (fixed 9 Jul) | F2: docket forces `#overview` |
 | 14 | PDF | PDF exists at build completion **or** exports from Finish without hunting | **Pass** (fallback) | F1: browser Print → Save as PDF via final issue when WeasyPrint missing |
 | 15 | Mobile (390px) | Overview 2-col grid; Finish reachable; no broken layout | **Pass** | |
-| 16 | Tenant link (optional) | `--share` link opens; tenant can comment; countersign works | **Pass** | Token ephemeral on restart — F4 |
+| 16 | Tenant link | Finish **Create tenant link** mints URL; tenant can comment; countersign works | **Pass** | Persisted in `share.json` (F4 fixed) |
 
 *Full friction detail: [`24-friction-log-2026-07-08.md`](24-friction-log-2026-07-08.md)*
 
@@ -76,7 +76,7 @@ Use one row per issue — even small ones. Tag severity so Phase 2 can prioritis
 | F1 | 14 | major | WeasyPrint `libgobject-2.0-0` missing on Windows; no PDF at build or Finish | One-click PDF | Windows deps or browser-print fallback |
 | F2 | 13 | minor | *Continue in Review* → `#items` not `#overview` | Overview round-trip | Fix deep-link in report template/JS |
 | F3 | 4 | minor | ~16 min build on 13 min video | Acceptable latency | ETA in progress UI (Phase 2) |
-| F4 | 16 | minor | Tenant token invalid after server restart | Stable share link | Persist token or regen warning |
+| F4 | 16 | minor | Tenant token invalid after server restart | Stable share link | **Fixed:** token persisted in `share.json`; Finish mints link |
 | F5 | 11 | nit | Duplicate landlord sign entries | Single sign | Debounce sign action |
 | F6 | 10 | nit | Sign allowed with 180/186 unreviewed | Optional hard gate | Product decision |
 

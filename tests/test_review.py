@@ -118,6 +118,16 @@ def test_report_renders_review_states(tmp_path):
 # levels 2 & 3: the review server
 # --------------------------------------------------------------------------
 
+def _start_built_server(cap, out, *, share=False):
+    """Built inventory + review server; returns (base, httpd, out, cap)."""
+    httpd = serve(cap, out, port=0, share=share, backend="offline",
+                  open_browser=False)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    base = f"http://127.0.0.1:{httpd.server_address[1]}"
+    return base, httpd, out, cap
+
+
 @pytest.fixture()
 def server(tmp_path):
     cap = tmp_path / "capture"
@@ -136,11 +146,7 @@ def server(tmp_path):
     (out / "inventory.json").write_text(inv.to_json(), encoding="utf-8")
     from homeinventory.report import render
     render(inv, cap, out, pdf=False)
-    httpd = serve(cap, out, port=0, share=True, backend="offline",
-                  open_browser=False)
-    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
-    thread.start()
-    base = f"http://127.0.0.1:{httpd.server_address[1]}"
+    base, httpd, out, cap = _start_built_server(cap, out, share=True)
     yield base, httpd.review_state, out, cap
     httpd.shutdown()
     httpd.server_close()
@@ -391,6 +397,78 @@ def test_tenant_token_persists_across_restart(server):
     finally:
         # shutdown() deadlocks without a running serve_forever loop, so just
         # release the bound socket.
+        httpd.server_close()
+
+
+def test_enable_share_mints_tenant_link(tmp_path):
+    """Finish can mint a tenant link without --share at startup."""
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    out = tmp_path / "report"
+    assert main(["build", str(cap), "-o", str(out),
+                 "--backend", "offline", "--no-detect", "--no-pdf"]) == 0
+    base, httpd, out, _cap = _start_built_server(cap, out, share=False)
+    try:
+        assert httpd.project_state.tenant_token is None
+        assert not (out / "share.json").exists()
+
+        status, body = _req("POST", base + "/api/share/enable", {})
+        assert status == 200
+        assert body["ok"] is True
+        assert body["share_url"].startswith("/t/")
+        assert body["tenant_token"]
+        assert (out / "share.json").is_file()
+        assert httpd.project_state.tenant_token == body["tenant_token"]
+
+        status2, body2 = _req("POST", base + "/api/share/enable", {})
+        assert status2 == 200
+        assert body2["share_url"] == body["share_url"]
+
+        status, _ = _get_text(base + body["share_url"])
+        assert status == 200
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_enable_share_persists_without_share_flag(tmp_path):
+    """A Finish-minted link survives restart without --share."""
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    out = tmp_path / "report"
+    assert main(["build", str(cap), "-o", str(out),
+                 "--backend", "offline", "--no-detect", "--no-pdf"]) == 0
+    base, httpd, out, cap = _start_built_server(cap, out, share=False)
+    try:
+        _, body = _req("POST", base + "/api/share/enable", {})
+        token = body["tenant_token"]
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+    httpd = serve(cap, out, port=0, share=False, backend="offline",
+                  open_browser=False)
+    try:
+        assert httpd.project_state.tenant_token == token
+    finally:
+        httpd.server_close()
+
+
+def test_finish_offers_create_tenant_link_without_share(tmp_path):
+    """Finish checklist offers Create tenant link instead of --share restart."""
+    cap = tmp_path / "capture"
+    _img(cap / "Kitchen" / "k1.jpg")
+    out = tmp_path / "report"
+    assert main(["build", str(cap), "-o", str(out),
+                 "--backend", "offline", "--no-detect", "--no-pdf"]) == 0
+    base, httpd, _out, _cap = _start_built_server(cap, out, share=False)
+    try:
+        _, html = _get_text(base + "/review")
+        assert "Create tenant link" in html
+        assert "enableShareLink" in html
+        assert "No tenant link is available in this local session" not in html
+    finally:
+        httpd.shutdown()
         httpd.server_close()
 
 

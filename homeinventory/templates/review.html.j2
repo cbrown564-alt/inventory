@@ -2258,6 +2258,20 @@
       }).catch(function () { window.prompt("Copy link:", SHARE_URL); });
     } else window.prompt("Copy link:", SHARE_URL);
   }
+  function enableShareLink(btn) {
+    if (btn && btn.dataset.inFlight === "1") return;
+    if (btn) { btn.disabled = true; btn.dataset.inFlight = "1"; }
+    api("POST", "/api/share/enable", {})
+      .then(function (res) {
+        SHARE_URL = res.share_url;
+        toast("Tenant link ready — copy and send it");
+        renderFinish();
+      })
+      .catch(function (e) {
+        if (btn) { btn.disabled = false; delete btn.dataset.inFlight; }
+        toast(e.message || "Could not create tenant link");
+      });
+  }
   function submitSign(nameInput, roleInput, signBtn) {
     if (signBtn.dataset.inFlight === "1") return;   /* double-click guard (F5) */
     var name = (nameInput.value || "").trim();
@@ -2513,9 +2527,17 @@
           body.appendChild(actions);
         }, "ok"));
     } else {
-      list.appendChild(finishStep("!", "Tenant review and countersign",
-        "No tenant link is available in this local session. Enable sharing before issuing the record so the tenant can comment and countersign.",
-        null, "warn"));
+      list.appendChild(finishStep("\u2026", "Tenant review and countersign",
+        "Send the tenant this link so they can walk every room, comment on a specific item, and countersign the same record.",
+        function (body) {
+          var actions = el("div", { "class": "finish-actions" });
+          actions.appendChild(el("button", {
+            type: "button", "class": "btn primary",
+            text: "Create tenant link",
+            onclick: function () { enableShareLink(this); }
+          }));
+          body.appendChild(actions);
+        }, "warn"));
     }
     host.appendChild(list);
     if (signed) {
@@ -2541,6 +2563,10 @@
         hact.appendChild(el("button", { type: "button", "class": "btn",
           text: "Copy " + (shareSpec.link_noun || "tenant") + " link",
           onclick: copyShareLink }));
+      } else {
+        hact.appendChild(el("button", { type: "button", "class": "btn",
+          text: "Send to tenant",
+          onclick: function () { enableShareLink(this); } }));
       }
       hact.appendChild(el("button", {
         type: "button", "class": "btn ghost",
