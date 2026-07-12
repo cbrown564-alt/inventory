@@ -65,6 +65,7 @@
   .item-thumb { display: block; width: 100%; max-width: 96px; height: 44px;
                 object-fit: cover; border: 1px solid var(--rule);
                 border-radius: 2px; margin-bottom: 3px; }
+  .item-rail-label { display: none; }
   /* grades wear small-caps; defect text stays sentence case */
   .grade-word { white-space: nowrap; font-variant: small-caps; }
   .grade-word.poor { color: var(--reject); font-weight: 700; }
@@ -228,6 +229,116 @@
     main { padding: 12px 10px 32px; }
     .cover { padding: 56px 10px 28px; }
     .cover h1 { font-size: 22pt; }
+  }
+
+  /* ---------- evidence-led screen catalogue ---------- */
+  @media screen {
+    body { background: #ece8df; color: #252831; }
+    main { max-width: 1180px; padding: 42px 32px 84px; }
+    section.room { padding-top: 8px; }
+    section.room h2 { display: flex; align-items: baseline; gap: 14px;
+      font-size: 18pt; letter-spacing: -.02em; border-bottom: 1px solid
+      var(--line-strong); padding-bottom: 9px; margin: 26px 0 8px; }
+    section.room h2::after { content: "FIELD RECORD"; margin-left: auto;
+      color: var(--brass-bright); font: 600 8px/1 var(--ui);
+      letter-spacing: .2em; }
+    section.room .room-meta { color: var(--faint); font-size: 8px;
+      letter-spacing: .14em; margin: 8px 0 18px; }
+    section.room .summary { background: var(--panel); border: 0;
+      border-left: 3px solid var(--brass); border-radius: 0;
+      box-shadow: 0 7px 24px -22px rgba(43,36,20,.5);
+      font-style: normal; font-size: 11pt; line-height: 1.6;
+      margin: 16px 0 24px; padding: 14px 18px 15px; }
+    section.room tr.category-row { margin-top: 34px; }
+    section.room tr.category-row td { color: var(--brass-bright);
+      border-bottom-color: var(--line-strong); letter-spacing: .18em;
+      padding-bottom: 7px; }
+    section.room tr.item-row { grid-template-columns: 156px 70px minmax(0,1fr)
+      minmax(148px,182px); grid-template-areas:
+      "visual ref name cond" "visual ref desc clean"
+      "visual ref def def" "visual ref photo photo";
+      column-gap: 22px; row-gap: 7px; padding: 20px 10px 22px 4px;
+      border-bottom-color: #ddd7ca; transition: background .2s ease,
+      box-shadow .2s ease; }
+    section.room tr.item-row:hover { background: rgba(255,253,248,.7);
+      box-shadow: inset 3px 0 0 var(--brass); }
+    section.room .ref-cell { gap: 7px; padding-top: 3px; }
+    section.room .ref-cell::before { content: "ENTRY"; color: var(--faint);
+      font: 600 7px/1 var(--ui); letter-spacing: .18em; }
+    section.room .ref-cell > .ref-mono { color: var(--ink); font-size: 10px;
+      font-weight: 600; }
+    section.room .ref-cell .ref-internal { color: var(--brass-bright);
+      font-size: 8px; letter-spacing: .02em; }
+    section.room .name-cell .item-name { color: #1e2229; font-size: 15pt;
+      line-height: 1.12; letter-spacing: -.015em; }
+    section.room .desc-cell { color: #363b43; font-size: 11pt;
+      line-height: 1.55; padding-top: 1px; }
+    section.room .cond-cell { padding-top: 1px; }
+    section.room .cond-cell .grade-word { color: var(--confirm);
+      font: 600 10px/1 var(--ui); letter-spacing: .14em;
+      text-transform: uppercase; }
+    section.room .clean-cell { color: var(--muted); font-size: 9px;
+      line-height: 1.45; padding-top: 1px; }
+    section.room .def-cell { margin-top: 9px; }
+    section.room .def-cell .defects { border-left: 2px solid var(--danger);
+      border-radius: 0; background: rgba(247,233,232,.62); color: var(--danger);
+      font-size: 9.5pt; padding: 8px 12px; }
+    section.room .photo-cell { border-top: 1px solid #e7e1d6; color: var(--faint);
+      margin-top: 10px; padding-top: 9px; }
+    section.room .photo-cell:not(:empty)::before { color: var(--brass-bright);
+      margin-right: 10px; }
+  }
+  @media screen and (min-width: 641px) {
+    section.room tr.item-row:not(:has(.item-thumb))::before { content: "NO CLOSE-UP";
+      grid-area: visual; align-self: stretch; min-height: 82px; display: flex;
+      align-items: center; justify-content: center; border: 1px dashed #d8d0c1;
+      border-radius: 8px; color: #aaa293; background: rgba(246,243,236,.5);
+      font: 600 7px/1 var(--ui); letter-spacing: .16em; }
+    section.room tr.item-row:has(.item-thumb) .name-cell { display: contents; }
+    section.room tr.item-row:has(.item-thumb) .item-thumb { grid-area: visual;
+      align-self: stretch; width: 100%; height: 100%; min-height: 118px;
+      max-width: none; margin: 0; border: 1px solid #cfc7b6; border-radius: 8px;
+      object-fit: cover; box-shadow: 0 5px 16px -12px rgba(43,36,20,.55);
+      transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease,
+      filter .25s ease; }
+    section.room tr.item-row:has(.item-thumb):hover .item-thumb { transform: scale(1.025);
+      box-shadow: 0 10px 24px -14px rgba(43,36,20,.7);
+      filter: saturate(1.05) contrast(1.02); }
+    section.room tr.item-row:has(.item-thumb) .name-cell .item-name { grid-area: name;
+      align-self: end; }
+    section.room tr.item-row:has(.item-thumb) .name-cell .review-flag { grid-area: name;
+      align-self: start; justify-self: end; }
+    section.room tr.item-row:has(.item-thumb-context) .item-rail-label { display: block;
+      grid-area: visual; align-self: end; justify-self: start; z-index: 1;
+      margin: 0 0 8px 8px; padding: 4px 6px;
+      border: 1px solid rgba(255,253,248,.72); background: rgba(30,34,41,.72);
+      color: #fffdf8; font: 600 7px/1 var(--ui); letter-spacing: .12em;
+      text-transform: uppercase; }
+  }
+  @media screen and (max-width: 640px) {
+    main { padding: 28px 14px 52px; }
+    section.room h2 { font-size: 16pt; }
+    section.room h2::after { content: ""; }
+    section.room .summary { font-size: 10.5pt; margin-bottom: 18px; }
+    section.room tr.item-row { grid-template-columns: 56px minmax(0,1fr);
+      grid-template-areas: "ref name" "ref cond" "ref clean" "ref desc"
+      "ref def" "ref photo"; column-gap: 14px; padding: 17px 0 19px; }
+    section.room tr.item-row:has(.item-thumb) { grid-template-columns: 86px 46px minmax(0,1fr);
+      grid-template-areas: "visual ref name" "visual ref cond" "visual ref clean"
+      "visual ref desc" "visual ref def" "visual ref photo"; column-gap: 10px; }
+    section.room tr.item-row:has(.item-thumb) .name-cell { display: contents; }
+    section.room tr.item-row:has(.item-thumb) .item-thumb { grid-area: visual;
+      width: 100%; height: 100%; min-height: 112px; max-width: none; margin: 0;
+      border-radius: 6px; object-fit: cover; }
+    section.room tr.item-row:has(.item-thumb) .name-cell .item-name { grid-area: name; }
+    section.room tr.item-row:has(.item-thumb-context) .item-rail-label { display: block;
+      grid-area: visual; align-self: end; justify-self: start; z-index: 1;
+      margin: 0 0 6px 6px; padding: 3px 5px; border: 1px solid rgba(255,253,248,.72);
+      background: rgba(30,34,41,.72); color: #fffdf8;
+      font: 600 7px/1 var(--ui); letter-spacing: .12em; text-transform: uppercase; }
+    .appendix { overflow-x: hidden; }
+    .appendix table { width: 100%; table-layout: fixed; font-size: 7px; }
+    .appendix td, .appendix th { overflow-wrap: anywhere; }
   }
 
   /* ---------- PDF / clerk layout (WeasyPrint) ---------- */
@@ -596,7 +707,10 @@ rather than silently deleted.</p>
           {% elif item.reviewed %}<span class="review-flag ok">reviewed</span>
           {% elif reviewed_items %}<span class="review-flag pending">unreviewed</span>{% endif -%}
           {% if crop_src.get(item.id) %}<img class="item-thumb"
-            src="{{ crop_src[item.id] }}" alt="" loading="lazy">{% endif -%}
+            src="{{ crop_src[item.id] }}" alt="Evidence crop for {{ item.name }}" loading="lazy">
+          {% elif item.photo_ids and photo_src.get(item.photo_ids[0]) %}<img class="item-thumb item-thumb-context"
+            src="{{ photo_src[item.photo_ids[0]] }}" alt="Context evidence for {{ item.name }} — {{ item.photo_ids[0] }}"
+            title="Context evidence · {{ item.photo_ids[0] }}" loading="lazy"><span class="item-rail-label screen-only">Context</span>{% endif -%}
           <strong class="item-name">{{ item.name }}</strong>{% if item.quantity > 1 %} &times;{{ item.quantity }}{% endif %}
           {% if item.rejected %}<br><span class="meta">AI suggested — reviewer rejected</span>{% endif %}
         </td>

@@ -169,6 +169,16 @@ def test_schedule_renders_item_crops(tmp_path):
     assert "gone.jpg" not in html
 
 
+def test_schedule_renders_context_photo_when_crop_missing(tmp_path):
+    """A cited photo remains visible in the screen rail when no detector
+    close-up was selected for the item."""
+    inv, cap, out = _fixture(tmp_path)
+    html = render(inv, cap, out, pdf=False)["html"].read_text(encoding="utf-8")
+    assert 'class="item-thumb item-thumb-context"' in html
+    assert 'src="photos/P001.jpg"' in html
+    assert 'Context evidence for Worktop' in html
+
+
 def test_appendix_b_prunes_near_duplicate_frames(tmp_path):
     cap = tmp_path / "capture"
     _img(cap / "Kitchen" / "k1.jpg")

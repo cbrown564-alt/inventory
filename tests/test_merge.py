@@ -1,6 +1,6 @@
 from homeinventory.detect import Detection, build_item_queries
 from homeinventory.merge import (accept_crop, attach_detector_crops,
-                                 crop_review_queue, merge_items,
+                                 crop_review_queue, ground_missing_crops, merge_items,
                                  merge_room_with_prior, reject_crop, room_code)
 from homeinventory.schema import Item, Photo, Room
 
@@ -99,6 +99,26 @@ def test_attach_detector_crops_proposes_mid_confidence():
     reject_crop(item)
     assert item.crop_path is None
     assert item.crop_status == "rejected"
+
+
+def test_grounding_does_not_auto_attach_weak_literal_query(tmp_path):
+    """Fresh item-conditioned labels still have to clear the auto threshold."""
+    item = Item(id="HAL-001", name="Staircase", photo_ids=["P001"])
+
+    class StubDetector:
+        available = True
+        mode = "text"
+
+        def detect_queries(self, path, queries, crops_dir=None, stem_suffix=""):
+            return [Detection(label="staircase", confidence=0.51,
+                              box=(0, 0, 80, 80), crop_path="weak.jpg")]
+
+    attached = ground_missing_crops(
+        [item], {"P001": tmp_path / "P001.jpg"}, StubDetector(), tmp_path
+    )
+    assert attached == 1
+    assert item.crop_status == "proposed"
+    assert item.crop_confidence == 0.51
 
 
 def test_attach_blocks_known_false_pairs():

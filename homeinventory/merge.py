@@ -67,6 +67,10 @@ _DETECTION_LABEL_ALIASES = {
 # reject below PROPOSE so visibly wrong crops stay off the report.
 CROP_AUTO_THRESHOLD = 0.72
 CROP_PROPOSE_THRESHOLD = 0.48
+# The largest current room has 148 distinct schedule queries. Keep one room
+# in one detector pass where possible; splitting too aggressively multiplies
+# CPU inference time because the same photo is re-scanned for every batch.
+GROUNDING_QUERY_BATCH = 192
 
 # Extra crop-only blocks when the schedule name is a paraphrase of a blocked
 # gold item (e.g. "Smoke/heat alarm" vs gold "smoke alarm").
@@ -264,41 +268,53 @@ def ground_missing_crops(
     aliases_by_name = aliases_by_name or {}
     detections = detections if detections is not None else {}
     attached = 0
-    # Cache (photo_id, query-tuple) → detections to avoid repeat inference.
-    cache: dict[tuple[str, tuple[str, ...]], list] = {}
+    pending: list[tuple[Item, list[str], Iterable[str] | None]] = []
+    all_queries: list[str] = []
+    photo_ids: set[str] = set()
+    conditioned_detections: dict[str, list] = {}
 
     for item in items:
-        if item.crop_path:
+        if item.crop_path or item.crop_status == "rejected":
             continue
         aliases = aliases_by_name.get(item.name) or aliases_by_name.get(
             item.name.lower())
         queries = build_item_queries(item.name, aliases)
         if not queries:
             continue
-        qkey = tuple(queries)
-        best = None
-        best_score = 0.0
-        for pid in item.photo_ids:
-            path = photo_paths.get(pid)
-            if path is None:
-                continue
-            key = (pid, qkey)
-            if key not in cache:
-                stem = re.sub(r"[^a-z0-9]+", "-", item.id.lower()).strip("-") or "item"
-                cache[key] = detector.detect_queries(
-                    path, queries, crops_dir=crops_dir, stem_suffix=f"g-{stem}-")
-                detections.setdefault(pid, []).extend(cache[key])
-            for det in cache[key]:
-                if not det.crop_path:
-                    continue
-                score = _combined_crop_score(det.label, det.confidence,
-                                             item.name, aliases)
-                if score > best_score:
-                    best, best_score = det, score
-        # Fresh query detections are already item-conditioned; treat a strong
-        # label match as literal-equivalent for auto-attach.
-        literal = bool(best and _detection_matches_item(best.label, item.name))
-        status = _status_for_score(best_score, literal=literal)
+        pending.append((item, queries, aliases))
+        for query in queries:
+            if query not in all_queries:
+                all_queries.append(query)
+        photo_ids.update(item.photo_ids)
+
+    if not pending or not all_queries:
+        return 0
+
+    # Query each room's photos in a few shared batches. The previous
+    # implementation reconfigured YOLOE once per item/photo pair; that is
+    # needlessly expensive because YOLOE can score many text classes in one
+    # pass. Keep batches bounded so the prompt embedding remains manageable.
+    query_batches = [all_queries[i:i + GROUNDING_QUERY_BATCH]
+                     for i in range(0, len(all_queries), GROUNDING_QUERY_BATCH)]
+    for pid in photo_ids:
+        path = photo_paths.get(pid)
+        if path is None:
+            continue
+        for batch_index, queries in enumerate(query_batches):
+            batch_dets = detector.detect_queries(
+                path, queries, crops_dir=crops_dir,
+                stem_suffix=f"g-room-{batch_index}-")
+            detections.setdefault(pid, []).extend(batch_dets)
+            conditioned_detections.setdefault(pid, []).extend(batch_dets)
+
+    for item, queries, aliases in pending:
+        # Score only the fresh, item-conditioned detections here.  A query
+        # label can look literally compatible with the item name even when
+        # its detector confidence is weak; it must still clear the normal
+        # auto/proposed thresholds before it reaches the report.
+        best, best_score, _literal = _best_detection_for_item(
+            item, conditioned_detections, aliases)
+        status = _status_for_score(best_score, literal=False)
         if best is None or status is None:
             continue
         _apply_crop(item, best.crop_path, best_score, status, best.label)
