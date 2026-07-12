@@ -1683,8 +1683,17 @@
     var p = roomHeroPhoto(room);
     return p ? photoSrc[p.id] : null;
   }
-  /* Interim bad-hero honesty (C2-H) until pipeline cover_confident lands. */
+  /* Pipeline cover_status (docs/18 / docs/00 Pillar 2); interim heuristics
+     remain as fallback for inventories built before the contract shipped. */
   function roomCoverWeak(room) {
+    if (room.cover_status === "review_required") {
+      var reason = room.cover_review_reason || "Cover needs review";
+      reason = reason.replace(/_/g, " ");
+      return { weak: true, reason: reason };
+    }
+    if (room.cover_status === "confident") {
+      return { weak: false, reason: "" };
+    }
     var p = roomHeroPhoto(room);
     if (!p) return { weak: true, reason: "No cover frame" };
     if (p.presentation_eligible === false) {

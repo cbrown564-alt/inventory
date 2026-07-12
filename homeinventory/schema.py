@@ -127,6 +127,11 @@ class Room:
     summary: str = ""          # overall decorative order / cleanliness narrative
     items: list[Item] = field(default_factory=list)
     photos: list[Photo] = field(default_factory=list)
+    # rank-1 cover confidence (docs/18, docs/00 Pillar 2): ``confident`` when
+    # E5/E7 plus optional semantic validation trust the establishing cover;
+    # ``review_required`` when the pipeline would rather flag than ship silently.
+    cover_status: Optional[str] = None
+    cover_review_reason: Optional[str] = None
 
 
 @dataclass
@@ -171,8 +176,14 @@ class Inventory:
         for r in raw.get("rooms", []):
             items = [Item(**known(Item, i)).normalise() for i in r.get("items", [])]
             photos = [Photo(**known(Photo, p)) for p in r.get("photos", [])]
-            rooms.append(Room(name=r["name"], summary=r.get("summary", ""),
-                              items=items, photos=photos))
+            rooms.append(Room(
+                name=r["name"],
+                summary=r.get("summary", ""),
+                items=items,
+                photos=photos,
+                cover_status=r.get("cover_status"),
+                cover_review_reason=r.get("cover_review_reason"),
+            ))
         keep = {k: v for k, v in raw.items() if k != "rooms"}
         inv = Inventory(**known(Inventory, keep))
         inv.rooms = rooms

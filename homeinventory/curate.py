@@ -53,7 +53,7 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-from .schema import Photo
+from .schema import Photo, Room
 
 log = logging.getLogger(__name__)
 
@@ -82,6 +82,9 @@ _COVER_TEXTURE_ALT = 0.88
 _COVER_SLOT_QUALITY = 0.12   # min quality ratio to admit a cover-slot hero
 _COVER_RANK1_QUALITY = 0.25  # prefer sharper rank-1 when within 8% cover score
 _COVER_ALT_WITHIN = 0.92
+_COVER_MIN_ESTABLISHING = 0.35
+_COVER_MIN_SCORE = 0.12
+_WRONG_ROOM_THRESHOLD = 0.45
 _CLIP_GATE = 0.15
 _SMOOTH_GATE = 0.97
 _CBR_GATE = 3.0
@@ -242,28 +245,56 @@ def override_key(photo: Photo) -> str:
     return photo.sha256 or Path(photo.path.replace("\\", "/")).name
 
 
-def load_overrides(work_dir: Path) -> dict[str, str]:
-    """{override_key: "hero" | "hidden"} recorded by the review app."""
+def _load_curation(work_dir: Path) -> dict:
     path = work_dir / CURATION_FILE
     if not path.is_file():
-        return {}
+        return {"version": 2, "overrides": {}, "cover_status": {}}
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return {}
-    ov = data.get("overrides") if isinstance(data, dict) else None
+        return {"version": 2, "overrides": {}, "cover_status": {}}
+    if not isinstance(data, dict):
+        return {"version": 2, "overrides": {}, "cover_status": {}}
+    data.setdefault("version", 2)
+    data.setdefault("overrides", {})
+    data.setdefault("cover_status", {})
+    return data
+
+
+def load_overrides(work_dir: Path) -> dict[str, str]:
+    """{override_key: "hero" | "hidden"} recorded by the review app."""
+    ov = _load_curation(work_dir).get("overrides")
     return ov if isinstance(ov, dict) else {}
+
+
+def load_cover_status(work_dir: Path) -> dict[str, dict]:
+    """Per-room rank-1 confidence from the latest curation pass."""
+    status = _load_curation(work_dir).get("cover_status")
+    return status if isinstance(status, dict) else {}
+
+
+def _write_curation(work_dir: Path, data: dict) -> None:
+    path = work_dir / CURATION_FILE
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False),
+                    encoding="utf-8")
 
 
 def save_override(work_dir: Path, key: str, action: str) -> None:
     """Record one promote ("hero") / demote ("hidden") decision."""
-    overrides = load_overrides(work_dir)
+    data = _load_curation(work_dir)
+    overrides = data.setdefault("overrides", {})
     overrides[key] = action
-    path = work_dir / CURATION_FILE
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({"version": 1, "overrides": overrides},
-                               indent=2, ensure_ascii=False),
-                    encoding="utf-8")
+    data["version"] = max(int(data.get("version", 1)), 2)
+    _write_curation(work_dir, data)
+
+
+def save_cover_status(work_dir: Path, cover_status: dict[str, dict]) -> None:
+    """Persist per-room rank-1 confidence alongside reviewer overrides."""
+    data = _load_curation(work_dir)
+    data["cover_status"] = cover_status
+    data["version"] = max(int(data.get("version", 1)), 2)
+    _write_curation(work_dir, data)
 
 
 def _percentile(values: list[float], p: float) -> float:
@@ -653,6 +684,108 @@ def rerank_covers_with_detections(
         _assign_rank_one(photos, best)
         promoted[room_name] = best.id
     return promoted
+
+
+def _wrong_room_evidence(detections: list,
+                         wrong_terms: tuple[str, ...]) -> float:
+    wrong = 0.0
+    for detection in detections:
+        if str(detection.label).lower() in wrong_terms:
+            wrong += float(detection.confidence)
+    return wrong
+
+
+def assess_rank1_cover(
+        room_name: str,
+        photos: list[Photo],
+        establishing: dict[str, float],
+        cover: dict[str, tuple[float, float, float, float]],
+        detections: dict[str, list] | None = None,
+        overrides: dict[str, str] | None = None) -> tuple[str, str, str | None]:
+    """Return ``(cover_status, reason, rank1_photo_id)`` after E5/E7.
+
+    ``confident`` when classical and (when available) semantic evidence
+    support the rank-1 establishing view; ``review_required`` otherwise.
+    """
+    overrides = overrides or {}
+    rank1 = next((p for p in photos if p.hero == 1), None)
+    if rank1 is None:
+        return "review_required", "no_cover_frame", None
+    if overrides.get(override_key(rank1)) == "hero":
+        return "confident", "reviewer_promoted", rank1.id
+    if not rank1.source_video:
+        return "confident", "deliberate_capture", rank1.id
+
+    reasons: list[str] = []
+    if rank1.presentation_eligible is False:
+        reasons.append("fails_presentation_gates")
+    if (rank1.quality or 0.0) < _COVER_RANK1_QUALITY:
+        reasons.append("low_quality")
+
+    est = establishing.get(rank1.id, 0.0)
+    if est < _COVER_MIN_ESTABLISHING:
+        reasons.append("weak_establishing_view")
+
+    _sh, _smooth, cbr, _clipped = cover.get(rank1.id, (0.0, 1.0, 1.0, 1.0))
+    if cover_score(est, cbr) < _COVER_MIN_SCORE:
+        reasons.append("low_cover_score")
+    if cbr > _CBR_GATE:
+        reasons.append("object_fill")
+
+    video_frames = [p for p in photos if p.source_video]
+    if video_frames and not any(p.presentation_eligible for p in video_frames):
+        reasons.append("no_presentation_eligible_candidate")
+
+    terms = _room_terms(room_name, _ROOM_COVER_TERMS)
+    if terms and detections is not None:
+        rank1_dets = detections.get(rank1.id, [])
+        wrong_terms = _room_terms(room_name, _ROOM_COVER_WRONG)
+        if _wrong_room_evidence(rank1_dets, wrong_terms) >= _WRONG_ROOM_THRESHOLD:
+            reasons.append("wrong_room_detections")
+        if _semantic_detection_score(
+                rank1, rank1_dets, terms, wrong_terms) is None:
+            reasons.append("no_room_identity_evidence")
+
+    if reasons:
+        return "review_required", ";".join(reasons), rank1.id
+    return "confident", "", rank1.id
+
+
+def finalize_room_covers(
+        rooms: dict[str, list[Photo]],
+        capture_dir: Path,
+        work_dir: Path,
+        detections: dict[str, list] | None = None) -> dict[str, dict]:
+    """Assess rank-1 confidence after E5/E7; write ``curation.json``."""
+    overrides = load_overrides(work_dir)
+    statuses: dict[str, dict] = {}
+    for room_name, photos in rooms.items():
+        establishing: dict[str, float] = {}
+        cover: dict[str, tuple[float, float, float, float]] = {}
+        for photo in photos:
+            full = Path(photo.path)
+            if not full.is_absolute():
+                full = capture_dir / full
+            _quality, _thumb, est = frame_quality(full)
+            establishing[photo.id] = est
+            cover[photo.id] = _cover_metrics(full)
+        status, reason, photo_id = assess_rank1_cover(
+            room_name, photos, establishing, cover, detections, overrides)
+        statuses[room_name] = {
+            "status": status,
+            "reason": reason,
+            "photo_id": photo_id,
+        }
+        if status != "confident":
+            log.info("cover review required for %s (%s)", room_name, reason)
+    save_cover_status(work_dir, statuses)
+    return statuses
+
+
+def apply_room_cover_status(room: Room, status: dict) -> None:
+    """Copy assessed cover confidence onto a ``Room`` for inventory.json."""
+    room.cover_status = status.get("status")
+    room.cover_review_reason = status.get("reason") or None
 
 
 def apply_override(inv, photo_id: str, action: str, work_dir: Path) -> dict:

@@ -93,6 +93,7 @@ def cmd_curate_only(args) -> int:
         return 2
     rooms = {r.name: r.photos for r in inv.rooms}
     curate(rooms, capture_dir, work_dir)
+    detections: dict[str, list] = {}
     if args.detect:
         from .curate import load_overrides, rerank_covers_with_detections
         from .detect import Detector
@@ -103,7 +104,6 @@ def cmd_curate_only(args) -> int:
             mode=args.detect_mode,
             device=args.device,
         )
-        detections = {}
         for photos in rooms.values():
             for photo in photos:
                 path = Path(photo.path)
@@ -113,6 +113,11 @@ def cmd_curate_only(args) -> int:
         if detector.available:
             rerank_covers_with_detections(
                 rooms, detections, load_overrides(work_dir))
+    from .curate import apply_room_cover_status, finalize_room_covers
+    cover_statuses = finalize_room_covers(
+        rooms, capture_dir, work_dir, detections or None)
+    for room in inv.rooms:
+        apply_room_cover_status(room, cover_statuses[room.name])
     outputs = render(inv, capture_dir, out_dir, pdf=not args.no_pdf,
                      use_case=args.use_case)
     print(f"re-curated {inv.photo_count()} photos across {len(inv.rooms)} rooms.")

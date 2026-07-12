@@ -168,6 +168,23 @@ Observed on IMG_5512, Jul 2026 sessions:
   broader detector evidence exists.
 - **Artifact:** `hero-dense-detect-metrics.json`.
 
+### E7b — No-confident-cover handling (curate)
+
+- **Date:** 12 Jul 2026
+- **Method:** After E5 classical rank 1 and optional E7 semantic promotion,
+  ``finalize_room_covers()`` assesses whether the rank-1 frame is a confident
+  establishing cover. Classical checks: presentation eligibility, quality floor,
+  establishing/cover score, object-fill ratio. When detections are available for
+  supported room types, rank 1 must also pass room-identity evidence and must
+  not show strong wrong-room labels. Unsupported types (e.g. stairs) stay on
+  classical checks only.
+- **Output:** ``Room.cover_status`` (`confident` | `review_required`) and
+  ``Room.cover_review_reason`` in ``inventory.json``; the same map under
+  ``curation.json`` → ``cover_status`` (schema v2). Rank 1 is **not** cleared —
+  the review overview flags weak covers honestly.
+- **Verdict:** ✅ **Adopted** — closes docs/00 Pillar 2 "flag bad segment"
+  without re-adopting rejected E2 smoothness or local-Ollama E8.
+
 ### E8 — Multi-image local VLM rerank (not adopted)
 
 - **Date:** 12 Jul 2026
@@ -260,6 +277,28 @@ uv run python evals/eval_hero_cover.py report --gold \
 
 Typical experiment loop: edit `curate.py` → `curate-only` → `eval_hero_cover.py`
 → eyeball contact sheet → log verdict here.
+
+### CI regression pinning (mutable ``report/``)
+
+Before the dense-anchor contract, ``tests/test_curate.py`` included
+``test_rank1_matches_hero_gold_when_fixture_present``, which read rank 1 from
+the local ``report/inventory.json`` tree. That directory is **gitignored** and
+absent on CI, so the test silently returned when missing; locally, a stale or
+partial re-curate could report **2/9** preferred hits while gold expected ≥7/9.
+
+**Resolution:** rank-1 agreement is pinned to immutable fixtures only:
+
+| Artifact | Role |
+|---|---|
+| ``hero-gold-dense-anchor.json`` | Human acceptable/preferred labels (schema v2) |
+| ``hero-candidates-dense-anchor.json`` | Frozen 145-frame room/frame identity |
+| ``hero-dense-detect-metrics.json`` | Frozen E7 ``rank1`` map from the benchmark run |
+
+``test_rank1_is_acceptable_on_compatible_hero_benchmark`` asserts 10/10
+acceptable membership; ``test_rank1_matches_hero_preference_on_compatible_benchmark``
+locks ≥7/10 exact preference. Neither reads ``report/``. Eval harnesses that
+still accept a report path refuse incompatible gold with an explicit drift
+diagnosis (``eval_hero_cover.py --gold``).
 
 ### 3. Metrics (per room, then mean)
 
@@ -412,6 +451,7 @@ flow / low motion windows; prefer those frames for rank 1.
 - [x] Historical 93-frame and active 145-frame gold/candidate contracts committed under `evals/fixtures/own-property/`
 - [x] `evals/eval_hero_cover.py` produces per-room contact sheets
 - [x] E6+E7 active pipeline hits pass bar on compatible dense gold (7/10 preferred, 10/10 acceptable); report-dependent tests refuse or skip incompatible mutable builds with explicit drift diagnosis
+- [x] Rank-1 confidence contract: ``cover_status`` on each room plus ``curation.json`` ``cover_status`` map; semantic wrong-room / weak-identity frames surface as ``review_required`` instead of silent ship
 - [ ] Overview on own-property build: user eyeball approval — *"I'd show this to a landlord"*
 - [x] Documented E4/E8 rejects and E5/E6/E7 adoptions with verdicts and artifacts
 - [x] `curate-only` CLI re-runs curation + render without describe/detect cost

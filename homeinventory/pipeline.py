@@ -249,6 +249,10 @@ def run_build(opts: BuildOptions, *,
                 log.info("detector-assisted cover for %s: %s",
                          room_name, photo_id)
 
+    from .curate import finalize_room_covers, apply_room_cover_status
+    cover_statuses = finalize_room_covers(
+        selected, capture_dir, work_dir, detections or None)
+
     try:
         backend = get_backend(opts.backend, model=opts.model,
                               base_url=opts.base_url, use_case=use_case)
@@ -331,6 +335,8 @@ def run_build(opts: BuildOptions, *,
                     summary=f"[DESCRIBE FAILED: {e}] Re-run with --resume to "
                             "retry this room without re-describing the others.",
                     items=[], photos=photos)
+                apply_room_cover_status(
+                    built[room_name], cover_statuses[room_name])
                 continue
             ckpt.write_text(json.dumps(
                 {"summary": summary, "items": [asdict(i) for i in items],
@@ -351,6 +357,7 @@ def run_build(opts: BuildOptions, *,
             items = merge_items(items, code)
             built[room_name] = Room(name=room_name, summary=summary,
                                     items=items, photos=photos)
+        apply_room_cover_status(built[room_name], cover_statuses[room_name])
 
     if detections:
         from .merge import attach_detector_crops, ground_missing_crops

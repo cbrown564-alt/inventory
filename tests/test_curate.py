@@ -8,11 +8,14 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFilter
 
 from homeinventory.cli import main
-from homeinventory.curate import (apply_override, centre_border_ratio, curate,
-                                  establishing_score, exposure_clipped_fraction,
-                                  frame_quality, hero_budget, load_overrides,
-                                  override_key, rerank_covers_with_detections,
-                                  save_override, sharpness, smooth_fraction)
+from homeinventory.curate import (apply_override, apply_room_cover_status,
+                                  assess_rank1_cover, centre_border_ratio,
+                                  curate, establishing_score,
+                                  exposure_clipped_fraction, finalize_room_covers,
+                                  frame_quality, hero_budget, load_cover_status,
+                                  load_overrides, override_key,
+                                  rerank_covers_with_detections, save_override,
+                                  sharpness, smooth_fraction)
 from homeinventory.detect import Detection
 from homeinventory.report import render
 from homeinventory.schema import Inventory, Item, Photo, Room
@@ -417,6 +420,81 @@ def test_rank1_matches_hero_preference_on_compatible_benchmark():
         for room_name, spec in rooms.items()
     )
     assert hits >= 7, f"preferred rank-1 hit {hits}/{len(rooms)}"
+
+
+def test_frozen_gold_pinning_uses_dense_anchor_not_mutable_report():
+    """CI-safe: rank-1 contract is pinned to immutable fixtures, not report/."""
+    gold, manifest = load_gold_document(HERO_GOLD)
+    metrics = json.loads(HERO_METRICS.read_text(encoding="utf-8"))
+    assert gold["candidate_manifest"] == "hero-candidates-dense-anchor.json"
+    assert manifest is not None
+    assert manifest["frame_count"] == 145
+    assert metrics["rank1"]["Kitchen"] == "IMG_5512_f004023.jpg"
+    assert set(metrics["rank1"]) == set(gold["rooms"])
+
+
+def test_no_confident_cover_flags_review_required(tmp_path):
+    """Low-quality rank-1 is kept but marked review_required, not silent."""
+    blur_path = tmp_path / "blur.jpg"
+    wide_path = tmp_path / "wide.jpg"
+    _blurred_wide_img(blur_path)
+    _wide_balanced_img(wide_path)
+    photos = [
+        Photo(id="P001", path=str(blur_path), room="Kitchen",
+              source_video="walk.mp4", hero=1, quality=0.1,
+              presentation_eligible=False),
+        Photo(id="P002", path=str(wide_path), room="Kitchen",
+              source_video="walk.mp4", hero=2, quality=0.9,
+              presentation_eligible=True),
+    ]
+    establishing = {p.id: frame_quality(Path(p.path))[2] for p in photos}
+    from homeinventory.curate import _cover_metrics
+    cover = {p.id: _cover_metrics(Path(p.path)) for p in photos}
+    status, reason, photo_id = assess_rank1_cover(
+        "Kitchen", photos, establishing, cover)
+    assert status == "review_required"
+    assert photo_id == "P001"
+    assert "low_quality" in reason or "fails_presentation_gates" in reason
+
+
+def test_semantic_wrong_room_detection_flags_review_required():
+    """Rank-1 with strong wrong-room detections is flagged, not trusted."""
+    kitchen = Photo(id="P001", path="kitchen.jpg", room="Kitchen", hero=1,
+                    quality=0.8, source_video="walk.mp4",
+                    presentation_eligible=True)
+    establishing = {"P001": 0.6}
+    cover = {"P001": (100.0, 0.2, 1.5, 0.02)}
+    detections = {
+        "P001": [Detection("toilet", 0.9, (0, 0, 10, 10)),
+                 Detection("shower", 0.8, (0, 0, 10, 10))],
+    }
+    status, reason, photo_id = assess_rank1_cover(
+        "Kitchen", [kitchen], establishing, cover, detections)
+    assert status == "review_required"
+    assert photo_id == "P001"
+    assert "wrong_room_detections" in reason
+
+
+def test_finalize_room_covers_persists_curation_json(tmp_path):
+    wide_path = tmp_path / "wide.jpg"
+    close_path = tmp_path / "close.jpg"
+    _wide_balanced_img(wide_path)
+    _corner_closeup_img(close_path)
+    photos = [
+        Photo(id="P001", path=str(close_path), room="Kitchen",
+              source_video="walk.mp4"),
+        Photo(id="P002", path=str(wide_path), room="Kitchen",
+              source_video="walk.mp4"),
+    ]
+    curate({"Kitchen": photos}, tmp_path, tmp_path / "work")
+    statuses = finalize_room_covers(
+        {"Kitchen": photos}, tmp_path, tmp_path / "work")
+    assert statuses["Kitchen"]["status"] in ("confident", "review_required")
+    saved = load_cover_status(tmp_path / "work")
+    assert saved["Kitchen"]["photo_id"] in {"P001", "P002"}
+    room = Room(name="Kitchen", photos=photos)
+    apply_room_cover_status(room, statuses["Kitchen"])
+    assert room.cover_status == statuses["Kitchen"]["status"]
 
 
 def test_wide_balanced_frame_wins_hero_rank_one(tmp_path):

@@ -196,13 +196,15 @@ pool that may contain the wrong room entirely.
       the deepest open question and the one that determines the
       pipeline's shape. Experiment design:
       [`26-capture-strategy-experiment.md`](26-capture-strategy-experiment.md).
-- [ ] **Heroes depict the named room** — a semantic check (not just
-      greyscale Laplacian heuristics that the scorer's own docstring
-      admits reward textured surfaces) confirms each rank-1 cover is
-      a recognisable establishing view of the room it labels.
-- [ ] **Pipeline can flag a bad segment**, not silently pick the
-      least-bad frame — "no confident cover" surfaces for re-capture
-      or manual review rather than shipping a staircase as a kitchen.
+- [x] **Heroes depict the named room** — E7 detector-assisted semantic rank 1
+      plus E7b ``cover_status`` validation flag unsupported or weak-identity
+      covers for review rather than silent ship. Stairs/landing remain classical
+      until broader detector evidence exists (docs/18). Dense-anchor benchmark:
+      10/10 acceptable, 7/10 preferred on frozen fixtures.
+- [x] **Pipeline can flag a bad segment**, not silently pick the
+      least-bad frame — ``review_required`` / ``cover_status`` on room and
+      ``curation.json`` when rank 1 fails classical or semantic confidence;
+      rank 1 stays visible in the overview with an explicit flag.
 - [x] **Report meets the deposit-scheme evidential spec point-by-point**
       ([`market-research-2026-07.md`](market-research-2026-07.md),
       audit: [`29-evidential-spec-audit.md`](29-evidential-spec-audit.md)):
