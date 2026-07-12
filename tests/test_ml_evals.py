@@ -355,8 +355,8 @@ def test_eval_vlm_rerank_demo(tmp_path):
     sys.path.insert(0, str(ROOT / "evals"))
     import eval_vlm_rerank as evr  # noqa: E402
 
-    # PASS_BAR_TOP1 is 9/9 — synthesise nine gold rooms whose top-1 the demo
-    # rerank recovers. The real report/ tree is gitignored (absent on CI).
+    # Synthesise nine gold rooms whose top-1 the demo rerank recovers. The real
+    # report/ tree is gitignored (absent on CI).
     report, gold_path = _synthetic_report(tmp_path, n_rooms=9)
 
     class Args:

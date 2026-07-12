@@ -237,6 +237,14 @@ def run_build(opts: BuildOptions, *,
                                                    crops_dir=work_dir / "crops")
         if not detector.available:
             log.warning("detector unavailable — continuing without crops/hints")
+        else:
+            from .curate import (load_overrides,
+                                 rerank_covers_with_detections)
+            promoted = rerank_covers_with_detections(
+                selected, detections, load_overrides(work_dir))
+            for room_name, photo_id in promoted.items():
+                log.info("detector-assisted cover for %s: %s",
+                         room_name, photo_id)
 
     try:
         backend = get_backend(opts.backend, model=opts.model,

@@ -1,0 +1,205 @@
+{
+  "schema_version": 2,
+  "benchmark_id": "own-property-img5512-dense-anchor-v2",
+  "candidate_manifest": "hero-candidates-dense-anchor.json",
+  "video": "IMG_5512.MOV",
+  "criteria": {
+    "decision_rule": "A frame is acceptable only when every required criterion applies and no reject criterion applies. Preferred is an ordering within the acceptable set, not a claim that only one image can represent the room.",
+    "required": [
+      "correct_room",
+      "recognisable_establishing_view",
+      "key_room_feature_or_fixture_visible",
+      "enough_context_to_understand_layout",
+      "sharp_and_usable_exposure",
+      "brochure_appropriate_framing"
+    ],
+    "small_wet_room_exception": "When the doorway and room size make a single wide view impossible, a sharp view that identifies the suite and shows spatial context may qualify as an establishing fallback.",
+    "reject_reasons": [
+      "wrong_room_or_boundary_bleed",
+      "motion_blur",
+      "object_or_fixture_closeup_without_room_context",
+      "odd_or_partial_framing",
+      "privacy_or_clear_person_reflection",
+      "unusable_exposure",
+      "temporary_clutter_dominates_the_room"
+    ]
+  },
+  "rooms": {
+    "Hallway": {
+      "preferred": [
+        "IMG_5512_f009738.jpg",
+        "IMG_5512_f000009.jpg",
+        "IMG_5512_f000045.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f009738.jpg",
+        "IMG_5512_f000009.jpg",
+        "IMG_5512_f000045.jpg",
+        "IMG_5512_f009432.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f010341.jpg",
+        "IMG_5512_f010071.jpg"
+      ],
+      "notes": "The floral-wallpaper corridor and floor must read as a space; door-edge and partial-wall views do not qualify."
+    },
+    "Living Room": {
+      "preferred": [
+        "IMG_5512_f008487.jpg",
+        "IMG_5512_f008064.jpg",
+        "IMG_5512_f008928.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f008487.jpg",
+        "IMG_5512_f008064.jpg",
+        "IMG_5512_f008928.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f000153.jpg",
+        "IMG_5512_f007893.jpg",
+        "IMG_5512_f009117.jpg"
+      ],
+      "notes": "Prefer the sofa/fireplace or TV grouping. Dining-table clutter and window/light close-ups fail brochure appropriateness even when technically sharp."
+    },
+    "Kitchen": {
+      "preferred": [
+        "IMG_5512_f000342.jpg",
+        "IMG_5512_f000495.jpg",
+        "IMG_5512_f004023.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f000342.jpg",
+        "IMG_5512_f000495.jpg",
+        "IMG_5512_f004023.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f000981.jpg",
+        "IMG_5512_f005292.jpg",
+        "IMG_5512_f003393.jpg"
+      ],
+      "notes": "Cabinets, worktop and layout must read together. Open-cabinet, drawer and surface-detail fills are evidence frames, not room covers."
+    },
+    "Bedroom 1": {
+      "preferred": [
+        "IMG_5512_f011214.jpg",
+        "IMG_5512_f011250.jpg",
+        "IMG_5512_f012807.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f011214.jpg",
+        "IMG_5512_f011250.jpg",
+        "IMG_5512_f012807.jpg",
+        "IMG_5512_f012843.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f012699.jpg",
+        "IMG_5512_f012735.jpg",
+        "IMG_5512_f011700.jpg"
+      ],
+      "notes": "The bed must anchor the composition. Vanity and bedside-detail views do not establish the bedroom."
+    },
+    "Bedroom 2": {
+      "preferred": [
+        "IMG_5512_f016839.jpg",
+        "IMG_5512_f021384.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f016839.jpg",
+        "IMG_5512_f021384.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f017253.jpg",
+        "IMG_5512_f017973.jpg",
+        "IMG_5512_f018000.jpg",
+        "IMG_5512_f018801.jpg",
+        "IMG_5512_f020313.jpg"
+      ],
+      "notes": "Use a bed-led overview. Reject shower-room boundary bleed, person reflections, and wardrobe-interior close-ups."
+    },
+    "Bathroom": {
+      "preferred": [
+        "IMG_5512_f011070.jpg",
+        "IMG_5512_f010854.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f011070.jpg",
+        "IMG_5512_f010854.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f010449.jpg",
+        "IMG_5512_f010629.jpg"
+      ],
+      "notes": "The bath, vanity or toilet should be legible with surrounding tile and layout; blurred entry frames are excluded."
+    },
+    "En-suite Shower Room": {
+      "preferred": [
+        "IMG_5512_f012501.jpg",
+        "IMG_5512_f012564.jpg",
+        "IMG_5512_f012141.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f012501.jpg",
+        "IMG_5512_f012564.jpg",
+        "IMG_5512_f012141.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f012231.jpg"
+      ],
+      "notes": "Apply the small-wet-room exception: a suite-identifying toilet, basin or shower view is acceptable when no doorway-wide overview exists."
+    },
+    "Stairs and Landing": {
+      "preferred": [
+        "IMG_5512_f014265.jpg",
+        "IMG_5512_f014373.jpg",
+        "IMG_5512_f014040.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f014265.jpg",
+        "IMG_5512_f014373.jpg",
+        "IMG_5512_f014040.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f013023.jpg",
+        "IMG_5512_f013176.jpg",
+        "IMG_5512_f014904.jpg"
+      ],
+      "notes": "The stair flight or landing circulation must be visible. Reject seam frames and the loft-room view at the segment tail."
+    },
+    "Loft Room": {
+      "preferred": [
+        "IMG_5512_f014922.jpg",
+        "IMG_5512_f014967.jpg",
+        "IMG_5512_f016461.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f014922.jpg",
+        "IMG_5512_f014967.jpg",
+        "IMG_5512_f016461.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f015777.jpg",
+        "IMG_5512_f016695.jpg"
+      ],
+      "notes": "Prefer the wide sofa/eaves overview; the office-area view is acceptable context, while detail fills are not."
+    },
+    "Loft Shower Room": {
+      "preferred": [
+        "IMG_5512_f021582.jpg",
+        "IMG_5512_f022374.jpg",
+        "IMG_5512_f022806.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f021582.jpg",
+        "IMG_5512_f022374.jpg",
+        "IMG_5512_f022806.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f021879.jpg",
+        "IMG_5512_f021726.jpg",
+        "IMG_5512_f023022.jpg",
+        "IMG_5512_f023778.jpg"
+      ],
+      "notes": "Prefer the doorway view showing toilet and enclosure together; fixture close-ups and bedroom boundary bleed do not qualify."
+    }
+  }
+}

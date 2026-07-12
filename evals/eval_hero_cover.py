@@ -45,6 +45,14 @@ from homeinventory.curate import (  # noqa: E402
     linear_iqa_score,
     mslap_score,
 )
+from evals.hero_gold import (  # noqa: E402
+    HeroGoldValidationError,
+    acceptable_frames,
+    compatibility_issues,
+    load_gold_document,
+    preferred_frames,
+    rejected_frames,
+)
 
 DEFAULT_WEIGHTS = (
     ROOT / "evals" / "fixtures" / "own-property" / "iqa-linear-weights.json"
@@ -101,7 +109,13 @@ def load_rooms(report_dir: Path) -> list[tuple[str, list[dict]]]:
     out: list[tuple[str, list[dict]]] = []
     for room in inv["rooms"]:
         frames = [
-            {"id": p["id"], "path": p["path"], "hero": p.get("hero")}
+            {
+                "id": p["id"],
+                "path": p["path"],
+                "hero": p.get("hero"),
+                "quality": p.get("quality"),
+                "cover_anchor": p.get("cover_anchor", False),
+            }
             for p in room.get("photos", [])
             if p.get("source_video")
         ]
@@ -120,8 +134,13 @@ def resolve_path(report_dir: Path, raw: str) -> Path:
 def load_gold(path: Path | None) -> dict[str, dict]:
     if path is None:
         return {}
-    data = json.loads(path.read_text(encoding="utf-8"))
-    return data.get("rooms", {})
+    data, _manifest = load_gold_document(path)
+    rooms = data.get("rooms", {})
+    # Keep older eval scripts working while v2 names the two distinct concepts.
+    for room in rooms.values():
+        room.setdefault("top", preferred_frames(room))
+        room.setdefault("bottom", rejected_frames(room))
+    return rooms
 
 
 def score_frame(path: Path, *, include_mslap: bool = True) -> dict:
@@ -364,10 +383,11 @@ def pick_rank_one(
 def gold_rank_map(gold_room: dict, n_frames: int) -> dict[str, float]:
     """{filename: gold rank} for top-3 and bottom-2 labels."""
     out: dict[str, float] = {}
-    for i, name in enumerate(gold_room.get("top", []), start=1):
+    for i, name in enumerate(preferred_frames(gold_room), start=1):
         out[name] = float(i)
-    for i, name in enumerate(gold_room.get("bottom", []), start=1):
-        out[name] = float(n_frames - len(gold_room.get("bottom", [])) + i)
+    rejected = rejected_frames(gold_room)
+    for i, name in enumerate(rejected, start=1):
+        out[name] = float(n_frames - len(rejected) + i)
     return out
 
 
@@ -493,7 +513,14 @@ def evaluate_room(
     if not gold_room:
         return room_metrics
 
-    top_gold = gold_room.get("top", [])
+    top_gold = preferred_frames(gold_room)
+    acceptable = set(acceptable_frames(gold_room))
+    entry_names = {e["name"] for e in entries}
+    room_metrics["acceptable_candidate_available"] = bool(
+        acceptable & entry_names
+    )
+    if acceptable:
+        room_metrics["acceptable_hit"] = pick_name in acceptable
     if top_gold:
         room_metrics["top1_hit"] = pick_name == top_gold[0]
         room_metrics["top3_hit"] = top_gold[0] in {
@@ -533,6 +560,7 @@ def build_room_entries(
             "name": name,
             "hero": f.get("hero"),
             "quality": f.get("quality") or 0,
+            "cover_anchor": f.get("cover_anchor", False),
         })
 
     sharpnesses = [metrics[e["name"]]["sharpness"] for e in entries]
@@ -565,6 +593,18 @@ def aggregate_metrics(per_room: dict[str, dict]) -> dict:
         rhos = [r["spearman"] for r in rooms_with_gold
                 if r.get("spearman") is not None]
         out["mean_spearman"] = round(sum(rhos) / len(rhos), 3) if rhos else None
+        available = [r for r in rooms_with_gold
+                     if "acceptable_candidate_available" in r]
+        if available:
+            out["acceptable_candidate_available_rate"] = round(
+                100 * sum(1 for r in available
+                          if r["acceptable_candidate_available"])
+                / len(available), 1)
+        acceptable = [r for r in rooms_with_gold if "acceptable_hit" in r]
+        if acceptable:
+            out["acceptable_hit_rate"] = round(
+                100 * sum(1 for r in acceptable if r["acceptable_hit"])
+                / len(acceptable), 1)
     blur = [r for r in per_room.values() if "blur_reject" in r]
     if blur:
         out["blur_reject_rate"] = round(
@@ -599,6 +639,10 @@ def main() -> int:
                     help="HTML contact sheet path")
     ap.add_argument("--gold", type=Path, default=None,
                     help="hero-gold.json for metrics")
+    ap.add_argument(
+        "--allow-incompatible-gold", action="store_true",
+        help="score despite candidate-manifest drift (for forensic comparison only)",
+    )
     ap.add_argument("--relevance-backend", default="siglip",
                     choices=["siglip", "openclip"],
                     help="encoder for --scorer siglip (Apache-2.0)")
@@ -612,11 +656,34 @@ def main() -> int:
     args = ap.parse_args()
 
     report_dir = args.report_dir.resolve()
-    gold = load_gold(args.gold)
+    manifest = None
+    try:
+        if args.gold:
+            gold_document, manifest = load_gold_document(args.gold)
+            gold = gold_document.get("rooms", {})
+            for room in gold.values():
+                room.setdefault("top", preferred_frames(room))
+                room.setdefault("bottom", rejected_frames(room))
+        else:
+            gold = {}
+    except (OSError, json.JSONDecodeError, HeroGoldValidationError) as exc:
+        print(f"invalid hero gold: {exc}", file=sys.stderr)
+        return 2
     rooms = load_rooms(report_dir)
     if not rooms:
         print("no video frames found", file=sys.stderr)
         return 1
+    if manifest is not None:
+        drift = compatibility_issues(manifest, rooms)
+        if drift and not args.allow_incompatible_gold:
+            print(
+                "hero gold is incompatible with this report; refusing to emit "
+                "accuracy metrics:\n- " + "\n- ".join(drift) +
+                "\nUse a matching frozen report or pass --allow-incompatible-gold "
+                "for forensic comparison.",
+                file=sys.stderr,
+            )
+            return 2
 
     weights = None
     if args.scorer == "linear-musiq":

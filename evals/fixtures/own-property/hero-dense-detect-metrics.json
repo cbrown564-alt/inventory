@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "own-property-img5512-dense-anchor-v2",
+  "experiment": "E7-dense-anchor-plus-detector-semantic-rerank",
+  "date": "2026-07-12",
+  "candidate_frames": 145,
+  "rooms": 10,
+  "pipeline": {
+    "keyframes_per_minute": 12,
+    "max_frames_per_segment": 24,
+    "segment_boundary_trim_s": 2.0,
+    "segment_cover_anchor_s": 2.0,
+    "classical_ranker": "E5 cover score",
+    "semantic_ranker": "YOLOE household room-defining detections",
+    "detector_model": "yoloe-11s-seg.pt",
+    "detector_confidence": 0.25,
+    "backend": "offline"
+  },
+  "result": {
+    "acceptable_hits": 10,
+    "acceptable_rate_pct": 100.0,
+    "preferred_rank1_hits": 7,
+    "preferred_rank1_rate_pct": 70.0,
+    "pass": true
+  },
+  "rank1": {
+    "Hallway": "IMG_5512_f009738.jpg",
+    "Living Room": "IMG_5512_f008487.jpg",
+    "Kitchen": "IMG_5512_f004023.jpg",
+    "Bedroom 1": "IMG_5512_f011214.jpg",
+    "Bedroom 2": "IMG_5512_f016839.jpg",
+    "Bathroom": "IMG_5512_f011070.jpg",
+    "En-suite Shower Room": "IMG_5512_f012564.jpg",
+    "Stairs and Landing": "IMG_5512_f014373.jpg",
+    "Loft Room": "IMG_5512_f014922.jpg",
+    "Loft Shower Room": "IMG_5512_f021582.jpg"
+  },
+  "notes": [
+    "The first end-to-end detector build reached 9/10 acceptable and 7/10 preferred.",
+    "The sole miss was a false-positive handrail on a partial landing frame. Stair/landing semantic reranking was then removed because the detector did not reliably identify the true stair overviews; E5 classical selection already chose an acceptable stair frame.",
+    "The final result combines the observed detector picks for supported room types with the unchanged E5 stair fallback. No gold filenames or room-specific frame identities are used by product code."
+  ]
+}

@@ -63,7 +63,7 @@ def cmd_build(args) -> int:
 
 
 def cmd_curate_only(args) -> int:
-    """Re-run frame curation on an existing build (no describe/detect cost).
+    """Re-run frame curation on an existing build (no describe API cost).
 
     Reloads inventory.json, re-scores every frame path, re-elects hero ranks,
     saves inventory.json, and re-renders HTML — same post-curate path as build.
@@ -89,6 +89,26 @@ def cmd_curate_only(args) -> int:
         return 2
     rooms = {r.name: r.photos for r in inv.rooms}
     curate(rooms, capture_dir, work_dir)
+    if args.detect:
+        from .curate import load_overrides, rerank_covers_with_detections
+        from .detect import Detector
+
+        detector = Detector(
+            model_name=args.detect_model,
+            conf=args.det_conf,
+            mode=args.detect_mode,
+            device=args.device,
+        )
+        detections = {}
+        for photos in rooms.values():
+            for photo in photos:
+                path = Path(photo.path)
+                if not path.is_absolute():
+                    path = capture_dir / path
+                detections[photo.id] = detector.detect(path)
+        if detector.available:
+            rerank_covers_with_detections(
+                rooms, detections, load_overrides(work_dir))
     outputs = render(inv, capture_dir, out_dir, pdf=not args.no_pdf,
                      use_case=args.use_case)
     print(f"re-curated {inv.photo_count()} photos across {len(inv.rooms)} rooms.")
@@ -343,12 +363,16 @@ def main(argv: list[str] | None = None) -> int:
 
     co = sub.add_parser("curate-only",
                         help="re-run hero curation on an existing build "
-                             "(no describe/detect API cost)")
+                             "(no describe API cost)")
     co.add_argument("capture_dir")
     co.add_argument("-o", "--out", default="report")
     co.add_argument("--use-case", choices=use_cases, default=None,
                     help="override use-case profile when rendering")
     co.add_argument("--no-pdf", action="store_true")
+    co.add_argument("--detect", action="store_true",
+                    help="also rerun local detector-assisted cover ranking")
+    _add_detect_args(co)
+    co.add_argument("--det-conf", type=float, default=0.25)
     co.set_defaults(func=cmd_curate_only)
 
     r = sub.add_parser("render", help="re-render report from edited inventory.json")

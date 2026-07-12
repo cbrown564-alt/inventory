@@ -113,6 +113,40 @@ def test_eval_writes_html_and_metrics(tmp_path):
     assert "★" in text
     assert summary["n_rooms"] == 1
     assert "top1_hit_rate" in summary
+    assert summary["acceptable_hit_rate"] == 100.0
+    assert summary["acceptable_candidate_available_rate"] == 100.0
+
+
+def test_main_refuses_incompatible_v2_gold(tmp_path, monkeypatch, capsys):
+    report = _synthetic_report(tmp_path)
+    manifest_path = tmp_path / "hero-candidates.json"
+    manifest_path.write_text(json.dumps({
+        "schema_version": 1,
+        "benchmark_id": "synthetic-v1",
+        "frame_count": 1,
+        "rooms": {"Room A": {"candidates": ["different.jpg"]}},
+    }), encoding="utf-8")
+    gold_path = tmp_path / "hero-gold.json"
+    gold_path.write_text(json.dumps({
+        "schema_version": 2,
+        "benchmark_id": "synthetic-v1",
+        "candidate_manifest": manifest_path.name,
+        "rooms": {
+            "Room A": {
+                "preferred": ["different.jpg"],
+                "acceptable": ["different.jpg"],
+                "rejected": [],
+            }
+        },
+    }), encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", [
+        "eval_hero_cover.py", str(report), "--gold", str(gold_path),
+        "-o", str(tmp_path / "out.html"),
+    ])
+
+    assert eval_hero_cover.main() == 2
+    assert "incompatible with this report" in capsys.readouterr().err
+    assert not (tmp_path / "out.html").exists()
 
 
 def test_linear_musiq_scorer_on_synthetic(tmp_path):

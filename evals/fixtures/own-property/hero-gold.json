@@ -1,109 +1,174 @@
 {
+  "schema_version": 2,
+  "benchmark_id": "own-property-img5512-original-segmentation-v1",
+  "candidate_manifest": "hero-candidates.json",
   "video": "IMG_5512.MOV",
+  "criteria": {
+    "required": [
+      "correct_room",
+      "recognisable_establishing_view",
+      "room_context_visible",
+      "sharp_and_usable_exposure",
+      "brochure_appropriate_framing"
+    ],
+    "reject_reasons": [
+      "wrong_room",
+      "motion_blur",
+      "object_closeup",
+      "odd_or_partial_framing",
+      "privacy",
+      "unusable_exposure"
+    ]
+  },
   "rooms": {
     "Hallway": {
-      "top": [
+      "preferred": [
         "IMG_5512_f009738.jpg",
         "IMG_5512_f000009.jpg",
         "IMG_5512_f000045.jpg"
       ],
-      "bottom": [
+      "acceptable": [
+        "IMG_5512_f009738.jpg",
+        "IMG_5512_f000009.jpg",
+        "IMG_5512_f000045.jpg"
+      ],
+      "rejected": [
         "IMG_5512_f010341.jpg",
         "IMG_5512_f010071.jpg"
       ],
       "notes": "Wide hallway with floor and floral wallpaper; avoid door-edge close-ups"
     },
     "Living Room": {
-      "top": [
+      "preferred": [
         "IMG_5512_f009126.jpg",
         "IMG_5512_f008280.jpg",
         "IMG_5512_f009063.jpg"
       ],
-      "bottom": [
+      "acceptable": [
+        "IMG_5512_f009126.jpg",
+        "IMG_5512_f008280.jpg",
+        "IMG_5512_f009063.jpg"
+      ],
+      "rejected": [
         "IMG_5512_f000297.jpg",
         "IMG_5512_f000216.jpg"
       ],
       "notes": "Sofa grouping and windows visible; avoid early doorway blur passes"
     },
     "Kitchen": {
-      "top": [
+      "preferred": [
         "IMG_5512_f000981.jpg",
         "IMG_5512_f001584.jpg",
         "IMG_5512_f002529.jpg"
       ],
-      "bottom": [
+      "acceptable": [
+        "IMG_5512_f000981.jpg",
+        "IMG_5512_f001584.jpg",
+        "IMG_5512_f002529.jpg"
+      ],
+      "rejected": [
         "IMG_5512_f005292.jpg",
         "IMG_5512_f003393.jpg"
       ],
       "notes": "Need hob and cabinets visible; avoid drawer/bread-bin close-ups and hob-surface fill"
     },
     "Bedroom 1": {
-      "top": [
+      "preferred": [
         "IMG_5512_f012906.jpg",
         "IMG_5512_f012735.jpg",
         "IMG_5512_f012042.jpg"
       ],
-      "bottom": [
+      "acceptable": [
+        "IMG_5512_f012906.jpg",
+        "IMG_5512_f012735.jpg",
+        "IMG_5512_f012042.jpg"
+      ],
+      "rejected": [
         "IMG_5512_f013023.jpg",
         "IMG_5512_f011430.jpg"
       ],
       "notes": "Full bed and walls in frame; avoid bedside-table close-ups"
     },
     "Loft Bedroom": {
-      "top": [
+      "preferred": [
         "IMG_5512_f020295.jpg",
         "IMG_5512_f018801.jpg",
         "IMG_5512_f019107.jpg"
       ],
-      "bottom": [
+      "acceptable": [
+        "IMG_5512_f020295.jpg",
+        "IMG_5512_f018801.jpg",
+        "IMG_5512_f019107.jpg"
+      ],
+      "rejected": [
         "IMG_5512_f018756.jpg",
         "IMG_5512_f015777.jpg"
       ],
       "notes": "Loft eaves and bed visible; avoid wardrobe interior fill"
     },
     "Bathroom": {
-      "top": [
+      "preferred": [
         "IMG_5512_f011070.jpg",
-        "IMG_5512_f010854.jpg",
+        "IMG_5512_f010854.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f011070.jpg",
+        "IMG_5512_f010854.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f010629.jpg"
+      ],
+      "review_required": [
         "IMG_5512_f010593.jpg"
       ],
-      "bottom": [
-        "IMG_5512_f010629.jpg",
-        "IMG_5512_f010593.jpg"
-      ],
-      "notes": "Vanity and bath suite overview; avoid motion-blurred pan frames"
+      "notes": "Vanity and bath suite overview; avoid motion-blurred pan frames. f010593 was contradictory in v1 (both top and bottom) and is excluded pending review."
     },
     "En-suite Shower Room": {
-      "top": [
+      "preferred": [
         "IMG_5512_f012492.jpg",
-        "IMG_5512_f012141.jpg",
+        "IMG_5512_f012141.jpg"
+      ],
+      "acceptable": [
+        "IMG_5512_f012492.jpg",
+        "IMG_5512_f012141.jpg"
+      ],
+      "rejected": [
+        "IMG_5512_f012213.jpg"
+      ],
+      "review_required": [
         "IMG_5512_f012564.jpg"
       ],
-      "bottom": [
-        "IMG_5512_f012213.jpg",
-        "IMG_5512_f012564.jpg"
-      ],
-      "notes": "Shower room overview; avoid shower-head and tray close-ups"
+      "notes": "Shower room overview; avoid shower-head and tray close-ups. f012564 was contradictory in v1 (both top and bottom) and is excluded pending review."
     },
     "Loft Shower Room": {
-      "top": [
+      "preferred": [
         "IMG_5512_f021879.jpg",
         "IMG_5512_f022194.jpg",
         "IMG_5512_f023526.jpg"
       ],
-      "bottom": [
+      "acceptable": [
+        "IMG_5512_f021879.jpg",
+        "IMG_5512_f022194.jpg",
+        "IMG_5512_f023526.jpg"
+      ],
+      "rejected": [
         "IMG_5512_f021726.jpg",
         "IMG_5512_f023022.jpg"
       ],
       "notes": "Full shower enclosure visible; avoid tray and fitting close-ups"
     },
     "Stairs and Landing": {
-      "top": [
+      "preferred": [
         "IMG_5512_f014904.jpg",
         "IMG_5512_f013482.jpg",
         "IMG_5512_f014382.jpg"
       ],
-      "bottom": [
+      "acceptable": [
+        "IMG_5512_f014904.jpg",
+        "IMG_5512_f013482.jpg",
+        "IMG_5512_f014382.jpg"
+      ],
+      "rejected": [
         "IMG_5512_f013176.jpg",
         "IMG_5512_f014274.jpg"
       ],

@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "own-property-img5512-dense-anchor-v2",
+  "video": "IMG_5512.MOV",
+  "frame_count": 145,
+  "provenance": "Generated from an offline build using the reviewed room segments. Private frame pixels remain untracked; room/frame identity, anchor provenance, and acquisition settings are frozen here.",
+  "acquisition": {
+    "keyframes_per_minute": 12,
+    "max_frames_per_segment": 24,
+    "segment_boundary_trim_s": 2.0,
+    "segment_cover_anchor_s": 2.0,
+    "explicit_trim_lead_s": 0.0
+  },
+  "rooms": {
+    "Hallway": {
+      "candidates": [
+        "IMG_5512_f000009.jpg",
+        "IMG_5512_f000045.jpg",
+        "IMG_5512_f000081.jpg",
+        "IMG_5512_f000144.jpg",
+        "IMG_5512_f009432.jpg",
+        "IMG_5512_f009468.jpg",
+        "IMG_5512_f009675.jpg",
+        "IMG_5512_f009738.jpg",
+        "IMG_5512_f009873.jpg",
+        "IMG_5512_f010071.jpg",
+        "IMG_5512_f010152.jpg",
+        "IMG_5512_f010341.jpg"
+      ],
+      "cover_anchors": [
+        "IMG_5512_f009432.jpg"
+      ]
+    },
+    "Living Room": {
+      "candidates": [
+        "IMG_5512_f000153.jpg",
+        "IMG_5512_f000216.jpg",
+        "IMG_5512_f000243.jpg",
+        "IMG_5512_f000297.jpg",
+        "IMG_5512_f007893.jpg",
+        "IMG_5512_f007947.jpg",
+        "IMG_5512_f008064.jpg",
+        "IMG_5512_f008280.jpg",
+        "IMG_5512_f008487.jpg",
+        "IMG_5512_f008613.jpg",
+        "IMG_5512_f008676.jpg",
+        "IMG_5512_f008928.jpg",
+        "IMG_5512_f009090.jpg",
+        "IMG_5512_f009117.jpg",
+        "IMG_5512_f009387.jpg"
+      ],
+      "cover_anchors": [
+        "IMG_5512_f000153.jpg",
+        "IMG_5512_f007893.jpg"
+      ]
+    },
+    "Kitchen": {
+      "candidates": [
+        "IMG_5512_f000342.jpg",
+        "IMG_5512_f000495.jpg",
+        "IMG_5512_f000684.jpg",
+        "IMG_5512_f000981.jpg",
+        "IMG_5512_f001503.jpg",
+        "IMG_5512_f001584.jpg",
+        "IMG_5512_f002007.jpg",
+        "IMG_5512_f002376.jpg",
+        "IMG_5512_f002529.jpg",
+        "IMG_5512_f002898.jpg",
+        "IMG_5512_f003393.jpg",
+        "IMG_5512_f003762.jpg",
+        "IMG_5512_f004023.jpg",
+        "IMG_5512_f004374.jpg",
+        "IMG_5512_f004464.jpg",
+        "IMG_5512_f004977.jpg",
+        "IMG_5512_f005292.jpg",
+        "IMG_5512_f005508.jpg",
+        "IMG_5512_f005958.jpg",
+        "IMG_5512_f006039.jpg",
+        "IMG_5512_f006579.jpg",
+        "IMG_5512_f006786.jpg",
+        "IMG_5512_f007182.jpg",
+        "IMG_5512_f007308.jpg",
+        "IMG_5512_f007848.jpg"
+      ],
+      "cover_anchors": [
+        "IMG_5512_f000342.jpg"
+      ]
+    },
+    "Bedroom 1": {
+      "candidates": [
+        "IMG_5512_f011214.jpg",
+        "IMG_5512_f011250.jpg",
+        "IMG_5512_f011340.jpg",
+        "IMG_5512_f011484.jpg",
+        "IMG_5512_f011700.jpg",
+        "IMG_5512_f011862.jpg",
+        "IMG_5512_f012042.jpg",
+        "IMG_5512_f012699.jpg",
+        "IMG_5512_f012735.jpg",
+        "IMG_5512_f012807.jpg",
+        "IMG_5512_f012843.jpg",
+        "IMG_5512_f012906.jpg"
+      ],
+      "cover_anchors": [
+        "IMG_5512_f011214.jpg",
+        "IMG_5512_f012699.jpg"
+      ]
+    },
+    "Bedroom 2": {
+      "candidates": [
+        "IMG_5512_f016839.jpg",
+        "IMG_5512_f017001.jpg",
+        "IMG_5512_f017181.jpg",
+        "IMG_5512_f017253.jpg",
+        "IMG_5512_f017550.jpg",
+        "IMG_5512_f017613.jpg",
+        "IMG_5512_f017973.jpg",
+        "IMG_5512_f018000.jpg",
+        "IMG_5512_f018369.jpg",
+        "IMG_5512_f018468.jpg",
+        "IMG_5512_f018747.jpg",
+        "IMG_5512_f018801.jpg",
+        "IMG_5512_f019116.jpg",
+        "IMG_5512_f019152.jpg",
+        "IMG_5512_f019485.jpg",
+        "IMG_5512_f019638.jpg",
+        "IMG_5512_f019827.jpg",
+        "IMG_5512_f020043.jpg",
+        "IMG_5512_f020214.jpg",
+        "IMG_5512_f020313.jpg",
+        "IMG_5512_f020538.jpg",
+        "IMG_5512_f020718.jpg",
+        "IMG_5512_f020898.jpg",
+        "IMG_5512_f021087.jpg",
+        "IMG_5512_f021384.jpg"
+      ],
+      "cover_anchors": [
+        "IMG_5512_f016839.jpg"
+      ]
+    },
+    "Bathroom": {
+      "candidates": [
+        "IMG_5512_f010449.jpg",
+        "IMG_5512_f010584.jpg",
+        "IMG_5512_f010629.jpg",
+        "IMG_5512_f010854.jpg",
+        "IMG_5512_f010980.jpg",
+        "IMG_5512_f011070.jpg"
+      ],
+      "cover_anchors": [
+        "IMG_5512_f010449.jpg"
+      ]
+    },
+    "En-suite Shower Room": {
+      "candidates": [
+        "IMG_5512_f012132.jpg",
+        "IMG_5512_f012141.jpg",
+        "IMG_5512_f012231.jpg",
+        "IMG_5512_f012501.jpg",
+        "IMG_5512_f012564.jpg"
+      ],
+      "cover_anchors": [
+        "IMG_5512_f012132.jpg"
+      ]
+    },
+    "Loft Room": {
+      "candidates": [
+        "IMG_5512_f014922.jpg",
+        "IMG_5512_f014967.jpg",
+        "IMG_5512_f015174.jpg",
+        "IMG_5512_f015246.jpg",
+        "IMG_5512_f015453.jpg",
+        "IMG_5512_f015552.jpg",
+        "IMG_5512_f015777.jpg",
+        "IMG_5512_f015912.jpg",
+        "IMG_5512_f016038.jpg",
+        "IMG_5512_f016164.jpg",
+        "IMG_5512_f016254.jpg",
+        "IMG_5512_f016461.jpg",
+        "IMG_5512_f016668.jpg",
+        "IMG_5512_f016695.jpg"
+      ],
+      "cover_anchors": [
+        "IMG_5512_f014922.jpg"
+      ]
+    },
+    "Loft Shower Room": {
+      "candidates": [
+        "IMG_5512_f021483.jpg",
+        "IMG_5512_f021582.jpg",
+        "IMG_5512_f021726.jpg",
+        "IMG_5512_f021879.jpg",
+        "IMG_5512_f022014.jpg",
+        "IMG_5512_f022194.jpg",
+        "IMG_5512_f022275.jpg",
+        "IMG_5512_f022374.jpg",
+        "IMG_5512_f022626.jpg",
+        "IMG_5512_f022806.jpg",
+        "IMG_5512_f022833.jpg",
+        "IMG_5512_f023022.jpg",
+        "IMG_5512_f023175.jpg",
+        "IMG_5512_f023319.jpg",
+        "IMG_5512_f023526.jpg",
+        "IMG_5512_f023724.jpg",
+        "IMG_5512_f023778.jpg"
+      ],
+      "cover_anchors": [
+        "IMG_5512_f021483.jpg"
+      ]
+    },
+    "Stairs and Landing": {
+      "candidates": [
+        "IMG_5512_f013023.jpg",
+        "IMG_5512_f013041.jpg",
+        "IMG_5512_f013176.jpg",
+        "IMG_5512_f013383.jpg",
+        "IMG_5512_f013464.jpg",
+        "IMG_5512_f013581.jpg",
+        "IMG_5512_f013815.jpg",
+        "IMG_5512_f013896.jpg",
+        "IMG_5512_f014040.jpg",
+        "IMG_5512_f014265.jpg",
+        "IMG_5512_f014373.jpg",
+        "IMG_5512_f014463.jpg",
+        "IMG_5512_f014652.jpg",
+        "IMG_5512_f014904.jpg"
+      ],
+      "cover_anchors": [
+        "IMG_5512_f013023.jpg"
+      ]
+    }
+  },
+  "segments_artifact": "IMG_5512.json",
+  "segments_sha256": "011a2ad8ce849c0c0b01405dda196b56de2d4e0899203b81bec80e08484a2985"
+}

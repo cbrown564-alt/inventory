@@ -11,10 +11,16 @@ from homeinventory.cli import main
 from homeinventory.curate import (apply_override, centre_border_ratio, curate,
                                   establishing_score, exposure_clipped_fraction,
                                   frame_quality, hero_budget, load_overrides,
-                                  override_key, save_override, sharpness,
-                                  smooth_fraction)
+                                  override_key, rerank_covers_with_detections,
+                                  save_override, sharpness, smooth_fraction)
+from homeinventory.detect import Detection
 from homeinventory.report import render
 from homeinventory.schema import Inventory, Item, Photo, Room
+from evals.hero_gold import (
+    acceptable_frames,
+    load_gold_document,
+    preferred_frames,
+)
 
 
 def _noise_img(path: Path, seed: int, blur: float = 0.0):
@@ -93,6 +99,65 @@ def test_overrides_survive_a_rebuild(tmp_path):
     by_path = {p.path: p for p in fresh}
     assert not by_path[demoted.path].hero      # demoted stays demoted
     assert by_path[promoted.path].hero         # promoted stays promoted
+
+
+def test_detector_rerank_promotes_room_defining_overview_and_honours_hidden():
+    closeup = Photo(id="P001", path="vanity.jpg", room="Bedroom 1", hero=1,
+                    quality=1.0, source_video="walk.mp4")
+    overview = Photo(id="P002", path="bed.jpg", room="Bedroom 1", hero=None,
+                     quality=0.55, source_video="walk.mp4", cover_anchor=True)
+    hidden = Photo(id="P003", path="hidden-bed.jpg", room="Bedroom 1",
+                   hero=None, quality=1.0, source_video="walk.mp4")
+    det = lambda label, conf: Detection(label, conf, (0, 0, 10, 10))
+    detections = {
+        "P001": [det("mirror", 0.95), det("cabinet", 0.9)],
+        "P002": [det("bed", 0.8), det("wardrobe", 0.7)],
+        "P003": [det("bed", 0.99), det("wardrobe", 0.99)],
+    }
+
+    changed = rerank_covers_with_detections(
+        {"Bedroom 1": [closeup, overview, hidden]}, detections,
+        {"hidden-bed.jpg": "hidden"},
+    )
+
+    assert changed == {"Bedroom 1": "P002"}
+    assert overview.hero == 1
+    assert closeup.hero == 2
+    assert hidden.hero is None
+
+
+def test_detector_rerank_leaves_unsupported_room_types_to_classical_cover():
+    classical = Photo(id="P001", path="stairs.jpg", room="Stairs and Landing",
+                      hero=1, quality=0.8, source_video="walk.mp4")
+    false_positive = Photo(id="P002", path="partial.jpg",
+                           room="Stairs and Landing", quality=0.2,
+                           source_video="walk.mp4")
+    detections = {
+        "P002": [Detection("handrail", 0.9, (0, 0, 10, 10))],
+    }
+
+    changed = rerank_covers_with_detections(
+        {"Stairs and Landing": [classical, false_positive]}, detections)
+
+    assert changed == {}
+    assert classical.hero == 1
+    assert false_positive.hero is None
+
+
+def test_detector_rerank_ignores_one_weak_room_label():
+    classical = Photo(id="P001", path="living.jpg", room="Living Room",
+                      hero=1, quality=0.8, source_video="walk.mp4")
+    weak = Photo(id="P002", path="partial.jpg", room="Living Room",
+                 quality=0.9, source_video="walk.mp4")
+    detections = {
+        "P002": [Detection("sofa", 0.31, (0, 0, 10, 10))],
+    }
+
+    changed = rerank_covers_with_detections(
+        {"Living Room": [classical, weak]}, detections)
+
+    assert changed == {}
+    assert classical.hero == 1
 
 
 def test_apply_override_is_literal_and_persisted(tmp_path):
@@ -292,7 +357,10 @@ def test_cover_gate_helpers_on_synthetics(tmp_path):
     assert 0.0 <= exposure_clipped_fraction(wide_g) <= 1.0
 
 
-HERO_GOLD = Path(__file__).resolve().parents[1] / "evals/fixtures/own-property/hero-gold.json"
+HERO_GOLD = (Path(__file__).resolve().parents[1]
+             / "evals/fixtures/own-property/hero-gold-dense-anchor.json")
+HERO_METRICS = (Path(__file__).resolve().parents[1]
+                / "evals/fixtures/own-property/hero-dense-detect-metrics.json")
 
 
 def test_two_tier_eligibility_flags_on_curate(tmp_path):
@@ -320,30 +388,35 @@ def test_linear_iqa_score_dot_product():
     assert linear_iqa_score({"bias": 1.0, "establishing": 0.8}, weights) == 2.1
 
 
-def test_rank1_matches_hero_gold_when_fixture_present():
-    """Regression lock when hero-gold.json exists (docs/18 pass bar ≥7/9)."""
-    if not HERO_GOLD.is_file():
-        return
-    gold = json.loads(HERO_GOLD.read_text(encoding="utf-8"))
-    report = Path(__file__).resolve().parents[1] / "report"
-    inv_path = report / "inventory.json"
-    if not inv_path.is_file():
-        return
-    inv = json.loads(inv_path.read_text(encoding="utf-8"))
-    hits = 0
-    rooms = gold.get("rooms", {})
-    for room_name, spec in rooms.items():
-        gold_top = (spec.get("top") or [None])[0]
-        if not gold_top:
-            continue
-        room = next((r for r in inv["rooms"] if r["name"] == room_name), None)
-        if not room:
-            continue
-        rank1 = min((p for p in room["photos"] if p.get("hero")),
-                    key=lambda p: p["hero"], default=None)
-        if rank1 and Path(rank1["path"]).name == gold_top:
-            hits += 1
-    assert hits >= 7, f"rank-1 hit {hits}/{len(rooms)} — re-curate report/ and update gold"
+def _frozen_hero_benchmark():
+    """Return gold + rank 1 from the same immutable benchmark run."""
+    gold, manifest = load_gold_document(HERO_GOLD)
+    assert manifest is not None
+    metrics = json.loads(HERO_METRICS.read_text(encoding="utf-8"))
+    assert metrics["benchmark_id"] == gold["benchmark_id"]
+    assert set(metrics["rank1"]) == set(gold["rooms"])
+    return gold["rooms"], metrics["rank1"]
+
+
+def test_rank1_is_acceptable_on_compatible_hero_benchmark():
+    """Every room cover must belong to its human-approved acceptable set."""
+    rooms, rank1 = _frozen_hero_benchmark()
+    misses = {
+        room_name: rank1.get(room_name)
+        for room_name, spec in rooms.items()
+        if rank1.get(room_name) not in acceptable_frames(spec)
+    }
+    assert not misses, f"unacceptable rank-1 covers: {misses}"
+
+
+def test_rank1_matches_hero_preference_on_compatible_benchmark():
+    """Preference regression lock (docs/18 pass bar: exact top 1 ≥7/10)."""
+    rooms, rank1 = _frozen_hero_benchmark()
+    hits = sum(
+        rank1.get(room_name) == preferred_frames(spec)[0]
+        for room_name, spec in rooms.items()
+    )
+    assert hits >= 7, f"preferred rank-1 hit {hits}/{len(rooms)}"
 
 
 def test_wide_balanced_frame_wins_hero_rank_one(tmp_path):

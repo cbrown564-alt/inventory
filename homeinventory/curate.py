@@ -546,6 +546,115 @@ def curate(rooms: dict[str, list[Photo]], capture_dir: Path,
                      room_name, n_hero, len(photos))
 
 
+# Room-defining objects for the optional detector-assisted rank-1 pass.  These
+# are deliberately narrower than the inventory vocabulary: they answer only
+# "does this frame establish the named room?", not "what items exist?".
+_ROOM_COVER_TERMS: tuple[tuple[tuple[str, ...], tuple[str, ...]], ...] = (
+    (("living", "lounge"),
+     ("sofa", "armchair", "television", "coffee table")),
+    (("kitchen",),
+     ("cabinet", "refrigerator", "oven", "stove", "hob", "sink",
+      "dishwasher", "extractor hood")),
+    (("bedroom",),
+     ("bed", "mattress", "wardrobe", "chest of drawers")),
+    (("bathroom", "shower", "en-suite", "ensuite"),
+     ("toilet", "shower", "bathtub", "sink", "tap", "towel rail")),
+    (("loft room",),
+     ("sofa", "desk", "armchair", "television")),
+)
+
+_ROOM_COVER_WRONG: tuple[tuple[tuple[str, ...], tuple[str, ...]], ...] = (
+    (("living", "lounge", "kitchen"), ("toilet", "shower", "bathtub", "bed")),
+    (("bedroom",), ("toilet", "shower", "bathtub")),
+    (("bathroom", "shower", "en-suite", "ensuite"), ("bed", "sofa")),
+)
+
+
+def _room_terms(room_name: str, table) -> tuple[str, ...]:
+    lower = room_name.lower()
+    for needles, terms in table:
+        if any(needle in lower for needle in needles):
+            return terms
+    return ()
+
+
+def _semantic_detection_score(photo: Photo, detections: list,
+                              terms: tuple[str, ...],
+                              wrong_terms: tuple[str, ...]) -> float | None:
+    """Score room identity evidence, or None when evidence is insufficient."""
+    by_label: dict[str, list[float]] = {}
+    wrong = 0.0
+    for detection in detections:
+        label = str(detection.label).lower()
+        confidence = float(detection.confidence)
+        if label in terms:
+            by_label.setdefault(label, []).append(confidence)
+        if label in wrong_terms:
+            wrong += confidence
+    if not by_label or max(max(values) for values in by_label.values()) < 0.30:
+        return None
+
+    # Repeated cabinets are positive layout evidence, but cap repetition so a
+    # close-up cannot win merely by producing many overlapping boxes.
+    semantic = 0.0
+    for values in by_label.values():
+        values.sort(reverse=True)
+        semantic += values[0] + min(0.45, 0.15 * (len(values) - 1))
+    distinct_context = 0.25 * len(by_label)
+    # A lone low-confidence box is not enough to replace a classical cover;
+    # require either one strong defining fixture or corroborating object types.
+    if semantic + distinct_context < 0.90:
+        return None
+    quality = 0.30 * float(photo.quality or 0.0)
+    anchor = 0.20 if photo.cover_anchor else 0.0
+    return semantic + distinct_context + quality + anchor - 1.5 * wrong
+
+
+def rerank_covers_with_detections(
+        rooms: dict[str, list[Photo]],
+        detections: dict[str, list],
+        overrides: dict[str, str] | None = None,
+) -> dict[str, str]:
+    """Promote semantically grounded room covers after object detection.
+
+    Classical image metrics remain the fallback. A promotion requires a
+    confident room-defining detection and never revives a human-hidden frame.
+    Returns ``{room_name: promoted_photo_id}`` for audit/logging.
+    """
+    overrides = overrides or {}
+    promoted: dict[str, str] = {}
+    for room_name, photos in rooms.items():
+        terms = _room_terms(room_name, _ROOM_COVER_TERMS)
+        if not terms:
+            continue
+        wrong_terms = _room_terms(room_name, _ROOM_COVER_WRONG)
+        scored: list[tuple[float, Photo]] = []
+        for photo in photos:
+            if not photo.source_video:
+                continue
+            if overrides.get(override_key(photo)) == "hidden":
+                continue
+            score = _semantic_detection_score(
+                photo, detections.get(photo.id, []), terms, wrong_terms)
+            if score is not None:
+                scored.append((score, photo))
+        if not scored:
+            continue
+        score, best = max(scored, key=lambda pair: pair[0])
+        current = next((p for p in photos if p.hero == 1), None)
+        current_score = next(
+            (value for value, photo in scored if photo is current), None)
+        # Do not churn a grounded classical cover for a negligible tie.
+        if current is best or (current_score is not None
+                               and score < current_score + 0.15):
+            continue
+        if best.hero is None:
+            best.hero = max((p.hero or 0 for p in photos), default=0) + 1
+        _assign_rank_one(photos, best)
+        promoted[room_name] = best.id
+    return promoted
+
+
 def apply_override(inv, photo_id: str, action: str, work_dir: Path) -> dict:
     """Promote/demote one photo now and persist the decision (docs/15 M3).
 

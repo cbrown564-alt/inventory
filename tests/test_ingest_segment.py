@@ -7,8 +7,10 @@ import pytest
 
 from homeinventory.ingest import (
     SEGMENT_BOUNDARY_TRIM_S,
+    SEGMENT_COVER_ANCHOR_S,
     extract_keyframes,
     ingest,
+    segment_frame_budget,
 )
 
 
@@ -31,8 +33,14 @@ def _frame_index(path: Path) -> int:
     return int(path.stem.rsplit("_f", 1)[1])
 
 
-def test_segment_ingest_trims_lead_at_boundaries(tmp_path):
-    """Kitchen keyframes must not include Hallway frames at the segment seam."""
+def test_segment_frame_budget_is_dense_enough_for_brief_room_overviews():
+    assert segment_frame_budget(30) == 6
+    assert segment_frame_budget(51) == 10
+    assert segment_frame_budget(155) == 24  # bounded runtime for long inspections
+
+
+def test_segment_ingest_keeps_one_room_entry_anchor_then_trims(tmp_path):
+    """A useful room-entry view survives while the regular pool stays trimmed."""
     cv2 = pytest.importorskip("cv2")
 
     cap = tmp_path / "capture"
@@ -59,13 +67,19 @@ def test_segment_ingest_trims_lead_at_boundaries(tmp_path):
     assert rooms["Kitchen"], "expected keyframes in Kitchen segment"
 
     bleed_cutoff = int((boundary_s + SEGMENT_BOUNDARY_TRIM_S) * fps)
+    indices = [_frame_index(Path(photo.path)) for photo in rooms["Kitchen"]]
+    marked_anchors = [photo for photo in rooms["Kitchen"] if photo.cover_anchor]
+    anchors = [idx for idx in indices if idx < bleed_cutoff]
+    regular = [idx for idx in indices if idx >= bleed_cutoff]
+    assert len(anchors) == 1
+    assert len(marked_anchors) == 1
+    assert _frame_index(Path(marked_anchors[0].path)) == anchors[0]
+    assert anchors[0] >= int(boundary_s * fps)
+    assert anchors[0] < int((boundary_s + SEGMENT_COVER_ANCHOR_S) * fps)
+    assert regular
+
     for photo in rooms["Kitchen"]:
         frame_path = Path(photo.path)
-        idx = _frame_index(frame_path)
-        assert idx >= bleed_cutoff, (
-            f"{frame_path.name} at frame {idx} is inside the lead-trim "
-            f"window ({boundary_s}s + {SEGMENT_BOUNDARY_TRIM_S}s)"
-        )
         img = cv2.imread(str(frame_path))
         assert img is not None
         # Kitchen segment frames should be predominantly blue (BGR channel 0).
@@ -94,6 +108,7 @@ def test_segment_lead_trim_respects_explicit_override(tmp_path):
     }), encoding="utf-8")
 
     rooms = ingest(cap, work, lead_trim_s=custom_trim)
+    assert not any(p.cover_anchor for p in rooms["Kitchen"])
     min_kitchen = min(_frame_index(Path(p.path)) for p in rooms["Kitchen"])
     assert min_kitchen >= int((boundary_s + custom_trim) * fps)
 

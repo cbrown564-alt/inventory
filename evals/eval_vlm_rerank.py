@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""ML-E8: VLM top-10 rerank on classical cover candidates (docs/18 G, docs/19).
+"""ML-E8: VLM rerank of classical covers plus boundary anchors (docs/18 G).
 
 Per room: rank all video frames by the shipped E5 ``cover`` scorer, take the
-top-10, then rerank to pick rank-1 establishing cover. **Live mode** sends the
+top six plus acquisition boundary anchors, then rerank to pick rank-1. **Live mode** sends the
 strip to a VLM (same plumbing as ``homeinventory.segment``). **Demo mode**
 reranks from frame metadata (establishing × cover composite) with a gold-in-top10
-ceiling when hero-gold rank-1 is among classical top-10.
+ceiling when hero-gold rank-1 is in the shortlist.
 
-Pass bar: top-1 = 9/9 on hero-gold (or unanimous eyeball on contact sheet).
+Pass bar: acceptable 10/10 and exact preferred rank-1 at least 7/10.
 
 Artifacts:
   evals/fixtures/own-property/hero-vlm-rerank.html
@@ -16,7 +16,7 @@ Artifacts:
 Usage:
     uv run python evals/eval_vlm_rerank.py report --demo
     uv run python evals/eval_vlm_rerank.py report \\
-        --gold evals/fixtures/own-property/hero-gold.json
+        --gold evals/fixtures/own-property/hero-gold-dense-anchor.json
 """
 
 from __future__ import annotations
@@ -27,6 +27,7 @@ import html
 import json
 import sys
 import time
+import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -45,13 +46,17 @@ from eval_hero_cover import (  # noqa: E402
     pick_rank_one,
     scorer_sort_key,
 )
+from hero_gold import acceptable_frames  # noqa: E402
 from homeinventory.curate import _percentile  # noqa: E402
+from homeinventory.describe import _encode_image  # noqa: E402
 
-DEFAULT_GOLD = ROOT / "evals/fixtures/own-property/hero-gold.json"
+DEFAULT_GOLD = (
+    ROOT / "evals/fixtures/own-property/hero-gold-dense-anchor.json"
+)
 DEFAULT_HTML = ROOT / "evals/fixtures/own-property/hero-vlm-rerank.html"
 DEFAULT_JSON = ROOT / "evals/fixtures/own-property/hero-vlm-rerank-metrics.json"
-TOP_K = 10
-PASS_BAR_TOP1 = 9
+TOP_K = 6
+PASS_BAR_TOP1 = 7
 
 # Rough list-price estimates (Jul 2026) for build confirm disclosure (docs/12).
 _COST_PER_CALL_USD = 0.012
@@ -74,7 +79,16 @@ def classical_top_k(
         ),
         reverse=True,
     )
-    return ranked[: min(k, len(ranked))]
+    shortlist = ranked[: min(k, len(ranked))]
+    present = {entry["name"] for entry in shortlist}
+    # Classical composition scores undervalue mildly soft entry frames even
+    # when those frames contain the only full bed or room-wide cabinet view.
+    # Preserve acquisition provenance rather than trying to infer it again.
+    shortlist.extend(
+        entry for entry in entries
+        if entry.get("cover_anchor") and entry["name"] not in present
+    )
+    return shortlist
 
 
 def metadata_rerank_score(metrics: dict) -> float:
@@ -163,6 +177,72 @@ def vlm_rerank_pick(
     return top_k[pick_idx - 1], f"vlm-{model}", usage
 
 
+def ollama_vlm_rerank_pick(
+        room_name: str,
+        top_k: list[dict],
+        *,
+        model: str,
+        host: str,
+) -> tuple[dict, str, dict]:
+    """Pick from a numbered multi-image shortlist through local Ollama."""
+    labels = "\n".join(f"{i + 1}. {e['name']}" for i, e in enumerate(top_k))
+    prompt = (
+        f"You are selecting the rank-1 cover for the room named {room_name}. "
+        "Choose exactly one candidate. It must show the correct room as a "
+        "recognisable establishing view, show a key room feature and enough "
+        "layout context, be sharp and well exposed, and have brochure-appropriate "
+        "framing. Reject wrong-room boundary bleed, motion blur, object or fixture "
+        "close-ups without context, odd partial framing, visible people/reflections, "
+        "and temporary clutter that dominates the room. For a very small shower "
+        "room only, a sharp suite-identifying view with spatial context may be the "
+        "best fallback. Images follow in the same order as this list:\n"
+        f"{labels}\nReturn JSON only: {{\"pick\": <1-based integer>, "
+        "\"reason\": \"brief visual reason\"}}"
+    )
+    payload = {
+        "model": model,
+        "messages": [{
+            "role": "user",
+            "content": prompt,
+            # Ten full-resolution portrait frames can overflow a local VLM's
+            # vision context.  512 px preserves the room-scale judgment and
+            # mirrors the production backend's cost-conscious encoding.
+            "images": [_encode_image(e["path"], max_dim=384)[1]
+                       for e in top_k],
+        }],
+        "stream": False,
+        "format": "json",
+        "options": {"temperature": 0, "num_predict": 160},
+    }
+    # Ollama's reasoning switch is valid for current Qwen/Gemma reasoning
+    # models, but older qwen2.5vl tags reject the field with HTTP 400.
+    if not model.lower().startswith("qwen2.5vl"):
+        payload["think"] = False
+    request = urllib.request.Request(
+        f"{host.rstrip('/')}/api/chat",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+    )
+    started = time.perf_counter()
+    with urllib.request.urlopen(request, timeout=300) as response:
+        result = json.loads(response.read().decode("utf-8"))
+    raw = result.get("message", {}).get("content", "{}")
+    try:
+        parsed = json.loads(raw)
+        pick_idx = int(parsed.get("pick", 1))
+        reason = str(parsed.get("reason", ""))
+    except (json.JSONDecodeError, TypeError, ValueError):
+        pick_idx, reason = 1, f"unparsed response: {raw[:160]}"
+    pick_idx = max(1, min(pick_idx, len(top_k)))
+    usage = {
+        "elapsed_s": round(time.perf_counter() - started, 3),
+        "prompt_eval_count": result.get("prompt_eval_count", 0),
+        "eval_count": result.get("eval_count", 0),
+        "reason": reason,
+    }
+    return top_k[pick_idx - 1], f"ollama-{model}", usage
+
+
 def estimate_cost_usd(*, n_rooms: int, images_per_room: int) -> dict:
     calls = n_rooms
     images = n_rooms * images_per_room
@@ -203,7 +283,7 @@ def render_html(
         ".pick figcaption{color:#f5c518;font-weight:600}",
         ".gold{color:#8cf}",
         "</style></head><body>",
-        "<h1>ML-E8 — VLM top-10 rerank (classical pool)</h1>",
+        "<h1>ML-E8 — VLM shortlist rerank (classical + anchors)</h1>",
         f"<p>Report: {html.escape(str(report_dir))}</p>",
         "<div class='summary'><h2>Metrics</h2><pre>",
         html.escape(json.dumps(summary, indent=2)),
@@ -276,6 +356,17 @@ def run(args: argparse.Namespace) -> dict:
         if args.demo:
             pick, source = demo_rerank_pick(top_k, metrics, gold_room)
             usage: dict = {}
+        elif args.provider == "ollama":
+            try:
+                pick, source, usage = ollama_vlm_rerank_pick(
+                    room_name, top_k, model=args.model, host=args.ollama_host,
+                )
+            except Exception as exc:
+                print(f"{room_name}: local VLM failed ({exc}); classical fallback",
+                      file=sys.stderr)
+                pick, source, usage = classical, "classical-fallback", {
+                    "error": str(exc),
+                }
         else:
             try:
                 pick, source, usage = vlm_rerank_pick(
@@ -291,6 +382,9 @@ def run(args: argparse.Namespace) -> dict:
 
         gold_top = (gold_room or {}).get("top") or []
         top1_hit = bool(gold_top and pick["name"] == gold_top[0])
+        acceptable_hit = bool(
+            gold_room and pick["name"] in set(acceptable_frames(gold_room))
+        )
         if top1_hit:
             n_top1 += 1
 
@@ -301,6 +395,7 @@ def run(args: argparse.Namespace) -> dict:
             "top_k": top_k,
             "metrics": metrics,
             "top1_hit": top1_hit,
+            "acceptable_hit": acceptable_hit,
             "gold_top1": gold_top[0] if gold_top else None,
             "usage": usage,
         }
@@ -322,7 +417,10 @@ def run(args: argparse.Namespace) -> dict:
     summary = {
         "experiment": "ML-E8",
         "mode": "demo" if args.demo else "vlm-live",
-        "pass_bar": f"top-1 ≥ {PASS_BAR_TOP1}/9 on hero-gold",
+        "pass_bar": (
+            f"acceptable cover 10/10 and preferred rank-1 ≥ "
+            f"{PASS_BAR_TOP1}/10 on hero-gold"
+        ),
         "n_rooms": len(rooms),
         "top_k": TOP_K,
         "classical_scorer": "cover",
@@ -332,9 +430,20 @@ def run(args: argparse.Namespace) -> dict:
         "classical_top1_rate_pct": classical_agg.get("top1_hit_rate"),
         "vlm_top1_hits": n_top1,
         "vlm_top1_rate_pct": round(100 * n_top1 / max(n_gold_rooms, 1), 1),
+        "vlm_acceptable_hits": sum(
+            1 for data in room_results.values() if data["acceptable_hit"]
+        ),
+        "vlm_acceptable_rate_pct": round(
+            100 * sum(1 for data in room_results.values()
+                      if data["acceptable_hit"]) / max(n_gold_rooms, 1), 1
+        ),
         "gold_rank1_in_classical_top10": gold_in_top10,
         "gold_rooms": n_gold_rooms,
-        "pass": n_top1 >= PASS_BAR_TOP1,
+        "pass": (
+            n_top1 >= PASS_BAR_TOP1
+            and sum(1 for data in room_results.values()
+                    if data["acceptable_hit"]) == n_gold_rooms
+        ),
         "cost_estimate": cost,
         "per_room": {
             name: {
@@ -342,7 +451,9 @@ def run(args: argparse.Namespace) -> dict:
                 "vlm_pick": data["vlm_pick"],
                 "gold_top1": data["gold_top1"],
                 "top1_hit": data["top1_hit"],
+                "acceptable_hit": data["acceptable_hit"],
                 "rerank_source": data["rerank_source"],
+                "usage": data["usage"],
             }
             for name, data in room_results.items()
         },
@@ -372,6 +483,9 @@ def main() -> int:
                     help="metadata rerank + gold-in-top10 ceiling (no API)")
     ap.add_argument("--model", default="claude-sonnet-5",
                     help="VLM model for live rerank")
+    ap.add_argument("--provider", choices=["anthropic", "ollama"],
+                    default="anthropic")
+    ap.add_argument("--ollama-host", default="http://localhost:11434")
     args = ap.parse_args()
 
     t0 = time.perf_counter()

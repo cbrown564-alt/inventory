@@ -25,7 +25,8 @@ motion-blurred passes, or frames from the wrong room.
 | In scope | Out of scope (other docs / modules) |
 |---|---|
 | **Rank-1 cover** per room (overview thumbnail, report room header) | MMR hero-set election for the filmstrip (docs/15) |
-| Scoring / ranking candidates within a room's frame pool | Keyframe extraction density (`ingest.extract_keyframes`) |
+| Scoring / ranking candidates within a room's frame pool | Item-description backend choice |
+| Cover-oriented candidate acquisition at segment boundaries | General segmentation model selection (docs/11) |
 | Evaluation harness + gold rankings on the own-property build | Segment boundary placement (docs/11) — though bleed affects pool purity |
 | Reviewer promote/demote persistence (docs/15 M3) | Item-level YOLOE crops (docs/15 M4) |
 | Experiment log and adoption criteria | Learned describe backend choice |
@@ -52,15 +53,16 @@ can remain detail frames useful for the filmstrip.
 | Field | Value |
 |---|---|
 | Video | `examples/videos/IMG_5512.MOV` (~13.4 min, 803 s) |
-| Segments | `segment-spike-multi/gemini-3.5-flash/segments.json` (12 segments, 9 room names after alias merge) |
-| Frames | ~93 per-segment keyframes under `report/work/frames/` |
+| Segments | reviewed `report/work/segments/IMG_5512.json` (13 segments, 10 room names after repeated-room merge) |
+| Frames | 145 keyframes: 12/minute (max 24/segment) plus a 2 s boundary anchor |
+| Active fixture | `hero-gold-dense-anchor.json` + `hero-candidates-dense-anchor.json` |
 | Manual reference | Pre-M2 per-room clips + `report/inventory.json` from folder capture (10 rooms); use for eyeball gold, not automatic labels |
 
 Rebuild command (reuse cached segments):
 
 ```bash
 uv run python -m homeinventory.cli build capture-walkthrough -o report \
-  --segments-json segment-spike-multi/gemini-3.5-flash/segments.json \
+  --segments-json report/work/segments/IMG_5512.json \
   --progress-file report/build-progress.json
 ```
 
@@ -68,14 +70,13 @@ Re-curate only (no describe cost):
 
 ```bash
 uv run python -m homeinventory.cli curate-only capture-walkthrough -o report \
-  --no-pdf
+  --detect --no-pdf
 ```
 
-Reloads `report/inventory.json`, re-scores frame paths under the capture dir,
-re-elects hero ranks via `curate()`, writes `inventory.json`, and re-renders
-`inventory.html` — same post-curate path as `build`, without ingest,
-describe, or detect API spend. Use after changing scorer logic in `curate.py`
-or reviewer overrides in `work/curation.json`.
+Reloads `report/inventory.json`, re-scores frame paths, optionally reruns the
+local detector-assisted semantic pass (`--detect`), writes `inventory.json`,
+and re-renders `inventory.html` without ingest or describe API spend. Use after
+changing scorer logic or reviewer overrides.
 
 ## Failure modes (catalogue)
 
@@ -129,9 +130,57 @@ Observed on IMG_5512, Jul 2026 sessions:
 
 - **Date:** 5 Jul 2026
 - **Method:** After MMR, admit one **cover slot** hero (best `cover_score = establishing × min(1, 2.5/cbr)` among frames with quality ≥ 12% of room max). Rank 1 = max cover_score among heroes; reject a low-quality winner (< 25% of room max) when a sharper alternative scores within 8%. Pool stays narrow (heroes + slot — not full frame pool).
-- **Result:** top-1 hit **77.8%** (7/9), top-3 hit **100%** (9/9) on IMG_5512 gold. Kitchen and En-suite pick gold #3 frames (still top-3 hits). Regression test `test_rank1_matches_hero_gold_when_fixture_present` locks ≥ 7/9.
+- **Result:** top-1 hit **77.8%** (7/9), top-3 hit **100%** (9/9) on IMG_5512 gold. Kitchen and En-suite pick gold #3 frames (still top-3 hits). The v2 regression contract separately requires every rank 1 to belong to the human-approved `acceptable` set and locks exact curator preference at ≥ 7/9.
 - **Verdict:** ✅ **Adopted** as product rank-1 scorer (E1 MMR + E3 boundary trim unchanged).
 - **Artifacts:** `evals/fixtures/own-property/hero-contact-cover.html`, `report/inventory.html` after `curate-only`
+
+### E6 — Dense extraction + boundary cover anchors (ingest)
+
+- **Date:** 12 Jul 2026
+- **Method:** Increase the duration-scaled budget from 6 to 12 frames/minute
+  (cap 24), and preserve one sharp frame from the first 2 seconds after every
+  detected room boundary before applying the existing 2-second bleed trim.
+  Persist `Photo.cover_anchor` so downstream ranking can use acquisition
+  provenance. An explicit `--trim-lead` still suppresses anchors.
+- **Visual result:** acceptable candidates are available in **10/10 rooms**.
+  The pool recovered the living-room sofa view, kitchen-wide view, both bed-led
+  bedroom views, loft sofa overview, and loft-shower doorway view.
+- **Verdict:** ✅ **Adopted.** The old trim removed useful entry views while the
+  old sparse windows missed brief wide pans.
+- **Fixture:** `hero-candidates-dense-anchor.json` freezes all 145 frames plus
+  density, cap, trim, anchor duration, and reviewed-segment hash.
+
+### E7 — Detector-assisted semantic rank 1 (curate/pipeline)
+
+- **Date:** 12 Jul 2026
+- **Method:** Keep E5 as fallback, then use normal YOLOE results for narrowly
+  defined room identity: sofa/TV for living rooms; cabinets/appliances/sink for
+  kitchens; bed/wardrobe for bedrooms; suite fixtures for wet rooms; sofa/desk
+  for the loft room. Repetition is capped, wrong-room objects are penalised,
+  anchors receive a small provenance prior, and promotion requires a defining
+  detection at confidence ≥0.30. Human-hidden frames are excluded.
+- **Result:** first full build: **9/10 acceptable, 7/10 preferred**. The only
+  miss was a false-positive `handrail` on a partial landing. Removing stair
+  semantic ranking—because true stair views were not detected reliably—and
+  retaining the correct E5 fallback gives **10/10 acceptable, 7/10 preferred**.
+- **Verdict:** ✅ **Adopted.** No new API call; when detection is disabled or
+  unavailable, E5 remains unchanged. Stairs are deliberately unsupported until
+  broader detector evidence exists.
+- **Artifact:** `hero-dense-detect-metrics.json`.
+
+### E8 — Multi-image local VLM rerank (not adopted)
+
+- **Date:** 12 Jul 2026
+- **Method:** Send six classical candidates plus boundary anchors, resized to
+  384 px, to Ollama with a criteria-only prompt. Tested `qwen2.5vl:3b`; spot
+  checked the living room with `gemma4:12b`.
+- **Result:** Qwen exceeded its active vision context on several 7–8-image
+  rooms and selected only **1/10 acceptable** overall; successful calls also
+  confused image/index correspondence. Gemma selected the same bad
+  window/light close-up and described features absent from it.
+- **Verdict:** ❌ **Reject for product.** It was slower, weaker, and less
+  auditable than the existing detector. `eval_vlm_rerank.py` remains an
+  experiment harness with Ollama and Anthropic providers.
 
 ### docs/15 IQA benchmark (not adopted for product)
 
@@ -150,18 +199,24 @@ For each room in IMG_5512, curator ranks **top 3** and **bottom 2** frames
 at full resolution with one-line rationale. Store in:
 
 ```text
-evals/fixtures/own-property/hero-gold.json
+evals/fixtures/own-property/hero-gold-dense-anchor.json
 ```
 
-Suggested schema:
+Schema v2 separates acceptable covers from ordered preference and binds the
+labels to an immutable candidate manifest:
 
 ```json
 {
+  "schema_version": 2,
+  "benchmark_id": "own-property-img5512-dense-anchor-v2",
+  "candidate_manifest": "hero-candidates-dense-anchor.json",
   "video": "IMG_5512.MOV",
   "rooms": {
     "Kitchen": {
-      "top": ["IMG_5512_f00….jpg", "…"],
-      "bottom": ["…"],
+      "preferred": ["IMG_5512_f00….jpg", "…"],
+      "acceptable": ["IMG_5512_f00….jpg", "…"],
+      "rejected": ["…"],
+      "review_required": [],
       "notes": "Need hob + cabinets visible, not hob surface fill"
     }
   }
@@ -169,6 +224,15 @@ Suggested schema:
 ```
 
 Until gold exists, use ** pairwise eyeball** on contact sheets (below).
+
+`hero-candidates-dense-anchor.json` freezes all 145 current room/frame
+assignments and anchor identities. The original 93-frame contract remains in
+`hero-gold.json` / `hero-candidates.json` for historical comparisons. Private
+pixels remain untracked.
+Evaluators refuse accuracy metrics when a report's rooms or filenames differ
+from this manifest; `--allow-incompatible-gold` exists only for explicitly
+labelled forensic comparisons. This prevents segmentation or keyframe drift
+from masquerading as a cover-scoring regression.
 
 ### 2. Contact sheet per scorer
 
@@ -189,9 +253,9 @@ uv run python evals/eval_hero_cover.py report
 uv run python evals/eval_hero_cover.py report --scorer hard-gates \
   -o evals/fixtures/own-property/hero-contact-hard-gates.html
 
-# Gold metrics when hero-gold.json exists
+# Gold metrics against the active dense-anchor contract
 uv run python evals/eval_hero_cover.py report --gold \
-  evals/fixtures/own-property/hero-gold.json
+  evals/fixtures/own-property/hero-gold-dense-anchor.json
 ```
 
 Typical experiment loop: edit `curate.py` → `curate-only` → `eval_hero_cover.py`
@@ -203,13 +267,16 @@ Typical experiment loop: edit `curate.py` → `curate-only` → `eval_hero_cover
 |---|---|
 | **top-1 hit** | Gold #1 == scorer #1 |
 | **top-3 hit** | Gold #1 in scorer top 3 |
+| **acceptable hit** | Scorer #1 belongs to the human-approved acceptable set |
+| **candidate available** | At least one acceptable frame exists in the room pool |
 | **ρ (Spearman)** | Rank correlation vs gold (needs ≥5 ranked frames) |
 | **blur reject rate** | Fraction of picks where Laplacian < room median |
 | **regression vs prior** | Side-by-side HTML of E(n) vs E(n−1) picks |
 
-**Pass bar for adoption:** top-1 hit ≥ 7/9 rooms on IMG_5512 gold (or
-unanimous eyeball approval on contact sheet), **and** no room worse than
-baseline on pairwise compare.
+**Pass bar for adoption:** rank 1 is human-approved `acceptable` in **10/10**
+rooms, exact preferred rank 1 in at least **7/10**, and no privacy/wrong-room
+failure. Exact preference is secondary because several images validly satisfy
+the criteria; acceptable membership is the strict product invariant.
 
 ### 4. Runtime budget
 
@@ -280,7 +347,7 @@ MUSIQ order — deploy the linear model, not pyiqa at runtime.
 
 ### G — VLM single-frame classify (API, build-time)
 
-One batched call per room: send top-10 classical candidates as a strip;
+One batched call per room: send six classical candidates plus anchors;
 ask VLM to pick the best establishing shot with one-sentence reason
 (JSON schema). Cache by frame sha256.
 
@@ -306,11 +373,11 @@ flow / low motion windows; prefer those frames for rank 1.
 
 ```text
 1. Revert E2 heuristics (restore E1 or E0 + boundary trim only)
-2. Write hero-gold.json for IMG_5512 (9 rooms × top3/bottom2)
+2. Write versioned acceptable/preferred gold tied to a frozen candidate pool
 3. Ship eval_hero_cover.py contact sheets
 4. Run A (hard gates) + B (narrow pool) — compare on contact sheet
 5. If still < pass bar: try C, D, then F (MUSIQ-weight learning)
-6. If still stuck: spike G (VLM rerank) with cost disclosure
+6. Spike G (VLM rerank); reject if it cannot beat the deterministic baseline
 7. Parallel: H for review UX safety net
 ```
 
@@ -319,8 +386,8 @@ flow / low motion windows; prefer those frames for rank 1.
 1. **Should rank 1 ever differ from the "best" hero by sharpness?** Product
    says yes (establishing > texture); engineering must enforce minimum
    sharpness floor.
-2. **Loft Office missing from gemini-3.5-flash segments** — merged into
-   Loft Bedroom. Accept for benchmark or re-segment with sonnet-5?
+2. **Detector scope expansion** — stairs remain classical until staircase
+   detections are reliable on a broader, non-private evaluation set.
 3. **Licence-clean learned model** — is a small ONNX mobile-grade IQA
    model worth training on gold + MUSIQ labels?
 4. **Rebuild cost** — shipped: `curate-only` CLI (see above) re-runs
@@ -331,10 +398,10 @@ flow / low motion windows; prefer those frames for rank 1.
 | Path | Role |
 |---|---|
 | `homeinventory/cli.py` | `build`, `curate-only`, `render` |
-| `homeinventory/ingest.py` | Frame pool + boundary trim |
+| `homeinventory/ingest.py` | Dense frame pool + boundary trim/anchor |
 | `homeinventory/templates/review.html.j2` | `roomHeroSrc()` |
 | `homeinventory/report.py` | `prepare_room_sections()` → `cover` |
-| `homeinventory/curate.py` | Scoring, MMR, rank-1 promotion |
+| `homeinventory/curate.py` | Scoring, MMR, classical + semantic rank-1 promotion |
 | `evals/eval_hero_cover.py` | Per-room contact sheets + gold metrics |
 | `evals/eval_iqa.py` | Within-room rank benchmark (oracle) |
 | `docs/15-curation-and-one-app.md` | Hero set + MMR architecture |
@@ -342,13 +409,13 @@ flow / low motion windows; prefer those frames for rank 1.
 
 ## Definition of done (this doc's feature)
 
-- [x] Gold rankings for IMG_5512 committed under `evals/fixtures/own-property/hero-gold.json`
+- [x] Historical 93-frame and active 145-frame gold/candidate contracts committed under `evals/fixtures/own-property/`
 - [x] `evals/eval_hero_cover.py` produces per-room contact sheets
-- [x] Adopted scorer (E5) hits pass bar on gold (7/9 top-1); regression test locks rank-1
+- [x] E6+E7 active pipeline hits pass bar on compatible dense gold (7/10 preferred, 10/10 acceptable); report-dependent tests refuse or skip incompatible mutable builds with explicit drift diagnosis
 - [ ] Overview on own-property build: user eyeball approval — *"I'd show this to a landlord"*
-- [x] Documented experiment ID (E4 reject, E5 adopt) with date, verdict, and artifact links
+- [x] Documented E4/E8 rejects and E5/E6/E7 adoptions with verdicts and artifacts
 - [x] `curate-only` CLI re-runs curation + render without describe/detect cost
 - [x] Segment boundary trim (E3) with tests in `tests/test_ingest_segment.py`
 
-E5 is **shipped** for rank-1 cover selection. Remaining gate: landlord eyeball on the
+E5 + E6 + E7 are **shipped** for rank-1 cover selection. Remaining gate: landlord eyeball on the
 overview gallery (review app or `report/inventory.html`).

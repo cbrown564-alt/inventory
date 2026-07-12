@@ -60,6 +60,9 @@ class Photo:
     sha256: str = ""
     captured_at: Optional[str] = None   # ISO 8601, from EXIF when available
     source_video: Optional[str] = None  # set when extracted from a video
+    # True for the sharp frame sampled immediately after a detected room
+    # boundary. This preserves useful acquisition provenance for curation.
+    cover_anchor: bool = False
     note: Optional[str] = None
     # curation (docs/15 M2): what is *shown by default*, never what exists.
     # hero is a 1-based display rank within the room (None = disclosed tier);

@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "own-property-img5512-original-segmentation-v1",
+  "video": "IMG_5512.MOV",
+  "frame_count": 93,
+  "source_artifact": "hero-contact-mslap.html",
+  "source_artifact_sha256": "a04413db45aa0940b75890b8db2f28464ec724ae878f0599cac8490f45bfe293",
+  "provenance": "Recovered from the committed full-pool contact sheet produced against the original, now-lost segmentation run. Private frame pixels remain untracked; this file freezes room/frame identity.",
+  "rooms": {
+    "Hallway": {
+      "candidates": [
+        "IMG_5512_f009738.jpg",
+        "IMG_5512_f000009.jpg",
+        "IMG_5512_f000045.jpg",
+        "IMG_5512_f009432.jpg",
+        "IMG_5512_f010341.jpg",
+        "IMG_5512_f010071.jpg",
+        "IMG_5512_f000144.jpg",
+        "IMG_5512_f000081.jpg"
+      ]
+    },
+    "Living Room": {
+      "candidates": [
+        "IMG_5512_f008280.jpg",
+        "IMG_5512_f008676.jpg",
+        "IMG_5512_f008496.jpg",
+        "IMG_5512_f009126.jpg",
+        "IMG_5512_f007839.jpg",
+        "IMG_5512_f009063.jpg",
+        "IMG_5512_f000243.jpg",
+        "IMG_5512_f000297.jpg",
+        "IMG_5512_f000216.jpg"
+      ]
+    },
+    "Kitchen": {
+      "candidates": [
+        "IMG_5512_f006039.jpg",
+        "IMG_5512_f006300.jpg",
+        "IMG_5512_f000981.jpg",
+        "IMG_5512_f007182.jpg",
+        "IMG_5512_f001854.jpg",
+        "IMG_5512_f001584.jpg",
+        "IMG_5512_f002529.jpg",
+        "IMG_5512_f000495.jpg",
+        "IMG_5512_f005292.jpg",
+        "IMG_5512_f002376.jpg",
+        "IMG_5512_f002898.jpg",
+        "IMG_5512_f004023.jpg",
+        "IMG_5512_f006579.jpg",
+        "IMG_5512_f000684.jpg",
+        "IMG_5512_f004977.jpg",
+        "IMG_5512_f005625.jpg",
+        "IMG_5512_f003393.jpg",
+        "IMG_5512_f003762.jpg",
+        "IMG_5512_f003528.jpg",
+        "IMG_5512_f004914.jpg",
+        "IMG_5512_f004374.jpg",
+        "IMG_5512_f001503.jpg",
+        "IMG_5512_f007686.jpg",
+        "IMG_5512_f006948.jpg"
+      ]
+    },
+    "Bedroom 1": {
+      "candidates": [
+        "IMG_5512_f011250.jpg",
+        "IMG_5512_f012843.jpg",
+        "IMG_5512_f012042.jpg",
+        "IMG_5512_f012735.jpg",
+        "IMG_5512_f013023.jpg",
+        "IMG_5512_f011430.jpg",
+        "IMG_5512_f011700.jpg",
+        "IMG_5512_f012906.jpg"
+      ]
+    },
+    "Loft Bedroom": {
+      "candidates": [
+        "IMG_5512_f015777.jpg",
+        "IMG_5512_f019476.jpg",
+        "IMG_5512_f015174.jpg",
+        "IMG_5512_f020754.jpg",
+        "IMG_5512_f018801.jpg",
+        "IMG_5512_f017469.jpg",
+        "IMG_5512_f019107.jpg",
+        "IMG_5512_f021177.jpg",
+        "IMG_5512_f020196.jpg",
+        "IMG_5512_f018468.jpg",
+        "IMG_5512_f021150.jpg",
+        "IMG_5512_f018756.jpg",
+        "IMG_5512_f016461.jpg",
+        "IMG_5512_f017658.jpg",
+        "IMG_5512_f020295.jpg",
+        "IMG_5512_f016038.jpg",
+        "IMG_5512_f016695.jpg",
+        "IMG_5512_f016164.jpg",
+        "IMG_5512_f017883.jpg",
+        "IMG_5512_f017100.jpg",
+        "IMG_5512_f019683.jpg",
+        "IMG_5512_f015246.jpg"
+      ]
+    },
+    "Bathroom": {
+      "candidates": [
+        "IMG_5512_f011070.jpg",
+        "IMG_5512_f010854.jpg",
+        "IMG_5512_f010593.jpg",
+        "IMG_5512_f010629.jpg"
+      ]
+    },
+    "En-suite Shower Room": {
+      "candidates": [
+        "IMG_5512_f012564.jpg",
+        "IMG_5512_f012141.jpg",
+        "IMG_5512_f012213.jpg",
+        "IMG_5512_f012492.jpg"
+      ]
+    },
+    "Loft Shower Room": {
+      "candidates": [
+        "IMG_5512_f021879.jpg",
+        "IMG_5512_f022626.jpg",
+        "IMG_5512_f023724.jpg",
+        "IMG_5512_f022194.jpg",
+        "IMG_5512_f023022.jpg",
+        "IMG_5512_f023526.jpg",
+        "IMG_5512_f022833.jpg",
+        "IMG_5512_f021726.jpg"
+      ]
+    },
+    "Stairs and Landing": {
+      "candidates": [
+        "IMG_5512_f013176.jpg",
+        "IMG_5512_f014904.jpg",
+        "IMG_5512_f014382.jpg",
+        "IMG_5512_f014274.jpg",
+        "IMG_5512_f013896.jpg",
+        "IMG_5512_f013482.jpg"
+      ]
+    }
+  }
+}
