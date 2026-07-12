@@ -49,6 +49,7 @@ class BuildOptions:
     segment_every: float = 5.0
     segments_json: Optional[Path] = None
     no_segment: bool = False
+    photo_mode: bool = False
     progress_file: Optional[Path] = None
     no_detect: bool = False
     detect_mode: str = "text"
@@ -89,6 +90,7 @@ class BuildOptions:
             segment_every=getattr(args, "segment_every", 5.0),
             segments_json=Path(seg_json) if seg_json else None,
             no_segment=getattr(args, "no_segment", False),
+            photo_mode=getattr(args, "photo_mode", False),
             progress_file=Path(progress) if progress else None,
             no_detect=getattr(args, "no_detect", False),
             detect_mode=getattr(args, "detect_mode", "text"),
@@ -186,6 +188,7 @@ def run_build(opts: BuildOptions, *,
         rooms_photos = ingest(
             capture_dir, work_dir,
             lead_trim_s=opts.trim_lead,
+            photo_mode=opts.photo_mode,
             segment_model=opts.segment_model,
             segment_every=opts.segment_every,
             segments_json=opts.segments_json,

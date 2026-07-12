@@ -70,7 +70,7 @@ emphasis, not direction.*
 4. Wait (segment → describe → curate → PDF — all invisible)
 5. Review room-by-room, fix grades/defects, sign
 6. Send the tenant link to review, comment, and countersign
-   (today `--share`; the journey ends here by default, not behind a flag —
+   (Finish mints the link; `--share` pre-enables it and phone pairing —
    mydeposits gives max weight only when both parties sign)
 7. Download the attested PDF
 
@@ -203,15 +203,16 @@ pool that may contain the wrong room entirely.
 - [ ] **Pipeline can flag a bad segment**, not silently pick the
       least-bad frame — "no confident cover" surfaces for re-capture
       or manual review rather than shipping a staircase as a kitchen.
-- [ ] **Report meets the deposit-scheme evidential spec point-by-point**
-      ([`market-research-2026-07.md`](market-research-2026-07.md)):
+- [x] **Report meets the deposit-scheme evidential spec point-by-point**
+      ([`market-research-2026-07.md`](market-research-2026-07.md),
+      audit: [`29-evidential-spec-audit.md`](29-evidential-spec-audit.md)):
       capture timestamps in the *file metadata* of every embedded image
-      (DPS checks metadata, not printed dates — extracted video frames
-      get ``DateTimeOriginal`` at ingest (provenance rule in
-      [`29-evidential-spec-audit.md`](29-evidential-spec-audit.md)), written report with embedded photos, video referenced
-      by exact timecodes, both-party signatures, tamper-evident trail.
-      Frame-metadata gap closed; countersign-as-default and full
-      point-by-point sign-off remain.
+      (DPS checks metadata, not printed dates — extracted video frames get
+      ``DateTimeOriginal`` at ingest; wall-clock provenance rule in docs/29;
+      footage timecode retained via ``videometa.photo_time``), written report
+      with embedded photos, video referenced by exact timecodes, both-party
+      signatures, tamper-evident trail. Frame-metadata gap closed; tenant
+      countersign-as-default remains a Pillar 4 item.
 
 ### Pillar 3 — The report is accurate and complete
 
@@ -251,9 +252,9 @@ back to the £165 option.
 | Pillar | Status |
 |---|---|
 | **1 — Trust at first glance** | **Mostly met.** Design system + review craft landed; first-screen owner sign-off remains. |
-| **2 — Trustworthy by construction** | **Not started.** Capture strategy is genuine research; hero/pipeline fixes are coupled to its outcome. Interim cover-warn UI only. Evidential-spec audit new — most mitigations shipped, frame-metadata gap to close. |
+| **2 — Trustworthy by construction** | **In progress.** Capture scaffolding (`--photo-mode`) ready; experiment unrun. Hero/pipeline semantic cover still open. Evidential-spec frame-metadata closed (docs/29). |
 | **3 — Accurate & complete** | **Partially met.** Defect recall below bar; quality wins (E8/E2/E10) proven but unwired. |
-| **4 — Low-friction journey** | **Mostly met.** Browser-print PDF fallback ships; native WeasyPrint still preferred. Countersign-as-default step remains. |
+| **4 — Low-friction journey** | **Mostly met.** Browser-print PDF fallback ships; countersign-as-default Finish step remains. |
 
 **v1 ships when every box is checked.** The old DoD was 4/6 done because
 it measured the journey mechanically; the real bar — Pillars 1 and 2 —

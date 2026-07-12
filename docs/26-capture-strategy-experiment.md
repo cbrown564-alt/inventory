@@ -167,6 +167,17 @@ The pipeline currently assumes video. Two gaps block the photo arms:
 Both are scoped as experiment scaffolding, not product features. They live
 behind a flag until the decision is made.
 
+### Step 0 scaffolding *(ready — Jul 2026)*
+
+| Piece | How to use |
+|---|---|
+| Photo-mode ingest | `homeinventory build CAPTURE --photo-mode -o OUT` — room names from `CAPTURE/<Room>/…`; skips VLM segmentation and keyframe extraction |
+| Folder layout check | `homeinventory experiment validate CAPTURE --arm P1\|P2\|V2` — warns on protocol drift, errors on missing rooms or wrong media type |
+| Scorecard template | `homeinventory experiment scorecard-template -o scorecard.json` — empty per-arm metrics structure from the table below |
+
+Convention: **`capture/<Room Name>/…`** for all photo and per-room video arms.
+No experiment results yet — proceed to Step 1 capture.
+
 ## Metrics & decision rules
 
 ### Per-arm scorecard (filled per property, then averaged)
@@ -212,7 +223,7 @@ built is built on the right assumption.
 ## Sequencing
 
 ```text
-Step 0 — Build photo-mode ingest + capture-time room naming (scaffolding)
+Step 0 — Build photo-mode ingest + capture-time room naming (scaffolding) ✅
 Step 1 — Capture Property A under V0, V1, P1 and P2 (reuse the existing
          footage only for V0 when it truly matches the baseline protocol)
 Step 2 — Build + review each to A's gold; score the scorecard

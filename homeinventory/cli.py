@@ -5,11 +5,15 @@
   homeinventory curate-only CAPTURE_DIR -o OUT_DIR
                                                # re-run hero curation + render
                                                # from existing inventory.json
-  homeinventory review CAPTURE_DIR -o OUT_DIR  # local review web app (--share
-                                               # adds a tenant link)
+  homeinventory review CAPTURE_DIR -o OUT_DIR  # local review web app (Finish
+                                               # mints tenant link; --share
+                                               # pre-enables it)
   homeinventory check CAPTURE_DIR              # detector-only coverage check
   homeinventory compare CHECKIN CHECKOUT -o DIR  # check-in vs check-out
                                                # delta report (docs/08)
+  homeinventory experiment validate CAPTURE_DIR --arm P1
+                                               # capture-strategy layout check
+  homeinventory experiment scorecard-template  # empty scorecard JSON (docs/26)
 """
 
 from __future__ import annotations
@@ -129,8 +133,9 @@ def cmd_render(args) -> int:
 
 
 def cmd_review(args) -> int:
-    """Serve the local review app (Level 2); --share adds the tenant link
-    (Level 3). See docs/05-review-experience.md."""
+    """Serve the local review app (Level 2); Finish mints the tenant link by
+    default.  --share pre-enables it and adds phone pairing (Level 3).
+    See docs/05-review-experience.md."""
     from .review import serve
 
     try:
@@ -164,7 +169,8 @@ def cmd_check(args) -> int:
         print(f"error: capture dir not found: {capture_dir}", file=sys.stderr)
         return 2
     work_dir = Path(args.out) / "work" if args.out else capture_dir / ".check-work"
-    rooms = ingest(capture_dir, work_dir)
+    rooms = ingest(capture_dir, work_dir,
+                   photo_mode=getattr(args, "photo_mode", False))
     if not rooms:
         print("error: no photos or videos found (see `homeinventory guide`)",
               file=sys.stderr)
@@ -284,6 +290,43 @@ def cmd_compare(args) -> int:
     return 0
 
 
+def cmd_experiment_validate(args) -> int:
+    """Validate capture folder layout for a docs/26 experiment arm."""
+    import json
+    from .capture_experiment import layout_report_dict, validate_capture_layout
+
+    try:
+        report = validate_capture_layout(Path(args.capture_dir), args.arm)
+    except ValueError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+
+    if args.json:
+        print(json.dumps(layout_report_dict(report), indent=2, ensure_ascii=False))
+    else:
+        print(f"arm {report.arm}  capture {report.capture_dir}")
+        print(f"rooms {len(report.rooms)}  "
+              f"photos {report.total_photos}  videos {report.total_videos}")
+        for room in report.rooms:
+            print(f"  {room.name}: {room.photos} photo(s), {room.videos} video(s)")
+        for w in report.warnings:
+            print(f"  WARN  {w}")
+        for e in report.errors:
+            print(f"  ERR   {e}")
+        status = "ok" if report.ok else "FAILED"
+        print(f"\nlayout {status}")
+    return 0 if report.ok else 1
+
+
+def cmd_experiment_scorecard_template(args) -> int:
+    """Write an empty docs/26 scorecard JSON template."""
+    from .capture_experiment import write_scorecard_template
+
+    path = write_scorecard_template(Path(args.output))
+    print(f"wrote {path}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     from .usecases import REGISTRY
     use_cases = sorted(REGISTRY)
@@ -344,6 +387,10 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--no-segment", action="store_true",
                    help="skip VLM room segmentation for root walkthrough videos "
                         "(treat as one General room)")
+    b.add_argument("--photo-mode", action="store_true",
+                   help="experiment scaffolding (docs/26): ingest native photos "
+                        "grouped by room subfolder; skip video segmentation and "
+                        "keyframe extraction")
     b.add_argument("--segment-model", default="gemini-3.5-flash",
                    help="VLM for walkthrough segmentation (default: "
                         "gemini-3.5-flash)")
@@ -385,13 +432,15 @@ def main(argv: list[str] | None = None) -> int:
 
     rv = sub.add_parser("review",
                         help="serve the local review web app (edit, annotate, "
-                             "sign; --share adds a tenant link)")
+                             "sign; Finish mints tenant link; --share "
+                             "pre-enables it + phone pairing)")
     rv.add_argument("capture_dir")
     rv.add_argument("-o", "--out", default="report")
     rv.add_argument("--port", type=int, default=8484)
     rv.add_argument("--share", action="store_true",
-                    help="also serve a token-protected tenant link on the LAN "
-                         "(comments + countersignature)")
+                    help="pre-enable the token-protected tenant link on the "
+                         "LAN and owner phone pairing (Finish can also mint "
+                         "the link without this flag)")
     rv.add_argument("--backend", choices=["claude", "openai", "local", "offline"],
                     default="openai", help="backend used by 'Re-describe room'")
     rv.add_argument("--model", default=None)
@@ -412,6 +461,8 @@ def main(argv: list[str] | None = None) -> int:
     ck.add_argument("-o", "--out", default=None,
                     help="reuse a report dir's work folder for video keyframes")
     ck.add_argument("--room", help="only check these rooms, comma-separated")
+    ck.add_argument("--photo-mode", action="store_true",
+                    help="same as build --photo-mode (photos only, no video path)")
     _add_detect_args(ck)
     ck.add_argument("--det-conf", type=float, default=0.25)
     ck.set_defaults(func=cmd_check)
@@ -449,6 +500,25 @@ def main(argv: list[str] | None = None) -> int:
                         "--context; omitted = 'not provided')")
     c.add_argument("--no-pdf", action="store_true")
     c.set_defaults(func=cmd_compare)
+
+    exp = sub.add_parser("experiment",
+                         help="capture-strategy experiment tools (docs/26)")
+    exp_sub = exp.add_subparsers(dest="experiment_cmd", required=True)
+
+    ev = exp_sub.add_parser("validate",
+                            help="check capture folder layout for an arm")
+    ev.add_argument("capture_dir")
+    ev.add_argument("--arm", required=True, choices=["P1", "P2", "V2"],
+                    help="experiment arm protocol to validate against")
+    ev.add_argument("--json", action="store_true",
+                    help="emit machine-readable layout report")
+    ev.set_defaults(func=cmd_experiment_validate)
+
+    est = exp_sub.add_parser("scorecard-template",
+                             help="write an empty per-arm scorecard JSON")
+    est.add_argument("-o", "--output", default="capture-scorecard.json",
+                     help="output path (default: capture-scorecard.json)")
+    est.set_defaults(func=cmd_experiment_scorecard_template)
 
     args = parser.parse_args(argv)
     from .dotenv import load_dotenv
