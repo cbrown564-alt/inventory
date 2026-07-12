@@ -35,8 +35,11 @@ capture-walkthrough/
 # own-property eval fixture (personal data; local by default per docs/07)
 evals/fixtures/ownproperty/
 
-# own-property walkthrough source video (personal data, 1.3 GB) + Finder junk
-examples/videos/IMG_5512.MOV
+# Walkthrough source videos — keep local only (GitHub 100 MB limit; personal data)
+examples/videos/*.MOV
+examples/videos/*.mov
+examples/videos/*.mp4
+examples/videos/*.MP4
 .DS_Store
 
 # segmentation spike outputs (personal frames)
