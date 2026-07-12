@@ -179,6 +179,27 @@ def test_schedule_renders_context_photo_when_crop_missing(tmp_path):
     assert 'Context evidence for Worktop' in html
 
 
+def test_report_includes_evidence_desk_and_lightbox_payload(tmp_path):
+    inv, cap, out = _fixture(tmp_path)
+    html = render(inv, cap, out, pdf=False)["html"].read_text(encoding="utf-8")
+    assert 'id="overview"' in html
+    assert "Evidence desk" in html
+    assert 'data-filter="needs-review"' in html
+    assert 'data-evidence-status="context"' in html
+    assert 'data-finish-gap="true"' in html
+    assert '"evidence_media"' in html
+    assert "photos/P001.jpg" in html
+    assert "finish view recommended" in html
+
+
+def test_defect_rows_expose_evidence_and_review_actions(tmp_path):
+    inv, cap, out = _fixture(tmp_path)
+    html = render(inv, cap, out, pdf=False)["html"].read_text(encoding="utf-8")
+    assert "Verify in evidence" in html
+    assert "Mark location in Review" in html
+    assert "1 marked region" in html
+
+
 def test_appendix_b_prunes_near_duplicate_frames(tmp_path):
     cap = tmp_path / "capture"
     _img(cap / "Kitchen" / "k1.jpg")

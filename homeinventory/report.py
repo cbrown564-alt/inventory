@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import shutil
 from collections import defaultdict
 from dataclasses import asdict
@@ -53,6 +54,14 @@ CATEGORY_HEADINGS: dict[str, str | None] = {
     "meter": "Meters",
     "other": "Miscellaneous items",
 }
+
+# These are intentionally broad, room-level evidence classes. They are not
+# detector labels: they identify the finish/coverage rows where a context
+# photo is often useful but a dedicated close-up would make the claim easier
+# to verify.
+FINISH_EVIDENCE_TERMS = (
+    "ceiling", "wall", "floor", "skirting", "blind",
+)
 
 
 def _room_sort_key(name: str) -> tuple[int, str]:
@@ -121,6 +130,105 @@ def build_cover_rows(inv: Inventory, uc: UseCase) -> list[dict]:
         if value:
             rows.append({"label": field.label, "value": value})
     return rows
+
+
+def _is_finish_item(name: str) -> bool:
+    text = re.sub(r"[^a-z0-9 ]", " ", name.lower())
+    return any(term in text for term in FINISH_EVIDENCE_TERMS)
+
+
+def _evidence_state(item: Item, crop_src: dict[str, str]) -> str:
+    """Return the evidence state visible to a report reader."""
+    if item.id in crop_src:
+        return "proposed" if item.crop_status == "proposed" else "crop"
+    if item.photo_ids:
+        return "context"
+    return "missing"
+
+
+def build_evidence_overview(inv: Inventory,
+                            crop_src: dict[str, str]) -> dict:
+    """Build the compact evidence desk shown above the schedule."""
+    stats = {
+        "total": 0, "closeups": 0, "proposed": 0, "context": 0,
+        "missing": 0, "finish_gaps": 0, "defect_items": 0,
+        "unreviewed": 0,
+    }
+    rooms: list[dict] = []
+    for room in sort_rooms(inv.rooms):
+        items = [item for item in room.items if not item.rejected]
+        room_stats = {
+            "name": room.name, "total": len(items), "closeups": 0,
+            "proposed": 0, "context": 0, "missing": 0, "finish_gaps": 0,
+            "defects": 0, "unreviewed": 0,
+        }
+        for item in items:
+            state = _evidence_state(item, crop_src)
+            stats["total"] += 1
+            stats["closeups"] += state == "crop"
+            stats["proposed"] += state == "proposed"
+            stats["context"] += state == "context"
+            stats["missing"] += state == "missing"
+            room_stats["closeups"] += state == "crop"
+            room_stats["proposed"] += state == "proposed"
+            room_stats["context"] += state == "context"
+            room_stats["missing"] += state == "missing"
+            if _is_finish_item(item.name) and state != "crop":
+                stats["finish_gaps"] += 1
+                room_stats["finish_gaps"] += 1
+            if item.defects or item.rejected_defects:
+                stats["defect_items"] += 1
+                room_stats["defects"] += 1
+            if not item.reviewed and not item.rejected:
+                stats["unreviewed"] += 1
+                room_stats["unreviewed"] += 1
+        rooms.append(room_stats)
+    stats["attention"] = stats["context"] + stats["missing"] + stats["defect_items"]
+    stats["coverage_percent"] = round(
+        100 * stats["closeups"] / stats["total"], 1
+    ) if stats["total"] else 0
+    return {**stats, "rooms": rooms}
+
+
+def build_evidence_media(inv: Inventory, photo_src: dict[str, str],
+                         crop_src: dict[str, str]) -> dict[str, list[dict]]:
+    """Build the lightbox media list for each schedule item.
+
+    The crop comes first, followed by every cited source photo. Defect
+    regions are scoped to the item so the viewer can show the claim in place
+    without exposing unrelated annotations from the same room.
+    """
+    media_by_item: dict[str, list[dict]] = {}
+    for room in inv.rooms:
+        for item in room.items:
+            media: list[dict] = []
+            if crop_src.get(item.id):
+                media.append({
+                    "src": crop_src[item.id],
+                    "label": "Proposed crop" if item.crop_status == "proposed"
+                    else "Close-up",
+                    "title": item.name,
+                })
+            for pid in item.photo_ids:
+                src = photo_src.get(pid)
+                if not src:
+                    continue
+                regions = []
+                for region in item.defect_regions:
+                    if region.get("photo_id") != pid:
+                        continue
+                    regions.append({
+                        "x": region.get("x", 0), "y": region.get("y", 0),
+                        "w": region.get("w", 0), "h": region.get("h", 0),
+                        "defect": region.get("defect", ""),
+                    })
+                media.append({
+                    "src": src, "label": pid,
+                    "title": f"{room.name} · {item.name}",
+                    "regions": regions,
+                })
+            media_by_item[item.id] = media
+    return media_by_item
 
 
 def _group_items_by_category(items: list[Item]) -> list[tuple[str | None, list[Item]]]:
@@ -456,6 +564,7 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
     env.filters["human_date"] = human_date
     env.filters["basename"] = lambda p: Path(str(p).replace("\\", "/")).name
     env.filters["timecode"] = _timecode
+    env.globals["is_finish_item"] = _is_finish_item
 
     # exhibit provenance: each extracted frame's second in its source video
     try:
@@ -504,6 +613,8 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
         section["appendix_pruned"] = len(section["photos"]) - len(kept)
 
     crop_src = _export_crops(inv, out_dir)
+    evidence_overview = build_evidence_overview(inv, crop_src)
+    evidence_media = build_evidence_media(inv, photo_src, crop_src)
     context = dict(
         inv=inv,
         uc=uc,
@@ -517,6 +628,7 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
         total_photos=inv.photo_count(),
         hero_total=sum(len(s["hero_photos"]) for s in room_sections),
         reviewed_items=inv.reviewed_count(),
+        evidence_overview=evidence_overview,
         schedule_summary=schedule,
         cover_rows=build_cover_rows(inv, uc),
         room_sections=room_sections,
@@ -527,6 +639,7 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
                                                  crop_src),
                  "photo_src": photo_src,
                  "crop_src": crop_src,
+                 "evidence_media": evidence_media,
                  "owner_role": uc.owner_role.key,
                  "counterparty_role": uc.counterparty_role.key,
                  "signing_roles": list(uc.signing_role_keys)},

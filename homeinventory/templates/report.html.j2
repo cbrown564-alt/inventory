@@ -65,6 +65,14 @@
   .item-thumb { display: block; width: 100%; max-width: 96px; height: 44px;
                 object-fit: cover; border: 1px solid var(--rule);
                 border-radius: 2px; margin-bottom: 3px; }
+  .evidence-trigger { display: block; position: relative; border: 0;
+                      padding: 0; margin: 0; background: transparent;
+                      color: inherit; font: inherit; text-align: left;
+                      cursor: zoom-in; }
+  .evidence-trigger:focus-visible, .defect-evidence:focus-visible,
+  .filter-btn:focus-visible, #review-search:focus-visible {
+    outline: 2px solid var(--brass); outline-offset: 3px; }
+  .evidence-print-label { color: var(--muted); font: 8pt var(--ui); }
   .item-rail-label { display: none; }
   /* grades wear small-caps; defect text stays sentence case */
   .grade-word { white-space: nowrap; font-variant: small-caps; }
@@ -295,24 +303,38 @@
       border-radius: 8px; color: #aaa293; background: rgba(246,243,236,.5);
       font: 600 7px/1 var(--ui); letter-spacing: .16em; }
     section.room tr.item-row:has(.item-thumb) .name-cell { display: contents; }
+    section.room tr.item-row:has(.item-thumb) .evidence-trigger {
+      grid-area: visual; align-self: stretch; width: 100%; height: 100%;
+      min-height: 118px; border: 1px solid #cfc7b6; border-radius: 8px;
+      overflow: hidden; box-shadow: 0 5px 16px -12px rgba(43,36,20,.55);
+      transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease; }
+    section.room tr.item-row:has(.item-thumb):hover .evidence-trigger {
+      transform: scale(1.025); box-shadow: 0 10px 24px -14px rgba(43,36,20,.7); }
     section.room tr.item-row:has(.item-thumb) .item-thumb { grid-area: visual;
       align-self: stretch; width: 100%; height: 100%; min-height: 118px;
       max-width: none; margin: 0; border: 1px solid #cfc7b6; border-radius: 8px;
       object-fit: cover; box-shadow: 0 5px 16px -12px rgba(43,36,20,.55);
       transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease,
       filter .25s ease; }
-    section.room tr.item-row:has(.item-thumb):hover .item-thumb { transform: scale(1.025);
-      box-shadow: 0 10px 24px -14px rgba(43,36,20,.7);
+    section.room tr.item-row:has(.item-thumb) .evidence-trigger .item-thumb {
+      grid-area: auto; border: 0; border-radius: 0; box-shadow: none;
+      transition: filter .25s ease; }
+    section.room tr.item-row:has(.item-thumb):hover .evidence-trigger .item-thumb {
       filter: saturate(1.05) contrast(1.02); }
     section.room tr.item-row:has(.item-thumb) .name-cell .item-name { grid-area: name;
       align-self: end; }
     section.room tr.item-row:has(.item-thumb) .name-cell .review-flag { grid-area: name;
       align-self: start; justify-self: end; }
     section.room tr.item-row:has(.item-thumb-context) .item-rail-label { display: block;
-      grid-area: visual; align-self: end; justify-self: start; z-index: 1;
-      margin: 0 0 8px 8px; padding: 4px 6px;
+      position: absolute; left: 8px; bottom: 8px; z-index: 1;
+      margin: 0; padding: 4px 6px;
       border: 1px solid rgba(255,253,248,.72); background: rgba(30,34,41,.72);
       color: #fffdf8; font: 600 7px/1 var(--ui); letter-spacing: .12em;
+      text-transform: uppercase; }
+    .item-evidence-badge { position: absolute; right: 7px; top: 7px;
+      padding: 4px 5px; border: 1px solid rgba(255,253,248,.72);
+      background: rgba(30,34,41,.72); color: #fffdf8;
+      font: 600 7px/1 var(--ui); letter-spacing: .1em;
       text-transform: uppercase; }
   }
   @media screen and (max-width: 640px) {
@@ -327,18 +349,102 @@
       grid-template-areas: "visual ref name" "visual ref cond" "visual ref clean"
       "visual ref desc" "visual ref def" "visual ref photo"; column-gap: 10px; }
     section.room tr.item-row:has(.item-thumb) .name-cell { display: contents; }
+    section.room tr.item-row:has(.item-thumb) .evidence-trigger {
+      grid-area: visual; width: 100%; height: 100%; min-height: 112px;
+      border: 1px solid #cfc7b6; border-radius: 6px; overflow: hidden; }
     section.room tr.item-row:has(.item-thumb) .item-thumb { grid-area: visual;
       width: 100%; height: 100%; min-height: 112px; max-width: none; margin: 0;
       border-radius: 6px; object-fit: cover; }
+    section.room tr.item-row:has(.item-thumb) .evidence-trigger .item-thumb {
+      grid-area: auto; border: 0; border-radius: 0; }
     section.room tr.item-row:has(.item-thumb) .name-cell .item-name { grid-area: name; }
     section.room tr.item-row:has(.item-thumb-context) .item-rail-label { display: block;
-      grid-area: visual; align-self: end; justify-self: start; z-index: 1;
-      margin: 0 0 6px 6px; padding: 3px 5px; border: 1px solid rgba(255,253,248,.72);
+      position: absolute; left: 6px; bottom: 6px; z-index: 1;
+      margin: 0; padding: 3px 5px; border: 1px solid rgba(255,253,248,.72);
       background: rgba(30,34,41,.72); color: #fffdf8;
       font: 600 7px/1 var(--ui); letter-spacing: .12em; text-transform: uppercase; }
+    .item-evidence-badge { position: absolute; right: 5px; top: 5px;
+      padding: 3px 4px; border: 1px solid rgba(255,253,248,.72);
+      background: rgba(30,34,41,.72); color: #fffdf8;
+      font: 600 6px/1 var(--ui); letter-spacing: .08em;
+      text-transform: uppercase; }
     .appendix { overflow-x: hidden; }
     .appendix table { width: 100%; table-layout: fixed; font-size: 7px; }
     .appendix td, .appendix th { overflow-wrap: anywhere; }
+  }
+
+  /* ---------- evidence desk and triage controls ---------- */
+  @media screen {
+    .report-overview { margin: 8px 0 34px; padding: 20px 0 0;
+      border-top: 1px solid var(--line-strong); }
+    .overview-head { display: flex; justify-content: space-between;
+      align-items: end; gap: 18px; margin-bottom: 15px; }
+    .overview-kicker { color: var(--brass-bright); font: 600 8px/1 var(--ui);
+      letter-spacing: .2em; text-transform: uppercase; }
+    .overview-title { margin: 7px 0 0; color: var(--ink);
+      font: 600 18pt/1.05 var(--display); letter-spacing: -.02em; }
+    .overview-note { max-width: 58ch; margin: 7px 0 0; color: var(--muted);
+      font: 10px/1.45 var(--ui); }
+    .overview-metrics { display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      margin: 18px 0 20px; }
+    .overview-metric { padding: 12px 14px 12px 0; border-right: 1px solid var(--line); }
+    .overview-metric + .overview-metric { padding-left: 14px; }
+    .overview-metric:last-child { border-right: 0; }
+    .overview-metric strong { display: block; color: var(--ink);
+      font: 600 19pt/1 var(--display); font-variant-numeric: tabular-nums; }
+    .overview-metric span { display: block; margin-top: 5px; color: var(--muted);
+      font: 600 7px/1.2 var(--ui); letter-spacing: .12em; text-transform: uppercase; }
+    .coverage-heading { display: flex; justify-content: space-between;
+      align-items: baseline; margin: 0 0 7px; color: var(--muted);
+      font: 600 8px/1 var(--ui); letter-spacing: .16em; text-transform: uppercase; }
+    .coverage-list { border-top: 1px solid var(--line); }
+    .coverage-row { display: grid; grid-template-columns: minmax(180px, 1fr) 110px 110px 110px;
+      gap: 12px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--line);
+      font: 9px/1.2 var(--ui); }
+    .coverage-row .room-name { color: var(--ink); font-weight: 600; }
+    .coverage-bar { height: 5px; background: var(--line); overflow: hidden; }
+    .coverage-bar i { display: block; height: 100%; background: var(--brass); }
+    .coverage-stat { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+    .coverage-stat strong { color: var(--ink); font-weight: 600; }
+    .report-filters { position: sticky; top: 0; z-index: 8; display: flex;
+      flex-wrap: wrap; align-items: center; gap: 7px; margin: 22px 0 4px;
+      padding: 10px 0; background: rgba(236,232,223,.96); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line-strong); }
+    #review-search { min-width: 180px; flex: 1 1 200px; padding: 8px 10px;
+      border: 1px solid var(--line-strong); border-radius: 2px; background: var(--panel);
+      color: var(--ink); font: 10px var(--ui); }
+    .filter-btn, .review-next { padding: 7px 9px; border: 1px solid var(--line-strong);
+      border-radius: 2px; background: transparent; color: var(--muted); cursor: pointer;
+      font: 600 7px/1 var(--ui); letter-spacing: .09em; text-transform: uppercase;
+      transition: background .18s ease, color .18s ease, border-color .18s ease; }
+    .filter-btn:hover, .review-next:hover { border-color: var(--brass); color: var(--ink); }
+    .filter-btn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--panel); }
+    .review-next { background: var(--brass); border-color: var(--brass); color: #fffdf8; }
+    #filter-summary { margin-left: auto; color: var(--muted); font: 9px var(--ui);
+      font-variant-numeric: tabular-nums; }
+    tr.item-row[hidden], tr.category-row[hidden] { display: none !important; }
+    .defect-tools { display: flex; align-items: center; gap: 8px; margin-top: 6px;
+      color: var(--muted); font: 8px var(--ui); }
+    .defect-evidence { padding: 0; border: 0; background: transparent; color: var(--brass-bright);
+      cursor: pointer; font: 600 8px var(--ui); text-decoration: underline;
+      text-underline-offset: 2px; }
+    .defect-evidence:hover { color: var(--ink); }
+    .defect-evidence-link { color: var(--muted); text-decoration: none;
+      border-bottom: 1px dotted var(--line-strong); }
+    .defect-evidence-link:hover { color: var(--brass); border-bottom-color: var(--brass); }
+    .defect-evidence[disabled] { color: var(--muted); cursor: not-allowed; }
+    .finish-gap-note { color: var(--brass-bright); font: 600 8px var(--ui);
+      letter-spacing: .08em; text-transform: uppercase; }
+  }
+  @media screen and (max-width: 760px) {
+    .overview-head { align-items: start; flex-direction: column; }
+    .overview-metrics { grid-template-columns: repeat(2, 1fr); }
+    .overview-metric:nth-child(2) { border-right: 0; }
+    .overview-metric:nth-child(n+3) { border-top: 1px solid var(--line); }
+    .coverage-row { grid-template-columns: minmax(130px, 1fr) 84px 84px; }
+    .coverage-row .coverage-stat:last-child { display: none; }
+    #filter-summary { width: 100%; margin-left: 0; }
   }
 
   /* ---------- PDF / clerk layout (WeasyPrint) ---------- */
@@ -600,11 +706,54 @@
     <tr><td>Rooms inspected</td><td><strong>{{ inv.rooms | length }}</strong></td></tr>
     <tr><td>Items recorded</td><td><strong>{{ total_items }}</strong></td></tr>
     <tr><td>Photographs</td><td><strong>{{ total_photos }}</strong>{% if hero_total and hero_total < total_photos %}<span class="screen-only meta"> — {{ hero_total }} shown, every frame analysed &amp; hashed in Appendix A</span>{% endif %}</td></tr>
+    <tr><td>Close-up evidence</td><td><strong>{{ evidence_overview.closeups }}</strong> of {{ evidence_overview.total }} items</td></tr>
+    <tr><td>Context-only evidence</td><td><strong>{{ evidence_overview.context }}</strong> items</td></tr>
+    <tr><td>Items with defects</td><td><strong>{{ evidence_overview.defect_items }}</strong></td></tr>
     {% if reviewed_items %}
     <tr class="screen-only"><td>Human-reviewed</td><td><strong>{{ reviewed_items }} of {{ total_items }} items</strong></td></tr>
     {% endif %}
   </table>
 </div>
+
+<section class="report-overview screen-only" id="overview" aria-labelledby="overview-title">
+  <div class="overview-head">
+    <div>
+      <div class="overview-kicker">Evidence desk</div>
+      <h2 class="overview-title" id="overview-title">What needs a closer look?</h2>
+      <p class="overview-note">Use the evidence state to move quickly: close-ups are detector-grounded, context images show the cited room view, and finish gaps are the structural rows most likely to benefit from a dedicated crop.</p>
+    </div>
+    {% if not final %}<button class="review-next" id="review-next" type="button">Review next item</button>{% endif %}
+  </div>
+  <div class="overview-metrics" aria-label="Evidence summary">
+    <div class="overview-metric"><strong>{{ evidence_overview.closeups }}</strong><span>Close-ups</span></div>
+    <div class="overview-metric"><strong>{{ evidence_overview.context }}</strong><span>Context only</span></div>
+    <div class="overview-metric"><strong>{{ evidence_overview.finish_gaps }}</strong><span>Finish gaps</span></div>
+    <div class="overview-metric"><strong>{{ evidence_overview.defect_items }}</strong><span>Defect-bearing</span></div>
+  </div>
+  <div class="coverage-heading"><span>Room evidence coverage</span><span>{{ evidence_overview.coverage_percent }}% close-up coverage</span></div>
+  <div class="coverage-list" aria-label="Room evidence coverage">
+    {% for room in evidence_overview.rooms %}
+    <div class="coverage-row">
+      <span class="room-name">{{ room.name }}</span>
+      <span class="coverage-bar" aria-label="{{ room.closeups }} of {{ room.total }} close-ups"><i style="width: {{ (100 * room.closeups / room.total) if room.total else 0 }}%"></i></span>
+      <span class="coverage-stat"><strong>{{ room.closeups }}</strong> / {{ room.total }} close-ups</span>
+      <span class="coverage-stat"><strong>{{ room.finish_gaps }}</strong> finish gaps</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% if not final %}
+  <div class="report-filters" id="report-filters" aria-label="Filter schedule">
+    <input id="review-search" type="search" placeholder="Search items, rooms or references" aria-label="Search items, rooms or references">
+    <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">All</button>
+    <button class="filter-btn" type="button" data-filter="needs-review" aria-pressed="false">Needs review</button>
+    <button class="filter-btn" type="button" data-filter="context" aria-pressed="false">Context only</button>
+    <button class="filter-btn" type="button" data-filter="closeup" aria-pressed="false">Close-ups</button>
+    <button class="filter-btn" type="button" data-filter="defects" aria-pressed="false">Defects</button>
+    <button class="filter-btn" type="button" data-filter="finish" aria-pressed="false">Finish gaps</button>
+    <span id="filter-summary" role="status"></span>
+  </div>
+  {% endif %}
+</section>
 
 <section class="toc page-break">
   <h2>Contents</h2>
@@ -694,8 +843,13 @@ rather than silently deleted.</p>
       {% endif %}
       {% for row in group.rows %}
       {% set item = row.item %}
+      {% set evidence_status = "proposed" if crop_src.get(item.id) and item.crop_status == "proposed" else ("crop" if crop_src.get(item.id) else ("context" if item.photo_ids else "missing")) %}
       <tr class="item-row{% if item.rejected %} item-rejected{% endif %}"
-          data-item-id="{{ item.id }}" data-ref="{{ row.ref }}" data-room="{{ section.name }}">
+          data-item-id="{{ item.id }}" data-ref="{{ row.ref }}" data-room="{{ section.name }}"
+          data-evidence-status="{{ evidence_status }}"
+          data-has-defect="{{ 'true' if item.defects or item.rejected_defects else 'false' }}"
+          data-reviewed="{{ 'true' if item.reviewed or item.rejected else 'false' }}"
+          data-finish-gap="{{ 'true' if is_finish_item(item.name) and evidence_status != 'crop' else 'false' }}">
         <td class="ref-cell"><span class="ref-mono">{{ row.ref }}</span>
           {% if final %}<span class="screen-only ref-internal ref-mono">{{ item.id }}</span>
           {% else %}<a class="screen-only ref-internal ref-mono deep-link"
@@ -706,11 +860,17 @@ rather than silently deleted.</p>
           {% elif final %}
           {% elif item.reviewed %}<span class="review-flag ok">reviewed</span>
           {% elif reviewed_items %}<span class="review-flag pending">unreviewed</span>{% endif -%}
-          {% if crop_src.get(item.id) %}<img class="item-thumb"
-            src="{{ crop_src[item.id] }}" alt="Evidence crop for {{ item.name }}" loading="lazy">
-          {% elif item.photo_ids and photo_src.get(item.photo_ids[0]) %}<img class="item-thumb item-thumb-context"
-            src="{{ photo_src[item.photo_ids[0]] }}" alt="Context evidence for {{ item.name }} — {{ item.photo_ids[0] }}"
-            title="Context evidence · {{ item.photo_ids[0] }}" loading="lazy"><span class="item-rail-label screen-only">Context</span>{% endif -%}
+          {% if crop_src.get(item.id) %}<button class="evidence-trigger" type="button" data-evidence-item="{{ item.id }}" aria-label="Open evidence for {{ item.name }}">
+            <img class="item-thumb"
+              src="{{ crop_src[item.id] }}" alt="Evidence crop for {{ item.name }}" loading="lazy">
+            <span class="item-evidence-badge screen-only">{{ "Proposed" if item.crop_status == "proposed" else "Close-up" }}</span>
+            <span class="evidence-print-label print-only">{{ "Proposed crop" if item.crop_status == "proposed" else "Close-up" }}</span>
+          </button>
+          {% elif item.photo_ids and photo_src.get(item.photo_ids[0]) %}<button class="evidence-trigger" type="button" data-evidence-item="{{ item.id }}" aria-label="Open context evidence for {{ item.name }}">
+            <img class="item-thumb item-thumb-context"
+              src="{{ photo_src[item.photo_ids[0]] }}" alt="Context evidence for {{ item.name }} — {{ item.photo_ids[0] }}"
+              title="Context evidence · {{ item.photo_ids[0] }}" loading="lazy"><span class="item-rail-label screen-only">Context</span><span class="evidence-print-label print-only">Context</span>
+          </button>{% endif -%}
           <strong class="item-name">{{ item.name }}</strong>{% if item.quantity > 1 %} &times;{{ item.quantity }}{% endif %}
           {% if item.rejected %}<br><span class="meta">AI suggested — reviewer rejected</span>{% endif %}
         </td>
@@ -736,9 +896,13 @@ rather than silently deleted.</p>
           {% if item.defects or item.rejected_defects %}<ul class="defects">
             {% for d in item.defects %}<li>{{ d }}</li>{% endfor %}
             {% for d in item.rejected_defects %}<li class="struck">{{ d }}</li>{% endfor %}
-          </ul>{% else %}<span class="meta">None noted</span>{% endif %}
+          </ul><div class="defect-tools">
+            <button class="defect-evidence" type="button" data-evidence-item="{{ item.id }}"{% if not item.photo_ids %} disabled{% endif %}>Verify in evidence</button>
+            <span>{{ item.defect_regions | length }} marked region{{ "" if item.defect_regions | length == 1 else "s" }}</span>
+            {% if not final %}<a class="defect-evidence-link deep-link" href="./#item-{{ item.id }}">Mark location in Review</a>{% endif %}
+          </div>{% else %}<span class="meta">None noted</span>{% endif %}
         </td>
-        <td class="photo-cell screen-only meta ref-mono">{{ item.photo_ids | join(", ") }}</td>
+        <td class="photo-cell screen-only meta ref-mono">{{ item.photo_ids | join(", ") }}{% if is_finish_item(item.name) and evidence_status != "crop" %}<span class="finish-gap-note"> · finish view recommended</span>{% endif %}</td>
       </tr>
       {% for c in item.comments %}
       <tr class="comment-row screen-only" data-for="{{ item.id }}">
@@ -942,6 +1106,109 @@ rather than silently deleted.</p>
 
   document.getElementById("docket").classList.add("on");
   updateProgress();
+})();
+</script>
+<script>
+"use strict";
+/* Evidence desk: triage the long schedule without changing the document
+   ordering. The same cited media list powers the rail and the lightbox. */
+(function () {
+  var dataEl = document.getElementById("hi-data");
+  if (!dataEl) return;
+  var payload = JSON.parse(dataEl.textContent);
+  var mediaByItem = payload.evidence_media || {};
+
+  function openEvidence(itemId) {
+    var media = mediaByItem[itemId] || [];
+    if (!media.length) {
+      if (ui && ui.toast) ui.toast("No cited photo is available for this item");
+      return;
+    }
+    ui.photoViewer({ photos: media, index: 0 });
+  }
+
+  Array.prototype.forEach.call(
+    document.querySelectorAll("[data-evidence-item]"), function (trigger) {
+      trigger.addEventListener("click", function () {
+        if (!trigger.disabled) openEvidence(trigger.getAttribute("data-evidence-item"));
+      });
+    });
+
+  var rows = Array.prototype.slice.call(document.querySelectorAll("tr.item-row"));
+  var headings = Array.prototype.slice.call(document.querySelectorAll("tr.category-row"));
+  var buttons = Array.prototype.slice.call(document.querySelectorAll(".filter-btn"));
+  var search = document.getElementById("review-search");
+  var summary = document.getElementById("filter-summary");
+  var next = document.getElementById("review-next");
+  var currentFilter = "all";
+
+  function matches(row) {
+    var q = search ? search.value.trim().toLowerCase() : "";
+    var status = row.getAttribute("data-evidence-status");
+    var match = true;
+    if (currentFilter === "needs-review") match = row.getAttribute("data-reviewed") !== "true";
+    else if (currentFilter === "context") match = status === "context";
+    else if (currentFilter === "closeup") match = status === "crop" || status === "proposed";
+    else if (currentFilter === "defects") match = row.getAttribute("data-has-defect") === "true";
+    else if (currentFilter === "finish") match = row.getAttribute("data-finish-gap") === "true";
+    return match && (!q || row.textContent.toLowerCase().indexOf(q) !== -1);
+  }
+
+  function updateHeadingVisibility() {
+    headings.forEach(function (heading) {
+      var visible = false, node = heading.nextElementSibling;
+      while (node && !node.classList.contains("category-row")) {
+        if (node.classList.contains("item-row") && !node.hidden) visible = true;
+        node = node.nextElementSibling;
+      }
+      heading.hidden = !visible;
+    });
+  }
+
+  function applyFilters() {
+    var visible = 0;
+    rows.forEach(function (row) {
+      row.hidden = !matches(row);
+      if (!row.hidden) visible += 1;
+    });
+    updateHeadingVisibility();
+    if (summary) summary.textContent = "Showing " + visible + " of " + rows.length + " items";
+  }
+
+  function setFilter(value) {
+    currentFilter = value;
+    buttons.forEach(function (button) {
+      button.setAttribute("aria-pressed", button.getAttribute("data-filter") === value ? "true" : "false");
+    });
+    applyFilters();
+  }
+
+  buttons.forEach(function (button) {
+    button.addEventListener("click", function () { setFilter(button.getAttribute("data-filter")); });
+  });
+  if (search) search.addEventListener("input", applyFilters);
+  if (next) {
+    next.addEventListener("click", function () {
+      setFilter("needs-review");
+      var candidates = rows.filter(function (row) { return !row.hidden; });
+      var target = candidates.filter(function (row) {
+        return row.getAttribute("data-has-defect") === "true";
+      })[0] || candidates.filter(function (row) {
+        return row.getAttribute("data-finish-gap") === "true";
+      })[0] || candidates[0];
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        target.classList.add("flash");
+        setTimeout(function () { target.classList.remove("flash"); }, 2600);
+      }
+    });
+  }
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "/" && document.activeElement !== search && search) {
+      e.preventDefault(); search.focus();
+    }
+  });
+  applyFilters();
 })();
 </script>
 {% endif %}
