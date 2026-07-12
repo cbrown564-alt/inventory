@@ -342,6 +342,9 @@ def test_cli_compare_offline_end_to_end(tmp_path):
     assert rc == 0
     assert (out / "compare.json").is_file()
     html = (out / "compare.html").read_text(encoding="utf-8")
+    assert "unmatched-cards" in html
+    assert "Why this was suggested" in html
+    assert "data-project-home" in html
 
     # grade-delta summary table + paired evidence + overlays markup present
     assert "Grade-delta summary" in html

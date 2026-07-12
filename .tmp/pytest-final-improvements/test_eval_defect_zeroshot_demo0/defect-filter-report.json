@@ -1,0 +1,170 @@
+{
+  "experiment": "ML-E15",
+  "date": "2026-07-12",
+  "capture_dir": "benchmarks\\inventoryflex\\capture",
+  "method": "synthetic_demo",
+  "encoder": "synthetic",
+  "device": "cpu",
+  "defect_prompts": [
+    "visible damage on a surface",
+    "stain on wall or floor",
+    "crack in wall or ceiling",
+    "chip or scratch on furniture",
+    "mould or water damage"
+  ],
+  "clean_prompts": [
+    "clean undamaged interior surface",
+    "well-maintained room with no visible damage",
+    "pristine wall or floor surface",
+    "clean household fixture in good condition"
+  ],
+  "pass_bar_fp_pct": 10.0,
+  "metrics": {
+    "n_photos": 16,
+    "n_flagged": 11,
+    "fp_pct": 68.8,
+    "pass_bar_fp_pct": 10.0,
+    "pass": false,
+    "threshold_defect_prob": 0.5,
+    "mean_defect_prob": 0.6192,
+    "mean_margin": 0.1192,
+    "per_room": {
+      "Balcony": {
+        "n_photos": 6,
+        "n_flagged": 4,
+        "fp_pct": 66.7
+      },
+      "Bathroom": {
+        "n_photos": 10,
+        "n_flagged": 7,
+        "fp_pct": 70.0
+      }
+    }
+  },
+  "pass": false,
+  "demo": true,
+  "note": "InventoryFlex capture photos are deliberate clean clerk shots \u2014 high zero-shot FP is expected (wood grain, shadows, specular highlights). Use as pre-filter oracle only; do not gate describe pool until native-res defect labels exist (docs/19 \u00a71.7).",
+  "recommendation": "fail \u2014 FP 68.8% exceeds 10.0% bar; zero-shot CLIP prompts unsuitable as pre-filter on clean inventory photos",
+  "top_flagged": [
+    {
+      "room": "Bathroom",
+      "path": "benchmarks\\inventoryflex\\capture\\Bathroom\\p14_i07.jpg",
+      "margin": 0.3728,
+      "defect_prob": 0.8728,
+      "defect_sim": 0.3151,
+      "clean_sim": 0.204,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Balcony",
+      "path": "benchmarks\\inventoryflex\\capture\\Balcony\\p33_i05.jpg",
+      "margin": 0.3587,
+      "defect_prob": 0.8587,
+      "defect_sim": 0.3125,
+      "clean_sim": 0.206,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Bathroom",
+      "path": "benchmarks\\inventoryflex\\capture\\Bathroom\\p14_i01.jpg",
+      "margin": 0.3534,
+      "defect_prob": 0.8534,
+      "defect_sim": 0.3115,
+      "clean_sim": 0.2068,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Bathroom",
+      "path": "benchmarks\\inventoryflex\\capture\\Bathroom\\p14_i09.jpg",
+      "margin": 0.3299,
+      "defect_prob": 0.8299,
+      "defect_sim": 0.3073,
+      "clean_sim": 0.2102,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Bathroom",
+      "path": "benchmarks\\inventoryflex\\capture\\Bathroom\\p14_i06.jpg",
+      "margin": 0.2443,
+      "defect_prob": 0.7443,
+      "defect_sim": 0.2917,
+      "clean_sim": 0.2227,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Balcony",
+      "path": "benchmarks\\inventoryflex\\capture\\Balcony\\p33_i02.jpg",
+      "margin": 0.1687,
+      "defect_prob": 0.6687,
+      "defect_sim": 0.278,
+      "clean_sim": 0.2336,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Bathroom",
+      "path": "benchmarks\\inventoryflex\\capture\\Bathroom\\p14_i02.jpg",
+      "margin": 0.1627,
+      "defect_prob": 0.6627,
+      "defect_sim": 0.2768,
+      "clean_sim": 0.2345,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Bathroom",
+      "path": "benchmarks\\inventoryflex\\capture\\Bathroom\\p14_i04.jpg",
+      "margin": 0.1202,
+      "defect_prob": 0.6202,
+      "defect_sim": 0.2691,
+      "clean_sim": 0.2407,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Balcony",
+      "path": "benchmarks\\inventoryflex\\capture\\Balcony\\p33_i04.jpg",
+      "margin": 0.0884,
+      "defect_prob": 0.5884,
+      "defect_sim": 0.2634,
+      "clean_sim": 0.2453,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Balcony",
+      "path": "benchmarks\\inventoryflex\\capture\\Balcony\\p33_i03.jpg",
+      "margin": 0.0633,
+      "defect_prob": 0.5633,
+      "defect_sim": 0.2588,
+      "clean_sim": 0.249,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Bathroom",
+      "path": "benchmarks\\inventoryflex\\capture\\Bathroom\\p14_i03.jpg",
+      "margin": 0.0327,
+      "defect_prob": 0.5327,
+      "defect_sim": 0.2532,
+      "clean_sim": 0.2534,
+      "flagged": true,
+      "synthetic": true
+    },
+    {
+      "room": "Bathroom",
+      "path": "benchmarks\\inventoryflex\\capture\\Bathroom\\p14_i00.jpg",
+      "margin": -0.0257,
+      "defect_prob": 0.4743,
+      "defect_sim": 0.2426,
+      "clean_sim": 0.2619,
+      "flagged": false,
+      "synthetic": true
+    }
+  ]
+}

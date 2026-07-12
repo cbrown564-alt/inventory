@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html><head><meta charset='utf-8'>
+<title>ML-E8 VLM hero rerank</title>
+<style>
+body{font:14px system-ui;margin:24px;background:#111;color:#eee}
+.summary{background:#222;padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+h2{margin:28px 0 8px}.meta{color:#aaa}
+.strip{display:flex;flex-wrap:wrap;gap:8px}
+figure{margin:0;width:180px}
+img{width:180px;border-radius:4px;display:block;aspect-ratio:16/9;object-fit:cover}
+figcaption{font-size:11px;color:#bbb}
+.pick img{outline:3px solid #f5c518}
+.pick figcaption{color:#f5c518;font-weight:600}
+.gold{color:#8cf}
+</style></head><body>
+<h1>ML-E8 — VLM top-10 rerank (classical pool)</h1>
+<p>Report: C:\Users\cbrow\Code\inventory\.tmp\pytest-final-improvements\test_eval_vlm_rerank_demo0\report</p>
+<div class='summary'><h2>Metrics</h2><pre>
+{
+  &quot;experiment&quot;: &quot;ML-E8&quot;,
+  &quot;mode&quot;: &quot;demo&quot;,
+  &quot;pass_bar&quot;: &quot;top-1 \u2265 9/9 on hero-gold&quot;,
+  &quot;n_rooms&quot;: 9,
+  &quot;top_k&quot;: 10,
+  &quot;classical_scorer&quot;: &quot;cover&quot;,
+  &quot;classical_top1_hits&quot;: 0,
+  &quot;classical_top1_rate_pct&quot;: 0.0,
+  &quot;vlm_top1_hits&quot;: 9,
+  &quot;vlm_top1_rate_pct&quot;: 100.0,
+  &quot;gold_rank1_in_classical_top10&quot;: 9,
+  &quot;gold_rooms&quot;: 9,
+  &quot;pass&quot;: true,
+  &quot;cost_estimate&quot;: {
+    &quot;n_room_calls&quot;: 9,
+    &quot;n_images&quot;: 90,
+    &quot;estimate_usd&quot;: 0.198,
+    &quot;method&quot;: &quot;~$0.012/call + $0.001/image (Jul 2026 list-price placeholder for build confirm)&quot;
+  },
+  &quot;per_room&quot;: {
+    &quot;Room 00&quot;: {
+      &quot;classical_pick&quot;: &quot;clip00_f000001.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;clip00_f000002.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;clip00_f000002.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Room 01&quot;: {
+      &quot;classical_pick&quot;: &quot;clip01_f000001.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;clip01_f000002.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;clip01_f000002.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Room 02&quot;: {
+      &quot;classical_pick&quot;: &quot;clip02_f000001.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;clip02_f000002.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;clip02_f000002.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Room 03&quot;: {
+      &quot;classical_pick&quot;: &quot;clip03_f000001.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;clip03_f000002.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;clip03_f000002.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Room 04&quot;: {
+      &quot;classical_pick&quot;: &quot;clip04_f000001.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;clip04_f000002.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;clip04_f000002.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Room 05&quot;: {
+      &quot;classical_pick&quot;: &quot;clip05_f000001.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;clip05_f000002.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;clip05_f000002.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Room 06&quot;: {
+      &quot;classical_pick&quot;: &quot;clip06_f000001.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;clip06_f000002.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;clip06_f000002.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Room 07&quot;: {
+      &quot;classical_pick&quot;: &quot;clip07_f000001.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;clip07_f000002.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;clip07_f000002.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    },
+    &quot;Room 08&quot;: {
+      &quot;classical_pick&quot;: &quot;clip08_f000001.jpg&quot;,
+      &quot;vlm_pick&quot;: &quot;clip08_f000002.jpg&quot;,
+      &quot;gold_top1&quot;: &quot;clip08_f000002.jpg&quot;,
+      &quot;top1_hit&quot;: true,
+      &quot;rerank_source&quot;: &quot;demo-gold-in-top10&quot;
+    }
+  }
+}
+</pre></div>
+<h2>Room 00</h2>
+<p class='meta'><em>synthetic</em></p>
+<p class='meta'>classical pick: clip00_f000001.jpg · VLM pick: <strong>clip00_f000002.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>clip00_f000002.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='report\work\frames\Room_00_seg00\clip00_f000001.jpg' loading='lazy' alt='clip00_f000001.jpg'><figcaption>clip00_f000001.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class=''><img src='report\work\frames\Room_00_seg00\clip00_f000003.jpg' loading='lazy' alt='clip00_f000003.jpg'><figcaption>clip00_f000003.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class='pick'><img src='report\work\frames\Room_00_seg00\clip00_f000002.jpg' loading='lazy' alt='clip00_f000002.jpg'><figcaption>clip00_f000002.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+</div>
+<h2>Room 01</h2>
+<p class='meta'><em>synthetic</em></p>
+<p class='meta'>classical pick: clip01_f000001.jpg · VLM pick: <strong>clip01_f000002.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>clip01_f000002.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='report\work\frames\Room_01_seg00\clip01_f000001.jpg' loading='lazy' alt='clip01_f000001.jpg'><figcaption>clip01_f000001.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class=''><img src='report\work\frames\Room_01_seg00\clip01_f000003.jpg' loading='lazy' alt='clip01_f000003.jpg'><figcaption>clip01_f000003.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class='pick'><img src='report\work\frames\Room_01_seg00\clip01_f000002.jpg' loading='lazy' alt='clip01_f000002.jpg'><figcaption>clip01_f000002.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+</div>
+<h2>Room 02</h2>
+<p class='meta'><em>synthetic</em></p>
+<p class='meta'>classical pick: clip02_f000001.jpg · VLM pick: <strong>clip02_f000002.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>clip02_f000002.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='report\work\frames\Room_02_seg00\clip02_f000001.jpg' loading='lazy' alt='clip02_f000001.jpg'><figcaption>clip02_f000001.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class=''><img src='report\work\frames\Room_02_seg00\clip02_f000003.jpg' loading='lazy' alt='clip02_f000003.jpg'><figcaption>clip02_f000003.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class='pick'><img src='report\work\frames\Room_02_seg00\clip02_f000002.jpg' loading='lazy' alt='clip02_f000002.jpg'><figcaption>clip02_f000002.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+</div>
+<h2>Room 03</h2>
+<p class='meta'><em>synthetic</em></p>
+<p class='meta'>classical pick: clip03_f000001.jpg · VLM pick: <strong>clip03_f000002.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>clip03_f000002.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='report\work\frames\Room_03_seg00\clip03_f000001.jpg' loading='lazy' alt='clip03_f000001.jpg'><figcaption>clip03_f000001.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class=''><img src='report\work\frames\Room_03_seg00\clip03_f000003.jpg' loading='lazy' alt='clip03_f000003.jpg'><figcaption>clip03_f000003.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class='pick'><img src='report\work\frames\Room_03_seg00\clip03_f000002.jpg' loading='lazy' alt='clip03_f000002.jpg'><figcaption>clip03_f000002.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+</div>
+<h2>Room 04</h2>
+<p class='meta'><em>synthetic</em></p>
+<p class='meta'>classical pick: clip04_f000001.jpg · VLM pick: <strong>clip04_f000002.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>clip04_f000002.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='report\work\frames\Room_04_seg00\clip04_f000001.jpg' loading='lazy' alt='clip04_f000001.jpg'><figcaption>clip04_f000001.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class=''><img src='report\work\frames\Room_04_seg00\clip04_f000003.jpg' loading='lazy' alt='clip04_f000003.jpg'><figcaption>clip04_f000003.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class='pick'><img src='report\work\frames\Room_04_seg00\clip04_f000002.jpg' loading='lazy' alt='clip04_f000002.jpg'><figcaption>clip04_f000002.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+</div>
+<h2>Room 05</h2>
+<p class='meta'><em>synthetic</em></p>
+<p class='meta'>classical pick: clip05_f000001.jpg · VLM pick: <strong>clip05_f000002.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>clip05_f000002.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='report\work\frames\Room_05_seg00\clip05_f000001.jpg' loading='lazy' alt='clip05_f000001.jpg'><figcaption>clip05_f000001.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class=''><img src='report\work\frames\Room_05_seg00\clip05_f000003.jpg' loading='lazy' alt='clip05_f000003.jpg'><figcaption>clip05_f000003.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class='pick'><img src='report\work\frames\Room_05_seg00\clip05_f000002.jpg' loading='lazy' alt='clip05_f000002.jpg'><figcaption>clip05_f000002.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+</div>
+<h2>Room 06</h2>
+<p class='meta'><em>synthetic</em></p>
+<p class='meta'>classical pick: clip06_f000001.jpg · VLM pick: <strong>clip06_f000002.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>clip06_f000002.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='report\work\frames\Room_06_seg00\clip06_f000001.jpg' loading='lazy' alt='clip06_f000001.jpg'><figcaption>clip06_f000001.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class=''><img src='report\work\frames\Room_06_seg00\clip06_f000003.jpg' loading='lazy' alt='clip06_f000003.jpg'><figcaption>clip06_f000003.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class='pick'><img src='report\work\frames\Room_06_seg00\clip06_f000002.jpg' loading='lazy' alt='clip06_f000002.jpg'><figcaption>clip06_f000002.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+</div>
+<h2>Room 07</h2>
+<p class='meta'><em>synthetic</em></p>
+<p class='meta'>classical pick: clip07_f000001.jpg · VLM pick: <strong>clip07_f000002.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>clip07_f000002.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='report\work\frames\Room_07_seg00\clip07_f000001.jpg' loading='lazy' alt='clip07_f000001.jpg'><figcaption>clip07_f000001.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class=''><img src='report\work\frames\Room_07_seg00\clip07_f000003.jpg' loading='lazy' alt='clip07_f000003.jpg'><figcaption>clip07_f000003.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class='pick'><img src='report\work\frames\Room_07_seg00\clip07_f000002.jpg' loading='lazy' alt='clip07_f000002.jpg'><figcaption>clip07_f000002.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+</div>
+<h2>Room 08</h2>
+<p class='meta'><em>synthetic</em></p>
+<p class='meta'>classical pick: clip08_f000001.jpg · VLM pick: <strong>clip08_f000002.jpg</strong> (demo-gold-in-top10) · gold #1: <span class='gold'>clip08_f000002.jpg</span></p>
+<div class='strip'>
+<figure class=''><img src='report\work\frames\Room_08_seg00\clip08_f000001.jpg' loading='lazy' alt='clip08_f000001.jpg'><figcaption>clip08_f000001.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class=''><img src='report\work\frames\Room_08_seg00\clip08_f000003.jpg' loading='lazy' alt='clip08_f000003.jpg'><figcaption>clip08_f000003.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+<figure class='pick'><img src='report\work\frames\Room_08_seg00\clip08_f000002.jpg' loading='lazy' alt='clip08_f000002.jpg'><figcaption>clip08_f000002.jpg<br>cover=0.00 est=0.93</figcaption></figure>
+</div>
+</body></html>

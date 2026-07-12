@@ -412,6 +412,14 @@ def _export_photos(inv: Inventory, capture_dir: Path, out_dir: Path,
             pdest = print_dir / f"{p.id}.jpg"
             src_map[p.id] = f"photos/{p.id}.jpg"
             print_map[p.id] = f"photos/print/{p.id}.jpg"
+            if not src.exists():
+                if dest.exists() and pdest.exists():
+                    log.warning("source photo %s is unavailable; keeping the existing exports", src)
+                    continue
+                log.warning("source photo %s is unavailable; omitting it from the rendered report", src)
+                src_map.pop(p.id, None)
+                print_map.pop(p.id, None)
+                continue
             # unchanged source -> keep the existing exports (a re-render after
             # review edits must not re-encode hundreds of untouched photos)
             try:

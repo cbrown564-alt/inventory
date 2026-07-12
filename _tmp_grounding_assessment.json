@@ -1,0 +1,1261 @@
+{
+  "bbox_gold": {
+    "verified_boxes": 167,
+    "literal_attach": 97,
+    "grounding_auto": 112,
+    "grounding_propose": 21,
+    "grounding_miss": 34,
+    "recovered_from_literal_fail": [
+      {
+        "gold": "bath",
+        "det": "bathtub",
+        "conf": 0.838,
+        "score": 0.838,
+        "status": "auto",
+        "room": "Bathroom",
+        "photo": "p14_i00.jpg"
+      },
+      {
+        "gold": "bath",
+        "det": "bathtub",
+        "conf": 0.84,
+        "score": 0.84,
+        "status": "auto",
+        "room": "Bathroom",
+        "photo": "p14_i01.jpg"
+      },
+      {
+        "gold": "bath",
+        "det": "bathtub",
+        "conf": 0.782,
+        "score": 0.782,
+        "status": "auto",
+        "room": "Bathroom",
+        "photo": "p14_i07.jpg"
+      },
+      {
+        "gold": "bath",
+        "det": "bathtub",
+        "conf": 0.818,
+        "score": 0.818,
+        "status": "auto",
+        "room": "Bathroom",
+        "photo": "p14_i11.jpg"
+      },
+      {
+        "gold": "mirrored cabinet",
+        "det": "mirror",
+        "conf": 0.594,
+        "score": 0.594,
+        "status": "proposed",
+        "room": "Bathroom",
+        "photo": "p14_i01.jpg"
+      },
+      {
+        "gold": "mirrored cabinet",
+        "det": "mirror",
+        "conf": 0.64,
+        "score": 0.64,
+        "status": "proposed",
+        "room": "Bathroom",
+        "photo": "p14_i03.jpg"
+      },
+      {
+        "gold": "recessed spotlights",
+        "det": "ceiling light",
+        "conf": 0.539,
+        "score": 0.539,
+        "status": "proposed",
+        "room": "Bathroom",
+        "photo": "p14_i03.jpg"
+      },
+      {
+        "gold": "bedside lamps",
+        "det": "lamp",
+        "conf": 0.914,
+        "score": 0.896,
+        "status": "auto",
+        "room": "Bedroom",
+        "photo": "p18_i00.jpg"
+      },
+      {
+        "gold": "bedside lamps",
+        "det": "lamp",
+        "conf": 0.946,
+        "score": 0.927,
+        "status": "auto",
+        "room": "Bedroom",
+        "photo": "p18_i01.jpg"
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.667,
+        "score": 0.667,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i00.jpg"
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.615,
+        "score": 0.615,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i01.jpg"
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.61,
+        "score": 0.61,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i02.jpg"
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.879,
+        "score": 0.879,
+        "status": "auto",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i03.jpg"
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.655,
+        "score": 0.655,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i04.jpg"
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.889,
+        "score": 0.889,
+        "status": "auto",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i05.jpg"
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.519,
+        "score": 0.519,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p26_i04.jpg"
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.482,
+        "score": 0.482,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p26_i10.jpg"
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.859,
+        "score": 0.859,
+        "status": "auto",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p26_i11.jpg"
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.791,
+        "score": 0.791,
+        "status": "auto",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p31_i04.jpg"
+      },
+      {
+        "gold": "canvas picture",
+        "det": "painting",
+        "conf": 0.494,
+        "score": 0.494,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i03.jpg"
+      },
+      {
+        "gold": "canvas picture",
+        "det": "painting",
+        "conf": 0.605,
+        "score": 0.605,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i04.jpg"
+      },
+      {
+        "gold": "canvas picture",
+        "det": "painting",
+        "conf": 0.743,
+        "score": 0.743,
+        "status": "auto",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p26_i02.jpg"
+      },
+      {
+        "gold": "canvas picture",
+        "det": "painting",
+        "conf": 0.492,
+        "score": 0.492,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p26_i04.jpg"
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.735,
+        "score": 0.735,
+        "status": "auto",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i01.jpg"
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.536,
+        "score": 0.536,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i02.jpg"
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.658,
+        "score": 0.658,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i03.jpg"
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.689,
+        "score": 0.689,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i04.jpg"
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.609,
+        "score": 0.609,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i05.jpg"
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.686,
+        "score": 0.686,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p26_i09.jpg"
+      },
+      {
+        "gold": "pendant light fittings",
+        "det": "lamp",
+        "conf": 0.544,
+        "score": 0.544,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i01.jpg"
+      },
+      {
+        "gold": "pendant light fittings",
+        "det": "lamp",
+        "conf": 0.887,
+        "score": 0.887,
+        "status": "auto",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i02.jpg"
+      },
+      {
+        "gold": "pendant light fittings",
+        "det": "ceiling light",
+        "conf": 0.491,
+        "score": 0.491,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i03.jpg"
+      },
+      {
+        "gold": "pendant light fittings",
+        "det": "lamp",
+        "conf": 0.96,
+        "score": 0.96,
+        "status": "auto",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i04.jpg"
+      },
+      {
+        "gold": "pendant light fittings",
+        "det": "lamp",
+        "conf": 0.93,
+        "score": 0.93,
+        "status": "auto",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p25_i06.jpg"
+      },
+      {
+        "gold": "pendant light fittings",
+        "det": "ceiling light",
+        "conf": 0.611,
+        "score": 0.611,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p31_i02.jpg"
+      },
+      {
+        "gold": "pendant light fittings",
+        "det": "ceiling light",
+        "conf": 0.534,
+        "score": 0.534,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen",
+        "photo": "p31_i05.jpg"
+      }
+    ],
+    "still_miss_examples": [
+      {
+        "gold": "mirrored cabinet",
+        "det": "mirror",
+        "conf": 0.433,
+        "score": 0.433,
+        "g": 1.0,
+        "queries": [
+          "medicine cabinet",
+          "mirror",
+          "cabinet",
+          "mirrored cabinet",
+          "mirrored"
+        ]
+      },
+      {
+        "gold": "sink",
+        "det": "tap",
+        "conf": 0.488,
+        "score": 0.0,
+        "g": 0.0,
+        "queries": [
+          "sink"
+        ]
+      },
+      {
+        "gold": "carpet",
+        "det": "chair",
+        "conf": 0.613,
+        "score": 0.334,
+        "g": 0.545,
+        "queries": [
+          "carpet"
+        ]
+      },
+      {
+        "gold": "chest of drawers",
+        "det": "desk",
+        "conf": 0.438,
+        "score": 0.239,
+        "g": 0.545,
+        "queries": [
+          "chest of drawers",
+          "chest",
+          "chest of",
+          "of",
+          "of drawers"
+        ]
+      },
+      {
+        "gold": "roller blind",
+        "det": "blinds",
+        "conf": 0.18,
+        "score": 0.18,
+        "g": 1.0,
+        "queries": [
+          "blinds",
+          "roller blind",
+          "roller",
+          "blind"
+        ]
+      },
+      {
+        "gold": "front door",
+        "det": "extractor hood",
+        "conf": 0.263,
+        "score": 0.066,
+        "g": 0.25,
+        "queries": [
+          "door",
+          "front door"
+        ]
+      },
+      {
+        "gold": "balcony door",
+        "det": "patio door",
+        "conf": 0.176,
+        "score": 0.176,
+        "g": 1.0,
+        "queries": [
+          "patio door",
+          "door",
+          "balcony door",
+          "balcony"
+        ]
+      },
+      {
+        "gold": "balcony door",
+        "det": "patio door",
+        "conf": 0.236,
+        "score": 0.236,
+        "g": 1.0,
+        "queries": [
+          "patio door",
+          "door",
+          "balcony door",
+          "balcony"
+        ]
+      },
+      {
+        "gold": "balcony door",
+        "det": "patio door",
+        "conf": 0.447,
+        "score": 0.447,
+        "g": 1.0,
+        "queries": [
+          "patio door",
+          "door",
+          "balcony door",
+          "balcony"
+        ]
+      },
+      {
+        "gold": "balcony door",
+        "det": "patio door",
+        "conf": 0.261,
+        "score": 0.261,
+        "g": 1.0,
+        "queries": [
+          "patio door",
+          "door",
+          "balcony door",
+          "balcony"
+        ]
+      },
+      {
+        "gold": "balcony door",
+        "det": "patio door",
+        "conf": 0.161,
+        "score": 0.161,
+        "g": 1.0,
+        "queries": [
+          "patio door",
+          "door",
+          "balcony door",
+          "balcony"
+        ]
+      },
+      {
+        "gold": "balcony door",
+        "det": "patio door",
+        "conf": 0.254,
+        "score": 0.254,
+        "g": 1.0,
+        "queries": [
+          "patio door",
+          "door",
+          "balcony door",
+          "balcony"
+        ]
+      },
+      {
+        "gold": "bar chairs",
+        "det": "chair",
+        "conf": 0.476,
+        "score": 0.476,
+        "g": 1.0,
+        "queries": [
+          "bar stool",
+          "chair",
+          "bar chairs",
+          "bar",
+          "chairs"
+        ]
+      },
+      {
+        "gold": "bar chairs",
+        "det": "bar stool",
+        "conf": 0.408,
+        "score": 0.408,
+        "g": 1.0,
+        "queries": [
+          "bar stool",
+          "chair",
+          "bar chairs",
+          "bar",
+          "chairs"
+        ]
+      },
+      {
+        "gold": "bar chairs",
+        "det": "bar stool",
+        "conf": 0.254,
+        "score": 0.254,
+        "g": 1.0,
+        "queries": [
+          "bar stool",
+          "chair",
+          "bar chairs",
+          "bar",
+          "chairs"
+        ]
+      },
+      {
+        "gold": "canvas picture",
+        "det": "painting",
+        "conf": 0.45,
+        "score": 0.45,
+        "g": 1.0,
+        "queries": [
+          "picture frame",
+          "painting",
+          "canvas picture",
+          "canvas",
+          "picture"
+        ]
+      },
+      {
+        "gold": "fridge freezer",
+        "det": "refrigerator",
+        "conf": 0.389,
+        "score": 0.389,
+        "g": 1.0,
+        "queries": [
+          "refrigerator",
+          "fridge freezer",
+          "fridge",
+          "freezer"
+        ]
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.423,
+        "score": 0.423,
+        "g": 1.0,
+        "queries": [
+          "cabinet",
+          "kitchen units",
+          "kitchen",
+          "units"
+        ]
+      },
+      {
+        "gold": "kitchen units",
+        "det": "medicine cabinet",
+        "conf": 0.469,
+        "score": 0.443,
+        "g": 0.944,
+        "queries": [
+          "cabinet",
+          "kitchen units",
+          "kitchen",
+          "units"
+        ]
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.232,
+        "score": 0.232,
+        "g": 1.0,
+        "queries": [
+          "cabinet",
+          "kitchen units",
+          "kitchen",
+          "units"
+        ]
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.36,
+        "score": 0.36,
+        "g": 1.0,
+        "queries": [
+          "cabinet",
+          "kitchen units",
+          "kitchen",
+          "units"
+        ]
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.373,
+        "score": 0.373,
+        "g": 1.0,
+        "queries": [
+          "cabinet",
+          "kitchen units",
+          "kitchen",
+          "units"
+        ]
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.43,
+        "score": 0.43,
+        "g": 1.0,
+        "queries": [
+          "cabinet",
+          "kitchen units",
+          "kitchen",
+          "units"
+        ]
+      },
+      {
+        "gold": "kitchen units",
+        "det": "cabinet",
+        "conf": 0.25,
+        "score": 0.25,
+        "g": 1.0,
+        "queries": [
+          "cabinet",
+          "kitchen units",
+          "kitchen",
+          "units"
+        ]
+      },
+      {
+        "gold": "kitchen units",
+        "det": "medicine cabinet",
+        "conf": 0.2,
+        "score": 0.189,
+        "g": 0.944,
+        "queries": [
+          "cabinet",
+          "kitchen units",
+          "kitchen",
+          "units"
+        ]
+      }
+    ],
+    "still_miss_n": 34,
+    "cross_item_false_attach_pairs": 15,
+    "cross_item_false_auto": 3,
+    "cross_item_false_propose": 12,
+    "false_attach_examples": [
+      {
+        "true_gold": "double bed",
+        "wrong_item": "bedside lamps",
+        "det": "bed",
+        "conf": 0.678,
+        "score": 0.639,
+        "status": "proposed",
+        "room": "Bedroom"
+      },
+      {
+        "true_gold": "double bed",
+        "wrong_item": "bedside lamps",
+        "det": "bed",
+        "conf": 0.677,
+        "score": 0.638,
+        "status": "proposed",
+        "room": "Bedroom"
+      },
+      {
+        "true_gold": "double bed",
+        "wrong_item": "bedside lamps",
+        "det": "bed",
+        "conf": 0.848,
+        "score": 0.8,
+        "status": "auto",
+        "room": "Bedroom"
+      },
+      {
+        "true_gold": "double bed",
+        "wrong_item": "bedside lamps",
+        "det": "bed",
+        "conf": 0.743,
+        "score": 0.701,
+        "status": "proposed",
+        "room": "Bedroom"
+      },
+      {
+        "true_gold": "double bed",
+        "wrong_item": "bedside lamps",
+        "det": "bed",
+        "conf": 0.788,
+        "score": 0.743,
+        "status": "auto",
+        "room": "Bedroom"
+      },
+      {
+        "true_gold": "double bed",
+        "wrong_item": "bedside lamps",
+        "det": "bed",
+        "conf": 0.666,
+        "score": 0.628,
+        "status": "proposed",
+        "room": "Bedroom"
+      },
+      {
+        "true_gold": "double bed",
+        "wrong_item": "bedside lamps",
+        "det": "bed",
+        "conf": 0.578,
+        "score": 0.545,
+        "status": "proposed",
+        "room": "Bedroom"
+      },
+      {
+        "true_gold": "canvas picture",
+        "wrong_item": "dining table",
+        "det": "painting",
+        "conf": 0.743,
+        "score": 0.531,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen"
+      },
+      {
+        "true_gold": "coffee table",
+        "wrong_item": "dining table",
+        "det": "coffee table",
+        "conf": 0.75,
+        "score": 0.706,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen"
+      },
+      {
+        "true_gold": "coffee table",
+        "wrong_item": "dining table",
+        "det": "coffee table",
+        "conf": 0.79,
+        "score": 0.744,
+        "status": "auto",
+        "room": "Reception & Open Plan Kitchen"
+      },
+      {
+        "true_gold": "coffee table",
+        "wrong_item": "dining table",
+        "det": "coffee table",
+        "conf": 0.678,
+        "score": 0.638,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen"
+      },
+      {
+        "true_gold": "dining table",
+        "wrong_item": "coffee table",
+        "det": "dining table",
+        "conf": 0.568,
+        "score": 0.535,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen"
+      },
+      {
+        "true_gold": "pendant light fittings",
+        "wrong_item": "smoke alarm",
+        "det": "lamp",
+        "conf": 0.887,
+        "score": 0.488,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen"
+      },
+      {
+        "true_gold": "pendant light fittings",
+        "wrong_item": "smoke alarm",
+        "det": "lamp",
+        "conf": 0.96,
+        "score": 0.528,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen"
+      },
+      {
+        "true_gold": "pendant light fittings",
+        "wrong_item": "smoke alarm",
+        "det": "lamp",
+        "conf": 0.93,
+        "score": 0.512,
+        "status": "proposed",
+        "room": "Reception & Open Plan Kitchen"
+      }
+    ],
+    "false_attach_by_pair": [
+      [
+        [
+          "bed",
+          "bedside lamps",
+          "double bed"
+        ],
+        7
+      ],
+      [
+        [
+          "coffee table",
+          "dining table",
+          "coffee table"
+        ],
+        3
+      ],
+      [
+        [
+          "lamp",
+          "smoke alarm",
+          "pendant light fittings"
+        ],
+        3
+      ],
+      [
+        [
+          "painting",
+          "dining table",
+          "canvas picture"
+        ],
+        1
+      ],
+      [
+        [
+          "dining table",
+          "coffee table",
+          "dining table"
+        ],
+        1
+      ]
+    ]
+  },
+  "query_coverage": {
+    "notable_with_bbox": 45,
+    "queries_cover_all_dets": 37,
+    "queries_cover_some_dets": 7,
+    "queries_miss_dets": [
+      {
+        "name": "bedside lamps",
+        "dets": [
+          "lamp"
+        ],
+        "queries": [
+          "bedside",
+          "bedside lamps",
+          "lamps",
+          "table",
+          "table lamps"
+        ]
+      }
+    ]
+  },
+  "inventories": [
+    {
+      "inventory": "report-gemini35flash-detect",
+      "items": 107,
+      "photos_with_synthetic_dets": 94,
+      "items_citing_det_photos": 95,
+      "old_literal_attached": 23,
+      "new_auto": 27,
+      "new_proposed": 8,
+      "new_none": 72,
+      "new_attached": 35,
+      "lift_vs_literal": 12,
+      "attach_judged_ok": 34,
+      "attach_judged_wrong": 1,
+      "attach_unknown": 0,
+      "examples_ok": [
+        {
+          "item": "Entrance door",
+          "gold": "front door",
+          "det": "door",
+          "status": "auto",
+          "score": 0.417
+        },
+        {
+          "item": "Entrance door hardware",
+          "gold": "front door",
+          "det": "door",
+          "status": "auto",
+          "score": 0.355
+        },
+        {
+          "item": "Closet door",
+          "gold": "front door",
+          "det": "door",
+          "status": "auto",
+          "score": 0.262
+        },
+        {
+          "item": "Entrance door",
+          "gold": "door",
+          "det": "door",
+          "status": "auto",
+          "score": 0.528
+        },
+        {
+          "item": "Window",
+          "gold": "window",
+          "det": "window",
+          "status": "auto",
+          "score": 0.384
+        },
+        {
+          "item": "Patio Door",
+          "gold": "balcony door",
+          "det": "patio door",
+          "status": "auto",
+          "score": 0.261
+        },
+        {
+          "item": "Tufted Gray Velvet Sofa",
+          "gold": "sofa",
+          "det": "sofa",
+          "status": "auto",
+          "score": 0.762
+        },
+        {
+          "item": "Velvet Armchair",
+          "gold": "bar chairs",
+          "det": "chair",
+          "status": "auto",
+          "score": 0.8557
+        },
+        {
+          "item": "Nesting Coffee Tables",
+          "gold": "coffee table",
+          "det": "coffee table",
+          "status": "auto",
+          "score": 0.7839
+        },
+        {
+          "item": "Dining Table",
+          "gold": "coffee table",
+          "det": "coffee table",
+          "status": "proposed",
+          "score": 0.7063
+        },
+        {
+          "item": "Velvet Dining Chairs",
+          "gold": "bar chairs",
+          "det": "chair",
+          "status": "proposed",
+          "score": 0.667
+        },
+        {
+          "item": "Floor Leaner Mirror",
+          "gold": "mirror",
+          "det": "mirror",
+          "status": "auto",
+          "score": 0.875
+        }
+      ],
+      "examples_wrong": [
+        {
+          "item": "Towel Radiator",
+          "gold": "toilet",
+          "det": "toilet",
+          "status": "proposed",
+          "score": 0.4805,
+          "queries": [
+            "radiator",
+            "towel radiator",
+            "towel"
+          ]
+        }
+      ],
+      "top_auto_names": [
+        [
+          "Entrance door",
+          2
+        ],
+        [
+          "Entrance door hardware",
+          1
+        ],
+        [
+          "Closet door",
+          1
+        ],
+        [
+          "Window",
+          1
+        ],
+        [
+          "Patio Door",
+          1
+        ],
+        [
+          "Tufted Gray Velvet Sofa",
+          1
+        ],
+        [
+          "Velvet Armchair",
+          1
+        ],
+        [
+          "Nesting Coffee Tables",
+          1
+        ],
+        [
+          "Floor Leaner Mirror",
+          1
+        ],
+        [
+          "Sideboard Console Cabinet",
+          1
+        ],
+        [
+          "Gunmetal Kitchen Mixer Tap",
+          1
+        ],
+        [
+          "Integrated Miele Oven",
+          1
+        ]
+      ],
+      "top_proposed_names": [
+        [
+          "Dining Table",
+          1
+        ],
+        [
+          "Velvet Dining Chairs",
+          1
+        ],
+        [
+          "Kitchen Cabinetry",
+          1
+        ],
+        [
+          "Utility Cupboard Double Doors",
+          1
+        ],
+        [
+          "Bedside Cabinets",
+          1
+        ],
+        [
+          "Mirrored Cabinet",
+          1
+        ],
+        [
+          "Towel Radiator",
+          1
+        ],
+        [
+          "Ceiling Lights",
+          1
+        ]
+      ]
+    },
+    {
+      "inventory": "report-claude-v4-polished",
+      "items": 142,
+      "photos_with_synthetic_dets": 94,
+      "items_citing_det_photos": 111,
+      "old_literal_attached": 18,
+      "new_auto": 27,
+      "new_proposed": 6,
+      "new_none": 109,
+      "new_attached": 33,
+      "lift_vs_literal": 15,
+      "attach_judged_ok": 32,
+      "attach_judged_wrong": 1,
+      "attach_unknown": 0,
+      "examples_ok": [
+        {
+          "item": "Entrance door",
+          "gold": "front door",
+          "det": "door",
+          "status": "auto",
+          "score": 0.355
+        },
+        {
+          "item": "Internal door (walnut)",
+          "gold": "front door",
+          "det": "door",
+          "status": "auto",
+          "score": 0.417
+        },
+        {
+          "item": "Door handle / lock set",
+          "gold": "front door",
+          "det": "door",
+          "status": "auto",
+          "score": 0.254
+        },
+        {
+          "item": "Internal door (white)",
+          "gold": "door",
+          "det": "door",
+          "status": "auto",
+          "score": 0.528
+        },
+        {
+          "item": "Door lever handle and latch",
+          "gold": "door",
+          "det": "door",
+          "status": "auto",
+          "score": 0.338
+        },
+        {
+          "item": "Door frame and architrave",
+          "gold": "door",
+          "det": "door",
+          "status": "auto",
+          "score": 0.528
+        },
+        {
+          "item": "Floor-to-ceiling window / balcony door",
+          "gold": "window",
+          "det": "window",
+          "status": "auto",
+          "score": 0.384
+        },
+        {
+          "item": "Recessed ceiling downlights",
+          "gold": "pendant light fittings",
+          "det": "ceiling light",
+          "status": "proposed",
+          "score": 0.5828
+        },
+        {
+          "item": "Pendant light fittings",
+          "gold": "pendant light fittings",
+          "det": "lamp",
+          "status": "auto",
+          "score": 0.96
+        },
+        {
+          "item": "Air conditioning ventilation grille",
+          "gold": "bar chairs",
+          "det": "chair",
+          "status": "auto",
+          "score": 0.8534
+        },
+        {
+          "item": "Three-seat sofa",
+          "gold": "sofa",
+          "det": "sofa",
+          "status": "auto",
+          "score": 0.762
+        },
+        {
+          "item": "Accent armchair",
+          "gold": "bar chairs",
+          "det": "chair",
+          "status": "auto",
+          "score": 0.8557
+        }
+      ],
+      "examples_wrong": [
+        {
+          "item": "Smoke/heat alarm",
+          "gold": "pendant light fittings",
+          "det": "lamp",
+          "status": "proposed",
+          "score": 0.5115,
+          "queries": [
+            "smoke heat alarm",
+            "smoke",
+            "smoke heat",
+            "heat",
+            "heat alarm"
+          ]
+        }
+      ],
+      "top_auto_names": [
+        [
+          "Entrance door",
+          1
+        ],
+        [
+          "Internal door (walnut)",
+          1
+        ],
+        [
+          "Door handle / lock set",
+          1
+        ],
+        [
+          "Internal door (white)",
+          1
+        ],
+        [
+          "Door lever handle and latch",
+          1
+        ],
+        [
+          "Door frame and architrave",
+          1
+        ],
+        [
+          "Floor-to-ceiling window / balcony door",
+          1
+        ],
+        [
+          "Pendant light fittings",
+          1
+        ],
+        [
+          "Air conditioning ventilation grille",
+          1
+        ],
+        [
+          "Three-seat sofa",
+          1
+        ],
+        [
+          "Accent armchair",
+          1
+        ],
+        [
+          "Nest of coffee tables",
+          1
+        ]
+      ],
+      "top_proposed_names": [
+        [
+          "Recessed ceiling downlights",
+          1
+        ],
+        [
+          "Smoke/heat alarm",
+          1
+        ],
+        [
+          "Round dining table",
+          1
+        ],
+        [
+          "Dining/bar chairs",
+          1
+        ],
+        [
+          "Bedding / duvet and pillows",
+          1
+        ],
+        [
+          "Recessed ceiling downlighters",
+          1
+        ]
+      ]
+    }
+  ],
+  "thresholds": {
+    "auto": 0.72,
+    "propose": 0.48
+  }
+}

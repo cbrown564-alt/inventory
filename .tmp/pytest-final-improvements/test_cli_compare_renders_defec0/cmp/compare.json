@@ -1,0 +1,209 @@
+{
+  "checkin": {
+    "address": "1 Synthetic Street, Testville",
+    "inspected_at": "2026-07-12",
+    "backend": ""
+  },
+  "checkout": {
+    "address": "1 Synthetic Street, Testville",
+    "inspected_at": "2026-07-12",
+    "backend": ""
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Kitchen",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "KIT-001",
+          "checkout_id": "KIT-001",
+          "name": "Walls",
+          "checkin_name": "Walls",
+          "checkin_condition": "good",
+          "checkout_condition": "fair",
+          "grade_delta": 1,
+          "cleanliness_delta": null,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "scuff mark low level"
+          ],
+          "new_defects": [
+            "scuff mark low level"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": null,
+          "checkout_cleanliness": null,
+          "checkin_photo_ids": [
+            "P001"
+          ],
+          "checkout_photo_ids": [
+            "P001"
+          ],
+          "checkin_regions": [
+            {
+              "defect": "scuff mark",
+              "photo_id": "P001",
+              "x": 0.1,
+              "y": 0.2,
+              "w": 0.3,
+              "h": 0.4
+            }
+          ],
+          "checkout_regions": [
+            {
+              "defect": "scuff mark",
+              "photo_id": "P001",
+              "x": 0.1,
+              "y": 0.2,
+              "w": 0.3,
+              "h": 0.4
+            }
+          ],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "KIT-002",
+          "checkout_id": "KIT-002",
+          "name": "Oak-effect laminate flooring"
+        },
+        {
+          "checkin_id": "KIT-003",
+          "checkout_id": "KIT-003",
+          "name": "Oven"
+        },
+        {
+          "checkin_id": "KIT-004",
+          "checkout_id": "KIT-004",
+          "name": "Fridge freezer"
+        },
+        {
+          "checkin_id": "KIT-005",
+          "checkout_id": "KIT-005",
+          "name": "Window"
+        }
+      ],
+      "removed": [],
+      "added": []
+    },
+    {
+      "name": "Living Room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [],
+      "unchanged": [
+        {
+          "checkin_id": "LIV-001",
+          "checkout_id": "LIV-001",
+          "name": "Three-seat sofa"
+        },
+        {
+          "checkin_id": "LIV-002",
+          "checkout_id": "LIV-002",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "LIV-003",
+          "checkout_id": "LIV-003",
+          "name": "Television stand"
+        },
+        {
+          "checkin_id": "LIV-004",
+          "checkout_id": "LIV-004",
+          "name": "Curtains"
+        },
+        {
+          "checkin_id": "LIV-005",
+          "checkout_id": "LIV-005",
+          "name": "Radiator"
+        }
+      ],
+      "removed": [],
+      "added": []
+    },
+    {
+      "name": "Bathroom",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [],
+      "unchanged": [
+        {
+          "checkin_id": "BAT-001",
+          "checkout_id": "BAT-001",
+          "name": "Toilet"
+        },
+        {
+          "checkin_id": "BAT-002",
+          "checkout_id": "BAT-002",
+          "name": "Wash basin"
+        },
+        {
+          "checkin_id": "BAT-003",
+          "checkout_id": "BAT-003",
+          "name": "Shaver mirror"
+        },
+        {
+          "checkin_id": "BAT-004",
+          "checkout_id": "BAT-004",
+          "name": "Extractor fan"
+        }
+      ],
+      "removed": [],
+      "added": []
+    }
+  ],
+  "totals": {
+    "matched": 14,
+    "changed": 1,
+    "unchanged": 13,
+    "removed": 0,
+    "added": 0,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  }
+}

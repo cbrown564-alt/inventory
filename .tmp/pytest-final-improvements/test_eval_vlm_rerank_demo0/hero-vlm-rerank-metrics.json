@@ -1,0 +1,86 @@
+{
+  "experiment": "ML-E8",
+  "mode": "demo",
+  "pass_bar": "top-1 \u2265 9/9 on hero-gold",
+  "n_rooms": 9,
+  "top_k": 10,
+  "classical_scorer": "cover",
+  "classical_top1_hits": 0,
+  "classical_top1_rate_pct": 0.0,
+  "vlm_top1_hits": 9,
+  "vlm_top1_rate_pct": 100.0,
+  "gold_rank1_in_classical_top10": 9,
+  "gold_rooms": 9,
+  "pass": true,
+  "cost_estimate": {
+    "n_room_calls": 9,
+    "n_images": 90,
+    "estimate_usd": 0.198,
+    "method": "~$0.012/call + $0.001/image (Jul 2026 list-price placeholder for build confirm)"
+  },
+  "per_room": {
+    "Room 00": {
+      "classical_pick": "clip00_f000001.jpg",
+      "vlm_pick": "clip00_f000002.jpg",
+      "gold_top1": "clip00_f000002.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Room 01": {
+      "classical_pick": "clip01_f000001.jpg",
+      "vlm_pick": "clip01_f000002.jpg",
+      "gold_top1": "clip01_f000002.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Room 02": {
+      "classical_pick": "clip02_f000001.jpg",
+      "vlm_pick": "clip02_f000002.jpg",
+      "gold_top1": "clip02_f000002.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Room 03": {
+      "classical_pick": "clip03_f000001.jpg",
+      "vlm_pick": "clip03_f000002.jpg",
+      "gold_top1": "clip03_f000002.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Room 04": {
+      "classical_pick": "clip04_f000001.jpg",
+      "vlm_pick": "clip04_f000002.jpg",
+      "gold_top1": "clip04_f000002.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Room 05": {
+      "classical_pick": "clip05_f000001.jpg",
+      "vlm_pick": "clip05_f000002.jpg",
+      "gold_top1": "clip05_f000002.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Room 06": {
+      "classical_pick": "clip06_f000001.jpg",
+      "vlm_pick": "clip06_f000002.jpg",
+      "gold_top1": "clip06_f000002.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Room 07": {
+      "classical_pick": "clip07_f000001.jpg",
+      "vlm_pick": "clip07_f000002.jpg",
+      "gold_top1": "clip07_f000002.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    },
+    "Room 08": {
+      "classical_pick": "clip08_f000001.jpg",
+      "vlm_pick": "clip08_f000002.jpg",
+      "gold_top1": "clip08_f000002.jpg",
+      "top1_hit": true,
+      "rerank_source": "demo-gold-in-top10"
+    }
+  }
+}

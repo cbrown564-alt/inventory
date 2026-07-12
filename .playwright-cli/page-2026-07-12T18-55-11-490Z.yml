@@ -1,0 +1,222 @@
+- generic [active] [ref=f4e1]:
+  - banner [ref=f4e2]:
+    - link "Home Inventory ." [ref=f4e3] [cursor=pointer]:
+      - /url: /
+    - navigation "Sections" [ref=f4e6]:
+      - link "Review" [ref=f4e7] [cursor=pointer]:
+        - /url: /
+      - link "Report" [ref=f4e8] [cursor=pointer]:
+        - /url: /report
+      - link "Final issue" [ref=f4e9] [cursor=pointer]:
+        - /url: /issue
+    - navigation "Review mode" [ref=f4e10]:
+      - link "Overview" [ref=f4e11] [cursor=pointer]:
+        - /url: "#overview"
+      - link "Items" [ref=f4e12] [cursor=pointer]:
+        - /url: "#items"
+      - link "Rooms" [ref=f4e13] [cursor=pointer]:
+        - /url: "#rooms"
+      - link "Finish" [ref=f4e14] [cursor=pointer]:
+        - /url: "#finish"
+    - generic [ref=f4e15]: 6 of 186 items confirmed
+    - status [ref=f4e20]: All changes saved
+  - generic [ref=f4e21]:
+    - text: ▸
+    - generic [ref=f4e23]:
+      - generic [ref=f4e24]:
+        - generic [ref=f4e26]:
+          - generic [ref=f4e27]: Inventory register · 8 Jul 2026
+          - heading "12 Test Street, Sampletown AB1 2CD" [level=1] [ref=f4e29]
+          - generic [ref=f4e30]: seen at 5:27 · Hallway
+        - generic [ref=f4e32]:
+          - generic [ref=f4e33]: 10 rooms · 186 items
+          - generic [ref=f4e34]: 38 of 92 frames shown
+          - generic [ref=f4e35]: IMG_5512.MOV · 13:23
+        - generic [ref=f4e36]:
+          - generic "Rooms whose cover frame confidently establishes the room" [ref=f4e37]: 7 of 10 rooms confident
+          - generic "Rooms whose best frame is weak — check these first" [ref=f4e38]: 3 flagged for you
+          - generic "Content SHA-256 bc7510164f7f801d8069358dfbc979a951838a459a46009d95150f9d52611fa9" [ref=f4e39]:
+            - generic [ref=f4e40]: SHA
+            - text: bc751016
+          - generic [ref=f4e41]: 6 / 186 confirmed
+      - generic [ref=f4e42]:
+        - button "Start review" [ref=f4e43] [cursor=pointer]
+        - button "Watch walkthrough" [ref=f4e44] [cursor=pointer]
+        - button "Preview as landlord" [ref=f4e45] [cursor=pointer]
+      - generic [ref=f4e46]:
+        - paragraph [ref=f4e47]: Walkthrough spine
+        - generic [ref=f4e48]:
+          - generic [ref=f4e49]:
+            - generic "Hallway · 0:00" [ref=f4e50] [cursor=pointer]: Hallway
+            - generic "Living Room · 0:05" [ref=f4e52] [cursor=pointer]: Living Room
+            - generic "Kitchen · 0:10" [ref=f4e54] [cursor=pointer]: Kitchen
+            - generic "Living Room · 4:25" [ref=f4e56] [cursor=pointer]: Living Room
+            - generic "Hallway · 5:16" [ref=f4e58] [cursor=pointer]: Hallway
+            - generic "Bathroom · 5:51" [ref=f4e60] [cursor=pointer]: Bathroom
+            - generic "Bedroom 1 · 6:16" [ref=f4e62] [cursor=pointer]: Bedroom 1
+            - generic "En-suite Shower Room · 6:46" [ref=f4e64] [cursor=pointer]: En-suite Shower Room
+            - generic "Bedroom 1 · 7:06" [ref=f4e66] [cursor=pointer]: Bedroom 1
+            - generic "Stairs and Landing · 7:16" [ref=f4e68] [cursor=pointer]: Stairs and Landing
+            - generic "Loft Room · 8:21" [ref=f4e70] [cursor=pointer]: Loft Room
+            - generic "Bedroom 2 · 9:26" [ref=f4e72] [cursor=pointer]: Bedroom 2
+            - generic "Loft Shower Room · 12:01" [ref=f4e74] [cursor=pointer]: Loft Shower Room
+          - generic [ref=f4e76] [cursor=pointer]:
+            - generic "seen at 0:00" [ref=f4e78]
+            - generic "seen at 0:01" [ref=f4e79]
+            - generic "seen at 0:02" [ref=f4e80]
+            - generic "seen at 0:04" [ref=f4e81]
+            - generic "seen at 0:07" [ref=f4e82]
+            - generic "seen at 0:07" [ref=f4e83]
+            - generic "seen at 0:08" [ref=f4e84]
+            - generic "seen at 0:16" [ref=f4e85]
+            - generic "seen at 0:28" [ref=f4e86]
+            - generic "seen at 0:32" [ref=f4e87]
+            - generic "seen at 0:50" [ref=f4e88]
+            - generic "seen at 0:53" [ref=f4e89]
+            - generic "seen at 1:10" [ref=f4e90]
+            - generic "seen at 1:19" [ref=f4e91]
+            - generic "seen at 1:25" [ref=f4e92]
+            - generic "seen at 1:37" [ref=f4e93]
+            - generic "seen at 1:54" [ref=f4e94]
+            - generic "seen at 1:58" [ref=f4e95]
+            - generic "seen at 2:16" [ref=f4e96]
+            - generic "seen at 2:27" [ref=f4e97]
+            - generic "seen at 2:33" [ref=f4e98]
+            - generic "seen at 2:47" [ref=f4e99]
+            - generic "seen at 2:57" [ref=f4e100]
+            - generic "seen at 3:07" [ref=f4e101]
+            - generic "seen at 3:20" [ref=f4e102]
+            - generic "seen at 3:22" [ref=f4e103]
+            - generic "seen at 3:41" [ref=f4e104]
+            - generic "seen at 3:44" [ref=f4e105]
+            - generic "seen at 4:01" [ref=f4e106]
+            - generic "seen at 4:09" [ref=f4e107]
+            - generic "seen at 4:23" [ref=f4e108]
+            - generic "seen at 4:34" [ref=f4e109]
+            - generic "seen at 4:38" [ref=f4e110]
+            - generic "seen at 4:49" [ref=f4e111]
+            - generic "seen at 5:05" [ref=f4e112]
+            - generic "seen at 5:06" [ref=f4e113]
+            - generic "seen at 5:18" [ref=f4e114]
+            - generic "seen at 5:27" [ref=f4e115]
+            - generic "seen at 5:38" [ref=f4e116]
+            - generic "seen at 5:47" [ref=f4e117]
+            - generic "seen at 5:56" [ref=f4e118]
+            - generic "seen at 5:57" [ref=f4e119]
+            - generic "seen at 6:04" [ref=f4e120]
+            - generic "seen at 6:12" [ref=f4e121]
+            - generic "seen at 6:20" [ref=f4e122]
+            - generic "seen at 6:29" [ref=f4e123]
+            - generic "seen at 6:38" [ref=f4e124]
+            - generic "seen at 6:38" [ref=f4e125]
+            - generic "seen at 6:48" [ref=f4e126]
+            - generic "seen at 6:54" [ref=f4e127]
+            - generic "seen at 7:00" [ref=f4e128]
+            - generic "seen at 7:02" [ref=f4e129]
+            - generic "seen at 7:08" [ref=f4e130]
+            - generic "seen at 7:10" [ref=f4e131]
+            - generic "seen at 7:11" [ref=f4e132]
+            - generic "seen at 7:15" [ref=f4e133]
+            - generic "seen at 7:18" [ref=f4e134]
+            - generic "seen at 7:28" [ref=f4e135]
+            - generic "seen at 7:47" [ref=f4e136]
+            - generic "seen at 7:51" [ref=f4e137]
+            - generic "seen at 8:06" [ref=f4e138]
+            - generic "seen at 8:19" [ref=f4e139]
+            - generic "seen at 8:30" [ref=f4e140]
+            - generic "seen at 8:32" [ref=f4e141]
+            - generic "seen at 8:50" [ref=f4e142]
+            - generic "seen at 8:59" [ref=f4e143]
+            - generic "seen at 9:13" [ref=f4e144]
+            - generic "seen at 9:21" [ref=f4e145]
+            - generic "seen at 9:33" [ref=f4e146]
+            - generic "seen at 9:41" [ref=f4e147]
+            - generic "seen at 9:49" [ref=f4e148]
+            - generic "seen at 10:04" [ref=f4e149]
+            - generic "seen at 10:05" [ref=f4e150]
+            - generic "seen at 10:20" [ref=f4e151]
+            - generic "seen at 10:31" [ref=f4e152]
+            - generic "seen at 10:42" [ref=f4e153]
+            - generic "seen at 10:44" [ref=f4e154]
+            - generic "seen at 10:54" [ref=f4e155]
+            - generic "seen at 11:06" [ref=f4e156]
+            - generic "seen at 11:19" [ref=f4e157]
+            - generic "seen at 11:30" [ref=f4e158]
+            - generic "seen at 11:33" [ref=f4e159]
+            - generic "seen at 11:42" [ref=f4e160]
+            - generic "seen at 11:58" [ref=f4e161]
+            - generic "seen at 12:10" [ref=f4e162]
+            - generic "seen at 12:15" [ref=f4e163]
+            - generic "seen at 12:24" [ref=f4e164]
+            - generic "seen at 12:40" [ref=f4e165]
+            - generic "seen at 12:46" [ref=f4e166]
+            - generic "seen at 12:53" [ref=f4e167]
+            - generic "seen at 13:10" [ref=f4e168]
+            - generic "seen at 13:13" [ref=f4e169]
+      - paragraph [ref=f4e171]: Room plates
+      - generic [ref=f4e172]:
+        - button "1:25 Plate 01 Kitchen 34 items · 15 to check" [ref=f4e173] [cursor=pointer]:
+          - generic "Seen at 1:25 in the walkthrough" [ref=f4e175]: 1:25
+          - generic [ref=f4e176]:
+            - generic [ref=f4e177]: Plate 01
+            - heading "Kitchen" [level=3] [ref=f4e178]
+            - generic [ref=f4e179]: 34 items · 15 to check
+        - button "4:34 Plate 02 Living Room 24 items · 1 to check Cover may not establish the room" [ref=f4e182] [cursor=pointer]:
+          - generic "Seen at 4:34 in the walkthrough" [ref=f4e184]: 4:34
+          - generic [ref=f4e185]:
+            - generic [ref=f4e186]: Plate 02
+            - heading "Living Room" [level=3] [ref=f4e187]
+            - generic [ref=f4e188]: 24 items · 1 to check
+            - generic [ref=f4e189]: Cover may not establish the room
+      - generic [ref=f4e192]:
+        - button "5:27 Plate 03 Hallway 18 items · 1 to check" [ref=f4e193] [cursor=pointer]:
+          - generic "Seen at 5:27 in the walkthrough" [ref=f4e195]: 5:27
+          - generic [ref=f4e196]:
+            - generic [ref=f4e197]: Plate 03
+            - heading "Hallway" [level=3] [ref=f4e198]
+            - generic [ref=f4e199]: 18 items · 1 to check
+        - button "6:38 Plate 04 Bedroom 1 19 items · 4 to check Cover may not establish the room" [ref=f4e202] [cursor=pointer]:
+          - generic "Seen at 6:38 in the walkthrough" [ref=f4e204]: 6:38
+          - generic [ref=f4e205]:
+            - generic [ref=f4e206]: Plate 04
+            - heading "Bedroom 1" [level=3] [ref=f4e207]
+            - generic [ref=f4e208]: 19 items · 4 to check
+            - generic [ref=f4e209]: Cover may not establish the room
+        - button "11:19 Plate 05 Bedroom 2 18 items · 4 to check" [ref=f4e212] [cursor=pointer]:
+          - generic "Seen at 11:19 in the walkthrough" [ref=f4e214]: 11:19
+          - generic [ref=f4e215]:
+            - generic [ref=f4e216]: Plate 05
+            - heading "Bedroom 2" [level=3] [ref=f4e217]
+            - generic [ref=f4e218]: 18 items · 4 to check
+        - button "6:12 Plate 06 Bathroom 14 items · 1 to check" [ref=f4e221] [cursor=pointer]:
+          - generic "Seen at 6:12 in the walkthrough" [ref=f4e223]: 6:12
+          - generic [ref=f4e224]:
+            - generic [ref=f4e225]: Plate 06
+            - heading "Bathroom" [level=3] [ref=f4e226]
+            - generic [ref=f4e227]: 14 items · 1 to check
+        - button "7:00 Plate 07 En-suite Shower Room 13 items · 4 to check" [ref=f4e229] [cursor=pointer]:
+          - generic "Seen at 7:00 in the walkthrough" [ref=f4e231]: 7:00
+          - generic [ref=f4e232]:
+            - generic [ref=f4e233]: Plate 07
+            - heading "En-suite Shower Room" [level=3] [ref=f4e234]
+            - generic [ref=f4e235]: 13 items · 4 to check
+        - button "8:32 Plate 08 Loft Room 19 items · 2 to check Cover may not establish the room" [ref=f4e237] [cursor=pointer]:
+          - generic "Seen at 8:32 in the walkthrough" [ref=f4e239]: 8:32
+          - generic [ref=f4e240]:
+            - generic [ref=f4e241]: Plate 08
+            - heading "Loft Room" [level=3] [ref=f4e242]
+            - generic [ref=f4e243]: 19 items · 2 to check
+            - generic [ref=f4e244]: Cover may not establish the room
+        - button "12:46 Plate 09 Loft Shower Room 11 items · 8 to check" [ref=f4e246] [cursor=pointer]:
+          - generic "Seen at 12:46 in the walkthrough" [ref=f4e248]: 12:46
+          - generic [ref=f4e249]:
+            - generic [ref=f4e250]: Plate 09
+            - heading "Loft Shower Room" [level=3] [ref=f4e251]
+            - generic [ref=f4e252]: 11 items · 8 to check
+        - button "7:18 Plate 10 Stairs and Landing 16 items · 4 to check" [ref=f4e254] [cursor=pointer]:
+          - generic "Seen at 7:18 in the walkthrough" [ref=f4e256]: 7:18
+          - generic [ref=f4e257]:
+            - generic [ref=f4e258]: Plate 10
+            - heading "Stairs and Landing" [level=3] [ref=f4e259]
+            - generic [ref=f4e260]: 16 items · 4 to check
+  - status

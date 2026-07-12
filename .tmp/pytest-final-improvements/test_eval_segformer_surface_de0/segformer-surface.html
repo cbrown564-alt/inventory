@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html><head><meta charset='utf-8'>
+<title>ML-E13 SegFormer surface contact sheet</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:1rem;background:#111;color:#eee}
+h1,h2{margin:0.5rem 0}
+.summary{background:#222;padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.cell{background:#222;border-radius:8px;overflow:hidden;border:2px solid #333}
+.cell.pick{border-color:#f5c518}
+.cell img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;background:#000}
+.meta{padding:8px;font-size:12px;line-height:1.4}
+.star{color:#f5c518;font-weight:bold}
+.metrics{color:#aaa}
+</style></head><body>
+<h1>ML-E13 — floor+wall surface fraction</h1>
+<p>Report: C:\Users\cbrow\Code\inventory\.tmp\pytest-final-improvements\test_eval_segformer_surface_de0\report</p>
+<p>Floor+wall fraction via histogram. Pass bar: mean Spearman ρ vs hero-gold ≥ classical establishing scorer.</p>
+<div class='summary'><h2>Metrics</h2><pre>
+{
+  &quot;experiment&quot;: &quot;ML-E13&quot;,
+  &quot;report_dir&quot;: &quot;C:\\Users\\cbrow\\Code\\inventory\\.tmp\\pytest-final-improvements\\test_eval_segformer_surface_de0\\report&quot;,
+  &quot;n_rooms&quot;: 2,
+  &quot;n_frames&quot;: 12,
+  &quot;demo&quot;: true,
+  &quot;mean_spearman_surface&quot;: 0.657,
+  &quot;mean_spearman_establishing&quot;: -0.257,
+  &quot;pass_bar&quot;: &quot;mean \u03c1 surface \u2265 establishing (-0.257)&quot;,
+  &quot;pass&quot;: true,
+  &quot;timing&quot;: {
+    &quot;infer_s&quot;: 0.03,
+    &quot;ms_per_frame&quot;: 2.2,
+    &quot;scorer_mode&quot;: &quot;histogram&quot;
+  },
+  &quot;per_room&quot;: {
+    &quot;Room 00&quot;: {
+      &quot;n_frames&quot;: 6,
+      &quot;spearman_surface&quot;: 0.657,
+      &quot;spearman_establishing&quot;: -0.257,
+      &quot;top3_hit_establishing&quot;: false,
+      &quot;top1_hit_surface&quot;: false,
+      &quot;top3_hit_surface&quot;: true
+    },
+    &quot;Room 01&quot;: {
+      &quot;n_frames&quot;: 6,
+      &quot;spearman_surface&quot;: 0.657,
+      &quot;spearman_establishing&quot;: -0.257,
+      &quot;top3_hit_establishing&quot;: false,
+      &quot;top1_hit_surface&quot;: false,
+      &quot;top3_hit_surface&quot;: true
+    }
+  }
+}
+</pre></div>
+<h2>Room 00</h2>
+<p><em>synthetic</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='report\work\frames\Room_00_seg00\clip00_f000001.jpg' alt='clip00_f000001.jpg'>
+<div class='meta'>
+<strong>clip00_f000001.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=1 hero=— gold=2
+</span></div></div>
+<div class='cell'>
+<img src='report\work\frames\Room_00_seg00\clip00_f000002.jpg' alt='clip00_f000002.jpg'>
+<div class='meta'>
+<strong>clip00_f000002.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=2 hero=— gold=3
+</span></div></div>
+<div class='cell'>
+<img src='report\work\frames\Room_00_seg00\clip00_f000003.jpg' alt='clip00_f000003.jpg'>
+<div class='meta'>
+<strong>clip00_f000003.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=3 hero=— gold=4
+</span></div></div>
+<div class='cell'>
+<img src='report\work\frames\Room_00_seg00\clip00_f000004.jpg' alt='clip00_f000004.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>clip00_f000004.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=4 hero=1 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='report\work\frames\Room_00_seg00\clip00_f000005.jpg' alt='clip00_f000005.jpg'>
+<div class='meta'>
+<strong>clip00_f000005.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=5 hero=— gold=5
+</span></div></div>
+<div class='cell'>
+<img src='report\work\frames\Room_00_seg00\clip00_f000006.jpg' alt='clip00_f000006.jpg'>
+<div class='meta'>
+<strong>clip00_f000006.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=6 hero=— gold=6
+</span></div></div>
+</div>
+<h2>Room 01</h2>
+<p><em>synthetic</em></p>
+<div class='grid'>
+<div class='cell pick'>
+<img src='report\work\frames\Room_01_seg00\clip01_f000001.jpg' alt='clip01_f000001.jpg'>
+<div class='meta'>
+<strong>clip01_f000001.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=1 hero=— gold=2
+</span></div></div>
+<div class='cell'>
+<img src='report\work\frames\Room_01_seg00\clip01_f000002.jpg' alt='clip01_f000002.jpg'>
+<div class='meta'>
+<strong>clip01_f000002.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=2 hero=— gold=3
+</span></div></div>
+<div class='cell'>
+<img src='report\work\frames\Room_01_seg00\clip01_f000003.jpg' alt='clip01_f000003.jpg'>
+<div class='meta'>
+<strong>clip01_f000003.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=3 hero=— gold=4
+</span></div></div>
+<div class='cell'>
+<img src='report\work\frames\Room_01_seg00\clip01_f000004.jpg' alt='clip01_f000004.jpg'>
+<div class='meta'>
+<span class='star'>★ </span><strong>clip01_f000004.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=4 hero=1 gold=1
+</span></div></div>
+<div class='cell'>
+<img src='report\work\frames\Room_01_seg00\clip01_f000005.jpg' alt='clip01_f000005.jpg'>
+<div class='meta'>
+<strong>clip01_f000005.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=5 hero=— gold=5
+</span></div></div>
+<div class='cell'>
+<img src='report\work\frames\Room_01_seg00\clip01_f000006.jpg' alt='clip01_f000006.jpg'>
+<div class='meta'>
+<strong>clip01_f000006.jpg</strong><br>
+<span class='metrics'>
+surface=1.000 floor=0.50 wall=0.50 rank=6 hero=— gold=6
+</span></div></div>
+</div>
+</body></html>

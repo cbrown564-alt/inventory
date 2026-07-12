@@ -63,6 +63,9 @@ def test_deepclean_before_after_sessions():
     assert DEEP_CLEAN.comparison.followup == "After"
     assert DEEP_CLEAN.value_bands is None
     assert DEEP_CLEAN.summary_section_title == "Cleanliness Summary"
+    assert DEEP_CLEAN.owner_role.key == "cleaner"
+    assert DEEP_CLEAN.counterparty_role.key == "customer"
+    assert DEEP_CLEAN.share_page.link_noun == DEEP_CLEAN.counterparty_role.key
 
 
 def test_cover_fields_resolve_on_blank_inventory():

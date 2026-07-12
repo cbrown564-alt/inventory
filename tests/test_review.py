@@ -10,12 +10,14 @@ import urllib.request
 from pathlib import Path
 
 import pytest
+from jinja2 import Environment, FileSystemLoader
 from PIL import Image
 
 from homeinventory.cli import main
 from homeinventory.coverage import coverage_gaps, expected_for
 from homeinventory.review import serve
 from homeinventory.schema import Inventory, Item, Photo, Room
+from homeinventory.webbase import TEMPLATES
 
 
 def _img(path: Path):
@@ -1217,7 +1219,36 @@ def test_tenant_walkthrough_precedes_countersign(server):
     _, html = _get_text(base + f"/t/{state.tenant_token}")
     assert "Walk through each room before countersigning" in html
     assert "Continue with " in html
-    assert "Review and countersign" in html
+    assert "Mark checked · countersign" in html
+    assert "viewed[ri] = true" in html
+    assert "s.inventory_sha256 === currentSha" in html
+
+
+def test_live_surfaces_share_evidence_register_grammar(server):
+    """The primary and specialist owner views expose honest image-led evidence."""
+    base, _state, _out, _cap = server
+    _, workspace = _get_text(base + "/")
+    _, desk = _get_text(base + "/review")
+    assert "evidence register" in workspace
+    assert 'kind: "Context"' in workspace
+    assert "No item evidence is linked" in workspace
+    assert "q-evidence" in desk
+    assert 'text: directCrop ?' in desk
+
+
+def test_project_advances_to_after_when_before_is_ready():
+    env = Environment(loader=FileSystemLoader(TEMPLATES))
+    html = env.get_template("project.html.j2").render(
+        use_case_label="Before & after clean",
+        sessions=[
+            {"key": "before", "label": "Before", "prefix": "/s/before", "built": True,
+             "room_count": 3, "item_count": 24},
+            {"key": "after", "label": "After", "prefix": "/s/after", "built": False},
+        ],
+        compare_ready=False, compare_built=False, compare_running=False,
+        route_prefix="",
+    )
+    assert re.search(r'class="step current"\s+id="after-step"', html)
 
 
 def test_finish_route_opens_field_finish_workspace(server):

@@ -1,0 +1,155 @@
+- generic [active] [ref=f8e1]:
+  - banner [ref=f8e2]:
+    - link "Home Inventory ." [ref=f8e3] [cursor=pointer]:
+      - /url: /compare.html
+    - generic [ref=f8e6]: Compare
+  - main [ref=f8e7]:
+    - generic [ref=f8e8]: Check-in vs Check-out comparison
+    - heading "1 Synthetic Street, Testville" [level=1] [ref=f8e9]
+    - paragraph [ref=f8e10]: "Check-in: 2026-07-12 (?) · Check-out: 2026-07-12 (synthetic-checkout (seed 42)) Tenancy length (months): 12 · Occupancy: not provided · Classification: offline"
+    - paragraph [ref=f8e11]: "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle. Classifications marked “unclassified” mean no rubric ran (offline) or the rubric failed — review by hand."
+    - heading "Grade-delta summary" [level=2] [ref=f8e12]
+    - paragraph [ref=f8e13]: 12 items matched (4 changed, 8 unchanged) · 2 not located at check-out · 2 new at check-out
+    - tablist "Filter by classification" [ref=f8e14]:
+      - tab "All (4)" [selected] [ref=f8e15] [cursor=pointer]
+      - tab "Unclassified (4)" [ref=f8e16] [cursor=pointer]
+    - generic [ref=f8e17]:
+      - article [ref=f8e18]:
+        - generic [ref=f8e19]:
+          - generic [ref=f8e20]: Oak-effect laminate flooring
+          - generic [ref=f8e21]: Kitchen
+          - generic [ref=f8e22]: Unclassified
+        - generic [ref=f8e23]:
+          - generic [ref=f8e24]:
+            - text: "Check-in:"
+            - strong [ref=f8e25]: good
+          - generic [ref=f8e26]:
+            - text: "Check-out:"
+            - strong [ref=f8e27]: good
+          - generic [ref=f8e28]: "0"
+        - list [ref=f8e29]:
+          - listitem [ref=f8e30]: "synthetic: angle chip to leading edge"
+        - paragraph [ref=f8e31]: "Why this was suggested — offline backend: no classification performed"
+        - generic [ref=f8e32]:
+          - generic [ref=f8e33]:
+            - generic [ref=f8e34]:
+              - generic [ref=f8e35]: Check-in — good
+              - img "P001" [ref=f8e36]
+              - generic [ref=f8e37]: P001
+            - generic [ref=f8e38]:
+              - generic [ref=f8e39]: Check-out — good
+              - img "P001" [ref=f8e40]
+              - generic [ref=f8e41]: P001
+          - generic [ref=f8e42]:
+            - button "Check-in" [ref=f8e43] [cursor=pointer]
+            - button "Check-out" [ref=f8e44] [cursor=pointer]
+      - article [ref=f8e45]:
+        - generic [ref=f8e46]:
+          - generic [ref=f8e47]: Curtains
+          - generic [ref=f8e48]: Living Room
+          - generic [ref=f8e49]: Unclassified
+        - generic [ref=f8e50]:
+          - generic [ref=f8e51]:
+            - text: "Check-in:"
+            - strong [ref=f8e52]: good
+          - generic [ref=f8e53]:
+            - text: "Check-out:"
+            - strong [ref=f8e54]: fair
+          - generic [ref=f8e55]: ▼1
+        - paragraph [ref=f8e56]: "Why this was suggested — offline backend: no classification performed"
+        - generic [ref=f8e57]:
+          - generic [ref=f8e58]:
+            - generic [ref=f8e59]:
+              - generic [ref=f8e60]: Check-in — good
+              - img "P002" [ref=f8e61]
+              - generic [ref=f8e62]: P002
+            - generic [ref=f8e63]:
+              - generic [ref=f8e64]: Check-out — fair
+              - img "P002" [ref=f8e65]
+              - generic [ref=f8e66]: P002
+          - generic [ref=f8e67]:
+            - button "Check-in" [ref=f8e68] [cursor=pointer]
+            - button "Check-out" [ref=f8e69] [cursor=pointer]
+      - article [ref=f8e70]:
+        - generic [ref=f8e71]:
+          - generic [ref=f8e72]: Toilet
+          - generic [ref=f8e73]: Bathroom
+          - generic [ref=f8e74]: Unclassified
+        - generic [ref=f8e75]:
+          - generic [ref=f8e76]:
+            - text: "Check-in:"
+            - strong [ref=f8e77]: good
+          - generic [ref=f8e78]:
+            - text: "Check-out:"
+            - strong [ref=f8e79]: good
+          - generic [ref=f8e80]: "0"
+        - list [ref=f8e81]:
+          - listitem [ref=f8e82]: "synthetic: scuff mark low level left hand side"
+        - paragraph [ref=f8e83]: "Why this was suggested — offline backend: no classification performed"
+        - generic [ref=f8e84]:
+          - generic [ref=f8e85]:
+            - generic [ref=f8e86]:
+              - generic [ref=f8e87]: Check-in — good
+              - img "P003" [ref=f8e88]
+              - generic [ref=f8e89]: P003
+            - generic [ref=f8e90]:
+              - generic [ref=f8e91]: Check-out — good
+              - img "P003" [ref=f8e92]
+              - generic [ref=f8e93]: P003
+          - generic [ref=f8e94]:
+            - button "Check-in" [ref=f8e95] [cursor=pointer]
+            - button "Check-out" [ref=f8e96] [cursor=pointer]
+      - article [ref=f8e97]:
+        - generic [ref=f8e98]:
+          - generic [ref=f8e99]: Shaver mirror
+          - generic [ref=f8e100]: Bathroom
+          - generic [ref=f8e101]: Unclassified
+        - generic [ref=f8e102]:
+          - generic [ref=f8e103]:
+            - text: "Check-in:"
+            - strong [ref=f8e104]: excellent
+          - generic [ref=f8e105]:
+            - text: "Check-out:"
+            - strong [ref=f8e106]: good
+          - generic [ref=f8e107]: ▼1
+        - paragraph [ref=f8e108]: "Why this was suggested — offline backend: no classification performed"
+        - generic [ref=f8e109]:
+          - generic [ref=f8e110]:
+            - generic [ref=f8e111]:
+              - generic [ref=f8e112]: Check-in — excellent
+              - img "P003" [ref=f8e113]
+              - generic [ref=f8e114]: P003
+            - generic [ref=f8e115]:
+              - generic [ref=f8e116]: Check-out — good
+              - img "P003" [ref=f8e117]
+              - generic [ref=f8e118]: P003
+          - generic [ref=f8e119]:
+            - button "Check-in" [ref=f8e120] [cursor=pointer]
+            - button "Check-out" [ref=f8e121] [cursor=pointer]
+    - heading "Items not located at check-out" [level=2] [ref=f8e122]
+    - generic "Items not located" [ref=f8e123]:
+      - article [ref=f8e124]:
+        - strong [ref=f8e125]: Walls
+        - generic [ref=f8e126]: Kitchen · good
+        - generic [ref=f8e127]: No defect recorded · evidence P001
+      - article [ref=f8e128]:
+        - strong [ref=f8e129]: Window
+        - generic [ref=f8e130]: Kitchen · good
+        - generic [ref=f8e131]: No defect recorded · evidence P001
+    - paragraph [ref=f8e132]: "“Not located” is an alignment verdict, not a liability verdict: confirm each before treating it as a loss."
+    - heading "Items new at check-out" [level=2] [ref=f8e133]
+    - generic "New items" [ref=f8e134]:
+      - article [ref=f8e135]:
+        - strong [ref=f8e136]: Waste paper bin
+        - generic [ref=f8e137]: Kitchen · good
+        - generic [ref=f8e138]: No defect recorded · evidence P001
+      - article [ref=f8e139]:
+        - strong [ref=f8e140]: Clothes airer
+        - generic [ref=f8e141]: Bathroom · good
+        - generic [ref=f8e142]: No defect recorded · evidence P003
+    - generic [ref=f8e143]:
+      - heading "Review the suggestions, then return to the record" [level=2] [ref=f8e144]
+      - paragraph [ref=f8e145]: Classifications and alignment are decision support. Confirm the evidence before using a change in a deduction or service discussion.
+      - link "Back to the evidence record" [ref=f8e146] [cursor=pointer]:
+        - /url: /compare.html
+    - generic [ref=f8e147]: homeinventory compare · alignment is lexical (room + head-noun match, no API calls) · classifications are AI-suggested and require human review before any deduction discussion.

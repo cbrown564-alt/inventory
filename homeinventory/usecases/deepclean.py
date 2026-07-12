@@ -185,9 +185,9 @@ DEEP_CLEAN = UseCase(
                    "e.g. 2 bed end-of-terrace"),
         CoverField("report_ref", "Report reference", "--report-ref", "Reference number"),
     ),
-    owner_role=Role("customer", "Customer"),
+    owner_role=Role("cleaner", "Cleaner"),
     agent_role=None,
-    counterparty_role=Role("cleaner", "Cleaner"),
+    counterparty_role=Role("customer", "Customer"),
     signing_role_keys=("customer", "cleaner"),
     share_page=SharePageSpec(
         link_noun="customer",

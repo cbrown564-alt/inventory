@@ -1,0 +1,218 @@
+- generic [active] [ref=f3e1]:
+  - banner [ref=f3e2]:
+    - link "Home Inventory workspace" [ref=f3e3] [cursor=pointer]:
+      - /url: /
+      - text: Home Inventory
+    - generic [ref=f3e7]:
+      - link "Full evidence desk" [ref=f3e8] [cursor=pointer]:
+        - /url: /review
+      - link "Report" [ref=f3e9] [cursor=pointer]:
+        - /url: /report
+      - link "Final issue" [ref=f3e10] [cursor=pointer]:
+        - /url: /issue
+  - main [ref=f3e11]:
+    - generic [ref=f3e12]:
+      - complementary [ref=f3e13]:
+        - generic [ref=f3e14]:
+          - paragraph [ref=f3e15]: Inventory
+          - heading "12 Test Street, Sampletown AB1 2CD" [level=1] [ref=f3e16]
+          - paragraph [ref=f3e17]: 44 decisions needs you
+        - navigation "Inspection sections" [ref=f3e18]:
+          - button "Overview 10" [ref=f3e19] [cursor=pointer]:
+            - generic [ref=f3e20]: Overview
+            - generic [ref=f3e21]: "10"
+          - button "Review 44" [ref=f3e22] [cursor=pointer]:
+            - generic [ref=f3e23]: Review
+            - generic [ref=f3e24]: "44"
+          - button "Finish ready" [ref=f3e25] [cursor=pointer]:
+            - generic [ref=f3e26]: Finish
+            - generic [ref=f3e27]: ready
+        - paragraph [ref=f3e28]:
+          - text: Every decision is saved back to the evidence record. Need frame-by-frame controls, annotations, or room corrections?
+          - link "Open the full evidence desk." [ref=f3e29] [cursor=pointer]:
+            - /url: /review
+      - generic [ref=f3e30]:
+        - generic [ref=f3e31]:
+          - generic [ref=f3e32]:
+            - paragraph [ref=f3e33]: Inspection overview
+            - heading "12 Test Street, Sampletown AB1 2CD" [level=2] [ref=f3e34]
+            - paragraph [ref=f3e35]: Start with the rooms. Review only the claims that still need your judgement.
+          - generic [ref=f3e36]:
+            - generic [ref=f3e37]: 44 decisions left
+            - button "Review next" [ref=f3e38] [cursor=pointer]
+        - region "Hallway evidence" [ref=f3e39]:
+          - img "Evidence for Hallway" [ref=f3e40]
+          - generic [ref=f3e41]:
+            - generic [ref=f3e42]:
+              - heading "Hallway" [level=3] [ref=f3e43]
+              - paragraph [ref=f3e44]: 18 claims · 2 checked
+            - button "Inspect evidence" [ref=f3e45] [cursor=pointer]
+        - generic [ref=f3e46]:
+          - generic [ref=f3e47]:
+            - heading "One claim is ready for a decision" [level=3] [ref=f3e48]
+            - paragraph [ref=f3e49]: Walls in Kitchen · a drafted defect
+          - button "Open review" [ref=f3e50] [cursor=pointer]
+        - region "Hallway claim evidence" [ref=f3e51]:
+          - generic [ref=f3e52]:
+            - generic [ref=f3e53]:
+              - heading "Hallway evidence register" [level=3] [ref=f3e54]
+              - paragraph [ref=f3e55]: 18 claims · inspect any entry without turning routine evidence into mandatory work
+            - generic [ref=f3e56]: 3 close-up · 15 context · 0 missing
+          - button "Open Ceiling in the evidence desk" [ref=f3e57] [cursor=pointer]:
+            - generic [ref=f3e58]: Context
+            - generic [ref=f3e60]:
+              - generic [ref=f3e61]: HAL-001
+              - generic [ref=f3e62]: Ceiling
+              - generic [ref=f3e63]: good
+            - generic [ref=f3e64]: Context
+          - button "Open Walls in the evidence desk" [ref=f3e65] [cursor=pointer]:
+            - generic [ref=f3e66]: Context
+            - generic [ref=f3e68]:
+              - generic [ref=f3e69]: HAL-002
+              - generic [ref=f3e70]: Walls
+              - generic [ref=f3e71]: good
+            - generic [ref=f3e72]: Context
+          - button "Open Flooring in the evidence desk" [ref=f3e73] [cursor=pointer]:
+            - generic [ref=f3e74]: Context
+            - generic [ref=f3e76]:
+              - generic [ref=f3e77]: HAL-003
+              - generic [ref=f3e78]: Flooring
+              - generic [ref=f3e79]: good
+            - generic [ref=f3e80]: Context
+          - button "Open Skirting boards in the evidence desk" [ref=f3e81] [cursor=pointer]:
+            - generic [ref=f3e82]: Context
+            - generic [ref=f3e84]:
+              - generic [ref=f3e85]: HAL-004
+              - generic [ref=f3e86]: Skirting boards
+              - generic [ref=f3e87]: good
+            - generic [ref=f3e88]: Context
+          - button "Open Internal flush door in the evidence desk" [ref=f3e89] [cursor=pointer]:
+            - generic [ref=f3e90]: Context
+            - generic [ref=f3e92]:
+              - generic [ref=f3e93]: HAL-005
+              - generic [ref=f3e94]: Internal flush door
+              - generic [ref=f3e95]: good
+            - generic [ref=f3e96]: Context
+          - button "Open Internal glazed door in the evidence desk" [ref=f3e97] [cursor=pointer]:
+            - generic [ref=f3e98]: Close-up
+            - generic [ref=f3e100]:
+              - generic [ref=f3e101]: HAL-006
+              - generic [ref=f3e102]: Internal glazed door
+              - generic [ref=f3e103]: good
+            - generic [ref=f3e104]: Close-up
+          - button "Open Recessed ceiling downlights in the evidence desk" [ref=f3e105] [cursor=pointer]:
+            - generic [ref=f3e106]: Context
+            - generic [ref=f3e108]:
+              - generic [ref=f3e109]: HAL-007
+              - generic [ref=f3e110]: Recessed ceiling downlights
+              - generic [ref=f3e111]: good
+            - generic [ref=f3e112]: Context
+          - button "Open Digital wall thermostat in the evidence desk" [ref=f3e113] [cursor=pointer]:
+            - generic [ref=f3e114]: Context
+            - generic [ref=f3e116]:
+              - generic [ref=f3e117]: HAL-008
+              - generic [ref=f3e118]: Digital wall thermostat
+              - generic [ref=f3e119]: good
+            - generic [ref=f3e120]: Context
+          - button "Open Convector radiator in the evidence desk" [ref=f3e121] [cursor=pointer]:
+            - generic [ref=f3e122]: Context
+            - generic [ref=f3e124]:
+              - generic [ref=f3e125]: HAL-009
+              - generic [ref=f3e126]: Convector radiator
+              - generic [ref=f3e127]: good
+            - generic [ref=f3e128]: Checked
+          - button "Open Rustic console cabinet in the evidence desk" [ref=f3e129] [cursor=pointer]:
+            - generic [ref=f3e130]: Close-up
+            - generic [ref=f3e132]:
+              - generic [ref=f3e133]: HAL-010
+              - generic [ref=f3e134]: Rustic console cabinet
+              - generic [ref=f3e135]: good
+            - generic [ref=f3e136]: Close-up
+          - button "Open Shoe rack in the evidence desk" [ref=f3e137] [cursor=pointer]:
+            - generic [ref=f3e138]: Context
+            - generic [ref=f3e140]:
+              - generic [ref=f3e141]: HAL-011
+              - generic [ref=f3e142]: Shoe rack
+              - generic [ref=f3e143]: good
+            - generic [ref=f3e144]: Context
+          - button "Open Patterned runner rug in the evidence desk" [ref=f3e145] [cursor=pointer]:
+            - generic [ref=f3e146]: Close-up
+            - generic [ref=f3e148]:
+              - generic [ref=f3e149]: HAL-012
+              - generic [ref=f3e150]: Patterned runner rug
+              - generic [ref=f3e151]: good
+            - generic [ref=f3e152]: Close-up
+          - button "Open Artificial monstera plant in the evidence desk" [ref=f3e153] [cursor=pointer]:
+            - generic [ref=f3e154]: Context
+            - generic [ref=f3e156]:
+              - generic [ref=f3e157]: HAL-013
+              - generic [ref=f3e158]: Artificial monstera plant
+              - generic [ref=f3e159]: good
+            - generic [ref=f3e160]: Context
+          - button "Open Artificial maple tree in the evidence desk" [ref=f3e161] [cursor=pointer]:
+            - generic [ref=f3e162]: Context
+            - generic [ref=f3e164]:
+              - generic [ref=f3e165]: HAL-014
+              - generic [ref=f3e166]: Artificial maple tree
+              - generic [ref=f3e167]: good
+            - generic [ref=f3e168]: Context
+          - button "Open Wall art in wooden frame in the evidence desk" [ref=f3e169] [cursor=pointer]:
+            - generic [ref=f3e170]: Context
+            - generic [ref=f3e172]:
+              - generic [ref=f3e173]: HAL-015
+              - generic [ref=f3e174]: Wall art in wooden frame
+              - generic [ref=f3e175]: good
+            - generic [ref=f3e176]: Context
+          - button "Open Cylindrical metal canisters in the evidence desk" [ref=f3e177] [cursor=pointer]:
+            - generic [ref=f3e178]: Context
+            - generic [ref=f3e180]:
+              - generic [ref=f3e181]: HAL-016
+              - generic [ref=f3e182]: Cylindrical metal canisters
+              - generic [ref=f3e183]: good
+            - generic [ref=f3e184]: Checked
+          - button "Open Cupboard slatted shelf and coat rack in the evidence desk" [ref=f3e185] [cursor=pointer]:
+            - generic [ref=f3e186]: Context
+            - generic [ref=f3e188]:
+              - generic [ref=f3e189]: HAL-017
+              - generic [ref=f3e190]: Cupboard slatted shelf and coat rack
+              - generic [ref=f3e191]: good
+            - generic [ref=f3e192]: Context
+          - button "Open Cardboard storage box in the evidence desk" [ref=f3e193] [cursor=pointer]:
+            - generic [ref=f3e194]: Context
+            - generic [ref=f3e196]:
+              - generic [ref=f3e197]: HAL-018
+              - generic [ref=f3e198]: Cardboard storage box
+              - generic [ref=f3e199]: 1 defect · fair
+            - generic [ref=f3e200]: Context
+        - region "Rooms" [ref=f3e201]:
+          - button "Hallway18 claims · The hallway is in good decorative order, featuring a combination of plain white emulsioned walls and a distinctive floral patterned feature wallpaper. The flooring consists of high-quality oak-effect laminate, which is clean and generally well-maintained. The space is neatly styled with functional furniture including a rustic storage cabinet and an industrial-style shoe rack, though there are some personal items and a cardboard box present at the time of inspection. 2/18" [ref=f3e202] [cursor=pointer]:
+            - generic [ref=f3e204]: Hallway18 claims · The hallway is in good decorative order, featuring a combination of plain white emulsioned walls and a distinctive floral patterned feature wallpaper. The flooring consists of high-quality oak-effect laminate, which is clean and generally well-maintained. The space is neatly styled with functional furniture including a rustic storage cabinet and an industrial-style shoe rack, though there are some personal items and a cardboard box present at the time of inspection.
+            - generic [ref=f3e205]: 2/18
+          - button "Living Room24 claims · An open-plan living and kitchen space featuring a combination of deep blue/grey and white emulsioned walls, accented by oak-effect wood flooring and grey tiled kitchen flooring. The room is heavily cluttered with numerous personal items, plastic bags, and loose kitchenware on the floor, which restricts full inspection of all areas. While the underlying structures are in good condition, the high volume of clutter results in a cleanliness standard that requires attention. 1/24" [ref=f3e206] [cursor=pointer]:
+            - generic [ref=f3e208]: Living Room24 claims · An open-plan living and kitchen space featuring a combination of deep blue/grey and white emulsioned walls, accented by oak-effect wood flooring and grey tiled kitchen flooring. The room is heavily cluttered with numerous personal items, plastic bags, and loose kitchenware on the floor, which restricts full inspection of all areas. While the underlying structures are in good condition, the high volume of clutter results in a cleanliness standard that requires attention.
+            - generic [ref=f3e209]: 1/24
+          - button "Kitchen34 claims · The kitchen features modern matte navy blue cabinetry with brushed steel bar handles, white composite worktops, and a white herringbone tiled splashback. Decoratively, the room is in good structural condition, but it is extremely cluttered with numerous items, pots, pans, and tableware piled on the floor. Cleanliness is poor, with significant cleaning required inside the cabinets, the wire pull-out rack, the oven interior, and across the gas hob. 1/34" [ref=f3e210] [cursor=pointer]:
+            - generic [ref=f3e212]: Kitchen34 claims · The kitchen features modern matte navy blue cabinetry with brushed steel bar handles, white composite worktops, and a white herringbone tiled splashback. Decoratively, the room is in good structural condition, but it is extremely cluttered with numerous items, pots, pans, and tableware piled on the floor. Cleanliness is poor, with significant cleaning required inside the cabinets, the wire pull-out rack, the oven interior, and across the gas hob.
+            - generic [ref=f3e213]: 1/34
+          - button "Bedroom 119 claims · The bedroom is in good decorative order overall, featuring neutrally painted walls and a beige carpet showing normal signs of wear. The room is fully furnished with a bed, a white gloss chest of drawers, a small study desk, and associated accessories. The cleanliness level is consistent with a good domestic standard throughout. 1/19" [ref=f3e214] [cursor=pointer]:
+            - generic [ref=f3e216]: Bedroom 119 claims · The bedroom is in good decorative order overall, featuring neutrally painted walls and a beige carpet showing normal signs of wear. The room is fully furnished with a bed, a white gloss chest of drawers, a small study desk, and associated accessories. The cleanliness level is consistent with a good domestic standard throughout.
+            - generic [ref=f3e217]: 1/19
+          - button "Bedroom 218 claims · Bedroom 2 is a modern loft-style double bedroom with sloped ceilings and neutral decor, accented by a slate grey feature wall. The room is in good decorative order and is currently occupied with tenant personal belongings, clothes, and bedding present. All fixtures, fittings, and structures are clean and well-maintained. 1/18" [ref=f3e218] [cursor=pointer]:
+            - generic [ref=f3e220]: Bedroom 218 claims · Bedroom 2 is a modern loft-style double bedroom with sloped ceilings and neutral decor, accented by a slate grey feature wall. The room is in good decorative order and is currently occupied with tenant personal belongings, clothes, and bedding present. All fixtures, fittings, and structures are clean and well-maintained.
+            - generic [ref=f3e221]: 1/18
+          - button "Bathroom14 claims · The bathroom features modern white wall tiling accented by a stylish black, grey, and white mosaic tiled ledge behind the sanitary ware. The room is in generally good decorative and functional condition, though some minor water marks on the tiled floor require cleaning. Sanitary fixtures are clean and well-maintained. 0/14" [ref=f3e222] [cursor=pointer]:
+            - generic [ref=f3e224]: Bathroom14 claims · The bathroom features modern white wall tiling accented by a stylish black, grey, and white mosaic tiled ledge behind the sanitary ware. The room is in generally good decorative and functional condition, though some minor water marks on the tiled floor require cleaning. Sanitary fixtures are clean and well-maintained.
+            - generic [ref=f3e225]: 0/14
+          - button "En-suite Shower Room13 claims · The en-suite shower room is modern, well-maintained, and in good decorative order. It features white painted walls contrasted with large format white tiles in the shower area, dark grey floor tiles, and striking black/grey/white mosaic splashback details. The sanitary ware, including the shower, toilet, and washbasin, is clean and functional with only light, expected domestic use marks. 0/13" [ref=f3e226] [cursor=pointer]:
+            - generic [ref=f3e228]: En-suite Shower Room13 claims · The en-suite shower room is modern, well-maintained, and in good decorative order. It features white painted walls contrasted with large format white tiles in the shower area, dark grey floor tiles, and striking black/grey/white mosaic splashback details. The sanitary ware, including the shower, toilet, and washbasin, is clean and functional with only light, expected domestic use marks.
+            - generic [ref=f3e229]: 0/13
+          - button "Loft Room19 claims · The Loft Room is a well-presented home office space featuring neutral emulsioned walls, a dark grey feature wall, and sloped ceilings with a timber-framed Velux window. The flooring is fitted with a neutral beige carpet in good, clean condition. Furnishings, including a desk setup, ergonomic chair, and decorative elements, are all well-maintained and presented in a clean, tidy state. 0/19" [ref=f3e230] [cursor=pointer]:
+            - generic [ref=f3e232]: Loft Room19 claims · The Loft Room is a well-presented home office space featuring neutral emulsioned walls, a dark grey feature wall, and sloped ceilings with a timber-framed Velux window. The flooring is fitted with a neutral beige carpet in good, clean condition. Furnishings, including a desk setup, ergonomic chair, and decorative elements, are all well-maintained and presented in a clean, tidy state.
+            - generic [ref=f3e233]: 0/19
+          - button "Loft Shower Room11 claims · A modern loft shower room featuring neutral-toned ceramic wall tiling, a wood-effect vanity unit with a semi-recessed wash basin, and a fully tiled shower enclosure. The room is in overall good functional condition, but exhibits some light water marking to fixtures and multiple personal toiletries remain in situ. 0/11" [ref=f3e234] [cursor=pointer]:
+            - generic [ref=f3e236]: Loft Shower Room11 claims · A modern loft shower room featuring neutral-toned ceramic wall tiling, a wood-effect vanity unit with a semi-recessed wash basin, and a fully tiled shower enclosure. The room is in overall good functional condition, but exhibits some light water marking to fixtures and multiple personal toiletries remain in situ.
+            - generic [ref=f3e237]: 0/11
+          - button "Stairs and Landing16 claims · The stairs and landing area are decorated in a neutral modern style, featuring white emulsioned walls, a mixture of light oak-effect laminate flooring in the lower hallway transition and beige loop-pile carpet to the staircase and upper landing. The woodwork, including the balustrade, door frames, and handrails, is painted white and is in good cosmetic condition. All fixtures, decorative items, and furnishings appear well-maintained and clean. 0/16" [ref=f3e238] [cursor=pointer]:
+            - generic [ref=f3e240]: Stairs and Landing16 claims · The stairs and landing area are decorated in a neutral modern style, featuring white emulsioned walls, a mixture of light oak-effect laminate flooring in the lower hallway transition and beige loop-pile carpet to the staircase and upper landing. The woodwork, including the balustrade, door frames, and handrails, is painted white and is in good cosmetic condition. All fixtures, decorative items, and furnishings appear well-maintained and clean.
+            - generic [ref=f3e241]: 0/16
+  - status

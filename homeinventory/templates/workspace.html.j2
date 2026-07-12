@@ -110,6 +110,30 @@
   .next-action { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--line-strong); }
   .next-action h3 { margin: 0; font: 600 22px/1.15 var(--display); }
   .next-action p { margin: 6px 0 0; color: var(--muted); line-height: 1.5; }
+  .room-ledger { margin-top: 26px; border-top: 1px solid var(--line-strong); }
+  .room-ledger-head { display: flex; justify-content: space-between; gap: 16px;
+    align-items: end; padding: 20px 0 12px; }
+  .room-ledger-head h3 { margin: 0; font: 600 24px/1.15 var(--display); }
+  .room-ledger-head p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+  .coverage-key { color: var(--muted); font: 11px/1.45 var(--mono); text-align: right; }
+  .claim-ledger-row { width: 100%; display: grid; grid-template-columns: 76px minmax(0,1fr) auto;
+    gap: 14px; align-items: center; min-height: 88px; padding: 10px 0;
+    border: 0; border-top: 1px solid var(--line); background: transparent;
+    color: var(--ink); text-align: left; cursor: pointer; }
+  .claim-ledger-row:hover .ledger-name, .claim-ledger-row:focus-visible .ledger-name { color: var(--brass-bright); }
+  .ledger-visual { width: 76px; height: 66px; position: relative; overflow: hidden;
+    border-radius: 6px; background: var(--panel-2); border: 1px solid var(--line); }
+  .ledger-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ledger-visual.missing { display: grid; place-items: center; color: var(--faint);
+    font: 600 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  .ledger-badge { position: absolute; left: 5px; bottom: 5px; padding: 3px 5px;
+    border-radius: 3px; background: rgba(24,28,33,.78); color: #fff;
+    font: 600 8px/1 var(--ui); letter-spacing: .06em; text-transform: uppercase; }
+  .ledger-ref { display: block; margin-bottom: 3px; color: var(--faint); font: 10px var(--mono); }
+  .ledger-name { display: block; font-size: 15px; font-weight: 600; line-height: 1.25; transition: color .15s; }
+  .ledger-detail { display: block; margin-top: 4px; color: var(--muted); font-size: 12.5px; line-height: 1.4; }
+  .ledger-state { color: var(--brass-bright); font: 11px var(--mono); white-space: nowrap; }
+  .ledger-state.done { color: var(--confirm); }
   .room-index { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 22px; margin-top: 20px; }
   .room-line { display: grid; grid-template-columns: 54px minmax(0,1fr) auto; gap: 12px; align-items: center; min-height: 76px; padding: 10px 0; border-bottom: 1px solid var(--line); background: transparent; border-right: 0; border-left: 0; border-top: 0; color: var(--ink); text-align: left; cursor: pointer; }
   .room-line:hover .room-name { color: var(--brass-bright); }
@@ -192,6 +216,11 @@
     .room-index { grid-template-columns: 1fr; }
     .next-action { grid-template-columns: 1fr; gap: 13px; }
     .next-action .btn { width: 100%; min-height: 48px; }
+    .room-ledger-head { align-items: start; }
+    .coverage-key { max-width: 15ch; }
+    .claim-ledger-row { grid-template-columns: 68px minmax(0,1fr); }
+    .ledger-visual { width: 68px; height: 72px; }
+    .ledger-state { grid-column: 2; }
     /* Keep the decision context above the persistent thumb-reach actions on
        short phone viewports. The full evidence remains one tap away. */
     .claim-media { min-height: 220px; }
@@ -205,11 +234,12 @@
 </head>
 <body id="field-workspace">
 <header class="field-header">
-  <a class="field-brand" href="{{ route_prefix }}/" aria-label="Home Inventory workspace">
+  <a class="field-brand" href="{{ project_url or (route_prefix ~ '/') }}" aria-label="Home Inventory workspace">
     <span class="field-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 20V9l7-5 7 5v11M9 20v-6h6v6"/></svg></span>
     Home Inventory
   </a>
   <div class="field-header-actions">
+    {% if project_url %}<a class="btn ghost" href="{{ project_url }}">Project</a>{% endif %}
     {% if not prebuild %}<a class="btn ghost desk-only" href="{{ route_prefix }}/review">Full evidence desk</a>{% endif %}
     {% if not prebuild %}<a class="btn ghost desk-only" href="{{ route_prefix }}/report">Report</a>{% endif %}
     {% if not prebuild %}<a class="btn ghost" href="{{ route_prefix }}/issue">Final issue</a>{% endif %}
@@ -403,6 +433,7 @@
   var payload = {{ payload|default({}, true)|tojson }};
   var inv = payload.inventory || {};
   var photoSrc = payload.photo_src || {};
+  var cropSrc = payload.crop_src || {};
   var rooms = inv.rooms || [];
   var screen = "overview", activeRoom = 0, activeItemId = "";
   var root = document.getElementById("workspace-main");
@@ -426,7 +457,12 @@
   function pending() { return allItems().filter(function (entry) { return needsAttention(entry.item); }).sort(function (a, b) { return (a.item.confidence == null ? 1.1 : a.item.confidence) - (b.item.confidence == null ? 1.1 : b.item.confidence); }); }
   function findItem(id) { return allItems().filter(function (entry) { return entry.item.id === id; })[0] || null; }
   function hero(room) { var pictures = room.photos || []; return pictures.filter(function (photo) { return photo.hero === 1; })[0] || pictures[0] || null; }
-  function imageFor(entry) { var ids = entry.item.photo_ids || []; for (var i = 0; i < ids.length; i++) if (photoSrc[ids[i]]) return { id: ids[i], src: photoSrc[ids[i]] }; var fallback = hero(entry.room); return fallback && photoSrc[fallback.id] ? { id: fallback.id, src: photoSrc[fallback.id] } : null; }
+  function evidenceFor(entry) {
+    if (cropSrc[entry.item.id]) return { id: null, src: cropSrc[entry.item.id], kind: entry.item.crop_status === "proposed" ? "Proposed" : "Close-up" };
+    var ids = entry.item.photo_ids || [];
+    for (var i = 0; i < ids.length; i++) if (photoSrc[ids[i]]) return { id: ids[i], src: photoSrc[ids[i]], kind: "Context" };
+    return { id: null, src: null, kind: "Missing" };
+  }
   function setNav() { var complete = reviewedCount(), total = allItems().length, remaining = pending().length; document.getElementById("side-progress").textContent = remaining ? plural(remaining, "decision") + " needs you" : "No decisions outstanding"; document.getElementById("nav-rooms").textContent = rooms.length; document.getElementById("nav-review").textContent = remaining; document.getElementById("nav-finish").textContent = inv.signatures && inv.signatures.length ? "ready" : ""; document.querySelectorAll("[data-screen]").forEach(function (button) { button.setAttribute("aria-current", button.getAttribute("data-screen") === screen ? "page" : "false"); }); }
   function save(note) { return api("PUT", "/api/inventory?autosave=1", inv).then(function () { if (note) toast(note); setNav(); }); }
   function refreshInventory() { return api("GET", "/api/inventory").then(function (fresh) { inv = fresh.inventory || {}; photoSrc = fresh.photo_src || {}; rooms = inv.rooms || []; }); }
@@ -440,13 +476,42 @@
     var stage = el("section", { "class": "hero-room", "aria-label": room.name + " evidence" }); if (source) stage.appendChild(el("img", { src: source, alt: "Evidence for " + room.name })); else stage.appendChild(el("div", { "class": "hero-empty", text: "No display image was selected for this room" }));
     var caption = el("div", { "class": "hero-caption" }); var captionCopy = el("div", {}); captionCopy.appendChild(el("h3", { text: room.name })); captionCopy.appendChild(el("p", { text: plural(room.items.length, "claim") + " · " + roomDone + " checked" })); caption.appendChild(captionCopy); if (source) caption.appendChild(el("button", { "class": "evidence-button", type: "button", text: "Inspect evidence", onclick: function () { openPhotos(room, cover.id); } })); stage.appendChild(caption); root.appendChild(stage);
     var action = el("section", { "class": "next-action" }); var actionCopy = el("div", {}); actionCopy.appendChild(el("h3", { text: next ? "One claim is ready for a decision" : "No more decisions need your judgement" })); actionCopy.appendChild(el("p", { text: next ? next.item.name + " in " + next.room.name + " · " + attentionReasons(next.item).join(", ") : "Routine claims remain available in the full evidence desk, with their source evidence intact." })); action.appendChild(actionCopy); action.appendChild(el("button", { "class": "btn", type: "button", text: next ? "Open review" : "Finish the record", onclick: function () { screen = next ? "review" : "finish"; activeItemId = next ? next.item.id : ""; render(); } })); root.appendChild(action);
+    var ledger = el("section", { "class": "room-ledger", "aria-label": room.name + " claim evidence" });
+    var ledgerHead = el("div", { "class": "room-ledger-head" }); var ledgerCopy = el("div", {});
+    ledgerCopy.appendChild(el("h3", { text: room.name + " evidence register" }));
+    var states = { "Close-up": 0, "Proposed": 0, "Context": 0, "Missing": 0 };
+    (room.items || []).forEach(function (item) { states[evidenceFor({ room: room, item: item }).kind] += 1; });
+    ledgerCopy.appendChild(el("p", { text: plural(room.items.length, "claim") + " · inspect any entry without turning routine evidence into mandatory work" }));
+    ledgerHead.appendChild(ledgerCopy);
+    ledgerHead.appendChild(el("div", { "class": "coverage-key", text: (states["Close-up"] + states.Proposed) + " close-up · " + states.Context + " context · " + states.Missing + " missing" }));
+    ledger.appendChild(ledgerHead);
+    (room.items || []).forEach(function (item) {
+      var evidence = evidenceFor({ room: room, item: item });
+      var row = el("button", { "class": "claim-ledger-row", type: "button", "aria-label": "Open " + item.name + " in the evidence desk" });
+      var visual = el("span", { "class": "ledger-visual" + (evidence.src ? "" : " missing") });
+      if (evidence.src) visual.appendChild(el("img", { src: evidence.src, alt: "", loading: "lazy" }));
+      else visual.appendChild(document.createTextNode("No image"));
+      if (evidence.src) visual.appendChild(el("span", { "class": "ledger-badge", text: evidence.kind }));
+      row.appendChild(visual);
+      var info = el("span", {}); info.appendChild(el("span", { "class": "ledger-ref", text: item.id }));
+      info.appendChild(el("span", { "class": "ledger-name", text: item.name || "Unnamed claim" }));
+      var detail = [];
+      if ((item.defects || []).length) detail.push(plural(item.defects.length, "defect"));
+      if (item.condition) detail.push(item.condition);
+      info.appendChild(el("span", { "class": "ledger-detail", text: detail.join(" · ") || "Evidence recorded" }));
+      row.appendChild(info);
+      row.appendChild(el("span", { "class": "ledger-state" + (done(item) ? " done" : ""), text: done(item) ? "Checked" : evidence.kind }));
+      row.addEventListener("click", function () { location.href = PREFIX + "/review#item-" + encodeURIComponent(item.id); });
+      ledger.appendChild(row);
+    });
+    root.appendChild(ledger);
     var index = el("section", { "class": "room-index", "aria-label": "Rooms" }); rooms.forEach(function (candidate, indexNo) { var candidateHero = hero(candidate), candidateSource = candidateHero && photoSrc[candidateHero.id], count = candidate.items.length, checked = candidate.items.filter(done).length; var button = el("button", { "class": "room-line", type: "button" }); var thumb = el("span", { "class": "room-thumb" }); if (candidateSource) thumb.appendChild(el("img", { src: candidateSource, alt: "" })); button.appendChild(thumb); var roomCopy = el("span", {}); roomCopy.appendChild(el("span", { "class": "room-name", text: candidate.name })); roomCopy.appendChild(el("span", { "class": "room-detail", text: plural(count, "claim") + (candidate.summary ? " · " + candidate.summary : "") })); button.appendChild(roomCopy); button.appendChild(el("span", { "class": "room-progress", text: checked + "/" + count })); button.addEventListener("click", function () { activeRoom = indexNo; render(); }); index.appendChild(button); }); root.appendChild(index);
   }
   function showReview() {
-    var queue = pending(), entry = queue.filter(function (candidate) { return candidate.item.id === activeItemId; })[0] || queue[0]; if (!entry) { screen = "finish"; render(); return; } activeItemId = entry.item.id; var item = entry.item, image = imageFor(entry), queuePosition = queue.indexOf(entry) + 1; root.innerHTML = ""; var view = el("section", { "class": "claim-view" }); view.appendChild(el("button", { "class": "claim-back", type: "button", text: "← Back to rooms", onclick: function () { screen = "overview"; render(); } }));
+    var queue = pending(), entry = queue.filter(function (candidate) { return candidate.item.id === activeItemId; })[0] || queue[0]; if (!entry) { screen = "finish"; render(); return; } activeItemId = entry.item.id; var item = entry.item, image = evidenceFor(entry), queuePosition = queue.indexOf(entry) + 1; root.innerHTML = ""; var view = el("section", { "class": "claim-view" }); view.appendChild(el("button", { "class": "claim-back", type: "button", text: "← Back to rooms", onclick: function () { screen = "overview"; render(); } }));
     var position = el("div", { "class": "claim-position" }); position.appendChild(el("span", { text: "Decision " + queuePosition + " of " + queue.length })); position.appendChild(el("span", { text: plural(queue.length - queuePosition, "decision") + " after this" })); view.appendChild(position);
-    var stage = el("section", { "class": "claim-stage" }); var media = el("div", { "class": "claim-media" }); if (image) { media.appendChild(el("img", { src: image.src, alt: "Evidence for " + item.name })); media.appendChild(el("button", { "class": "evidence-button", type: "button", text: "Inspect", onclick: function () { openPhotos(entry.room, image.id); } })); } else media.appendChild(el("div", { "class": "hero-empty", text: "No linked image" })); stage.appendChild(media);
-    var claimCopy = el("div", { "class": "claim-copy" }); claimCopy.appendChild(el("p", { "class": "field-kicker", text: entry.room.name + " · " + item.category })); claimCopy.appendChild(el("h2", { text: item.name })); claimCopy.appendChild(el("p", { "class": "description", text: item.description || "No additional description was drafted." })); claimCopy.appendChild(el("p", { "class": "source", text: image ? "Evidence " + image.id : "No linked evidence" })); var reasonList = el("div", { "class": "claim-reasons", "aria-label": "Why this claim needs review" }); attentionReasons(item).forEach(function (reason) { reasonList.appendChild(el("span", { "class": "claim-reason", text: reason })); }); claimCopy.appendChild(reasonList); stage.appendChild(claimCopy); view.appendChild(stage);
+    var stage = el("section", { "class": "claim-stage" }); var media = el("div", { "class": "claim-media" }); if (image.src) { media.appendChild(el("img", { src: image.src, alt: image.kind + " evidence for " + item.name })); if (image.id) media.appendChild(el("button", { "class": "evidence-button", type: "button", text: "Inspect", onclick: function () { openPhotos(entry.room, image.id); } })); } else media.appendChild(el("div", { "class": "hero-empty", text: "No item evidence is linked" })); stage.appendChild(media);
+    var claimCopy = el("div", { "class": "claim-copy" }); claimCopy.appendChild(el("p", { "class": "field-kicker", text: entry.room.name + " · " + item.category })); claimCopy.appendChild(el("h2", { text: item.name })); claimCopy.appendChild(el("p", { "class": "description", text: item.description || "No additional description was drafted." })); claimCopy.appendChild(el("p", { "class": "source", text: image.src ? image.kind + (image.id ? " · " + image.id : "") : "Missing item evidence" })); var reasonList = el("div", { "class": "claim-reasons", "aria-label": "Why this claim needs review" }); attentionReasons(item).forEach(function (reason) { reasonList.appendChild(el("span", { "class": "claim-reason", text: reason })); }); claimCopy.appendChild(reasonList); stage.appendChild(claimCopy); view.appendChild(stage);
     var details = el("section", { "class": "claim-details" }); var condition = el("div", {}); condition.appendChild(el("h3", { text: "Condition" })); var grades = el("div", { "class": "grade-group" }); CONDITIONS.forEach(function (grade) { grades.appendChild(el("button", { type: "button", "class": item.condition === grade ? "selected" : "", text: grade, onclick: function () { item.condition = grade; save("Condition updated"); render(); } })); }); condition.appendChild(grades); details.appendChild(condition);
     var cleanliness = el("div", {}); cleanliness.appendChild(el("h3", { text: "Cleanliness" })); var cleanlinessGrades = el("div", { "class": "grade-group" }); CLEANLINESS.forEach(function (grade) { cleanlinessGrades.appendChild(el("button", { type: "button", "class": item.cleanliness === grade ? "selected" : "", text: grade, onclick: function () { item.cleanliness = grade; save("Cleanliness updated"); render(); } })); }); cleanliness.appendChild(cleanlinessGrades); details.appendChild(cleanliness);
     var defects = el("div", {}); defects.appendChild(el("h3", { text: "Defects" })); var list = el("ul", { "class": "defect-list" }); if ((item.defects || []).length) item.defects.forEach(function (defect) { list.appendChild(el("li", { text: defect })); }); else list.appendChild(el("li", { text: "None drafted" })); defects.appendChild(list); details.appendChild(defects); view.appendChild(details);

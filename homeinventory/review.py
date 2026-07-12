@@ -1186,6 +1186,8 @@ class ReviewHandler(BaseHandler):
                         "outcome": _USE_CASE_OUTCOMES.get(u.key, "")}
                        for u in REGISTRY.values()],
             share_url=share_url,
+            project_url=(route_prefix.rsplit("/s/", 1)[0] or "/")
+                        if self.project.is_multi else "",
             initial_screen=initial_screen,
             route_prefix=route_prefix)
 
@@ -1352,7 +1354,9 @@ class ReviewHandler(BaseHandler):
             st = proj.followup_session() if proj.is_multi else proj.session()
             inv = st.load()
             self._json({"inventory": asdict(inv),
-                        "photo_src": st.photo_src(inv)})
+                        "photo_src": st.photo_src(inv),
+                        "crop_src": st.crop_src(inv),
+                        "content_sha256": inv.content_sha256()})
             return
 
         st: Optional[SessionState] = None

@@ -1,0 +1,86 @@
+- generic [active] [ref=f7e1]:
+  - main [ref=f7e2]:
+    - generic [ref=f7e3]:
+      - generic [ref=f7e4]: Inventory & schedule of condition — tenant review
+      - heading "12 Test Street, Sampletown AB1 2CD" [level=1] [ref=f7e5]
+      - generic [ref=f7e6]: Inspected 2026-07-08 by First Tester · 10 rooms · 186 items
+    - generic [ref=f7e7]:
+      - text: Checked
+      - strong [ref=f7e8]: "0"
+      - text: of
+      - strong [ref=f7e9]: "10"
+      - text: rooms ·
+      - strong [ref=f7e10]: "1"
+      - text: comment
+    - generic [ref=f7e11]: Walk each room with this page open. If something was already wrong at check-in, add a comment on that item. When you have walked the whole property, countersign below.
+    - generic [ref=f7e12]:
+      - button "Hallway Hallway 18 items" [ref=f7e13] [cursor=pointer]:
+        - img "Hallway" [ref=f7e15]
+        - generic [ref=f7e16]:
+          - generic [ref=f7e17]: Hallway
+          - generic [ref=f7e18]: 18 items
+      - button "Living Room Living Room 24 items" [ref=f7e19] [cursor=pointer]:
+        - img "Living Room" [ref=f7e21]
+        - generic [ref=f7e22]:
+          - generic [ref=f7e23]: Living Room
+          - generic [ref=f7e24]: 24 items
+      - button "Kitchen Kitchen 34 items" [ref=f7e25] [cursor=pointer]:
+        - img "Kitchen" [ref=f7e27]
+        - generic [ref=f7e28]:
+          - generic [ref=f7e29]: Kitchen
+          - generic [ref=f7e30]: 34 items
+      - button "Bedroom 1 Bedroom 1 19 items" [ref=f7e31] [cursor=pointer]:
+        - img "Bedroom 1" [ref=f7e33]
+        - generic [ref=f7e34]:
+          - generic [ref=f7e35]: Bedroom 1
+          - generic [ref=f7e36]: 19 items
+      - button "Bedroom 2 Bedroom 2 18 items" [ref=f7e37] [cursor=pointer]:
+        - img "Bedroom 2" [ref=f7e39]
+        - generic [ref=f7e40]:
+          - generic [ref=f7e41]: Bedroom 2
+          - generic [ref=f7e42]: 18 items
+      - button "Bathroom Bathroom 14 items" [ref=f7e43] [cursor=pointer]:
+        - img "Bathroom" [ref=f7e45]
+        - generic [ref=f7e46]:
+          - generic [ref=f7e47]: Bathroom
+          - generic [ref=f7e48]: 14 items
+      - button "En-suite Shower Room En-suite Shower Room 13 items" [ref=f7e49] [cursor=pointer]:
+        - img "En-suite Shower Room" [ref=f7e51]
+        - generic [ref=f7e52]:
+          - generic [ref=f7e53]: En-suite Shower Room
+          - generic [ref=f7e54]: 13 items
+      - button "Loft Room Loft Room 19 items" [ref=f7e55] [cursor=pointer]:
+        - img "Loft Room" [ref=f7e57]
+        - generic [ref=f7e58]:
+          - generic [ref=f7e59]: Loft Room
+          - generic [ref=f7e60]: 19 items
+      - button "Loft Shower Room Loft Shower Room 11 items" [ref=f7e61] [cursor=pointer]:
+        - img "Loft Shower Room" [ref=f7e63]
+        - generic [ref=f7e64]:
+          - generic [ref=f7e65]: Loft Shower Room
+          - generic [ref=f7e66]: 11 items
+      - button "Stairs and Landing Stairs and Landing 16 items" [ref=f7e67] [cursor=pointer]:
+        - img "Stairs and Landing" [ref=f7e69]
+        - generic [ref=f7e70]:
+          - generic [ref=f7e71]: Stairs and Landing
+          - generic [ref=f7e72]: 16 items
+    - button "Begin with Hallway" [ref=f7e74] [cursor=pointer]
+    - generic [ref=f7e75]:
+      - heading "Countersign" [level=2] [ref=f7e76]
+      - paragraph [ref=f7e77]: Walk through each room before countersigning. You can add a comment to any item as you go.
+      - button "Continue with Hallway" [ref=f7e78] [cursor=pointer]
+    - generic [ref=f7e79]:
+      - heading "Signatures on record" [level=2] [ref=f7e80]
+      - generic [ref=f7e81]:
+        - strong [ref=f7e82]: First Tester
+        - text: — landlord — signed 2026-07-08T15:26:46+00:00
+        - generic [ref=f7e83]: Earlier version · content sha256 e73ad60409adfc498bc076ae75b40735260a31e0ba943b4ea2cb0b233e7ee097
+      - generic [ref=f7e84]:
+        - strong [ref=f7e85]: First Tester
+        - text: — landlord — signed 2026-07-08T15:27:05+00:00
+        - generic [ref=f7e86]: Earlier version · content sha256 e73ad60409adfc498bc076ae75b40735260a31e0ba943b4ea2cb0b233e7ee097
+      - generic [ref=f7e87]:
+        - strong [ref=f7e88]: Test Tenant
+        - text: — tenant — signed 2026-07-08T20:39:53+00:00
+        - generic [ref=f7e89]: Earlier version · content sha256 722f77d74259a612905ecd9750751cc84faa85b57b8bb6b011ebb98876b7f0fb
+  - status

@@ -1,0 +1,147 @@
+{
+  "experiment": "ML-E16",
+  "licence": "MIT",
+  "backend": "openclip-zero-shot",
+  "inventory_rooms": [
+    "Hallway",
+    "Living Room",
+    "Kitchen",
+    "Bedroom 1",
+    "Loft Bedroom",
+    "Bathroom",
+    "En-suite Shower Room",
+    "Loft Office",
+    "Loft Shower Room",
+    "Stairs and Landing"
+  ],
+  "mit67_to_inventory": {
+    "airport": null,
+    "artstudio": null,
+    "auditorium": null,
+    "bakery": null,
+    "bar": null,
+    "bathroom": "Bathroom",
+    "bedroom": "Bedroom 1",
+    "bookstore": null,
+    "buffet": "Kitchen",
+    "cafeteria": null,
+    "classroom": null,
+    "closet": "Hallway",
+    "clothingstore": null,
+    "computerroom": "Loft Office",
+    "conference_center": "Loft Office",
+    "corridor": "Hallway",
+    "deli": "Kitchen",
+    "dentaloffice": null,
+    "dining_room": "Living Room",
+    "elevator": "Hallway",
+    "fastfood_restaurant": "Kitchen",
+    "florist": null,
+    "gameroom": "Living Room",
+    "garage": null,
+    "greenhouse": null,
+    "groceystore": null,
+    "gym": null,
+    "hallway": "Hallway",
+    "inside_bus": null,
+    "inside_subway": null,
+    "jewelleryshop": null,
+    "kindergarden": null,
+    "kitchen": "Kitchen",
+    "laboratory": null,
+    "laundromat": null,
+    "library": "Loft Office",
+    "livingroom": "Living Room",
+    "locker_room": null,
+    "mall": null,
+    "meeting_room": "Loft Office",
+    "movietheater": null,
+    "museum": null,
+    "nursery": "Bedroom 1",
+    "office": "Loft Office",
+    "operating_room": null,
+    "pantry": "Kitchen",
+    "poolinside": "Bathroom",
+    "prison": null,
+    "restaurant": "Living Room",
+    "restaurant_kitchen": "Kitchen",
+    "shoeshop": null,
+    "stairscase": "Stairs and Landing",
+    "storeroom": "Hallway",
+    "subway": null,
+    "tv_studio": null,
+    "videostore": null,
+    "waitingroom": "Hallway",
+    "warehouse": null,
+    "winery": null
+  },
+  "room_prompts": {
+    "Hallway": [
+      "a hallway in a home with doors and a runner rug",
+      "an entrance corridor with sideboard and stairs visible"
+    ],
+    "Living Room": [
+      "a living room with sofa and windows",
+      "an open-plan living and dining area"
+    ],
+    "Kitchen": [
+      "a kitchen with fitted cabinets and appliances",
+      "a kitchen with hob oven and worktops"
+    ],
+    "Bedroom 1": [
+      "a bedroom with bed and wardrobe",
+      "a furnished double bedroom"
+    ],
+    "Loft Bedroom": [
+      "a loft bedroom under the eaves with sloped ceiling",
+      "an attic bedroom with bed and eaves"
+    ],
+    "Bathroom": [
+      "a bathroom with bath suite and vanity",
+      "a main bathroom with toilet and basin"
+    ],
+    "En-suite Shower Room": [
+      "an en-suite shower room with wall-hung basin",
+      "a small ensuite bathroom attached to a bedroom"
+    ],
+    "Loft Office": [
+      "a home office with desk and shelves",
+      "a loft study room with desk"
+    ],
+    "Loft Shower Room": [
+      "a loft shower room with shower enclosure",
+      "an upstairs shower room with tiled walls"
+    ],
+    "Stairs and Landing": [
+      "a staircase and landing with balustrade",
+      "stairs and landing with wallpapered walls"
+    ]
+  },
+  "training": {
+    "mode": "documented-stub",
+    "hf_dataset": "keremberke/indoor-scene-classification",
+    "n_samples_seen": 0,
+    "n_mapped_to_inventory": 0,
+    "inventory_label_counts": {
+      "Hallway": 0,
+      "Living Room": 0,
+      "Kitchen": 0,
+      "Bedroom 1": 0,
+      "Loft Bedroom": 0,
+      "Bathroom": 0,
+      "En-suite Shower Room": 0,
+      "Loft Office": 0,
+      "Loft Shower Room": 0,
+      "Stairs and Landing": 0
+    },
+    "fine_tune_steps": [
+      "Download HF dataset: uv pip install datasets huggingface_hub",
+      "  load_dataset('keremberke/indoor-scene-classification') or save_to_disk C:\\Users\\cbrow\\Code\\inventory\\evals\\external\\data\\indoor-scene",
+      "Map MIT67 label \u2192 inventory room via MIT67_TO_INVENTORY (drop None)",
+      "Fine-tune ViT-B/32 head (OpenCLIP) or train linear probe on embeddings",
+      "Eval: uv run python evals/eval_room_classifier.py report --backend openclip",
+      "Pass bar: would_reject_rate \u2191 and true_room_top1_rate on bleed audit"
+    ],
+    "note": "Demo weights \u2014 zero-shot OpenCLIP prompts only. Full fine-tune requires HF indoor-scene download (~150 MB)."
+  }
+}

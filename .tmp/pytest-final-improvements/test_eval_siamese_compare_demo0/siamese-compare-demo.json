@@ -1,0 +1,229 @@
+{
+  "experiment": "ML-E14",
+  "date": "2026-07-12",
+  "blocked": true,
+  "blocker": "No paired check-in/check-out fixture \u2014 pseudo-pairs from InventoryFlex same-room photos are exploratory only (docs/19 \u00a71.6, \u00a72.3).",
+  "mode": "pseudo_pairs_inventoryflex",
+  "capture_dir": "benchmarks\\inventoryflex\\capture",
+  "encoder": "synthetic",
+  "device": "cpu",
+  "pass_bar": null,
+  "pass": null,
+  "note": "Exploratory embedding distances only; cannot validate wear/damage change detection without visit-aligned item crops.",
+  "metrics": {
+    "n_pairs": 22,
+    "n_same_room": 18,
+    "n_cross_room": 4,
+    "mean_distance_same_room": 0.1501,
+    "max_distance_same_room": 0.2439,
+    "mean_distance_cross_room": 0.3836,
+    "min_distance_cross_room": 0.2743,
+    "same_below_cross_mean": true
+  },
+  "pairs": [
+    {
+      "kind": "same_room_adjacent",
+      "room": "Balcony",
+      "path_a": "Balcony\\p33_i00.jpg",
+      "path_b": "Balcony\\p33_i01.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.0592,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Balcony",
+      "path_a": "Balcony\\p33_i01.jpg",
+      "path_b": "Balcony\\p33_i02.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.1639,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_span",
+      "room": "Balcony",
+      "path_a": "Balcony\\p33_i00.jpg",
+      "path_b": "Balcony\\p33_i05.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.241,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Bathroom",
+      "path_a": "Bathroom\\p14_i00.jpg",
+      "path_b": "Bathroom\\p14_i01.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.2224,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Bathroom",
+      "path_a": "Bathroom\\p14_i01.jpg",
+      "path_b": "Bathroom\\p14_i02.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.1367,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_span",
+      "room": "Bathroom",
+      "path_a": "Bathroom\\p14_i00.jpg",
+      "path_b": "Bathroom\\p16_i02.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.2357,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Bedroom",
+      "path_a": "Bedroom\\p18_i00.jpg",
+      "path_b": "Bedroom\\p18_i01.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.0941,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Bedroom",
+      "path_a": "Bedroom\\p18_i01.jpg",
+      "path_b": "Bedroom\\p18_i02.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.1434,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_span",
+      "room": "Bedroom",
+      "path_a": "Bedroom\\p18_i00.jpg",
+      "path_b": "Bedroom\\p20_i08.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.106,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Entrance Hall",
+      "path_a": "Entrance Hall\\p06_i00.jpg",
+      "path_b": "Entrance Hall\\p06_i01.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.0575,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Entrance Hall",
+      "path_a": "Entrance Hall\\p06_i01.jpg",
+      "path_b": "Entrance Hall\\p06_i02.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.1179,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_span",
+      "room": "Entrance Hall",
+      "path_a": "Entrance Hall\\p06_i00.jpg",
+      "path_b": "Entrance Hall\\p08_i02.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.0628,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Reception & Open Plan Kitchen",
+      "path_a": "Reception & Open Plan Kitchen\\p25_i00.jpg",
+      "path_b": "Reception & Open Plan Kitchen\\p25_i01.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.1453,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Reception & Open Plan Kitchen",
+      "path_a": "Reception & Open Plan Kitchen\\p25_i01.jpg",
+      "path_b": "Reception & Open Plan Kitchen\\p25_i02.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.2363,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_span",
+      "room": "Reception & Open Plan Kitchen",
+      "path_a": "Reception & Open Plan Kitchen\\p25_i00.jpg",
+      "path_b": "Reception & Open Plan Kitchen\\p32_i02.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.1522,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Walk In Wardrobe",
+      "path_a": "Walk In Wardrobe\\p10_i00.jpg",
+      "path_b": "Walk In Wardrobe\\p10_i01.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.195,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_adjacent",
+      "room": "Walk In Wardrobe",
+      "path_a": "Walk In Wardrobe\\p10_i01.jpg",
+      "path_b": "Walk In Wardrobe\\p10_i02.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.0891,
+      "synthetic": true
+    },
+    {
+      "kind": "same_room_span",
+      "room": "Walk In Wardrobe",
+      "path_a": "Walk In Wardrobe\\p10_i00.jpg",
+      "path_b": "Walk In Wardrobe\\p11_i05.jpg",
+      "expected": "low_distance",
+      "label": "no_change_pseudo",
+      "cosine_distance": 0.2439,
+      "synthetic": true
+    },
+    {
+      "kind": "cross_room",
+      "room_a": "Balcony",
+      "room_b": "Reception & Open Plan Kitchen",
+      "path_a": "Balcony\\p33_i05.jpg",
+      "path_b": "Reception & Open Plan Kitchen\\p31_i11.jpg",
+      "expected": "high_distance",
+      "label": "different_scene_pseudo",
+      "cosine_distance": 0.4784,
+      "synthetic": true
+    },
+    {
+      "kind": "cross_room",
+      "room_a": "Reception & Open Plan Kitchen",
+      "room_b": "Bathroom",
+      "path_a": "Reception & Open Plan Kitchen\\p27_i10.jpg",
+      "path_b": "Bathroom\\p15_i11.jpg",
+      "expected": "high_distance",
+      "label": "different_scene_pseudo",
+      "cosine_distance": 0.3891,
+      "synthetic": true
+    }
+  ],
+  "recommendation": "blocked \u2014 capture a paired check-in/out property fixture before investing in Siamese or change-detection networks (docs/19 ML-E14).",
+  "demo": true
+}

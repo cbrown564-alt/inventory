@@ -117,10 +117,20 @@
                  margin: 20px 0; }
   .empty-state p { color: var(--muted); margin: 0 0 12px; }
   .empty-state .btn { text-decoration: none; display: inline-block; }
+  .unmatched-cards { display: none; }
+  .closure-band { margin-top: 34px; padding: 20px; border-top: 2px solid var(--ink);
+                  background: var(--panel); }
+  .closure-band h2 { margin-top: 0; }
 
   @media (max-width: 720px) {
-    .table-wrap, .pair-section .pair { display: none; }
+    .table-wrap, .pair-section { display: none; }
     .change-cards { display: block; }
+    .unmatched-cards { display: grid; gap: 10px; }
+    .unmatched-card { padding: 14px; border-top: 1px solid var(--line-strong);
+                      background: var(--panel); }
+    .unmatched-card strong { display: block; font-family: var(--display); }
+    .unmatched-card span { display: block; margin-top: 4px; color: var(--muted);
+                           font-size: 12px; }
     .filters { top: 0; }
     table.delta thead th { position: static; }
   }
@@ -131,7 +141,7 @@
 </head>
 <body>
 <header class="app-header">
-  <a class="wordmark" href="/">
+  <a class="wordmark" href="/" data-project-home>
   <svg class="wordmark-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M6 5v14" />
     <path d="M18 5v14" />
@@ -230,6 +240,7 @@
       {% if c.new_defects %}<ul class="defects">
         {% for d in c.new_defects %}<li>{{ d }}</li>{% endfor %}
       </ul>{% endif %}
+      {% if c.rationale %}<p class="rationale"><span class="who">Why this was suggested</span> — {{ c.rationale }}</p>{% endif %}
       <div class="pair-swipe" data-swipe>
         <div class="pair-track">
           {% for side_label, photos, cond in [
@@ -259,7 +270,7 @@
   {% else %}
   <div class="empty-state">
     <p>No gated changes found on matched items.</p>
-    <a class="btn" href="/">Back to project home</a>
+    <a class="btn" href="/" data-project-home>Back to project home</a>
   </div>
   {% endif %}
 
@@ -328,6 +339,11 @@
     </tbody>
   </table>
   </div>
+  <div class="unmatched-cards" aria-label="Items not located">
+    {% for room in rooms %}{% for it in room.removed %}
+    <article class="unmatched-card"><strong>{{ it.name }}</strong><span>{{ room.name }} · {{ it.condition or "not graded" }}</span><span>{{ it.defects | join("; ") or "No defect recorded" }} · evidence {{ it.photo_ids | join(", ") or "missing" }}</span></article>
+    {% endfor %}{% endfor %}
+  </div>
   <p class="meta">“Not located” is an alignment verdict, not a liability
   verdict: confirm each before treating it as a loss.</p>
   {% else %}<p class="meta">None — every {{ labels.baseline | lower }} item was matched.</p>{% endif %}
@@ -348,7 +364,18 @@
     </tbody>
   </table>
   </div>
+  <div class="unmatched-cards" aria-label="New items">
+    {% for room in rooms %}{% for it in room.added %}
+    <article class="unmatched-card"><strong>{{ it.name }}</strong><span>{{ room.name }} · {{ it.condition or "not graded" }}</span><span>{{ it.defects | join("; ") or "No defect recorded" }} · evidence {{ it.photo_ids | join(", ") or "missing" }}</span></article>
+    {% endfor %}{% endfor %}
+  </div>
   {% else %}<p class="meta">None.</p>{% endif %}
+
+  <section class="closure-band">
+    <h2>Review the suggestions, then return to the record</h2>
+    <p class="meta">Classifications and alignment are decision support. Confirm the evidence before using a change in a deduction or service discussion.</p>
+    <a class="btn" href="/" data-project-home>Back to the evidence record</a>
+  </section>
 
   <footer class="meta" style="margin-top:36px; text-align:center;">
     homeinventory compare &middot; alignment is lexical (room + head-noun
@@ -359,6 +386,10 @@
 <script>
 "use strict";
 (function () {
+  var projectHome = location.pathname.replace(/\/compare\/?$/, "") || "/";
+  document.querySelectorAll("[data-project-home]").forEach(function (link) {
+    link.href = projectHome;
+  });
   var active = "all";
   var rows = document.querySelectorAll("#delta-table tbody tr[data-cls]");
   var cards = document.querySelectorAll(".change-card[data-cls]");

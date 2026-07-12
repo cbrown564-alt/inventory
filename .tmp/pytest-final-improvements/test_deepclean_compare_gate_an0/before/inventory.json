@@ -1,0 +1,68 @@
+{
+  "property_address": "1 Clean St",
+  "inspected_by": "",
+  "inspected_at": "2026-07-12",
+  "report_type": "Inventory & Schedule of Condition",
+  "agent_name": "",
+  "agent_phone": "",
+  "property_type": "",
+  "tenant_name": "",
+  "landlord_name": "",
+  "report_ref": "",
+  "use_case": "deepclean",
+  "parties": {},
+  "schedule_summary": [],
+  "rooms": [
+    {
+      "name": "Kitchen",
+      "summary": "",
+      "items": [
+        {
+          "id": "K1",
+          "name": "Worktop",
+          "category": "other",
+          "description": "",
+          "condition": "good",
+          "cleanliness": "requires cleaning",
+          "defects": [],
+          "quantity": 1,
+          "est_value_band": null,
+          "photo_ids": [
+            "P001"
+          ],
+          "crop_path": null,
+          "crop_confidence": null,
+          "crop_status": null,
+          "detector_label": null,
+          "confidence": null,
+          "reviewed": false,
+          "rejected": false,
+          "rejected_defects": [],
+          "not_inspected": null,
+          "added_by": null,
+          "defect_regions": [],
+          "comments": []
+        }
+      ],
+      "photos": [
+        {
+          "id": "P001",
+          "path": "k.jpg",
+          "room": "Kitchen",
+          "sha256": "",
+          "captured_at": null,
+          "source_video": null,
+          "note": null,
+          "hero": null,
+          "quality": null,
+          "describe_eligible": null,
+          "presentation_eligible": null
+        }
+      ]
+    }
+  ],
+  "notes": "",
+  "tool_version": "0.1.0",
+  "describe_backend": "",
+  "signatures": []
+}

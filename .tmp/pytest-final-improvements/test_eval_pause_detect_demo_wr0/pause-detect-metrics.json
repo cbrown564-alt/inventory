@@ -1,0 +1,203 @@
+{
+  "experiment": "ML-E9",
+  "mode": "synthetic",
+  "every_s": 0.5,
+  "fps": 30.0,
+  "n_flow_samples": 120,
+  "timing_s": 0.0,
+  "eval": {
+    "n_flow_samples": 120,
+    "n_gold_top3_evaluated": 13,
+    "gold_top3_pause_recall": 0.077,
+    "gold_top3_in_flow_top3_rate": 0.462,
+    "pass_bar_gold_top3_pause_recall": 0.8,
+    "pass": false,
+    "gold_details": [
+      {
+        "room": "Hallway",
+        "name": "IMG_5512_f009738.jpg",
+        "gold_rank": 1,
+        "t_s": 324.6,
+        "flow_magnitude": 5.4799,
+        "pause_threshold": 4.25,
+        "is_pause": false,
+        "in_flow_top3": false
+      },
+      {
+        "room": "Hallway",
+        "name": "IMG_5512_f000009.jpg",
+        "gold_rank": 2,
+        "t_s": 0.3,
+        "flow_magnitude": 4.2493,
+        "pause_threshold": 4.5911,
+        "is_pause": true,
+        "in_flow_top3": true
+      },
+      {
+        "room": "Hallway",
+        "name": "IMG_5512_f000045.jpg",
+        "gold_rank": 3,
+        "t_s": 1.5,
+        "flow_magnitude": 4.7325,
+        "pause_threshold": 4.5911,
+        "is_pause": false,
+        "in_flow_top3": true
+      },
+      {
+        "room": "Living Room",
+        "name": "IMG_5512_f008280.jpg",
+        "gold_rank": 2,
+        "t_s": 276.0,
+        "flow_magnitude": 5.4799,
+        "pause_threshold": 4.25,
+        "is_pause": false,
+        "in_flow_top3": true
+      },
+      {
+        "room": "Kitchen",
+        "name": "IMG_5512_f000981.jpg",
+        "gold_rank": 1,
+        "t_s": 32.7,
+        "flow_magnitude": 7.4231,
+        "pause_threshold": 4.5911,
+        "is_pause": false,
+        "in_flow_top3": false
+      },
+      {
+        "room": "Kitchen",
+        "name": "IMG_5512_f001584.jpg",
+        "gold_rank": 2,
+        "t_s": 52.8,
+        "flow_magnitude": 5.2632,
+        "pause_threshold": 3.8498,
+        "is_pause": false,
+        "in_flow_top3": true
+      },
+      {
+        "room": "Kitchen",
+        "name": "IMG_5512_f002529.jpg",
+        "gold_rank": 3,
+        "t_s": 84.3,
+        "flow_magnitude": 5.4799,
+        "pause_threshold": 3.8498,
+        "is_pause": false,
+        "in_flow_top3": false
+      },
+      {
+        "room": "Bedroom 1",
+        "name": "IMG_5512_f012735.jpg",
+        "gold_rank": 2,
+        "t_s": 424.5,
+        "flow_magnitude": 5.4799,
+        "pause_threshold": 4.25,
+        "is_pause": false,
+        "in_flow_top3": false
+      },
+      {
+        "room": "Bathroom",
+        "name": "IMG_5512_f011070.jpg",
+        "gold_rank": 1,
+        "t_s": 369.0,
+        "flow_magnitude": 5.4799,
+        "pause_threshold": 4.25,
+        "is_pause": false,
+        "in_flow_top3": false
+      },
+      {
+        "room": "En-suite Shower Room",
+        "name": "IMG_5512_f012141.jpg",
+        "gold_rank": 2,
+        "t_s": 404.7,
+        "flow_magnitude": 5.4799,
+        "pause_threshold": 4.25,
+        "is_pause": false,
+        "in_flow_top3": true
+      },
+      {
+        "room": "En-suite Shower Room",
+        "name": "IMG_5512_f012564.jpg",
+        "gold_rank": 3,
+        "t_s": 418.8,
+        "flow_magnitude": 5.4799,
+        "pause_threshold": 4.25,
+        "is_pause": false,
+        "in_flow_top3": false
+      },
+      {
+        "room": "Loft Shower Room",
+        "name": "IMG_5512_f021879.jpg",
+        "gold_rank": 1,
+        "t_s": 729.3,
+        "flow_magnitude": 5.4799,
+        "pause_threshold": 4.25,
+        "is_pause": false,
+        "in_flow_top3": true
+      },
+      {
+        "room": "Loft Shower Room",
+        "name": "IMG_5512_f023526.jpg",
+        "gold_rank": 3,
+        "t_s": 784.2,
+        "flow_magnitude": 5.4799,
+        "pause_threshold": 4.25,
+        "is_pause": false,
+        "in_flow_top3": false
+      }
+    ],
+    "per_room_flow_top3": {
+      "Hallway": [
+        "IMG_5512_f000009.jpg",
+        "IMG_5512_f000045.jpg",
+        "IMG_5512_f000081.jpg"
+      ],
+      "Living Room": [
+        "IMG_5512_f008181.jpg",
+        "IMG_5512_f008280.jpg",
+        "IMG_5512_f008613.jpg"
+      ],
+      "Kitchen": [
+        "IMG_5512_f001503.jpg",
+        "IMG_5512_f001584.jpg",
+        "IMG_5512_f002088.jpg"
+      ],
+      "Bedroom 1": [
+        "IMG_5512_f011322.jpg",
+        "IMG_5512_f011592.jpg",
+        "IMG_5512_f011844.jpg"
+      ],
+      "Bedroom 2": [
+        "IMG_5512_f017073.jpg",
+        "IMG_5512_f017289.jpg",
+        "IMG_5512_f017550.jpg"
+      ],
+      "Bathroom": [
+        "IMG_5512_f010602.jpg",
+        "IMG_5512_f010629.jpg",
+        "IMG_5512_f010845.jpg"
+      ],
+      "En-suite Shower Room": [
+        "IMG_5512_f012141.jpg",
+        "IMG_5512_f012321.jpg",
+        "IMG_5512_f012501.jpg"
+      ],
+      "Loft Room": [
+        "IMG_5512_f015174.jpg",
+        "IMG_5512_f015246.jpg",
+        "IMG_5512_f015777.jpg"
+      ],
+      "Loft Shower Room": [
+        "IMG_5512_f021726.jpg",
+        "IMG_5512_f021879.jpg",
+        "IMG_5512_f022149.jpg"
+      ],
+      "Stairs and Landing": [
+        "IMG_5512_f013041.jpg",
+        "IMG_5512_f013347.jpg",
+        "IMG_5512_f013896.jpg"
+      ]
+    }
+  },
+  "pass_bar_gold_top3_pause_recall": 0.8,
+  "pass": false,
+  "report_dir": "C:\\Users\\cbrow\\Code\\inventory\\report"
+}

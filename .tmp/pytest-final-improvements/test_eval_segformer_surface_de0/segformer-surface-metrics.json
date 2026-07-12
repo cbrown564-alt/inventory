@@ -1,0 +1,34 @@
+{
+  "experiment": "ML-E13",
+  "report_dir": "C:\\Users\\cbrow\\Code\\inventory\\.tmp\\pytest-final-improvements\\test_eval_segformer_surface_de0\\report",
+  "n_rooms": 2,
+  "n_frames": 12,
+  "demo": true,
+  "mean_spearman_surface": 0.657,
+  "mean_spearman_establishing": -0.257,
+  "pass_bar": "mean \u03c1 surface \u2265 establishing (-0.257)",
+  "pass": true,
+  "timing": {
+    "infer_s": 0.03,
+    "ms_per_frame": 2.2,
+    "scorer_mode": "histogram"
+  },
+  "per_room": {
+    "Room 00": {
+      "n_frames": 6,
+      "spearman_surface": 0.657,
+      "spearman_establishing": -0.257,
+      "top3_hit_establishing": false,
+      "top1_hit_surface": false,
+      "top3_hit_surface": true
+    },
+    "Room 01": {
+      "n_frames": 6,
+      "spearman_surface": 0.657,
+      "spearman_establishing": -0.257,
+      "top3_hit_establishing": false,
+      "top1_hit_surface": false,
+      "top3_hit_surface": true
+    }
+  }
+}

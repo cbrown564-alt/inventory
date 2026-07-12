@@ -1,0 +1,36 @@
+{
+  "experiment": "ML-E17",
+  "licence": "MIT",
+  "target": "koniq_mos",
+  "target_note": "KonIQ-10k MOS (research download) \u2014 distilled linear head on classical PIL features (KonCept512-style spike simplified)",
+  "features": [
+    "bias",
+    "log_sharpness",
+    "smooth",
+    "log_cbr",
+    "clipped",
+    "establishing",
+    "cover"
+  ],
+  "weights": [
+    8.048598,
+    11.903115,
+    -8.209767,
+    9.3912,
+    -2.137336,
+    16.087534,
+    4.680631
+  ],
+  "training": {
+    "fixture": "evals\\fixtures\\own-property\\iqa-comparison-mps.json",
+    "koniq_dir": "evals\\external\\data\\koniq10k",
+    "mode": "bootstrap-musiq-proxy",
+    "n_resolved_frames": 260,
+    "ridge_alpha": 1.0,
+    "max_samples": 512,
+    "n_samples": 260,
+    "spearman_pred_vs_musiq": 0.74,
+    "disclaimer": "DISCLAIMER: KonIQ-10k images/scores not present under evals\\external\\data\\koniq10k. Trained classical\u2192MUSIQ proxy from iqa-comparison-mps.json \u2014 NOT true KonIQ pretrain. Register at https://database.mmsp-kn.de/koniq-10k-database.html and unpack to evals/external/data/koniq10k/ for real MOS targets."
+  },
+  "disclaimer": "DISCLAIMER: KonIQ-10k images/scores not present under evals\\external\\data\\koniq10k. Trained classical\u2192MUSIQ proxy from iqa-comparison-mps.json \u2014 NOT true KonIQ pretrain. Register at https://database.mmsp-kn.de/koniq-10k-database.html and unpack to evals/external/data/koniq10k/ for real MOS targets."
+}

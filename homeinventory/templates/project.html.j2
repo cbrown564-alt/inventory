@@ -98,7 +98,7 @@ are built, the comparison sheet appears automatically.</p>
 {% set before_done = before.built %}
 {% set after_done = after.built if after else false %}
 {% set compare_step_done = compare_built %}
-{% set current_step = 3 if compare_step_done else 2 if after_done else 1 if before_done else 1 %}
+{% set current_step = 3 if compare_step_done or after_done else 2 if before_done else 1 %}
 
 <nav class="stepper" aria-label="Project timeline">
   <div class="step {% if before_done %}done{% elif current_step == 1 %}current{% else %}pending{% endif %}"

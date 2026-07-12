@@ -1,0 +1,332 @@
+- generic [active] [ref=f7e1]:
+  - main [ref=f7e2]:
+    - generic [ref=f7e90]:
+      - generic [ref=f7e91]: Inventory & schedule of condition — tenant review
+      - heading "12 Test Street, Sampletown AB1 2CD" [level=1] [ref=f7e92]
+      - generic [ref=f7e93]: Inspected 2026-07-08 by First Tester · 10 rooms · 186 items
+    - generic [ref=f7e94]:
+      - text: Checked
+      - strong [ref=f7e95]: "0"
+      - text: of
+      - strong [ref=f7e96]: "10"
+      - text: rooms ·
+      - strong [ref=f7e97]: "1"
+      - text: comment
+    - generic [ref=f7e98]:
+      - button "← All rooms" [ref=f7e99] [cursor=pointer]
+      - generic [ref=f7e100]: Room 1 of 10
+    - heading "1. Hallway" [level=2] [ref=f7e101]
+    - paragraph [ref=f7e102]: The hallway is in good decorative order, featuring a combination of plain white emulsioned walls and a distinctive floral patterned feature wallpaper. The flooring consists of high-quality oak-effect laminate, which is clean and generally well-maintained. The space is neatly styled with functional furniture including a rustic storage cabinet and an industrial-style shoe rack, though there are some personal items and a cardboard box present at the time of inspection.
+    - generic [ref=f7e103]:
+      - generic [ref=f7e105]:
+        - button "Open all evidence for Ceiling" [ref=f7e106]:
+          - img "Context evidence for Ceiling" [ref=f7e107]
+        - generic: Context
+        - generic: 4 views
+      - generic [ref=f7e108]:
+        - generic [ref=f7e109]:
+          - generic [ref=f7e110]: HAL-001
+          - generic [ref=f7e111]: Ceiling
+          - generic [ref=f7e112]: good
+          - generic [ref=f7e113]: cleaned to domestic standard
+        - paragraph [ref=f7e114]: Smooth plaster ceiling painted in matt white emulsion.
+      - generic [ref=f7e115]:
+        - generic [ref=f7e116]:
+          - text: Test Tenant (tenant)2026-07-08 20:39
+          - generic [ref=f7e117]: Stain on rug was pre-existing
+        - generic [ref=f7e118]:
+          - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e119]
+          - button "Comment" [ref=f7e120] [cursor=pointer]
+    - generic [ref=f7e121]:
+      - generic [ref=f7e123]:
+        - button "Open all evidence for Walls" [ref=f7e124]:
+          - img "Context evidence for Walls" [ref=f7e125]
+        - generic: Context
+        - generic: 5 views
+      - generic [ref=f7e126]:
+        - generic [ref=f7e127]:
+          - generic [ref=f7e128]: HAL-002
+          - generic [ref=f7e129]: Walls
+          - generic [ref=f7e130]: good
+          - generic [ref=f7e131]: cleaned to domestic standard
+        - paragraph [ref=f7e132]: Part white emulsioned plaster walls, part feature wall finished with black and grey floral/vine patterned wallpaper on a white background.
+      - generic [ref=f7e134]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e135]
+        - button "Comment" [ref=f7e136] [cursor=pointer]
+    - generic [ref=f7e137]:
+      - generic [ref=f7e139]:
+        - button "Open all evidence for Flooring" [ref=f7e140]:
+          - img "Context evidence for Flooring" [ref=f7e141]
+        - generic: Context
+        - generic: 5 views
+      - generic [ref=f7e142]:
+        - generic [ref=f7e143]:
+          - generic [ref=f7e144]: HAL-003
+          - generic [ref=f7e145]: Flooring
+          - generic [ref=f7e146]: good
+          - generic [ref=f7e147]: cleaned to domestic standard
+        - paragraph [ref=f7e148]: Oak-effect laminate/engineered wood flooring with light wood grain finish.
+      - generic [ref=f7e150]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e151]
+        - button "Comment" [ref=f7e152] [cursor=pointer]
+    - generic [ref=f7e153]:
+      - generic [ref=f7e155]:
+        - button "Open all evidence for Skirting boards" [ref=f7e156]:
+          - img "Context evidence for Skirting boards" [ref=f7e157]
+        - generic: Context
+        - generic: 4 views
+      - generic [ref=f7e158]:
+        - generic [ref=f7e159]:
+          - generic [ref=f7e160]: HAL-004
+          - generic [ref=f7e161]: Skirting boards
+          - generic [ref=f7e162]: good
+          - generic [ref=f7e163]: cleaned to domestic standard
+        - paragraph [ref=f7e164]: Profiled timber skirting boards painted in white satinwood.
+      - generic [ref=f7e166]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e167]
+        - button "Comment" [ref=f7e168] [cursor=pointer]
+    - generic [ref=f7e169]:
+      - generic [ref=f7e171]:
+        - button "Open all evidence for Internal flush door" [ref=f7e172]:
+          - img "Context evidence for Internal flush door" [ref=f7e173]
+        - generic: Context
+        - generic: 3 views
+      - generic [ref=f7e174]:
+        - generic [ref=f7e175]:
+          - generic [ref=f7e176]: HAL-005
+          - generic [ref=f7e177]: Internal flush door
+          - generic [ref=f7e178]: good
+          - generic [ref=f7e179]: cleaned to domestic standard
+        - paragraph [ref=f7e180]: Oak-effect flush timber door leading to bathroom, fitted with a brushed metal lever-style handle.
+      - generic [ref=f7e182]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e183]
+        - button "Comment" [ref=f7e184] [cursor=pointer]
+    - generic [ref=f7e185]:
+      - generic [ref=f7e187]:
+        - button "Open all evidence for Internal glazed door" [ref=f7e188]:
+          - img "Close-up evidence for Internal glazed door" [ref=f7e189]
+        - generic: Close-up
+        - generic: 2 views
+      - generic [ref=f7e190]:
+        - generic [ref=f7e191]:
+          - generic [ref=f7e192]: HAL-006
+          - generic [ref=f7e193]: Internal glazed door
+          - generic [ref=f7e194]: good
+          - generic [ref=f7e195]: cleaned to domestic standard
+        - paragraph [ref=f7e196]: Oak-effect timber door featuring a long central vertical frosted glaze panel, fitted with a brushed metal handle.
+      - generic [ref=f7e198]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e199]
+        - button "Comment" [ref=f7e200] [cursor=pointer]
+    - generic [ref=f7e201]:
+      - generic [ref=f7e203]:
+        - button "Open all evidence for Recessed ceiling downlights" [ref=f7e204]:
+          - img "Context evidence for Recessed ceiling downlights" [ref=f7e205]
+        - generic: Context
+        - generic: 3 views
+      - generic [ref=f7e206]:
+        - generic [ref=f7e207]:
+          - generic [ref=f7e208]: HAL-007
+          - generic [ref=f7e209]: Recessed ceiling downlights ×3
+          - generic [ref=f7e210]: good
+          - generic [ref=f7e211]: cleaned to domestic standard
+        - paragraph [ref=f7e212]: Recessed circular ceiling spotlights with white bezels.
+      - generic [ref=f7e214]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e215]
+        - button "Comment" [ref=f7e216] [cursor=pointer]
+    - generic [ref=f7e217]:
+      - generic [ref=f7e219]:
+        - button "Open all evidence for Digital wall thermostat" [ref=f7e220]:
+          - img "Context evidence for Digital wall thermostat" [ref=f7e221]
+        - generic: Context
+        - generic: 2 views
+      - generic [ref=f7e222]:
+        - generic [ref=f7e223]:
+          - generic [ref=f7e224]: HAL-008
+          - generic [ref=f7e225]: Digital wall thermostat
+          - generic [ref=f7e226]: good
+          - generic [ref=f7e227]: cleaned to domestic standard
+        - paragraph [ref=f7e228]: White plastic wall-mounted digital control panel located next to the console cabinet.
+      - generic [ref=f7e230]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e231]
+        - button "Comment" [ref=f7e232] [cursor=pointer]
+    - generic [ref=f7e233]:
+      - generic [ref=f7e235]:
+        - button "Open all evidence for Convector radiator" [ref=f7e236]:
+          - img "Context evidence for Convector radiator" [ref=f7e237]
+        - generic: Context
+      - generic [ref=f7e238]:
+        - generic [ref=f7e239]:
+          - generic [ref=f7e240]: HAL-009
+          - generic [ref=f7e241]: Convector radiator
+          - generic [ref=f7e242]: good
+          - generic [ref=f7e243]: cleaned to domestic standard
+        - generic [ref=f7e244]: AI suggested this item; the reviewer rejected it.
+        - paragraph [ref=f7e245]: White steel convector radiator, partially visible on lower right wall.
+      - generic [ref=f7e247]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e248]
+        - button "Comment" [ref=f7e249] [cursor=pointer]
+    - generic [ref=f7e250]:
+      - generic [ref=f7e252]:
+        - button "Open all evidence for Rustic console cabinet" [ref=f7e253]:
+          - img "Close-up evidence for Rustic console cabinet" [ref=f7e254]
+        - generic: Close-up
+        - generic: 4 views
+      - generic [ref=f7e255]:
+        - generic [ref=f7e256]:
+          - generic [ref=f7e257]: HAL-010
+          - generic [ref=f7e258]: Rustic console cabinet
+          - generic [ref=f7e259]: good
+          - generic [ref=f7e260]: cleaned to domestic standard
+        - paragraph [ref=f7e261]: Grey-washed oak-effect wooden cabinet featuring a top drawer and two lower doors with barn-style panel details and dark metal hardware.
+      - generic [ref=f7e263]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e264]
+        - button "Comment" [ref=f7e265] [cursor=pointer]
+    - generic [ref=f7e266]:
+      - generic [ref=f7e268]:
+        - button "Open all evidence for Shoe rack" [ref=f7e269]:
+          - img "Context evidence for Shoe rack" [ref=f7e270]
+        - generic: Context
+        - generic: 2 views
+      - generic [ref=f7e271]:
+        - generic [ref=f7e272]:
+          - generic [ref=f7e273]: HAL-011
+          - generic [ref=f7e274]: Shoe rack
+          - generic [ref=f7e275]: good
+          - generic [ref=f7e276]: cleaned to domestic standard
+        - paragraph [ref=f7e277]: Industrial style shoe rack with a dark wood-effect top shelf and black metal mesh lower shelves.
+      - generic [ref=f7e279]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e280]
+        - button "Comment" [ref=f7e281] [cursor=pointer]
+    - generic [ref=f7e282]:
+      - generic [ref=f7e284]:
+        - button "Open all evidence for Patterned runner rug" [ref=f7e285]:
+          - img "Close-up evidence for Patterned runner rug" [ref=f7e286]
+        - generic: Close-up
+        - generic: 5 views
+      - generic [ref=f7e287]:
+        - generic [ref=f7e288]:
+          - generic [ref=f7e289]: HAL-012
+          - generic [ref=f7e290]: Patterned runner rug
+          - generic [ref=f7e291]: good
+          - generic [ref=f7e292]: cleaned to domestic standard
+        - paragraph [ref=f7e293]: Woven black and white runner rug featuring a geometric diamond pattern and fringed ends.
+      - generic [ref=f7e295]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e296]
+        - button "Comment" [ref=f7e297] [cursor=pointer]
+    - generic [ref=f7e298]:
+      - generic [ref=f7e300]:
+        - button "Open all evidence for Artificial monstera plant" [ref=f7e301]:
+          - img "Context evidence for Artificial monstera plant" [ref=f7e302]
+        - generic: Context
+        - generic: 3 views
+      - generic [ref=f7e303]:
+        - generic [ref=f7e304]:
+          - generic [ref=f7e305]: HAL-013
+          - generic [ref=f7e306]: Artificial monstera plant
+          - generic [ref=f7e307]: good
+          - generic [ref=f7e308]: cleaned to domestic standard
+        - paragraph [ref=f7e309]: Faux monstera plant set in a black plastic pot, located on top of the console cabinet.
+      - generic [ref=f7e311]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e312]
+        - button "Comment" [ref=f7e313] [cursor=pointer]
+    - generic [ref=f7e314]:
+      - generic [ref=f7e316]:
+        - button "Open all evidence for Artificial maple tree" [ref=f7e317]:
+          - img "Context evidence for Artificial maple tree" [ref=f7e318]
+        - generic: Context
+        - generic: 2 views
+      - generic [ref=f7e319]:
+        - generic [ref=f7e320]:
+          - generic [ref=f7e321]: HAL-014
+          - generic [ref=f7e322]: Artificial maple tree
+          - generic [ref=f7e323]: good
+          - generic [ref=f7e324]: cleaned to domestic standard
+        - paragraph [ref=f7e325]: Large potted artificial green maple tree in a black pot, situated on the shoe rack.
+      - generic [ref=f7e327]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e328]
+        - button "Comment" [ref=f7e329] [cursor=pointer]
+    - generic [ref=f7e330]:
+      - generic [ref=f7e332]:
+        - button "Open all evidence for Wall art in wooden frame" [ref=f7e333]:
+          - img "Context evidence for Wall art in wooden frame" [ref=f7e334]
+        - generic: Context
+        - generic: 3 views
+      - generic [ref=f7e335]:
+        - generic [ref=f7e336]:
+          - generic [ref=f7e337]: HAL-015
+          - generic [ref=f7e338]: Wall art in wooden frame
+          - generic [ref=f7e339]: good
+          - generic [ref=f7e340]: cleaned to domestic standard
+        - paragraph [ref=f7e341]: Rectangular wooden-framed wall art piece.
+      - generic [ref=f7e343]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e344]
+        - button "Comment" [ref=f7e345] [cursor=pointer]
+    - generic [ref=f7e346]:
+      - generic [ref=f7e348]:
+        - button "Open all evidence for Cylindrical metal canisters" [ref=f7e349]:
+          - img "Context evidence for Cylindrical metal canisters" [ref=f7e350]
+        - generic: Context
+        - generic: 2 views
+      - generic [ref=f7e351]:
+        - generic [ref=f7e352]:
+          - generic [ref=f7e353]: HAL-016
+          - generic [ref=f7e354]: Cylindrical metal canisters ×2
+          - generic [ref=f7e355]: good
+          - generic [ref=f7e356]: cleaned to domestic standard
+        - generic [ref=f7e357]: AI suggested this item; the reviewer rejected it.
+        - paragraph [ref=f7e358]: Two silver metal cylindrical canisters/vases placed on the shoe rack.
+      - generic [ref=f7e360]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e361]
+        - button "Comment" [ref=f7e362] [cursor=pointer]
+    - generic [ref=f7e363]:
+      - generic [ref=f7e365]:
+        - button "Open all evidence for Cupboard slatted shelf and coat rack" [ref=f7e366]:
+          - img "Context evidence for Cupboard slatted shelf and coat rack" [ref=f7e367]
+        - generic: Context
+      - generic [ref=f7e368]:
+        - generic [ref=f7e369]:
+          - generic [ref=f7e370]: HAL-017
+          - generic [ref=f7e371]: Cupboard slatted shelf and coat rack
+          - generic [ref=f7e372]: good
+          - generic [ref=f7e373]: cleaned to domestic standard
+        - paragraph [ref=f7e374]: Pine timber slatted overhead shelf and wooden wall rack with metal hooks, located inside the utility/coat cupboard.
+      - generic [ref=f7e376]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e377]
+        - button "Comment" [ref=f7e378] [cursor=pointer]
+    - generic [ref=f7e379]:
+      - generic [ref=f7e381]:
+        - button "Open all evidence for Cardboard storage box" [ref=f7e382]:
+          - img "Context evidence for Cardboard storage box" [ref=f7e383]
+        - generic: Context
+      - generic [ref=f7e384]:
+        - generic [ref=f7e385]:
+          - generic [ref=f7e386]: HAL-018
+          - generic [ref=f7e387]: Cardboard storage box
+          - generic [ref=f7e388]: fair
+          - generic [ref=f7e389]: requires cleaning
+        - paragraph [ref=f7e390]: Open cardboard shipping box containing mixed plastic packets and household items, placed on the floor.
+        - list [ref=f7e391]:
+          - listitem [ref=f7e392]: cluttered and untidy contents
+      - generic [ref=f7e394]:
+        - textbox "Anything to flag on this item? e.g. “stain was already here”" [ref=f7e395]
+        - button "Comment" [ref=f7e396] [cursor=pointer]
+    - 'button "Mark checked · next: Living Room" [ref=f7e398] [cursor=pointer]'
+    - generic [ref=f7e399]:
+      - heading "Countersign" [level=2] [ref=f7e400]
+      - paragraph [ref=f7e401]: Walk through each room before countersigning. You can add a comment to any item as you go.
+      - button "Continue with Hallway" [ref=f7e402] [cursor=pointer]
+    - generic [ref=f7e403]:
+      - heading "Signatures on record" [level=2] [ref=f7e404]
+      - generic [ref=f7e405]:
+        - strong [ref=f7e406]: First Tester
+        - text: — landlord — signed 2026-07-08T15:26:46+00:00
+        - generic [ref=f7e407]: Earlier version · content sha256 e73ad60409adfc498bc076ae75b40735260a31e0ba943b4ea2cb0b233e7ee097
+      - generic [ref=f7e408]:
+        - strong [ref=f7e409]: First Tester
+        - text: — landlord — signed 2026-07-08T15:27:05+00:00
+        - generic [ref=f7e410]: Earlier version · content sha256 e73ad60409adfc498bc076ae75b40735260a31e0ba943b4ea2cb0b233e7ee097
+      - generic [ref=f7e411]:
+        - strong [ref=f7e412]: Test Tenant
+        - text: — tenant — signed 2026-07-08T20:39:53+00:00
+        - generic [ref=f7e413]: Earlier version · content sha256 722f77d74259a612905ecd9750751cc84faa85b57b8bb6b011ebb98876b7f0fb
+  - status

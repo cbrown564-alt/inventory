@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "overrides": {
+    "walk_f000000.jpg": "hidden",
+    "walk_f000007.jpg": "hero"
+  }
+}

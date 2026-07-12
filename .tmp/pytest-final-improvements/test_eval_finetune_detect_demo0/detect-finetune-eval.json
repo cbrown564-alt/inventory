@@ -1,0 +1,45 @@
+{
+  "experiment": "ML-E12",
+  "date": "2026-07-12",
+  "capture_dir": "benchmarks\\inventoryflex\\capture",
+  "labels_boxes": "evals\\fixtures\\inventoryflex\\labels_boxes.json",
+  "split": "evals\\splits\\inventoryflex.json",
+  "pass_bar_pp": 10.0,
+  "iou_threshold": 0.5,
+  "baseline": {
+    "backend": "yoloe-text",
+    "recall_pct": 82.7,
+    "n_gold_boxes": 98,
+    "hits": 81,
+    "demo": true
+  },
+  "finetuned": {
+    "backend": "yoloe-text-finetuned",
+    "recall_pct": 65.3,
+    "n_gold_boxes": 98,
+    "hits": 64,
+    "demo": true
+  },
+  "delta_recall_pp": -17.4,
+  "pass": false,
+  "recommendation": "reject fine-tune \u2014 val recall -17.4pp vs baseline; 37 train boxes insufficient for YOLOE probe",
+  "train": {
+    "train_rooms": [
+      "Entrance Hall",
+      "Walk In Wardrobe",
+      "Bedroom",
+      "Balcony"
+    ],
+    "val_rooms": [
+      "Bathroom",
+      "Reception & Open Plan Kitchen"
+    ],
+    "n_train_pseudo_boxes": 37,
+    "epochs": 5,
+    "mode": "demo"
+  },
+  "weights_meta": ".tmp\\pytest-final-improvements\\test_eval_finetune_detect_demo0\\detect-finetune-probe.json",
+  "skip_train": false,
+  "demo": true,
+  "note": "Demo metrics from committed CPU run 2026-07-05; re-run without --demo for live eval."
+}

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html><head><meta charset='utf-8'>
+<title>ML-E9 pause detection timeline</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:1rem;background:#111;color:#eee}
+.summary{background:#222;padding:1rem;border-radius:8px;margin-bottom:1.5rem}
+.chart{display:flex;align-items:flex-end;gap:1px;height:120px;margin:1rem 0}
+.bar{background:#4a9;min-width:2px;flex:1}
+.bar.pause{background:#f5c518}
+.bar.gold{outline:2px solid #fff}
+table{border-collapse:collapse;width:100%}
+td,th{border:1px solid #444;padding:6px;text-align:left;font-size:13px}
+</style></head><body>
+<h1>ML-E9 — optical-flow pause detection</h1>
+<div class='summary'><h2>Metrics</h2><pre>
+{
+  &quot;experiment&quot;: &quot;ML-E9&quot;,
+  &quot;mode&quot;: &quot;synthetic&quot;,
+  &quot;every_s&quot;: 0.5,
+  &quot;fps&quot;: 30.0,
+  &quot;n_flow_samples&quot;: 120,
+  &quot;timing_s&quot;: 0.0,
+  &quot;eval&quot;: {
+    &quot;n_flow_samples&quot;: 120,
+    &quot;n_gold_top3_evaluated&quot;: 13,
+    &quot;gold_top3_pause_recall&quot;: 0.077,
+    &quot;gold_top3_in_flow_top3_rate&quot;: 0.462,
+    &quot;pass_bar_gold_top3_pause_recall&quot;: 0.8,
+    &quot;pass&quot;: false,
+    &quot;gold_details&quot;: [
+      {
+        &quot;room&quot;: &quot;Hallway&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f009738.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 324.6,
+        &quot;flow_magnitude&quot;: 5.4799,
+        &quot;pause_threshold&quot;: 4.25,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Hallway&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f000009.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 0.3,
+        &quot;flow_magnitude&quot;: 4.2493,
+        &quot;pause_threshold&quot;: 4.5911,
+        &quot;is_pause&quot;: true,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Hallway&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f000045.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 1.5,
+        &quot;flow_magnitude&quot;: 4.7325,
+        &quot;pause_threshold&quot;: 4.5911,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Living Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f008280.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 276.0,
+        &quot;flow_magnitude&quot;: 5.4799,
+        &quot;pause_threshold&quot;: 4.25,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Kitchen&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f000981.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 32.7,
+        &quot;flow_magnitude&quot;: 7.4231,
+        &quot;pause_threshold&quot;: 4.5911,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Kitchen&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f001584.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 52.8,
+        &quot;flow_magnitude&quot;: 5.2632,
+        &quot;pause_threshold&quot;: 3.8498,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Kitchen&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f002529.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 84.3,
+        &quot;flow_magnitude&quot;: 5.4799,
+        &quot;pause_threshold&quot;: 3.8498,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Bedroom 1&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f012735.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 424.5,
+        &quot;flow_magnitude&quot;: 5.4799,
+        &quot;pause_threshold&quot;: 4.25,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Bathroom&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f011070.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 369.0,
+        &quot;flow_magnitude&quot;: 5.4799,
+        &quot;pause_threshold&quot;: 4.25,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;En-suite Shower Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f012141.jpg&quot;,
+        &quot;gold_rank&quot;: 2,
+        &quot;t_s&quot;: 404.7,
+        &quot;flow_magnitude&quot;: 5.4799,
+        &quot;pause_threshold&quot;: 4.25,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;En-suite Shower Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f012564.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 418.8,
+        &quot;flow_magnitude&quot;: 5.4799,
+        &quot;pause_threshold&quot;: 4.25,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      },
+      {
+        &quot;room&quot;: &quot;Loft Shower Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f021879.jpg&quot;,
+        &quot;gold_rank&quot;: 1,
+        &quot;t_s&quot;: 729.3,
+        &quot;flow_magnitude&quot;: 5.4799,
+        &quot;pause_threshold&quot;: 4.25,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: true
+      },
+      {
+        &quot;room&quot;: &quot;Loft Shower Room&quot;,
+        &quot;name&quot;: &quot;IMG_5512_f023526.jpg&quot;,
+        &quot;gold_rank&quot;: 3,
+        &quot;t_s&quot;: 784.2,
+        &quot;flow_magnitude&quot;: 5.4799,
+        &quot;pause_threshold&quot;: 4.25,
+        &quot;is_pause&quot;: false,
+        &quot;in_flow_top3&quot;: false
+      }
+    ],
+    &quot;per_room_flow_top3&quot;: {
+      &quot;Hallway&quot;: [
+        &quot;IMG_5512_f000009.jpg&quot;,
+        &quot;IMG_5512_f000045.jpg&quot;,
+        &quot;IMG_5512_f000081.jpg&quot;
+      ],
+      &quot;Living Room&quot;: [
+        &quot;IMG_5512_f008181.jpg&quot;,
+        &quot;IMG_5512_f008280.jpg&quot;,
+        &quot;IMG_5512_f008613.jpg&quot;
+      ],
+      &quot;Kitchen&quot;: [
+        &quot;IMG_5512_f001503.jpg&quot;,
+        &quot;IMG_5512_f001584.jpg&quot;,
+        &quot;IMG_5512_f002088.jpg&quot;
+      ],
+      &quot;Bedroom 1&quot;: [
+        &quot;IMG_5512_f011322.jpg&quot;,
+        &quot;IMG_5512_f011592.jpg&quot;,
+        &quot;IMG_5512_f011844.jpg&quot;
+      ],
+      &quot;Bedroom 2&quot;: [
+        &quot;IMG_5512_f017073.jpg&quot;,
+        &quot;IMG_5512_f017289.jpg&quot;,
+        &quot;IMG_5512_f017550.jpg&quot;
+      ],
+      &quot;Bathroom&quot;: [
+        &quot;IMG_5512_f010602.jpg&quot;,
+        &quot;IMG_5512_f010629.jpg&quot;,
+        &quot;IMG_5512_f010845.jpg&quot;
+      ],
+      &quot;En-suite Shower Room&quot;: [
+        &quot;IMG_5512_f012141.jpg&quot;,
+        &quot;IMG_5512_f012321.jpg&quot;,
+        &quot;IMG_5512_f012501.jpg&quot;
+      ],
+      &quot;Loft Room&quot;: [
+        &quot;IMG_5512_f015174.jpg&quot;,
+        &quot;IMG_5512_f015246.jpg&quot;,
+        &quot;IMG_5512_f015777.jpg&quot;
+      ],
+      &quot;Loft Shower Room&quot;: [
+        &quot;IMG_5512_f021726.jpg&quot;,
+        &quot;IMG_5512_f021879.jpg&quot;,
+        &quot;IMG_5512_f022149.jpg&quot;
+      ],
+      &quot;Stairs and Landing&quot;: [
+        &quot;IMG_5512_f013041.jpg&quot;,
+        &quot;IMG_5512_f013347.jpg&quot;,
+        &quot;IMG_5512_f013896.jpg&quot;
+      ]
+    }
+  },
+  &quot;pass_bar_gold_top3_pause_recall&quot;: 0.8,
+  &quot;pass&quot;: false,
+  &quot;report_dir&quot;: &quot;C:\\Users\\cbrow\\Code\\inventory\\report&quot;
+}
+</pre></div>
+<h2>Motion magnitude (low = pause)</h2>
+<div class='chart'>
+<div class='bar pause gold' style='height:37px' title='t=0.0s mag=4.000'></div>
+<div class='bar pause gold' style='height:39px' title='t=0.5s mag=4.249'></div>
+<div class='bar gold' style='height:41px' title='t=1.0s mag=4.495'></div>
+<div class='bar gold' style='height:43px' title='t=1.5s mag=4.733'></div>
+<div class='bar gold' style='height:45px' title='t=2.0s mag=4.959'></div>
+<div class='bar' style='height:47px' title='t=2.5s mag=5.170'></div>
+<div class='bar' style='height:49px' title='t=3.0s mag=5.363'></div>
+<div class='bar' style='height:50px' title='t=3.5s mag=5.535'></div>
+<div class='bar' style='height:51px' title='t=4.0s mag=5.683'></div>
+<div class='bar' style='height:52px' title='t=4.5s mag=5.805'></div>
+<div class='bar' style='height:53px' title='t=5.0s mag=5.898'></div>
+<div class='bar' style='height:54px' title='t=5.5s mag=5.962'></div>
+<div class='bar' style='height:54px' title='t=6.0s mag=5.995'></div>
+<div class='bar' style='height:54px' title='t=6.5s mag=5.997'></div>
+<div class='bar' style='height:54px' title='t=7.0s mag=5.968'></div>
+<div class='bar' style='height:53px' title='t=7.5s mag=5.908'></div>
+<div class='bar' style='height:52px' title='t=8.0s mag=5.819'></div>
+<div class='bar' style='height:52px' title='t=8.5s mag=5.701'></div>
+<div class='bar' style='height:50px' title='t=9.0s mag=5.558'></div>
+<div class='bar' style='height:49px' title='t=9.5s mag=5.395'></div>
+<div class='bar' style='height:47px' title='t=10.0s mag=5.220'></div>
+<div class='bar' style='height:46px' title='t=10.5s mag=5.054'></div>
+<div class='bar' style='height:45px' title='t=11.0s mag=4.935'></div>
+<div class='bar' style='height:45px' title='t=11.5s mag=4.921'></div>
+<div class='bar' style='height:46px' title='t=12.0s mag=5.094'></div>
+<div class='bar' style='height:50px' title='t=12.5s mag=5.529'></div>
+<div class='bar' style='height:56px' title='t=13.0s mag=6.250'></div>
+<div class='bar' style='height:64px' title='t=13.5s mag=7.177'></div>
+<div class='bar' style='height:72px' title='t=14.0s mag=8.103'></div>
+<div class='bar' style='height:77px' title='t=14.5s mag=8.746'></div>
+<div class='bar' style='height:78px' title='t=15.0s mag=8.857'></div>
+<div class='bar' style='height:74px' title='t=15.5s mag=8.337'></div>
+<div class='bar' style='height:65px' title='t=16.0s mag=7.291'></div>
+<div class='bar' style='height:54px' title='t=16.5s mag=5.974'></div>
+<div class='bar' style='height:43px' title='t=17.0s mag=4.677'></div>
+<div class='bar pause' style='height:34px' title='t=17.5s mag=3.609'></div>
+<div class='bar pause' style='height:28px' title='t=18.0s mag=2.857'></div>
+<div class='bar pause' style='height:24px' title='t=18.5s mag=2.402'></div>
+<div class='bar pause' style='height:22px' title='t=19.0s mag=2.173'></div>
+<div class='bar pause' style='height:21px' title='t=19.5s mag=2.093'></div>
+<div class='bar pause' style='height:21px' title='t=20.0s mag=2.105'></div>
+<div class='bar pause' style='height:22px' title='t=20.5s mag=2.175'></div>
+<div class='bar pause' style='height:23px' title='t=21.0s mag=2.284'></div>
+<div class='bar pause' style='height:24px' title='t=21.5s mag=2.424'></div>
+<div class='bar pause' style='height:25px' title='t=22.0s mag=2.589'></div>
+<div class='bar pause' style='height:27px' title='t=22.5s mag=2.777'></div>
+<div class='bar pause' style='height:29px' title='t=23.0s mag=2.984'></div>
+<div class='bar pause' style='height:31px' title='t=23.5s mag=3.207'></div>
+<div class='bar pause' style='height:32px' title='t=24.0s mag=3.443'></div>
+<div class='bar pause' style='height:35px' title='t=24.5s mag=3.692'></div>
+<div class='bar pause' style='height:37px' title='t=25.0s mag=3.957'></div>
+<div class='bar pause' style='height:39px' title='t=25.5s mag=4.250'></div>
+<div class='bar' style='height:42px' title='t=26.0s mag=4.602'></div>
+<div class='bar' style='height:46px' title='t=26.5s mag=5.065'></div>
+<div class='bar' style='height:52px' title='t=27.0s mag=5.712'></div>
+<div class='bar' style='height:59px' title='t=27.5s mag=6.612'></div>
+<div class='bar' style='height:69px' title='t=28.0s mag=7.781'></div>
+<div class='bar' style='height:80px' title='t=28.5s mag=9.131'></div>
+<div class='bar' style='height:91px' title='t=29.0s mag=10.451'></div>
+<div class='bar' style='height:100px' title='t=29.5s mag=11.451'></div>
+<div class='bar' style='height:104px' title='t=30.0s mag=11.876'></div>
+<div class='bar' style='height:101px' title='t=30.5s mag=11.624'></div>
+<div class='bar' style='height:94px' title='t=31.0s mag=10.794'></div>
+<div class='bar' style='height:85px' title='t=31.5s mag=9.639'></div>
+<div class='bar' style='height:75px' title='t=32.0s mag=8.445'></div>
+<div class='bar gold' style='height:66px' title='t=32.5s mag=7.423'></div>
+<div class='bar gold' style='height:60px' title='t=33.0s mag=6.657'></div>
+<div class='bar' style='height:55px' title='t=33.5s mag=6.129'></div>
+<div class='bar' style='height:52px' title='t=34.0s mag=5.768'></div>
+<div class='bar' style='height:50px' title='t=34.5s mag=5.501'></div>
+<div class='bar' style='height:48px' title='t=35.0s mag=5.273'></div>
+<div class='bar' style='height:46px' title='t=35.5s mag=5.052'></div>
+<div class='bar' style='height:44px' title='t=36.0s mag=4.826'></div>
+<div class='bar' style='height:42px' title='t=36.5s mag=4.591'></div>
+<div class='bar' style='height:40px' title='t=37.0s mag=4.348'></div>
+<div class='bar pause' style='height:38px' title='t=37.5s mag=4.100'></div>
+<div class='bar pause' style='height:36px' title='t=38.0s mag=3.850'></div>
+<div class='bar pause' style='height:34px' title='t=38.5s mag=3.603'></div>
+<div class='bar pause' style='height:32px' title='t=39.0s mag=3.363'></div>
+<div class='bar pause' style='height:30px' title='t=39.5s mag=3.137'></div>
+<div class='bar pause' style='height:28px' title='t=40.0s mag=2.935'></div>
+<div class='bar pause' style='height:27px' title='t=40.5s mag=2.778'></div>
+<div class='bar pause' style='height:26px' title='t=41.0s mag=2.702'></div>
+<div class='bar pause' style='height:27px' title='t=41.5s mag=2.767'></div>
+<div class='bar pause' style='height:29px' title='t=42.0s mag=3.053'></div>
+<div class='bar pause' style='height:34px' title='t=42.5s mag=3.632'></div>
+<div class='bar' style='height:42px' title='t=43.0s mag=4.527'></div>
+<div class='bar' style='height:51px' title='t=43.5s mag=5.654'></div>
+<div class='bar' style='height:61px' title='t=44.0s mag=6.804'></div>
+<div class='bar' style='height:68px' title='t=44.5s mag=7.692'></div>
+<div class='bar' style='height:71px' title='t=45.0s mag=8.064'></div>
+<div class='bar' style='height:69px' title='t=45.5s mag=7.818'></div>
+<div class='bar' style='height:63px' title='t=46.0s mag=7.054'></div>
+<div class='bar' style='height:54px' title='t=46.5s mag=6.022'></div>
+<div class='bar' style='height:46px' title='t=47.0s mag=5.009'></div>
+<div class='bar pause' style='height:39px' title='t=47.5s mag=4.221'></div>
+<div class='bar pause' style='height:35px' title='t=48.0s mag=3.739'></div>
+<div class='bar pause' style='height:33px' title='t=48.5s mag=3.540'></div>
+<div class='bar pause' style='height:33px' title='t=49.0s mag=3.549'></div>
+<div class='bar pause' style='height:35px' title='t=49.5s mag=3.686'></div>
+<div class='bar pause' style='height:36px' title='t=50.0s mag=3.891'></div>
+<div class='bar pause' style='height:38px' title='t=50.5s mag=4.124'></div>
+<div class='bar' style='height:40px' title='t=51.0s mag=4.367'></div>
+<div class='bar' style='height:42px' title='t=51.5s mag=4.608'></div>
+<div class='bar' style='height:44px' title='t=52.0s mag=4.840'></div>
+<div class='bar gold' style='height:46px' title='t=52.5s mag=5.060'></div>
+<div class='bar gold' style='height:48px' title='t=53.0s mag=5.263'></div>
+<div class='bar' style='height:49px' title='t=53.5s mag=5.447'></div>
+<div class='bar' style='height:51px' title='t=54.0s mag=5.608'></div>
+<div class='bar' style='height:52px' title='t=54.5s mag=5.743'></div>
+<div class='bar' style='height:53px' title='t=55.0s mag=5.852'></div>
+<div class='bar' style='height:53px' title='t=55.5s mag=5.932'></div>
+<div class='bar' style='height:54px' title='t=56.0s mag=5.981'></div>
+<div class='bar' style='height:54px' title='t=56.5s mag=6.000'></div>
+<div class='bar' style='height:54px' title='t=57.0s mag=5.987'></div>
+<div class='bar' style='height:54px' title='t=57.5s mag=5.944'></div>
+<div class='bar' style='height:53px' title='t=58.0s mag=5.870'></div>
+<div class='bar' style='height:52px' title='t=58.5s mag=5.767'></div>
+<div class='bar' style='height:51px' title='t=59.0s mag=5.636'></div>
+<div class='bar' style='height:50px' title='t=59.5s mag=5.480'></div>
+</div>
+<h2>Gold top-3 vs pause</h2><table>
+<tr><th>Room</th><th>Frame</th><th>t (s)</th><th>Flow</th><th>Pause?</th><th>Flow top-3?</th></tr>
+<tr><td>Hallway</td><td>IMG_5512_f009738.jpg</td><td>324.6</td><td>5.4799</td><td>no</td><td>no</td></tr>
+<tr><td>Hallway</td><td>IMG_5512_f000009.jpg</td><td>0.3</td><td>4.2493</td><td>yes</td><td>yes</td></tr>
+<tr><td>Hallway</td><td>IMG_5512_f000045.jpg</td><td>1.5</td><td>4.7325</td><td>no</td><td>yes</td></tr>
+<tr><td>Living Room</td><td>IMG_5512_f008280.jpg</td><td>276.0</td><td>5.4799</td><td>no</td><td>yes</td></tr>
+<tr><td>Kitchen</td><td>IMG_5512_f000981.jpg</td><td>32.7</td><td>7.4231</td><td>no</td><td>no</td></tr>
+<tr><td>Kitchen</td><td>IMG_5512_f001584.jpg</td><td>52.8</td><td>5.2632</td><td>no</td><td>yes</td></tr>
+<tr><td>Kitchen</td><td>IMG_5512_f002529.jpg</td><td>84.3</td><td>5.4799</td><td>no</td><td>no</td></tr>
+<tr><td>Bedroom 1</td><td>IMG_5512_f012735.jpg</td><td>424.5</td><td>5.4799</td><td>no</td><td>no</td></tr>
+<tr><td>Bathroom</td><td>IMG_5512_f011070.jpg</td><td>369.0</td><td>5.4799</td><td>no</td><td>no</td></tr>
+<tr><td>En-suite Shower Room</td><td>IMG_5512_f012141.jpg</td><td>404.7</td><td>5.4799</td><td>no</td><td>yes</td></tr>
+<tr><td>En-suite Shower Room</td><td>IMG_5512_f012564.jpg</td><td>418.8</td><td>5.4799</td><td>no</td><td>no</td></tr>
+<tr><td>Loft Shower Room</td><td>IMG_5512_f021879.jpg</td><td>729.3</td><td>5.4799</td><td>no</td><td>yes</td></tr>
+<tr><td>Loft Shower Room</td><td>IMG_5512_f023526.jpg</td><td>784.2</td><td>5.4799</td><td>no</td><td>no</td></tr>
+</table></body></html>

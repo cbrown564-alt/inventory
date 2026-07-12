@@ -1,0 +1,101 @@
+{
+  "checkin": {
+    "address": "1 Clean St",
+    "inspected_at": "2026-07-12",
+    "backend": ""
+  },
+  "checkout": {
+    "address": "",
+    "inspected_at": "2026-07-12",
+    "backend": ""
+  },
+  "use_case": "deepclean",
+  "labels": {
+    "baseline": "Before",
+    "followup": "After"
+  },
+  "comparison": {
+    "title": "Cleaning comparison",
+    "intro_note": "This is a discussion sheet: it identifies and classifies changes between the before and after reports. It does not price anything.",
+    "class_labels": {
+      "cleaned": "Cleaned (resolved)",
+      "not_cleaned": "Not cleaned",
+      "cleaning_damage": "Cleaning damage",
+      "pre_existing": "Pre-existing",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "cleaned": "confirm",
+      "not_cleaned": "reject",
+      "cleaning_damage": "reject",
+      "pre_existing": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "scope",
+        "label": "Cleaning scope"
+      },
+      {
+        "key": "clean_date",
+        "label": "Clean date"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Kitchen",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "K1",
+          "checkout_id": "K2",
+          "name": "Worktop",
+          "checkin_name": "Worktop",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": -2,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "requires cleaning",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "P001"
+          ],
+          "checkout_photo_ids": [
+            "P001"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [],
+      "removed": [],
+      "added": []
+    }
+  ],
+  "totals": {
+    "matched": 1,
+    "changed": 1,
+    "unchanged": 0,
+    "removed": 0,
+    "added": 0,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  }
+}

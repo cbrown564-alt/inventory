@@ -89,6 +89,8 @@
   /* ---------- layout ---------- */
   #app { flex: 1; display: grid; grid-template-columns: 300px 1fr;
          min-height: 0; }
+  #app.phase-wide { grid-template-columns: 1fr; }
+  #app.phase-wide #rail { display: none; }
 
   /* ---------- queue rail (de-densified — docs/25 Workstream B) ---------- */
   #rail { border-right: 1px solid var(--line); background: var(--paper);
@@ -156,8 +158,8 @@
   .room-head .meter i { display: block; height: 100%;
                         background: var(--confirm); }
   .q-item {
-    display: grid; grid-template-columns: 8px 1fr auto; gap: 12px;
-    align-items: start; padding: 12px 18px; cursor: pointer;
+    display: grid; grid-template-columns: 54px minmax(0,1fr) auto; gap: 11px;
+    align-items: center; padding: 10px 14px; cursor: pointer;
     border-radius: 0; transition: background .12s ease;
   }
   .q-item:hover { background: var(--panel); }
@@ -166,9 +168,19 @@
   }
   .q-item.active .name { color: var(--ink); }
   .q-item.active .name .item-title { font-weight: 600; }
-  .q-item .dot { width: 7px; height: 7px; border-radius: 50%;
-                 border: 1.5px solid var(--line-strong); flex-shrink: 0;
-                 margin-top: 6px; }
+  .q-evidence { width: 54px; height: 50px; position: relative; overflow: hidden;
+                border: 1px solid var(--line); border-radius: 5px;
+                background: var(--panel-2); }
+  .q-evidence img { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .q-evidence.missing { display: grid; place-items: center; color: var(--faint);
+                        font: 600 8px var(--mono); letter-spacing: .05em; }
+  .q-evidence .kind { position: absolute; right: 3px; bottom: 3px;
+                      padding: 2px 3px; border-radius: 2px;
+                      background: rgba(24,28,33,.8); color: #fff;
+                      font: 600 7px/1 var(--ui); text-transform: uppercase; }
+  .q-item .dot { position: absolute; z-index: 1; top: 4px; left: 4px;
+                 width: 8px; height: 8px; border-radius: 50%;
+                 border: 1.5px solid rgba(255,255,255,.9); background: var(--panel); }
   .q-item.done .dot { background: var(--confirm); border-color: var(--confirm); }
   .q-item.bad .dot { background: var(--danger); border-color: var(--danger); }
   .q-item .name { font-weight: 400; font-size: var(--fs-base); line-height: 1.4;
@@ -1763,6 +1775,7 @@
     else if (viewMode === "items") i.setAttribute("aria-current", "page");
     else if (viewMode === "room") r.setAttribute("aria-current", "page");
     else if (viewMode === "finish") f.setAttribute("aria-current", "page");
+    document.getElementById("app").classList.toggle("phase-wide", viewMode !== "items");
   }
   function setViewHash(mode, arg) {
     var h = "";
@@ -2632,7 +2645,24 @@
       onclick: function () { select({ type: "item", id: it.id }); } });
     queueRowState(row, it);
     row.setAttribute("data-qid", it.id);
-    row.appendChild(el("span", { "class": "dot" }));
+    row.setAttribute("role", "button");
+    row.setAttribute("tabindex", "0");
+    row.setAttribute("aria-label", "Open " + (it.name || it.id));
+    row.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault(); select({ type: "item", id: it.id });
+      }
+    });
+    var directCrop = cropSrc[it.id] || null;
+    var firstPhoto = (it.photo_ids || []).filter(function (pid) { return photoSrc[pid]; })[0];
+    var qsrc = directCrop || (firstPhoto ? photoSrc[firstPhoto] : null);
+    var evidence = el("span", { "class": "q-evidence" + (qsrc ? "" : " missing") });
+    evidence.appendChild(el("span", { "class": "dot" }));
+    if (qsrc) {
+      evidence.appendChild(el("img", { src: qsrc, alt: "", loading: "lazy" }));
+      evidence.appendChild(el("span", { "class": "kind", text: directCrop ? (it.crop_status === "proposed" ? "Proposed" : "Close-up") : "Context" }));
+    } else evidence.appendChild(document.createTextNode("Missing"));
+    row.appendChild(evidence);
     var name = el("span", { "class": "name", title: it.name || "" });
     name.appendChild(el("span", { "class": "ref", text: it.id }));
     var nameText = el("span", { "class": "item-title" });
