@@ -342,9 +342,21 @@ def run_build(opts: BuildOptions, *,
                                     items=items, photos=photos)
 
     if detections:
-        from .merge import attach_detector_crops
+        from .merge import attach_detector_crops, ground_missing_crops
         for room in built.values():
             attach_detector_crops(room.items, detections)
+        if detector and detector.available and detector.mode == "text":
+            photo_paths: dict[str, Path] = {}
+            for photos in selected.values():
+                for p in photos:
+                    photo_paths[p.id] = _full_path(capture_dir, p.path)
+            for room in built.values():
+                n = ground_missing_crops(
+                    room.items, photo_paths, detector, work_dir / "crops",
+                    detections=detections)
+                if n:
+                    log.info("item-conditioned grounding attached %d crop(s) in %s",
+                             n, room.name)
 
     if prior:
         built_by_lower = {k.lower(): k for k in built}

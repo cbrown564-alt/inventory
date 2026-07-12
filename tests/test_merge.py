@@ -1,6 +1,7 @@
-from homeinventory.detect import Detection
-from homeinventory.merge import (attach_detector_crops, merge_items,
-                                 merge_room_with_prior, room_code)
+from homeinventory.detect import Detection, build_item_queries
+from homeinventory.merge import (accept_crop, attach_detector_crops,
+                                 crop_review_queue, merge_items,
+                                 merge_room_with_prior, reject_crop, room_code)
 from homeinventory.schema import Item, Photo, Room
 
 
@@ -29,8 +30,114 @@ def test_attach_detector_crops_is_conservative():
     ]}
     attach_detector_crops(items, dets)
     assert items[0].crop_path == "best-sofa.jpg"   # highest confidence match
+    assert items[0].crop_status == "auto"
     assert items[1].crop_path is None    # "table" seen only in an uncited photo
     assert items[2].crop_path == "mine.jpg"        # never overwritten
+
+
+def test_attach_detector_crops_accepts_structural_aliases():
+    item = Item(id="HAL-001", name="Timber staircase with grey carpet",
+                photo_ids=["P001"])
+    dets = {"P001": [
+        Detection(label="stairs", confidence=0.72, box=(0, 0, 100, 100),
+                  crop_path="stairs.jpg"),
+    ]}
+    attach_detector_crops([item], dets)
+    assert item.crop_path == "stairs.jpg"
+    assert item.crop_status == "auto"
+
+
+def test_build_item_queries_covers_schedule_synonyms():
+    qs = build_item_queries("Pendant light fittings")
+    assert "ceiling light" in qs or "light fitting" in qs
+    qs2 = build_item_queries("Canvas wall art")
+    assert "picture frame" in qs2 or "painting" in qs2
+    qs3 = build_item_queries("Skirting boards")
+    assert "skirting board" in qs3
+
+
+def test_attach_detector_crops_item_conditioned_synonyms():
+    """Schedule wording ≠ detector label: score existing boxes via queries."""
+    pendant = Item(id="LIV-001", name="Pendant light fittings",
+                   photo_ids=["P001"])
+    art = Item(id="LIV-002", name="Canvas wall art", photo_ids=["P001"])
+    stairs = Item(id="HAL-001", name="Staircase", photo_ids=["P001"])
+    # Wrong pairing must not attach: skirting ≠ flooring.
+    skirting = Item(id="HAL-002", name="Skirting boards", photo_ids=["P001"])
+    dets = {"P001": [
+        Detection(label="ceiling light", confidence=0.88, box=(0, 0, 40, 40),
+                  crop_path="light.jpg"),
+        Detection(label="picture frame", confidence=0.81, box=(0, 0, 40, 40),
+                  crop_path="art.jpg"),
+        Detection(label="stairwell", confidence=0.77, box=(0, 0, 40, 40),
+                  crop_path="stairs.jpg"),
+        Detection(label="flooring", confidence=0.95, box=(0, 0, 40, 40),
+                  crop_path="floor.jpg"),
+    ]}
+    attach_detector_crops([pendant, art, stairs, skirting], dets)
+    assert pendant.crop_path == "light.jpg"
+    assert pendant.crop_status == "auto"
+    assert pendant.crop_confidence and pendant.crop_confidence >= 0.72
+    assert art.crop_path == "art.jpg"
+    assert stairs.crop_path == "stairs.jpg"
+    assert skirting.crop_path is None  # flooring must not steal skirting
+
+
+def test_attach_detector_crops_proposes_mid_confidence():
+    item = Item(id="LIV-003", name="Canvas wall art", photo_ids=["P001"])
+    dets = {"P001": [
+        Detection(label="picture frame", confidence=0.55, box=(0, 0, 40, 40),
+                  crop_path="maybe-art.jpg"),
+    ]}
+    attach_detector_crops([item], dets)
+    assert item.crop_path == "maybe-art.jpg"
+    assert item.crop_status == "proposed"
+    assert crop_review_queue([item]) == [item]
+    accept_crop(item)
+    assert item.crop_status == "accepted"
+    item.crop_status = "proposed"
+    reject_crop(item)
+    assert item.crop_path is None
+    assert item.crop_status == "rejected"
+
+
+def test_attach_blocks_known_false_pairs():
+    """Reuse det_match blocklist so ceiling light never grounds to ceiling."""
+    item = Item(id="KIT-001", name="Ceiling", photo_ids=["P001"])
+    dets = {"P001": [
+        Detection(label="ceiling light", confidence=0.99, box=(0, 0, 40, 40),
+                  crop_path="spot.jpg"),
+    ]}
+    attach_detector_crops([item], dets)
+    assert item.crop_path is None
+
+
+def test_attach_rejects_fuzzy_false_positives():
+    """Query-membership gate: no bare difflib/substring proposes."""
+    bedside = Item(id="BED-001", name="Bedside lamps", photo_ids=["P001"])
+    dining = Item(id="LIV-001", name="Dining table", photo_ids=["P001"])
+    smoke = Item(id="KIT-001", name="Smoke/heat alarm", photo_ids=["P001"])
+    radiator = Item(id="BAT-001", name="Towel Radiator", photo_ids=["P001"])
+    dets = {"P001": [
+        Detection(label="bed", confidence=0.95, box=(0, 0, 40, 40),
+                  crop_path="bed.jpg"),
+        Detection(label="coffee table", confidence=0.9, box=(0, 0, 40, 40),
+                  crop_path="coffee.jpg"),
+        Detection(label="lamp", confidence=0.9, box=(0, 0, 40, 40),
+                  crop_path="lamp.jpg"),
+        Detection(label="toilet", confidence=0.9, box=(0, 0, 40, 40),
+                  crop_path="toilet.jpg"),
+    ]}
+    attach_detector_crops([bedside, dining, smoke, radiator], dets)
+    assert bedside.crop_path == "lamp.jpg"  # lamp ∈ bedside queries
+    assert dining.crop_path is None         # coffee table must not steal
+    assert smoke.crop_path is None          # lamp must not ground to smoke
+    assert radiator.crop_path is None       # toilet must not ground to radiator
+
+
+def test_build_item_queries_bedside_includes_lamp():
+    qs = build_item_queries("Bedside lamps")
+    assert "lamp" in qs
 
 
 def test_merge_duplicates_worst_grade_and_union():

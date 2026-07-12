@@ -85,6 +85,12 @@ class Item:
     est_value_band: Optional[str] = None  # "<£50" | "£50-250" | "£250-1000" | ">£1000"
     photo_ids: list[str] = field(default_factory=list)
     crop_path: Optional[str] = None      # detector crop used as report thumbnail
+    # Item-conditioned grounding (merge.attach_detector_crops):
+    #   auto     — high-confidence match, safe to show without crop review
+    #   proposed — attached but needs accept/reject in the crop review queue
+    #   accepted / rejected — human decision on a proposed crop
+    crop_confidence: Optional[float] = None
+    crop_status: Optional[str] = None    # auto|proposed|accepted|rejected
     detector_label: Optional[str] = None
     confidence: Optional[float] = None   # describe-backend confidence 0..1
 

@@ -85,6 +85,16 @@ DET_GOLD_BLOCK: frozenset[tuple[str, str]] = frozenset({
     ("chair", "sofa"),
     ("chair", "dining table"),
     ("bathtub", "shower screen"),
+    # Crop-grounding false positives (substring / fuzzy stem collisions).
+    ("bed", "bedside lamps"),
+    ("bed", "bedside lamp"),
+    ("coffee table", "dining table"),
+    ("dining table", "coffee table"),
+    ("lamp", "smoke alarm"),
+    ("toilet", "towel radiator"),
+    ("toilet", "radiator"),
+    ("painting", "dining table"),
+    ("picture frame", "dining table"),
 })
 
 _DEFAULT_THRESHOLDS: dict[MatchMode, float] = {

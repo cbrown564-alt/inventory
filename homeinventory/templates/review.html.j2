@@ -1067,6 +1067,7 @@
       <div class="filters" id="filters">
         <button data-f="all" aria-pressed="true">All</button>
         <button data-f="pending" aria-pressed="false">Unreviewed</button>
+        <button data-f="crops" aria-pressed="false">Crop review</button>
         <button data-f="defects" aria-pressed="false">Defects</button>
         <button data-f="noev" aria-pressed="false">No evidence</button>
       </div>
@@ -1576,19 +1577,23 @@
 
   /* ---------- progress ---------- */
   function filterCounts() {
-    var pending = 0, defects = 0, noev = 0;
+    var pending = 0, defects = 0, noev = 0, crops = 0;
     ix.items.forEach(function (it) {
       if (!isDone(it)) pending++;
       if ((it.defects || []).length || (it.rejected_defects || []).length) {
         defects++;
       }
       if (!hasEvidence(it)) noev++;
+      if (it.crop_status === "proposed" && (cropSrc[it.id] || it.crop_path)) {
+        crops++;
+      }
     });
-    return { all: ix.items.length, pending: pending, defects: defects,
-             noev: noev };
+    return { all: ix.items.length, pending: pending, crops: crops,
+             defects: defects, noev: noev };
   }
   var FILTER_LABELS = {
-    all: "All", pending: "Unreviewed", defects: "Defects", noev: "No evidence"
+    all: "All", pending: "Unreviewed", crops: "Crop review",
+    defects: "Defects", noev: "No evidence"
   };
   function updateFilterBadges() {
     var c = filterCounts();
@@ -2593,6 +2598,9 @@
   function visible(it) {
     if (query && !matchesQuery(it)) return false;
     if (filter === "pending") return !isDone(it);
+    if (filter === "crops") {
+      return it.crop_status === "proposed" && (cropSrc[it.id] || it.crop_path);
+    }
     if (filter === "defects") {
       return (it.defects || []).length || (it.rejected_defects || []).length;
     }
@@ -2601,8 +2609,12 @@
   }
   function queueEntries() {
     var entries = ix.items.filter(visible);
-    if (sortMode === "conf") {
+    if (sortMode === "conf" || filter === "crops") {
       entries = entries.slice().sort(function (a, b) {
+        if (filter === "crops") {
+          return (a.crop_confidence == null ? 1.01 : a.crop_confidence) -
+                 (b.crop_confidence == null ? 1.01 : b.crop_confidence);
+        }
         return (a.confidence == null ? 1.01 : a.confidence) -
                (b.confidence == null ? 1.01 : b.confidence);
       });
@@ -3503,6 +3515,16 @@
       verdict.appendChild(warn);
     }
 
+    if (it.crop_status === "proposed" && (cropSrc[it.id] || it.crop_path)) {
+      var cropPct = typeof it.crop_confidence === "number"
+        ? Math.round(it.crop_confidence * 100) + "% " : "";
+      var cropWarn = el("div", { "class": "claim-warn" });
+      cropWarn.appendChild(el("b", { text: cropPct + "crop match" }));
+      cropWarn.appendChild(document.createTextNode(
+        " — accept the detector close-up or reject and draw manually."));
+      verdict.appendChild(cropWarn);
+    }
+
     var editSnap = null;   // one undo entry per focus session on text fields
     function textUndo(node) {
       node.addEventListener("focus", function () {
@@ -3556,6 +3578,27 @@
       text: it.rejected ? "Restore item" : "✕ Reject",
       onclick: function () { rejectItem(it); } }));
     act.appendChild(row);
+    if (it.crop_status === "proposed" && (cropSrc[it.id] || it.crop_path)) {
+      var cropRow = el("div", { "class": "row" });
+      cropRow.appendChild(el("button", {
+        "class": "btn", text: "Accept crop",
+        onclick: function () {
+          pushUndo("accept crop " + it.id, [it]);
+          it.crop_status = "accepted";
+          markDirty(); renderDetail(); renderQueue(); renderProgress();
+        } }));
+      cropRow.appendChild(el("button", {
+        "class": "btn danger", text: "Reject crop",
+        onclick: function () {
+          pushUndo("reject crop " + it.id, [it]);
+          it.crop_path = null;
+          it.crop_confidence = null;
+          it.crop_status = "rejected";
+          delete cropSrc[it.id];
+          markDirty(); renderDetail(); renderQueue(); renderProgress();
+        } }));
+      act.appendChild(cropRow);
+    }
     verdict.appendChild(act);
 
     var hasDefects = (it.defects || []).length || (it.rejected_defects || []).length;
