@@ -1,0 +1,30 @@
+
+== Entrance Hallway (18 preds, 9 gold)
+  missed gold:      -
+  granularity:      Flooring - threshold carpet, Front entrance door ironmongery, Door security chain, Internal door frame and architrave, Doorstop, Light switch - rocker, Blind/control switch, Doormat
+  true unmatched:   Threshold strip
+
+== Reception Kitchen (40 preds, 26 gold)
+  missed gold:      Hotpoint oven FU 5Y0 IX H (notable)
+  granularity:      Full-height glazing / window wall, Curtains, Door frame and architrave, Door lever handles and latch, Doorstop, Double sockets and data/TV outlets, Under-cabinet spotlights, Extract vent
+  true unmatched:   Threshold strip, Thermostat, Fused spur / switch, Adhesive wall hooks, Splashback tiling, Utility pipework, Broom
+
+== Bathroom (21 preds, 13 gold)
+  missed gold:      -
+  granularity:      Basin mixer tap, Shower tray, Thermostatic shower mixer, Shower handset, Bath mat
+  true unmatched:   Skirting board, Wall-mounted coat/robe hook, Hand towel
+
+== Office Room (18 preds, 11 gold)
+  missed gold:      mezzanine balustrade (notable)
+  granularity:      Door frame and architrave, Door handles/lever set, Doorstop, Window
+  true unmatched:   Threshold strip, Thermostat/programmer, Fused spur/switch, Radiator
+
+== Bedroom (32 preds, 18 gold)
+  missed gold:      mattress (notable), two pillows
+  granularity:      Oak-effect solid wood flooring (lower landing), Entrance/room door, Door lever handle set, ProSafe rim latch/lock, Draught excluder/threshold strip to door, Built-in double wardrobe, Aluminium framed window (Schuco), Window handle and restrictor
+  true unmatched:   Oak wall-mounted handrail, ERA mortice lock, Pendant light with cream drum shade, Smoke/heat alarm, Programmable room thermostat, Double socket outlets, Round pin and 13A socket outlets, Air vents/grilles
+
+== En-suite Bathroom (29 preds, 16 gold)
+  missed gold:      -
+  granularity:      Cupboard/utility walls, Door frame and architrave, Door latch and lock mechanism, Ceiling light fitting, Basin mixer tap, WC flush plate, Bath/shower mixer and thermostatic valve, Shower handset holder, Glass bath screen, Heating manifold and pipework
+  true unmatched:   Threshold strip, Light switch, Consumer unit/electrical box

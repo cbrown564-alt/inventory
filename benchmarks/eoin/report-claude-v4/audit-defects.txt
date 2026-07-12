@@ -1,0 +1,47 @@
+
+== Entrance Hallway
+  MISS [switches and sockets -> Power sockets] blinds operation switch does not operate
+
+== Reception Kitchen
+  MISS [door -> Internal door] light marks to bottom
+       pred defects: ['timber leading edge worn/unfinished (P178, P184, P185)', 'angle mark to leading edge (P184)']
+  MISS [ceiling -> Ceiling] moderate spots above dining table
+       pred defects: ['light rub marks to bulkhead edges high level']
+  MISS [ceiling -> Ceiling] shading around extractor unit
+       pred defects: ['light rub marks to bulkhead edges high level']
+  MISS [skirting -> Skirting boards] piece missing below window
+       pred defects: ['light scuffs low level to isolated sections']
+  MISS [laminate flooring -> Flooring] usage scratches and wear
+       pred defects: ['darker shade mark/discolouration to board join mid floor (P180)', 'light surface scratch marks noted (P186, P187)']
+  MISS [built-in cupboard -> Utility cupboard ceiling light] sticky tape residue to metal data box
+       pred defects: ['dust to diffuser']
+  MISS [built-in cupboard -> Utility cupboard ceiling light] items behind washing machine
+       pred defects: ['dust to diffuser']
+  MISS [Kuppersbusch hob -> Ceramic hob] wear to burner rings
+       pred defects: ['heavy smears and residue marks to glass surface (P227)']
+  MISS [Kuppersbusch microwave -> Built-in microwave/combi oven] general signs of usage
+       pred defects: ['light marks to interior (P231)', 'dust to front trim', 'light marks to door glass (P237)', 'dust to interior']
+  MISS [Zanussi fridge freezer ZNLN18FS1 -> Integrated fridge/freezer] appliance light not working
+       pred defects: ['cracked/split salad drawer (P241, P244)', 'cracked drawer rim (P242, P243)', 'hairline crack to shelf trim (P223)']
+  MISS [kitchen units -> Kitchen base and wall units] sticky plastic hooks
+       pred defects: ['scuff/grey marks to plinth low level (P220)', 'light wear to cabinet edges']
+  MISS [quartz worktop -> Worktops] discolouration around sink
+       pred defects: ['water marks and smears to surface (P251, P252, P253)', 'dust/fingermarks (P252)']
+
+== Bathroom
+  MISS [door -> Door frame / architrave] chip to bottom edge on reverse
+       pred defects: ['speckled marks to gloss paint along architrave', 'paint wear around metal strike plate', 'light wear to latch mechanism']
+
+== Office Room
+
+== Bedroom
+  MISS [hallway door and frame -> Door hinges] angle chipping painted over on leading edge
+  MISS [blackout roller blinds -> Roller blinds] shaded and marked at bottom
+       pred defects: ['black dirt/mould type marks and staining to blind fabric top edge (P065,P066)', 'shade marks and dirt to blind fabric (P067,P079)']
+  MISS [built-in wardrobe -> Wardrobe hanging rail] three yellow stains on left door reverse
+       pred defects: ['light surface marks to chrome (P071)']
+
+== En-suite Bathroom
+  MISS [utility cupboard -> Skirting boards] marks to door frame and interior walls
+  MISS [utility cupboard -> Skirting boards] residual marks on left wall
+  MISS [utility cupboard -> Skirting boards] scuff marks and angle chipping to walls

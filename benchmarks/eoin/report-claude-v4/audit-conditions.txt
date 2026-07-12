@@ -1,0 +1,29 @@
+
+== Reception Kitchen
+- delta=+2 [grey fabric sofa -> Three-seat sofa] gold=new, pred=good
+- delta=+1 [four dining chairs -> Dining chairs] gold=good, pred=fair
+- delta=+1 [dining table -> Dining table] gold=good, pred=fair
+- delta=-1 [vertical blinds -> Vertical blinds] gold=fair, pred=good
+- delta=-1 [sliding balcony door -> Window handle and lock] gold=fair, pred=good
+- delta=-1 [skirting -> Skirting boards] gold=fair, pred=good
+- delta=-1 [kitchen units -> Kitchen base and wall units] gold=fair, pred=good
+- delta=-1 [Hisense washer dryer -> Washer-dryer] gold=good, pred=excellent
+
+== Office Room
+- delta=+2 [fitted carpet -> Flooring - carpet] gold=new, pred=good
+- delta=+1 [door -> Internal door] gold=good, pred=fair
+
+== Bedroom
+- delta=+2 [grey fitted carpet -> Grey fitted carpet (sleeping level)] gold=new, pred=good
+- delta=+2 [duvet -> Duvet and bedding] gold=new, pred=good
+- delta=+2 [double bed -> Double bed with frame] gold=new, pred=good
+- delta=+1 [wood staircase -> Oak and glass staircase] gold=good, pred=fair
+- delta=+1 [walls -> Walls] gold=good, pred=fair
+- delta=+1 [skirting -> Skirting boards] gold=good, pred=fair
+- delta=-1 [hallway door and frame -> Door hinges] gold=fair, pred=good
+
+== En-suite Bathroom
+- delta=+1 [four-tier shelving unit -> Black plastic storage shelf unit] gold=good, pred=fair
+- delta=+1 [bath -> Panel bath] gold=good, pred=fair
+- delta=-1 [utility cupboard -> Skirting boards] gold=fair, pred=good
+- delta=-1 [toilet brush -> Toilet brush and holder] gold=fair, pred=good

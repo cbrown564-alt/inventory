@@ -1,0 +1,71 @@
+
+== Entrance Hallway
+- Threshold strip | condition=good | photos=P139, P147 | confidence=0.8
+  Brushed metal threshold divider strip between laminate flooring and carpet
+
+== Reception Kitchen
+- Threshold strip | condition=good | photos=P219 | confidence=0.75
+  Timber/oak-effect threshold strip at balcony door opening
+- Thermostat | condition=good | photos=P175, P177 | confidence=0.9
+  Wall-mounted white programmable room thermostat with LCD display
+- Fused spur / switch | condition=good | photos=P175, P177 | confidence=0.85
+  White fused connection unit switch below thermostat
+- Adhesive wall hooks | condition=fair | photos=P200, P246, P247, P248 | confidence=0.8
+  Clear plastic self-adhesive wall hooks left in situ
+  defects=['adhesive residue to wall (P200, P246, P247, P248)']
+- Splashback tiling | condition=good | photos=P189, P249, P253 | confidence=0.75
+  Dark brown/aubergine composite splashback panels above worktop
+  defects=['water marks and dust to surface (P189)']
+- Utility pipework | condition=good | photos=P199, P201, P203 | confidence=0.7
+  Painted/insulated service pipework and flexible duct in utility cupboard
+  defects=['exposed foil duct insulation (P199, P202)']
+- Broom | condition=good | photos=P203 | confidence=0.7
+  Domestic broom left in utility cupboard
+
+== Bathroom
+- Skirting board | condition=fair | photos=P019 | confidence=0.85
+  White gloss painted timber skirting to threshold
+  defects=['chip to skirting low level exposing bare board at floor join']
+- Wall-mounted coat/robe hook | condition=good | photos=P014 | confidence=0.8
+  Chrome domed wall hook mounted beside shower enclosure
+  defects=['light scratch marks to chrome face']
+- Hand towel | condition=good | photos=P002 | confidence=0.7
+  Grey towel draped over WC/radiator
+
+== Office Room
+- Threshold strip | condition=good | photos=P150, P166 | confidence=0.8
+  Timber/oak-effect threshold strip to doorway between carpet and laminate
+- Thermostat/programmer | condition=good | photos=P151, P165 | confidence=0.9
+  White wall-mounted digital heating thermostat/programmer
+- Fused spur/switch | condition=good | photos=P151 | confidence=0.8
+  White single fused connection unit/switched spur
+- Radiator | condition=good | photos=P164 | confidence=0.65
+  White panel radiator, wall-mounted below window (partial view)
+  defects=['minor indentation/dink low level to panel face (P164)']
+
+== Bedroom
+- Oak wall-mounted handrail | condition=good | photos=P056, P058, P074 | confidence=0.85
+  Oak timber wall-fixed handrail to staircase
+- ERA mortice lock | condition=good | photos=P043 | confidence=0.85
+  ERA British Standard mortice lock with brass strike
+- Pendant light with cream drum shade | condition=good | photos=P025, P031, P060, P074 | confidence=0.85
+  Ceiling pendant with white fabric drum shade over bed
+- Smoke/heat alarm | condition=good | photos=P030, P032 | confidence=0.85
+  White ceiling-mounted mains smoke/heat alarm
+- Programmable room thermostat | condition=good | photos=P028 | confidence=0.85
+  White Drayton wall-mounted digital programmable thermostat
+- Double socket outlets | condition=good | photos=P035, P058, P075 | confidence=0.8
+  White plastic twin 13A switched socket outlets
+- Round pin and 13A socket outlets | condition=fair | photos=P076 | confidence=0.75
+  White plastic round-pin (lamp) socket and 13A socket outlet
+  defects=['scuff/dirt marks to socket faceplate (P076)']
+- Air vents/grilles | condition=good | photos=P070 | confidence=0.75
+  Two white plastic air vents/grilles set into underside of shelf/reveal
+
+== En-suite Bathroom
+- Threshold strip | condition=good | photos=P083, P112 | confidence=0.7
+  Metal threshold strip between tiled bathroom floor and carpeted hallway
+- Light switch | condition=good | photos=P124 | confidence=0.85
+  White plastic single rocker light switch
+- Consumer unit/electrical box | condition=good | photos=P105, P125, P128 | confidence=0.7
+  White surface-mounted electrical unit with cabling to cupboard wall

@@ -1,0 +1,327 @@
+{
+  "_source": "18 Weststand Apartments Inventory & Schedule of Condition, inspected 20 April 2026. Gold labels hand-converted from the clerk's numbered area tables in benchmarks/eoin/ground-truth.txt.",
+  "rooms": {
+    "Entrance Hallway": {
+      "items": [
+        {
+          "name": "entrance door",
+          "aliases": ["front door", "door"],
+          "components": ["door handle", "door locks", "security chain", "spy hole"],
+          "condition": "good",
+          "defects": ["chipped leading edge throughout interior", "bottom lock plate slightly loose"],
+          "notable": true
+        },
+        {"name": "ceiling", "condition": "good", "notable": true},
+        {"name": "walls", "condition": "good", "notable": true},
+        {"name": "skirting", "aliases": ["skirting boards"], "condition": "good", "notable": true},
+        {
+          "name": "laminate flooring",
+          "aliases": ["flooring", "wood flooring", "wood effect floor"],
+          "condition": "good",
+          "defects": ["usage scratches throughout"],
+          "notable": true
+        },
+        {"name": "recessed spotlights", "aliases": ["spotlights", "ceiling lights", "downlights"], "condition": "good", "notable": true},
+        {
+          "name": "switches and sockets",
+          "aliases": ["light switches", "sockets", "blind switch"],
+          "condition": "good",
+          "defects": ["blinds operation switch does not operate"],
+          "notable": false
+        },
+        {"name": "entry phone", "aliases": ["entryphone", "intercom", "door entry system"], "condition": "good", "notable": true},
+        {"name": "smoke alarm", "aliases": ["smoke detector"], "condition": "good", "notable": true}
+      ]
+    },
+    "Reception Kitchen": {
+      "items": [
+        {
+          "name": "door",
+          "aliases": ["internal door"],
+          "components": ["door handle", "door frame"],
+          "condition": "good",
+          "defects": ["light marks to bottom", "minor chipping to door edge"],
+          "notable": true
+        },
+        {
+          "name": "ceiling",
+          "condition": "good",
+          "defects": ["marks throughout", "moderate spots above dining table", "shading around extractor unit"],
+          "notable": true
+        },
+        {"name": "walls", "condition": "good", "notable": true},
+        {
+          "name": "skirting",
+          "aliases": ["skirting boards"],
+          "condition": "fair",
+          "defects": ["piece missing below window", "kitchen skirting damaged and not freshly painted"],
+          "notable": true
+        },
+        {
+          "name": "laminate flooring",
+          "aliases": ["flooring", "wood flooring", "wood effect floor"],
+          "condition": "good",
+          "defects": ["usage scratches and wear", "long black scratch in front of kitchen"],
+          "notable": true
+        },
+        {
+          "name": "recessed spotlights",
+          "aliases": ["spotlights", "ceiling lights", "downlights"],
+          "condition": "good",
+          "defects": ["two under-cabinet lights not working"],
+          "notable": true,
+          "components": ["under cabinet lights", "wall lights"]
+        },
+        {"name": "switches and sockets", "aliases": ["light switches", "sockets"], "condition": "good", "notable": false},
+        {
+          "name": "vertical blinds",
+          "aliases": ["blinds", "curtains", "window blinds"],
+          "condition": "fair",
+          "defects": ["blind elements detached at bottom"],
+          "notable": true
+        },
+        {
+          "name": "sliding balcony door",
+          "aliases": ["sliding door", "window", "patio door", "glazed door"],
+          "components": ["glass balustrade", "guard rail"],
+          "condition": "fair",
+          "defects": ["lock missing from handle"],
+          "notable": true
+        },
+        {
+          "name": "built-in cupboard",
+          "aliases": ["utility cupboard", "storage cupboard", "laundry cupboard"],
+          "components": ["data box", "cupboard light", "plastic hook"],
+          "condition": "good",
+          "defects": ["sticky tape residue to metal data box", "items behind washing machine"],
+          "notable": true
+        },
+        {"name": "metal shelving units", "aliases": ["metal shelving unit", "galvanised shelving unit", "shelving", "storage shelves", "shelves"], "condition": "good", "notable": false},
+        {
+          "name": "Hisense washer dryer",
+          "aliases": ["washing machine", "washer dryer", "laundry machine"],
+          "condition": "good",
+          "notable": true
+        },
+        {"name": "dining table", "aliases": ["table"], "condition": "good", "defects": ["wear and usage"], "notable": true},
+        {
+          "name": "four dining chairs",
+          "aliases": ["dining chairs", "chairs"],
+          "components": ["seat cushions"],
+          "condition": "good",
+          "defects": ["occasional scratches chips and wear"],
+          "notable": true
+        },
+        {
+          "name": "five-cubby storage unit",
+          "aliases": ["storage unit", "storage cube unit", "cubby unit", "TV unit"],
+          "condition": "good",
+          "defects": ["small chips to front edge"],
+          "notable": true
+        },
+        {"name": "smoke alarms", "aliases": ["smoke alarm", "smoke detectors"], "condition": "good", "notable": true},
+        {"name": "grey fabric sofa", "aliases": ["sofa", "couch", "settee"], "condition": "new", "notable": true},
+        {
+          "name": "Hotpoint dishwasher",
+          "aliases": ["dishwasher"],
+          "components": ["cutlery basket", "dishwasher trays"],
+          "condition": "good",
+          "notable": true
+        },
+        {
+          "name": "Kuppersbusch hob",
+          "aliases": ["hob", "ceramic hob", "cooktop"],
+          "condition": "good",
+          "defects": ["wear to burner rings"],
+          "notable": true
+        },
+        {
+          "name": "Teka extractor hood",
+          "aliases": ["extractor hood", "cooker hood", "extractor fan"],
+          "components": ["metal filters", "extractor lights"],
+          "condition": "good",
+          "notable": true
+        },
+        {"name": "Kuppersbusch microwave", "aliases": ["microwave", "microwave oven"], "condition": "good", "defects": ["general signs of usage"], "notable": true},
+        {
+          "name": "Hotpoint oven FU 5Y0 IX H",
+          "aliases": ["Hotpoint oven", "oven", "built-in oven"],
+          "components": ["wire rack", "drip trays"],
+          "condition": "good",
+          "defects": ["light burn wear to interior"],
+          "notable": true
+        },
+        {
+          "name": "Zanussi fridge freezer ZNLN18FS1",
+          "aliases": ["Zanussi fridge freezer", "fridge freezer", "refrigerator", "freezer"],
+          "components": ["fridge shelves", "crisper trays", "freezer drawers", "door balconies", "fridge light"],
+          "condition": "fair",
+          "defects": ["crack to bottom door balcony", "cracked middle freezer drawer face", "crack to bottom freezer drawer face", "appliance light not working", "damaged fridge door handle"],
+          "notable": true
+        },
+        {
+          "name": "kitchen units",
+          "aliases": ["kitchen cabinets", "cupboards", "base units", "wall units", "drawers"],
+          "components": ["cutlery divider", "cabinet doors", "drawer units"],
+          "condition": "fair",
+          "defects": ["moderate ring marks to unit below sink", "sticky plastic hooks", "peeling edge trim to under-sink cabinet"],
+          "notable": true
+        },
+        {"name": "quartz worktop", "aliases": ["worktop", "countertop", "kitchen counter"], "defects": ["discolouration around sink"], "notable": true},
+        {
+          "name": "single bowl sink",
+          "aliases": ["sink", "kitchen sink"],
+          "components": ["chrome mixer tap", "drainer plug", "integrated drainer"],
+          "condition": "good",
+          "notable": true
+        }
+      ]
+    },
+    "Bathroom": {
+      "items": [
+        {
+          "name": "door",
+          "aliases": ["bathroom door", "internal door"],
+          "components": ["door handle", "door frame", "thumb lock"],
+          "defects": ["chip to bottom edge on reverse", "light scratches under door frame at top"],
+          "notable": true
+        },
+        {"name": "ceiling", "condition": "good", "notable": true},
+        {"name": "air vent", "aliases": ["extractor vent", "ventilation grille"], "condition": "good", "notable": false},
+        {"name": "tiled walls", "aliases": ["walls", "wall tiles"], "condition": "good", "notable": true},
+        {"name": "tiled flooring", "aliases": ["flooring", "floor tiles", "tile floor"], "condition": "good", "notable": true},
+        {"name": "recessed spotlights", "aliases": ["spotlights", "ceiling lights", "downlights"], "condition": "good", "notable": true},
+        {"name": "shaver socket", "aliases": ["socket", "switches and sockets"], "condition": "good", "notable": false},
+        {"name": "heated towel rail", "aliases": ["towel radiator", "radiator", "heating"], "condition": "good", "notable": true},
+        {"name": "toilet", "aliases": ["WC", "toilet pan"], "components": ["toilet seat", "concealed cistern", "flush"], "condition": "good", "notable": true},
+        {
+          "name": "basin",
+          "aliases": ["wash basin", "sink", "bathroom sink"],
+          "components": ["mixer tap", "pop-up plug"],
+          "condition": "fair",
+          "defects": ["cracking around plug overflow and front edge"],
+          "notable": true
+        },
+        {
+          "name": "shower enclosure",
+          "aliases": ["shower", "shower cubicle"],
+          "components": ["shower tray", "sliding glass door", "mixer shower", "shower riser", "soap tray", "shower head"],
+          "condition": "good",
+          "notable": true
+        },
+        {"name": "frameless wall mirror", "aliases": ["mirror"], "condition": "good", "notable": true},
+        {"name": "toilet brush", "components": ["bath mat"], "condition": "good", "notable": false}
+      ]
+    },
+    "Office Room": {
+      "items": [
+        {"name": "door", "aliases": ["office door", "internal door"], "components": ["door handle", "door frame"], "condition": "good", "notable": true},
+        {"name": "ceiling", "condition": "good", "notable": true},
+        {"name": "access hatch", "aliases": ["ceiling hatch", "loft hatch"], "condition": "good", "notable": false},
+        {"name": "fire alarm", "aliases": ["smoke alarm", "smoke detector"], "condition": "good", "notable": true},
+        {"name": "walls", "condition": "good", "notable": true},
+        {"name": "mezzanine balustrade", "aliases": ["balustrade", "banister", "guard rail"], "condition": "good", "notable": true},
+        {"name": "skirting boards", "aliases": ["skirting"], "condition": "good", "notable": true},
+        {"name": "fitted carpet", "aliases": ["carpet", "flooring"], "condition": "new", "notable": true},
+        {"name": "pendant light with blue shade", "aliases": ["pendant light", "ceiling light", "light fitting"], "condition": "good", "notable": true},
+        {"name": "switches and sockets", "aliases": ["light switches", "sockets", "socket outlets", "double socket outlets"], "condition": "good", "notable": false},
+        {"name": "vertical blinds", "aliases": ["blinds", "curtains", "window blinds"], "condition": "good", "notable": true}
+      ]
+    },
+    "Bedroom": {
+      "items": [
+        {
+          "name": "front door and frame",
+          "aliases": ["front door", "entrance door", "door"],
+          "components": ["door handles", "door locks", "draught excluder", "Prosafe attachment"],
+          "condition": "good",
+          "notable": true
+        },
+        {
+          "name": "hallway door and frame",
+          "aliases": ["internal door", "upper door", "door"],
+          "condition": "fair",
+          "defects": ["chipped edge at top hinge side", "angle chipping painted over on leading edge"],
+          "notable": true
+        },
+        {"name": "ceiling", "condition": "good", "notable": true},
+        {"name": "walls", "condition": "good", "defects": ["three marked areas on bedroom walls"], "notable": true},
+        {"name": "skirting", "aliases": ["skirting boards"], "condition": "good", "defects": ["marks on skirting"], "notable": true},
+        {"name": "grey fitted carpet", "aliases": ["carpet", "flooring"], "condition": "new", "notable": true},
+        {"name": "wood staircase", "aliases": ["stairs", "wooden stairs", "staircase"], "condition": "good", "notable": true},
+        {"name": "pendant lights", "aliases": ["ceiling lights", "light fittings"], "components": ["blue shade", "white shade"], "condition": "good", "notable": true},
+        {"name": "wall-mounted spotlights", "aliases": ["wall lights", "spotlights", "wall-mounted uplight/downlight fittings"], "condition": "good", "notable": true},
+        {"name": "switches and sockets", "aliases": ["light switches", "sockets"], "condition": "good", "notable": false},
+        {
+          "name": "sliding balcony door",
+          "aliases": ["sliding door", "window", "patio door", "glazed door"],
+          "components": ["guard rail", "opening restrictor"],
+          "condition": "good",
+          "defects": ["light marks to frame and sill"],
+          "notable": true
+        },
+        {
+          "name": "blackout roller blinds",
+          "aliases": ["roller blinds", "blinds", "curtains"],
+          "condition": "fair",
+          "defects": ["shaded and marked at bottom", "blind overturned at top and not working effectively"],
+          "notable": true
+        },
+        {
+          "name": "built-in wardrobe",
+          "aliases": ["wardrobe", "fitted wardrobe"],
+          "components": ["wardrobe doors", "wardrobe carpet"],
+          "condition": "good",
+          "defects": ["three yellow stains on left door reverse"],
+          "notable": true
+        },
+        {"name": "white wooden stool", "aliases": ["stool"], "condition": "good", "defects": ["light wear"], "notable": false},
+        {"name": "double bed", "aliases": ["bed", "bed frame"], "condition": "new", "notable": true},
+        {"name": "mattress", "condition": "new", "notable": true},
+        {"name": "duvet", "aliases": ["bedding", "quilt"], "condition": "new", "notable": false},
+        {"name": "two pillows", "aliases": ["pillows", "pillow cases"], "condition": "new", "notable": false}
+      ]
+    },
+    "En-suite Bathroom": {
+      "items": [
+        {
+          "name": "door",
+          "aliases": ["bathroom door", "internal door"],
+          "components": ["door handle", "door frame"],
+          "condition": "fair",
+          "defects": ["long scuff at high level", "marks and rust around hinges"],
+          "notable": true
+        },
+        {"name": "ceiling", "condition": "good", "notable": true},
+        {"name": "air vent", "aliases": ["extractor vent", "ventilation grille"], "condition": "good", "notable": false},
+        {"name": "tiled walls", "aliases": ["walls", "wall tiles"], "condition": "good", "defects": ["cracked tile right of bath near door"], "notable": true},
+        {"name": "tiled flooring", "aliases": ["flooring", "floor tiles", "tile floor"], "condition": "good", "notable": true},
+        {"name": "recessed spotlights", "aliases": ["spotlights", "ceiling lights", "downlights"], "condition": "good", "notable": true},
+        {"name": "shaver socket", "aliases": ["socket", "switches and sockets"], "condition": "good", "notable": false},
+        {"name": "heated towel rail", "aliases": ["towel radiator", "radiator", "heating"], "condition": "fair", "defects": ["light rust spotting between bars"], "notable": true},
+        {"name": "toilet", "aliases": ["WC", "toilet pan"], "components": ["toilet seat", "concealed cistern", "flush"], "condition": "good", "notable": true},
+        {"name": "basin", "aliases": ["wash basin", "sink", "bathroom sink"], "components": ["mixer tap", "pop-up plug"], "condition": "good", "notable": true},
+        {
+          "name": "bath",
+          "aliases": ["bathtub"],
+          "components": ["bath panel", "mixer taps", "shower hose", "shower head", "shower riser", "soap tray", "pop-up plug", "glass shower screen"],
+          "condition": "good",
+          "defects": ["light discolouring to anti-slip dots"],
+          "notable": true
+        },
+        {
+          "name": "utility cupboard",
+          "aliases": ["built-in cupboard", "boiler cupboard", "storage cupboard"],
+          "components": ["cupboard light", "pipes"],
+          "condition": "fair",
+          "defects": ["marks to door frame and interior walls", "residual marks on left wall", "scuff marks and angle chipping to walls"],
+          "notable": true
+        },
+        {"name": "Redan boiler", "aliases": ["boiler", "heating unit"], "condition": "good", "notable": true},
+        {"name": "toilet brush", "condition": "fair", "notable": false},
+        {"name": "round frameless mirror", "aliases": ["mirror", "leaning mirror"], "condition": "good", "notable": false},
+        {"name": "four-tier shelving unit", "aliases": ["black plastic storage shelf unit", "shelving unit", "shelves", "storage rack"], "condition": "good", "notable": false}
+      ]
+    }
+  }
+}

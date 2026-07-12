@@ -4,8 +4,7 @@ The PDF's printed page numbers match its zero-based physical page indexes becaus
 the unnumbered cover is physical page 0. Inventory areas and printed page ranges:
 
     Entrance/Hallway          9-11
-    Reception/Kitchen        12-16
-    Kitchen and appliances   17-19
+    Reception/Kitchen        12-19
     Bathroom                 20-22
     Office room              23-24
     Bedroom                  25-29
@@ -28,8 +27,7 @@ PDF = next(HERE.glob("*.pdf"))
 
 AREA_PAGES = {
     "Entrance Hallway": range(9, 12),
-    "Reception Kitchen": range(12, 17),
-    "Kitchen and Appliances": range(17, 20),
+    "Reception Kitchen": range(12, 20),
     "Bathroom": range(20, 23),
     "Office Room": range(23, 25),
     "Bedroom": range(25, 30),

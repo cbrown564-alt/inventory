@@ -1,0 +1,25 @@
+{
+  "item_recall_all": 95.7,
+  "item_recall_notable": 96.1,
+  "hallucination_rate": 16.5,
+  "granularity_split_rate": 27.2,
+  "naming_accuracy": 94.4,
+  "condition_exact": 75.9,
+  "condition_within_one": 94.3,
+  "defect_recall": 75.0,
+  "_counts": {
+    "gold_items": 93,
+    "gold_notable": 76,
+    "found": 89,
+    "found_notable": 73,
+    "pred_items": 158,
+    "hallucinated": 26,
+    "granularity_splits": 43,
+    "name_exactish": 84,
+    "cond_pairs": 87,
+    "cond_exact": 66,
+    "cond_within1": 82,
+    "gold_defects": 52,
+    "defects_found": 39
+  }
+}
