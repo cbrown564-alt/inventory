@@ -12,6 +12,8 @@ import json
 import logging
 import os
 import re
+import struct
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -52,6 +54,20 @@ def _decodable(path: Path) -> bool:
     return True
 
 
+# QuickTime / ISO-BMFF mvhd.creation_time is seconds since 1904-01-01 UTC.
+_MAC_EPOCH_OFFSET = 2082844800
+
+
+def _iso_from_exif(value: str) -> str:
+    """EXIF 'YYYY:MM:DD HH:MM:SS' -> ISO-like 'YYYY-MM-DD HH:MM:SS'."""
+    return str(value).replace(":", "-", 2)
+
+
+def _exif_from_iso(value: str) -> str:
+    """ISO-like timestamp -> EXIF 'YYYY:MM:DD HH:MM:SS'."""
+    return str(value).replace("T", " ")[:19].replace("-", ":", 2)
+
+
 def exif_capture_time(path: Path) -> Optional[str]:
     try:
         from PIL import Image, ExifTags
@@ -64,11 +80,102 @@ def exif_capture_time(path: Path) -> Optional[str]:
                 tid = tag_ids.get(tag)
                 val = exif.get(tid) if tid else None
                 if val:
-                    # EXIF format: "YYYY:MM:DD HH:MM:SS"
-                    return str(val).replace(":", "-", 2)
+                    return _iso_from_exif(val)
     except Exception:
         pass
     return None
+
+
+def stamp_exif_capture_time(path: Path, captured_at: str) -> None:
+    """Write DateTimeOriginal (+ related tags) into a JPEG's EXIF.
+
+    Deposit-scheme adjudicators (DPS) verify capture dates from file metadata,
+    not printed report captions — extracted video keyframes must carry this."""
+    try:
+        from PIL import Image
+        from PIL.ExifTags import Base
+
+        exif_str = _exif_from_iso(captured_at)
+        with Image.open(path) as im:
+            rgb = im.convert("RGB")
+            exif = rgb.getexif()
+            for tag in (Base.DateTime, Base.DateTimeOriginal,
+                        Base.DateTimeDigitized):
+                exif[tag] = exif_str
+            rgb.save(path, quality=92, exif=exif)
+    except Exception as e:
+        log.warning("could not stamp EXIF capture time on %s (%s)", path, e)
+
+
+def _iter_mp4_boxes(data: bytes, start: int, end: int):
+    pos = start
+    while pos + 8 <= end:
+        if pos + 8 > len(data):
+            break
+        size = struct.unpack(">I", data[pos:pos + 4])[0]
+        typ = data[pos + 4:pos + 8]
+        hdr = 8
+        if size == 1:
+            if pos + 16 > end:
+                break
+            size = struct.unpack(">Q", data[pos + 8:pos + 16])[0]
+            hdr = 16
+        elif size == 0:
+            size = end - pos
+        box_end = min(pos + size, end)
+        if box_end <= pos + hdr:
+            break
+        yield typ, pos + hdr, box_end
+        pos = box_end
+
+
+def _mvhd_creation_epoch(data: bytes, start: int, end: int) -> Optional[float]:
+    for typ, cstart, cend in _iter_mp4_boxes(data, start, end):
+        if typ == b"moov":
+            found = _mvhd_creation_epoch(data, cstart, cend)
+            if found is not None:
+                return found
+        elif typ == b"mvhd" and cend - cstart >= 5:
+            version = data[cstart]
+            if version == 0 and cend - cstart >= 8:
+                created = struct.unpack(">I", data[cstart + 4:cstart + 8])[0]
+            elif version == 1 and cend - cstart >= 16:
+                created = struct.unpack(">Q", data[cstart + 4:cstart + 12])[0]
+            else:
+                continue
+            if created:
+                return float(created - _MAC_EPOCH_OFFSET)
+    return None
+
+
+def video_recorded_epoch(video: Path) -> float:
+    """Unix epoch when the walkthrough video was recorded.
+
+    Provenance rule (deposit-scheme frame metadata):
+    1. MP4/MOV container ``mvhd.creation_time`` when present (typical phone
+       footage).
+    2. Else the video file's modification time — a practical proxy when the
+       container carries no creation stamp (e.g. OpenCV test clips).
+
+    Each extracted keyframe's wall-clock capture time is
+    ``video_recorded_epoch + (frame_index / fps)``.  Reports still show the
+    separate footage timecode ``frame_index / fps`` via videometa.photo_time."""
+    ext = video.suffix.lower()
+    if ext in {".mp4", ".mov", ".m4v"}:
+        try:
+            created = _mvhd_creation_epoch(video.read_bytes(), 0, 2 << 20)
+            if created is not None:
+                return created
+        except OSError:
+            pass
+    return video.stat().st_mtime
+
+
+def frame_captured_at(video: Path, frame_index: int, fps: float) -> str:
+    """ISO-like capture timestamp for one extracted keyframe."""
+    t_s = frame_index / fps if fps else 0.0
+    dt = datetime.fromtimestamp(video_recorded_epoch(video) + t_s)
+    return dt.strftime("%Y-%m-%d %H:%M:%S")
 
 
 def segment_frame_budget(duration_s: float, base_max: int = 24,
@@ -126,6 +233,7 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
     last_kept_small = None
     best: Optional[tuple[float, int, "np.ndarray"]] = None  # current window's best
     window = 0
+    recorded_epoch = video_recorded_epoch(video)
 
     def flush():
         nonlocal last_kept_small
@@ -138,6 +246,10 @@ def extract_keyframes(video: Path, out_dir: Path, max_frames: int = 24,
             return  # camera didn't move since the last kept frame
         out = out_dir / f"{video.stem}_f{fidx:06d}.jpg"
         cv2.imwrite(str(out), frame, [cv2.IMWRITE_JPEG_QUALITY, 92])
+        t_s = fidx / fps if fps else 0.0
+        captured = datetime.fromtimestamp(recorded_epoch + t_s).strftime(
+            "%Y-%m-%d %H:%M:%S")
+        stamp_exif_capture_time(out, captured)
         kept.append(out)
         last_kept_small = small
 
@@ -294,6 +406,7 @@ def _ingest_root_video(video: Path, work_dir: Path, capture_dir: Path, add,
 def ingest(capture_dir: Path, work_dir: Path,
            lead_trim_s: float = 0.0,
            *,
+           photo_mode: bool = False,
            segment_model: str = "gemini-3.5-flash",
            segment_every: float = 5.0,
            segments_json: Optional[Path] = None,
@@ -304,7 +417,11 @@ def ingest(capture_dir: Path, work_dir: Path,
     """Return {room_name: [Photo, ...]}. Video keyframes land in work_dir/frames.
 
     ``lead_trim_s`` is forwarded to keyframe extraction — use it when per-room
-    videos were cut from one continuous walkthrough (see extract_keyframes)."""
+    videos were cut from one continuous walkthrough (see extract_keyframes).
+
+    ``photo_mode`` (docs/26 experiment scaffolding): ingest native photos only.
+    Room names come from first-level subfolders; videos and VLM segmentation
+    are skipped entirely."""
     capture_dir = capture_dir.resolve()
     rooms: dict[str, list[Photo]] = {}
     counter = 0
@@ -339,25 +456,31 @@ def ingest(capture_dir: Path, work_dir: Path,
                 if ext in IMAGE_EXTS:
                     if _decodable(f):
                         add(room, f)
-                elif ext in VIDEO_EXTS:
+                elif ext in VIDEO_EXTS and not photo_mode:
                     frames = extract_keyframes(f, work_dir / "frames" / room,
                                                lead_trim_s=lead_trim_s)
                     for fr in frames:
                         add(room, fr, source_video=f.name)
+                elif ext in VIDEO_EXTS:
+                    log.warning("photo-mode: skipping video %s in room %s",
+                                f.name, room)
         elif entry.is_file() and entry.suffix.lower() in IMAGE_EXTS:
             if _decodable(entry):
                 add("General", entry)
         elif entry.is_file() and entry.suffix.lower() in VIDEO_EXTS:
-            if on_segmenting:
-                on_segmenting()
-            _ingest_root_video(entry, work_dir, capture_dir, add,
-                               segment_model=segment_model,
-                               segment_every=segment_every,
-                               segments_json=segments_json,
-                               no_segment=no_segment,
-                               lead_trim_s=lead_trim_s,
-                               on_segmented=on_segmented,
-                               on_extracting=on_extracting)
+            if photo_mode:
+                log.warning("photo-mode: skipping root video %s", entry.name)
+            else:
+                if on_segmenting:
+                    on_segmenting()
+                _ingest_root_video(entry, work_dir, capture_dir, add,
+                                   segment_model=segment_model,
+                                   segment_every=segment_every,
+                                   segments_json=segments_json,
+                                   no_segment=no_segment,
+                                   lead_trim_s=lead_trim_s,
+                                   on_segmented=on_segmented,
+                                   on_extracting=on_extracting)
 
     aliases = load_room_aliases(work_dir)
     if aliases:

@@ -207,11 +207,11 @@ pool that may contain the wrong room entirely.
       ([`market-research-2026-07.md`](market-research-2026-07.md)):
       capture timestamps in the *file metadata* of every embedded image
       (DPS checks metadata, not printed dates — extracted video frames
-      need this written in, with provenance to the source video's
-      timestamp), written report with embedded photos, video referenced
+      get ``DateTimeOriginal`` at ingest (provenance rule in
+      [`29-evidential-spec-audit.md`](29-evidential-spec-audit.md)), written report with embedded photos, video referenced
       by exact timecodes, both-party signatures, tamper-evident trail.
-      Most items are shipped; audit against the spec and close the
-      frame-metadata gap.
+      Frame-metadata gap closed; countersign-as-default and full
+      point-by-point sign-off remain.
 
 ### Pillar 3 — The report is accurate and complete
 

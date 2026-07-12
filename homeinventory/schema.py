@@ -58,7 +58,7 @@ class Photo:
     path: str                  # path relative to the capture root
     room: str
     sha256: str = ""
-    captured_at: Optional[str] = None   # ISO 8601, from EXIF when available
+    captured_at: Optional[str] = None   # ISO-like, from EXIF (native or stamped keyframes)
     source_video: Optional[str] = None  # set when extracted from a video
     # True for the sharp frame sampled immediately after a detected room
     # boundary. This preserves useful acquisition provenance for curation.

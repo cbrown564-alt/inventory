@@ -13,6 +13,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
+from .ingest import exif_capture_time, stamp_exif_capture_time
 from .schema import CATEGORIES, Inventory, Item, Room, cover_value
 from .usecases import get_use_case, use_case_for
 from .usecases.base import UseCase
@@ -435,15 +436,20 @@ def _export_photos(inv: Inventory, capture_dir: Path, out_dir: Path,
                     dhash_map[p.id] = entry["dhash"]
                 continue
             try:
+                captured = p.captured_at or exif_capture_time(src)
                 with Image.open(src) as im:
                     im = im.convert("RGB")
                     if max(im.size) > max_dim:
                         im.thumbnail((max_dim, max_dim))
                     im.save(dest, quality=88)
+                    if captured:
+                        stamp_exif_capture_time(dest, captured)
                     dhash_map[p.id] = _dhash(im)
                     if max(im.size) > PRINT_MAX_DIM:
                         im.thumbnail((PRINT_MAX_DIM, PRINT_MAX_DIM))
                     im.save(pdest, quality=PRINT_QUALITY)
+                    if captured:
+                        stamp_exif_capture_time(pdest, captured)
                 cache[p.id] = {"src_mtime": src_mtime,
                                "dhash": dhash_map[p.id]}
             except Exception as e:
