@@ -80,9 +80,8 @@ existing share-page language.
 
 ## Deliberate boundaries
 
-The old `start.html.j2` path remains dead code and should be removed in a
-separate cleanup change. The specialist evidence desk remains available for
-crop approval, annotations, timeline inspection, and room correction; it does
-not compete with the default exception-first workspace. Comparison still uses
-its existing desktop index plus evidence appendix; the mobile path is the first
-fully integrated ledger and can be used to judge a later desktop consolidation.
+The `start.html.j2` template remains in use for `/start` and the project
+picker path in `review.py` — it is not dead code. Earlier notes calling it
+obsolete referred to a retired capture-UX branch, not the current start/picker
+render. Generated Playwright dumps, `.tmp/`, and regenerable
+`inventory.html` benchmark renders are now gitignored and untracked.
