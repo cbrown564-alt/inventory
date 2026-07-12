@@ -28,31 +28,55 @@ from .schema import Inventory
 log = logging.getLogger("homeinventory")
 
 DETECT_MODE_CHOICES = ("text", "prompt_free")
+DETECT_BACKEND_CHOICES = ("auto", "yoloe", "gdino")
 
 
 def _detector_from_args(args) -> "Detector | None":
-    from .detect import Detector, default_model
+    from .detect import make_build_detector
 
     if getattr(args, "no_detect", False):
         return None
-    mode = getattr(args, "detect_mode", "text")
-    model = getattr(args, "detect_model", None) or default_model(mode)
-    return Detector(
-        model_name=model,
-        mode=mode,
-        conf=args.det_conf,
+    return make_build_detector(
+        backend=getattr(args, "detect_backend", "auto"),
+        detect_mode=getattr(args, "detect_mode", "text"),
+        detect_model=getattr(args, "detect_model", None),
+        gdino_model=getattr(args, "gdino_model", None),
         device=getattr(args, "device", None),
+        conf=getattr(args, "det_conf", 0.25),
+        verify=not getattr(args, "no_detect_verify", False),
     )
 
 
 def _add_detect_args(p):
+    p.add_argument("--detect-backend", choices=DETECT_BACKEND_CHOICES,
+                   default="auto",
+                   help="ML-E10 detector: auto tries Grounding DINO (Apache-2.0) "
+                        "then YOLOE; yoloe or gdino to force one backend")
     p.add_argument("--detect-mode", choices=DETECT_MODE_CHOICES, default="text",
-                   help="YOLOE mode: text (household vocabulary) or prompt_free "
-                        "(built-in LVIS/Objects365 vocab)")
+                   help="YOLOE mode when backend=yoloe or auto fallback: text "
+                        "(household vocabulary) or prompt_free")
     p.add_argument("--detect-model", default=None,
                    help="override YOLOE weights (default follows --detect-mode)")
+    p.add_argument("--gdino-model", default=None,
+                   help="Hugging Face Grounding DINO model id (ML-E10 default: "
+                        "IDEA-Research/grounding-dino-tiny)")
+    p.add_argument("--no-detect-verify", action="store_true",
+                   help="disable ML-E10 cheap vocabulary verify on GDINO labels")
     p.add_argument("--device", default=None,
-                   help="torch device for YOLOE (cpu, cuda, 0, …)")
+                   help="torch device for detection (cpu, cuda, 0, …)")
+
+
+def _add_ml_quality_args(p):
+    p.add_argument("--no-seam-refine", action="store_true",
+                   help="disable ML-E2 VLM seam refine (docs/22 §5.1)")
+    p.add_argument("--seam-refine-model", default=None,
+                   help="VLM model for ML-E2 seam refine (default: --segment-model)")
+    p.add_argument("--seam-refine-window", type=float, default=30.0,
+                   help="±seconds around each seam for ML-E2 refine (default 30)")
+    p.add_argument("--no-vlm-cover", action="store_true",
+                   help="disable ML-E8 VLM cover rerank; keep classical E5+E7")
+    p.add_argument("--cover-rerank-model", default=None,
+                   help="VLM model for ML-E8 cover rerank (default: --segment-model)")
 
 
 def cmd_guide(args) -> int:
@@ -407,8 +431,9 @@ def main(argv: list[str] | None = None) -> int:
     b.add_argument("--progress-file", default=None,
                    help="write staged build progress JSON for the web UI")
     b.add_argument("--no-detect", action="store_true",
-                   help="skip YOLOE detection (no crops / hints)")
+                   help="skip object detection (no crops / hints)")
     _add_detect_args(b)
+    _add_ml_quality_args(b)
     b.add_argument("--det-conf", type=float, default=0.25)
     b.add_argument("--no-pdf", action="store_true")
     b.set_defaults(func=cmd_build)

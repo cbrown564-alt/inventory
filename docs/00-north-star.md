@@ -223,8 +223,12 @@ wrong is still worthless.
 
 - [ ] Native-res benchmark shows notable recall ≥90%, hallucination
       ≤5%, defect recall ≥75% (docs/10; currently resolution-bound at
-      64–71% defect recall).
-- [ ] E8 + E2 + E10 wired into the production build path.
+      64–71% defect recall). Gate harness: `evals/verify_v1_accuracy.py`.
+- [x] E8 + E2 + E10 wired into the production build path — ML-E8 VLM cover
+      rerank (default ON when API keys exist; `--no-vlm-cover` keeps E5+E7),
+      ML-E2 seam refine on fresh segmentations (`--no-seam-refine` to skip),
+      ML-E10 Grounding DINO stage-1 with cheap vocab verify
+      (`--detect-backend auto|gdino|yoloe`). Graceful fallbacks mandatory.
 
 ### Pillar 4 — The journey is low-friction end-to-end
 
@@ -255,9 +259,9 @@ back to the £165 option.
 | Pillar | Status |
 |---|---|
 | **1 — Trust at first glance** | **Mostly met.** Design system + review craft landed; first-screen owner sign-off remains. |
-| **2 — Trustworthy by construction** | **In progress.** Capture scaffolding (`--photo-mode`) ready; experiment unrun. Hero/pipeline semantic cover still open. Evidential-spec frame-metadata closed (docs/29). |
-| **3 — Accurate & complete** | **Partially met.** Defect recall below bar; quality wins (E8/E2/E10) proven but unwired. |
-| **4 — Low-friction journey** | **Met.** Browser-print PDF fallback ships; Finish mints tenant countersign link by default. |
+| **2 — Trustworthy by construction** | **Mostly met.** Capture scaffolding ready (experiment unrun). Hero no-confident-cover + EXIF frame metadata shipped. |
+| **3 — Accurate & complete** | **Partially met.** E2/E8/E10 wired with fallbacks; defect recall still resolution-bound pending native-res fixture. |
+| **4 — Low-friction journey** | **Met.** Finish mints tenant countersign link by default; `--share` is optional pre-enable. |
 
 **v1 ships when every box is checked.** The old DoD was 4/6 done because
 it measured the journey mechanically; the real bar — Pillars 1 and 2 —

@@ -331,22 +331,41 @@ def find_root_videos(capture_dir: Path) -> list[Path]:
 
 def _load_segments(video: Path, work_dir: Path, *,
                    segment_model: str, every_s: float,
-                   segments_json: Optional[Path]) -> list:
+                   segments_json: Optional[Path],
+                   no_seam_refine: bool = False,
+                   seam_refine_model: Optional[str] = None,
+                   seam_refine_window: float = 30.0) -> list:
     """Return segment list, caching to work_dir/segments/."""
     from dataclasses import asdict
     from .segment import Segment, segment_video
 
     cache = segments_json or work_dir / "segments" / f"{video.stem}.json"
+    precomputed = segments_json is not None and cache.is_file()
+    fresh = not cache.is_file()
     if cache.is_file():
         data = json.loads(cache.read_text(encoding="utf-8"))
         segments = [Segment(**s) for s in data["segments"]]
         log.info("loaded %d segments from %s", len(segments), cache)
-        return segments
-    segments, meta = segment_video(video, every_s=every_s, model=segment_model)
-    cache.parent.mkdir(parents=True, exist_ok=True)
-    cache.write_text(json.dumps(
-        {**meta, "segments": [asdict(s) for s in segments]},
-        indent=2, ensure_ascii=False), encoding="utf-8")
+    else:
+        segments, meta = segment_video(video, every_s=every_s, model=segment_model)
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        cache.write_text(json.dumps(
+            {**meta, "segments": [asdict(s) for s in segments]},
+            indent=2, ensure_ascii=False), encoding="utf-8")
+
+    # ML-E2: refine interior seams on freshly segmented walkthroughs when a
+    # VLM is available. Skip for precomputed schedules and --no-seam-refine.
+    if (fresh and not no_seam_refine and not precomputed and len(segments) > 1):
+        from .ml_seam import try_refine_segments
+
+        model = seam_refine_model or segment_model
+        segments, refine_meta = try_refine_segments(
+            video, segments, model=model, window_s=seam_refine_window)
+        if refine_meta.get("enabled"):
+            cache.write_text(json.dumps(
+                {**refine_meta, "segments": [asdict(s) for s in segments],
+                 "seam_refine": True},
+                indent=2, ensure_ascii=False), encoding="utf-8")
     return segments
 
 
@@ -354,6 +373,9 @@ def _ingest_root_video(video: Path, work_dir: Path, capture_dir: Path, add,
                        *, segment_model: str, segment_every: float,
                        segments_json: Optional[Path], no_segment: bool,
                        lead_trim_s: float,
+                       no_seam_refine: bool = False,
+                       seam_refine_model: Optional[str] = None,
+                       seam_refine_window: float = 30.0,
                        on_segmented=None, on_extracting=None) -> None:
     if no_segment:
         for fr in extract_keyframes(video, work_dir / "frames" / "General",
@@ -364,7 +386,10 @@ def _ingest_root_video(video: Path, work_dir: Path, capture_dir: Path, add,
         return
     segments = _load_segments(video, work_dir, segment_model=segment_model,
                               every_s=segment_every,
-                              segments_json=segments_json)
+                              segments_json=segments_json,
+                              no_seam_refine=no_seam_refine,
+                              seam_refine_model=seam_refine_model,
+                              seam_refine_window=seam_refine_window)
     room_names = sorted({s.room for s in segments})
     if on_segmented:
         on_segmented(len(room_names), room_names)
@@ -411,6 +436,9 @@ def ingest(capture_dir: Path, work_dir: Path,
            segment_every: float = 5.0,
            segments_json: Optional[Path] = None,
            no_segment: bool = False,
+           no_seam_refine: bool = False,
+           seam_refine_model: Optional[str] = None,
+           seam_refine_window: float = 30.0,
            on_segmenting=None,
            on_segmented=None,
            on_extracting=None) -> dict[str, list[Photo]]:
@@ -479,6 +507,9 @@ def ingest(capture_dir: Path, work_dir: Path,
                                    segments_json=segments_json,
                                    no_segment=no_segment,
                                    lead_trim_s=lead_trim_s,
+                                   no_seam_refine=no_seam_refine,
+                                   seam_refine_model=seam_refine_model,
+                                   seam_refine_window=seam_refine_window,
                                    on_segmented=on_segmented,
                                    on_extracting=on_extracting)
 

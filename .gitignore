@@ -52,3 +52,18 @@ evals/fixtures/own-property/shotscale-smoke-report/
 
 # local report backups (not source of truth)
 report-backup-*/
+
+# generated / ephemeral agent and browser artifacts
+.tmp/
+.playwright-cli/
+output/
+output/playwright/
+
+# regenerable rendered benchmark HTML (keep eval.json / labels / inventory.json)
+benchmarks/*/report-*/inventory.html
+benchmarks/*/report-*/inventory-issue.html
+benchmarks/local-tuning/*/inventory.html
+benchmarks/local-tuning/*/inventory-issue.html
+
+# agent worktree summaries (do not commit)
+AGENT_SUMMARY.md

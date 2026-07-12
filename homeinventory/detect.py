@@ -35,6 +35,7 @@ from typing import Iterable, Literal, Optional
 log = logging.getLogger(__name__)
 
 DetectMode = Literal["text", "prompt_free"]
+DetectBackend = Literal["auto", "yoloe", "gdino"]
 
 # Text-prompt vocabulary for household items of worth. YOLOE's text-prompted
 # mode detects exactly these classes; tune freely — it needs no retraining.
@@ -186,6 +187,56 @@ DEFAULT_MODEL = DEFAULT_MODEL_TEXT
 def default_model(mode: DetectMode = "text") -> str:
     """Return the default weight file for a detection mode."""
     return DEFAULT_MODEL_PROMPT_FREE if mode == "prompt_free" else DEFAULT_MODEL_TEXT
+
+
+def make_build_detector(
+        *,
+        backend: DetectBackend = "auto",
+        detect_mode: DetectMode = "text",
+        detect_model: str | None = None,
+        gdino_model: str | None = None,
+        device: str | None = None,
+        conf: float = 0.25,
+        verify: bool = True,
+):
+    """ML-E10 production detector: GDINO stage-1 + verify, YOLOE fallback."""
+    if backend == "yoloe":
+        return Detector(
+            model_name=detect_model or default_model(detect_mode),
+            mode=detect_mode,
+            conf=conf,
+            device=device,
+        )
+    if backend in ("gdino", "auto"):
+        from .gdino import DEFAULT_MODEL, GroundingDinoDetector
+
+        gdino = GroundingDinoDetector(
+            conf=conf,
+            device=device,
+            model_id=gdino_model or DEFAULT_MODEL,
+            verify=verify,
+        )
+        gdino._load()
+        if gdino.available or backend == "gdino":
+            if backend == "auto" and gdino.available:
+                log.info("ML-E10 using Grounding DINO (%s)", gdino.model_id)
+            elif backend == "gdino" and not gdino.available:
+                log.warning(
+                    "ML-E10 GDINO unavailable (%s) — no detections",
+                    gdino._load_error,
+                )
+            return gdino
+        if backend == "auto":
+            log.info(
+                "ML-E10 GDINO unavailable (%s) — falling back to YOLOE",
+                gdino._load_error,
+            )
+    return Detector(
+        model_name=detect_model or default_model(detect_mode),
+        mode=detect_mode,
+        conf=conf,
+        device=device,
+    )
 
 
 @dataclass

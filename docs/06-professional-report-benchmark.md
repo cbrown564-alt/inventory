@@ -180,13 +180,51 @@ Findings:
 4. **Mini v4 ≈ opus v1 on defects at 8× less.** The iterate-on-mini /
    validate-on-opus split is confirmed working practice.
 
+## v1 accuracy gate (Phase 3)
+
+**Targets** (docs/00, docs/10): notable recall ≥90%, hallucination ≤5%,
+defect recall ≥75%. Measured on the **native-resolution InventoryFlex**
+fixture when present; until then the gate reports honest downscaled numbers
+and stays unchecked in docs/00.
+
+```bash
+python evals/verify_v1_accuracy.py          # fixture inventory + scored runs + gaps
+python evals/verify_v1_accuracy.py --json  # machine-readable summary
+python evals/score_benchmarks.py            # all InventoryFlex report-* runs
+```
+
+**Fixtures (12 Jul 2026):**
+
+| Fixture | Path | Resolution | Status |
+|---|---|---|---|
+| InventoryFlex downscaled | `benchmarks/inventoryflex/capture/` | 800×600 (192 photos) | present |
+| InventoryFlex native-res | `benchmarks/inventoryflex-nativeres/capture/` | phone native | **absent** |
+| Weststand (eoin) downscaled | `benchmarks/eoin/capture/` | 450×600 (257 photos) | present |
+
+**Best downscaled scores vs v1 targets (re-scored 12 Jul 2026):**
+
+| Run | Notable | Halluc. | Defect | v1 pass |
+|---|---:|---:|---:|---|
+| inventoryflex/claude-v4 | 88.0 | **2.8** | 71.3 | fail (−2.0 / −3.7 pp) |
+| inventoryflex/gpt54mini-v4 | **90.7** | 14.7 | 64.8 | fail (+9.7 / −10.2 pp) |
+| weststand/eoin-claude-v4 | **96.1** | 16.5 | **75.0** | fail (+11.5 pp halluc.) |
+
+No committed run clears all three targets on downscaled fixtures. Defect recall
+remains resolution-bound at 64–71% on InventoryFlex (docs/22 §5.3). Native-res
+capture is the unlock; see `docs/23` §6 for the workstream and
+`evals/verify_v1_accuracy.py` for the runnable gate.
+
 ## Artefacts
 
 - `benchmarks/samples/` — downloaded sample PDFs (4)
 - `benchmarks/extract_inventoryflex.py` — photo/ground-truth extraction
-- `benchmarks/inventoryflex/capture/` — 192 photos in 6 rooms
+- `benchmarks/inventoryflex/capture/` — 192 photos in 6 rooms (800×600)
 - `benchmarks/inventoryflex/labels.json` — 112-item gold fixture (eval-schema)
 - `benchmarks/inventoryflex/report-claude/`, `report-gpt54mini/` — v1-prompt outputs;
   `report-gpt54mini-v2/…-v4/`, `report-claude-v4/` — prompt-iteration outputs
+- `benchmarks/eoin/` — Weststand professional report (450×600); gold at
+  `evals/fixtures/weststand/labels.json`
+- `evals/verify_v1_accuracy.py` — Phase 3 accuracy gate (pass/fail vs docs/00)
+- `evals/score_benchmarks.py` — score all InventoryFlex `report-*/` runs
 - `benchmarks/audit_matches.py` — per-room missed/unmatched audit
 - `benchmarks/audit_defects.py` — per-item missed-defect audit

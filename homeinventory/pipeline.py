@@ -21,6 +21,7 @@ from .schema import Inventory, Item, Room
 log = logging.getLogger("homeinventory")
 
 DETECT_MODE_CHOICES = ("text", "prompt_free")
+DETECT_BACKEND_CHOICES = ("auto", "yoloe", "gdino")
 
 
 @dataclass
@@ -56,6 +57,14 @@ class BuildOptions:
     detect_model: Optional[str] = None
     device: Optional[str] = None
     det_conf: float = 0.25
+    detect_backend: str = "auto"
+    gdino_model: Optional[str] = None
+    no_detect_verify: bool = False
+    no_seam_refine: bool = False
+    seam_refine_model: Optional[str] = None
+    seam_refine_window: float = 30.0
+    no_vlm_cover: bool = False
+    cover_rerank_model: Optional[str] = None
     no_pdf: bool = False
 
     @classmethod
@@ -97,6 +106,14 @@ class BuildOptions:
             detect_model=getattr(args, "detect_model", None),
             device=getattr(args, "device", None),
             det_conf=getattr(args, "det_conf", 0.25),
+            detect_backend=getattr(args, "detect_backend", "auto"),
+            gdino_model=getattr(args, "gdino_model", None),
+            no_detect_verify=getattr(args, "no_detect_verify", False),
+            no_seam_refine=getattr(args, "no_seam_refine", False),
+            seam_refine_model=getattr(args, "seam_refine_model", None),
+            seam_refine_window=getattr(args, "seam_refine_window", 30.0),
+            no_vlm_cover=getattr(args, "no_vlm_cover", False),
+            cover_rerank_model=getattr(args, "cover_rerank_model", None),
             no_pdf=args.no_pdf,
         )
 
@@ -133,16 +150,18 @@ def _load_prior(opts: BuildOptions) -> tuple[Inventory | None, bool]:
 
 
 def _make_detector(opts: BuildOptions):
-    from .detect import Detector, default_model
+    from .detect import make_build_detector
 
     if opts.no_detect:
         return None
-    model = opts.detect_model or default_model(opts.detect_mode)
-    return Detector(
-        model_name=model,
-        mode=opts.detect_mode,
-        conf=opts.det_conf,
+    return make_build_detector(
+        backend=opts.detect_backend,
+        detect_mode=opts.detect_mode,
+        detect_model=opts.detect_model,
+        gdino_model=opts.gdino_model,
         device=opts.device,
+        conf=opts.det_conf,
+        verify=not opts.no_detect_verify,
     )
 
 
@@ -193,6 +212,9 @@ def run_build(opts: BuildOptions, *,
             segment_every=opts.segment_every,
             segments_json=opts.segments_json,
             no_segment=opts.no_segment,
+            no_seam_refine=opts.no_seam_refine,
+            seam_refine_model=opts.seam_refine_model or opts.segment_model,
+            seam_refine_window=opts.seam_refine_window,
             on_segmenting=_on_segmenting,
             on_segmented=_on_segmented,
             on_extracting=_on_extracting,
@@ -212,8 +234,19 @@ def run_build(opts: BuildOptions, *,
 
     build_manifest(capture_dir, rooms_photos, out_dir / "manifest.json")
 
-    from .curate import curate
+    from .curate import curate, load_overrides
+    from .ml_cover import apply_vlm_cover_rerank, should_enable_vlm_cover
+
     curate(rooms_photos, capture_dir, work_dir)
+    cover_model = opts.cover_rerank_model or opts.segment_model
+    if should_enable_vlm_cover(no_vlm_cover=opts.no_vlm_cover, model=cover_model):
+        apply_vlm_cover_rerank(
+            rooms_photos,
+            capture_dir,
+            work_dir,
+            load_overrides(work_dir),
+            model=cover_model,
+        )
 
     only = {r.strip().lower() for r in opts.room.split(",")} if opts.room else None
     selected = {name: photos for name, photos in rooms_photos.items()

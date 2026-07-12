@@ -317,12 +317,16 @@ signal:
 
 ```text
 Now        Re-triage docs/21; GPU session; external-data decision  (§5.0)
-Sprint 1   Ship E8 cover rerank + E2 seam refine; GDINO stage-1     (§5.1)
+Sprint 1   Ship E8 cover rerank + E2 seam refine; GDINO stage-1     (§5.1)  ← LANDED
 Sprint 2   Describe: pool reduction (real) + tiered routing         (§5.2)
 Parallel   Native-res fixture; grow hero-gold + bbox + seg labels   (§5.3)
 Quarter    Distil describe VLM; distil detector; in-domain cover    (§5.4)
 Opportun.  Motion-metadata / audio capture signals                 (§5.5)
 ```
+
+**Production wiring (12 Jul 2026):** ML-E2 / ML-E8 / ML-E10 are on the build
+path in `pipeline.py` / `ingest.py` / `detect.make_build_detector`, with
+CLI opt-outs and graceful fallback when credentials or GDINO deps are absent.
 
 ## 8. Success metrics (revised from docs/19 §8)
 
