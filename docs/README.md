@@ -3,6 +3,18 @@
 *Start here. For v1 scope and the singular path forward, read
 [`00-north-star.md`](00-north-star.md) first.*
 
+## Canonical owners
+
+| Concern | Owner |
+| --- | --- |
+| v1 scope, exclusions, next milestones | [`00-north-star.md`](00-north-star.md) |
+| Current product journey | [`12-video-first-journey.md`](12-video-first-journey.md) |
+| Experience quality | [`10-product-quality-review.md`](10-product-quality-review.md) |
+| Backend benchmark evidence | [`04-backend-comparison.md`](04-backend-comparison.md) |
+| ML experiment status | [`21-ml-dl-experiment-log.md`](21-ml-dl-experiment-log.md) |
+
+Update the owner instead of creating a second live plan. Implementation and tests own current behavior; dated records explain history.
+
 ## Authority tiers
 
 | Tier | Docs | When to read |
