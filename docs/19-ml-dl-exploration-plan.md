@@ -639,6 +639,7 @@ ML pre-filters are enabled — gate on InventoryFlex before ship.
 | `evals/eval_iqa.py` | MUSIQ oracle (eval only) |
 | `evals/eval_detect.py` | Detection comparison |
 | `docs/21-ml-dl-experiment-log.md` | ML-E1–E20 status and artifacts |
+| `docs/31-synthetic-evaluation-dataset-plan.md` | Synthetic images for prompt and off-the-shelf VLM evaluation; no weight tuning |
 
 ---
 
