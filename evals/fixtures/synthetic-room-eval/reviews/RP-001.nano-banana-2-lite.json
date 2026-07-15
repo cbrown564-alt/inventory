@@ -125,11 +125,155 @@
     ]
   },
   "pass_b": {
-    "reviewer": "",
-    "completed_at": null,
-    "claims": [],
+    "reviewer": "Codex observed-evidence review",
+    "completed_at": "2026-07-15T15:30:00+00:00",
+    "claims": [
+      {
+        "canonical_name": "kitchen units",
+        "aliases": ["kitchen cabinets", "cupboards"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"],
+        "visibility": "clear",
+        "condition": "Pale wood-effect fronts; no material damage is visible in the accepted views.",
+        "defects": [],
+        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "dark worktop",
+        "aliases": ["black worktop", "countertop"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "sink",
+        "aliases": ["stainless-steel sink", "drainer sink"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "oven",
+        "aliases": ["built-in oven"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "induction hob",
+        "aliases": ["black glass hob", "cooktop"],
+        "evidence_frame_ids": ["A-wide", "C-inventory"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "extractor hood",
+        "aliases": ["cooker hood", "range hood"],
+        "evidence_frame_ids": ["A-wide", "C-inventory"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "window blind",
+        "aliases": ["venetian blind"],
+        "evidence_frame_ids": ["B-reverse"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "radiator",
+        "aliases": ["panel radiator"],
+        "evidence_frame_ids": ["B-reverse"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "door furniture",
+        "aliases": ["door handle", "lever handle"],
+        "evidence_frame_ids": ["B-reverse"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "skirting boards",
+        "aliases": ["baseboards"],
+        "evidence_frame_ids": ["B-reverse"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "smoke alarm",
+        "aliases": ["ceiling smoke detector"],
+        "evidence_frame_ids": ["C-inventory"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "splashback",
+        "aliases": ["tiled splashback", "wall tiles"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"],
+        "visibility": "clear",
+        "condition": "White square tiles with intact-looking joints in the accepted views.",
+        "defects": [],
+        "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "electrical sockets",
+        "aliases": ["power sockets", "wall outlets"],
+        "evidence_frame_ids": ["A-wide", "C-inventory"],
+        "visibility": "clear",
+        "condition": null,
+        "defects": [],
+        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      }
+    ],
+    "negative_controls": [
+      {
+        "wording": "Wood grain is not mould.",
+        "evidence_frame_ids": ["A-wide", "C-inventory"],
+        "assessment": "supported",
+        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "wording": "No cracked tiles are visible.",
+        "evidence_frame_ids": ["A-wide", "C-inventory"],
+        "assessment": "supported",
+        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "wording": "The ordinary corner shadow is not evidence of damp.",
+        "evidence_frame_ids": ["B-reverse"],
+        "assessment": "supported",
+        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "wording": "The clean hob reflection is not a stain.",
+        "evidence_frame_ids": ["C-inventory"],
+        "assessment": "supported",
+        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      }
+    ],
     "generator_deviations": [
-      "second attempt stopping-rule failure; first attempt used an uninstalled defect sample and second reused another packet image"
+      "D-condition is excluded: the first attempt used an uninstalled defect sample and the second reused another packet image, so its intended chip and nearby fixtures are not observed gold."
     ]
   }
 }

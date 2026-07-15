@@ -13,7 +13,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from .ingest import exif_capture_time, stamp_exif_capture_time
+from .ingest import exif_capture_time
 from .schema import CATEGORIES, Inventory, Item, Room, cover_value
 from .usecases import get_use_case, use_case_for
 from .usecases.base import UseCase
@@ -381,9 +381,9 @@ def _hamming(a: int, b: int) -> int:
 
 
 def _export_photos(inv: Inventory, capture_dir: Path, out_dir: Path,
-                   max_dim: int = 1400) -> tuple[dict[str, str],
-                                                 dict[str, str],
-                                                 dict[str, int]]:
+                   max_dim: int = 1400, *,
+                   photo_time: dict[str, dict] | None = None,
+                   ) -> tuple[dict[str, str], dict[str, str], dict[str, int]]:
     """Copy (downscaled) report photos to out_dir/photos plus a smaller
     print tier to out_dir/photos/print. Returns (id -> rel path,
     id -> print rel path, id -> dhash)."""
@@ -400,6 +400,7 @@ def _export_photos(inv: Inventory, capture_dir: Path, out_dir: Path,
     src_map: dict[str, str] = {}
     print_map: dict[str, str] = {}
     dhash_map: dict[str, int] = {}
+    photo_time = photo_time or {}
     for room in inv.rooms:
         for p in room.photos:
             src = Path(p.path.replace("\\", "/"))
@@ -428,30 +429,49 @@ def _export_photos(inv: Inventory, capture_dir: Path, out_dir: Path,
             except OSError:
                 src_mtime = None
             entry = cache.get(p.id) or {}
+            timing = photo_time.get(p.id) or {}
+            captured = (p.captured_at or timing.get("captured_at")
+                        or exif_capture_time(src))
+            provenance = {
+                "photo_id": p.id,
+                "captured_at": captured,
+                "source_video": p.source_video,
+                "source_time_seconds": timing.get("t"),
+            }
+            provenance_text = json.dumps(
+                provenance, sort_keys=True, separators=(",", ":"))
             if (src_mtime is not None
                     and dest.exists() and dest.stat().st_mtime >= src_mtime
                     and pdest.exists() and pdest.stat().st_mtime >= src_mtime
-                    and entry.get("src_mtime") == src_mtime):
+                    and entry.get("src_mtime") == src_mtime
+                    and entry.get("provenance") == provenance_text):
                 if entry.get("dhash") is not None:
                     dhash_map[p.id] = entry["dhash"]
                 continue
             try:
-                captured = p.captured_at or exif_capture_time(src)
                 with Image.open(src) as im:
                     im = im.convert("RGB")
+                    exif = Image.Exif()
+                    exif[270] = provenance_text
+                    exif[305] = "HomeInventory evidence export"
+                    if captured:
+                        try:
+                            captured_dt = datetime.fromisoformat(
+                                captured.replace("Z", "+00:00"))
+                            exif[36867] = captured_dt.strftime(
+                                "%Y:%m:%d %H:%M:%S")
+                        except ValueError:
+                            pass
                     if max(im.size) > max_dim:
                         im.thumbnail((max_dim, max_dim))
-                    im.save(dest, quality=88)
-                    if captured:
-                        stamp_exif_capture_time(dest, captured)
+                    im.save(dest, quality=88, exif=exif)
                     dhash_map[p.id] = _dhash(im)
                     if max(im.size) > PRINT_MAX_DIM:
                         im.thumbnail((PRINT_MAX_DIM, PRINT_MAX_DIM))
-                    im.save(pdest, quality=PRINT_QUALITY)
-                    if captured:
-                        stamp_exif_capture_time(pdest, captured)
+                    im.save(pdest, quality=PRINT_QUALITY, exif=exif)
                 cache[p.id] = {"src_mtime": src_mtime,
-                               "dhash": dhash_map[p.id]}
+                               "dhash": dhash_map[p.id],
+                               "provenance": provenance_text}
             except Exception as e:
                 log.warning("could not re-encode %s (%s); copying as-is — the "
                             "report image may not render", src, e)
@@ -568,8 +588,16 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
     out_dir.mkdir(parents=True, exist_ok=True)
     inv.rooms = sort_rooms(inv.rooms)
     uc = get_use_case(use_case) if use_case else use_case_for(inv)
+    # Resolve video frame moments before export so JPEG metadata carries the
+    # same evidence provenance shown in the report.
+    try:
+        from .videometa import video_payload
+        _videos, photo_time = video_payload(inv, capture_dir,
+                                            out_dir / "work", "", {})
+    except Exception:              # never let provenance break the render
+        photo_time = {}
     photo_src, photo_print_src, dhash_map = _export_photos(
-        inv, capture_dir, out_dir)
+        inv, capture_dir, out_dir, photo_time=photo_time)
     schedule = summary_rows(inv, uc)
     room_sections = prepare_room_sections(inv)
 
@@ -581,12 +609,6 @@ def render(inv: Inventory, capture_dir: Path, out_dir: Path,
     env.globals["is_finish_item"] = _is_finish_item
 
     # exhibit provenance: each extracted frame's second in its source video
-    try:
-        from .videometa import video_payload
-        _videos, photo_time = video_payload(inv, capture_dir,
-                                            out_dir / "work", "", {})
-    except Exception:              # never let provenance break the render
-        photo_time = {}
     photo_display_path = {
         p.id: _display_path(p.path, capture_dir, out_dir)
         for room in inv.rooms for p in room.photos

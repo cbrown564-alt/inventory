@@ -125,11 +125,115 @@
     ]
   },
   "pass_b": {
-    "reviewer": "",
-    "completed_at": null,
-    "claims": [],
+    "reviewer": "Codex observed-evidence review",
+    "completed_at": "2026-07-15T15:30:00+00:00",
+    "claims": [
+      {
+        "canonical_name": "bath", "aliases": ["bathtub"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "glass shower screen", "aliases": ["bath screen", "shower screen"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "wash basin", "aliases": ["basin", "sink"],
+        "evidence_frame_ids": ["A-wide", "B-reverse"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "WC", "aliases": ["toilet", "water closet"],
+        "evidence_frame_ids": ["A-wide", "B-reverse"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "heated towel rail", "aliases": ["towel radiator"],
+        "evidence_frame_ids": ["A-wide", "B-reverse"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "grey wall tiles", "aliases": ["bathroom wall tiles"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"], "visibility": "clear",
+        "condition": "Tile faces and joints appear intact in the accepted views.",
+        "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "mirror", "aliases": ["wall mirror"],
+        "evidence_frame_ids": ["A-wide", "B-reverse"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "door furniture", "aliases": ["door handle", "lever handle"],
+        "evidence_frame_ids": ["A-wide", "B-reverse"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "extractor vent", "aliases": ["extractor fan", "ventilation grille"],
+        "evidence_frame_ids": ["B-reverse"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "skirting board", "aliases": ["baseboard"],
+        "evidence_frame_ids": ["B-reverse", "D-condition"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "mixer taps", "aliases": ["bath taps", "mixer tap"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "shower handset", "aliases": ["hand shower", "shower head"],
+        "evidence_frame_ids": ["A-wide", "B-reverse"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "bath panel", "aliases": ["bath side panel"],
+        "evidence_frame_ids": ["A-wide", "D-condition"], "visibility": "clear",
+        "condition": "A short shallow scuff is visible on the lower face.",
+        "defects": [{"wording": "Short shallow scuff", "location": "lower central-right face of the bath panel", "severity": "minor"}],
+        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "silicone seal", "aliases": ["bath sealant", "silicone seam"],
+        "evidence_frame_ids": ["D-condition"], "visibility": "partial",
+        "condition": "The visible section appears continuous; the full perimeter is not shown.",
+        "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "vinyl floor", "aliases": ["wood-effect vinyl flooring", "resilient floor"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"], "visibility": "clear",
+        "condition": "No material defect is visible in the accepted views.",
+        "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "lower wall tiles", "aliases": ["low-level wall tiles"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      }
+    ],
+    "negative_controls": [
+      {
+        "wording": "Tile joints are not cracks.", "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"],
+        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "wording": "No mould is visible.", "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"],
+        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "wording": "The mirror reflection is not a stain.", "evidence_frame_ids": ["B-reverse"],
+        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "wording": "The visible silicone seam is not a crack.", "evidence_frame_ids": ["D-condition"],
+        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      }
+    ],
     "generator_deviations": [
-      "first attempt omitted the heated towel rail; second exactly duplicated the doorway frame"
+      "C-inventory is excluded: its first attempt omitted the heated towel rail and its second attempt exactly duplicated the doorway frame. Items visible in other accepted views remain labelable there."
     ]
   }
 }

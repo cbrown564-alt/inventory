@@ -132,6 +132,7 @@ def _write_review_templates(dataset_dir: Path) -> None:
                     "reviewer": "",
                     "completed_at": None,
                     "claims": [],
+                    "negative_controls": [],
                     "generator_deviations": [],
                 },
             }

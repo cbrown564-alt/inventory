@@ -333,20 +333,34 @@ def _load_segments(video: Path, work_dir: Path, *,
                    segment_model: str, every_s: float,
                    segments_json: Optional[Path],
                    no_seam_refine: bool = False,
+                   refine_seams: Optional[bool] = None,
                    seam_refine_model: Optional[str] = None,
                    seam_refine_window: float = 30.0) -> list:
     """Return segment list, caching to work_dir/segments/."""
     from dataclasses import asdict
-    from .segment import Segment, segment_video
+    from .segment import Segment, _normalise, segment_video, video_duration_s
 
     cache = segments_json or work_dir / "segments" / f"{video.stem}.json"
     precomputed = segments_json is not None and cache.is_file()
+    refine = not no_seam_refine if refine_seams is None else refine_seams
     fresh = not cache.is_file()
     if cache.is_file():
         data = json.loads(cache.read_text(encoding="utf-8"))
-        segments = [Segment(**s) for s in data["segments"]]
-        log.info("loaded %d segments from %s", len(segments), cache)
-    else:
+        stale = (segments_json is None and refine and data.get("model")
+                 and not data.get("seam_refine"))
+        if not stale:
+            raw_segments = [Segment(**s) for s in data["segments"]]
+            segments = _normalise(raw_segments, video_duration_s(video))
+            repaired = (sum(a != b for a, b in zip(raw_segments, segments))
+                        + abs(len(raw_segments) - len(segments)))
+            log.info("loaded %d normalized segments from %s%s",
+                     len(segments), cache,
+                     f" ({repaired} repaired/dropped)" if repaired else "")
+            return segments
+        log.info("cached segments predate seam refinement; recomputing %s",
+                 cache)
+        fresh = True
+    if fresh:
         segments, meta = segment_video(video, every_s=every_s, model=segment_model)
         cache.parent.mkdir(parents=True, exist_ok=True)
         cache.write_text(json.dumps(
@@ -355,7 +369,7 @@ def _load_segments(video: Path, work_dir: Path, *,
 
     # ML-E2: refine interior seams on freshly segmented walkthroughs when a
     # VLM is available. Skip for precomputed schedules and --no-seam-refine.
-    if (fresh and not no_seam_refine and not precomputed and len(segments) > 1):
+    if fresh and refine and not precomputed and len(segments) > 1:
         from .ml_seam import try_refine_segments
 
         model = seam_refine_model or segment_model

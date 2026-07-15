@@ -1,7 +1,7 @@
 {
   "dataset_id": "synthetic-room-eval",
   "phase": "phase-1-representative-slice",
-  "status": "phase_1_gpt_generation_pending",
+  "status": "phase_1_pass_b_second_review_pending",
   "observed_truth_rule": "Only Pass B human-observed claims may be scored as gold.",
   "providers": {
     "nano-banana-2-lite": {

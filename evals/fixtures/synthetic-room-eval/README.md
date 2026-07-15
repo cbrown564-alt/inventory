@@ -30,9 +30,13 @@ There was no failed GPT first attempt, so correction-retry behaviour remains
 untested. Overall Pass A yield is 14/16 (87.5%). Failed generations stay out of
 scoring but a yield of at least 75% does not block Phase 1.
 
-The project owner approved and signed off Pass A on 15 Jul 2026. The next task
-is Pass B: complete observed labels and generator-deviation records for the 14
-accepted images before running either extraction candidate.
+The project owner approved and signed off Pass A on 15 Jul 2026. Primary Pass B
+review is complete for the 14 accepted images: all claims link to accepted
+frames, negative controls are structured, and generator deviations are recorded.
+The records remain provisional until an independent reviewer checks all three
+defect claims, all negatives and the preselected 25% ordinary-label sample. Do
+not run either extraction candidate against these labels as gold before those
+checks resolve.
 
 ## Commands
 

@@ -42,7 +42,7 @@
     },
     "pass_b": {
       "type": "object",
-      "required": ["reviewer", "completed_at", "claims", "generator_deviations"],
+      "required": ["reviewer", "completed_at", "claims", "negative_controls", "generator_deviations"],
       "properties": {
         "reviewer": {"type": "string"},
         "completed_at": {"type": ["string", "null"]},
@@ -74,6 +74,27 @@
                 "required": ["required", "reviewer", "decision"],
                 "properties": {
                   "required": {"type": "boolean"},
+                  "reviewer": {"type": ["string", "null"]},
+                  "decision": {"enum": ["pending", "agreed", "resolved"]}
+                }
+              }
+            }
+          }
+        },
+        "negative_controls": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["wording", "evidence_frame_ids", "assessment", "second_review"],
+            "properties": {
+              "wording": {"type": "string"},
+              "evidence_frame_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+              "assessment": {"enum": ["supported", "ambiguous", "not_visible"]},
+              "second_review": {
+                "type": "object",
+                "required": ["required", "reviewer", "decision"],
+                "properties": {
+                  "required": {"const": true},
                   "reviewer": {"type": ["string", "null"]},
                   "decision": {"enum": ["pending", "agreed", "resolved"]}
                 }

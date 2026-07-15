@@ -432,7 +432,9 @@ not pretend to be 50/50.
 - [x] Author two complete room packets: one Kitchen and one Bathroom.
 - [x] Attempt both room specifications through both providers: 16 images total; at least 12 accepted.
 - [x] Complete Pass A visual screening and generate the 16-card contact sheet.
-- [ ] Complete Pass B observed-label review for the 14 accepted images.
+- [x] Complete primary Pass B observed-label review for the 14 accepted images.
+- [ ] Complete independent Pass B checks for all three defect claims, every
+      negative and the preselected 25% ordinary-label sample.
 - [ ] Run the current production backend and one prompt candidate.
 
 Exit: all 16 generations attempted, at least 12 accepted images, labels resolve
@@ -445,9 +447,9 @@ verified: two four-view specifications produce a deterministic 16-row task
 queue; scene and observed-label schemas, provisional review records, strict
 and work-in-progress validation, and a static contact sheet are present.
 Generation has now attempted all 16 canonical tasks and Pass A accepted 14
-(87.5%). Phase 1 remains open for Pass B observed-label review, contact-sheet
-inspection, and the production-baseline/prompt-candidate comparison. No model
-accuracy claim exists yet.
+(87.5%). Primary Pass B review is complete. Phase 1 remains open for the
+independent Pass B checks and the production-baseline/prompt-candidate
+comparison. No model accuracy claim exists yet.
 
 **Generation-path clarification, 15 Jul 2026:** Antigravity CLI supplies the
 Nano Banana 2 Lite half only. GPT Image 2 supplies the other half, preserving
@@ -473,10 +475,17 @@ output.
 **Pass A sign-off, 15 Jul 2026:** the project owner reviewed and approved the
 representative generation slice in full. Pass A is closed at 14/16 accepted
 (87.5%), above the agreed 75% threshold. The two terminal generation failures
-remain excluded and preserved in the rejection audit. The next task is **Pass
-B observed-label review**: record only evidence visible in each accepted image,
-resolve generator deviations, complete the four provider review records, and
-then run the production backend and prompt candidate against those labels.
+remain excluded and preserved in the rejection audit.
+
+**Primary Pass B review, 15 Jul 2026:** all 14 accepted images now have
+evidence-linked observed claims, structured negative controls and recorded
+generator deviations. The intended kitchen cabinet chip and both generated
+bath-panel scuffs were recorded as minor defects; rejected Google frames do not
+support any claim. Four ordinary-label samples of at least 25% per provider
+packet are preselected. The records remain provisional until an independent
+reviewer checks all three defect claims, every negative and those ordinary-label
+samples. Only then may the production backend and prompt candidate score
+against them as verified synthetic gold.
 
 ### Phase 2 — extract the pattern
 

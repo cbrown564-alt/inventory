@@ -16,7 +16,7 @@ from io import StringIO
 from pathlib import Path
 from typing import Optional
 
-from .schema import Inventory, Item, Room
+from .schema import Inventory, Item, Photo, Room
 
 log = logging.getLogger("homeinventory")
 
@@ -133,6 +133,61 @@ def _full_path(capture_dir: Path, path: str) -> Path:
 
 def _checkpoint_name(room_name: str) -> str:
     return re.sub(r"[^\w\- ]+", "_", room_name) + ".json"
+
+
+def _checkpoint_identity(photos: list[Photo], backend, use_case: str) -> dict:
+    """Inputs that must be identical before a paid room result is reusable."""
+    return {
+        "version": 2,
+        "evidence_sha256": [photo.sha256 for photo in photos],
+        "backend": backend.name,
+        "model": getattr(backend, "model", None),
+        "use_case": use_case,
+    }
+
+
+def _checkpoint_matches(data: dict, identity: dict) -> bool:
+    """Treat legacy or differently bound checkpoints as safe cache misses."""
+    return data.get("checkpoint") == identity
+
+
+def _room_evidence_state(room_name: str, photos: list[Photo]) -> dict:
+    """Describe legacy evidence trust without inferring semantic confidence."""
+    heroes = sorted((photo for photo in photos if photo.hero),
+                    key=lambda photo: photo.hero)
+    if not heroes:
+        cover_state, cover_reason = "no_confident_cover", "No cover image"
+    else:
+        cover = heroes[0]
+        if cover.presentation_eligible is False:
+            cover_state, cover_reason = (
+                "no_confident_cover", "Top image failed visual quality gates")
+        elif getattr(cover, "room_match", None) is False:
+            cover_state, cover_reason = (
+                "no_confident_cover",
+                getattr(cover, "room_match_reason", None)
+                or "Top image did not establish this room")
+        elif getattr(cover, "room_match", None) is True:
+            cover_state, cover_reason = (
+                "confident", getattr(cover, "room_match_reason", None) or "")
+        else:
+            cover_state, cover_reason = (
+                "unverified", "Top image has not had an on-room semantic check")
+
+    if not any(photo.source_video for photo in photos):
+        segment_state, segment_reason = "n/a", "Capture was grouped by room"
+    elif room_name.strip().lower() in {"property", "general"}:
+        segment_state, segment_reason = (
+            "no_confident_segment", "Walkthrough could not be assigned a room")
+    else:
+        segment_state, segment_reason = (
+            "unverified", "Room boundary has not had a semantic verification")
+    return {
+        "cover_state": cover_state,
+        "cover_reason": cover_reason,
+        "segment_state": segment_state,
+        "segment_reason": segment_reason,
+    }
 
 
 def _load_prior(opts: BuildOptions) -> tuple[Inventory | None, bool]:
@@ -345,11 +400,20 @@ def run_build(opts: BuildOptions, *,
         progress.describing(opts.progress_file, ri, len(room_names), room_name)
         photos = selected[room_name]
         ckpt = ckpt_dir / _checkpoint_name(room_name)
+        identity = _checkpoint_identity(photos, backend, use_case)
+        checkpoint_data = None
         if opts.resume and ckpt.exists():
+            candidate = json.loads(ckpt.read_text(encoding="utf-8"))
+            if _checkpoint_matches(candidate, identity):
+                checkpoint_data = candidate
+            else:
+                log.info("checkpoint inputs changed for %s; describing again",
+                         room_name)
+        if checkpoint_data is not None:
             log.info("reusing checkpoint for %s", room_name)
-            data = json.loads(ckpt.read_text(encoding="utf-8"))
-            summary = data["summary"]
-            items = [Item(**i).normalise() for i in data["items"]]
+            summary = checkpoint_data["summary"]
+            items = [Item(**i).normalise()
+                     for i in checkpoint_data["items"]]
         else:
             paths = [_full_path(capture_dir, p.path) for p in photos]
             log.info("describing %s (%d photos, backend=%s)…",
@@ -373,7 +437,8 @@ def run_build(opts: BuildOptions, *,
                 continue
             ckpt.write_text(json.dumps(
                 {"summary": summary, "items": [asdict(i) for i in items],
-                 "timing": getattr(backend, "last_room_timing", None)},
+                 "timing": getattr(backend, "last_room_timing", None),
+                 "checkpoint": identity},
                 ensure_ascii=False), encoding="utf-8")
         code = room_code(room_name, used_codes)
         prior_room = None

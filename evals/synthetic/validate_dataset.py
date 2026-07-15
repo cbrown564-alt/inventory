@@ -76,7 +76,7 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
             if row.get(field) != expected_row[field]:
                 errors.append(f"{row['task_id']}: stale or changed {field}; rebuild tasks")
         image_path = dataset_dir / row["output_path"]
-        if row.get("status") == "accepted":
+        if row.get("status") in {"accepted", "pass_a_accepted"}:
             if not image_path.exists():
                 errors.append(f"{row['task_id']}: accepted image is missing")
                 continue
@@ -112,12 +112,42 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
     for review_path in sorted((dataset_dir / "reviews").glob("*.json")):
         review = _load(review_path)
         _required(review, ["scenario_id", "provider", "pass_a", "pass_b", "review_status"], review_path.name, errors)
+        pass_b = review.get("pass_b", {})
+        _required(pass_b, ["reviewer", "completed_at", "claims", "negative_controls", "generator_deviations"],
+                  f"{review_path.name} pass_b", errors)
         if review.get("review_status") == "verified_synthetic_gold":
-            if not review.get("pass_a", {}).get("completed_at") or not review.get("pass_b", {}).get("completed_at"):
+            if not review.get("pass_a", {}).get("completed_at") or not pass_b.get("completed_at"):
                 errors.append(f"{review_path.name}: gold status without both completed passes")
-            for claim in review.get("pass_b", {}).get("claims", []):
+            claims = pass_b.get("claims", [])
+            if not claims:
+                errors.append(f"{review_path.name}: gold status without observed claims")
+            for claim in claims:
                 if not claim.get("evidence_frame_ids"):
                     errors.append(f"{review_path.name}: claim {claim.get('canonical_name')} has no evidence frames")
+                if claim.get("defects") and (
+                    claim.get("second_review", {}).get("required") is not True
+                    or claim.get("second_review", {}).get("decision") not in {"agreed", "resolved"}
+                ):
+                    errors.append(f"{review_path.name}: defect claim {claim.get('canonical_name')} lacks a completed second review")
+            ordinary_checks = sum(
+                claim.get("second_review", {}).get("required") is True
+                and claim.get("second_review", {}).get("decision") in {"agreed", "resolved"}
+                for claim in claims if not claim.get("defects")
+            )
+            ordinary_count = sum(not claim.get("defects") for claim in claims)
+            if ordinary_count and ordinary_checks * 4 < ordinary_count:
+                errors.append(f"{review_path.name}: fewer than 25% of ordinary claims have a completed second review")
+            negatives = pass_b.get("negative_controls", [])
+            if not negatives:
+                errors.append(f"{review_path.name}: gold status without negative controls")
+            for negative in negatives:
+                if not negative.get("evidence_frame_ids"):
+                    errors.append(f"{review_path.name}: negative control {negative.get('wording')} has no evidence frames")
+                if (
+                    negative.get("second_review", {}).get("required") is not True
+                    or negative.get("second_review", {}).get("decision") not in {"agreed", "resolved"}
+                ):
+                    errors.append(f"{review_path.name}: negative control {negative.get('wording')} lacks a completed second review")
 
     manifest = dataset_dir / "rejected/manifest.jsonl"
     if manifest.exists():

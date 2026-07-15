@@ -247,6 +247,31 @@ class Detection:
     crop_path: Optional[str] = None
 
 
+def verify_detection_proposals(
+        by_photo: dict[str, list[Detection]],
+        min_support: int = 2,
+        high_confidence: float = 0.45,
+) -> dict[str, list[Detection]]:
+    """Keep proposals repeated across photos or supported strongly once.
+
+    This is the packet-level precision stage used after a high-recall detector.
+    Support counts distinct photos, so duplicate boxes in one image cannot make
+    a weak label appear independently corroborated.
+    """
+    support: dict[str, set[str]] = {}
+    for photo_id, detections in by_photo.items():
+        for detection in detections:
+            support.setdefault(detection.label.lower(), set()).add(photo_id)
+    return {
+        photo_id: [
+            detection for detection in detections
+            if detection.confidence >= high_confidence
+            or len(support.get(detection.label.lower(), ())) >= min_support
+        ]
+        for photo_id, detections in by_photo.items()
+    }
+
+
 class Detector:
     """Lazy-loading YOLOE wrapper; `available` is False if the stack is missing."""
 

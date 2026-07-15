@@ -162,8 +162,10 @@ def cmd_render(args) -> int:
 
 
 def cmd_review(args) -> int:
-    """Serve the local review app (Level 2); Finish mints the tenant link by
-    default.  --share pre-enables it and adds phone pairing (Level 3).
+    """Serve review with tenant countersigning enabled unless opted out.
+
+    ``--no-share`` keeps the session owner-only; the default also enables
+    phone pairing (Level 3).
     See docs/05-review-experience.md."""
     from .review import serve
 
@@ -473,10 +475,12 @@ def main(argv: list[str] | None = None) -> int:
     rv.add_argument("capture_dir")
     rv.add_argument("-o", "--out", default="report")
     rv.add_argument("--port", type=int, default=8484)
-    rv.add_argument("--share", action="store_true",
-                    help="pre-enable the token-protected tenant link on the "
-                         "LAN and owner phone pairing (Finish can also mint "
-                         "the link without this flag)")
+    rv.set_defaults(share=True)
+    rv.add_argument("--share", action="store_true", dest="share",
+                    help="enable the tenant link and phone pairing (default; "
+                         "retained for compatibility)")
+    rv.add_argument("--no-share", action="store_false", dest="share",
+                    help="start an owner-only session without a tenant link")
     rv.add_argument("--backend", choices=["claude", "openai", "local", "offline"],
                     default="openai", help="backend used by 'Re-describe room'")
     rv.add_argument("--model", default=None)

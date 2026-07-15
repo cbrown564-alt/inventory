@@ -4,7 +4,7 @@
   "video": "IMG_5512.MOV",
   "frame_count": 93,
   "source_artifact": "hero-contact-mslap.html",
-  "source_artifact_sha256": "a04413db45aa0940b75890b8db2f28464ec724ae878f0599cac8490f45bfe293",
+  "source_artifact_sha256": "e5ed5da3025c52a02b255f97fe4e79bf0b4c783aa839b4ada4736c6ca0649949",
   "provenance": "Recovered from the committed full-pool contact sheet produced against the original, now-lost segmentation run. Private frame pixels remain untracked; this file freezes room/frame identity.",
   "rooms": {
     "Hallway": {

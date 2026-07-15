@@ -5,117 +5,117 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Project owner sign-off after Codex visual inspection",
+    "completed_at": "2026-07-15T15:30:00+00:00",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "kitchen units",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "dark worktop",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sink",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "oven",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "induction hob",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "extractor hood",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
         "rejection_reasons": []
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "kitchen units",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "window blind",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "door furniture",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting boards",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
         "rejection_reasons": []
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "extractor hood",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "induction hob",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "oven",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "smoke alarm",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "splashback",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "electrical sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
         "rejection_reasons": []
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "base unit door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "plinth",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting board",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
         "rejection_reasons": []
@@ -123,9 +123,119 @@
     ]
   },
   "pass_b": {
-    "reviewer": "",
-    "completed_at": null,
-    "claims": [],
-    "generator_deviations": []
+    "reviewer": "Codex observed-evidence review",
+    "completed_at": "2026-07-15T15:30:00+00:00",
+    "claims": [
+      {
+        "canonical_name": "kitchen units", "aliases": ["kitchen cabinets", "cupboards"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory", "D-condition"], "visibility": "clear",
+        "condition": "Pale wood-effect fronts; one lower door has the separately recorded small chip.",
+        "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "dark worktop", "aliases": ["black worktop", "countertop"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory", "D-condition"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "sink", "aliases": ["stainless-steel sink", "drainer sink"],
+        "evidence_frame_ids": ["A-wide", "C-inventory"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "oven", "aliases": ["built-in oven"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "induction hob", "aliases": ["black glass hob", "cooktop"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "extractor hood", "aliases": ["cooker hood", "range hood"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "window blind", "aliases": ["venetian blind"],
+        "evidence_frame_ids": ["B-reverse"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "radiator", "aliases": ["panel radiator"],
+        "evidence_frame_ids": ["B-reverse"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "door furniture", "aliases": ["door handle", "lever handle"],
+        "evidence_frame_ids": ["A-wide", "B-reverse"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "skirting boards", "aliases": ["baseboards"],
+        "evidence_frame_ids": ["B-reverse", "D-condition"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "smoke alarm", "aliases": ["ceiling smoke detector"],
+        "evidence_frame_ids": ["C-inventory"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "splashback", "aliases": ["tiled splashback", "wall tiles"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"], "visibility": "clear",
+        "condition": "White square tiles with intact-looking joints.",
+        "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "electrical sockets", "aliases": ["power sockets", "wall outlets"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "base unit door", "aliases": ["lower cabinet door"],
+        "evidence_frame_ids": ["D-condition"], "visibility": "clear",
+        "condition": "Small localised chip on the lower edge; the remainder appears intact in this view.",
+        "defects": [{"wording": "Small chip", "location": "lower edge of the corner base-unit door", "severity": "minor"}],
+        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "plinth", "aliases": ["cabinet kickboard", "toe kick"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory", "D-condition"], "visibility": "clear",
+        "condition": null, "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "canonical_name": "vinyl floor", "aliases": ["sheet vinyl flooring", "resilient floor"],
+        "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"], "visibility": "clear",
+        "condition": "No material defect is visible in the accepted views.",
+        "defects": [], "second_review": {"required": false, "reviewer": null, "decision": "pending"}
+      }
+    ],
+    "negative_controls": [
+      {
+        "wording": "Wood grain is not mould.", "evidence_frame_ids": ["A-wide", "C-inventory", "D-condition"],
+        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "wording": "No cracked tiles are visible.", "evidence_frame_ids": ["A-wide", "C-inventory"],
+        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "wording": "The ordinary corner shadow is not evidence of damp.", "evidence_frame_ids": ["B-reverse"],
+        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "wording": "The clean hob reflection is not a stain.", "evidence_frame_ids": ["C-inventory"],
+        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      },
+      {
+        "wording": "The floor joint pattern is not a crack.", "evidence_frame_ids": ["D-condition"],
+        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+      }
+    ],
+    "generator_deviations": [
+      "A microwave and tall fridge-freezer are prominent additional appliances not named in the scene specification."
+    ]
   }
 }
