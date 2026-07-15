@@ -1,0 +1,16 @@
+{
+  "id": "RP-001",
+  "room_type": "Kitchen",
+  "property_profile": "modest 1990s UK flat with dated but maintained fittings",
+  "cleanliness": "mildly cluttered but clean",
+  "lighting": "overcast daylight mixed with warm ceiling lights",
+  "continuity_requirements": ["same pale units, dark worktop, appliance positions and window across all four views"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "extra doors or windows"],
+  "provider_assignments": ["nano-banana-2-lite", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "standing at the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["kitchen units", "dark worktop", "sink", "oven", "induction hob", "extractor hood"], "intended_defects": [], "intended_negatives": ["wood grain is not mould", "no cracked tiles"]},
+    {"id": "B-reverse", "viewpoint": "opposite corner looking back toward the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["kitchen units", "window blind", "radiator", "door furniture", "skirting boards"], "intended_defects": [], "intended_negatives": ["ordinary corner shadow is not damp"]},
+    {"id": "C-inventory", "viewpoint": "near the sink looking toward the cooking wall", "shot_scale": "medium fixtures view", "intended_visible_items": ["extractor hood", "induction hob", "oven", "smoke alarm", "splashback", "electrical sockets"], "intended_defects": [], "intended_negatives": ["clean hob reflection is not a stain"]},
+    {"id": "D-condition", "viewpoint": "close to the base units with surrounding context retained", "shot_scale": "condition detail", "intended_visible_items": ["base unit door", "plinth", "vinyl floor", "skirting board"], "intended_defects": ["one small chip on the lower edge of a base unit door"], "intended_negatives": ["tile joint is not a crack"]}
+  ]
+}

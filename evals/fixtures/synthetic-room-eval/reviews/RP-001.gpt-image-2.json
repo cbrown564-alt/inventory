@@ -1,0 +1,131 @@
+{
+  "scenario_id": "RP-001",
+  "provider": "OpenAI",
+  "product": "Codex built-in image generation",
+  "model_display_name": "GPT Image 2",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "kitchen units",
+            "visibility": "pending"
+          },
+          {
+            "name": "dark worktop",
+            "visibility": "pending"
+          },
+          {
+            "name": "sink",
+            "visibility": "pending"
+          },
+          {
+            "name": "oven",
+            "visibility": "pending"
+          },
+          {
+            "name": "induction hob",
+            "visibility": "pending"
+          },
+          {
+            "name": "extractor hood",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "kitchen units",
+            "visibility": "pending"
+          },
+          {
+            "name": "window blind",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "door furniture",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting boards",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "extractor hood",
+            "visibility": "pending"
+          },
+          {
+            "name": "induction hob",
+            "visibility": "pending"
+          },
+          {
+            "name": "oven",
+            "visibility": "pending"
+          },
+          {
+            "name": "smoke alarm",
+            "visibility": "pending"
+          },
+          {
+            "name": "splashback",
+            "visibility": "pending"
+          },
+          {
+            "name": "electrical sockets",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "base unit door",
+            "visibility": "pending"
+          },
+          {
+            "name": "plinth",
+            "visibility": "pending"
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting board",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "generator_deviations": []
+  }
+}

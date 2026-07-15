@@ -1,0 +1,131 @@
+{
+  "scenario_id": "RP-002",
+  "provider": "OpenAI",
+  "product": "Codex built-in image generation",
+  "model_display_name": "GPT Image 2",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "bath",
+            "visibility": "pending"
+          },
+          {
+            "name": "glass shower screen",
+            "visibility": "pending"
+          },
+          {
+            "name": "wash basin",
+            "visibility": "pending"
+          },
+          {
+            "name": "WC",
+            "visibility": "pending"
+          },
+          {
+            "name": "heated towel rail",
+            "visibility": "pending"
+          },
+          {
+            "name": "grey wall tiles",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "WC",
+            "visibility": "pending"
+          },
+          {
+            "name": "wash basin",
+            "visibility": "pending"
+          },
+          {
+            "name": "mirror",
+            "visibility": "pending"
+          },
+          {
+            "name": "door furniture",
+            "visibility": "pending"
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting board",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "glass shower screen",
+            "visibility": "pending"
+          },
+          {
+            "name": "mixer taps",
+            "visibility": "pending"
+          },
+          {
+            "name": "shower handset",
+            "visibility": "pending"
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "pending"
+          },
+          {
+            "name": "heated towel rail",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "bath panel",
+            "visibility": "pending"
+          },
+          {
+            "name": "silicone seal",
+            "visibility": "pending"
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "pending"
+          },
+          {
+            "name": "lower wall tiles",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "generator_deviations": []
+  }
+}

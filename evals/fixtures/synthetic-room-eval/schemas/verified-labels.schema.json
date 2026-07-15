@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "verified-labels.schema.json",
+  "type": "object",
+  "required": ["scenario_id", "provider", "review_status", "pass_a", "pass_b"],
+  "properties": {
+    "scenario_id": {"type": "string", "pattern": "^RP-[0-9]{3}$"},
+    "provider": {"enum": ["Google", "OpenAI"]},
+    "product": {"type": "string"},
+    "model_display_name": {"type": "string"},
+    "review_status": {"enum": ["provisional", "rejected", "verified_synthetic_gold"]},
+    "pass_a": {
+      "type": "object",
+      "required": ["reviewer", "completed_at", "frames"],
+      "properties": {
+        "reviewer": {"type": "string"},
+        "completed_at": {"type": ["string", "null"]},
+        "frames": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["frame_id", "decision", "requested_evidence"],
+            "properties": {
+              "frame_id": {"type": "string"},
+              "decision": {"enum": ["pending", "accepted", "rejected"]},
+              "requested_evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "visibility"],
+                  "properties": {
+                    "name": {"type": "string"},
+                    "visibility": {"enum": ["pending", "clear", "ambiguous", "absent", "malformed"]}
+                  }
+                }
+              },
+              "rejection_reasons": {"type": "array", "items": {"type": "string"}}
+            }
+          }
+        }
+      }
+    },
+    "pass_b": {
+      "type": "object",
+      "required": ["reviewer", "completed_at", "claims", "generator_deviations"],
+      "properties": {
+        "reviewer": {"type": "string"},
+        "completed_at": {"type": ["string", "null"]},
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["canonical_name", "aliases", "evidence_frame_ids", "visibility", "condition", "defects", "second_review"],
+            "properties": {
+              "canonical_name": {"type": "string"},
+              "aliases": {"type": "array", "items": {"type": "string"}},
+              "evidence_frame_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+              "visibility": {"enum": ["clear", "partial", "ambiguous", "not_visible"]},
+              "condition": {"type": ["string", "null"]},
+              "defects": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["wording", "location", "severity"],
+                  "properties": {
+                    "wording": {"type": "string"},
+                    "location": {"type": "string"},
+                    "severity": {"type": "string"}
+                  }
+                }
+              },
+              "second_review": {
+                "type": "object",
+                "required": ["required", "reviewer", "decision"],
+                "properties": {
+                  "required": {"type": "boolean"},
+                  "reviewer": {"type": ["string", "null"]},
+                  "decision": {"enum": ["pending", "agreed", "resolved"]}
+                }
+              }
+            }
+          }
+        },
+        "generator_deviations": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,135 @@
+{
+  "scenario_id": "RP-001",
+  "provider": "Google",
+  "product": "Antigravity CLI generate_image (replicate B)",
+  "model_display_name": "Nano Banana 2 Lite",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "Codex visual inspection",
+    "completed_at": "2026-07-15T12:07:34.411988+00:00",
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "accepted",
+        "requested_evidence": [
+          {
+            "name": "kitchen units",
+            "visibility": "clear"
+          },
+          {
+            "name": "dark worktop",
+            "visibility": "clear"
+          },
+          {
+            "name": "sink",
+            "visibility": "clear"
+          },
+          {
+            "name": "oven",
+            "visibility": "clear"
+          },
+          {
+            "name": "induction hob",
+            "visibility": "clear"
+          },
+          {
+            "name": "extractor hood",
+            "visibility": "clear"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "rejected",
+        "requested_evidence": [
+          {
+            "name": "kitchen units",
+            "visibility": "clear"
+          },
+          {
+            "name": "window blind",
+            "visibility": "clear"
+          },
+          {
+            "name": "radiator",
+            "visibility": "clear"
+          },
+          {
+            "name": "door furniture",
+            "visibility": "clear"
+          },
+          {
+            "name": "skirting boards",
+            "visibility": "clear"
+          }
+        ],
+        "rejection_reasons": [
+          "first attempt contained a readable shopping-bag logo; second exactly duplicated another packet frame"
+        ]
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "accepted",
+        "requested_evidence": [
+          {
+            "name": "extractor hood",
+            "visibility": "clear"
+          },
+          {
+            "name": "induction hob",
+            "visibility": "clear"
+          },
+          {
+            "name": "oven",
+            "visibility": "clear"
+          },
+          {
+            "name": "smoke alarm",
+            "visibility": "clear"
+          },
+          {
+            "name": "splashback",
+            "visibility": "clear"
+          },
+          {
+            "name": "electrical sockets",
+            "visibility": "clear"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "accepted",
+        "requested_evidence": [
+          {
+            "name": "base unit door",
+            "visibility": "clear"
+          },
+          {
+            "name": "plinth",
+            "visibility": "clear"
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "clear"
+          },
+          {
+            "name": "skirting board",
+            "visibility": "clear"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "generator_deviations": [
+      "first attempt contained a readable shopping-bag logo; second exactly duplicated another packet frame"
+    ]
+  }
+}

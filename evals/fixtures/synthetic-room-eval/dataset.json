@@ -1,0 +1,46 @@
+{
+  "dataset_id": "synthetic-room-eval",
+  "phase": "phase-1-representative-slice",
+  "status": "phase_1_gpt_generation_pending",
+  "observed_truth_rule": "Only Pass B human-observed claims may be scored as gold.",
+  "providers": {
+    "nano-banana-2-lite": {
+      "provider": "Google",
+      "product": "Antigravity CLI generate_image",
+      "model_display_name": "Nano Banana 2 Lite",
+      "image_directory": "antigravity/nano-banana-2-lite/replicate-a",
+      "file_extension": "jpg",
+      "terms_record": "google-consumer-2026-07-15"
+    },
+    "gpt-image-2": {
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "image_directory": "openai/gpt-image-2",
+      "file_extension": "png",
+      "terms_record": "openai-eu-2026-07-15"
+    }
+  },
+  "terms_records": {
+    "google-consumer-2026-07-15": {
+      "terms_url": "https://policies.google.com/terms?gl=GB&hl=en",
+      "terms_checked_at": "2026-07-15",
+      "acceptance_permitted": true,
+      "decision_owner": "project owner",
+      "decision_recorded_at": "2026-07-15",
+      "note": "Project owner approved this bounded use because the dataset evaluates provider systems for an inventory task and does not train, fine-tune, distil, or otherwise develop model weights. Re-check before any training use or publication-scope change."
+    },
+    "openai-eu-2026-07-15": {
+      "terms_url": "https://openai.com/policies/eu-terms-of-use/",
+      "terms_checked_at": "2026-07-15",
+      "acceptance_permitted": true,
+      "note": "Prompt and VLM evaluation only; no weight training. Re-check if use or publication scope changes."
+    }
+  },
+  "design_change": {
+    "decided_at": "2026-07-15",
+    "decision_owner": "project owner",
+    "reason": "Restore the intended 50/50 Nano Banana 2 Lite and GPT Image 2 split after clarifying that Antigravity supplies only the Google half.",
+    "effect": "Eight Nano Banana 2 Lite attempts and eight GPT Image 2 attempts; a 75% accepted-generation yield is sufficient to continue, while failed images remain excluded from scoring."
+  }
+}

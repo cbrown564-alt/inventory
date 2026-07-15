@@ -1,0 +1,16 @@
+{
+  "id": "RP-002",
+  "room_type": "Bathroom",
+  "property_profile": "compact recently refurbished UK rental flat",
+  "cleanliness": "tidy with ordinary toiletries and dry surfaces",
+  "lighting": "window backlight plus neutral ceiling light",
+  "continuity_requirements": ["same white suite, grey tiles, glass screen, towel rail and window positions across all four views"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "extra sanitary fixtures"],
+  "provider_assignments": ["nano-banana-2-lite", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "standing at the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["bath", "glass shower screen", "wash basin", "WC", "heated towel rail", "grey wall tiles"], "intended_defects": [], "intended_negatives": ["tile joints are not cracks", "no mould"]},
+    {"id": "B-reverse", "viewpoint": "beside the bath looking back toward the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["WC", "wash basin", "mirror", "door furniture", "extractor vent", "skirting board"], "intended_defects": [], "intended_negatives": ["mirror reflection is not a stain"]},
+    {"id": "C-inventory", "viewpoint": "facing the bath and shower end", "shot_scale": "medium fixtures and safety view", "intended_visible_items": ["glass shower screen", "mixer taps", "shower handset", "extractor vent", "heated towel rail"], "intended_defects": [], "intended_negatives": ["light condensation on glass does not prove damp"]},
+    {"id": "D-condition", "viewpoint": "low oblique view of the bath panel with the bath edge visible", "shot_scale": "condition detail", "intended_visible_items": ["bath panel", "silicone seal", "vinyl floor", "lower wall tiles"], "intended_defects": ["short shallow scuff on the lower bath panel"], "intended_negatives": ["silicone seam is not a crack"]}
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "scenario_id": "RP-002",
+  "provider": "Google",
+  "product": "Antigravity CLI generate_image (replicate B)",
+  "model_display_name": "Nano Banana 2 Lite",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "Codex visual inspection",
+    "completed_at": "2026-07-15T12:07:34.411988+00:00",
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "accepted",
+        "requested_evidence": [
+          {
+            "name": "bath",
+            "visibility": "clear"
+          },
+          {
+            "name": "glass shower screen",
+            "visibility": "clear"
+          },
+          {
+            "name": "wash basin",
+            "visibility": "clear"
+          },
+          {
+            "name": "WC",
+            "visibility": "clear"
+          },
+          {
+            "name": "heated towel rail",
+            "visibility": "clear"
+          },
+          {
+            "name": "grey wall tiles",
+            "visibility": "clear"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "accepted",
+        "requested_evidence": [
+          {
+            "name": "WC",
+            "visibility": "clear"
+          },
+          {
+            "name": "wash basin",
+            "visibility": "clear"
+          },
+          {
+            "name": "mirror",
+            "visibility": "clear"
+          },
+          {
+            "name": "door furniture",
+            "visibility": "clear"
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "clear"
+          },
+          {
+            "name": "skirting board",
+            "visibility": "clear"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "rejected",
+        "requested_evidence": [
+          {
+            "name": "glass shower screen",
+            "visibility": "clear"
+          },
+          {
+            "name": "mixer taps",
+            "visibility": "clear"
+          },
+          {
+            "name": "shower handset",
+            "visibility": "clear"
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "clear"
+          },
+          {
+            "name": "heated towel rail",
+            "visibility": "clear"
+          }
+        ],
+        "rejection_reasons": [
+          "first attempt duplicated shower hardware; second exactly duplicated another packet doorway frame"
+        ]
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "accepted",
+        "requested_evidence": [
+          {
+            "name": "bath panel",
+            "visibility": "clear"
+          },
+          {
+            "name": "silicone seal",
+            "visibility": "clear"
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "clear"
+          },
+          {
+            "name": "lower wall tiles",
+            "visibility": "clear"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "generator_deviations": [
+      "first attempt duplicated shower hardware; second exactly duplicated another packet doorway frame"
+    ]
+  }
+}
