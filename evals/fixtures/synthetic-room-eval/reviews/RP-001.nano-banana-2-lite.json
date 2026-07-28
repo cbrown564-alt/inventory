@@ -3,7 +3,7 @@
   "provider": "Google",
   "product": "Antigravity CLI generate_image",
   "model_display_name": "Nano Banana 2 Lite",
-  "review_status": "provisional",
+  "review_status": "verified_synthetic_gold",
   "pass_a": {
     "reviewer": "Codex visual inspection",
     "completed_at": "2026-07-15T12:07:34.411988+00:00",
@@ -135,7 +135,7 @@
         "visibility": "clear",
         "condition": "Pale wood-effect fronts; no material damage is visible in the accepted views.",
         "defects": [],
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "dark worktop",
@@ -198,7 +198,7 @@
         "visibility": "clear",
         "condition": null,
         "defects": [],
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "door furniture",
@@ -225,7 +225,7 @@
         "visibility": "clear",
         "condition": null,
         "defects": [],
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "splashback",
@@ -243,7 +243,7 @@
         "visibility": "clear",
         "condition": null,
         "defects": [],
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       }
     ],
     "negative_controls": [
@@ -251,25 +251,25 @@
         "wording": "Wood grain is not mould.",
         "evidence_frame_ids": ["A-wide", "C-inventory"],
         "assessment": "supported",
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "No cracked tiles are visible.",
         "evidence_frame_ids": ["A-wide", "C-inventory"],
         "assessment": "supported",
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "The ordinary corner shadow is not evidence of damp.",
         "evidence_frame_ids": ["B-reverse"],
         "assessment": "supported",
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "The clean hob reflection is not a stain.",
         "evidence_frame_ids": ["C-inventory"],
         "assessment": "supported",
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       }
     ],
     "generator_deviations": [

@@ -3,7 +3,7 @@
   "provider": "Google",
   "product": "Antigravity CLI generate_image",
   "model_display_name": "Nano Banana 2 Lite",
-  "review_status": "provisional",
+  "review_status": "verified_synthetic_gold",
   "pass_a": {
     "reviewer": "Codex visual inspection",
     "completed_at": "2026-07-15T12:07:34.411988+00:00",
@@ -131,7 +131,7 @@
       {
         "canonical_name": "bath", "aliases": ["bathtub"],
         "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"], "visibility": "clear",
-        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "glass shower screen", "aliases": ["bath screen", "shower screen"],
@@ -151,7 +151,7 @@
       {
         "canonical_name": "heated towel rail", "aliases": ["towel radiator"],
         "evidence_frame_ids": ["A-wide", "B-reverse"], "visibility": "clear",
-        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "grey wall tiles", "aliases": ["bathroom wall tiles"],
@@ -172,7 +172,7 @@
       {
         "canonical_name": "extractor vent", "aliases": ["extractor fan", "ventilation grille"],
         "evidence_frame_ids": ["B-reverse"], "visibility": "clear",
-        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "skirting board", "aliases": ["baseboard"],
@@ -194,7 +194,7 @@
         "evidence_frame_ids": ["A-wide", "D-condition"], "visibility": "clear",
         "condition": "A short shallow scuff is visible on the lower face.",
         "defects": [{"wording": "Short shallow scuff", "location": "lower central-right face of the bath panel", "severity": "minor"}],
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "silicone seal", "aliases": ["bath sealant", "silicone seam"],
@@ -206,7 +206,7 @@
         "canonical_name": "vinyl floor", "aliases": ["wood-effect vinyl flooring", "resilient floor"],
         "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"], "visibility": "clear",
         "condition": "No material defect is visible in the accepted views.",
-        "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "lower wall tiles", "aliases": ["low-level wall tiles"],
@@ -217,19 +217,19 @@
     "negative_controls": [
       {
         "wording": "Tile joints are not cracks.", "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "No mould is visible.", "evidence_frame_ids": ["A-wide", "B-reverse", "D-condition"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "The mirror reflection is not a stain.", "evidence_frame_ids": ["B-reverse"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "The visible silicone seam is not a crack.", "evidence_frame_ids": ["D-condition"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       }
     ],
     "generator_deviations": [

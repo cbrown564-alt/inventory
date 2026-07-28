@@ -433,7 +433,7 @@ not pretend to be 50/50.
 - [x] Attempt both room specifications through both providers: 16 images total; at least 12 accepted.
 - [x] Complete Pass A visual screening and generate the 16-card contact sheet.
 - [x] Complete primary Pass B observed-label review for the 14 accepted images.
-- [ ] Complete independent Pass B checks for all three defect claims, every
+- [x] Complete independent Pass B checks for all three defect claims, every
       negative and the preselected 25% ordinary-label sample.
 - [ ] Run the current production backend and one prompt candidate.
 
@@ -447,9 +447,9 @@ verified: two four-view specifications produce a deterministic 16-row task
 queue; scene and observed-label schemas, provisional review records, strict
 and work-in-progress validation, and a static contact sheet are present.
 Generation has now attempted all 16 canonical tasks and Pass A accepted 14
-(87.5%). Primary Pass B review is complete. Phase 1 remains open for the
-independent Pass B checks and the production-baseline/prompt-candidate
-comparison. No model accuracy claim exists yet.
+(87.5%). Both Pass B reviews are complete. Phase 1 remains open for the
+production-baseline/prompt-candidate comparison. No model accuracy claim exists
+yet.
 
 **Generation-path clarification, 15 Jul 2026:** Antigravity CLI supplies the
 Nano Banana 2 Lite half only. GPT Image 2 supplies the other half, preserving
@@ -482,10 +482,15 @@ evidence-linked observed claims, structured negative controls and recorded
 generator deviations. The intended kitchen cabinet chip and both generated
 bath-panel scuffs were recorded as minor defects; rejected Google frames do not
 support any claim. Four ordinary-label samples of at least 25% per provider
-packet are preselected. The records remain provisional until an independent
-reviewer checks all three defect claims, every negative and those ordinary-label
-samples. Only then may the production backend and prompt candidate score
-against them as verified synthetic gold.
+packet were preselected, and the records were held provisional pending the
+independent checks completed below.
+
+**Independent Pass B review, 28 Jul 2026:** Conor Brown reviewed the three
+defect claims, every negative control and the four preselected ordinary-label
+samples through the phone review protocol. All 37 required decisions agreed
+with the primary observed-evidence review. All four provider/packet records are
+now `verified_synthetic_gold`; the next Phase 1 task is the production-backend
+and prompt-candidate comparison.
 
 ### Phase 2 — extract the pattern
 

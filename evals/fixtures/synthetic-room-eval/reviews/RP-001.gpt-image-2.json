@@ -3,7 +3,7 @@
   "provider": "OpenAI",
   "product": "Codex built-in image generation",
   "model_display_name": "GPT Image 2",
-  "review_status": "provisional",
+  "review_status": "verified_synthetic_gold",
   "pass_a": {
     "reviewer": "Project owner sign-off after Codex visual inspection",
     "completed_at": "2026-07-15T15:30:00+00:00",
@@ -130,7 +130,7 @@
         "canonical_name": "kitchen units", "aliases": ["kitchen cabinets", "cupboards"],
         "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory", "D-condition"], "visibility": "clear",
         "condition": "Pale wood-effect fronts; one lower door has the separately recorded small chip.",
-        "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "dark worktop", "aliases": ["black worktop", "countertop"],
@@ -165,7 +165,7 @@
       {
         "canonical_name": "radiator", "aliases": ["panel radiator"],
         "evidence_frame_ids": ["B-reverse"], "visibility": "clear",
-        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "door furniture", "aliases": ["door handle", "lever handle"],
@@ -180,7 +180,7 @@
       {
         "canonical_name": "smoke alarm", "aliases": ["ceiling smoke detector"],
         "evidence_frame_ids": ["C-inventory"], "visibility": "clear",
-        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "splashback", "aliases": ["tiled splashback", "wall tiles"],
@@ -191,14 +191,14 @@
       {
         "canonical_name": "electrical sockets", "aliases": ["power sockets", "wall outlets"],
         "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"], "visibility": "clear",
-        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "base unit door", "aliases": ["lower cabinet door"],
         "evidence_frame_ids": ["D-condition"], "visibility": "clear",
         "condition": "Small localised chip on the lower edge; the remainder appears intact in this view.",
         "defects": [{"wording": "Small chip", "location": "lower edge of the corner base-unit door", "severity": "minor"}],
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "plinth", "aliases": ["cabinet kickboard", "toe kick"],
@@ -215,23 +215,23 @@
     "negative_controls": [
       {
         "wording": "Wood grain is not mould.", "evidence_frame_ids": ["A-wide", "C-inventory", "D-condition"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "No cracked tiles are visible.", "evidence_frame_ids": ["A-wide", "C-inventory"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "The ordinary corner shadow is not evidence of damp.", "evidence_frame_ids": ["B-reverse"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "The clean hob reflection is not a stain.", "evidence_frame_ids": ["C-inventory"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "The floor joint pattern is not a crack.", "evidence_frame_ids": ["D-condition"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       }
     ],
     "generator_deviations": [
