@@ -61,6 +61,15 @@ report-backup-*/
 .playwright-cli/
 output/
 output/playwright/
+/tmp/
+/_tmp*.json
+
+# Python test, type-checking, lint and coverage caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
 
 # regenerable rendered benchmark HTML (keep eval.json / labels / inventory.json)
 benchmarks/*/report-*/inventory.html

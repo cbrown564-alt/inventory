@@ -18,6 +18,21 @@ def test_ci_gate_passes():
     assert proc.returncode == 0, proc.stderr + proc.stdout
 
 
+def test_repo_has_no_tracked_ignored_files():
+    """Generated files must not silently become permanent repository data."""
+    proc = subprocess.run(
+        ["git", "ls-files", "-ci", "--exclude-standard"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert proc.stdout.strip() == "", (
+        "Tracked files match .gitignore and should be removed from the index:\n"
+        f"{proc.stdout}"
+    )
+
+
 def test_ci_gate_reference_scores_meet_floors():
     sys.path.insert(0, str(ROOT / "evals"))
     import ci_gate  # noqa: E402
