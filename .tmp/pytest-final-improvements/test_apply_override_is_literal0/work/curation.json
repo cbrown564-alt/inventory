@@ -1,7 +1,0 @@
-{
-  "version": 1,
-  "overrides": {
-    "b.jpg": "hero",
-    "a.jpg": "hidden"
-  }
-}
