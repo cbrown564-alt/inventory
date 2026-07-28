@@ -1,0 +1,16 @@
+{
+  "id": "RP-016",
+  "room_type": "Dining room",
+  "property_profile": "recently refurbished dining room in a UK terrace",
+  "cleanliness": "clean, tidy and sparsely furnished",
+  "lighting": "soft daylight from French doors",
+  "continuity_requirements": ["same oak table, six grey chairs, French doors and pale timber floor"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "at the hall doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["oak dining table", "six chairs", "French doors", "pendant light", "timber floor"], "intended_defects": [], "intended_negatives": ["no table damage"]},
+    {"id": "B-reverse", "viewpoint": "at the French doors", "shot_scale": "wide establishing view", "intended_visible_items": ["internal door", "sideboard", "radiator", "wall mirror", "skirting"], "intended_defects": [], "intended_negatives": ["mirror reflection is not a stain"]},
+    {"id": "C-inventory", "viewpoint": "beside the table facing outside", "shot_scale": "medium fixtures view", "intended_visible_items": ["French doors", "curtain pole", "radiator", "sockets", "thermostatic valve"], "intended_defects": [], "intended_negatives": ["glass reflection is not condensation"]},
+    {"id": "D-condition", "viewpoint": "close view along table edge", "shot_scale": "condition detail", "intended_visible_items": ["oak tabletop", "chair upholstery", "timber floor", "table leg"], "intended_defects": [], "intended_negatives": ["oak grain is not scratching"]}
+  ]
+}

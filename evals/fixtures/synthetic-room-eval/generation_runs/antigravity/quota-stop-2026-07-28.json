@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "record_type": "operator_run_stop",
+  "generation_path": "Antigravity CLI built-in generate_image",
+  "cli_version": "1.1.8",
+  "operator_model_mode": "gemini-3.5-flash-low",
+  "metered_api_call": false,
+  "observed_at": "2026-07-28T15:38:10Z",
+  "reported_quota_reset_at": "2026-07-28T19:36:54Z",
+  "scale_run": {
+    "packets_submitted": 25,
+    "packets_reported_failed": 21,
+    "complete_or_cached_packets": [
+      "RP-001",
+      "RP-003",
+      "RP-007",
+      "RP-014"
+    ],
+    "note": "RP-003 was cached during the scale run and was later rejected under the two-attempt packet-continuity rule. RP-015 left four files although the wrapper returned ERROR; a later recovery record pins their hashes but does not claim a successful raw wrapper response."
+  },
+  "current_google_task_status": {
+    "review_pending": 19,
+    "generator_failed": 4,
+    "pending": 77
+  },
+  "current_file_counts": {
+    "complete_review_pending_packets": [
+      "RP-001",
+      "RP-007",
+      "RP-014",
+      "RP-015"
+    ],
+    "partial_review_pending_packets": {
+      "RP-002": 2,
+      "RP-005": 1
+    }
+  },
+  "stop_reasons": [
+    "Antigravity returned RESOURCE_EXHAUSTED/429 provider-internal quota errors.",
+    "The built-in image tool did not reliably accept the saved first view as a visual reference, so packet continuity cannot be assumed."
+  ],
+  "resume_rule": "Resume only after the reported quota reset. Keep each packet subject to Pass A and the two-attempt limit; do not weaken scene specifications or relabel the backend cohort."
+}

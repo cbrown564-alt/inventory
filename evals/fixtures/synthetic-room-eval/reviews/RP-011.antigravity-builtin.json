@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-011",
+  "provider": "Google",
+  "product": "Antigravity CLI generate_image",
+  "model_display_name": "Antigravity built-in image generator",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "grey sofa",
+            "visibility": "pending"
+          },
+          {
+            "name": "armchair",
+            "visibility": "pending"
+          },
+          {
+            "name": "coffee table",
+            "visibility": "pending"
+          },
+          {
+            "name": "television unit",
+            "visibility": "pending"
+          },
+          {
+            "name": "beige carpet",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "door",
+            "visibility": "pending"
+          },
+          {
+            "name": "bookcase",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "floor lamp",
+            "visibility": "pending"
+          },
+          {
+            "name": "ceiling shade",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "balcony door",
+            "visibility": "pending"
+          },
+          {
+            "name": "vertical blinds",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "thermostat",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "sofa arm",
+            "visibility": "pending"
+          },
+          {
+            "name": "seat cushion",
+            "visibility": "pending"
+          },
+          {
+            "name": "fabric seam",
+            "visibility": "pending"
+          },
+          {
+            "name": "carpet",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

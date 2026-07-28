@@ -1,0 +1,16 @@
+{
+  "id": "RP-015",
+  "room_type": "Entrance hall",
+  "property_profile": "family house entrance with open coat storage",
+  "cleanliness": "noticeably cluttered but inspectable with shoes, bags and coats",
+  "lighting": "strong daylight through glazed front door",
+  "continuity_requirements": ["same pale walls, tiled floor, glazed door and open coat bench"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "extra doors"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "at the open front door", "shot_scale": "wide establishing view", "intended_visible_items": ["tiled floor", "coat bench", "wall hooks", "hall mirror", "radiator"], "intended_defects": [], "intended_negatives": ["tile joints are not cracks"]},
+    {"id": "B-reverse", "viewpoint": "stair foot facing the door", "shot_scale": "wide establishing view", "intended_visible_items": ["glazed front door", "door furniture", "doormat", "shoe storage", "skirting"], "intended_defects": [], "intended_negatives": ["glazing reflection is not a stain"]},
+    {"id": "C-inventory", "viewpoint": "beside coat bench", "shot_scale": "medium fixtures view", "intended_visible_items": ["radiator", "thermostat", "sockets", "light switch", "smoke alarm"], "intended_defects": [], "intended_negatives": ["coat shadow is not damp"]},
+    {"id": "D-condition", "viewpoint": "low view across tiles and mat", "shot_scale": "condition detail", "intended_visible_items": ["floor tiles", "doormat", "threshold strip", "skirting"], "intended_defects": [], "intended_negatives": ["mud-toned mat pattern is not a floor stain"]}
+  ]
+}

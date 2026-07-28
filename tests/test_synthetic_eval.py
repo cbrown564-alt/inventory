@@ -4,6 +4,7 @@ from pathlib import Path
 
 from evals.synthetic.build_review import build
 from evals.synthetic.build_tasks import build_rows, write_tasks
+from evals.synthetic.generate_antigravity import _load_packets, _packet_prompt
 from evals.synthetic.record_outputs import record
 from evals.synthetic.reject_output import reject
 from evals.synthetic.run_eval import build_run_plan
@@ -16,10 +17,10 @@ from homeinventory.usecases.tenancy import SYSTEM_PROMPT
 DATASET = Path(__file__).resolve().parents[1] / "evals/fixtures/synthetic-room-eval"
 
 
-def test_representative_slice_has_two_matched_four_view_packets():
+def test_pilot_has_twenty_five_matched_four_view_packets():
     rows = build_rows(DATASET)
-    assert len(rows) == 16
-    assert {row["scenario_id"] for row in rows} == {"RP-001", "RP-002"}
+    assert len(rows) == 200
+    assert len({row["scenario_id"] for row in rows}) == 25
     for scenario in {row["scenario_id"] for row in rows}:
         subset = [row for row in rows if row["scenario_id"] == scenario]
         assert len(subset) == 8
@@ -29,6 +30,25 @@ def test_representative_slice_has_two_matched_four_view_packets():
             "Codex built-in image generation",
         }
         assert {row["view_id"] for row in subset} == {"A-wide", "B-reverse", "C-inventory", "D-condition"}
+
+
+def test_antigravity_resume_skips_terminal_packets_and_preserves_partial_files():
+    assert _load_packets(DATASET, {"RP-003"}) == {}
+    packet = _load_packets(DATASET, {"RP-002"})["RP-002"]
+    missing = [row for row in packet if row["view_id"] in {
+        "C-inventory",
+        "D-condition",
+    }]
+    prompt = _packet_prompt(
+        "RP-002",
+        missing,
+        DATASET,
+        [{"task_id": packet[0]["task_id"], "path": "existing.jpg", "sha256": "abc"}],
+    )
+    assert "already exist and are immutable" in prompt
+    assert "Generate only the tasks listed below" in prompt
+    assert "RP-002.antigravity-builtin.C-inventory" in prompt
+    assert "RP-002.antigravity-builtin.A-wide" in prompt
 
 
 def test_prompts_are_deterministic_and_task_progress_is_preserved(tmp_path):
@@ -49,19 +69,36 @@ def test_prompts_are_deterministic_and_task_progress_is_preserved(tmp_path):
     assert second[0]["status"] == "review_pending"
 
 
-def test_fixture_validates_accepted_images_and_reports_terminal_failures(tmp_path):
+def test_fixture_validates_accepted_images_and_reports_pending_tasks(tmp_path):
     errors, warnings = validate(DATASET)
     assert errors == []
-    assert len([w for w in warnings if w.startswith("RP-")]) == 2
-    assert all("generator_failed" in warning for warning in warnings)
+    assert len([w for w in warnings if w.startswith("RP-")]) == 192
+    assert all(
+        any(status in warning for status in (
+            "pending",
+            "review_pending",
+            "generator_failed",
+        ))
+        for warning in warnings
+    )
     strict_errors, _ = validate(DATASET, require_complete=True)
-    assert len([e for e in strict_errors if "not accepted" in e]) == 2
+    assert len([e for e in strict_errors if "not accepted" in e]) == 192
     output = tmp_path / "contact-sheet.html"
     build(DATASET, output)
     page = output.read_text()
     assert "<strong>Status:</strong>" in page
-    assert page.count("<article>") == 16
-    assert "Intended prompts are not gold" in page
+    assert page.count("<article ") == 200
+    assert "Requested content is not gold" in page
+    for filter_name in (
+        "development",
+        "validation",
+        "sealed",
+        "review_pending",
+        "pending",
+        "generator_failed",
+    ):
+        assert f'data-filter="{filter_name}"' in page
+    assert "c.dataset.split===f||c.dataset.status===f" in page
 
 
 def test_schema_files_are_valid_json():
@@ -80,8 +117,13 @@ def test_review_templates_include_structured_negative_controls(tmp_path):
     assert review["pass_b"]["negative_controls"] == []
 
 
-def test_primary_pass_b_reviews_are_complete_and_keep_rejected_frames_out_of_gold():
-    reviews = [json.loads(path.read_text()) for path in sorted((DATASET / "reviews").glob("RP-*.json"))]
+def test_verified_pass_b_reviews_keep_rejected_frames_out_of_gold():
+    reviews = [
+        json.loads(path.read_text())
+        for path in sorted((DATASET / "reviews").glob("RP-*.json"))
+        if json.loads(path.read_text()).get("review_status")
+        == "verified_synthetic_gold"
+    ]
     assert len(reviews) == 4
     defects = []
     for review in reviews:
@@ -149,7 +191,7 @@ def test_phase1_plan_keeps_production_architecture_and_complete_packets_only():
     assert len(plan) == 4
     assert {run["scenario_id"] for run in plan} == {"RP-001", "RP-002"}
     assert {run["prompt_id"] for run in plan} == set(PROMPTS)
-    assert {run["model"] for run in plan} == {"gemini-3.5-flash"}
+    assert {run["model"] for run in plan} == {"gemini-3.5-flash-low"}
     assert all(len(run["inputs"]) == 4 for run in plan)
     assert all(run["image_model"] == "GPT Image 2" for run in plan)
 
@@ -189,4 +231,32 @@ def test_phase1_scorer_traces_items_defects_and_evidence_links():
     assert scored["item_recall_against_reviewed_gold"] == 100.0
     assert scored["defect_recall"] == 100.0
     assert scored["evidence_link_accuracy"] == 100.0
+    assert scored["counts"]["unsupported_defects"] == 0
+
+
+def test_phase1_scorer_allows_visible_defect_on_grouped_item_name():
+    review = json.loads(
+        (DATASET / "reviews/RP-001.gpt-image-2.json").read_text()
+    )
+    record = {
+        "run_id": "test-grouped-defect",
+        "scenario_id": "RP-001",
+        "room_type": "Kitchen",
+        "prompt_id": "production-v1",
+        "parsed_output": {
+            "items": [
+                {
+                    "name": "Kitchen cabinets",
+                    "description": "Laminate base and wall units.",
+                    "defects": ["small chip to lower edge of corner base cupboard"],
+                    "photo_ids": ["D-condition"],
+                }
+            ]
+        },
+        "latency_seconds": 1.0,
+        "usage": {"input_tokens": 100, "output_tokens": 50, "total_tokens": 150},
+        "estimated_cost": {"amount": 0.0},
+    }
+    scored = score_run(record, review)
+    assert scored["defect_recall"] == 100.0
     assert scored["counts"]["unsupported_defects"] == 0

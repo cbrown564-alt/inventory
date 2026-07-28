@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-016",
+  "provider": "Google",
+  "product": "Antigravity CLI generate_image",
+  "model_display_name": "Antigravity built-in image generator",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "oak dining table",
+            "visibility": "pending"
+          },
+          {
+            "name": "six chairs",
+            "visibility": "pending"
+          },
+          {
+            "name": "French doors",
+            "visibility": "pending"
+          },
+          {
+            "name": "pendant light",
+            "visibility": "pending"
+          },
+          {
+            "name": "timber floor",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "internal door",
+            "visibility": "pending"
+          },
+          {
+            "name": "sideboard",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "wall mirror",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "French doors",
+            "visibility": "pending"
+          },
+          {
+            "name": "curtain pole",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          },
+          {
+            "name": "thermostatic valve",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "oak tabletop",
+            "visibility": "pending"
+          },
+          {
+            "name": "chair upholstery",
+            "visibility": "pending"
+          },
+          {
+            "name": "timber floor",
+            "visibility": "pending"
+          },
+          {
+            "name": "table leg",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

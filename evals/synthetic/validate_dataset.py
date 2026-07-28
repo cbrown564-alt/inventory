@@ -33,10 +33,20 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
         return ["missing dataset.json"], warnings
     config = _load(config_path)
     _required(config, ["dataset_id", "phase", "providers", "terms_records"], "dataset.json", errors)
+    design = config.get("target_design", {})
+    expected_scenarios = int(design.get("matched_scenarios", 25))
+    expected_tasks = int(design.get("task_images", expected_scenarios * 8))
+    views_per_packet = int(design.get("views_per_packet", 4))
+    providers_per_scenario = int(
+        design.get("provider_packets_per_scenario", 2)
+    )
 
     scene_paths = sorted((dataset_dir / "scenarios").glob("RP-*.json"))
-    if len(scene_paths) != 2:
-        errors.append(f"representative slice requires 2 scenarios; found {len(scene_paths)}")
+    if len(scene_paths) != expected_scenarios:
+        errors.append(
+            f"pilot requires {expected_scenarios} scenarios; "
+            f"found {len(scene_paths)}"
+        )
     scenario_ids: set[str] = set()
     for path in scene_paths:
         scene = _load(path)
@@ -44,8 +54,22 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
                           "continuity_requirements", "avoid", "provider_assignments", "views"], path.name, errors)
         scenario_ids.add(scene.get("id", ""))
         views = scene.get("views", [])
-        if len(views) != 4:
-            errors.append(f"{path.name}: expected four views; found {len(views)}")
+        if len(views) != views_per_packet:
+            errors.append(
+                f"{path.name}: expected {views_per_packet} views; "
+                f"found {len(views)}"
+            )
+        assignments = scene.get("provider_assignments", [])
+        if len(assignments) != providers_per_scenario:
+            errors.append(
+                f"{path.name}: expected {providers_per_scenario} providers; "
+                f"found {len(assignments)}"
+            )
+        for provider_id in assignments:
+            if provider_id not in config.get("providers", {}):
+                errors.append(
+                    f"{path.name}: unknown provider assignment {provider_id}"
+                )
         if len(set(v.get("id") for v in views)) != len(views):
             errors.append(f"{path.name}: duplicate view IDs")
         for i, view in enumerate(views):
@@ -61,12 +85,18 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
     else:
         with task_path.open(newline="", encoding="utf-8") as handle:
             actual = list(csv.DictReader(handle))
-    if len(actual) != 16:
-        errors.append(f"representative slice requires 16 tasks; found {len(actual)}")
+    if len(actual) != expected_tasks:
+        errors.append(
+            f"pilot requires {expected_tasks} tasks; found {len(actual)}"
+        )
     counts = Counter(row.get("scenario_id") for row in actual)
     for scenario_id in scenario_ids:
-        if counts[scenario_id] != 8:
-            errors.append(f"{scenario_id}: expected 8 provider/view tasks; found {counts[scenario_id]}")
+        expected_per_scenario = views_per_packet * providers_per_scenario
+        if counts[scenario_id] != expected_per_scenario:
+            errors.append(
+                f"{scenario_id}: expected {expected_per_scenario} "
+                f"provider/view tasks; found {counts[scenario_id]}"
+            )
     for row in actual:
         expected_row = expected_by_id.get(row.get("task_id", ""))
         if not expected_row:
@@ -76,10 +106,8 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
             if row.get(field) != expected_row[field]:
                 errors.append(f"{row['task_id']}: stale or changed {field}; rebuild tasks")
         image_path = dataset_dir / row["output_path"]
-        if row.get("status") in {"accepted", "pass_a_accepted"}:
-            if not image_path.exists():
-                errors.append(f"{row['task_id']}: accepted image is missing")
-                continue
+        is_accepted = row.get("status") in {"accepted", "pass_a_accepted"}
+        if image_path.exists():
             try:
                 with Image.open(image_path) as image:
                     width, height = image.size
@@ -93,6 +121,9 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
                         errors.append(f"{row['task_id']}: resolution {width}x{height} is below 1024x768")
             except Exception as exc:
                 errors.append(f"{row['task_id']}: unreadable image: {exc}")
+        elif is_accepted:
+            errors.append(f"{row['task_id']}: accepted image is missing")
+        if is_accepted:
             if not all(row.get(field) for field in (
                 "operator", "generated_at", "generator_cli_version", "output_sha256"
             )):
@@ -108,6 +139,39 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
             errors.append(f"{provider_id}: missing terms record")
         elif terms.get("acceptance_permitted") is not True:
             warnings.append(f"{provider_id}: dataset acceptance paused by terms record")
+
+    split_paths = [
+        dataset_dir / "splits/development.json",
+        dataset_dir / "splits/validation.json",
+        dataset_dir / "splits/sealed.json",
+    ]
+    split_ids: list[str] = []
+    for split_path in split_paths:
+        if not split_path.is_file():
+            errors.append(f"missing {split_path.relative_to(dataset_dir)}")
+            continue
+        split = _load(split_path)
+        ids = split.get("scenario_ids", [])
+        if not isinstance(ids, list) or not ids:
+            errors.append(f"{split_path.name}: missing scenario_ids")
+            continue
+        split_ids.extend(ids)
+    duplicates = [
+        scenario_id
+        for scenario_id, count in Counter(split_ids).items()
+        if count > 1
+    ]
+    if duplicates:
+        errors.append(
+            "scenario IDs cross split boundaries: " + ", ".join(duplicates)
+        )
+    if set(split_ids) != scenario_ids:
+        missing = sorted(scenario_ids - set(split_ids))
+        extra = sorted(set(split_ids) - scenario_ids)
+        if missing:
+            errors.append("split assignment missing: " + ", ".join(missing))
+        if extra:
+            errors.append("split assignment unknown: " + ", ".join(extra))
 
     for review_path in sorted((dataset_dir / "reviews").glob("*.json")):
         review = _load(review_path)

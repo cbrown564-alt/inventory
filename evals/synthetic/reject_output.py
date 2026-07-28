@@ -14,17 +14,25 @@ from pathlib import Path
 from evals.synthetic.build_tasks import DEFAULT_DATASET, FIELDNAMES
 
 
-def reject(dataset_dir: Path, task_id: str, reasons: list[str], terminal: bool = False) -> Path:
+def reject(
+    dataset_dir: Path,
+    task_id: str,
+    reasons: list[str],
+    terminal: bool = False,
+    operator: str | None = None,
+) -> Path:
     task_path = dataset_dir / "tasks.csv"
     with task_path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     row = next((candidate for candidate in rows if candidate["task_id"] == task_id), None)
     if row is None:
         raise ValueError(f"unknown task: {task_id}")
+    if operator:
+        row["operator"] = operator
     source = dataset_dir / row["output_path"]
     if not source.is_file():
         raise ValueError(f"missing output for {task_id}")
-    attempt = int(row.get("attempts") or 1)
+    attempt = max(1, int(row.get("attempts") or 1))
     destination = dataset_dir / "rejected" / f"{task_id}-attempt-{attempt}{source.suffix.lower()}"
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
@@ -43,6 +51,7 @@ def reject(dataset_dir: Path, task_id: str, reasons: list[str], terminal: bool =
     with (dataset_dir / "rejected/manifest.jsonl").open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(entry, sort_keys=True) + "\n")
     row["status"] = "generator_failed" if terminal else "retry_pending"
+    row["attempts"] = str(attempt)
     for field in ("generated_at", "generator_cli_version", "output_sha256"):
         row[field] = ""
     with task_path.open("w", newline="", encoding="utf-8") as handle:
@@ -59,8 +68,18 @@ def main() -> int:
     parser.add_argument("--dataset-dir", type=Path, default=DEFAULT_DATASET)
     parser.add_argument("--terminal", action="store_true",
                         help="record the stopping-rule failure instead of preparing another retry")
+    parser.add_argument(
+        "--operator",
+        help="override the recorded operator when correcting stale provenance",
+    )
     args = parser.parse_args()
-    destination = reject(args.dataset_dir, args.task_id, args.reason, args.terminal)
+    destination = reject(
+        args.dataset_dir,
+        args.task_id,
+        args.reason,
+        args.terminal,
+        args.operator,
+    )
     print(destination)
     return 0
 

@@ -52,6 +52,7 @@ evals/fixtures/own-property/shotscale-smoke-report/
 
 # local agent / tooling scratch
 .zcode/
+.tools/
 
 # local report backups (not source of truth)
 report-backup-*/

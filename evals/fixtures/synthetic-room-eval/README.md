@@ -1,11 +1,12 @@
 # Synthetic room evaluation fixture
 
-This directory is the working data for `docs/31-synthetic-evaluation-dataset-plan.md`.
-Phase 1 is a 16-image representative slice: two room specifications, four views
-and a 50/50 split between Nano Banana 2 Lite through Antigravity CLI and GPT
-Image 2 through Codex built-in generation. Intended prompt content is never
-scored as observed truth. Only a completed two-pass review may use
-`verified_synthetic_gold`.
+This directory is the working data for
+`docs/31-synthetic-evaluation-dataset-plan.md`. The immutable pilot queue
+contains 25 matched room specifications, two provider packets per room and
+four views per packet: 200 tasks in total. The earlier 16-image representative
+slice remains as audit and prompt-development evidence. Intended prompt
+content is never scored as observed truth. Only a completed two-pass review
+may use `verified_synthetic_gold`.
 
 ## Terms decision
 
@@ -13,17 +14,20 @@ On 15 Jul 2026 the project owner approved Google generation and dataset
 acceptance for this bounded evaluation use: the project is using provider AI
 systems for an inventory task and does not train, fine-tune, distil or otherwise
 develop model weights. This is an owner decision, not external legal advice.
-Re-check before training use or a change in publication scope. For Phase 1 the
-project owner confirms the Antigravity `generate_image` backend is Nano Banana
-2 Lite. Preserve the CLI version, exact prompt and output hash for every task.
+Re-check before training use or a change in publication scope. The six
+accepted legacy Google images retain their recorded Nano Banana 2 Lite label
+but sit outside the new 200-task queue. Antigravity CLI 1.1.8 does not expose
+a selectable backend image model in successful run records, so the current
+Google cohort is `antigravity-builtin / backend_model: unknown`. Preserve the
+CLI version, exact prompt and output hash for every task.
 
 ## Permanent generation boundary
 
-Never call an image-generation API for this project. Generate Nano Banana
-images only through Antigravity CLI and GPT Image 2 images only through Codex's
-`imagegen` skill. This rule applies even when an API key is configured. It does
-not authorise a later vision-description evaluation call; that remains a
-separate, task-specific permission decision.
+Never call an image-generation API for this project. Generate Google images
+only through Antigravity CLI and GPT Image 2 images only through Codex's
+`imagegen` skill. Google vision-description evaluation for this synthetic
+programme also uses subscription-backed Antigravity CLI, never a metered
+Gemini endpoint. This rule applies even when an API key is configured.
 
 ## Phase 1 generation result
 
@@ -47,27 +51,46 @@ claims, every negative control and the preselected ordinary-label samples: all
 `verified_synthetic_gold` and may be used for the production-backend and
 prompt-candidate comparison.
 
+Four immutable Antigravity CLI vision runs completed on 28 Jul 2026. The
+evidence-bounded prompt improved defect recall from 50% to 100% and removed
+one unsupported defect, while item recall fell from 78.1% to 71.9%. The result
+is directional, so no prompt winner is frozen.
+
+## Current pilot status
+
+Phase 2 is complete: all 25 scenarios, 200 tasks, review templates and hashed
+development/validation/sealed splits exist. Phase 3 is stopped. The queue has
+8 `pass_a_accepted`, 23 `review_pending`, 4 `generator_failed` and 165
+`pending` tasks. Antigravity reported `RESOURCE_EXHAUSTED`/429 with a reset at
+`2026-07-28T19:36:54Z`; it also could not reliably use the first view as a
+continuity reference. Resume only after the reset and keep the two-attempt
+rule. Generated files remain provisional until independent review.
+
 ## Commands
 
-```sh
-uv run python -m evals.synthetic.build_tasks
-uv run python -m evals.synthetic.validate_dataset
-uv run python -m evals.synthetic.build_review
-uv run python -m evals.synthetic.run_eval --dry-run
-# Explicit approval for metered Gemini inference is required before:
-uv run python -m evals.synthetic.run_eval
-uv run python -m evals.synthetic.score
+```powershell
+.\.venv\Scripts\python.exe -m evals.synthetic.build_tasks
+.\.venv\Scripts\python.exe -m evals.synthetic.validate_dataset
+.\.venv\Scripts\python.exe -m evals.synthetic.build_review
+.\.venv\Scripts\python.exe -m evals.synthetic.generate_antigravity --workers 1
+.\.venv\Scripts\python.exe -m evals.synthetic.record_outputs --provider Google --operator "Antigravity operator name" --cli-version "Antigravity CLI 1.1.8"
+.\.venv\Scripts\python.exe -m evals.synthetic.run_eval --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.run_eval
+.\.venv\Scripts\python.exe -m evals.synthetic.score
 ```
 
-Use `--require-complete` only after all 16 task rows say `accepted`, all image
-files exist, and both provider reviews for each packet are complete. The normal
-validator accepts a not-yet-generated slice but reports every pending task.
+`generate_antigravity` invokes the subscription CLI; it does not use image API
+credentials. Use `--require-complete` only after all 200 task rows say
+`accepted` or `pass_a_accepted`, all image files exist, and both provider
+reviews for each packet are complete. The normal validator accepts a
+not-yet-generated pilot but reports every pending task.
 
 ## Operator sequence
 
 1. Confirm the provider's `acceptance_permitted` terms record is true.
 2. Claim a row in `tasks.csv`; add your name and retain its exact prompt.
-3. Generate interactively with the displayed product/model in that row.
+3. Generate with the authorised path in that row: Antigravity CLI for Google
+   or Codex `imagegen` for GPT Image 2.
 4. Save the original output at `output_path`; do not edit pixels.
 5. Record `attempts`, `generated_at`, and set status to `review_pending`.
 6. Copy the review template for the matching packet/provider and complete Pass A.
@@ -77,12 +100,13 @@ validator accepts a not-yet-generated slice but reports every pending task.
 10. Rebuild the contact sheet and run the strict validator.
 
 The Phase 1 prompt comparison is frozen in `dataset.json`. Its runner sends the
-two complete GPT Image 2 packets to the production `gemini-3.5-flash` backend
-once per prompt, caches the raw provider responses, and refuses to overwrite
-them. An interrupted run resumes by skipping immutable cached responses. The
-scorer writes `reports/phase1-prompt-comparison.{json,md}`. The two
-incomplete Nano Banana packets remain useful for single-image work but are
-excluded from this whole-room production-architecture comparison.
+two complete GPT Image 2 packets through the pinned Antigravity CLI
+`gemini-3.5-flash-low` mode once per prompt, caches sanitised raw responses,
+and refuses to overwrite them. It never calls a Gemini API endpoint. An
+interrupted run resumes by skipping immutable cached responses. The scorer
+writes `reports/phase1-prompt-comparison.{json,md}`. The two incomplete legacy
+Google packets remain useful for single-image work but are excluded from this
+whole-room comparison.
 
 Rejected attempts are append-only JSON lines in `rejected/manifest.jsonl` with
 task ID, attempt, output hash/path, timestamp, operator and rejection reasons.

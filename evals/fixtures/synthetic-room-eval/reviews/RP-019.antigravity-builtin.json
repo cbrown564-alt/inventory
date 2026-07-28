@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-019",
+  "provider": "Google",
+  "product": "Antigravity CLI generate_image",
+  "model_display_name": "Antigravity built-in image generator",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "stacked washer dryer",
+            "visibility": "pending"
+          },
+          {
+            "name": "boiler",
+            "visibility": "pending"
+          },
+          {
+            "name": "shelves",
+            "visibility": "pending"
+          },
+          {
+            "name": "cleaning tools",
+            "visibility": "pending"
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "cupboard door",
+            "visibility": "pending"
+          },
+          {
+            "name": "door hinges",
+            "visibility": "pending"
+          },
+          {
+            "name": "shelves",
+            "visibility": "pending"
+          },
+          {
+            "name": "storage baskets",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "boiler",
+            "visibility": "pending"
+          },
+          {
+            "name": "consumer unit",
+            "visibility": "pending"
+          },
+          {
+            "name": "isolator switches",
+            "visibility": "pending"
+          },
+          {
+            "name": "air vent",
+            "visibility": "pending"
+          },
+          {
+            "name": "pipework",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "vinyl floor",
+            "visibility": "pending"
+          },
+          {
+            "name": "plinth",
+            "visibility": "pending"
+          },
+          {
+            "name": "pipe boxing",
+            "visibility": "pending"
+          },
+          {
+            "name": "basket edge",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

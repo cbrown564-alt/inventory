@@ -1,0 +1,966 @@
+{
+  "dataset_id": "synthetic-room-eval",
+  "dataset_phase": "phase-1-representative-slice",
+  "scope": "Complete verified four-view packets evaluated through the pinned subscription-backed Antigravity CLI model/mode. No Gemini API endpoint is used.",
+  "metric_limits": [
+    "The reviewed claims do not mark a notable subset, so notable recall is not reported.",
+    "Unmatched predicted items require human review; the fixture records generator deviations but is not exhaustive enough for a public hallucination claim.",
+    "Condition labels are descriptive rather than ordinal grades, so condition agreement is not reported.",
+    "This synthetic slice is development evidence, not real-property accuracy evidence."
+  ],
+  "rows": [
+    {
+      "run_id": "RP-001.GPT Image 2.gemini-3.5-flash-low.evidence-bounded-coverage-v1",
+      "scenario_id": "RP-001",
+      "room_type": "Kitchen",
+      "image_provider": "OpenAI",
+      "image_model": "GPT Image 2",
+      "architecture_id": "antigravity-whole-room-v1",
+      "prompt_id": "evidence-bounded-coverage-v1",
+      "item_recall_against_reviewed_gold": 81.2,
+      "naming_accuracy": 76.9,
+      "defect_recall": 100.0,
+      "evidence_link_accuracy": 100.0,
+      "unsupported_item_rate_against_reviewed_gold": 65.8,
+      "duplicate_rate": 0.0,
+      "negative_control_false_positive_rate": 0.0,
+      "counts": {
+        "reviewed_gold_items": 16,
+        "matched_items": 13,
+        "predicted_items": 38,
+        "gold_defects": 1,
+        "found_defects": 1,
+        "unsupported_defects": 0,
+        "negative_controls": 5,
+        "negative_false_positives": 0
+      },
+      "row_failures": {
+        "missed_claims": [
+          "induction hob",
+          "base unit door",
+          "plinth"
+        ],
+        "unmatched_predictions_need_review": [
+          {
+            "name": "Walls",
+            "description": "Plaster walls painted in a light cream/beige colour.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Ceiling",
+            "description": "Plaster ceiling painted in plain white.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Window",
+            "description": "White uPVC double-glazed window with a central opening section.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Internal door",
+            "description": "White painted wooden internal door with six recessed panels.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Door frame",
+            "description": "White painted wooden door architrave and frame.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Wall cabinets",
+            "description": "Light wood laminate wall-mounted cupboards with double and single doors, equipped with round brushed metal knobs.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Fridge-freezer",
+            "description": "Freestanding tall silver/grey metallic fridge-freezer.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Microwave oven",
+            "description": "Freestanding silver/grey microwave oven.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Kettle",
+            "description": "Silver stainless steel electric kettle with black handle and lid.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Toaster",
+            "description": "Silver 2-slice stainless steel toaster with black trim.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Air fryer",
+            "description": "Black electric air fryer placed on top of the fridge-freezer.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Ceiling light fixture",
+            "description": "Chrome/metal three-way adjustable spotlight fixture mounted to the ceiling.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Light switch",
+            "description": "White plastic single-gang light switch on the kitchen wall next to the entrance door.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Double wall sockets",
+            "description": "White plastic double electrical sockets, including sockets with red switches for appliance isolation, mounted on the tiled splashback.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Windowsill plant",
+            "description": "Green houseplant in a blue/teal ceramic pot on the windowsill.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Dish drying rack",
+            "description": "Chrome/stainless steel wire dish drainer on the sink unit.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Knife block and knives",
+            "description": "Black wooden/plastic knife block containing a set of kitchen knives with black handles.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Utensil holder and utensils",
+            "description": "Perforated stainless steel utensil holder containing various metal and black plastic kitchen utensils.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Chopping board",
+            "description": "Rectangular light-coloured wooden/bamboo chopping board.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Storage canisters",
+            "description": "Three storage jars/canisters (two white with lids, one dark glass jar) placed on the countertop.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Condiment and oil bottles",
+            "description": "Glass bottle of olive oil and other condiment bottles/jars on the countertop.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Fruit bowl",
+            "description": "White ceramic bowl containing fresh fruit (including bananas and oranges), placed on top of the microwave.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Washing-up liquid and hand soap",
+            "description": "Plastic dispenser bottles for washing-up liquid and hand wash located behind the sink.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Refrigerator magnets",
+            "description": "A collection of colourful decorative magnets on the side of the fridge-freezer.",
+            "defects": [],
+            "photo_ids": [
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Threshold strip",
+            "description": "Metal transition/threshold strip at the kitchen entrance doorway.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          }
+        ],
+        "missed_defects": [],
+        "unsupported_defects": [],
+        "evidence_link_failures": [],
+        "negative_control_false_positives": [],
+        "duplicate_names": []
+      },
+      "latency_seconds": 42.088,
+      "usage": {
+        "prompt_tokens": 96844,
+        "completion_tokens": 18914,
+        "total_tokens": 115758
+      },
+      "estimated_cost_usd": 0.0
+    },
+    {
+      "run_id": "RP-002.GPT Image 2.gemini-3.5-flash-low.evidence-bounded-coverage-v1",
+      "scenario_id": "RP-002",
+      "room_type": "Bathroom",
+      "image_provider": "OpenAI",
+      "image_model": "GPT Image 2",
+      "architecture_id": "antigravity-whole-room-v1",
+      "prompt_id": "evidence-bounded-coverage-v1",
+      "item_recall_against_reviewed_gold": 62.5,
+      "naming_accuracy": 90.0,
+      "defect_recall": 100.0,
+      "evidence_link_accuracy": 100.0,
+      "unsupported_item_rate_against_reviewed_gold": 58.3,
+      "duplicate_rate": 0.0,
+      "negative_control_false_positive_rate": 0.0,
+      "counts": {
+        "reviewed_gold_items": 16,
+        "matched_items": 10,
+        "predicted_items": 24,
+        "gold_defects": 1,
+        "found_defects": 1,
+        "unsupported_defects": 0,
+        "negative_controls": 5,
+        "negative_false_positives": 0
+      },
+      "row_failures": {
+        "missed_claims": [
+          "grey wall tiles",
+          "mixer taps",
+          "bath panel",
+          "silicone seal",
+          "vinyl floor",
+          "lower wall tiles"
+        ],
+        "unmatched_predictions_need_review": [
+          {
+            "name": "Tiled walls",
+            "description": "Large rectangular grey ceramic wall tiles with white/light grey grout, covering the bath enclosure, window wall, and lower half of the adjacent walls.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Painted walls",
+            "description": "Plastered walls, painted white, located above the tiling level.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Ceiling",
+            "description": "Plastered ceiling, painted white.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Floor tiling",
+            "description": "Light grey square ceramic or porcelain floor tiles with light grey grout.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Door frame and architrave",
+            "description": "White painted wooden door frame and architrave surrounding the entry door.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Window",
+            "description": "White uPVC double-glazed window with obscured privacy glass, featuring a top-opening transom.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Recessed spotlights",
+            "description": "Recessed ceiling downlights with chrome or white bezels, housing LED lamps.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Shaver socket",
+            "description": "White plastic dual-voltage shaver socket outlet on the wall left of the window.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Pedestal wash hand basin",
+            "description": "White ceramic wash hand basin and floor pedestal, fitted with a chrome monobloc mixer tap and push-button clicker waste.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Toilet brush and holder",
+            "description": "Black plastic toilet brush in a matching black cylindrical plastic container, positioned on the floor beside the toilet.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Charcoal towel",
+            "description": "Dark grey or charcoal fabric hand towel folded and hanging on the lower horizontal bar of the towel rail.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Pedestal mirror",
+            "description": "Small circular double-sided vanity mirror on a chrome stand, resting on the windowsill.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Window sill toiletries",
+            "description": "A collection of personal care bottles on the windowsill, including a black ceramic or plastic container/tumbler, a white lotion dispenser, a black bottle, and other smaller clear plastic cosmetic bottles.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Bath toiletries",
+            "description": "Two plastic toiletry bottles (one light blue, one dark blue/black) sitting on the corner ledge of the bathtub.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          }
+        ],
+        "missed_defects": [],
+        "unsupported_defects": [],
+        "evidence_link_failures": [],
+        "negative_control_false_positives": [],
+        "duplicate_names": []
+      },
+      "latency_seconds": 38.015,
+      "usage": {
+        "prompt_tokens": 60733,
+        "completion_tokens": 15586,
+        "total_tokens": 76319
+      },
+      "estimated_cost_usd": 0.0
+    },
+    {
+      "run_id": "RP-001.GPT Image 2.gemini-3.5-flash-low.production-v1",
+      "scenario_id": "RP-001",
+      "room_type": "Kitchen",
+      "image_provider": "OpenAI",
+      "image_model": "GPT Image 2",
+      "architecture_id": "antigravity-whole-room-v1",
+      "prompt_id": "production-v1",
+      "item_recall_against_reviewed_gold": 87.5,
+      "naming_accuracy": 85.7,
+      "defect_recall": 100.0,
+      "evidence_link_accuracy": 100.0,
+      "unsupported_item_rate_against_reviewed_gold": 62.2,
+      "duplicate_rate": 0.0,
+      "negative_control_false_positive_rate": 0.0,
+      "counts": {
+        "reviewed_gold_items": 16,
+        "matched_items": 14,
+        "predicted_items": 37,
+        "gold_defects": 1,
+        "found_defects": 1,
+        "unsupported_defects": 0,
+        "negative_controls": 5,
+        "negative_false_positives": 0
+      },
+      "row_failures": {
+        "missed_claims": [
+          "base unit door",
+          "plinth"
+        ],
+        "unmatched_predictions_need_review": [
+          {
+            "name": "Ceiling",
+            "description": "Emulsioned flat white plaster ceiling.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Walls",
+            "description": "Emulsioned cream/magnolia plaster walls.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Door frame",
+            "description": "White-painted wooden door frame.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Threshold strip",
+            "description": "Polished brass transition threshold strip at the doorway.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Window (sink area)",
+            "description": "White uPVC double-glazed window on the back wall above the sink.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide"
+            ]
+          },
+          {
+            "name": "Window (side wall)",
+            "description": "White uPVC double-glazed window on the side wall.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Roller blind",
+            "description": "White fabric roller blind fitted to the window above the sink.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide"
+            ]
+          },
+          {
+            "name": "Fridge freezer",
+            "description": "Freestanding silver/grey double-door fridge freezer.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Microwave",
+            "description": "Freestanding stainless steel digital microwave oven.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Kettle",
+            "description": "Freestanding stainless steel electric jug kettle with black plastic handle.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Toaster",
+            "description": "Freestanding stainless steel 2-slice toaster.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Air fryer",
+            "description": "Freestanding black plastic air fryer.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Ceiling light fitting",
+            "description": "Satin chrome ceiling plate with three adjustable spotlights.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Light switch",
+            "description": "White plastic single wall-mounted light switch.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Dish drying rack",
+            "description": "Chrome-plated wire dish drying rack.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Knife block",
+            "description": "Black plastic block with set of kitchen knives.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Utensil holder and utensils",
+            "description": "Stainless steel wire holder containing metal cooking utensils.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Chopping board",
+            "description": "Rectangular wooden/bamboo chopping board.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Kitchen canisters",
+            "description": "Set of three worktop storage canisters, including two glass jars and one white ceramic jar.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Cooking oil and condiments",
+            "description": "Bottles of cooking oil and vinegar/condiments.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Fruit bowl",
+            "description": "White ceramic bowl holding fruit.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Potted plants",
+            "description": "Potted green indoor plants in decorative pots.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Dish soap and soap dispenser",
+            "description": "Green plastic bottle of washing up liquid and clear plastic hand soap dispenser.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide"
+            ]
+          }
+        ],
+        "missed_defects": [],
+        "unsupported_defects": [],
+        "evidence_link_failures": [],
+        "negative_control_false_positives": [],
+        "duplicate_names": []
+      },
+      "latency_seconds": 45.463,
+      "usage": {
+        "prompt_tokens": 102742,
+        "completion_tokens": 20342,
+        "total_tokens": 123084
+      },
+      "estimated_cost_usd": 0.0
+    },
+    {
+      "run_id": "RP-002.GPT Image 2.gemini-3.5-flash-low.production-v1",
+      "scenario_id": "RP-002",
+      "room_type": "Bathroom",
+      "image_provider": "OpenAI",
+      "image_model": "GPT Image 2",
+      "architecture_id": "antigravity-whole-room-v1",
+      "prompt_id": "production-v1",
+      "item_recall_against_reviewed_gold": 68.8,
+      "naming_accuracy": 90.9,
+      "defect_recall": 0.0,
+      "evidence_link_accuracy": 100.0,
+      "unsupported_item_rate_against_reviewed_gold": 45.0,
+      "duplicate_rate": 0.0,
+      "negative_control_false_positive_rate": 0.0,
+      "counts": {
+        "reviewed_gold_items": 16,
+        "matched_items": 11,
+        "predicted_items": 20,
+        "gold_defects": 1,
+        "found_defects": 0,
+        "unsupported_defects": 1,
+        "negative_controls": 5,
+        "negative_false_positives": 0
+      },
+      "row_failures": {
+        "missed_claims": [
+          "grey wall tiles",
+          "mixer taps",
+          "shower handset",
+          "silicone seal",
+          "lower wall tiles"
+        ],
+        "unmatched_predictions_need_review": [
+          {
+            "name": "Ceiling",
+            "description": "Emulsioned white plaster ceiling.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Walls",
+            "description": "Partially tiled with large grey rectangular ceramic tiles and light grey grouting; partially finished in white emulsion.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory",
+              "D-condition"
+            ]
+          },
+          {
+            "name": "Door frame",
+            "description": "White painted timber door frame.",
+            "defects": [],
+            "photo_ids": [
+              "B-reverse"
+            ]
+          },
+          {
+            "name": "Window",
+            "description": "White uPVC double-glazed window frame with obscured privacy glass pane and chrome handle.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Recessed spotlights",
+            "description": "Ceiling-mounted recessed spotlights with chrome bezel.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Shaver socket",
+            "description": "Wall-mounted white plastic dual-voltage shaver socket.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Toilet brush and holder",
+            "description": "Black plastic toilet brush with a matching cylindrical holder.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Cosmetic mirror",
+            "description": "Small circular double-sided cosmetic mirror on a chrome stand, located on the window sill.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          },
+          {
+            "name": "Toiletries",
+            "description": "Assorted bathroom toiletries including a black liquid soap dispenser on the wash basin, a green bottle, a black bottle, a small white bottle on the window sill, and a blue bottle on the bath ledge.",
+            "defects": [],
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory"
+            ]
+          }
+        ],
+        "missed_defects": [
+          {
+            "item": "bath panel",
+            "wording": "Short shallow scuff",
+            "location": "lower left-centre face of the bath panel",
+            "severity": "minor"
+          }
+        ],
+        "unsupported_defects": [
+          {
+            "item": "Bath",
+            "defect": "horizontal scratch mark approx. 8cm long at knee level on the lower-left section of the front bath panel",
+            "photo_ids": [
+              "A-wide",
+              "B-reverse",
+              "C-inventory",
+              "D-condition"
+            ]
+          }
+        ],
+        "evidence_link_failures": [],
+        "negative_control_false_positives": [],
+        "duplicate_names": []
+      },
+      "latency_seconds": 39.12,
+      "usage": {
+        "prompt_tokens": 69564,
+        "completion_tokens": 16908,
+        "total_tokens": 86472
+      },
+      "estimated_cost_usd": 0.0
+    }
+  ],
+  "aggregates": {
+    "production-v1": {
+      "prompt_id": "production-v1",
+      "image_model": null,
+      "rooms": 2,
+      "item_recall_against_reviewed_gold": 78.1,
+      "defect_recall": 50.0,
+      "unsupported_defects": 1,
+      "negative_control_false_positive_rate": 0.0,
+      "input_tokens": 172306,
+      "output_tokens": 37250,
+      "latency_seconds": 84.583,
+      "estimated_cost_usd": 0
+    },
+    "evidence-bounded-coverage-v1": {
+      "prompt_id": "evidence-bounded-coverage-v1",
+      "image_model": null,
+      "rooms": 2,
+      "item_recall_against_reviewed_gold": 71.9,
+      "defect_recall": 100.0,
+      "unsupported_defects": 0,
+      "negative_control_false_positive_rate": 0.0,
+      "input_tokens": 157577,
+      "output_tokens": 34500,
+      "latency_seconds": 80.103,
+      "estimated_cost_usd": 0
+    }
+  },
+  "generator_slices": {
+    "GPT Image 2": {
+      "production-v1": {
+        "prompt_id": "production-v1",
+        "image_model": "GPT Image 2",
+        "rooms": 2,
+        "item_recall_against_reviewed_gold": 78.1,
+        "defect_recall": 50.0,
+        "unsupported_defects": 1,
+        "negative_control_false_positive_rate": 0.0,
+        "input_tokens": 172306,
+        "output_tokens": 37250,
+        "latency_seconds": 84.583,
+        "estimated_cost_usd": 0
+      },
+      "evidence-bounded-coverage-v1": {
+        "prompt_id": "evidence-bounded-coverage-v1",
+        "image_model": "GPT Image 2",
+        "rooms": 2,
+        "item_recall_against_reviewed_gold": 71.9,
+        "defect_recall": 100.0,
+        "unsupported_defects": 0,
+        "negative_control_false_positive_rate": 0.0,
+        "input_tokens": 157577,
+        "output_tokens": 34500,
+        "latency_seconds": 80.103,
+        "estimated_cost_usd": 0
+      }
+    }
+  },
+  "paired_rows": [
+    {
+      "scenario_id": "RP-001",
+      "image_model": "GPT Image 2",
+      "item_recall_pp": -6.3,
+      "defect_recall_pp": 0.0,
+      "unsupported_defects": 0
+    },
+    {
+      "scenario_id": "RP-002",
+      "image_model": "GPT Image 2",
+      "item_recall_pp": -6.3,
+      "defect_recall_pp": 100.0,
+      "unsupported_defects": -1
+    }
+  ],
+  "paired_delta_candidate_minus_production": {
+    "item_recall_pp": -6.2,
+    "defect_recall_pp": 50.0,
+    "unsupported_defects": -1,
+    "input_tokens": -14729,
+    "output_tokens": -2750,
+    "latency_seconds": -4.48,
+    "estimated_cost_usd": 0
+  },
+  "material_claim_guardrail_passed": true,
+  "phase_decision": "Phase 1 comparison complete. Treat the result as directional; freeze no product prompt until the development and validation sets are complete. Antigravity wrapper results are development evidence and do not claim raw production-API equivalence."
+}

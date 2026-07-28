@@ -302,9 +302,10 @@ C2PA/e-signature and multi-property stay deferred
 ([`docs/03`](docs/03-implementation-plan.md)). The first-tester tenancy run and
 friction log completed on 8 Jul; the Windows PDF fallback shipped on 9 Jul.
 The ordered path to v1 is in [`docs/00`](docs/00-north-star.md): finish the
-bounded synthetic baseline/candidate comparison; decide capture strategy on
-Property A; clear the independently annotated native-resolution quality gate;
-complete first-screen trust sign-off; then make the promotion decision.
+200-image synthetic pilot after its recorded Antigravity quota stop and human
+review; decide capture strategy on Property A; clear the independently
+annotated native-resolution quality gate; complete first-screen trust sign-off;
+then make the promotion decision.
 Hosted login and the remote project spine remain deferred.
 
 **Product-quality pass, 3 Jul 2026** ([`docs/10`](docs/10-product-quality-review.md)):

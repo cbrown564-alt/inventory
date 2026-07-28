@@ -1,0 +1,16 @@
+{
+  "id": "RP-014",
+  "room_type": "Entrance hall",
+  "property_profile": "narrow communal-entry flat hallway with dated finishes",
+  "cleanliness": "ordinarily occupied with coats and shoes",
+  "lighting": "warm ceiling light without daylight",
+  "continuity_requirements": ["same cream walls, striped runner, entryphone and dark front door"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "extra doors"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "inside the front door", "shot_scale": "wide establishing view", "intended_visible_items": ["hall walls", "striped runner", "coat hooks", "entryphone", "ceiling light"], "intended_defects": [], "intended_negatives": ["runner stripe is not a stain"]},
+    {"id": "B-reverse", "viewpoint": "inner end facing the front door", "shot_scale": "wide establishing view", "intended_visible_items": ["front door", "door chain", "letter plate", "shoe rack", "skirting"], "intended_defects": [], "intended_negatives": ["door shadow is not damp"]},
+    {"id": "C-inventory", "viewpoint": "facing the entry controls", "shot_scale": "medium fixtures view", "intended_visible_items": ["entryphone", "consumer unit", "light switch", "smoke alarm", "sockets"], "intended_defects": [], "intended_negatives": ["empty wall hook is not a missing identified item"]},
+    {"id": "D-condition", "viewpoint": "close view of front door lower panel", "shot_scale": "condition detail", "intended_visible_items": ["front door", "threshold", "door seal", "runner"], "intended_defects": ["three pale scuff marks low on the inner face of the front door"], "intended_negatives": ["wood grain is not scratching"]}
+  ]
+}

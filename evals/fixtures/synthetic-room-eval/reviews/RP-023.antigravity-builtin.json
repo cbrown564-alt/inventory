@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-023",
+  "provider": "Google",
+  "product": "Antigravity CLI generate_image",
+  "model_display_name": "Antigravity built-in image generator",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "sloped ceiling",
+            "visibility": "pending"
+          },
+          {
+            "name": "shelves",
+            "visibility": "pending"
+          },
+          {
+            "name": "vacuum cleaner",
+            "visibility": "pending"
+          },
+          {
+            "name": "storage boxes",
+            "visibility": "pending"
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "cupboard door",
+            "visibility": "pending"
+          },
+          {
+            "name": "hinges",
+            "visibility": "pending"
+          },
+          {
+            "name": "coat hooks",
+            "visibility": "pending"
+          },
+          {
+            "name": "shelf ends",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "electric meter",
+            "visibility": "pending"
+          },
+          {
+            "name": "consumer unit",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          },
+          {
+            "name": "shelf brackets",
+            "visibility": "pending"
+          },
+          {
+            "name": "light fitting",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "vinyl floor",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting",
+            "visibility": "pending"
+          },
+          {
+            "name": "door threshold",
+            "visibility": "pending"
+          },
+          {
+            "name": "vacuum wheel",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "RP-019",
+  "room_type": "Utility cupboard",
+  "property_profile": "deep apartment utility cupboard crowded with household storage",
+  "cleanliness": "partially obscured and deliberately difficult but accessible",
+  "lighting": "single harsh bulb with deep shadows",
+  "continuity_requirements": ["same stacked washer dryer, boiler, fuse box and crowded shelves"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "at the open cupboard door", "shot_scale": "wide establishing view", "intended_visible_items": ["stacked washer dryer", "boiler", "shelves", "cleaning tools", "vinyl floor"], "intended_defects": [], "intended_negatives": ["hidden areas are not assumed damaged"]},
+    {"id": "B-reverse", "viewpoint": "low inside view facing the door", "shot_scale": "wide establishing view", "intended_visible_items": ["cupboard door", "door hinges", "shelves", "storage baskets", "skirting"], "intended_defects": [], "intended_negatives": ["deep shadow is not mould"]},
+    {"id": "C-inventory", "viewpoint": "facing the upper services", "shot_scale": "medium fixtures view", "intended_visible_items": ["boiler", "consumer unit", "isolator switches", "air vent", "pipework"], "intended_defects": [], "intended_negatives": ["pipe joint is not a crack"]},
+    {"id": "D-condition", "viewpoint": "low view behind storage basket", "shot_scale": "condition detail", "intended_visible_items": ["vinyl floor", "plinth", "pipe boxing", "basket edge"], "intended_defects": [], "intended_negatives": ["unseen floor is not claimed clean or damaged"]}
+  ]
+}

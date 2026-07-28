@@ -1,0 +1,16 @@
+{
+  "id": "RP-018",
+  "room_type": "Utility room",
+  "property_profile": "working utility room in a UK family house",
+  "cleanliness": "noticeably cluttered but inspectable with laundry supplies",
+  "lighting": "cool fluorescent ceiling light",
+  "continuity_requirements": ["same washing machine, tumble dryer, white cupboards and speckled vinyl floor"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "at the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["washing machine", "tumble dryer", "utility sink", "wall cupboards", "vinyl floor"], "intended_defects": [], "intended_negatives": ["floor speckles are not stains"]},
+    {"id": "B-reverse", "viewpoint": "beside the sink looking back", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "coat hooks", "shelving", "radiator", "skirting"], "intended_defects": [], "intended_negatives": ["appliance shadow is not damp"]},
+    {"id": "C-inventory", "viewpoint": "facing the appliances", "shot_scale": "medium fixtures view", "intended_visible_items": ["washing machine", "tumble dryer", "isolator switches", "sockets", "air vent"], "intended_defects": [], "intended_negatives": ["detergent reflection is not a leak"]},
+    {"id": "D-condition", "viewpoint": "close view beneath the utility sink", "shot_scale": "condition detail", "intended_visible_items": ["sink cabinet", "plinth", "vinyl floor", "pipe boxing"], "intended_defects": ["small swollen patch along the bottom edge of the sink cabinet door"], "intended_negatives": ["printed vinyl flecks are not mould"]}
+  ]
+}

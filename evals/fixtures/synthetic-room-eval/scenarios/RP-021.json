@@ -1,0 +1,16 @@
+{
+  "id": "RP-021",
+  "room_type": "Stairs and landing",
+  "property_profile": "narrow converted-flat staircase partly obscured by stored boxes",
+  "cleanliness": "partially obscured and deliberately difficult with boxed storage",
+  "lighting": "dim warm light with no direct daylight",
+  "continuity_requirements": ["same dark runner, timber handrail, cream walls and stacked boxes"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "unsafe missing balustrade"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "at the lower entrance", "shot_scale": "wide establishing view", "intended_visible_items": ["stair runner", "timber handrail", "painted walls", "boxes", "ceiling light"], "intended_defects": [], "intended_negatives": ["shadow behind boxes is not damp"]},
+    {"id": "B-reverse", "viewpoint": "top landing looking down", "shot_scale": "wide establishing view", "intended_visible_items": ["stairs", "lower door", "handrail", "newel post", "boxes"], "intended_defects": [], "intended_negatives": ["hidden treads are not assumed damaged"]},
+    {"id": "C-inventory", "viewpoint": "mid-stair facing the landing", "shot_scale": "medium fixtures view", "intended_visible_items": ["smoke alarm", "landing light", "light switch", "radiator", "skirting"], "intended_defects": [], "intended_negatives": ["light shadow is not staining"]},
+    {"id": "D-condition", "viewpoint": "close view of a clear tread edge", "shot_scale": "condition detail", "intended_visible_items": ["stair runner", "tread edge", "riser", "wall string"], "intended_defects": ["frayed strip along the front edge of one stair tread"], "intended_negatives": ["runner weave is not tearing"]}
+  ]
+}

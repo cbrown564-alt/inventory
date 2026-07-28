@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-008",
+  "provider": "Google",
+  "product": "Antigravity CLI generate_image",
+  "model_display_name": "Antigravity built-in image generator",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "painted walls",
+            "visibility": "pending"
+          },
+          {
+            "name": "grey carpet",
+            "visibility": "pending"
+          },
+          {
+            "name": "sash window",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "ceiling pendant",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "door",
+            "visibility": "pending"
+          },
+          {
+            "name": "door furniture",
+            "visibility": "pending"
+          },
+          {
+            "name": "built-in wardrobe",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting boards",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "window",
+            "visibility": "pending"
+          },
+          {
+            "name": "curtain pole",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "thermostatic valve",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "grey carpet",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting board",
+            "visibility": "pending"
+          },
+          {
+            "name": "doorstop",
+            "visibility": "pending"
+          },
+          {
+            "name": "threshold strip",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

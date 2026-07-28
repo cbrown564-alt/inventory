@@ -1,6 +1,6 @@
 # 31 — Synthetic room evaluation dataset
 
-*15 Jul 2026. Implementation plan for a public, human-verified synthetic
+*Updated 28 Jul 2026. Implementation plan for a public, human-verified synthetic
 room dataset used to develop prompts and compare off-the-shelf VLM pipelines.
 This document owns the synthetic evaluation dataset. It does not change the
 real-property v1 quality gate in docs/00 or the ML training programme in
@@ -9,8 +9,15 @@ docs/19.*
 ## Decision
 
 Build a **200-image pilot** as 25 matched four-view room specifications
-rendered once by Gemini and once by ChatGPT Image 2. Use it to find prompt and pipeline
+rendered once through Antigravity CLI's built-in Google image generator and
+once through Codex's GPT Image 2 generator. Use it to find prompt and pipeline
 failures quickly. Do not train or fine-tune model weights on the images.
+
+For this synthetic programme, both Google image generation and Google
+vision-description evaluation use the subscription-backed Antigravity CLI.
+Never use Gemini API credentials or a metered Gemini endpoint. GPT Image 2
+generation uses only Codex's built-in `imagegen` path. This is narrower than
+the production backend policy in docs/00.
 
 Completing and using the 200-image pilot is next-phase v1 evidence work.
 Publishing the dataset is post-v1 and requires a separate review of provider
@@ -24,6 +31,21 @@ The generation prompt states what an image is intended to contain. It becomes
 gold only after a human checks what is actually visible and corrects the
 labels. Rejected generations remain in the audit log but never enter the
 scored set.
+
+## Current execution status — 28 Jul 2026
+
+| Phase | Status | Evidence |
+|---|---|---|
+| 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
+| 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
+| 3 — development and validation | **Stopped** | 31 task images exist: 8 are previously accepted GPT images and 23 await Pass A. Four Google views are terminal generator failures; 165 tasks remain pending. Antigravity returned `RESOURCE_EXHAUSTED`/429 with a reported reset at `2026-07-28T19:36:54Z`, and its built-in image tool did not reliably accept the first view as a continuity reference. |
+| 4 — sealed comparison | **Dependency-blocked** | No validation winner exists, so opening the sealed model comparison would violate the frozen order. |
+| 5 — real transfer | **Dependency-blocked** | There is no selected winner to run on real fixtures. The separate native-resolution evidence gate also remains open. |
+
+The quota response is a provider-internal limit reached through Antigravity
+CLI; it is not a metered image API call made by this project. Resume Phase 3
+after the reported reset, then obtain the required independent human reviews.
+Do not mark generated files accepted or gold without those reviews.
 
 ## The question this dataset answers
 
@@ -42,13 +64,15 @@ The pilot should distinguish four failure sources:
 
 ### In scope
 
-- still-image description using off-the-shelf VLM APIs;
+- still-image description using the approved Antigravity CLI model path;
 - single-image and room-level multi-image pipelines;
 - prompt, schema, frame-selection, merge, verification and retry changes;
 - items, condition, cleanliness and visible defects;
 - exact negatives and near-negatives that test hallucination;
 - paired comparison across image generators;
-- a public dataset with prompts, provenance and human-reviewed labels.
+- an internal dataset with prompts, provenance and human-reviewed labels;
+- a later public release only after the separate terms, provenance, metadata
+  and licensing review.
 
 ### Out of scope
 
@@ -76,7 +100,8 @@ permit this use.
   content to develop machine-learning models or related AI technology. Merely
   avoiding weight tuning may not resolve the broader "related AI technology"
   wording. Re-check the terms due to take effect on 30 Jul 2026 or obtain
-  written confirmation before accepting Gemini images into the dataset.
+  written confirmation before accepting Google-generated images into the
+  dataset.
 - Subscription interfaces must be used interactively. Do not automate
   extraction, bypass limits, rotate accounts or use API credentials for image
   generation.
@@ -89,45 +114,47 @@ accepted image.
 
 ### Matched-pair structure
 
-Create 25 room specifications. Each becomes one four-view Gemini packet and
-one four-view ChatGPT packet. This yields 50 generated rooms and 200 images:
+Create 25 room specifications. Each becomes one four-view Antigravity packet
+and one four-view GPT Image 2 packet. This yields 50 generated rooms and
+200 images:
 
 | Provider | Model assignment | Images |
 |---|---|---:|
-| Gemini | Gemini 3.1 Flash-Lite Image / Nano Banana 2 Lite | 36 (9 packets) |
-| Gemini | Gemini 3.1 Flash Image / Nano Banana 2 | 32 (8 packets) |
-| Gemini | Gemini 3 Pro Image / Nano Banana Pro | 32 (8 packets) |
-| ChatGPT | ChatGPT Image 2 | 100 |
+| Google | Antigravity CLI built-in `generate_image`; successful records keep `backend_model: unknown` | 100 |
+| OpenAI | GPT Image 2 through Codex `imagegen` | 100 |
 | **Total** |  | **200** |
 
-The three Gemini assignments rotate through room types and frame roles rather
-than giving one model only easy or difficult images. Every Gemini result has a
-ChatGPT result with the same intended evidence.
+Antigravity does not expose a selectable image backend in successful run
+records. A provider failure message named `gemini-3.1-flash-image`, but that
+diagnostic does not pin the successful cohort. Do not relabel these images as
+one of the older Nano Banana assignments. Every Google result has an OpenAI
+result with the same intended evidence.
 
 ### Generation assignments
 
-| Room type | Gemini Lite packets | Gemini Flash packets | Gemini Pro packets | ChatGPT Image 2 packets |
-|---|---:|---:|---:|---:|
-| Kitchen | 2 | 1 | 1 | 4 |
-| Bathroom / shower room | 1 | 1 | 1 | 3 |
-| Bedroom | 1 | 1 | 1 | 3 |
-| Living room | 1 | 1 | 1 | 3 |
-| Entrance hall | 1 | 1 | 0 | 2 |
-| Dining room | 1 | 0 | 1 | 2 |
-| Utility room / cupboard | 0 | 1 | 1 | 2 |
-| Stairs / landing | 1 | 1 | 0 | 2 |
-| WC / cloakroom | 0 | 1 | 0 | 1 |
-| Storage / wardrobe | 1 | 0 | 0 | 1 |
-| Home office | 0 | 0 | 1 | 1 |
-| Balcony / patio | 0 | 0 | 1 | 1 |
-| **Total packets** | **9** | **8** | **8** | **25** |
-| **Total images** | **36** | **32** | **32** | **100** |
+| Room type | Antigravity packets | GPT Image 2 packets |
+|---|---:|---:|
+| Kitchen | 4 | 4 |
+| Bathroom / shower room | 3 | 3 |
+| Bedroom | 3 | 3 |
+| Living room | 3 | 3 |
+| Entrance hall | 2 | 2 |
+| Dining room | 2 | 2 |
+| Utility room / cupboard | 2 | 2 |
+| Stairs / landing | 2 | 2 |
+| WC / cloakroom | 1 | 1 |
+| Storage / wardrobe | 1 | 1 |
+| Home office | 1 | 1 |
+| Balcony / patio | 1 | 1 |
+| **Total packets** | **25** | **25** |
+| **Total images** | **100** | **100** |
 
 This paired design supports:
 
 - aggregate VLM accuracy by image generator;
 - paired failure analysis on the same intended scene;
-- self-family checks, such as Gemini VLMs on Gemini-generated imagery;
+- self-family checks, such as the Antigravity Google VLM path on
+  Antigravity-generated imagery;
 - image-model comparison without changing the content mix.
 
 ### Room packets
@@ -203,15 +230,15 @@ evals/fixtures/synthetic-room-eval/
     ...
     RP-025.json
   images/
-    gemini/
-      flash-lite/
-      flash/
-      pro/
-    chatgpt/
-      image-2/
+    antigravity/
+      builtin/
+    openai/
+      gpt-image-2/
   reviews/
-    RP-001.gemini.json
-    RP-001.chatgpt.json
+    RP-001.antigravity-builtin.json
+    RP-001.gpt-image-2.json
+  generation_runs/
+    antigravity/
   rejected/
     manifest.jsonl
   splits/
@@ -336,8 +363,9 @@ generator slices separately. At minimum compare:
 
 For each architecture, pin the backend model version, prompt version, image
 order, temperature or equivalent sampling controls, retry policy and schema.
-Cache raw API responses so scoring never requires a second nondeterministic
-call.
+Cache sanitised raw CLI responses so scoring never requires a second
+nondeterministic call. Remove conversation IDs and other provider session
+data before committing records.
 
 Report:
 
@@ -356,8 +384,8 @@ Report:
 
 ### Bias checks
 
-- Compare Gemini backends on Gemini and ChatGPT imagery.
-- Compare OpenAI backends on Gemini and ChatGPT imagery.
+- Compare the Antigravity VLM path on Google and OpenAI imagery.
+- Compare any approved OpenAI backend on Google and OpenAI imagery.
 - Flag a self-generator advantage when a backend improves materially only on
   imagery from its own provider.
 - Compare synthetic rankings with real-fixture rankings. A candidate that wins
@@ -372,7 +400,7 @@ it is not required to clear the v1 product gate.
 |---|---|
 | Initial generation yield | At least 150/200 first or second attempts accepted (75%); retain and exclude failed outputs rather than stopping prompt/VLM work |
 | Label quality | 100% defects/negatives double-checked; ≥25% ordinary labels double-checked |
-| Pair balance | All 25 matched specifications have complete four-view Gemini and ChatGPT packets |
+| Pair balance | All 25 matched specifications have complete four-view Antigravity and GPT Image 2 packets |
 | Prompt win | Validation notable recall improves ≥5 pp or hallucination falls ≥2 pp with the other metric non-regressing |
 | Architecture win | Validation quality improves and per-property projected cost remains ≤ docs/00 budget |
 | Sealed confirmation | Named winner retains the direction of improvement on sealed synthetic packets |
@@ -422,22 +450,23 @@ evaluation is a separate action and still requires task-specific approval.
 7. Complete Pass B labels after the four-view packet is present.
 8. Run local schema, duplicate, resolution and provenance checks.
 
-Antigravity CLI may be used only if it exposes the named subscription-backed
-image model and returns the original image through a supported command. If its
-model list contains only reasoning models or image output is unavailable, use
-the Gemini web app manually. Do not substitute a similarly named text model.
+Antigravity CLI 1.1.8 can call its built-in `generate_image` tool through the
+authenticated subscription, save original JPEG outputs and return hashes. It
+does not expose a selectable image backend in successful run records. Record
+successful outputs as `antigravity-builtin / backend_model: unknown` unless a
+specific successful response exposes the backend. Do not infer the cohort from
+the Antigravity reasoning-model selector. Do not fall back to a Gemini web app
+or API.
 
-The 15 Jul probe found that Antigravity 1.1.2 can call a built-in
-`generate_image` tool through the authenticated Google account, but its model
-list does not expose any of the three requested image models and the image
-tool has no backend-model argument. Antigravity output must therefore be
-recorded as `antigravity_builtin / backend_model: unknown`; it cannot fill the
-named Gemini cohorts. Use a consumer interface with an explicit selector for
-those tasks.
+The current built-in image tool did not reliably accept an existing first view
+as a visual reference. Treat continuity as a Pass A decision. A packet that
+fails continuity twice is a terminal generator failure; do not weaken its
+scene specification.
 
-ChatGPT generation uses ChatGPT Image 2. Keep one conversation per room packet
-when continuity is needed. The operator must still save and log each image;
-do not scrape conversation output.
+GPT Image 2 generation uses Codex's built-in `imagegen` tool, one tool call per
+image. Use the accepted first view as the reference for later views when
+continuity is needed. The operator must still save and log each image; do not
+commit conversation or provider session identifiers.
 
 ## Implementation phases
 
@@ -450,8 +479,9 @@ do not scrape conversation output.
       fine-tune, distil or otherwise develop model weights. Re-check if the use
       or publication scope changes; this is an owner decision, not external
       legal confirmation.
-- [x] Probe Antigravity for the three named image models — named image models
-      are not exposed; built-in backend is unknown.
+- [x] Probe Antigravity CLI 1.1.8 — the built-in image tool works, but the
+      successful response does not expose a selectable image backend; record
+      the cohort as `antigravity-builtin`.
 - [x] Generate one non-scored image per available provider path.
 - [x] Confirm original-resolution save, hashes and available provenance for
       the two pilots in `evals/fixtures/synthetic-room-eval/pilots/`.
@@ -469,9 +499,9 @@ not pretend to be 50/50.
 - [x] Complete primary Pass B observed-label review for the 14 accepted images.
 - [x] Complete independent Pass B checks for all three defect claims, every
       negative and the preselected 25% ordinary-label sample.
-- [ ] Run the current production backend with the production prompt and the
-      frozen evidence-bounded coverage prompt. Do not revise either after
-      outputs are visible.
+- [x] Run the production prompt and frozen evidence-bounded coverage prompt
+      through the same Antigravity whole-room adapter. Do not revise either
+      after outputs are visible.
 
 Exit: all 16 generations attempted, at least 12 accepted images, labels resolve
 without ad hoc fields, and at least one real model failure is traceable from
@@ -482,10 +512,10 @@ block the phase when accepted yield is at least 75%.
 verified: two four-view specifications produce a deterministic 16-row task
 queue; scene and observed-label schemas, provisional review records, strict
 and work-in-progress validation, and a static contact sheet are present.
-Generation has now attempted all 16 canonical tasks and Pass A accepted 14
-(87.5%). Both Pass B reviews are complete. Phase 1 remains open for the
-production-baseline/prompt-candidate comparison. No model accuracy claim exists
-yet.
+Generation attempted all 16 original representative tasks and Pass A accepted
+14 (87.5%). Both Pass B reviews and the frozen prompt comparison are complete.
+The comparison is directional development evidence, not a product-accuracy
+claim.
 
 **Generation-path clarification, 15 Jul 2026:** Antigravity CLI supplies the
 Nano Banana 2 Lite half only. GPT Image 2 supplies the other half, preserving
@@ -525,28 +555,34 @@ independent checks completed below.
 defect claims, every negative control and the four preselected ordinary-label
 samples through the phone review protocol. All 37 required decisions agreed
 with the primary observed-evidence review. All four provider/packet records are
-now `verified_synthetic_gold`; the next Phase 1 task is the production-backend
-and prompt-candidate comparison.
+now `verified_synthetic_gold` and were eligible for the frozen comparison
+below.
 
-**Comparison readiness, 28 Jul 2026:** the production prompt and
-evidence-bounded coverage prompt are frozen by SHA-256 in `dataset.json`. The
-four-call runner keeps the production backend, schema and whole-room
-architecture fixed, accepts only the two complete GPT Image 2 packets, caches
-raw responses, and records token usage, current list-price cost and latency.
-The paired scorer and row-level failure report are implemented and the dry-run
-plan is verified. The external run remains pending explicit authorization to
-send the eight accepted synthetic images to the metered Gemini API; no output
-or prompt result has been observed.
+**Prompt comparison, 28 Jul 2026:** the production prompt and evidence-bounded
+coverage prompt are frozen by SHA-256 in `dataset.json`. Four immutable runs
+completed through Antigravity CLI 1.1.8 using the pinned
+`gemini-3.5-flash-low` operator mode, the same schema and the same whole-room
+architecture. No Gemini API credential or metered endpoint was used. The
+evidence-bounded prompt raised defect recall from 50% to 100% and removed one
+unsupported defect, but item recall fell from 78.1% to 71.9%. The material
+guardrail passed; the prompt-win bar did not. Freeze no winner until the
+development and validation sets are complete. Wrapper token counts are logged
+for reproducibility but are not raw API billing units.
 
 ### Phase 2 — extract the pattern
 
-- [ ] Freeze schemas and naming vocabulary.
-- [ ] Add a static review page with image/manifest/label comparison.
-- [ ] Add generator-sliced scoring and paired comparisons.
-- [ ] Freeze room-packet split assignment before the remaining generation.
+- [x] Freeze schemas and naming vocabulary.
+- [x] Add a static review page with image/manifest/label comparison.
+- [x] Add generator-sliced scoring and paired comparisons.
+- [x] Freeze room-packet split assignment before the remaining generation.
 
 Exit: another operator can generate and review a task using only the repo
 instructions.
+
+**28 Jul 2026 status:** Phase 2 is complete. The queue contains 25 matched
+scenario manifests and 200 immutable tasks. Development, validation and sealed
+packet assignments are frozen in `splits/` and recorded by SHA-256 in
+`dataset.json`.
 
 ### Phase 3 — complete development and validation sets
 
@@ -561,6 +597,15 @@ instructions.
 
 Exit: 160 accepted development and validation images or a documented
 generator failure rate that stops the programme.
+
+**28 Jul 2026 stop:** the scale run through Antigravity CLI hit
+`RESOURCE_EXHAUSTED`/429 before the Google cohort was complete. The immutable
+queue currently contains 8 Pass A accepted images, 23 images awaiting Pass A,
+4 terminal Google generator failures and 165 pending tasks. Four complete
+Google packets and two partial packets await review. The stop record is
+`generation_runs/antigravity/quota-stop-2026-07-28.json`. Resume after the
+reported reset, but do not start prompt/architecture selection until the
+required development and validation packets have passed both reviews.
 
 ### Phase 4 — sealed synthetic comparison
 
@@ -593,6 +638,7 @@ claim.
 | `evals/synthetic/build_tasks.py` | Deterministically turn scene specs into prompts and `tasks.csv` |
 | `evals/synthetic/validate_dataset.py` | Schema, file, dimensions, pair and provenance checks |
 | `evals/synthetic/build_review.py` | Static human-review/contact-sheet artifact |
+| `evals/synthetic/generate_antigravity.py` | Generate Google packets through Antigravity CLI without image API credentials |
 | `evals/synthetic/run_eval.py` | Run named off-the-shelf VLM configurations and cache raw output |
 | `evals/synthetic/score.py` | Existing metric contract plus slices and paired comparisons |
 | `evals/fixtures/synthetic-room-eval/README.md` | Dataset card and operator instructions |
@@ -617,8 +663,8 @@ new metric only when the current schema cannot express the decision.
 
 ## Definition of done
 
-- [ ] 25 matched four-view specifications and immutable packet splits committed.
-- [ ] Exactly 100 accepted Gemini and 100 accepted ChatGPT Image 2 images, or
+- [x] 25 matched four-view specifications and immutable packet splits implemented.
+- [ ] Exactly 100 accepted Antigravity and 100 accepted GPT Image 2 images, or
   an explicit terms/tooling decision explaining why the design changed.
 - [ ] Every accepted image has exact prompt, provenance and human-observed
   labels.

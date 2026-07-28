@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-009",
+  "provider": "Google",
+  "product": "Antigravity CLI generate_image",
+  "model_display_name": "Antigravity built-in image generator",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "double bed",
+            "visibility": "pending"
+          },
+          {
+            "name": "headboard",
+            "visibility": "pending"
+          },
+          {
+            "name": "bedside tables",
+            "visibility": "pending"
+          },
+          {
+            "name": "wardrobe",
+            "visibility": "pending"
+          },
+          {
+            "name": "cream carpet",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "door",
+            "visibility": "pending"
+          },
+          {
+            "name": "chest of drawers",
+            "visibility": "pending"
+          },
+          {
+            "name": "wall mirror",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "ceiling light",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "bay window",
+            "visibility": "pending"
+          },
+          {
+            "name": "curtains",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "blind",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "drawer front",
+            "visibility": "pending"
+          },
+          {
+            "name": "metal handle",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting board",
+            "visibility": "pending"
+          },
+          {
+            "name": "carpet",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

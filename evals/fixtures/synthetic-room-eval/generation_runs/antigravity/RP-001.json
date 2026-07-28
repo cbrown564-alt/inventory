@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "scenario_id": "RP-001",
+  "started_at": "2026-07-28T15:06:33.902616+00:00",
+  "completed_at": "2026-07-28T15:12:12.797678+00:00",
+  "latency_seconds": 338.763,
+  "generation_path": "Antigravity CLI built-in generate_image",
+  "backend_model": "unknown",
+  "metered_api_call": false,
+  "cli_version": "1.1.8",
+  "operator_model_mode": "gemini-3.5-flash-low",
+  "prompt": "Act only as the image-generation operator for this bounded synthetic property-room evaluation. Do not edit source code, documentation, task CSV files or review records.\n\nGenerate the four distinct views for RP-001 in sequence. First generate A-wide with its exact prompt and save it. For B-reverse, C-inventory and D-condition, invoke generate_image with the saved A-wide image as an explicit visual reference/input as well as that task's exact prompt. Preserve the same room geometry, fixed fittings, finishes, windows, doors and object positions while moving the camera to the requested viewpoint. If the tool cannot accept the reference image, stop and report that limitation rather than generating unrelated rooms. Save the original generated JPEG bytes at required_output_path. Do not crop, resize, retouch, recompress or substitute an earlier image. Do not create a collage. Do not copy one view to another. The four outputs must be distinct files.\n\nAfter all four tool calls finish, verify that every required path exists and calculate its SHA-256. Return only a JSON object with scenario_id, tool_name, backend_model (use \"unknown\" unless the tool explicitly exposes it), and outputs [{task_id,path,sha256}].\n\n[\n  {\n    \"task_id\": \"RP-001.antigravity-builtin.A-wide\",\n    \"view_id\": \"A-wide\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a modest 1990s UK flat with dated but maintained fittings. This is view A-wide: standing at the doorway; wide establishing view. Visible evidence required in this view: kitchen units, dark worktop, sink, oven, induction hob, extractor hood. Intended visible defects: none. Negative controls: wood grain is not mould; no cracked tiles. The room is mildly cluttered but clean under overcast daylight mixed with warm ceiling lights. Across views preserve: same pale units, dark worktop, appliance positions and window across all four views. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors or windows. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-A-wide.jpg\"\n  },\n  {\n    \"task_id\": \"RP-001.antigravity-builtin.B-reverse\",\n    \"view_id\": \"B-reverse\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a modest 1990s UK flat with dated but maintained fittings. This is view B-reverse: opposite corner looking back toward the doorway; wide establishing view. Visible evidence required in this view: kitchen units, window blind, radiator, door furniture, skirting boards. Intended visible defects: none. Negative controls: ordinary corner shadow is not damp. The room is mildly cluttered but clean under overcast daylight mixed with warm ceiling lights. Across views preserve: same pale units, dark worktop, appliance positions and window across all four views. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors or windows. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-B-reverse.jpg\"\n  },\n  {\n    \"task_id\": \"RP-001.antigravity-builtin.C-inventory\",\n    \"view_id\": \"C-inventory\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a modest 1990s UK flat with dated but maintained fittings. This is view C-inventory: near the sink looking toward the cooking wall; medium fixtures view. Visible evidence required in this view: extractor hood, induction hob, oven, smoke alarm, splashback, electrical sockets. Intended visible defects: none. Negative controls: clean hob reflection is not a stain. The room is mildly cluttered but clean under overcast daylight mixed with warm ceiling lights. Across views preserve: same pale units, dark worktop, appliance positions and window across all four views. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors or windows. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-C-inventory.jpg\"\n  },\n  {\n    \"task_id\": \"RP-001.antigravity-builtin.D-condition\",\n    \"view_id\": \"D-condition\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a modest 1990s UK flat with dated but maintained fittings. This is view D-condition: close to the base units with surrounding context retained; condition detail. Visible evidence required in this view: base unit door, plinth, vinyl floor, skirting board. Intended visible defects: one small chip on the lower edge of a base unit door. Negative controls: tile joint is not a crack. The room is mildly cluttered but clean under overcast daylight mixed with warm ceiling lights. Across views preserve: same pale units, dark worktop, appliance positions and window across all four views. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors or windows. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-D-condition.jpg\"\n  }\n]",
+  "raw_cli_response": {
+    "status": "SUCCESS",
+    "response": "I am waiting for the `agy models` command to complete to see if alternative models are available.\nI am waiting.\nI am waiting for the models list.\nI am waiting for the search task.\nI am waiting for the search task.\nI am waiting for the file search.\nI am waiting.\n\n{\n  \"scenario_id\": \"RP-001\",\n  \"tool_name\": \"generate_image\",\n  \"backend_model\": \"unknown\",\n  \"outputs\": [\n    {\n      \"task_id\": \"RP-001.antigravity-builtin.A-wide\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-A-wide.jpg\",\n      \"sha256\": \"b29587b98758de9bb4b45b84be2e114b3ef77112080445d46e63c36e4d3971b3\"\n    },\n    {\n      \"task_id\": \"RP-001.antigravity-builtin.B-reverse\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-B-reverse.jpg\",\n      \"sha256\": \"03e15cd1e295005e03d47b8145459ec36ec03d2555d1709c4a8e2eab234e8d86\"\n    },\n    {\n      \"task_id\": \"RP-001.antigravity-builtin.C-inventory\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-C-inventory.jpg\",\n      \"sha256\": \"25327a0ec6cd0ba76c7fdcf2fcd4df3a488eaa411eb18ac81098ff5f866b7d50\"\n    },\n    {\n      \"task_id\": \"RP-001.antigravity-builtin.D-condition\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-D-condition.jpg\",\n      \"sha256\": \"f706a290a0c0493010243ad0e7de52a63ff2f271e80433592df55a33c246183b\"\n    }\n  ]\n}\n{\n  \"scenario_id\": \"RP-001\",\n  \"tool_name\": \"generate_image\",\n  \"backend_model\": \"unknown\",\n  \"outputs\": [\n    {\n      \"task_id\": \"RP-001.antigravity-builtin.A-wide\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-A-wide.jpg\",\n      \"sha256\": \"b29587b98758de9bb4b45b84be2e114b3ef77112080445d46e63c36e4d3971b3\"\n    },\n    {\n      \"task_id\": \"RP-001.antigravity-builtin.B-reverse\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-B-reverse.jpg\",\n      \"sha256\": \"03e15cd1e295005e03d47b8145459ec36ec03d2555d1709c4a8e2eab234e8d86\"\n    },\n    {\n      \"task_id\": \"RP-001.antigravity-builtin.C-inventory\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-C-inventory.jpg\",\n      \"sha256\": \"25327a0ec6cd0ba76c7fdcf2fcd4df3a488eaa411eb18ac81098ff5f866b7d50\"\n    },\n    {\n      \"task_id\": \"RP-001.antigravity-builtin.D-condition\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-001-D-condition.jpg\",\n      \"sha256\": \"f706a290a0c0493010243ad0e7de52a63ff2f271e80433592df55a33c246183b\"\n    }\n  ]\n}\n",
+    "duration_seconds": 333.7078181,
+    "num_turns": 1,
+    "usage": {
+      "input_tokens": 1041409,
+      "output_tokens": 50143,
+      "thinking_tokens": 39976,
+      "cache_read_tokens": 6457518,
+      "total_tokens": 1091552
+    }
+  },
+  "stderr": "",
+  "outputs": [
+    {
+      "task_id": "RP-001.antigravity-builtin.A-wide",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-A-wide.jpg",
+      "sha256": "b29587b98758de9bb4b45b84be2e114b3ef77112080445d46e63c36e4d3971b3",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-001.antigravity-builtin.B-reverse",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-B-reverse.jpg",
+      "sha256": "03e15cd1e295005e03d47b8145459ec36ec03d2555d1709c4a8e2eab234e8d86",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-001.antigravity-builtin.C-inventory",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-C-inventory.jpg",
+      "sha256": "25327a0ec6cd0ba76c7fdcf2fcd4df3a488eaa411eb18ac81098ff5f866b7d50",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-001.antigravity-builtin.D-condition",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-D-condition.jpg",
+      "sha256": "f706a290a0c0493010243ad0e7de52a63ff2f271e80433592df55a33c246183b",
+      "width": 1264,
+      "height": 848
+    }
+  ]
+}

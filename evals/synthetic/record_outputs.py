@@ -12,12 +12,19 @@ from pathlib import Path
 from evals.synthetic.build_tasks import DEFAULT_DATASET, FIELDNAMES
 
 
-def record(dataset_dir: Path, operator: str, cli_version: str) -> int:
+def record(
+    dataset_dir: Path,
+    operator: str,
+    cli_version: str,
+    provider: str | None = None,
+) -> int:
     task_path = dataset_dir / "tasks.csv"
     with task_path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     count = 0
     for row in rows:
+        if provider and row.get("provider") != provider:
+            continue
         output = dataset_dir / row["output_path"]
         if not output.is_file():
             continue
@@ -48,8 +55,17 @@ def main() -> int:
     parser.add_argument("dataset_dir", nargs="?", type=Path, default=DEFAULT_DATASET)
     parser.add_argument("--operator", required=True)
     parser.add_argument("--cli-version", required=True)
+    parser.add_argument(
+        "--provider",
+        help="record only rows whose provider column exactly matches this value",
+    )
     args = parser.parse_args()
-    count = record(args.dataset_dir, args.operator, args.cli_version)
+    count = record(
+        args.dataset_dir,
+        args.operator,
+        args.cli_version,
+        args.provider,
+    )
     print(f"Recorded provenance for {count} output(s)")
     return 0
 

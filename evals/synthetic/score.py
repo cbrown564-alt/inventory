@@ -71,6 +71,19 @@ def _defect_found(prediction: dict[str, Any], gold_defect: dict[str, Any]) -> bo
     return bool(gold_terms & _tokens(predicted))
 
 
+def _defect_prediction_matches(
+    prediction: dict[str, Any],
+    gold_defect: dict[str, Any],
+    gold_frames: set[str],
+) -> bool:
+    """Match a visible defect even when the model groups the affected item."""
+    predicted_frames = set(prediction.get("photo_ids") or [])
+    return bool(
+        predicted_frames & gold_frames
+        and _defect_found(prediction, gold_defect)
+    )
+
+
 def _negative_terms(wording: str) -> set[str]:
     return _tokens(wording) & DEFECT_WORDS
 
@@ -97,9 +110,17 @@ def score_run(record: dict[str, Any], review: dict[str, Any]) -> dict[str, Any]:
         if claim_index not in matches:
             missed_claims.append(claim["canonical_name"])
             for defect in claim.get("defects", []):
-                gold_defects.append(
-                    {"item": claim["canonical_name"], **defect}
-                )
+                gold_entry = {"item": claim["canonical_name"], **defect}
+                gold_defects.append(gold_entry)
+                if any(
+                    _defect_prediction_matches(
+                        prediction,
+                        defect,
+                        set(claim["evidence_frame_ids"]),
+                    )
+                    for prediction in predictions
+                ):
+                    found_defects.append(gold_entry)
             continue
         score, prediction_index = matches[claim_index]
         prediction = predictions[prediction_index]
@@ -125,14 +146,25 @@ def score_run(record: dict[str, Any], review: dict[str, Any]) -> dict[str, Any]:
         for defect in claim.get("defects", []):
             gold_entry = {"item": claim["canonical_name"], **defect}
             gold_defects.append(gold_entry)
-            if _defect_found(prediction, defect):
+            if any(
+                _defect_prediction_matches(
+                    candidate,
+                    defect,
+                    set(claim["evidence_frame_ids"]),
+                )
+                for candidate in predictions
+            ):
                 found_defects.append(gold_entry)
 
         if not claim.get("defects"):
             for defect in prediction.get("defects", []):
                 if _tokens(defect) & DEFECT_WORDS:
                     unsupported_defects.append(
-                        {"item": prediction["name"], "defect": defect}
+                        {
+                            "item": prediction["name"],
+                            "defect": defect,
+                            "photo_ids": prediction.get("photo_ids", []),
+                        }
                     )
 
     unmatched_predictions = [
@@ -142,10 +174,49 @@ def score_run(record: dict[str, Any], review: dict[str, Any]) -> dict[str, Any]:
     ]
     for prediction in unmatched_predictions:
         for defect in prediction.get("defects", []):
-            if _tokens(defect) & DEFECT_WORDS:
+            defect_terms = _tokens(defect) & DEFECT_WORDS
+            supports_found_gold = any(
+                defect_terms & _tokens(found["wording"])
+                and set(prediction.get("photo_ids") or [])
+                & {
+                    frame
+                    for claim in claims
+                    if claim["canonical_name"] == found["item"]
+                    for frame in claim["evidence_frame_ids"]
+                }
+                for found in found_defects
+            )
+            if defect_terms and not supports_found_gold:
                 unsupported_defects.append(
-                    {"item": prediction["name"], "defect": defect}
+                    {
+                        "item": prediction["name"],
+                        "defect": defect,
+                        "photo_ids": prediction.get("photo_ids", []),
+                    }
                 )
+
+    found_support = []
+    for found in found_defects:
+        claim = next(
+            claim
+            for claim in claims
+            if claim["canonical_name"] == found["item"]
+        )
+        found_support.append(
+            {
+                "terms": _tokens(found["wording"]) & DEFECT_WORDS,
+                "frames": set(claim["evidence_frame_ids"]),
+            }
+        )
+    unsupported_defects = [
+        defect
+        for defect in unsupported_defects
+        if not any(
+            (_tokens(defect["defect"]) & support["terms"])
+            and (set(defect.get("photo_ids") or []) & support["frames"])
+            for support in found_support
+        )
+    ]
 
     negative_false_positives = []
     for negative in review["pass_b"]["negative_controls"]:
@@ -174,6 +245,9 @@ def score_run(record: dict[str, Any], review: dict[str, Any]) -> dict[str, Any]:
         "run_id": record["run_id"],
         "scenario_id": record["scenario_id"],
         "room_type": record["room_type"],
+        "image_provider": record.get("image_provider"),
+        "image_model": record.get("image_model"),
+        "architecture_id": record.get("architecture_id"),
         "prompt_id": record["prompt_id"],
         "item_recall_against_reviewed_gold": pct(len(matches), len(claims)),
         "naming_accuracy": pct(exactish, len(matches)),
@@ -218,16 +292,28 @@ def score_run(record: dict[str, Any], review: dict[str, Any]) -> dict[str, Any]:
         },
         "latency_seconds": record["latency_seconds"],
         "usage": {
-            "prompt_tokens": usage.get("prompt_tokens"),
-            "completion_tokens": usage.get("completion_tokens"),
+            "prompt_tokens": usage.get("prompt_tokens", usage.get("input_tokens")),
+            "completion_tokens": usage.get(
+                "completion_tokens", usage.get("output_tokens")
+            ),
             "total_tokens": usage.get("total_tokens"),
         },
         "estimated_cost_usd": record["estimated_cost"]["amount"],
     }
 
 
-def _aggregate(rows: list[dict[str, Any]], prompt_id: str) -> dict[str, Any]:
-    selected = [row for row in rows if row["prompt_id"] == prompt_id]
+def _aggregate(
+    rows: list[dict[str, Any]],
+    prompt_id: str,
+    *,
+    image_model: str | None = None,
+) -> dict[str, Any]:
+    selected = [
+        row
+        for row in rows
+        if row["prompt_id"] == prompt_id
+        and (image_model is None or row["image_model"] == image_model)
+    ]
     counts = Counter()
     for row in selected:
         counts.update(row["counts"])
@@ -243,6 +329,7 @@ def _aggregate(rows: list[dict[str, Any]], prompt_id: str) -> dict[str, Any]:
     )
     return {
         "prompt_id": prompt_id,
+        "image_model": image_model,
         "rooms": len(selected),
         "item_recall_against_reviewed_gold": pct(
             counts["matched_items"], counts["reviewed_gold_items"]
@@ -265,24 +352,86 @@ def _aggregate(rows: list[dict[str, Any]], prompt_id: str) -> dict[str, Any]:
 
 def build_report(dataset_dir: Path = DEFAULT_DATASET) -> dict[str, Any]:
     reviews = {}
-    for path in sorted((dataset_dir / "reviews").glob("RP-*.gpt-image-2.json")):
+    for path in sorted((dataset_dir / "reviews").glob("RP-*.json")):
         review = _json(path)
-        reviews[review["scenario_id"]] = review
+        if review.get("review_status") == "verified_synthetic_gold":
+            reviews[
+                (review["scenario_id"], review["model_display_name"])
+            ] = review
 
     rows = []
-    for prompt_id in PROMPTS:
-        output_dir = dataset_dir / "outputs" / "gemini-3.5-flash" / prompt_id
-        for path in sorted(output_dir.glob("*.gpt-image-2.json")):
-            record = _json(path)
-            review = reviews[record["scenario_id"]]
-            rows.append(score_run(record, review))
-    expected = len(PROMPTS) * len(reviews)
-    if len(rows) != expected:
-        raise ValueError(f"expected {expected} cached runs; found {len(rows)}")
+    output_root = (
+        dataset_dir
+        / "outputs"
+        / "antigravity-cli"
+        / "gemini-3.5-flash-low"
+    )
+    for path in sorted(output_root.glob("*/*.json")):
+        record = _json(path)
+        key = (record["scenario_id"], record["image_model"])
+        if key not in reviews:
+            continue
+        rows.append(score_run(record, reviews[key]))
+    if not rows:
+        raise ValueError("no cached Antigravity outputs have verified gold")
+    pair_members = Counter(
+        (row["scenario_id"], row["image_model"]) for row in rows
+    )
+    incomplete = [
+        f"{scenario_id}.{image_model}"
+        for (scenario_id, image_model), count in pair_members.items()
+        if count != len(PROMPTS)
+    ]
+    if incomplete:
+        raise ValueError(
+            "prompt pair incomplete for: " + ", ".join(incomplete)
+        )
 
     aggregates = {
         prompt_id: _aggregate(rows, prompt_id) for prompt_id in PROMPTS
     }
+    image_models = sorted(
+        {row["image_model"] for row in rows if row["image_model"]}
+    )
+    generator_slices = {
+        image_model: {
+            prompt_id: _aggregate(
+                rows, prompt_id, image_model=image_model
+            )
+            for prompt_id in PROMPTS
+        }
+        for image_model in image_models
+    }
+    paired_rows = []
+    for scenario_id, image_model in sorted(pair_members):
+        pair = {
+            row["prompt_id"]: row
+            for row in rows
+            if row["scenario_id"] == scenario_id
+            and row["image_model"] == image_model
+        }
+        baseline_row = pair["production-v1"]
+        candidate_row = pair["evidence-bounded-coverage-v1"]
+        paired_rows.append(
+            {
+                "scenario_id": scenario_id,
+                "image_model": image_model,
+                "item_recall_pp": round(
+                    candidate_row["item_recall_against_reviewed_gold"]
+                    - baseline_row["item_recall_against_reviewed_gold"],
+                    1,
+                ),
+                "defect_recall_pp": round(
+                    (candidate_row["defect_recall"] or 0)
+                    - (baseline_row["defect_recall"] or 0),
+                    1,
+                ),
+                "unsupported_defects": (
+                    candidate_row["counts"]["unsupported_defects"]
+                    - baseline_row["counts"]["unsupported_defects"]
+                ),
+            }
+        )
     baseline = aggregates["production-v1"]
     candidate = aggregates["evidence-bounded-coverage-v1"]
     guardrail_passed = (
@@ -293,8 +442,9 @@ def build_report(dataset_dir: Path = DEFAULT_DATASET) -> dict[str, Any]:
         "dataset_id": "synthetic-room-eval",
         "dataset_phase": "phase-1-representative-slice",
         "scope": (
-            "Two complete GPT Image 2 four-view room packets. Incomplete "
-            "Google-generated packets are excluded from room-level scoring."
+            "Complete verified four-view packets evaluated through the pinned "
+            "subscription-backed Antigravity CLI model/mode. No Gemini API "
+            "endpoint is used."
         ),
         "metric_limits": [
             "The reviewed claims do not mark a notable subset, so notable recall is not reported.",
@@ -304,6 +454,8 @@ def build_report(dataset_dir: Path = DEFAULT_DATASET) -> dict[str, Any]:
         ],
         "rows": rows,
         "aggregates": aggregates,
+        "generator_slices": generator_slices,
+        "paired_rows": paired_rows,
         "paired_delta_candidate_minus_production": {
             "item_recall_pp": round(
                 candidate["item_recall_against_reviewed_gold"]
@@ -334,7 +486,8 @@ def build_report(dataset_dir: Path = DEFAULT_DATASET) -> dict[str, Any]:
         "phase_decision": (
             "Phase 1 comparison complete. Treat the result as directional; "
             "freeze no product prompt until the development and validation "
-            "sets are complete."
+            "sets are complete. Antigravity wrapper results are development "
+            "evidence and do not claim raw production-API equivalence."
         ),
     }
 
@@ -376,6 +529,17 @@ def _markdown(report: dict[str, Any]) -> str:
             "",
         ]
     )
+    lines.extend(["", "## Generator slices", ""])
+    for image_model, prompts in report["generator_slices"].items():
+        lines.append(f"### {image_model}")
+        lines.append("")
+        for prompt_id, row in prompts.items():
+            lines.append(
+                f"- {prompt_id}: item recall "
+                f"{row['item_recall_against_reviewed_gold']}%, defect recall "
+                f"{row['defect_recall']}%, unsupported defects "
+                f"{row['unsupported_defects']}."
+            )
     lines.extend(f"- {limit}" for limit in report["metric_limits"])
     lines.extend(["", "## Row-level failures", ""])
     for row in report["rows"]:

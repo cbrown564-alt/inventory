@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-014",
+  "provider": "Google",
+  "product": "Antigravity CLI generate_image",
+  "model_display_name": "Antigravity built-in image generator",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "hall walls",
+            "visibility": "pending"
+          },
+          {
+            "name": "striped runner",
+            "visibility": "pending"
+          },
+          {
+            "name": "coat hooks",
+            "visibility": "pending"
+          },
+          {
+            "name": "entryphone",
+            "visibility": "pending"
+          },
+          {
+            "name": "ceiling light",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "front door",
+            "visibility": "pending"
+          },
+          {
+            "name": "door chain",
+            "visibility": "pending"
+          },
+          {
+            "name": "letter plate",
+            "visibility": "pending"
+          },
+          {
+            "name": "shoe rack",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "entryphone",
+            "visibility": "pending"
+          },
+          {
+            "name": "consumer unit",
+            "visibility": "pending"
+          },
+          {
+            "name": "light switch",
+            "visibility": "pending"
+          },
+          {
+            "name": "smoke alarm",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "front door",
+            "visibility": "pending"
+          },
+          {
+            "name": "threshold",
+            "visibility": "pending"
+          },
+          {
+            "name": "door seal",
+            "visibility": "pending"
+          },
+          {
+            "name": "runner",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-013",
+  "provider": "Google",
+  "product": "Antigravity CLI generate_image",
+  "model_display_name": "Antigravity built-in image generator",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "charcoal sofa",
+            "visibility": "pending"
+          },
+          {
+            "name": "nested tables",
+            "visibility": "pending"
+          },
+          {
+            "name": "television stand",
+            "visibility": "pending"
+          },
+          {
+            "name": "moving boxes",
+            "visibility": "pending"
+          },
+          {
+            "name": "laminate floor",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "entrance door",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "coat hooks",
+            "visibility": "pending"
+          },
+          {
+            "name": "floor lamp",
+            "visibility": "pending"
+          },
+          {
+            "name": "boxes",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "window",
+            "visibility": "pending"
+          },
+          {
+            "name": "roller blind",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "laminate floor",
+            "visibility": "pending"
+          },
+          {
+            "name": "table leg",
+            "visibility": "pending"
+          },
+          {
+            "name": "rug edge",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

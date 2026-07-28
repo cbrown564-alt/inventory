@@ -1,8 +1,16 @@
 {
   "dataset_id": "synthetic-room-eval",
-  "phase": "phase-1-representative-slice",
-  "status": "phase_1_production_comparison_pending",
+  "phase": "phase-3-development-and-validation-generation",
+  "status": "blocked_antigravity_quota_and_human_review",
   "observed_truth_rule": "Only Pass B human-observed claims may be scored as gold.",
+  "target_design": {
+    "matched_scenarios": 25,
+    "views_per_packet": 4,
+    "provider_packets_per_scenario": 2,
+    "task_images": 200,
+    "accepted_google_images": 100,
+    "accepted_openai_images": 100
+  },
   "image_generation_policy": {
     "api_calls_permitted": false,
     "nano_banana_path": "Antigravity CLI only",
@@ -19,6 +27,16 @@
       "image_directory": "antigravity/nano-banana-2-lite/replicate-a",
       "file_extension": "jpg",
       "terms_record": "google-consumer-2026-07-15"
+    },
+    "antigravity-builtin": {
+      "provider": "Google",
+      "product": "Antigravity CLI generate_image",
+      "model_display_name": "Antigravity built-in image generator",
+      "image_directory": "antigravity/builtin",
+      "file_extension": "jpg",
+      "terms_record": "google-consumer-2026-07-15",
+      "backend_model": "unknown",
+      "note": "Antigravity CLI 1.1.8 exposes generate_image but does not expose a selectable backend image-model name in successful run records. A failure message named gemini-3.1-flash-image; that diagnostic does not justify relabelling successful outputs as a pinned cohort."
     },
     "gpt-image-2": {
       "provider": "OpenAI",
@@ -46,15 +64,16 @@
     }
   },
   "design_change": {
-    "decided_at": "2026-07-15",
+    "decided_at": "2026-07-28",
     "decision_owner": "project owner",
-    "reason": "Restore the intended 50/50 Nano Banana 2 Lite and GPT Image 2 split after clarifying that Antigravity supplies only the Google half.",
-    "effect": "Eight Nano Banana 2 Lite attempts and eight GPT Image 2 attempts; a 75% accepted-generation yield is sufficient to continue, while failed images remain excluded from scoring."
+    "reason": "The current Antigravity CLI is the required Google generation and vision-evaluation path, but its generate_image tool does not expose a backend model name and its VLM path is an agent wrapper rather than the raw Gemini API.",
+    "effect": "The six accepted legacy Nano Banana 2 Lite images remain as audited Phase 1 development evidence but are outside the immutable 200-task pilot. All 25 scored Google packets are generated afresh as Antigravity built-in / backend unknown, allowing a complete 100 Google + 100 GPT Image 2 design. All synthetic VLM runs use the pinned subscription-backed Antigravity CLI model/mode, never a Gemini API endpoint."
   },
   "phase_1_prompt_comparison": {
-    "status": "prepared_external_run_pending_explicit_authorization",
-    "backend_model": "gemini-3.5-flash",
-    "architecture_id": "production-whole-room-v1",
+    "status": "complete",
+    "backend_path": "Antigravity CLI 1.1.8",
+    "backend_model": "gemini-3.5-flash-low",
+    "architecture_id": "antigravity-whole-room-v1",
     "eligible_packets": [
       "RP-001.gpt-image-2",
       "RP-002.gpt-image-2"
@@ -68,6 +87,50 @@
       "evidence-bounded-coverage-v1": "9a0a5c0ec45dbcd4e7d0b3fa1339b14d0839b16e0c8c91f164bf58caa855a870"
     },
     "prepared_at": "2026-07-28",
-    "note": "The four-call run plan, cache format and scorer are implemented and tested. The metered external run requires explicit authorization because it sends the eight accepted GPT Image 2 synthetic room images to the configured Gemini API."
+    "completed_at": "2026-07-28",
+    "result": "The evidence-bounded prompt raised defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points. This directional slice does not freeze a winner.",
+    "note": "Four immutable runs completed through subscription-backed Antigravity CLI. No Gemini API credential or metered endpoint was used. Wrapper token counts are recorded but are not raw API token accounting."
+  },
+  "phase_2_pattern": {
+    "status": "complete",
+    "completed_at": "2026-07-28",
+    "schema_status": "frozen for the 200-task pilot",
+    "review_artifact": "reports/contact-sheet.html",
+    "scoring": "generator slices and scenario/provider paired deltas implemented",
+    "splits": {
+      "development.json": "55470ed8c1f88c5ee0a288c4136551595d64f95f7042c68ebcd02452dde23372",
+      "validation.json": "a993fe4da9662991bb3975c1700ba3d1992361f5d971bc24e4884572db01ca65",
+      "sealed.json": "ea2357b92f4996c186c7a5ec7c75a9256f4374fbc47c08ab30871880ac690c1a"
+    }
+  },
+  "phase_3_execution": {
+    "status": "blocked",
+    "observed_at": "2026-07-28T15:38:10Z",
+    "task_status": {
+      "total": 200,
+      "pass_a_accepted": 8,
+      "review_pending": 23,
+      "generator_failed": 4,
+      "pending": 165
+    },
+    "provider_status": {
+      "Google": {
+        "review_pending": 19,
+        "generator_failed": 4,
+        "pending": 77
+      },
+      "OpenAI": {
+        "pass_a_accepted": 8,
+        "review_pending": 4,
+        "pending": 88
+      }
+    },
+    "stop_record": "generation_runs/antigravity/quota-stop-2026-07-28.json",
+    "blocked_by": [
+      "Antigravity RESOURCE_EXHAUSTED/429 quota until the reported 2026-07-28T19:36:54Z reset.",
+      "Pass A and Pass B require human review; generated files cannot be self-promoted to verified_synthetic_gold.",
+      "No prompt or architecture winner may be frozen before complete development and validation evidence."
+    ],
+    "downstream_effect": "Phase 4 sealed comparison and Phase 5 real transfer remain dependency-blocked. They have not run."
   }
 }

@@ -1,0 +1,16 @@
+{
+  "id": "RP-006",
+  "room_type": "Bathroom",
+  "property_profile": "clean modern bathroom in a UK build-to-rent flat",
+  "cleanliness": "clean and tidy with minimal toiletries",
+  "lighting": "neutral ceiling spots and soft daylight",
+  "continuity_requirements": ["same white suite, pale stone tiles, walk-in shower and chrome towel rail"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "extra sanitary fixtures"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "at the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["walk-in shower", "WC", "vanity basin", "heated towel rail", "stone wall tiles"], "intended_defects": [], "intended_negatives": ["no mould", "tile joints are not cracks"]},
+    {"id": "B-reverse", "viewpoint": "inside the shower looking back", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "vanity unit", "mirror", "extractor vent", "floor tiles"], "intended_defects": [], "intended_negatives": ["mirror reflection is not a stain"]},
+    {"id": "C-inventory", "viewpoint": "facing the shower controls", "shot_scale": "medium fixtures view", "intended_visible_items": ["rain shower", "handset", "mixer controls", "glass screen", "floor drain"], "intended_defects": [], "intended_negatives": ["water droplets do not prove damp"]},
+    {"id": "D-condition", "viewpoint": "close view of the vanity corner", "shot_scale": "condition detail", "intended_visible_items": ["vanity drawer", "basin edge", "mixer tap", "silicone joint"], "intended_defects": ["small chip on the upper corner of the vanity drawer front"], "intended_negatives": ["silicone joint is not a crack"]}
+  ]
+}

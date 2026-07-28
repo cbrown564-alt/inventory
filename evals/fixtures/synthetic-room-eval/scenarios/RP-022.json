@@ -1,0 +1,16 @@
+{
+  "id": "RP-022",
+  "room_type": "WC",
+  "property_profile": "small downstairs cloakroom in a UK family house",
+  "cleanliness": "noticeably cluttered but inspectable with cleaning products",
+  "lighting": "warm ceiling light",
+  "continuity_requirements": ["same white WC, corner basin, floral wallpaper and dark vinyl floor"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "extra sanitary fixtures"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "at the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["WC", "corner basin", "mirror", "wallpaper", "vinyl floor"], "intended_defects": [], "intended_negatives": ["wallpaper pattern is not mould"]},
+    {"id": "B-reverse", "viewpoint": "beside the WC looking back", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "toilet roll holder", "towel ring", "skirting", "cleaning basket"], "intended_defects": [], "intended_negatives": ["door shadow is not damp"]},
+    {"id": "C-inventory", "viewpoint": "facing the basin wall", "shot_scale": "medium fixtures view", "intended_visible_items": ["corner basin", "mixer tap", "mirror", "extractor vent", "light switch"], "intended_defects": [], "intended_negatives": ["mirror reflection is not a stain"]},
+    {"id": "D-condition", "viewpoint": "low view beside the WC", "shot_scale": "condition detail", "intended_visible_items": ["WC base", "vinyl floor", "skirting", "pipe boxing"], "intended_defects": [], "intended_negatives": ["vinyl pattern is not staining"]}
+  ]
+}

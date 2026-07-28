@@ -1,0 +1,16 @@
+{
+  "id": "RP-003",
+  "room_type": "Kitchen",
+  "property_profile": "recently refurbished compact UK terrace with inexpensive white fittings",
+  "cleanliness": "clean and tidy with clear worktops",
+  "lighting": "bright overcast daylight",
+  "continuity_requirements": ["same white shaker units, oak-effect worktop, black appliances and rear window"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "standing in the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["white kitchen units", "oak-effect worktop", "sink", "oven", "ceramic hob"], "intended_defects": [], "intended_negatives": ["clean timber grain is not mould"]},
+    {"id": "B-reverse", "viewpoint": "rear corner looking to the entrance", "shot_scale": "wide establishing view", "intended_visible_items": ["fridge freezer", "radiator", "door", "vinyl floor", "skirting boards"], "intended_defects": [], "intended_negatives": ["ordinary shadow is not damp"]},
+    {"id": "C-inventory", "viewpoint": "facing the cooking wall", "shot_scale": "medium fixtures view", "intended_visible_items": ["extractor hood", "ceramic hob", "oven", "heat alarm", "sockets"], "intended_defects": [], "intended_negatives": ["hob reflection is not a stain"]},
+    {"id": "D-condition", "viewpoint": "oblique view across the splashback", "shot_scale": "condition detail", "intended_visible_items": ["splashback tiles", "grout", "worktop edge", "socket"], "intended_defects": [], "intended_negatives": ["dark grout line is not a crack"]}
+  ]
+}

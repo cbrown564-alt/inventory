@@ -1,0 +1,16 @@
+{
+  "id": "RP-009",
+  "room_type": "Bedroom",
+  "property_profile": "furnished double bedroom in a modest UK rental house",
+  "cleanliness": "ordinarily occupied with made bed and a few belongings",
+  "lighting": "warm bedside lamps with weak window daylight",
+  "continuity_requirements": ["same double bed, oak wardrobes, cream carpet and bay window"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "standing in the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["double bed", "headboard", "bedside tables", "wardrobe", "cream carpet"], "intended_defects": [], "intended_negatives": ["no mattress stains"]},
+    {"id": "B-reverse", "viewpoint": "bay window looking back", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "chest of drawers", "wall mirror", "radiator", "ceiling light"], "intended_defects": [], "intended_negatives": ["mirror reflection is not a stain"]},
+    {"id": "C-inventory", "viewpoint": "beside the bed facing the bay", "shot_scale": "medium fixtures view", "intended_visible_items": ["bay window", "curtains", "radiator", "blind", "sockets"], "intended_defects": [], "intended_negatives": ["window shadow is not damp"]},
+    {"id": "D-condition", "viewpoint": "close view of chest of drawers with context", "shot_scale": "condition detail", "intended_visible_items": ["drawer front", "metal handle", "skirting board", "carpet"], "intended_defects": ["two short scratches beside the top drawer handle"], "intended_negatives": ["wood grain is not scratching"]}
+  ]
+}

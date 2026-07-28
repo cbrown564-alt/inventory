@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-007",
+  "provider": "OpenAI",
+  "product": "Codex built-in image generation",
+  "model_display_name": "GPT Image 2",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "shower enclosure",
+            "visibility": "pending"
+          },
+          {
+            "name": "pedestal basin",
+            "visibility": "pending"
+          },
+          {
+            "name": "WC",
+            "visibility": "pending"
+          },
+          {
+            "name": "mosaic tiles",
+            "visibility": "pending"
+          },
+          {
+            "name": "sloped ceiling",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "door",
+            "visibility": "pending"
+          },
+          {
+            "name": "mirror",
+            "visibility": "pending"
+          },
+          {
+            "name": "towel ring",
+            "visibility": "pending"
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "pending"
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "shower handset",
+            "visibility": "pending"
+          },
+          {
+            "name": "mixer controls",
+            "visibility": "pending"
+          },
+          {
+            "name": "glass door",
+            "visibility": "pending"
+          },
+          {
+            "name": "soap tray",
+            "visibility": "pending"
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "mosaic tiles",
+            "visibility": "pending"
+          },
+          {
+            "name": "grout",
+            "visibility": "pending"
+          },
+          {
+            "name": "silicone seal",
+            "visibility": "pending"
+          },
+          {
+            "name": "shower tray",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

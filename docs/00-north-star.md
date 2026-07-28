@@ -32,10 +32,16 @@ gates below.
 
 **Current evidence work:**
 
-- The synthetic representative slice has 14 accepted images from 16 attempts.
-  Primary and independent Pass B review are complete; all 37 required
-  independent decisions agreed. No model-accuracy claim exists yet because
-  the production baseline and prompt candidate have not run
+- The synthetic representative slice has 14 accepted images from 16 attempts,
+  and all 37 required independent Pass B decisions agreed. Its frozen
+  four-run prompt comparison is complete through subscription-backed
+  Antigravity CLI: the evidence-bounded prompt improved defect recall from
+  50% to 100% and removed one unsupported defect, but item recall fell
+  6.2 percentage points, so no winner was frozen. The 25-scenario, 200-task
+  pilot and immutable splits are implemented. Phase 3 stopped with 31 task
+  images present, 4 terminal Google generator failures and 165 pending tasks
+  after Antigravity quota exhaustion; 23 generated images still require human
+  Pass A review. No image-generation API was used
   ([`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md)).
 - Capture-strategy scaffolding and Property A inputs exist, but the
   photo-versus-video decision is still unrun
@@ -137,6 +143,11 @@ synthetic comparison and real-fixture regression gates.
 Credentials live in a gitignored `.env`; the journey never mentions backends
 or model names (docs/12).
 
+The synthetic evaluation programme has a narrower execution rule: Google
+image generation and vision-description evaluation use subscription-backed
+Antigravity CLI, GPT Image 2 uses Codex `imagegen`, and no image-generation
+API or metered Gemini endpoint is permitted.
+
 ---
 
 ## Authority hierarchy
@@ -158,8 +169,10 @@ or model names (docs/12).
 
 ```text
 1. Complete the 200-image synthetic evaluation programme
-   → close the representative slice by comparing the production prompt with
-     the frozen evidence-bounded coverage prompt
+   → resume Antigravity generation after its recorded quota reset and finish
+     the Google development/validation packets without weakening failed scenes
+   → generate the remaining GPT Image 2 packets through Codex `imagegen`
+   → complete independent Pass A and Pass B review before scoring
    → freeze the winning prompt before comparing architectures
    → record cost and row-level failures; do not promote from synthetic data
    → keep public dataset publication post-v1 and subject to a separate terms,

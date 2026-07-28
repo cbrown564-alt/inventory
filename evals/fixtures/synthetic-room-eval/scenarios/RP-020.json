@@ -1,0 +1,16 @@
+{
+  "id": "RP-020",
+  "room_type": "Stairs and landing",
+  "property_profile": "carpeted staircase in a maintained UK terrace",
+  "cleanliness": "ordinarily occupied but clear of objects",
+  "lighting": "daylight from a small landing window",
+  "continuity_requirements": ["same beige stair carpet, white balustrade, landing window and pendant"],
+  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "unsafe missing balustrade"],
+  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "views": [
+    {"id": "A-wide", "viewpoint": "at the foot of the stairs", "shot_scale": "wide establishing view", "intended_visible_items": ["stair carpet", "handrail", "balustrade", "painted walls", "landing window"], "intended_defects": [], "intended_negatives": ["carpet pile shading is not a stain"]},
+    {"id": "B-reverse", "viewpoint": "top landing looking down", "shot_scale": "wide establishing view", "intended_visible_items": ["stairs", "front hall", "handrail", "newel post", "ceiling pendant"], "intended_defects": [], "intended_negatives": ["corner shadow is not damp"]},
+    {"id": "C-inventory", "viewpoint": "on the landing facing the window", "shot_scale": "medium fixtures view", "intended_visible_items": ["landing window", "radiator", "smoke alarm", "light switch", "sockets"], "intended_defects": [], "intended_negatives": ["window glare is not condensation"]},
+    {"id": "D-condition", "viewpoint": "close view of lower steps", "shot_scale": "condition detail", "intended_visible_items": ["stair carpet", "carpet rods", "skirting string", "newel post"], "intended_defects": [], "intended_negatives": ["compressed carpet pile is not damage"]}
+  ]
+}
