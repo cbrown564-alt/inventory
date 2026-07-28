@@ -32,6 +32,28 @@ reported. Results must be labelled according to their evidence:
 - independently annotated local capture: **internal held-out evaluation**;
 - independently annotated external source: **external benchmark**.
 
+## External component-benchmark minimum
+
+The v1 native-photo gate must be frozen before the scored run and contain:
+
+- two materially different external properties;
+- at least 100 independently annotated notable inventory facts;
+- at least 20 material visible defects, so one miss changes defect recall by
+  no more than five percentage points;
+- clean and ambiguous near-negatives for unsupported-defect testing; and
+- original images meeting the existing median-resolution threshold of 8 MP.
+
+If this evidence cannot be sourced, the gate remains blocked; do not reduce
+the denominators to manufacture a pass.
+
+This is a component benchmark for description accuracy from native-resolution
+photographs. It does not measure walkthrough segmentation, frame selection,
+boundary bleed or evidence lost during capture processing. Property A/B
+capture results provide separate acquisition evidence. Public wording must
+keep those sources separate: an end-to-end claim such as “90% recall from
+your walkthrough” requires a later evaluation of untouched drafts produced
+through the selected capture path.
+
 Metrics are scored into a JSON object with rates in 0..1:
 
 ```json
@@ -62,9 +84,10 @@ cannot accidentally be reported as native resolution.
   default**; clear the synthetic and real-fixture comparison first.
 - Native-resolution development/regression: may proceed on frozen local
   originals with appropriately bounded claims.
-- Native-resolution quality gate: **pending external benchmark data**, not an
-  implementation failure.
-- Public quality claim: **not yet supported**.
+- Native-resolution component gate: **pending external benchmark data** that
+  meets the minimum above, not an implementation failure.
+- Native-photo component quality claim: **not yet supported**.
+- End-to-end walkthrough percentages: **not measured by this gate**.
 - Next evidence task: source a professional report with its original images,
   or obtain permission and originals directly from a report provider; freeze
   and independently annotate the fixture before evaluating the unchanged

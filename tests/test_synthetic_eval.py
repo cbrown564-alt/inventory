@@ -6,7 +6,11 @@ from evals.synthetic.build_review import build
 from evals.synthetic.build_tasks import build_rows, write_tasks
 from evals.synthetic.record_outputs import record
 from evals.synthetic.reject_output import reject
+from evals.synthetic.run_eval import build_run_plan
+from evals.synthetic.prompts import PROMPTS, prompt_sha256
+from evals.synthetic.score import score_run
 from evals.synthetic.validate_dataset import validate
+from homeinventory.usecases.tenancy import SYSTEM_PROMPT
 
 
 DATASET = Path(__file__).resolve().parents[1] / "evals/fixtures/synthetic-room-eval"
@@ -127,3 +131,62 @@ def test_record_outputs_pins_hash_and_generation_provenance(tmp_path):
     assert rejected.is_file()
     assert not output.exists()
     assert json.loads((fixture / "rejected/manifest.jsonl").read_text())["reasons"] == ["malformed fixture"]
+
+
+def test_prompt_comparison_uses_product_prompt_and_plain_model_facing_text():
+    assert PROMPTS["production-v1"] == SYSTEM_PROMPT
+    assert len({prompt_sha256(prompt) for prompt in PROMPTS.values()}) == 2
+    candidate = PROMPTS["evidence-bounded-coverage-v1"].lower()
+    for research_term in ("benchmark", "candidate", "gold", "scorer", "stop rule"):
+        assert research_term not in candidate
+    assert '"photo_ids"' in candidate
+    assert "do not infer working order" in " ".join(candidate.split())
+    assert "wood grain mould" in candidate
+
+
+def test_phase1_plan_keeps_production_architecture_and_complete_packets_only():
+    plan = build_run_plan(DATASET)
+    assert len(plan) == 4
+    assert {run["scenario_id"] for run in plan} == {"RP-001", "RP-002"}
+    assert {run["prompt_id"] for run in plan} == set(PROMPTS)
+    assert {run["model"] for run in plan} == {"gemini-3.5-flash"}
+    assert all(len(run["inputs"]) == 4 for run in plan)
+    assert all(run["image_model"] == "GPT Image 2" for run in plan)
+
+
+def test_phase1_scorer_traces_items_defects_and_evidence_links():
+    review = json.loads(
+        (DATASET / "reviews/RP-001.gpt-image-2.json").read_text()
+    )
+    items = []
+    for claim in review["pass_b"]["claims"]:
+        items.append(
+            {
+                "name": claim["canonical_name"],
+                "description": claim.get("condition") or "",
+                "defects": [
+                    f"{defect['wording']} {defect['location']}"
+                    for defect in claim["defects"]
+                ],
+                "photo_ids": claim["evidence_frame_ids"],
+            }
+        )
+    record = {
+        "run_id": "test",
+        "scenario_id": "RP-001",
+        "room_type": "Kitchen",
+        "prompt_id": "production-v1",
+        "parsed_output": {"items": items},
+        "latency_seconds": 1.0,
+        "usage": {
+            "prompt_tokens": 100,
+            "completion_tokens": 50,
+            "total_tokens": 150,
+        },
+        "estimated_cost": {"amount": 0.001},
+    }
+    scored = score_run(record, review)
+    assert scored["item_recall_against_reviewed_gold"] == 100.0
+    assert scored["defect_recall"] == 100.0
+    assert scored["evidence_link_accuracy"] == 100.0
+    assert scored["counts"]["unsupported_defects"] == 0

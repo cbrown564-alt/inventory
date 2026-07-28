@@ -12,6 +12,10 @@ Build a **200-image pilot** as 25 matched four-view room specifications
 rendered once by Gemini and once by ChatGPT Image 2. Use it to find prompt and pipeline
 failures quickly. Do not train or fine-tune model weights on the images.
 
+Completing and using the 200-image pilot is next-phase v1 evidence work.
+Publishing the dataset is post-v1 and requires a separate review of provider
+terms, provenance, metadata removal and dataset licensing.
+
 Synthetic results are development evidence, not product accuracy evidence.
 All product claims and promotion decisions remain gated on held-out,
 native-resolution photographs from real properties.
@@ -377,7 +381,37 @@ it is not required to clear the v1 product gate.
 Synthetic metrics may reject a weak approach early. Only the real-transfer
 gate can promote a change to the product path.
 
+### Frozen comparison order
+
+The programme changes one decision class at a time:
+
+1. hold the production backend and architecture fixed;
+2. compare the production prompt with the named
+   **evidence-bounded coverage prompt**;
+3. freeze the winning prompt;
+4. compare merge and verifier architectures using that prompt;
+5. run the selected configuration once on the sealed synthetic split; and
+6. require non-regression on real fixtures before changing production.
+
+The evidence-bounded coverage prompt must systematically enumerate visible
+notable items and material defects, cite the supporting frame for each
+material claim, use `ambiguous` or `not_visible` instead of inferred absence,
+avoid causal claims about visible damage, and avoid strengthening partial
+evidence during multi-image consolidation. Its primary objective is improved
+notable-item and defect recall.
+
+Material claims are hard guardrails throughout validation and the sealed run.
+A candidate is rejected if it introduces an additional unsupported material
+defect, misses a material defect found by the baseline, or weakens a material
+claim's evidence link, even when an aggregate prompt metric improves.
+
 ## Generation workflow without image APIs
+
+**Permanent project rule, 28 Jul 2026:** image-generation API calls are never
+permitted. Nano Banana images may be generated only through Antigravity CLI;
+GPT Image 2 images may be generated only through Codex's `imagegen` skill.
+Configured API credentials do not change this boundary. Vision-description
+evaluation is a separate action and still requires task-specific approval.
 
 1. Generate `tasks.csv` and exact prompts locally from the scenario manifests.
 2. An operator claims one task and records provider/model/session start.
@@ -435,7 +469,9 @@ not pretend to be 50/50.
 - [x] Complete primary Pass B observed-label review for the 14 accepted images.
 - [x] Complete independent Pass B checks for all three defect claims, every
       negative and the preselected 25% ordinary-label sample.
-- [ ] Run the current production backend and one prompt candidate.
+- [ ] Run the current production backend with the production prompt and the
+      frozen evidence-bounded coverage prompt. Do not revise either after
+      outputs are visible.
 
 Exit: all 16 generations attempted, at least 12 accepted images, labels resolve
 without ad hoc fields, and at least one real model failure is traceable from
@@ -492,6 +528,16 @@ with the primary observed-evidence review. All four provider/packet records are
 now `verified_synthetic_gold`; the next Phase 1 task is the production-backend
 and prompt-candidate comparison.
 
+**Comparison readiness, 28 Jul 2026:** the production prompt and
+evidence-bounded coverage prompt are frozen by SHA-256 in `dataset.json`. The
+four-call runner keeps the production backend, schema and whole-room
+architecture fixed, accepts only the two complete GPT Image 2 packets, caches
+raw responses, and records token usage, current list-price cost and latency.
+The paired scorer and row-level failure report are implemented and the dry-run
+plan is verified. The external run remains pending explicit authorization to
+send the eight accepted synthetic images to the metered Gemini API; no output
+or prompt result has been observed.
+
 ### Phase 2 — extract the pattern
 
 - [ ] Freeze schemas and naming vocabulary.
@@ -506,8 +552,12 @@ instructions.
 
 - [ ] Generate the remaining development and validation packets.
 - [ ] Review and repair labels; never repair image pixels.
-- [ ] Run named prompt and architecture candidates.
-- [ ] Select one candidate using the validation split and cost constraint.
+- [ ] Run the production and evidence-bounded coverage prompts with the
+      production backend and architecture fixed.
+- [ ] Freeze the winning prompt using the validation split, cost constraint
+      and material-claim guardrails.
+- [ ] Only then run named architecture candidates with that prompt fixed.
+- [ ] Select one architecture using the same validation and cost constraints.
 
 Exit: 160 accepted development and validation images or a documented
 generator failure rate that stops the programme.
@@ -522,18 +572,19 @@ generator failure rate that stops the programme.
 
 Exit: the direction of improvement holds or the candidate is rejected.
 
-### Phase 5 — real transfer and publication
+### Phase 5 — real transfer
 
 - [ ] Run the winner on InventoryFlex and native-resolution real fixtures.
 - [ ] Reject any change that improves synthetic results but regresses real
   evidence.
-- [ ] Publish dataset card, generation/review method, terms record, limitations,
-  splits, prompts and verified labels.
-- [ ] Show generated examples on the customer website only with unmistakable
-  synthetic disclosure and no implication that they are tenancy evidence.
+- [ ] Prepare an internal dataset card with generation/review method, terms
+  record, limitations, splits, prompts and verified labels.
 
-Exit: synthetic development evidence and real product evidence are published
-as separate tables.
+Exit: synthetic development evidence and real product evidence are recorded
+as separate tables. Public release and customer-site examples are post-v1
+actions requiring a separate provider-terms, provenance, metadata and
+licensing review; publication does not turn synthetic evidence into a product
+claim.
 
 ## Files to implement
 

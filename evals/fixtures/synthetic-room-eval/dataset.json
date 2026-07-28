@@ -3,6 +3,14 @@
   "phase": "phase-1-representative-slice",
   "status": "phase_1_production_comparison_pending",
   "observed_truth_rule": "Only Pass B human-observed claims may be scored as gold.",
+  "image_generation_policy": {
+    "api_calls_permitted": false,
+    "nano_banana_path": "Antigravity CLI only",
+    "gpt_image_2_path": "Codex imagegen skill only",
+    "decision_owner": "project owner",
+    "decided_at": "2026-07-28",
+    "note": "Permanent project restriction. Vision-description and other inference remain separate actions requiring task-specific approval."
+  },
   "providers": {
     "nano-banana-2-lite": {
       "provider": "Google",
@@ -42,5 +50,24 @@
     "decision_owner": "project owner",
     "reason": "Restore the intended 50/50 Nano Banana 2 Lite and GPT Image 2 split after clarifying that Antigravity supplies only the Google half.",
     "effect": "Eight Nano Banana 2 Lite attempts and eight GPT Image 2 attempts; a 75% accepted-generation yield is sufficient to continue, while failed images remain excluded from scoring."
+  },
+  "phase_1_prompt_comparison": {
+    "status": "prepared_external_run_pending_explicit_authorization",
+    "backend_model": "gemini-3.5-flash",
+    "architecture_id": "production-whole-room-v1",
+    "eligible_packets": [
+      "RP-001.gpt-image-2",
+      "RP-002.gpt-image-2"
+    ],
+    "excluded_packets": {
+      "RP-001.nano-banana-2-lite": "incomplete four-view packet",
+      "RP-002.nano-banana-2-lite": "incomplete four-view packet"
+    },
+    "prompts": {
+      "production-v1": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+      "evidence-bounded-coverage-v1": "9a0a5c0ec45dbcd4e7d0b3fa1339b14d0839b16e0c8c91f164bf58caa855a870"
+    },
+    "prepared_at": "2026-07-28",
+    "note": "The four-call run plan, cache format and scorer are implemented and tested. The metered external run requires explicit authorization because it sends the eight accepted GPT Image 2 synthetic room images to the configured Gemini API."
   }
 }

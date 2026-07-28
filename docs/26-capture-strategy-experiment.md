@@ -122,8 +122,10 @@ per-frame quality, because the review step can repair the rest?
 
 ## Fixture matrix
 
-One property is not enough — capture difficulty varies with property type.
-Minimum: **two properties** of different character. Ideal: three.
+One property is not enough to change the product default — capture difficulty
+varies with property type. Minimum: **two properties** of different character.
+Property A may eliminate dominated arms and select two finalists; Property B
+must confirm the winning direction. Ideal: three.
 
 | Property | Why | Rooms |
 |---|---|---|
@@ -132,9 +134,16 @@ Minimum: **two properties** of different character. Ideal: three.
 | **C — Third property** (stretch) | Confirms A/B findings generalise; prevents a one-property artefact. | any |
 
 **Per property, per arm:** capture the property using that arm's protocol,
-build, review to a gold report, score all five axes. The gold report is
+build, score the untouched automated draft, then review to a gold report.
+Human repair is measured separately. The gold report is
 **property-level** (the canonical item/grade/defect list for that property)
-and shared across arms — so arms are compared against the same truth.
+and shared across arms — so arms are compared against the same truth. Freeze
+it before inspecting arm outputs.
+
+Property B may be captured by the owner for v1: it tests transfer across
+properties, not users. A first-time target user's ability to follow the chosen
+instruction is post-v1 validation required before broad rollout or usability
+claims.
 
 ### Capture protocols (so arms are comparable)
 
@@ -197,6 +206,11 @@ structure:   room-name correctness, boundary-bleed count, hero pass rate
 
 ### Decision criteria
 
+Accuracy means the untouched automated draft before human correction. The
+issued report's agreement with gold is a completion check, not an arm accuracy
+score. Record review time, additions, rejections, grade changes,
+`not visible` marks and re-captures as review burden.
+
 We are **not** looking for a single winner on accuracy. The decision rule:
 
 - **If a photo arm matches video accuracy AND clearly wins image quality
@@ -227,16 +241,14 @@ Step 0 — Build photo-mode ingest + capture-time room naming (scaffolding) ✅
 Step 1 — Capture Property A under V0, V1, P1 and P2 (reuse the existing
          footage only for V0 when it truly matches the baseline protocol)
 Step 2 — Build + review each to A's gold; score the scorecard
-Step 3 — Decision checkpoint on A alone: is the signal strong enough to
-         call it, or do we need B?
-Step 4 — If needed: capture Property B under the leading 2–3 arms only
+Step 3 — Use A to eliminate dominated arms and select two finalists
+Step 4 — Capture a contrasting Property B under the two finalist arms
 Step 5 — Decision recorded in docs/00 Pillar 2 + this doc's outcome section
 ```
 
 Property A first because the gold work is partly done (docs/18 fixture).
-A *may* be enough if the signal is decisive — e.g. if photos are dramatically
-better on image quality at low effort on A, we don't need B to confirm the
-direction, only to stress-test it.
+A may narrow the field decisively, but it cannot change the v1 default by
+itself. Property B is the required property-transfer confirmation.
 
 ## What this experiment is NOT
 

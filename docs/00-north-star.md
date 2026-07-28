@@ -46,7 +46,9 @@ gates below.
 
 **Unvalidated:** first-screen owner trust sign-off, capture strategy,
 native-resolution accuracy thresholds, and transfer from synthetic results to
-real property evidence.
+real property evidence. First-time-landlord capture usability is a post-v1
+validation requirement before broad rollout or usability claims; it does not
+block the operator-run v1 pilot.
 
 ---
 
@@ -155,25 +157,35 @@ or model names (docs/12).
 ## Next work (ordered)
 
 ```text
-1. Finish the bounded synthetic representative slice
-   → run current production baseline and one named prompt candidate
+1. Complete the 200-image synthetic evaluation programme
+   → close the representative slice by comparing the production prompt with
+     the frozen evidence-bounded coverage prompt
+   → freeze the winning prompt before comparing architectures
    → record cost and row-level failures; do not promote from synthetic data
+   → keep public dataset publication post-v1 and subject to a separate terms,
+     provenance, metadata and licensing review
 
-2. Decide the capture strategy on Property A
+2. Decide the capture strategy on Properties A and B
    → build/review V0, V1, P1 and curated P2 against one frozen gold
-   → record whether the signal is decisive or Property B is required
+   → score each untouched automated draft before human correction
+   → use Property A to eliminate dominated arms and select two finalists
+   → require a contrasting Property B before changing the v1 default
 
 3. Clear the native-resolution quality gate
-   → freeze an original-resolution fixture with independent annotations
+   → freeze original-resolution external fixtures from two properties with
+     independent annotations, at least 100 notable facts and 20 defects
    → run the unchanged pipeline against the docs/00 thresholds
-   → keep public quality claims blocked until this passes
+   → report this as a native-photo description benchmark, not end-to-end
+     walkthrough accuracy; keep the component claim blocked until it passes
 
 4. Complete first-screen trust sign-off
-   → inspect a fresh representative build at desktop and mobile sizes
+   → inspect Property B's untouched winning-arm draft at desktop and mobile
    → record the owner's send/no-send decision and defects
 
 5. Make the v1 promotion decision
-   → ship only when all four pillars below are met
+   → promote only when all four pillars below are met
+   → the boundary is an evidence-complete, operator-run pilot; public
+     self-service requires a separate operational and legal promotion
 ```
 
 ---
@@ -215,9 +227,11 @@ decoration; for a real-estate product it *is* the value proposition.
       light/airy consistency with the landing page (the "two worlds"
       split is re-evaluated), generous type and spacing, hover/affordance
       polish matching the start page, no 9px density. Craft C1+C2 landed.
-- [ ] **First-screen trust sign-off** — owner looks at the overview on
-      a fresh build and says *"I'd send this to a landlord"* without
-      qualification. This is the gate the old DoD lacked.
+- [ ] **First-screen trust sign-off** — owner looks at Property B's untouched
+      winning-arm draft on desktop and mobile and says *"I'd send this to a
+      landlord"* without qualification. Explicit `review_required` warnings
+      are honest recovery; silently wrong-room, blurred or misleading heroes
+      fail. This is the gate the old DoD lacked.
 
 ### Pillar 2 — The evidence is trustworthy by construction
 
@@ -226,11 +240,14 @@ the right capture strategy and the pipeline selects representative
 frames — not because a heuristic picked the least-bad option from a
 pool that may contain the wrong room entirely.
 
-- [ ] **Capture strategy validated** (photo vs video, at multiple
+- [ ] **Capture strategy decided** (photo vs video, at multiple
       volumes, measured on accuracy / image quality / time / effort) —
       the deepest open question and the one that determines the
       pipeline's shape. Experiment design:
       [`26-capture-strategy-experiment.md`](26-capture-strategy-experiment.md).
+      Property A selects two finalists; a contrasting, owner-captured
+      Property B is required before the default changes. First-time-user
+      capture validation is post-v1.
 - [x] **Heroes depict the named room** — E7 detector-assisted semantic rank 1
       plus E7b ``cover_status`` validation flag unsupported or weak-identity
       covers for review rather than silent ship. Stairs/landing remain classical
@@ -256,9 +273,13 @@ pool that may contain the wrong room entirely.
 The existing quality bar — kept, because a beautiful report that is
 wrong is still worthless.
 
-- [ ] Native-res benchmark shows notable recall ≥90%, hallucination
-      ≤5%, defect recall ≥75% (docs/10; currently resolution-bound at
-      64–71% defect recall). Gate harness: `evals/verify_v1_accuracy.py`.
+- [ ] Native-photo component benchmark shows notable recall ≥90%,
+      hallucination ≤5%, defect recall ≥75% (docs/10; currently
+      resolution-bound at 64–71% defect recall). It must cover two external
+      properties, at least 100 independently annotated notable facts and
+      20 material defects, clean/ambiguous negatives, and original images
+      meeting the 8 MP gate. These percentages do not describe end-to-end
+      walkthrough accuracy. Gate harness: `evals/verify_v1_accuracy.py`.
 - [x] E8 + E2 + E10 wired into the production build path — ML-E8 VLM cover
       rerank (default ON when API keys exist; `--no-vlm-cover` keeps E5+E7),
       ML-E2 seam refine on fresh segmentations (`--no-seam-refine` to skip),

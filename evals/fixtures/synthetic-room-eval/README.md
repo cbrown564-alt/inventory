@@ -17,6 +17,14 @@ Re-check before training use or a change in publication scope. For Phase 1 the
 project owner confirms the Antigravity `generate_image` backend is Nano Banana
 2 Lite. Preserve the CLI version, exact prompt and output hash for every task.
 
+## Permanent generation boundary
+
+Never call an image-generation API for this project. Generate Nano Banana
+images only through Antigravity CLI and GPT Image 2 images only through Codex's
+`imagegen` skill. This rule applies even when an API key is configured. It does
+not authorise a later vision-description evaluation call; that remains a
+separate, task-specific permission decision.
+
 ## Phase 1 generation result
 
 Antigravity CLI 1.1.2 produced the eight Nano Banana 2 Lite first attempts.
@@ -45,6 +53,10 @@ prompt-candidate comparison.
 uv run python -m evals.synthetic.build_tasks
 uv run python -m evals.synthetic.validate_dataset
 uv run python -m evals.synthetic.build_review
+uv run python -m evals.synthetic.run_eval --dry-run
+# Explicit approval for metered Gemini inference is required before:
+uv run python -m evals.synthetic.run_eval
+uv run python -m evals.synthetic.score
 ```
 
 Use `--require-complete` only after all 16 task rows say `accepted`, all image
@@ -63,6 +75,14 @@ validator accepts a not-yet-generated slice but reports every pending task.
 8. Complete Pass B from visible evidence only, including deviations.
 9. Obtain the required second checks, then mark gold only after disagreements resolve.
 10. Rebuild the contact sheet and run the strict validator.
+
+The Phase 1 prompt comparison is frozen in `dataset.json`. Its runner sends the
+two complete GPT Image 2 packets to the production `gemini-3.5-flash` backend
+once per prompt, caches the raw provider responses, and refuses to overwrite
+them. An interrupted run resumes by skipping immutable cached responses. The
+scorer writes `reports/phase1-prompt-comparison.{json,md}`. The two
+incomplete Nano Banana packets remain useful for single-image work but are
+excluded from this whole-room production-architecture comparison.
 
 Rejected attempts are append-only JSON lines in `rejected/manifest.jsonl` with
 task ID, attempt, output hash/path, timestamp, operator and rejection reasons.

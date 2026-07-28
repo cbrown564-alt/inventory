@@ -154,9 +154,11 @@ that doesn't exist yet is the mistake that created the current overrides.
 - [x] Review overview rebuilt: generous cards, readable type, hero images
       given room, hover/affordance parity with start.
 - [x] Report/PDF uses the shared system (no third palette).
-- [ ] **First-screen trust sign-off:** owner looks at a fresh-build
-      overview and says *"I'd send this to a landlord"* without
-      qualification.
+- [ ] **First-screen trust sign-off:** owner looks at Property B's untouched
+      winning-arm draft at representative desktop and mobile sizes and says
+      *"I'd send this to a landlord"* without qualification. Explicit
+      `review_required` warnings are honest recovery; a silently wrong-room,
+      blurred or misleading hero fails.
 
 The last checkbox is the gate. Everything else serves it.
 
@@ -215,8 +217,8 @@ Progress since Ledger commit (9 Jul 2026):
 
 Remaining:
 
-- **First-screen trust sign-off** against docs/00 Pillar 1 (owner looks at
-  a fresh-build overview and says *"I'd send this to a landlord"*).
+- **First-screen trust sign-off** against docs/00 Pillar 1 using Property B's
+  untouched winning-arm draft at desktop and mobile sizes.
 
 The earlier `cover_confident` implementation gap is closed by
 `cover_status` / `review_required`; see docs/00 Pillar 2 and docs/18.

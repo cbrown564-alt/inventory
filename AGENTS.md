@@ -15,3 +15,9 @@ homeinventory review <capture-directory> -o <report-directory>
 ```
 
 Do not run paid or network-backed inference unless the task authorizes it.
+
+Never use an API for image generation in this project. The only authorised
+image-generation paths are Antigravity CLI for Nano Banana images and Codex's
+`imagegen` skill for GPT Image 2 images. This restriction does not itself
+authorise vision-description or other model inference; those calls still
+require task-specific approval under the rule above.
