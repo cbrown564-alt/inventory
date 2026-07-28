@@ -2,10 +2,12 @@
 
 *11 Jul 2026. Repository-controlled Phase 4 implementation record.*
 
-The production path now contains the four accuracy cascades required by
-docs/00: bounded semantic cover reranking (E8), bounded seam refinement (E2),
-Grounding DINO plus proposal verification (E10), and tiered Gemini-to-Opus item
-description. Local generation already applies a repeat penalty and a
+The production path contains bounded semantic cover reranking (E8), bounded
+seam refinement (E2), and Grounding DINO plus proposal verification (E10).
+The tiered Gemini-to-Opus backend is implemented and tested, but the current
+CLI and web defaults still select the Gemini/OpenAI-compatible backend
+directly. Tiered routing remains a promotion candidate, not shipped default
+behaviour. Local generation applies a repeat penalty and a
 temperature-jittered retry to break malformed repetition loops.
 
 The remaining gate is data, not implementation. The committed InventoryFlex
@@ -55,7 +57,9 @@ cannot accidentally be reported as native resolution.
 
 ## Current disposition
 
-- Phase 4 production engineering: **complete**.
+- E2/E8/E10 production engineering: **complete**.
+- Tiered describe implementation: **complete but not promoted to the product
+  default**; clear the synthetic and real-fixture comparison first.
 - Native-resolution development/regression: may proceed on frozen local
   originals with appropriately bounded claims.
 - Native-resolution quality gate: **pending external benchmark data**, not an

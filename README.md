@@ -243,6 +243,11 @@ Full index: [`docs/README.md`](docs/README.md).
 - [`docs/21-ml-dl-experiment-log.md`](docs/21-ml-dl-experiment-log.md) — ML experiment status tracker
 - [`docs/22-ml-programme-review-and-roadmap.md`](docs/22-ml-programme-review-and-roadmap.md) — ML post-mortem and roadmap
 - [`docs/23-gpu-rerun-runbook.md`](docs/23-gpu-rerun-runbook.md) — GPU re-run execution runbook
+- [`docs/24-friction-log-2026-07-08.md`](docs/24-friction-log-2026-07-08.md) — completed first-tester run
+- [`docs/26-capture-strategy-experiment.md`](docs/26-capture-strategy-experiment.md) — photo vs video decision owner
+- [`docs/29-evidential-spec-audit.md`](docs/29-evidential-spec-audit.md) — deposit-scheme evidence audit
+- [`docs/30-phase4-quality-gate.md`](docs/30-phase4-quality-gate.md) — native-resolution quality gate
+- [`docs/31-synthetic-evaluation-dataset-plan.md`](docs/31-synthetic-evaluation-dataset-plan.md) — synthetic VLM evaluation owner
 - [`evals/README.md`](evals/README.md) — fixture format and quality metrics
 
 ## Status
@@ -263,10 +268,11 @@ the `local` backend has two viable £0 paths: `qwen3.5:9b` (lighter), or the
 including claude), ~23 tok/s on an 8 GB GPU + 32 GB RAM box, a genuine
 **draft for review** rather than an unreviewed report. Dense models ≤4B fit
 the card but are too weak; MoE sidesteps that by riding system RAM for the
-weights. **Tiered describe is the default** (July 2026):
-`gemini-3.5-flash` drafts the room and Opus verifies only the hard tail
-(docs/00). **`claude-opus-4-8` remains available as the premium full-room
-backend** for complex cases.
+weights. **`gemini-3.5-flash` is the current CLI and web default.**
+Tiered Gemini-to-Opus description is implemented and tested but is not yet
+selected by the product defaults; it remains a promotion candidate.
+**`claude-opus-4-8` is available as the premium full-room backend** for
+complex cases.
 See [`docs/04`](docs/04-backend-comparison.md) for benchmark scores.
 **M4 (check-in vs check-out comparison) is shipped** — `homeinventory
 compare` aligns the two reports lexically, classifies deteriorations with a
@@ -295,11 +301,11 @@ detection eval** documented in [`docs/13`](docs/13-yoloe-detection.md).
 C2PA/e-signature and multi-property stay deferred
 ([`docs/03`](docs/03-implementation-plan.md)). The first-tester tenancy run and
 friction log completed on 8 Jul; the Windows PDF fallback shipped on 9 Jul.
-The next product gate is the capture-strategy decision in [`docs/26`](docs/26-capture-strategy-experiment.md):
-finish Property A gold/review burden, P1 and curated P2, isolate recorded-audio
-contribution, then validate the leading arms on Property B. Hosted login and the
-remote project spine follow that evidence gate; local model tuning is bounded
-post-quality work rather than a v1 blocker.
+The ordered path to v1 is in [`docs/00`](docs/00-north-star.md): finish the
+bounded synthetic baseline/candidate comparison; decide capture strategy on
+Property A; clear the independently annotated native-resolution quality gate;
+complete first-screen trust sign-off; then make the promotion decision.
+Hosted login and the remote project spine remain deferred.
 
 **Product-quality pass, 3 Jul 2026** ([`docs/10`](docs/10-product-quality-review.md)):
 the PDF's evidence chain now closes end-to-end (item → photo refs → Appendix

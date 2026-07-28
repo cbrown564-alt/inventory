@@ -67,6 +67,12 @@ property address sanitised.*
 
 **Verdict:** Journey is **complete end-to-end** with one **major** friction (PDF). Phase 1 exit is **conditional** — approve for HTML-first delivery; block Windows PDF claim until F1 resolved.
 
+**Post-run resolution, 9 Jul 2026:** F1 was resolved after this dated run.
+Finish now offers browser Print → Save as PDF through the final issue when
+WeasyPrint is unavailable. The unchecked box above records the state observed
+during the run; it is not a current blocker. Current status is owned by
+[`00-north-star.md`](00-north-star.md).
+
 ---
 
 ## Evidence

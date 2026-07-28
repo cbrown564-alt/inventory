@@ -1,8 +1,9 @@
 # 00 — North star
 
-*8 Jul 2026. Single source of truth for v1 scope, success criteria, and what
-is explicitly deferred. Supersedes scattered open items in docs/03, docs/12,
-and docs/22 when they conflict. Read this first; everything else is detail.*
+*Updated 28 Jul 2026. Single source of truth for v1 scope, current status,
+next work, and what is explicitly deferred. Supersedes scattered open items
+in docs/03, docs/12, and docs/22 when they conflict. Read this first;
+everything else is detail.*
 
 ---
 
@@ -13,6 +14,39 @@ reviews a TDS-credible inventory report, signs it, and downloads a professional
 PDF — for pennies, not £165.**
 
 The competition is not other tools; it is not bothering.
+
+---
+
+## Current status (28 Jul 2026)
+
+**Current outcome:** the local web product completes the primary journey from
+walkthrough upload through draft, review, owner signature, tenant countersign,
+and report handoff. The journey, evidence trail, and production fallbacks are
+implemented. v1 is not yet validated or promoted.
+
+**Freshest verification:** commit `ff7b94f` passed `pytest -q` and
+`python evals/ci_gate.py` on Ubuntu and Windows in GitHub Actions on
+28 Jul 2026. That verifies the automated contract at that revision; it does
+not replace the open visual, capture-strategy, or native-resolution evidence
+gates below.
+
+**Current evidence work:**
+
+- The synthetic representative slice has 14 accepted images from 16 attempts.
+  Primary and independent Pass B review are complete; all 37 required
+  independent decisions agreed. No model-accuracy claim exists yet because
+  the production baseline and prompt candidate have not run
+  ([`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md)).
+- Capture-strategy scaffolding and Property A inputs exist, but the
+  photo-versus-video decision is still unrun
+  ([`26-capture-strategy-experiment.md`](26-capture-strategy-experiment.md)).
+- The native-resolution gate is fail-closed. No independently annotated
+  external fixture currently supports the public v1 quality claim
+  ([`30-phase4-quality-gate.md`](30-phase4-quality-gate.md)).
+
+**Unvalidated:** first-screen owner trust sign-off, capture strategy,
+native-resolution accuracy thresholds, and transfer from synthetic results to
+real property evidence.
 
 ---
 
@@ -88,14 +122,15 @@ compare. The CLI remains plumbing for power users and CI.
 |---|---|---|
 | **Walkthrough segmentation** | `gemini-3.5-flash` | `claude-sonnet-5` (quality alternative) |
 | **Item describe (most rooms/items)** | `gemini-3.5-flash` via `--backend openai` | — |
-| **Hard items** (low confidence, defect claims, ambiguous grades) | Route to **`claude-opus-4-8`** | Human review loop always available |
+| **Hard items** (low confidence, defect claims, ambiguous grades) | `TieredBackend` candidate routes to **`claude-opus-4-8`** | Human review loop always available |
 | **Local £0 draft** | `gemma4:26b` via `--backend local` | `qwen3.5:9b` (lighter) |
 | **CI / offline** | `--backend offline` | — |
 
-Gemini is the **default** describe backend — cheap, fast, clears the
-hallucination ceiling. Opus is the **expensive backup** for complex tasks,
-not the default for every item. Tiered routing (cheap draft → opus on hard
-tail) is Phase 2 work (docs/22 §5.2).
+Gemini is the **current CLI and web default** describe backend. Opus is
+available as the expensive full-room backend. The tiered Gemini-to-Opus
+implementation exists and is covered by focused tests, but it is not selected
+by the current CLI or web defaults; promote it only after the bounded
+synthetic comparison and real-fixture regression gates.
 
 Credentials live in a gitignored `.env`; the journey never mentions backends
 or model names (docs/12).
@@ -117,28 +152,28 @@ or model names (docs/12).
 
 ---
 
-## The singular path (sequenced)
+## Next work (ordered)
 
 ```text
-Phase 0 — CONSOLIDATE ✓ (Jul 2026)
-  docs/00 + doc index + pipeline.run_build()
-  → one doc to read, one code path to build
+1. Finish the bounded synthetic representative slice
+   → run current production baseline and one named prompt candidate
+   → record cost and row-level failures; do not promote from synthetic data
 
-Phase 1 — SHIP THE JOURNEY (in progress)
-  Video upload → segment → build → review → sign → PDF
-  → first-tester run with friction log (docs/24)
+2. Decide the capture strategy on Property A
+   → build/review V0, V1, P1 and curated P2 against one frozen gold
+   → record whether the signal is decisive or Property B is required
 
-Phase 2 — SHIP PROVEN QUALITY WINS
-  E8 VLM cover rerank, E2 seam refine, E10 GDINO + verify
-  gemma4 repetition-loop fix; tiered describe routing (gemini → opus)
+3. Clear the native-resolution quality gate
+   → freeze an original-resolution fixture with independent annotations
+   → run the unchanged pipeline against the docs/00 thresholds
+   → keep public quality claims blocked until this passes
 
-Phase 3 — FIX THE ACCURACY CEILING
-  Native-res InventoryFlex re-capture
-  Re-measure defect recall (currently resolution-bound at 64–71%)
-  Scale bbox gold if detector fine-tune still wanted
+4. Complete first-screen trust sign-off
+   → inspect a fresh representative build at desktop and mobile sizes
+   → record the owner's send/no-send decision and defects
 
-Phase 4 — COST REDUCTION (post-v1, only if Phase 1–3 pass)
-  E3 describe pool, distillation flywheel (docs/22 §5.4)
+5. Make the v1 promotion decision
+   → ship only when all four pillars below are met
 ```
 
 ---

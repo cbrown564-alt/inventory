@@ -1,13 +1,13 @@
 """Local review server (Level 2) and multi-party share mode (Level 3).
 
 `homeinventory review CAPTURE_DIR -o REPORT_DIR` serves a single-machine web
-app over stdlib http.server — no accounts, no hosting, nothing leaves the
-machine unless --share is given:
+app over stdlib http.server — no accounts and no hosting. The default mints a
+token-protected tenant link; ``--no-share`` keeps the session owner-only:
 
   * owner app at /            edit grades/defects, annotate defect regions on
                               photos, add missed items, re-describe a room,
                               write straight back to inventory.json
-  * tenant app at /t/<token>  (--share) read-only walk-through with per-item
+  * tenant app at /t/<token>  token-protected walk-through with per-item
                               comments and a countersignature
 
 Multi-session projects (e.g. deepclean before/after) add ``project.json``,

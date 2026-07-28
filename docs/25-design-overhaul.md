@@ -147,13 +147,13 @@ that doesn't exist yet is the mistake that created the current overrides.
 
 ## How we know it's done (docs/00 Pillar 1)
 
-- [ ] One shared design system; every surface consumes it; no surface
+- [x] One shared design system; every surface consumes it; no surface
       defines its own palette.
-- [ ] The light→dark jarring transition is gone from the review journey;
+- [x] The light→dark jarring transition is gone from the review journey;
       dark survives only in the scoped media-inspection surface.
-- [ ] Review overview rebuilt: generous cards, readable type, hero images
+- [x] Review overview rebuilt: generous cards, readable type, hero images
       given room, hover/affordance parity with start.
-- [ ] Report/PDF uses the shared system (no third palette).
+- [x] Report/PDF uses the shared system (no third palette).
 - [ ] **First-screen trust sign-off:** owner looks at a fresh-build
       overview and says *"I'd send this to a landlord"* without
       qualification.
@@ -213,12 +213,13 @@ Progress since Ledger commit (9 Jul 2026):
   brass callout. Shared `.btn.primary` on tenant countersign.
 - **Start picker** wrapped in the same ledger plate as the upload hero.
 
-Remaining (not yet done):
+Remaining:
 
 - **First-screen trust sign-off** against docs/00 Pillar 1 (owner looks at
   a fresh-build overview and says *"I'd send this to a landlord"*).
-- **Pipeline cover_confident** for product-grade bad-hero honesty (H) —
-  interim UI uses `presentation_eligible` / low `quality` today.
+
+The earlier `cover_confident` implementation gap is closed by
+`cover_status` / `review_required`; see docs/00 Pillar 2 and docs/18.
 
 Progress since Craft Sprint C1 (9 Jul 2026):
 

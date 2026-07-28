@@ -12,6 +12,8 @@
 | Experience quality | [`10-product-quality-review.md`](10-product-quality-review.md) |
 | Backend benchmark evidence | [`04-backend-comparison.md`](04-backend-comparison.md) |
 | ML experiment status | [`21-ml-dl-experiment-log.md`](21-ml-dl-experiment-log.md) |
+| Capture-strategy decision | [`26-capture-strategy-experiment.md`](26-capture-strategy-experiment.md) |
+| Native-resolution quality gate | [`30-phase4-quality-gate.md`](30-phase4-quality-gate.md) |
 | Synthetic VLM evaluation dataset | [`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md) |
 
 Update the owner instead of creating a second live plan. Implementation and tests own current behavior; dated records explain history.
@@ -26,7 +28,7 @@ Update the owner instead of creating a second live plan. Implementation and test
 | **Milestone ledger** | [03](03-implementation-plan.md) | Historical — what shipped when (frozen) |
 | **Feature records** | [06](06-professional-report-benchmark.md)–[09](09-web-ui-and-capture.md), [15](15-curation-and-one-app.md)–[16](16-report-redesign.md) | Deep dive on a shipped milestone |
 | **Design reference** | [05](05-review-experience.md), [14](14-frontend-craft.md), [17](17-experience-redesign.md) | Review UX principles and next work |
-| **Technical spikes** | [02](02-research.md), [11](11-video-segmentation.md), [13](13-yoloe-detection.md), [18](18-hero-image-selection.md), [26](26-capture-strategy-experiment.md), [market-research](market-research-2026-07.md) | Background research and eval methodology |
+| **Evidence and technical work** | [02](02-research.md), [11](11-video-segmentation.md), [13](13-yoloe-detection.md), [18](18-hero-image-selection.md), [26](26-capture-strategy-experiment.md), [29 evidential](29-evidential-spec-audit.md), [29 local](29-local-inference-tuning.md), [30 quality gate](30-phase4-quality-gate.md), [31](31-synthetic-evaluation-dataset-plan.md), [market-research](market-research-2026-07.md) | Current evidence gates, research and evaluation method |
 | **ML programme** | [19](19-ml-dl-exploration-plan.md), [21](21-ml-dl-experiment-log.md), [22](22-ml-programme-review-and-roadmap.md), [23](23-gpu-rerun-runbook.md) | ML experiments — subordinate to docs/00 |
 | **Future** | [20](20-ios-native-app.md) | Post-v1 iOS track |
 
@@ -36,17 +38,21 @@ Update the owner instead of creating a second live plan. Implementation and test
 
 1. [00](00-north-star.md) → [12](12-video-first-journey.md) → [10](10-product-quality-review.md) → [04](04-backend-comparison.md)
 
-**Phase 1 — first-tester exit**
+**Current v1 work, in order**
 
-1. [24](24-first-tester-runbook.md) → run on a real property → commit friction log
+1. [31](31-synthetic-evaluation-dataset-plan.md) → finish the bounded production-baseline/prompt-candidate comparison
+2. [26](26-capture-strategy-experiment.md) → decide Property A capture strategy
+3. [30](30-phase4-quality-gate.md) → freeze independent native-resolution evidence and run the gate
+4. [25](25-design-overhaul.md) → complete first-screen trust sign-off
+5. [00](00-north-star.md) → make the v1 promotion decision
 
-**UX next work**
+**Completed journey evidence**
 
-1. [17](17-experience-redesign.md) with [14](14-frontend-craft.md), [15](15-curation-and-one-app.md), [16](16-report-redesign.md) as context
+1. [24 runbook](24-first-tester-runbook.md) → [24 friction log](24-friction-log-2026-07-08.md)
 
-**ML next work**
+**ML background**
 
-1. [00](00-north-star.md) §Next major milestones → [26](26-capture-strategy-experiment.md) (current evidence gate) → [30](30-phase4-quality-gate.md) (native-resolution quality gate) → [21](21-ml-dl-experiment-log.md) (ML status) → [23](23-gpu-rerun-runbook.md) (commands) → [22](22-ml-programme-review-and-roadmap.md) (ML strategy)
+1. [21](21-ml-dl-experiment-log.md) (status) → [23](23-gpu-rerun-runbook.md) (commands) → [22](22-ml-programme-review-and-roadmap.md) (strategy)
 
 **Historical / debug**
 
@@ -68,7 +74,7 @@ Update the owner instead of creating a second live plan. Implementation and test
 | # | File | Status | Summary |
 |---|---|---|---|
 | 00 | [north-star](00-north-star.md) | active | End goal, v1 scope, singular path |
-| 24 | [first-tester-runbook](24-first-tester-runbook.md) | active | Phase 1 exit gate script + friction log |
+| 24 | [first-tester-runbook](24-first-tester-runbook.md) | record | Completed Phase 1 exit script |
 | 01 | [scope-and-architecture](01-scope-and-architecture.md) | active* | Pipeline architecture (*§3.3/§4 superseded by 12) |
 | 02 | [research](02-research.md) | active | TDS/AIIC standards, YOLOE, VLM landscape |
 | 03 | [implementation-plan](03-implementation-plan.md) | record | Milestones M0→M5 (frozen ledger) |
@@ -97,6 +103,9 @@ Update the owner instead of creating a second live plan. Implementation and test
 | 26 | [capture-strategy-experiment](26-capture-strategy-experiment.md) | active | Photo vs video capture experiment design |
 | 27 | [mobile-owner-pairing-friction-log](27-mobile-owner-pairing-friction-log-2026-07-10.md) | active | QR owner-pairing incident and LAN reliability gate |
 | 28 | [camera-first-mobile-rebuild](28-camera-first-mobile-rebuild.md) | active | Camera-first mobile workspace, experiment guardrails and native-assist boundary |
+| 29 | [evidential-spec-audit](29-evidential-spec-audit.md) | active | Deposit-scheme evidence requirements against implementation |
+| 29 | [local-inference-tuning](29-local-inference-tuning.md) | active | Local VLM hardware results and bounded tuning work |
 | 30 | [evidence-register-experience-pass](30-evidence-register-experience-pass.md) | record | Cross-surface evidence register redesign and measured impact |
+| 30 | [phase4-quality-gate](30-phase4-quality-gate.md) | active | Native-resolution accuracy gate and evidence limits |
 | 31 | [synthetic-evaluation-dataset-plan](31-synthetic-evaluation-dataset-plan.md) | active | Human-verified generated rooms for prompt and VLM architecture evaluation |
 | — | [market-research-2026-07](market-research-2026-07.md) | active | Competitive map, evidential spec, pricing anchors |

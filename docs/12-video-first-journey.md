@@ -33,9 +33,10 @@ real device and killed. The web app is the product; the CLI is plumbing.
 - **Segmentation model: `gemini-3.5-flash` preferred** (owner's call —
   pennies, zero invented rooms; errors are review-repairable);
   `claude-sonnet-5` is the quality alternative. See docs/11.
-- **Describe backend: tiered by default** — `gemini-3.5-flash` drafts every
-  item; `claude-opus-4-8` verifies the low-confidence, defect-bearing or
-  ambiguous-grade tail (docs/00).
+- **Describe backend: Gemini by default** — `gemini-3.5-flash` is the current
+  CLI and web default. A tiered Gemini-to-Opus backend is implemented and
+  tested, but is not selected by the product defaults; docs/00 owns its
+  promotion gate.
 - **Credentials configured once** in a gitignored `.env`
   (`homeinventory/dotenv.py`); the journey never mentions keys, backends
   or models. Spend confirms become plain language with a rough cost
@@ -77,11 +78,14 @@ real device and killed. The web app is the product; the CLI is plumbing.
    slots; compare auto-starts when the second session build lands.
 4. **`.env` at app entry** — `load_dotenv()` in CLI and review server.
 
-## Still open
+## Current status
 
-1. **First-tester run** — owner drives real tenancy using
-   [`24-first-tester-runbook.md`](24-first-tester-runbook.md); commit friction
-   log. Blocked on owner time, not code.
+The primary journey was exercised on a real tenancy on 8 Jul 2026; the
+friction log is [`24-friction-log-2026-07-08.md`](24-friction-log-2026-07-08.md).
+The Windows PDF friction recorded during that run was subsequently resolved
+with the browser-print fallback. Journey work is no longer the active v1
+gate. See [`00-north-star.md`](00-north-star.md) for the ordered evidence and
+trust work that remains.
 
 ## Shipped (experience redesign X1–X6, Jul 2026)
 
