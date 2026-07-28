@@ -3,7 +3,7 @@
   "provider": "OpenAI",
   "product": "Codex built-in image generation",
   "model_display_name": "GPT Image 2",
-  "review_status": "provisional",
+  "review_status": "verified_synthetic_gold",
   "pass_a": {
     "reviewer": "Project owner sign-off after Codex visual inspection",
     "completed_at": "2026-07-15T15:30:00+00:00",
@@ -129,7 +129,7 @@
       {
         "canonical_name": "bath", "aliases": ["bathtub"],
         "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory", "D-condition"], "visibility": "clear",
-        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "glass shower screen", "aliases": ["bath screen", "shower screen"],
@@ -149,7 +149,7 @@
       {
         "canonical_name": "heated towel rail", "aliases": ["towel radiator"],
         "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory"], "visibility": "clear",
-        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "grey wall tiles", "aliases": ["bathroom wall tiles"],
@@ -170,7 +170,7 @@
       {
         "canonical_name": "extractor vent", "aliases": ["extractor fan", "ventilation grille"],
         "evidence_frame_ids": ["B-reverse", "C-inventory"], "visibility": "clear",
-        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "condition": null, "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "skirting board", "aliases": ["baseboard"],
@@ -192,7 +192,7 @@
         "evidence_frame_ids": ["A-wide", "C-inventory", "D-condition"], "visibility": "clear",
         "condition": "A short shallow scuff is visible on the lower face.",
         "defects": [{"wording": "Short shallow scuff", "location": "lower left-centre face of the bath panel", "severity": "minor"}],
-        "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "silicone seal", "aliases": ["bath sealant", "silicone seam"],
@@ -204,7 +204,7 @@
         "canonical_name": "vinyl floor", "aliases": ["stone-effect vinyl flooring", "resilient floor"],
         "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory", "D-condition"], "visibility": "clear",
         "condition": "No material defect is visible in the accepted views.",
-        "defects": [], "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "defects": [], "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "canonical_name": "lower wall tiles", "aliases": ["low-level wall tiles"],
@@ -215,23 +215,23 @@
     "negative_controls": [
       {
         "wording": "Tile joints are not cracks.", "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory", "D-condition"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "No mould is visible.", "evidence_frame_ids": ["A-wide", "B-reverse", "C-inventory", "D-condition"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "The mirror reflection is not a stain.", "evidence_frame_ids": ["B-reverse"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "Light on the shower glass does not establish damp.", "evidence_frame_ids": ["C-inventory"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       },
       {
         "wording": "The visible silicone seam is not a crack.", "evidence_frame_ids": ["D-condition"],
-        "assessment": "supported", "second_review": {"required": true, "reviewer": null, "decision": "pending"}
+        "assessment": "supported", "second_review": {"required": true, "reviewer": "Conor Brown", "decision": "agreed"}
       }
     ],
     "generator_deviations": []

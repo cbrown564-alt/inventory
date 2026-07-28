@@ -32,11 +32,12 @@ scoring but a yield of at least 75% does not block Phase 1.
 
 The project owner approved and signed off Pass A on 15 Jul 2026. Primary Pass B
 review is complete for the 14 accepted images: all claims link to accepted
-frames, negative controls are structured, and generator deviations are recorded.
-The records remain provisional until an independent reviewer checks all three
-defect claims, all negatives and the preselected 25% ordinary-label sample. Do
-not run either extraction candidate against these labels as gold before those
-checks resolve.
+frames, negative controls are structured, and generator deviations are
+recorded. On 28 Jul 2026 Conor Brown independently checked all three defect
+claims, every negative control and the preselected ordinary-label samples: all
+37 required decisions agreed with the primary review. The four records are now
+`verified_synthetic_gold` and may be used for the production-backend and
+prompt-candidate comparison.
 
 ## Commands
 
