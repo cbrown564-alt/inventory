@@ -59,12 +59,20 @@ is directional, so no prompt winner is frozen.
 ## Current pilot status
 
 Phase 2 is complete: all 25 scenarios, 200 tasks, review templates and hashed
-development/validation/sealed splits exist. Phase 3 is stopped. The queue has
-8 `pass_a_accepted`, 23 `review_pending`, 4 `generator_failed` and 165
-`pending` tasks. Antigravity reported `RESOURCE_EXHAUSTED`/429 with a reset at
-`2026-07-28T19:36:54Z`; it also could not reliably use the first view as a
-continuity reference. Resume only after the reset and keep the two-attempt
-rule. Generated files remain provisional until independent review.
+development/validation/sealed splits exist. Phase 3 is paused at the 29 Jul
+operator checkpoint. Across the full queue there are 8 `pass_a_accepted`, 93
+`review_pending`, 4 `generator_failed` and 95 `pending` tasks; the last 40
+pending tasks are the untouched sealed split. Within development/validation,
+55 tasks remain pending.
+
+The GPT cohort is complete through RP-010. Google has 15 complete provisional
+packets, one partial packet (`RP-016`, A-wide only), the earlier terminal
+RP-003 failure, and pending work at RP-010, RP-011, RP-016 B–D and RP-020.
+Complete file packets RP-009, RP-012 and RP-018 came from wrapper-error runs
+and need provenance review as well as Pass A. Resume from
+`generation_runs/antigravity/pause-2026-07-29.json`, keep the two-attempt rule,
+and do not start prompt or architecture selection until the required reviews
+are complete. Generated files remain provisional until independent review.
 
 ## Commands
 

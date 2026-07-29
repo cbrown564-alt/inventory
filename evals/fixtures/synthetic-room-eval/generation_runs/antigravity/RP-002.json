@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "scenario_id": "RP-002",
+  "started_at": "2026-07-29T05:46:46.216786+00:00",
+  "completed_at": "2026-07-29T05:48:20.170812+00:00",
+  "latency_seconds": 93.931,
+  "generation_path": "Antigravity CLI built-in generate_image",
+  "backend_model": "unknown",
+  "metered_api_call": false,
+  "cli_version": "1.1.8",
+  "operator_model_mode": "gemini-3.5-flash-low",
+  "prompt": "Act only as the image-generation operator for this bounded synthetic property-room evaluation. Do not edit source code, documentation, task CSV files or review records.\n\nComplete the four-view packet for RP-002. These earlier outputs already exist and are immutable; do not overwrite them: [{\"task_id\": \"RP-002.antigravity-builtin.A-wide\", \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-002-A-wide.jpg\", \"sha256\": \"00c2e67fe582dfc8872712b12072865036f055850bc5743025650c378cf6e2f5\"}, {\"task_id\": \"RP-002.antigravity-builtin.B-reverse\", \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-002-B-reverse.jpg\", \"sha256\": \"f9db16d1f73b3dabc16e6c8c6541a7c82b7028ae0898a3224a330110e3512d8a\"}]. Generate only the tasks listed below. When A-wide is among the tasks, generate and save it first. For every later view, invoke generate_image with the saved A-wide image as an explicit visual reference/input as well as that task's exact prompt. Preserve the same room geometry, fixed fittings, finishes, windows, doors and object positions while moving the camera to the requested viewpoint. If the tool cannot accept the reference image, stop and report that limitation rather than generating unrelated rooms. Save the original generated JPEG bytes at required_output_path. Do not crop, resize, retouch, recompress or substitute an earlier image. Do not create a collage. Do not copy one view to another. The four outputs must be distinct files.\n\nAfter the required tool calls finish, verify every listed required path and calculate its SHA-256. Return only a JSON object with scenario_id, tool_name, backend_model (use \"unknown\" unless the tool explicitly exposes it), and outputs [{task_id,path,sha256}].\n\n[\n  {\n    \"task_id\": \"RP-002.antigravity-builtin.C-inventory\",\n    \"view_id\": \"C-inventory\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a bathroom in a compact recently refurbished UK rental flat. This is view C-inventory: facing the bath and shower end; medium fixtures and safety view. Visible evidence required in this view: glass shower screen, mixer taps, shower handset, extractor vent, heated towel rail. Intended visible defects: none. Negative controls: light condensation on glass does not prove damp. The room is tidy with ordinary toiletries and dry surfaces under window backlight plus neutral ceiling light. Across views preserve: same white suite, grey tiles, glass screen, towel rail and window positions across all four views. Avoid: people, logos, readable text, watermark, impossible geometry, extra sanitary fixtures. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-002-C-inventory.jpg\"\n  },\n  {\n    \"task_id\": \"RP-002.antigravity-builtin.D-condition\",\n    \"view_id\": \"D-condition\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a bathroom in a compact recently refurbished UK rental flat. This is view D-condition: low oblique view of the bath panel with the bath edge visible; condition detail. Visible evidence required in this view: bath panel, silicone seal, vinyl floor, lower wall tiles. Intended visible defects: short shallow scuff on the lower bath panel. Negative controls: silicone seam is not a crack. The room is tidy with ordinary toiletries and dry surfaces under window backlight plus neutral ceiling light. Across views preserve: same white suite, grey tiles, glass screen, towel rail and window positions across all four views. Avoid: people, logos, readable text, watermark, impossible geometry, extra sanitary fixtures. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-002-D-condition.jpg\"\n  }\n]",
+  "raw_cli_response": {
+    "status": "SUCCESS",
+    "response": "<message_notification:default_api:run_command{TaskId:d4c50d93-d693-4221-99fe-b41029f142a3/task-24}>\nStdout:\n    Directory: C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\scenarios\n\nMode                 LastWriteTime         Length Name\n----                 -------------         ------ ----\n-a---          28/07/2026    15:45           1133 RP-001.json\n-a---          28/07/2026    15:45           1258 RP-002.json\n-a---          28/07/2026    15:45           1252 RP-005.json\n-a---          28/07/2026    15:45           1215 RP-007.json\n-a---          28/07/2026    15:45           1093 RP-014.json\n-a---          28/07/2026    15:45           1238 RP-015.json\n\nThe command exited with code 0.\n\n<message_notification:default_api:run_command{TaskId:d4c50d93-d693-4221-99fe-b41029f142a3/task-30}>\nStdout:\n    Directory: C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\outputs\n\nMode                 LastWriteTime         Length Name\n----                 -------------         ------ ----\nd----          28/07/2026    16:30                antigravity\n\n\n    Directory: C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\outputs\\antigravity\n\nMode                 LastWriteTime         Length Name\n----                 -------------         ------ ----\n-a---          28/07/2026    15:32          12080 run-20260728-143000.json\n\nThe command exited with code 0.\n\n<message_notification:default_api:run_command{TaskId:d4c50d93-d693-4221-99fe-b41029f142a3/task-38}>\nStdout:\nC: cb903f4b0a0a4eaac42edea1220aa70b9a41f527c877155edd797fa7d6cea079\nD: 5727fb33c2f091a2625c3c037e153fafec7ad1e90f931eaa8babf45dde22d058\n\nThe command exited with code 0.\n\n{\n  \"scenario_id\": \"RP-002\",\n  \"tool_name\": \"generate_image\",\n  \"backend_model\": \"unknown\",\n  \"outputs\": [\n    {\n      \"task_id\": \"RP-002.antigravity-builtin.C-inventory\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-002-C-inventory.jpg\",\n      \"sha256\": \"cb903f4b0a0a4eaac42edea1220aa70b9a41f527c877155edd797fa7d6cea079\"\n    },\n    {\n      \"task_id\": \"RP-002.antigravity-builtin.D-condition\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-002-D-condition.jpg\",\n      \"sha256\": \"5727fb33c2f091a2625c3c037e153fafec7ad1e90f931eaa8babf45dde22d058\"\n    }\n  ]\n}\n",
+    "duration_seconds": 87.5073826,
+    "num_turns": 1,
+    "usage": {
+      "input_tokens": 315414,
+      "output_tokens": 10780,
+      "thinking_tokens": 7161,
+      "cache_read_tokens": 546204,
+      "total_tokens": 326194
+    }
+  },
+  "stderr": "",
+  "preexisting_outputs": [
+    {
+      "task_id": "RP-002.antigravity-builtin.A-wide",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-A-wide.jpg",
+      "sha256": "00c2e67fe582dfc8872712b12072865036f055850bc5743025650c378cf6e2f5"
+    },
+    {
+      "task_id": "RP-002.antigravity-builtin.B-reverse",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-B-reverse.jpg",
+      "sha256": "f9db16d1f73b3dabc16e6c8c6541a7c82b7028ae0898a3224a330110e3512d8a"
+    }
+  ],
+  "outputs": [
+    {
+      "task_id": "RP-002.antigravity-builtin.A-wide",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-A-wide.jpg",
+      "sha256": "00c2e67fe582dfc8872712b12072865036f055850bc5743025650c378cf6e2f5",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-002.antigravity-builtin.B-reverse",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-B-reverse.jpg",
+      "sha256": "f9db16d1f73b3dabc16e6c8c6541a7c82b7028ae0898a3224a330110e3512d8a",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-002.antigravity-builtin.C-inventory",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-C-inventory.jpg",
+      "sha256": "cb903f4b0a0a4eaac42edea1220aa70b9a41f527c877155edd797fa7d6cea079",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-002.antigravity-builtin.D-condition",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-D-condition.jpg",
+      "sha256": "5727fb33c2f091a2625c3c037e153fafec7ad1e90f931eaa8babf45dde22d058",
+      "width": 1264,
+      "height": 848
+    }
+  ]
+}

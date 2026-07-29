@@ -1,6 +1,6 @@
 # 31 — Synthetic room evaluation dataset
 
-*Updated 28 Jul 2026. Implementation plan for a public, human-verified synthetic
+*Updated 29 Jul 2026. Implementation plan for a public, human-verified synthetic
 room dataset used to develop prompts and compare off-the-shelf VLM pipelines.
 This document owns the synthetic evaluation dataset. It does not change the
 real-property v1 quality gate in docs/00 or the ML training programme in
@@ -38,14 +38,15 @@ scored set.
 |---|---|---|
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
-| 3 — development and validation | **Stopped** | 31 task images exist: 8 are previously accepted GPT images and 23 await Pass A. Four Google views are terminal generator failures; 165 tasks remain pending. Antigravity returned `RESOURCE_EXHAUSTED`/429 with a reported reset at `2026-07-28T19:36:54Z`, and its built-in image tool did not reliably accept the first view as a continuity reference. |
+| 3 — development and validation | **Paused** | Across the 160 development/validation tasks, 8 previously accepted GPT images remain accepted, 93 generated images await Pass A, 4 Google tasks are terminal generator failures and 55 tasks remain pending. The 29 Jul resume produced 28 additional GPT images and 42 additional Google files, but Antigravity again exposed quota and continuity/wrapper failures. |
 | 4 — sealed comparison | **Dependency-blocked** | No validation winner exists, so opening the sealed model comparison would violate the frozen order. |
 | 5 — real transfer | **Dependency-blocked** | There is no selected winner to run on real fixtures. The separate native-resolution evidence gate also remains open. |
 
-The quota response is a provider-internal limit reached through Antigravity
-CLI; it is not a metered image API call made by this project. Resume Phase 3
-after the reported reset, then obtain the required independent human reviews.
-Do not mark generated files accepted or gold without those reviews.
+The quota responses are provider-internal limits reached through Antigravity
+CLI; they are not metered image API calls made by this project. Resume Phase 3
+from `generation_runs/antigravity/pause-2026-07-29.json`, complete the pending
+generation tasks, then obtain the required independent human reviews. Do not
+mark generated files accepted or gold without those reviews.
 
 ## The question this dataset answers
 
@@ -606,6 +607,21 @@ Google packets and two partial packets await review. The stop record is
 `generation_runs/antigravity/quota-stop-2026-07-28.json`. Resume after the
 reported reset, but do not start prompt/architecture selection until the
 required development and validation packets have passed both reviews.
+
+**29 Jul 2026 pause:** generation resumed after the recorded reset and is now
+paused at a clean operator checkpoint. The development/validation queue has
+8 `pass_a_accepted`, 93 `review_pending`, 4 `generator_failed` and 55
+`pending` tasks. The GPT cohort is complete through RP-010: 28 new images were
+generated in this session, expanding the pilot-task cohort from 12 to 40
+files. Google gained 42 files and now has 15 complete
+four-view packets awaiting Pass A, one partial packet (`RP-016`, A-wide only),
+two quota-stopped packets (`RP-010`, `RP-011`) and one unstarted packet
+(`RP-020`) in the development/validation splits. Three complete Google packets
+(`RP-009`, `RP-012`, `RP-018`) have files and hashes but no successful wrapper
+record; they remain provisional and need Pass A plus provenance review.
+No prompt or architecture evaluation was started. The sanitised resume record
+is `generation_runs/antigravity/pause-2026-07-29.json`; raw temporary wrapper
+logs containing provider conversation identifiers were removed.
 
 ### Phase 4 — sealed synthetic comparison
 

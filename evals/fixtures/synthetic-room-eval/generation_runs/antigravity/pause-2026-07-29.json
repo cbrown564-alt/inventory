@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "record_type": "operator_pause",
+  "paused_at": "2026-07-29T07:50:00+01:00",
+  "phase": "3-development-validation",
+  "generation_paths": {
+    "google": "Antigravity CLI built-in generate_image",
+    "openai": "Codex built-in imagegen / GPT Image 2"
+  },
+  "metered_image_api_call": false,
+  "queue_status": {
+    "all_200_tasks": {
+      "pass_a_accepted": 8,
+      "review_pending": 93,
+      "generator_failed": 4,
+      "pending": 95
+    },
+    "development_and_validation_160_tasks": {
+      "pass_a_accepted": 8,
+      "review_pending": 93,
+      "generator_failed": 4,
+      "pending": 55
+    }
+  },
+  "provider_status_development_and_validation": {
+    "Google": {
+      "review_pending": 61,
+      "generator_failed": 4,
+      "pending": 15,
+      "complete_four_view_packets_awaiting_pass_a": [
+        "RP-001",
+        "RP-002",
+        "RP-004",
+        "RP-005",
+        "RP-006",
+        "RP-007",
+        "RP-008",
+        "RP-009",
+        "RP-012",
+        "RP-013",
+        "RP-014",
+        "RP-015",
+        "RP-017",
+        "RP-018",
+        "RP-019"
+      ],
+      "partial_packets": {
+        "RP-016": [
+          "A-wide"
+        ]
+      },
+      "pending_packets_or_views": {
+        "RP-010": [
+          "A-wide",
+          "B-reverse",
+          "C-inventory",
+          "D-condition"
+        ],
+        "RP-011": [
+          "A-wide",
+          "B-reverse",
+          "C-inventory",
+          "D-condition"
+        ],
+        "RP-016": [
+          "B-reverse",
+          "C-inventory",
+          "D-condition"
+        ],
+        "RP-020": [
+          "A-wide",
+          "B-reverse",
+          "C-inventory",
+          "D-condition"
+        ]
+      },
+      "complete_files_without_successful_wrapper_record": [
+        "RP-009",
+        "RP-012",
+        "RP-018"
+      ],
+      "quota_stopped_packets": [
+        "RP-010",
+        "RP-011"
+      ],
+      "terminal_generator_failure_packet": "RP-003"
+    },
+    "OpenAI": {
+      "pass_a_accepted": 8,
+      "review_pending": 32,
+      "pending": 40,
+      "complete_through": "RP-010",
+      "next_packet": "RP-011"
+    }
+  },
+  "verification": {
+    "dataset_validation_errors": 0,
+    "focused_tests": "12 passed",
+    "contact_sheet_rebuilt": true
+  },
+  "resume_order": [
+    "Run Pass A on every review_pending image, including continuity and requested-evidence checks.",
+    "Review provenance for RP-009, RP-012 and RP-018 before accepting any of their files.",
+    "Resume GPT Image 2 at RP-011 through Codex imagegen, one call per image with A-wide as the continuity reference.",
+    "Retry pending Google packets only under the frozen two-attempt rule and without weakening a scene specification.",
+    "Complete Pass B and independent checks before any prompt or architecture comparison."
+  ],
+  "guardrail": "No generated file is accepted or synthetic gold solely because it exists or has a hash."
+}
