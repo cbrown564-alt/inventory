@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "record_type": "operator_pause",
+  "paused_at": "2026-07-29T13:20:17+01:00",
+  "phase": "3-development-validation",
+  "generation_paths": {
+    "google": "Antigravity CLI built-in generate_image",
+    "openai": "Codex built-in imagegen / GPT Image 2"
+  },
+  "metered_image_api_call": false,
+  "queue_status": {
+    "development_and_validation_160_tasks": {
+      "pass_a_accepted": 8,
+      "review_pending": 146,
+      "generator_failed": 4,
+      "pending": 2
+    }
+  },
+  "completed_work": {
+    "openai_complete_packets": [
+      "RP-013",
+      "RP-014",
+      "RP-015",
+      "RP-016",
+      "RP-017",
+      "RP-018",
+      "RP-019",
+      "RP-020"
+    ],
+    "openai_new_outputs": 32,
+    "google_partial_packet": {
+      "scenario_id": "RP-016",
+      "immutable_existing_views": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "pending_views": [
+        "C-inventory",
+        "D-condition"
+      ]
+    }
+  },
+  "provider_status_development_and_validation": {
+    "Google": {
+      "review_pending": 74,
+      "generator_failed": 4,
+      "pending": 2
+    },
+    "OpenAI": {
+      "pass_a_accepted": 8,
+      "review_pending": 72,
+      "pending": 0,
+      "complete_through": "RP-020"
+    }
+  },
+  "review_notes": [
+    "No new image was accepted or marked synthetic gold.",
+    "RP-012 GPT Image 2 B-reverse requires Pass A scrutiny for requested bay-window evidence.",
+    "RP-013 GPT Image 2 C-inventory obscures the requested socket evidence.",
+    "RP-014 GPT Image 2 D-condition appears to show more than the intended three scuffs.",
+    "RP-019 GPT Image 2 D-condition does not clearly show all requested low-level evidence.",
+    "RP-020 GPT Image 2 D-condition omits the requested carpet rods."
+  ],
+  "verification": {
+    "dataset_validation_errors": 0,
+    "dataset_validation_warnings": 192,
+    "focused_tests_passed": 12
+  },
+  "resume_order": [
+    "After the provider reset, generate only Google RP-016 C-inventory and D-condition without overwriting A-wide or B-reverse.",
+    "Run Pass A on every review_pending image, including continuity and requested-evidence checks.",
+    "Review provenance for Google RP-009, RP-012 and RP-018 before accepting any of their files.",
+    "Complete Pass B and independent checks before any prompt or architecture comparison."
+  ],
+  "guardrail": "No generated file is accepted or synthetic gold solely because it exists or has a hash."
+}

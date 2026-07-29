@@ -5,8 +5,9 @@ This directory is the working data for
 contains 25 matched room specifications, two provider packets per room and
 four views per packet: 200 tasks in total. The earlier 16-image representative
 slice remains as audit and prompt-development evidence. Intended prompt
-content is never scored as observed truth. Only a completed two-pass review
-may use `verified_synthetic_gold`.
+content is never scored as observed truth. Only a completed independent
+AI-first two-pass review, including any required owner adjudication, may use
+`verified_synthetic_gold`.
 
 ## Terms decision
 
@@ -60,19 +61,28 @@ is directional, so no prompt winner is frozen.
 
 Phase 2 is complete: all 25 scenarios, 200 tasks, review templates and hashed
 development/validation/sealed splits exist. Phase 3 is paused at the 29 Jul
-operator checkpoint. Across the full queue there are 8 `pass_a_accepted`, 93
-`review_pending`, 4 `generator_failed` and 95 `pending` tasks; the last 40
-pending tasks are the untouched sealed split. Within development/validation,
-55 tasks remain pending.
+13:20 operator checkpoint. Across the full queue there are 8
+`pass_a_accepted`, 146 `review_pending`, 4 `generator_failed` and 42 `pending`
+tasks; the last 40 pending tasks are the untouched sealed split. Within
+development/validation, only Google `RP-016 C-inventory` and `D-condition`
+remain to generate.
 
-The GPT cohort is complete through RP-010. Google has 15 complete provisional
-packets, one partial packet (`RP-016`, A-wide only), the earlier terminal
-RP-003 failure, and pending work at RP-010, RP-011, RP-016 B–D and RP-020.
-Complete file packets RP-009, RP-012 and RP-018 came from wrapper-error runs
-and need provenance review as well as Pass A. Resume from
-`generation_runs/antigravity/pause-2026-07-29.json`, keep the two-attempt rule,
-and do not start prompt or architecture selection until the required reviews
-are complete. Generated files remain provisional until independent review.
+The GPT development/validation cohort is complete through RP-020. Google has
+the earlier terminal RP-003 failure and one partial packet (`RP-016`, A-wide
+and B-reverse present). Complete file packets RP-009, RP-012 and RP-018 came
+from wrapper-error runs and need provenance review as well as Pass A. Resume
+from `generation_runs/antigravity/pause-2026-07-29-1320.json`, keep the
+two-attempt rule, and do not start prompt or architecture selection until the
+required reviews are complete. Generated files remain provisional until
+independent review.
+
+The review path is AI-first. An AI reviewer independent of the generation
+call completes Pass A and Pass B. A second independent AI checks every defect,
+every negative and the defined ordinary-label sample. Send only ambiguity,
+reviewer disagreement, material continuity or condition concerns, validation
+failures and periodic drift-audit samples to the project owner. See
+`docs/31-synthetic-evaluation-dataset-plan.md` for the binding escalation
+rules.
 
 ## Commands
 
@@ -101,11 +111,15 @@ not-yet-generated pilot but reports every pending task.
    or Codex `imagegen` for GPT Image 2.
 4. Save the original output at `output_path`; do not edit pixels.
 5. Record `attempts`, `generated_at`, and set status to `review_pending`.
-6. Copy the review template for the matching packet/provider and complete Pass A.
-7. Reject or accept each frame. Never weaken a scenario after two failures.
-8. Complete Pass B from visible evidence only, including deviations.
-9. Obtain the required second checks, then mark gold only after disagreements resolve.
-10. Rebuild the contact sheet and run the strict validator.
+6. Copy the review template for the matching packet/provider and run
+   independent AI Pass A.
+7. Reject or accept clear cases; escalate uncertainty. Never weaken a
+   scenario after two failures.
+8. Run independent AI Pass B from visible evidence only, including deviations.
+9. Run the required separate AI checks and send only defined exceptions or
+   drift-audit samples to the project owner.
+10. Mark gold only after deterministic validation and any escalation resolves.
+11. Rebuild the contact sheet and run the strict validator.
 
 The Phase 1 prompt comparison is frozen in `dataset.json`. Its runner sends the
 two complete GPT Image 2 packets through the pinned Antigravity CLI

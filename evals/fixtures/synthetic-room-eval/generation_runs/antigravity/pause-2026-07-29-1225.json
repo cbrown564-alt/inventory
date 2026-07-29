@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "record_type": "operator_pause",
+  "paused_at": "2026-07-29T12:24:54+01:00",
+  "phase": "3-development-validation",
+  "generation_paths": {
+    "google": "Antigravity CLI built-in generate_image",
+    "openai": "Codex built-in imagegen / GPT Image 2"
+  },
+  "metered_image_api_call": false,
+  "queue_status": {
+    "development_and_validation_160_tasks": {
+      "pass_a_accepted": 8,
+      "review_pending": 114,
+      "generator_failed": 4,
+      "pending": 34
+    }
+  },
+  "completed_work": {
+    "google_complete_packets": [
+      "RP-011",
+      "RP-020"
+    ],
+    "google_partial_packet": {
+      "scenario_id": "RP-016",
+      "immutable_existing_views": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "pending_views": [
+        "C-inventory",
+        "D-condition"
+      ]
+    },
+    "openai_complete_packet": "RP-012"
+  },
+  "provider_status_development_and_validation": {
+    "Google": {
+      "review_pending": 74,
+      "generator_failed": 4,
+      "pending": 2,
+      "latest_stop": {
+        "scenario_id": "RP-016",
+        "result": "quota_blocked_before_output",
+        "provider_status": "RESOURCE_EXHAUSTED",
+        "reported_reset_delay": "approximately 4 hours 29 minutes",
+        "output_files_created_by_retry": 0
+      }
+    },
+    "OpenAI": {
+      "pass_a_accepted": 8,
+      "review_pending": 40,
+      "pending": 32,
+      "complete_through": "RP-012",
+      "next_packet": "RP-013"
+    }
+  },
+  "review_notes": [
+    "No new image was accepted or marked synthetic gold.",
+    "RP-012 GPT Image 2 B-reverse requires Pass A scrutiny for requested bay-window evidence."
+  ],
+  "resume_order": [
+    "Run Pass A on every review_pending image, including continuity and requested-evidence checks.",
+    "Review provenance for Google RP-009, RP-012 and RP-018 before accepting any of their files.",
+    "Resume GPT Image 2 at RP-013 through Codex imagegen, one call per image with A-wide as the continuity reference.",
+    "After the provider reset, generate only RP-016 C-inventory and D-condition without overwriting A-wide or B-reverse.",
+    "Complete Pass B and independent checks before any prompt or architecture comparison."
+  ],
+  "guardrail": "No generated file is accepted or synthetic gold solely because it exists or has a hash."
+}

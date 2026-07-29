@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "record_type": "operator_checkpoint",
+  "recorded_at": "2026-07-29T12:05:04+01:00",
+  "phase": "3-development-validation",
+  "generation_paths": {
+    "google": "Antigravity CLI built-in generate_image",
+    "openai": "Codex built-in imagegen / GPT Image 2"
+  },
+  "metered_image_api_call": false,
+  "queue_status": {
+    "development_and_validation_160_tasks": {
+      "pass_a_accepted": 8,
+      "review_pending": 101,
+      "generator_failed": 4,
+      "pending": 47
+    }
+  },
+  "completed_work": {
+    "scenario_id": "RP-010",
+    "provider": "Google",
+    "outputs": 4,
+    "status": "review_pending",
+    "distinct_sha256": true,
+    "dimensions": "1376x768",
+    "generation_record": "generation_runs/antigravity/RP-010.json"
+  },
+  "provider_status_development_and_validation": {
+    "Google": {
+      "review_pending": 65,
+      "generator_failed": 4,
+      "pending": 11,
+      "next_full_packet": "RP-011",
+      "partial_packet": "RP-016"
+    },
+    "OpenAI": {
+      "pass_a_accepted": 8,
+      "review_pending": 36,
+      "pending": 36,
+      "complete_through": "RP-011",
+      "next_packet": "RP-012"
+    }
+  },
+  "verification": {
+    "dataset_validation_errors": 0,
+    "focused_tests": "12 passed",
+    "contact_sheet_rebuilt": true,
+    "rp_010_visual_inspection": "coherent packet suitable for Pass A; not accepted"
+  },
+  "resume_order": [
+    "Run Pass A on every review_pending image, including continuity and requested-evidence checks.",
+    "Review provenance for RP-009, RP-012 and RP-018 before accepting any of their files.",
+    "Resume GPT Image 2 at RP-012 through Codex imagegen, one call per image with A-wide as the continuity reference.",
+    "Resume Google generation at RP-011; complete the partial RP-016 packet without overwriting its immutable A-wide output.",
+    "Complete Pass B and independent checks before any prompt or architecture comparison."
+  ],
+  "guardrail": "No generated file is accepted or synthetic gold solely because it exists or has a hash."
+}

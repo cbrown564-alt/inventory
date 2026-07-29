@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "scenario_id": "RP-020",
+  "started_at": "2026-07-29T11:10:52.611312+00:00",
+  "completed_at": "2026-07-29T11:12:46.741528+00:00",
+  "latency_seconds": 114.114,
+  "generation_path": "Antigravity CLI built-in generate_image",
+  "backend_model": "unknown",
+  "metered_api_call": false,
+  "cli_version": "1.1.8",
+  "operator_model_mode": "gemini-3.5-flash-low",
+  "prompt": "Act only as the image-generation operator for this bounded synthetic property-room evaluation. Do not edit source code, documentation, task CSV files or review records.\n\nComplete the four-view packet for RP-020. When A-wide is among the tasks, generate and save it first. For every later view, invoke generate_image with the saved A-wide image as an explicit visual reference/input as well as that task's exact prompt. Preserve the same room geometry, fixed fittings, finishes, windows, doors and object positions while moving the camera to the requested viewpoint. If the tool cannot accept the reference image, stop and report that limitation rather than generating unrelated rooms. Save the original generated JPEG bytes at required_output_path. Do not crop, resize, retouch, recompress or substitute an earlier image. Do not create a collage. Do not copy one view to another. The four outputs must be distinct files.\n\nAfter the required tool calls finish, verify every listed required path and calculate its SHA-256. Return only a JSON object with scenario_id, tool_name, backend_model (use \"unknown\" unless the tool explicitly exposes it), and outputs [{task_id,path,sha256}].\n\n[\n  {\n    \"task_id\": \"RP-020.antigravity-builtin.A-wide\",\n    \"view_id\": \"A-wide\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a stairs and landing in a carpeted staircase in a maintained UK terrace. This is view A-wide: at the foot of the stairs; wide establishing view. Visible evidence required in this view: stair carpet, handrail, balustrade, painted walls, landing window. Intended visible defects: none. Negative controls: carpet pile shading is not a stain. The room is ordinarily occupied but clear of objects under daylight from a small landing window. Across views preserve: same beige stair carpet, white balustrade, landing window and pendant. Avoid: people, logos, readable text, watermark, impossible geometry, unsafe missing balustrade. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-020-A-wide.jpg\"\n  },\n  {\n    \"task_id\": \"RP-020.antigravity-builtin.B-reverse\",\n    \"view_id\": \"B-reverse\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a stairs and landing in a carpeted staircase in a maintained UK terrace. This is view B-reverse: top landing looking down; wide establishing view. Visible evidence required in this view: stairs, front hall, handrail, newel post, ceiling pendant. Intended visible defects: none. Negative controls: corner shadow is not damp. The room is ordinarily occupied but clear of objects under daylight from a small landing window. Across views preserve: same beige stair carpet, white balustrade, landing window and pendant. Avoid: people, logos, readable text, watermark, impossible geometry, unsafe missing balustrade. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-020-B-reverse.jpg\"\n  },\n  {\n    \"task_id\": \"RP-020.antigravity-builtin.C-inventory\",\n    \"view_id\": \"C-inventory\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a stairs and landing in a carpeted staircase in a maintained UK terrace. This is view C-inventory: on the landing facing the window; medium fixtures view. Visible evidence required in this view: landing window, radiator, smoke alarm, light switch, sockets. Intended visible defects: none. Negative controls: window glare is not condensation. The room is ordinarily occupied but clear of objects under daylight from a small landing window. Across views preserve: same beige stair carpet, white balustrade, landing window and pendant. Avoid: people, logos, readable text, watermark, impossible geometry, unsafe missing balustrade. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-020-C-inventory.jpg\"\n  },\n  {\n    \"task_id\": \"RP-020.antigravity-builtin.D-condition\",\n    \"view_id\": \"D-condition\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a stairs and landing in a carpeted staircase in a maintained UK terrace. This is view D-condition: close view of lower steps; condition detail. Visible evidence required in this view: stair carpet, carpet rods, skirting string, newel post. Intended visible defects: none. Negative controls: compressed carpet pile is not damage. The room is ordinarily occupied but clear of objects under daylight from a small landing window. Across views preserve: same beige stair carpet, white balustrade, landing window and pendant. Avoid: people, logos, readable text, watermark, impossible geometry, unsafe missing balustrade. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-020-D-condition.jpg\"\n  }\n]",
+  "raw_cli_response": {
+    "status": "SUCCESS",
+    "response": "I will first list the current permissions to see what files or directories I can access, and then start the image generation process.\nI will generate the establishing view `A-wide` of the stairs and landing.\nI will now create the destination directory and copy the generated image for view `A-wide` to its required path.\nI will generate the `B-reverse` view, looking down from the top landing, using the `A-wide` image as an explicit visual reference.\nI will now copy the generated image for view `B-reverse` to its required path.\nI will generate the `C-inventory` view, facing the landing window, using the `A-wide` image as an explicit visual reference.\nI will copy the generated image for view `C-inventory` to its required path.\nI will generate the final view `D-condition`, showing a close view of the lower steps, using the `A-wide` image as an explicit visual reference.\nI will copy the generated image for view `D-condition` to its required path.\nI will compute the SHA-256 hashes for all four generated image files at their required output paths.\n{\n  \"scenario_id\": \"RP-020\",\n  \"tool_name\": \"generate_image\",\n  \"backend_model\": \"unknown\",\n  \"outputs\": [\n    {\n      \"task_id\": \"RP-020.antigravity-builtin.A-wide\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-020-A-wide.jpg\",\n      \"sha256\": \"e2af9edb0f5f4c7cbcb763bc51b3d1e51683574f6d9cc3b0bffae7f618c15785\"\n    },\n    {\n      \"task_id\": \"RP-020.antigravity-builtin.B-reverse\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-020-B-reverse.jpg\",\n      \"sha256\": \"55d49e1eeb9a969ae4d6876008afa509c70429150607559fcab4234462d5ea28\"\n    },\n    {\n      \"task_id\": \"RP-020.antigravity-builtin.C-inventory\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-020-C-inventory.jpg\",\n      \"sha256\": \"8740187673637857965b0adaaafefb2df1b30262e4940aba682563cc628c1c1a\"\n    },\n    {\n      \"task_id\": \"RP-020.antigravity-builtin.D-condition\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-020-D-condition.jpg\",\n      \"sha256\": \"301e5a2987ccd3d14c53df1e2ff8a1876b9807ac74757049cd96982eb9352c07\"\n    }\n  ]\n}\n",
+    "duration_seconds": 106.5326041,
+    "num_turns": 1,
+    "usage": {
+      "input_tokens": 94049,
+      "output_tokens": 10106,
+      "thinking_tokens": 6981,
+      "cache_read_tokens": 277151,
+      "total_tokens": 104155
+    }
+  },
+  "stderr": "",
+  "preexisting_outputs": [],
+  "outputs": [
+    {
+      "task_id": "RP-020.antigravity-builtin.A-wide",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-020-A-wide.jpg",
+      "sha256": "e2af9edb0f5f4c7cbcb763bc51b3d1e51683574f6d9cc3b0bffae7f618c15785",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-020.antigravity-builtin.B-reverse",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-020-B-reverse.jpg",
+      "sha256": "55d49e1eeb9a969ae4d6876008afa509c70429150607559fcab4234462d5ea28",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-020.antigravity-builtin.C-inventory",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-020-C-inventory.jpg",
+      "sha256": "8740187673637857965b0adaaafefb2df1b30262e4940aba682563cc628c1c1a",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-020.antigravity-builtin.D-condition",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-020-D-condition.jpg",
+      "sha256": "301e5a2987ccd3d14c53df1e2ff8a1876b9807ac74757049cd96982eb9352c07",
+      "width": 1264,
+      "height": 848
+    }
+  ]
+}

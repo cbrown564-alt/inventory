@@ -1,10 +1,10 @@
 # 31 — Synthetic room evaluation dataset
 
-*Updated 29 Jul 2026. Implementation plan for a public, human-verified synthetic
-room dataset used to develop prompts and compare off-the-shelf VLM pipelines.
-This document owns the synthetic evaluation dataset. It does not change the
-real-property v1 quality gate in docs/00 or the ML training programme in
-docs/19.*
+*Updated 29 Jul 2026. Implementation plan for a public, independently
+AI-reviewed synthetic room dataset with human escalation, used to develop
+prompts and compare off-the-shelf VLM pipelines. This document owns the
+synthetic evaluation dataset. It does not change the real-property v1 quality
+gate in docs/00 or the ML training programme in docs/19.*
 
 ## Decision
 
@@ -28,25 +28,40 @@ All product claims and promotion decisions remain gated on held-out,
 native-resolution photographs from real properties.
 
 The generation prompt states what an image is intended to contain. It becomes
-gold only after a human checks what is actually visible and corrects the
-labels. Rejected generations remain in the audit log but never enter the
-scored set.
+gold only after an independent AI review checks what is actually visible and
+records observed labels. Clear cases do not require routine human review.
+Ambiguity, disagreement and material evidential risk are escalated to the
+project owner. Rejected generations remain in the audit log but never enter
+the scored set.
 
-## Current execution status — 28 Jul 2026
+The project owner reviewed the first generated batches and reported that they
+were correct. On 29 Jul 2026 the owner therefore replaced blanket human review
+with the AI-first, exception-based review policy below. Those reviewed batches
+are calibration evidence for the policy, not automatic acceptance of later
+images.
+
+## Current execution status — 29 Jul 2026
 
 | Phase | Status | Evidence |
 |---|---|---|
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
-| 3 — development and validation | **Paused** | Across the 160 development/validation tasks, 8 previously accepted GPT images remain accepted, 93 generated images await Pass A, 4 Google tasks are terminal generator failures and 55 tasks remain pending. The 29 Jul resume produced 28 additional GPT images and 42 additional Google files, but Antigravity again exposed quota and continuity/wrapper failures. |
+| 3 — development and validation | **Paused** | Across the 160 development/validation tasks, 8 previously accepted GPT images remain accepted, 146 generated images await independent AI Pass A, 4 Google tasks are terminal generator failures and 2 Google tasks remain pending. The GPT Image 2 development/validation cohort is complete through `RP-020`; only the `C-inventory` and `D-condition` Google views of `RP-016` remain to generate. |
 | 4 — sealed comparison | **Dependency-blocked** | No validation winner exists, so opening the sealed model comparison would violate the frozen order. |
 | 5 — real transfer | **Dependency-blocked** | There is no selected winner to run on real fixtures. The separate native-resolution evidence gate also remains open. |
 
 The quota responses are provider-internal limits reached through Antigravity
 CLI; they are not metered image API calls made by this project. Resume Phase 3
-from `generation_runs/antigravity/pause-2026-07-29.json`, complete the pending
-generation tasks, then obtain the required independent human reviews. Do not
-mark generated files accepted or gold without those reviews.
+from `generation_runs/antigravity/pause-2026-07-29-1320.json`, complete the
+pending generation tasks, then run the independent AI reviews and send only
+the required exceptions to the project owner. Do not mark generated files
+accepted or gold without the recorded review path.
+
+The existing review schema and templates predate the AI-first decision: they
+have free-text reviewer fields but do not yet pin reviewer model/version and
+review-prompt hashes or record an escalation decision. Update them before
+starting the 146-image review run. The policy is decided; its metadata support
+is a Phase 3 implementation task.
 
 ## The question this dataset answers
 
@@ -71,7 +86,8 @@ The pilot should distinguish four failure sources:
 - items, condition, cleanliness and visible defects;
 - exact negatives and near-negatives that test hallucination;
 - paired comparison across image generators;
-- an internal dataset with prompts, provenance and human-reviewed labels;
+- an internal dataset with prompts, provenance, independent AI-reviewed labels
+  and human adjudication records where required;
 - a later public release only after the separate terms, provenance, metadata
   and licensing review.
 
@@ -293,14 +309,22 @@ not own observed truth.
 Prompt builders may add provider-specific syntax, but they may not change the
 intended facts. Store the exact submitted prompt and any reference-image IDs.
 
-## Human verification and gold labels
+## Independent AI verification and human escalation
 
 Use two passes.
 
 ### Pass A — generation acceptance
 
-The operator marks each requested item as clearly visible, ambiguous, absent
-or malformed. Reject an image when:
+An AI reviewer, independent of the image-generation call and conversation,
+marks each requested item as clearly visible, ambiguous, absent or malformed.
+The review record must pin the reviewer model and version, review prompt hash,
+timestamp and immutable image hash. The reviewer may use the frozen scene
+specification to locate requested evidence, but must treat every intended fact
+as a hypothesis rather than truth.
+
+Reject an image without human review when the failure is clear. Escalate
+uncertain cases rather than forcing an accept or reject decision. Rejection
+criteria are:
 
 - the named room is not recognisable;
 - a required anchor object is absent or malformed;
@@ -316,7 +340,8 @@ record the specification as a generator failure; do not silently weaken it.
 
 ### Pass B — observed evidence labels
 
-A reviewer labels only what is actually visible. Each claim records:
+An independent AI reviewer labels only what is actually visible. Each claim
+records:
 
 - canonical name and accepted aliases;
 - frame IDs that support it;
@@ -326,12 +351,26 @@ A reviewer labels only what is actually visible. Each claim records:
 - `not_visible` rather than an assumed absence;
 - generator deviations from the intended scene.
 
-A second reviewer checks every defect, every negative and a stratified 25% of
-ordinary item labels. Disagreements are resolved before the sealed split is
-used.
+A second independent AI review checks every defect, every negative and a
+stratified 25% of ordinary item labels. It must run in a separate context and
+make its judgment before seeing the first reviewer's conclusion.
 
-Labels are **verified synthetic gold** only after both passes. Until then they
-are generation manifests or provisional labels.
+Escalate a packet to the project owner when:
+
+- either AI reports ambiguity or low confidence that affects a scored label;
+- the two AI reviews disagree;
+- a suspected defect or near-negative cannot be distinguished reliably;
+- views conflict about object identity, condition, geometry or continuity;
+- an unintended visible issue would materially change the intended label;
+- validation detects missing evidence, invalid provenance or an unexplained
+  duplicate; or
+- a periodic stratified audit sample is due to check for reviewer drift.
+
+The owner adjudicates only the disputed fields or packet. A clear packet may
+become **verified synthetic gold** after both AI passes and deterministic
+validation without routine owner review. Until that point, labels are
+generation manifests or provisional labels. Record AI decisions, owner
+escalations and resolutions so the review path remains inspectable.
 
 ## Development and sealed splits
 
@@ -447,9 +486,11 @@ evaluation is a separate action and still requires task-specific approval.
 3. Submit the prompt through the subscribed product interface.
 4. Save the original output without editing it.
 5. Record exact prompt, output filename, timestamp and any provider warning.
-6. Run Pass A acceptance and either accept, retry or reject.
-7. Complete Pass B labels after the four-view packet is present.
-8. Run local schema, duplicate, resolution and provenance checks.
+6. Run independent AI Pass A and either accept, retry or escalate uncertainty.
+7. Complete independent AI Pass B after the four-view packet is present.
+8. Run the required separate AI checks and obtain owner adjudication only for
+   defined exceptions or drift-audit samples.
+9. Run local schema, duplicate, resolution and provenance checks.
 
 Antigravity CLI 1.1.8 can call its built-in `generate_image` tool through the
 authenticated subscription, save original JPEG outputs and return hashes. It
@@ -588,7 +629,10 @@ packet assignments are frozen in `splits/` and recorded by SHA-256 in
 ### Phase 3 — complete development and validation sets
 
 - [ ] Generate the remaining development and validation packets.
-- [ ] Review and repair labels; never repair image pixels.
+- [ ] Extend the review schema and templates with AI reviewer provenance,
+      review-prompt hashes and escalation outcomes.
+- [ ] Run independent AI Pass A and Pass B, escalate only the defined
+      exceptions, and repair labels without repairing image pixels.
 - [ ] Run the production and evidence-bounded coverage prompts with the
       production backend and architecture fixed.
 - [ ] Freeze the winning prompt using the validation split, cost constraint
@@ -623,6 +667,64 @@ No prompt or architecture evaluation was started. The sanitised resume record
 is `generation_runs/antigravity/pause-2026-07-29.json`; raw temporary wrapper
 logs containing provider conversation identifiers were removed.
 
+**29 Jul 2026 11:21 checkpoint:** the four-view GPT Image 2 packet for
+`RP-011` was generated through Codex `imagegen`, copied unedited to the
+frozen output paths and recorded with distinct SHA-256 hashes. All four
+images remain `review_pending`; none is accepted or gold. A sandboxed
+Antigravity attempt failed before provider access, and the authorised retry
+reached the provider but returned `RESOURCE_EXHAUSTED`/429 on the first
+`RP-010` image call. No Google output file was created, so no task attempt was
+consumed. The development/validation queue is now 8 `pass_a_accepted`,
+97 `review_pending`, 4 `generator_failed` and 51 `pending`. The sanitised
+checkpoint is
+`generation_runs/antigravity/pause-2026-07-29-1121.json`. Dataset validation
+reports zero errors and the 12 focused synthetic-evaluation tests pass with a
+workspace-local pytest temp directory. No prompt or architecture evaluation
+has started.
+
+**29 Jul 2026 12:05 checkpoint:** after the provider quota reset,
+Antigravity CLI generated all four frozen `RP-010` Google tasks successfully
+in one packet. The original JPEGs are recorded at 1376×768 with distinct
+SHA-256 hashes and status `review_pending`. Direct visual inspection found a
+coherent child's-bedroom packet suitable for Pass A, but did not accept any
+frame or verify its requested evidence. The development/validation queue is
+now 8 `pass_a_accepted`, 101 `review_pending`, 4 `generator_failed` and 47
+`pending`. Dataset validation reports zero errors and the 12 focused
+synthetic-evaluation tests pass. The sanitised resume record is
+`generation_runs/antigravity/resume-2026-07-29-1205.json`.
+
+**29 Jul 2026 12:25 checkpoint:** Antigravity completed the four-view Google
+packets for `RP-011` and `RP-020`. The partial `RP-016` packet gained
+`B-reverse`, but generation stopped before `C-inventory` and `D-condition`;
+an immediate missing-view retry returned `RESOURCE_EXHAUSTED` with an
+estimated reset of about four and a half hours and created no file. The
+existing `A-wide` and new `B-reverse` files remain immutable and
+`review_pending`. Codex `imagegen` completed all four GPT Image 2 views for
+`RP-012`; Pass A must specifically check that `B-reverse` contains the
+requested bay-window evidence. Direct visual inspection found the other new
+packets coherent enough to enter Pass A, but accepted no image. The
+development/validation queue is now 8 `pass_a_accepted`, 114
+`review_pending`, 4 `generator_failed` and 34 `pending`. The sanitised
+checkpoint is
+`generation_runs/antigravity/pause-2026-07-29-1225.json`.
+
+**29 Jul 2026 13:20 checkpoint:** Codex `imagegen` completed every remaining
+GPT Image 2 development/validation packet, `RP-013` through `RP-020`, using
+one call per frozen task and each packet's `A-wide` image as the continuity
+reference for later views. All 32 new files were copied unedited to their
+frozen output paths, hashed and recorded as `review_pending`; none was
+accepted or marked gold. Pass A must inspect several visible concerns:
+`RP-013 C-inventory` obscures the requested socket evidence, `RP-014
+D-condition` appears to show more than the intended three scuffs, `RP-019
+D-condition` does not clearly show all requested low-level evidence, and
+`RP-020 D-condition` omits the requested carpet rods. The
+development/validation queue is now 8 `pass_a_accepted`, 146
+`review_pending`, 4 `generator_failed` and 2 `pending`. The two pending tasks
+are Google `RP-016 C-inventory` and `D-condition`. Dataset validation reports
+zero errors and the 12 focused synthetic-evaluation tests pass. The sanitised
+checkpoint is
+`generation_runs/antigravity/pause-2026-07-29-1320.json`.
+
 ### Phase 4 — sealed synthetic comparison
 
 - [ ] Hash prompts, labels and selected candidate configuration.
@@ -653,7 +755,7 @@ claim.
 |---|---|
 | `evals/synthetic/build_tasks.py` | Deterministically turn scene specs into prompts and `tasks.csv` |
 | `evals/synthetic/validate_dataset.py` | Schema, file, dimensions, pair and provenance checks |
-| `evals/synthetic/build_review.py` | Static human-review/contact-sheet artifact |
+| `evals/synthetic/build_review.py` | Static AI-review and human-escalation/contact-sheet artifact |
 | `evals/synthetic/generate_antigravity.py` | Generate Google packets through Antigravity CLI without image API credentials |
 | `evals/synthetic/run_eval.py` | Run named off-the-shelf VLM configurations and cache raw output |
 | `evals/synthetic/score.py` | Existing metric contract plus slices and paired comparisons |
@@ -666,7 +768,8 @@ new metric only when the current schema cannot express the decision.
 
 | Risk | Control / stopping rule |
 |---|---|
-| Prompt manifest is mistaken for observed truth | Two-pass review; labels cite visible frames |
+| Prompt manifest is mistaken for observed truth | Independent AI reviews treat intended facts as hypotheses; observed labels cite visible frames |
+| AI review silently misses a repeated error | Separate second checks, owner escalation triggers and periodic stratified human audit |
 | Generator style makes evaluation artificially easy | Paired providers, difficult phone-like framing, real transfer gate |
 | Same-family VLM advantage | Report provider × backend matrix |
 | Multi-angle item drift | Record continuity failure; never silently reconcile contradictions |
@@ -682,9 +785,10 @@ new metric only when the current schema cannot express the decision.
 - [x] 25 matched four-view specifications and immutable packet splits implemented.
 - [ ] Exactly 100 accepted Antigravity and 100 accepted GPT Image 2 images, or
   an explicit terms/tooling decision explaining why the design changed.
-- [ ] Every accepted image has exact prompt, provenance and human-observed
-  labels.
-- [ ] Defects and negatives are all double-checked.
+- [ ] Every accepted image has exact prompt, provenance, AI-observed labels
+  and any required human adjudication.
+- [ ] Defects and negatives are all double-checked by an independent AI, with
+  disagreements and ambiguity resolved by the project owner.
 - [ ] Baseline and candidate results are reported by provider and on matched
   pairs.
 - [ ] A sealed synthetic comparison is complete.

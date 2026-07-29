@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "record_type": "operator_pause",
+  "paused_at": "2026-07-29T11:21:14+01:00",
+  "phase": "3-development-validation",
+  "generation_paths": {
+    "google": "Antigravity CLI built-in generate_image",
+    "openai": "Codex built-in imagegen / GPT Image 2"
+  },
+  "metered_image_api_call": false,
+  "queue_status": {
+    "development_and_validation_160_tasks": {
+      "pass_a_accepted": 8,
+      "review_pending": 97,
+      "generator_failed": 4,
+      "pending": 51
+    }
+  },
+  "provider_status_development_and_validation": {
+    "Google": {
+      "review_pending": 61,
+      "generator_failed": 4,
+      "pending": 15,
+      "latest_attempt": {
+        "scenario_id": "RP-010",
+        "result": "quota_blocked_before_output",
+        "provider_status": "RESOURCE_EXHAUSTED",
+        "provider_code": 429,
+        "output_files_created": 0,
+        "task_attempt_consumed": false
+      }
+    },
+    "OpenAI": {
+      "pass_a_accepted": 8,
+      "review_pending": 36,
+      "pending": 36,
+      "complete_through": "RP-011",
+      "next_packet": "RP-012"
+    }
+  },
+  "verification": {
+    "dataset_validation_errors": 0,
+    "focused_tests": "12 passed",
+    "contact_sheet_rebuilt": true,
+    "rp_011_distinct_hashes": true
+  },
+  "resume_order": [
+    "Run Pass A on every review_pending image, including continuity and requested-evidence checks.",
+    "Review provenance for RP-009, RP-012 and RP-018 before accepting any of their files.",
+    "Resume GPT Image 2 at RP-012 through Codex imagegen, one call per image with A-wide as the continuity reference.",
+    "Retry RP-010 through Antigravity only after the reported provider reset; do not weaken the scene or count quota-only calls as generation attempts.",
+    "Complete Pass B and independent checks before any prompt or architecture comparison."
+  ],
+  "guardrail": "No generated file is accepted or synthetic gold solely because it exists or has a hash."
+}

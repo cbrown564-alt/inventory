@@ -38,10 +38,15 @@ gates below.
   Antigravity CLI: the evidence-bounded prompt improved defect recall from
   50% to 100% and removed one unsupported defect, but item recall fell
   6.2 percentage points, so no winner was frozen. The 25-scenario, 200-task
-  pilot and immutable splits are implemented. Phase 3 stopped with 31 task
-  images present, 4 terminal Google generator failures and 165 pending tasks
-  after Antigravity quota exhaustion; 23 generated images still require human
-  Pass A review. No image-generation API was used
+  pilot and immutable splits are implemented. In the development and
+  validation splits, Phase 3 now has 8 previously accepted GPT images,
+  146 generated images awaiting independent AI Pass A, 4 terminal Google
+  generator failures and 2 pending tasks. Ambiguity, reviewer disagreement
+  and material evidential risk escalate to the project owner rather than
+  requiring blanket human review. The GPT Image 2 cohort is complete through
+  `RP-020`; only the Google `C-inventory` and `D-condition` views of `RP-016`
+  remain to generate. The authorised Antigravity subscription path is paused
+  at another provider quota reset. No image-generation API was used
   ([`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md)).
 - Capture-strategy scaffolding and Property A inputs exist, but the
   photo-versus-video decision is still unrun
