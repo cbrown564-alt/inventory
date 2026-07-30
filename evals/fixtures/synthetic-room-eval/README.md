@@ -86,29 +86,33 @@ rules.
 ## Commands
 
 ```powershell
+$fixture = "evals/fixtures/synthetic-room-eval"
 .\.venv\Scripts\python.exe -m evals.synthetic.build_tasks
 .\.venv\Scripts\python.exe -m evals.synthetic.validate_dataset
 .\.venv\Scripts\python.exe -m evals.synthetic.build_review
 .\.venv\Scripts\python.exe -m evals.synthetic.generate_antigravity --workers 1
 .\.venv\Scripts\python.exe -m evals.synthetic.record_outputs --provider Google --operator "Antigravity operator name" --cli-version "Antigravity CLI 1.1.8"
-.\.venv\Scripts\python.exe -m evals.synthetic.build_pass_a_gallery
-.\.venv\Scripts\python.exe -m evals.synthetic.apply_owner_adjudications reports/phase3-pass-a-review-2026-07-29.json owner-adjudications.json --corrections reports/pass-a-protocol-corrections-2026-07-30.json --dry-run
-.\.venv\Scripts\python.exe -m evals.synthetic.apply_owner_adjudications reports/phase3-pass-a-review-2026-07-29.json owner-adjudications.json --corrections reports/pass-a-protocol-corrections-2026-07-30.json --prepare-retries
+.\.venv\Scripts\python.exe -m evals.synthetic.build_pass_a_gallery --review "$fixture/reports/phase3-pass-a-review-2026-07-29.json"
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_owner_adjudications "$fixture/reports/phase3-pass-a-review-2026-07-29.json" owner-adjudications.json --corrections "$fixture/reports/pass-a-protocol-corrections-2026-07-30.json" --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_owner_adjudications "$fixture/reports/phase3-pass-a-review-2026-07-29.json" owner-adjudications.json --corrections "$fixture/reports/pass-a-protocol-corrections-2026-07-30.json" --prepare-retries
 .\.venv\Scripts\python.exe -m evals.synthetic.record_imagegen_retries
 .\.venv\Scripts\python.exe -m evals.synthetic.audit_google_provenance
-.\.venv\Scripts\python.exe -m evals.synthetic.review_pass_a --output reports/phase3-retry-pass-a-review-2026-07-30.json
-.\.venv\Scripts\python.exe -m evals.synthetic.apply_retry_pass_a reports/phase3-retry-pass-a-review-2026-07-30.json --dry-run
-.\.venv\Scripts\python.exe -m evals.synthetic.apply_retry_pass_a reports/phase3-retry-pass-a-review-2026-07-30.json
-.\.venv\Scripts\python.exe -m evals.synthetic.review_pass_b --output reports/phase3-pass-b-review-2026-07-30.json
-.\.venv\Scripts\python.exe -m evals.synthetic.apply_pass_b reports/phase3-pass-b-review-2026-07-30.json --dry-run
-.\.venv\Scripts\python.exe -m evals.synthetic.apply_pass_b reports/phase3-pass-b-review-2026-07-30.json
+.\.venv\Scripts\python.exe -m evals.synthetic.review_pass_a --output "$fixture/reports/phase3-retry-pass-a-review-2026-07-30.json" --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.review_pass_a --output "$fixture/reports/phase3-retry-pass-a-review-2026-07-30.json"
+.\.venv\Scripts\python.exe -m evals.synthetic.build_pass_a_gallery --review "$fixture/reports/phase3-retry-pass-a-review-2026-07-30.json"
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_retry_pass_a "$fixture/reports/phase3-retry-pass-a-review-2026-07-30.json" --adjudications owner-adjudications.json --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_retry_pass_a "$fixture/reports/phase3-retry-pass-a-review-2026-07-30.json" --adjudications owner-adjudications.json
+.\.venv\Scripts\python.exe -m evals.synthetic.review_pass_b --output "$fixture/reports/phase3-pass-b-review-2026-07-30.json" --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.review_pass_b --output "$fixture/reports/phase3-pass-b-review-2026-07-30.json"
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_pass_b "$fixture/reports/phase3-pass-b-review-2026-07-30.json" --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_pass_b "$fixture/reports/phase3-pass-b-review-2026-07-30.json"
 .\.venv\Scripts\python.exe -m evals.synthetic.run_eval --dry-run
 .\.venv\Scripts\python.exe -m evals.synthetic.run_eval
 .\.venv\Scripts\python.exe -m evals.synthetic.score
 ```
 
 `build_pass_a_gallery` writes `reports/pass-a-owner-gallery.html` from the latest
-`phase3-pass-a-review-*.json`. Serve the dataset root so image paths resolve:
+initial or retry Pass A report. Serve the dataset root so image paths resolve:
 
 ```powershell
 .\.venv\Scripts\python.exe -m http.server 8766 --directory evals/fixtures/synthetic-room-eval

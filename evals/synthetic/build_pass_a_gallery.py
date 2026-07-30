@@ -12,8 +12,8 @@ from evals.synthetic.build_tasks import DEFAULT_DATASET
 
 GALLERY_JS = r"""
 (() => {
-  const STORAGE_KEY = "pass-a-owner-adjudications-v1";
   const data = window.PASS_A_REVIEW;
+  const STORAGE_KEY = `pass-a-owner-adjudications-v2:${data.source_file || data.review_type}`;
   const frames = data.frames.map((frame, index) => {
     const disagreement = (data.reviewer_disagreements || []).find(
       (row) => row.task_id === frame.task_id
@@ -341,7 +341,11 @@ GALLERY_JS = r"""
 
     if (frame.disagreement) {
       els.disagreement.hidden = false;
-      els.disagreement.textContent = `Reviewers disagreed: ${frame.disagreement.first} vs ${frame.disagreement.second} → escalated`;
+      const firstReason = frame.first_review?.reason || "No reason recorded.";
+      const secondReason = frame.second_review?.reason || "No reason recorded.";
+      els.disagreement.textContent =
+        `Reviewers disagreed: ${frame.disagreement.first} vs ${frame.disagreement.second} → escalated\n\n` +
+        `First review: ${firstReason}\n\nSecond review: ${secondReason}`;
     } else {
       els.disagreement.hidden = true;
     }
@@ -352,9 +356,11 @@ GALLERY_JS = r"""
     renderFilmstrip(list, frame.task_id);
     const activeThumb = els.filmstrip.querySelector('[data-active="1"]');
     if (activeThumb) {
-      activeThumb.scrollIntoView({
-        inline: "center",
-        block: "nearest",
+      const left =
+        activeThumb.offsetLeft -
+        (els.filmstrip.clientWidth - activeThumb.clientWidth) / 2;
+      els.filmstrip.scrollTo({
+        left: Math.max(0, left),
         behavior: "smooth",
       });
     }
@@ -747,6 +753,7 @@ button.ghost { background: transparent; }
   color: #6d5418;
   font-size: 12.5px;
   line-height: 1.4;
+  white-space: pre-wrap;
 }
 .note-block {
   display: grid;
@@ -897,18 +904,60 @@ def _image_src(dataset_dir: Path, output: Path, path_value: str) -> str:
 
 def build(dataset_dir: Path, review_path: Path, output: Path) -> None:
     review = json.loads(review_path.read_text(encoding="utf-8"))
+    if review.get("status") == "partial":
+        raise ValueError("Pass A review is partial and cannot populate the gallery")
+    scenario_views: dict[tuple[str, str], dict[str, object]] = {}
+    for scenario_path in (dataset_dir / "scenarios").glob("*.json"):
+        scenario = json.loads(scenario_path.read_text(encoding="utf-8"))
+        for view in scenario.get("views") or []:
+            scenario_views[(scenario["id"], view["id"])] = view
     frames = []
     for frame in review["frames"]:
         item = dict(frame)
-        item["image_src"] = _image_src(dataset_dir, output, frame["path"])
+        if "path" not in item and "image_path" in item:
+            item["path"] = item["image_path"]
+        view = scenario_views.get((item["scenario_id"], item["view_id"]), {})
+        if "required" not in item:
+            required = view.get("intended_visible_items") or []
+            item["required"] = ", ".join(str(value) for value in required)
+        if "intended_defects" not in item:
+            defects = view.get("intended_defects") or []
+            item["intended_defects"] = "; ".join(str(value) for value in defects)
+        first = item.get("first_review") or {}
+        second = item.get("second_review") or {}
+        if first or second:
+            first_decision = first.get("decision")
+            second_decision = second.get("decision")
+            item["pass_a_reason"] = (
+                first.get("reason")
+                if first_decision == second_decision
+                else "Independent reviewers disagreed: "
+                f"{first_decision} vs {second_decision}"
+            )
+        item["image_src"] = _image_src(dataset_dir, output, item["path"])
         frames.append(item)
+    disagreements = list(review.get("reviewer_disagreements", []))
+    for frame in frames:
+        first = frame.get("first_review") or {}
+        second = frame.get("second_review") or {}
+        if first and second and first.get("decision") != second.get("decision"):
+            disagreements.append(
+                {
+                    "task_id": frame["task_id"],
+                    "first": first.get("decision"),
+                    "second": second.get("decision"),
+                }
+            )
     payload = {
         "review_type": review.get("review_type"),
         "reviewed_at": review.get("reviewed_at"),
         "source_file": review_path.name,
-        "counts": review.get("counts", {}),
+        "counts": {
+            decision: int((review.get("counts") or {}).get(decision, 0))
+            for decision in ("accept", "reject", "escalate")
+        },
         "owner_escalations_priority": review.get("owner_escalations_priority", []),
-        "reviewer_disagreements": review.get("reviewer_disagreements", []),
+        "reviewer_disagreements": disagreements,
         "frames": frames,
     }
     priority = "".join(
@@ -1044,7 +1093,10 @@ def main() -> int:
     parser.add_argument(
         "--review",
         type=Path,
-        help="Pass A review JSON (default: newest phase3-pass-a-review-*.json)",
+        help=(
+            "Pass A review JSON (default: newest initial or retry "
+            "phase3 review)"
+        ),
     )
     parser.add_argument(
         "-o",
@@ -1056,7 +1108,17 @@ def main() -> int:
     dataset_dir = args.dataset_dir
     review = args.review
     if review is None:
-        candidates = sorted(dataset_dir.joinpath("reports").glob("phase3-pass-a-review-*.json"))
+        candidates = sorted(
+            [
+                *dataset_dir.joinpath("reports").glob(
+                    "phase3-pass-a-review-*.json"
+                ),
+                *dataset_dir.joinpath("reports").glob(
+                    "phase3-retry-pass-a-review-*.json"
+                ),
+            ],
+            key=lambda path: path.stat().st_mtime_ns,
+        )
         if not candidates:
             raise SystemExit("No phase3-pass-a-review-*.json found; pass --review")
         review = candidates[-1]

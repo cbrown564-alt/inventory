@@ -64,18 +64,37 @@ Metrics are scored into a JSON object with rates in 0..1:
 }
 ```
 
-Run the fail-closed gate:
+Prepare the external fixture without committing its private source images:
+
+```powershell
+.\.venv\Scripts\python.exe -m benchmarks.native_fixture init `
+  benchmarks/native-v1 --property property-a --property property-b
+```
+
+Fill `fixture.json` with the source/permission authority, independent
+annotator, observed facts, defects and both negative-control classes. After
+the labels and original images are complete, freeze hashes and audit the
+denominators:
+
+```powershell
+.\.venv\Scripts\python.exe -m benchmarks.native_fixture freeze benchmarks/native-v1
+```
+
+Run the fail-closed quality gate:
 
 ```sh
 python benchmarks/quality_gate.py \
-  benchmarks/inventoryflex-native/capture \
-  benchmarks/inventoryflex-native/metrics.json \
-  -o benchmarks/inventoryflex-native/quality-gate.json
+  benchmarks/native-v1/capture \
+  benchmarks/native-v1/metrics.json \
+  --fixture-manifest benchmarks/native-v1/fixture.json \
+  -o benchmarks/native-v1/quality-gate.json
 ```
 
-The command exits non-zero unless median source resolution is at least 8 MP
-and all three docs/00 thresholds pass. The current 0.48 MP fixture therefore
-cannot accidentally be reported as native resolution.
+The command exits non-zero unless the image manifest still matches, two
+properties are independently annotated, the 100-fact/20-defect denominators
+and both negative-control classes exist, median source resolution is at least
+8 MP, and all three docs/00 thresholds pass. A metrics file alone cannot
+manufacture a pass.
 
 ## Current disposition
 

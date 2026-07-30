@@ -1,6 +1,6 @@
 """Capture-strategy experiment scaffolding (docs/26).
 
-Photo-mode ingest and folder-layout validation for P1/P2/V2 arms.
+Photo-mode ingest and folder-layout validation for V0/V1/V2/P1/P2 arms.
 Not a product feature — lives behind ``--photo-mode`` until the experiment
 decides the default capture instruction.
 """
@@ -8,16 +8,26 @@ decides the default capture instruction.
 from __future__ import annotations
 
 import json
+import re
+from copy import deepcopy
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Optional
 
 from .ingest import IMAGE_EXTS, VIDEO_EXTS
 
-EXPERIMENT_ARMS = ("P1", "P2", "V2")
+EXPERIMENT_ARMS = ("V0", "V1", "V2", "P1", "P2")
 
 # Soft ranges from docs/26 capture protocols — validation warns, not hard-fails.
 ARM_PROTOCOLS: dict[str, dict] = {
+    "V0": {
+        "kind": "continuous_video",
+        "videos_at_root": (1, 1),
+    },
+    "V1": {
+        "kind": "continuous_video",
+        "videos_at_root": (1, 1),
+    },
     "P1": {
         "kind": "photos",
         "photos_per_room": (3, 4),
@@ -87,6 +97,45 @@ def validate_capture_layout(capture_dir: Path, arm: str) -> LayoutReport:
         return report
 
     proto = ARM_PROTOCOLS[arm]
+    if proto["kind"] == "continuous_video":
+        root_photos = root_videos = 0
+        nested_media: list[str] = []
+        for entry in sorted(capture_dir.rglob("*")):
+            if entry.name.startswith(".") or not entry.is_file():
+                continue
+            ext = entry.suffix.lower()
+            if entry.parent == capture_dir:
+                root_photos += int(ext in IMAGE_EXTS)
+                root_videos += int(ext in VIDEO_EXTS)
+            elif ext in IMAGE_EXTS or ext in VIDEO_EXTS:
+                nested_media.append(entry.relative_to(capture_dir).as_posix())
+        report.rooms.append(
+            RoomLayout(
+                name="Continuous walkthrough",
+                photos=root_photos,
+                videos=root_videos,
+            )
+        )
+        lo, hi = proto["videos_at_root"]
+        if root_videos < lo or root_videos > hi:
+            report.ok = False
+            report.errors.append(
+                f"capture root has {root_videos} video(s); {arm} expects "
+                "exactly one continuous walkthrough"
+            )
+        if root_photos:
+            report.ok = False
+            report.errors.append(
+                f"{root_photos} root photo(s) are outside the {arm} protocol"
+            )
+        if nested_media:
+            report.ok = False
+            report.errors.append(
+                f"{len(nested_media)} nested media file(s) are outside the "
+                f"{arm} continuous-video arm"
+            )
+        return report
+
     room_dirs = sorted(
         (p for p in capture_dir.iterdir()
          if p.is_dir() and not p.name.startswith(".")),
@@ -184,17 +233,40 @@ def scorecard_template() -> dict:
             "hero_pass_rate": None,
         },
     }
+    arm_template = {
+        "status": "not_run",
+        "capture": {
+            "path": "",
+            "sha256": "",
+            "protocol_validated": False,
+        },
+        "untouched_draft": {
+            "path": "",
+            "sha256": "",
+            "built_at": "",
+            "backend": "",
+        },
+        **axes,
+    }
     return {
+        "schema_version": 2,
         "_doc": "Capture-strategy experiment scorecard (docs/26). "
                 "Fill per arm × property; average across properties before deciding.",
         "property": "",
-        "arms": {arm: dict(axes) for arm in
+        "gold": {
+            "path": "",
+            "sha256": "",
+            "frozen_at": "",
+            "independent_reviewer": "",
+        },
+        "arms": {arm: deepcopy(arm_template) for arm in
                  ("V0", "V1", "V2", "P1", "P2", "H1")},
     }
 
 
 def write_scorecard_template(path: Path) -> Path:
     path = path.resolve()
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(scorecard_template(), indent=2, ensure_ascii=False)
                     + "\n", encoding="utf-8")
     return path
@@ -205,3 +277,157 @@ def layout_report_dict(report: LayoutReport) -> dict:
     d["total_photos"] = report.total_photos
     d["total_videos"] = report.total_videos
     return d
+
+
+SCORECARD_METRICS = (
+    "accuracy.recall",
+    "accuracy.precision",
+    "accuracy.hallucination",
+    "image_qual.mean_hero_rating_1_5",
+    "image_qual.pct_heroes_establishing_on_room",
+    "capture_min",
+    "effort.tlx_band",
+    "cost.tokens",
+    "cost.usd",
+    "review.minutes_to_issue",
+    "review.accepts_unchanged",
+    "review.material_edits",
+    "review.rejects",
+    "review.missing_item_additions",
+    "review.not_visible_marks",
+    "review.recaptures",
+    "structure.room_name_correctness",
+    "structure.boundary_bleed_count",
+    "structure.hero_pass_rate",
+)
+SHA256_PATTERN = re.compile(r"[0-9a-f]{64}", re.IGNORECASE)
+RATIO_METRICS = (
+    "accuracy.recall",
+    "accuracy.precision",
+    "accuracy.hallucination",
+    "image_qual.pct_heroes_establishing_on_room",
+    "structure.room_name_correctness",
+    "structure.hero_pass_rate",
+)
+NONNEGATIVE_METRICS = (
+    "capture_min",
+    "cost.tokens",
+    "cost.usd",
+    "review.minutes_to_issue",
+    "review.accepts_unchanged",
+    "review.material_edits",
+    "review.rejects",
+    "review.missing_item_additions",
+    "review.not_visible_marks",
+    "review.recaptures",
+    "structure.boundary_bleed_count",
+)
+
+
+def _value_at(payload: dict, dotted_path: str):
+    value = payload
+    for part in dotted_path.split("."):
+        if not isinstance(value, dict) or part not in value:
+            return None
+        value = value[part]
+    return value
+
+
+def _is_number(value: object) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def audit_scorecard(
+    payload: dict,
+    required_arms: tuple[str, ...] = ("V0", "V1", "P1", "P2"),
+) -> dict:
+    """Fail closed until comparable untouched-draft evidence is complete."""
+    errors: list[str] = []
+    warnings: list[str] = []
+    if payload.get("schema_version") != 2:
+        errors.append("schema_version must be 2")
+    if not str(payload.get("property") or "").strip():
+        errors.append("property is required")
+    gold = payload.get("gold") or {}
+    for field_name in ("path", "sha256", "frozen_at", "independent_reviewer"):
+        if not str(gold.get(field_name) or "").strip():
+            errors.append(f"gold.{field_name} is required")
+    if gold.get("sha256") and not SHA256_PATTERN.fullmatch(str(gold["sha256"])):
+        errors.append("gold.sha256 must be a 64-character SHA-256 digest")
+    arms = payload.get("arms") or {}
+    for arm in required_arms:
+        evidence = arms.get(arm)
+        if not isinstance(evidence, dict):
+            errors.append(f"{arm}: scorecard entry is missing")
+            continue
+        if evidence.get("status") != "complete":
+            errors.append(f"{arm}: status must be complete")
+        capture = evidence.get("capture") or {}
+        for field_name in ("path", "sha256"):
+            if not str(capture.get(field_name) or "").strip():
+                errors.append(f"{arm}: capture.{field_name} is required")
+        if capture.get("sha256") and not SHA256_PATTERN.fullmatch(
+            str(capture["sha256"])
+        ):
+            errors.append(
+                f"{arm}: capture.sha256 must be a 64-character SHA-256 digest"
+            )
+        if capture.get("protocol_validated") is not True:
+            errors.append(f"{arm}: capture protocol is not validated")
+        draft = evidence.get("untouched_draft") or {}
+        for field_name in ("path", "sha256", "built_at", "backend"):
+            if not str(draft.get(field_name) or "").strip():
+                errors.append(f"{arm}: untouched_draft.{field_name} is required")
+        if draft.get("sha256") and not SHA256_PATTERN.fullmatch(
+            str(draft["sha256"])
+        ):
+            errors.append(
+                f"{arm}: untouched_draft.sha256 must be a 64-character "
+                "SHA-256 digest"
+            )
+        for metric in SCORECARD_METRICS:
+            if _value_at(evidence, metric) is None:
+                errors.append(f"{arm}: metric {metric} is missing")
+        for metric in RATIO_METRICS:
+            value = _value_at(evidence, metric)
+            if value is not None and (
+                not _is_number(value) or not 0 <= value <= 1
+            ):
+                errors.append(f"{arm}: metric {metric} must be between 0 and 1")
+        hero_rating = _value_at(
+            evidence, "image_qual.mean_hero_rating_1_5"
+        )
+        if hero_rating is not None and (
+            not _is_number(hero_rating) or not 1 <= hero_rating <= 5
+        ):
+            errors.append(
+                f"{arm}: metric image_qual.mean_hero_rating_1_5 "
+                "must be between 1 and 5"
+            )
+        for metric in NONNEGATIVE_METRICS:
+            value = _value_at(evidence, metric)
+            if value is not None and (
+                not _is_number(value) or value < 0
+            ):
+                errors.append(f"{arm}: metric {metric} must be non-negative")
+        tlx_band = _value_at(evidence, "effort.tlx_band")
+        if tlx_band is not None and tlx_band not in {"low", "medium", "high"}:
+            errors.append(f"{arm}: effort.tlx_band must be low, medium or high")
+    extra_complete = sorted(
+        arm
+        for arm, evidence in arms.items()
+        if arm not in required_arms
+        and isinstance(evidence, dict)
+        and evidence.get("status") == "complete"
+    )
+    if extra_complete:
+        warnings.append(
+            "completed non-required arms: " + ", ".join(extra_complete)
+        )
+    return {
+        "ready": not errors,
+        "property": payload.get("property") or "",
+        "required_arms": list(required_arms),
+        "errors": errors,
+        "warnings": warnings,
+    }

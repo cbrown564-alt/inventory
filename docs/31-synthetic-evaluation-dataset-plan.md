@@ -46,7 +46,7 @@ images.
 |---|---|---|
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
-| 3 — development and validation | **Provider-blocked** | The complete 146-frame Pass A plus owner adjudication has been applied: 93 frames were accepted and 53 first attempts were archived for retry. Eighteen GPT Image 2 retries and 21 Google retries now await dual independent retry Pass A. Fourteen Google retry files and the two first-attempt `RP-016` views are still missing after the subscription reported a quota reset in about four hours. |
+| 3 — development and validation | **Owner- and provider-blocked** | The complete 146-frame first-attempt Pass A plus owner adjudication has been applied: 93 frames were accepted and 53 first attempts were archived for retry. Dual independent retry Pass A is complete for the 39 available retries: 5 accepted, 28 rejected and 6 escalated. The six owner decisions and atomic application remain. Fourteen Google retry files and the two first-attempt `RP-016` views are still missing. |
 | 4 — sealed comparison | **Dependency-blocked** | No validation winner exists, so opening the sealed model comparison would violate the frozen order. |
 | 5 — real transfer | **Dependency-blocked** | There is no selected winner to run on real fixtures. The separate native-resolution evidence gate also remains open. |
 
@@ -741,11 +741,14 @@ the untouched sealed split.
 
 Dual independent retry Pass A, its atomic applicator, observed-evidence Pass B
 with blind risk-label checks, Pass B promotion guards, GPT retry provenance
-and the special Google provenance audit are implemented. Thirty-nine retry
-outputs are ready for Pass A and seven complete, provenance-eligible packets
-are ready for Pass B after the quota reset. No development/validation scoring,
-prompt selection, sealed work or real transfer has started. Dataset validation
-reports zero errors and the focused synthetic suite has 17 passing tests.
+and the special Google provenance audit are implemented. On 30 Jul 2026 the
+39 available retry outputs completed two blind Pass A reviews: 5 were
+accepted, 28 rejected and 6 escalated. The six owner decisions and atomic
+application remain; no retry outcome has been promoted from this report yet.
+Seven complete, provenance-eligible packets are currently ready for Pass B.
+No development/validation scoring, prompt selection, sealed work or real
+transfer has started. Dataset validation reports zero errors and the focused
+synthetic suite has 24 passing tests.
 
 ### Phase 4 — sealed synthetic comparison
 

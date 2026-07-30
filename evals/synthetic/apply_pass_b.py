@@ -271,6 +271,8 @@ def apply(
     dry_run: bool = False,
 ) -> dict[str, Any]:
     report = _load(report_path)
+    if report.get("status") == "partial":
+        raise ValueError("Pass B report is partial and cannot be applied")
     owner_payload = _load(adjudication_path) if adjudication_path else None
     owner = _owner_map(owner_payload)
     with (dataset_dir / "tasks.csv").open(newline="", encoding="utf-8") as handle:
@@ -292,7 +294,7 @@ def apply(
                 "Independent Antigravity CLI observed-evidence review with "
                 "blind second check"
             ),
-            "completed_at": report["reviewed_at"],
+            "completed_at": report.get("completed_at") or report["reviewed_at"],
             "claims": claims,
             "negative_controls": negatives,
             "generator_deviations": packet["first_review"][

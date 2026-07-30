@@ -142,7 +142,7 @@ def _invoke(
         "--model",
         model,
         "--effort",
-        "medium",
+        "low",
         "--print-timeout",
         f"{max(1, timeout // 60)}m",
         "--output-format",
@@ -179,6 +179,8 @@ def _validate_review(
 ) -> dict[str, dict[str, Any]]:
     expected_ids = {item["task_id"] for item in expected}
     by_id = {item.get("task_id"): item for item in review}
+    if len(by_id) != len(review):
+        raise ValueError("Pass A reviewer returned duplicate task IDs")
     if set(by_id) != expected_ids:
         raise ValueError(
             f"review task mismatch: missing={sorted(expected_ids - set(by_id))}, "
@@ -198,22 +200,77 @@ def review(
     task_ids: set[str] | None = None,
     cli_path: Path | None = None,
     model: str = MODEL_MODE,
-    batch_size: int = 8,
+    batch_size: int = 2,
     timeout: int = 480,
 ) -> dict[str, Any]:
+    if batch_size < 1:
+        raise ValueError("batch_size must be at least 1")
     cli = _resolve_cli(cli_path)
+    cli_version = _cli_version(cli)
     inputs = _review_inputs(dataset_dir, task_ids)
     if not inputs:
         raise ValueError("no retry outputs are ready for Pass A")
-    frames = []
-    calls = []
-    for offset in range(0, len(inputs), batch_size):
-        batch = inputs[offset : offset + batch_size]
-        first_prompt = _prompt(batch, f"first-{offset // batch_size + 1}")
-        second_prompt = _prompt(batch, f"second-{offset // batch_size + 1}")
+    frames: list[dict[str, Any]] = []
+    calls: list[dict[str, Any]] = []
+    started_at = _utc_now()
+    if output_path.exists():
+        previous = json.loads(output_path.read_text(encoding="utf-8"))
+        if previous.get("status") != "partial":
+            raise FileExistsError(
+                f"refusing to overwrite completed review: {output_path}"
+            )
+        if previous.get("reviewer_model_mode") != model:
+            raise ValueError("partial review uses a different reviewer model")
+        frames = list(previous.get("frames") or [])
+        calls = list(previous.get("calls") or [])
+        started_at = previous.get("reviewed_at") or started_at
+    completed_list = [frame["task_id"] for frame in frames]
+    if len(set(completed_list)) != len(completed_list):
+        raise ValueError("partial Pass A review contains duplicate tasks")
+    completed_ids = set(completed_list)
+    available_ids = {item["task_id"] for item in inputs}
+    if not completed_ids <= available_ids:
+        raise ValueError("partial review contains tasks outside the current queue")
+    remaining = [item for item in inputs if item["task_id"] not in completed_ids]
+
+    def write_report(status: str) -> dict[str, Any]:
+        counts = Counter(frame["pass_a_decision"] for frame in frames)
+        report = {
+            "review_type": "phase3_retry_pass_a_visual_screen",
+            "status": status,
+            "reviewed_at": started_at,
+            "completed_at": _utc_now() if status == "complete" else None,
+            "generation_path": "Antigravity CLI independent local-image review",
+            "metered_api_call": False,
+            "cli_version": cli_version,
+            "reviewer_model_mode": model,
+            "counts": dict(sorted(counts.items())),
+            "frames": frames,
+            "calls": calls,
+        }
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = output_path.with_suffix(output_path.suffix + ".tmp")
+        temporary.write_text(
+            json.dumps(report, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        temporary.replace(output_path)
+        return report
+
+    for offset in range(0, len(remaining), batch_size):
+        batch = remaining[offset : offset + batch_size]
+        batch_number = len(calls) + 1
+        print(
+            f"Pass A batch {batch_number}: first review "
+            f"({len(batch)} image(s))",
+            flush=True,
+        )
+        first_prompt = _prompt(batch, f"first-{batch_number}")
+        second_prompt = _prompt(batch, f"second-{batch_number}")
         first, first_wrapper, first_elapsed = _invoke(
             cli, model, first_prompt, timeout, dataset_dir
         )
+        print(f"Pass A batch {batch_number}: second review", flush=True)
         second, second_wrapper, second_elapsed = _invoke(
             cli, model, second_prompt, timeout, dataset_dir
         )
@@ -221,7 +278,7 @@ def review(
         second_by_id = _validate_review(batch, second)
         calls.append(
             {
-                "batch": offset // batch_size + 1,
+                "batch": batch_number,
                 "task_ids": [item["task_id"] for item in batch],
                 "first_prompt_sha256": _sha256_text(first_prompt),
                 "second_prompt_sha256": _sha256_text(second_prompt),
@@ -257,24 +314,9 @@ def review(
                     ),
                 }
             )
-    counts = Counter(frame["pass_a_decision"] for frame in frames)
-    report = {
-        "review_type": "phase3_retry_pass_a_visual_screen",
-        "reviewed_at": _utc_now(),
-        "generation_path": "Antigravity CLI independent local-image review",
-        "metered_api_call": False,
-        "cli_version": _cli_version(cli),
-        "reviewer_model_mode": model,
-        "counts": dict(sorted(counts.items())),
-        "frames": frames,
-        "calls": calls,
-    }
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(report, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
-    return report
+        write_report("partial")
+        print(f"Pass A batch {batch_number}: checkpointed", flush=True)
+    return write_report("complete")
 
 
 def main() -> int:
@@ -282,15 +324,42 @@ def main() -> int:
     parser.add_argument("--dataset-dir", type=Path, default=DEFAULT_DATASET)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--task", action="append", dest="tasks")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="list eligible immutable inputs without invoking Antigravity",
+    )
     parser.add_argument("--cli", type=Path)
     parser.add_argument("--model", default=MODEL_MODE)
-    parser.add_argument("--batch-size", type=int, default=8)
+    parser.add_argument("--batch-size", type=int, default=2)
     parser.add_argument("--timeout", type=int, default=480)
     args = parser.parse_args()
+    task_ids = set(args.tasks) if args.tasks else None
+    if args.dry_run:
+        inputs = _review_inputs(args.dataset_dir, task_ids)
+        print(
+            json.dumps(
+                {
+                    "review_type": "phase3_retry_pass_a_preflight",
+                    "count": len(inputs),
+                    "tasks": [
+                        {
+                            "task_id": item["task_id"],
+                            "provider": item["provider"],
+                            "image_path": item["image_path"],
+                            "image_sha256": item["image_sha256"],
+                        }
+                        for item in inputs
+                    ],
+                },
+                indent=2,
+            )
+        )
+        return 0
     report = review(
         args.dataset_dir,
         args.output,
-        set(args.tasks) if args.tasks else None,
+        task_ids,
         args.cli,
         args.model,
         args.batch_size,

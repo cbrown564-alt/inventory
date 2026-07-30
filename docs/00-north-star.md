@@ -41,16 +41,19 @@ gates below.
   pilot and immutable splits are implemented. In the development and
   validation splits, the complete 146-frame Pass A and owner adjudication have
   been applied: 93 frames were accepted and 53 failed first attempts were
-  archived. Eighteen GPT Image 2 retries and 21 Google retries are ready for
-  dual independent retry Pass A. Fourteen Google retry files and the two
-  `RP-016` first-attempt views remain missing. The authorised Antigravity
-  subscription path is paused at a zero-token provider quota response. No
-  image-generation API was used. Seven complete packets are ready for Pass B
-  after the reset; three intact Google packets remain excluded because their
+  archived. Dual independent retry Pass A is complete for the 39 available
+  retry images: 5 accepted, 28 rejected and 6 escalated for owner
+  adjudication. Those outcomes are not applied yet. Fourteen Google retry
+  files and the two `RP-016` first-attempt views remain missing. No
+  image-generation API was used. Seven complete packets are currently ready
+  for Pass B; three intact Google packets remain excluded because their
   successful raw generation provenance is absent
   ([`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md)).
-- Capture-strategy scaffolding and Property A inputs exist, but the
-  photo-versus-video decision is still unrun
+- A preliminary Property A V0/V1/`P2+` matrix exists, but it is not the
+  qualifying capture decision: it used a non-independent proxy, omitted P1
+  and protocol-valid P2, and did not measure review-to-issue burden. Independent
+  gold, the missing arms, the recorded-audio ablation and Property B transfer
+  remain
   ([`26-capture-strategy-experiment.md`](26-capture-strategy-experiment.md)).
 - The native-resolution gate is fail-closed. No independently annotated
   external fixture currently supports the public v1 quality claim
@@ -177,7 +180,8 @@ API or metered Gemini endpoint is permitted.
 1. Complete the 200-image synthetic evaluation programme
    → resume Antigravity generation after its recorded quota reset and finish
      the Google development/validation packets without weakening failed scenes
-   → run dual independent retry Pass A on the 39 current retry outputs
+   → adjudicate the six retry Pass A exceptions and atomically apply all
+     39 AI-reviewed outcomes
    → complete independent Pass B and its risk-label checks before scoring
    → freeze the winning prompt before comparing architectures
    → record cost and row-level failures; do not promote from synthetic data
@@ -185,6 +189,9 @@ API or metered Gemini endpoint is permitted.
      provenance, metadata and licensing review
 
 2. Decide the capture strategy on Properties A and B
+   → close Property A rather than rerunning its preliminary diagnostics:
+     freeze independent gold, retain its V0/V1 bytes, capture P1, curate a
+     protocol-valid P2 and run the recorded-audio ablation
    → build/review V0, V1, P1 and curated P2 against one frozen gold
    → score each untouched automated draft before human correction
    → use Property A to eliminate dominated arms and select two finalists
@@ -298,7 +305,8 @@ wrong is still worthless.
       properties, at least 100 independently annotated notable facts and
       20 material defects, clean/ambiguous negatives, and original images
       meeting the 8 MP gate. These percentages do not describe end-to-end
-      walkthrough accuracy. Gate harness: `evals/verify_v1_accuracy.py`.
+      walkthrough accuracy. Fail-closed external-fixture gate:
+      `benchmarks/quality_gate.py`.
 - [x] E8 + E2 + E10 wired into the production build path — ML-E8 VLM cover
       rerank (default ON when API keys exist; `--no-vlm-cover` keeps E5+E7),
       ML-E2 seam refine on fresh segmentations (`--no-seam-refine` to skip),
@@ -334,7 +342,7 @@ back to the £165 option.
 | Pillar | Status |
 |---|---|
 | **1 — Trust at first glance** | **Mostly met.** Design system + review craft landed; first-screen owner sign-off remains. |
-| **2 — Trustworthy by construction** | **Mostly met.** Capture scaffolding ready (experiment unrun). Hero no-confident-cover + EXIF frame metadata shipped. |
+| **2 — Trustworthy by construction** | **Mostly met.** Capture scaffolding is ready and Property A has a preliminary proxy matrix, but its qualifying gold/arms/review burden and Property B transfer remain. Hero no-confident-cover + EXIF frame metadata shipped. |
 | **3 — Accurate & complete** | **Partially met.** E2/E8/E10 wired with fallbacks; defect recall still resolution-bound pending native-res fixture. |
 | **4 — Low-friction journey** | **Met.** Finish mints tenant countersign link by default; `--share` is optional pre-enable. |
 

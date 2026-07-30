@@ -358,6 +358,21 @@ def cmd_experiment_scorecard_template(args) -> int:
     return 0
 
 
+def cmd_experiment_scorecard_audit(args) -> int:
+    """Fail closed until a docs/26 property scorecard is decision-ready."""
+    import json
+    from .capture_experiment import audit_scorecard
+
+    path = Path(args.scorecard)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    result = audit_scorecard(
+        payload,
+        tuple(args.required_arm or ("V0", "V1", "P1", "P2")),
+    )
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0 if result["ready"] else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     from .usecases import REGISTRY
     use_cases = sorted(REGISTRY)
@@ -548,7 +563,10 @@ def main(argv: list[str] | None = None) -> int:
     ev = exp_sub.add_parser("validate",
                             help="check capture folder layout for an arm")
     ev.add_argument("capture_dir")
-    ev.add_argument("--arm", required=True, choices=["P1", "P2", "V2"],
+    ev.add_argument(
+        "--arm",
+        required=True,
+        choices=["V0", "V1", "V2", "P1", "P2"],
                     help="experiment arm protocol to validate against")
     ev.add_argument("--json", action="store_true",
                     help="emit machine-readable layout report")
@@ -559,6 +577,19 @@ def main(argv: list[str] | None = None) -> int:
     est.add_argument("-o", "--output", default="capture-scorecard.json",
                      help="output path (default: capture-scorecard.json)")
     est.set_defaults(func=cmd_experiment_scorecard_template)
+
+    esa = exp_sub.add_parser(
+        "scorecard-audit",
+        help="fail closed until a property scorecard is decision-ready",
+    )
+    esa.add_argument("scorecard")
+    esa.add_argument(
+        "--required-arm",
+        action="append",
+        choices=["V0", "V1", "V2", "P1", "P2", "H1"],
+        help="arm required for this checkpoint (repeatable)",
+    )
+    esa.set_defaults(func=cmd_experiment_scorecard_audit)
 
     args = parser.parse_args(argv)
     from .dotenv import load_dotenv

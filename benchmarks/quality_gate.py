@@ -10,9 +10,27 @@ from pathlib import Path
 
 from PIL import Image
 
+try:
+    from benchmarks.native_fixture import audit_fixture
+except ModuleNotFoundError:  # direct ``python benchmarks/quality_gate.py``
+    from native_fixture import audit_fixture
+
 TARGETS = {"notable_recall": 0.90, "hallucination": 0.05,
            "defect_recall": 0.75}
 MIN_NATIVE_MEGAPIXELS = 8.0
+REQUIRED_EVIDENCE_CHECKS = (
+    "two_external_properties",
+    "source_authority_recorded",
+    "independently_annotated",
+    "notable_fact_denominator",
+    "material_defect_denominator",
+    "clean_negative_controls",
+    "ambiguous_near_negatives",
+    "property_capture_dirs",
+    "fixture_frozen",
+    "image_manifest_complete",
+    "capture_dir_matches_fixture",
+)
 
 
 def capture_resolution(capture_dir: Path) -> dict:
@@ -31,19 +49,40 @@ def capture_resolution(capture_dir: Path) -> dict:
             and median >= MIN_NATIVE_MEGAPIXELS}
 
 
-def evaluate(metrics: dict, resolution: dict) -> dict:
+def evaluate(
+    metrics: dict,
+    resolution: dict,
+    evidence: dict | None = None,
+) -> dict:
+    def metric(name: str, failure_value: float) -> float:
+        try:
+            value = float(metrics.get(name, failure_value))
+        except (TypeError, ValueError):
+            return failure_value
+        return value
+
+    supplied_evidence = dict((evidence or {}).get("checks") or {})
+    evidence_checks = {
+        name: bool(supplied_evidence.get(name))
+        for name in REQUIRED_EVIDENCE_CHECKS
+    }
     checks = {
+        **evidence_checks,
+        "all_fixture_images_decodable": (
+            int(resolution.get("images") or 0)
+            == int(((evidence or {}).get("counts") or {}).get("images") or -1)
+        ),
         "native_resolution": bool(resolution.get("native_resolution")),
-        "notable_recall": float(metrics.get("notable_recall", -1))
+        "notable_recall": metric("notable_recall", -1)
         >= TARGETS["notable_recall"],
-        "hallucination": float(metrics.get("hallucination", 2))
+        "hallucination": metric("hallucination", 2)
         <= TARGETS["hallucination"],
-        "defect_recall": float(metrics.get("defect_recall", -1))
+        "defect_recall": metric("defect_recall", -1)
         >= TARGETS["defect_recall"],
     }
     return {"pass": all(checks.values()), "checks": checks,
             "targets": TARGETS, "resolution": resolution,
-            "metrics": metrics}
+            "metrics": metrics, "evidence": evidence}
 
 
 def main(argv=None) -> int:
@@ -51,10 +90,25 @@ def main(argv=None) -> int:
     parser.add_argument("capture_dir", type=Path)
     parser.add_argument("metrics_json", type=Path,
                         help="JSON with notable_recall, hallucination, defect_recall as 0..1")
+    parser.add_argument(
+        "--fixture-manifest",
+        type=Path,
+        required=True,
+        help="frozen external fixture.json with independent annotations",
+    )
     parser.add_argument("-o", "--out", type=Path)
     args = parser.parse_args(argv)
-    result = evaluate(json.loads(args.metrics_json.read_text(encoding="utf-8")),
-                      capture_resolution(args.capture_dir))
+    manifest = json.loads(args.fixture_manifest.read_text(encoding="utf-8"))
+    fixture_dir = args.fixture_manifest.parent
+    evidence = audit_fixture(fixture_dir, manifest)
+    evidence["checks"]["capture_dir_matches_fixture"] = (
+        args.capture_dir.resolve() == (fixture_dir / "capture").resolve()
+    )
+    result = evaluate(
+        json.loads(args.metrics_json.read_text(encoding="utf-8")),
+        capture_resolution(args.capture_dir),
+        evidence,
+    )
     text = json.dumps(result, indent=2)
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)

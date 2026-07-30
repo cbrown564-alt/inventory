@@ -181,11 +181,19 @@ behind a flag until the decision is made.
 | Piece | How to use |
 |---|---|
 | Photo-mode ingest | `homeinventory build CAPTURE --photo-mode -o OUT` — room names from `CAPTURE/<Room>/…`; skips VLM segmentation and keyframe extraction |
-| Folder layout check | `homeinventory experiment validate CAPTURE --arm P1\|P2\|V2` — warns on protocol drift, errors on missing rooms or wrong media type |
-| Scorecard template | `homeinventory experiment scorecard-template -o scorecard.json` — empty per-arm metrics structure from the table below |
+| Folder layout check | `homeinventory experiment validate CAPTURE --arm V0\|V1\|V2\|P1\|P2` — validates one root walkthrough for V0/V1 and named-room media for the other arms |
+| Scorecard template | `homeinventory experiment scorecard-template -o scorecard.json` — empty per-arm metrics and provenance structure from the table below |
+| Decision-readiness audit | `homeinventory experiment scorecard-audit scorecard.json` — fails closed until the gold, immutable capture/draft hashes and every required metric exist |
 
 Convention: **`capture/<Room Name>/…`** for all photo and per-room video arms.
-No experiment results yet — proceed to Step 1 capture.
+V0/V1 keep one continuous walkthrough at the capture root.
+
+A preliminary Property A matrix ran on 10 Jul 2026, but it is not the
+predeclared experiment result. It compared V0, V1 and a 166-photo `P2+` arm
+against a non-independent proxy and did not measure review-to-issue burden.
+The result is preserved in
+`evals/fixtures/own-property/capture-strategy-property-a-2026-07-10.json`.
+Close the missing evidence below rather than rerunning completed diagnostics.
 
 ## Metrics & decision rules
 
@@ -238,10 +246,13 @@ built is built on the right assumption.
 
 ```text
 Step 0 — Build photo-mode ingest + capture-time room naming (scaffolding) ✅
-Step 1 — Capture Property A under V0, V1, P1 and P2 (reuse the existing
-         footage only for V0 when it truly matches the baseline protocol)
-Step 2 — Build + review each to A's gold; score the scorecard
-Step 3 — Use A to eliminate dominated arms and select two finalists
+Step 1 — Freeze independent Property A gold; retain the existing V0/V1
+         bytes, capture P1 and curate a protocol-valid P2 from P2+ where
+         that can be done without looking at model outputs
+Step 2 — Build untouched drafts with one frozen backend, review each to A's
+         gold and complete the scorecard including review-to-issue burden
+Step 3 — Run the recorded-audio ablation, then use A to eliminate dominated
+         arms and select two finalists
 Step 4 — Capture a contrasting Property B under the two finalist arms
 Step 5 — Decision recorded in docs/00 Pillar 2 + this doc's outcome section
 ```
@@ -274,16 +285,18 @@ itself. Property B is the required property-transfer confirmation.
 
 | Arm | Property A | Property B | Decision |
 |---|---|---|---|
-| V0 (ordinary continuous video) | | | |
-| V1 (narrated continuous video) | | | |
+| V0 (ordinary continuous video) | Preliminary proxy only; final scorecard pending independent gold and review burden | | |
+| V1 (narrated continuous video) | Preliminary proxy only; audio unused by current pipeline | | |
 | V2 (video per room) | | | |
-| P1 (light photos) | | | |
-| P2 (heavy photos) | | | |
+| P1 (light photos) | Not run | | |
+| P2 (heavy photos) | `P2+` diagnostic only; protocol-valid curated P2 not run | | |
 | H1 (hybrid) | | | |
 
-**Decision recorded:** *(pending)*
-**Implication for pipeline:** *(pending)*
-**Implication for start page UX:** *(pending)*
+**Decision recorded:** no default switch from Property A's preliminary proxy;
+the predeclared comparison remains pending.
+**Implication for pipeline:** keep existing defaults until Property A closes
+and Property B confirms transfer.
+**Implication for start page UX:** *(pending the qualifying A/B result)*
 
 ## Related
 

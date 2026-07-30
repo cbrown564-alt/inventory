@@ -83,7 +83,13 @@ def apply(
     dry_run: bool = False,
 ) -> dict[str, Any]:
     report = _load_json(report_path)
+    if report.get("status") == "partial":
+        raise ValueError("retry Pass A report is partial and cannot be applied")
     owner_payload = _load_json(adjudication_path) if adjudication_path else None
+    if owner_payload and owner_payload.get("source_review") != report_path.name:
+        raise ValueError(
+            "owner adjudications were exported from a different Pass A review"
+        )
     owner = _owner_map(owner_payload)
     frames = report.get("frames") or []
     rows = _load_tasks(dataset_dir)
@@ -189,7 +195,9 @@ def apply(
                 evidence["visibility"] = _evidence_visibility(
                     item, evidence.get("name", "")
                 )
-        review["pass_a"]["completed_at"] = report["reviewed_at"]
+        review["pass_a"]["completed_at"] = (
+            report.get("completed_at") or report["reviewed_at"]
+        )
         review["pass_a"]["reviewer"] = (
             "Two independent Antigravity CLI Pass A contexts"
         )

@@ -285,7 +285,7 @@ def _invoke(
         "--model",
         model,
         "--effort",
-        "medium",
+        "low",
         "--print-timeout",
         f"{max(1, timeout // 60)}m",
         "--output-format",
@@ -322,6 +322,8 @@ def _validate_first(
 ) -> dict[str, dict[str, Any]]:
     expected_ids = {packet["packet_id"] for packet in expected}
     by_id = {item.get("packet_id"): item for item in results}
+    if len(by_id) != len(results):
+        raise ValueError("first Pass B review returned duplicate packet IDs")
     if set(by_id) != expected_ids:
         raise ValueError("first Pass B packet IDs do not match the request")
     frame_ids = {
@@ -358,6 +360,8 @@ def _validate_second(
 ) -> dict[str, dict[str, Any]]:
     expected_ids = {packet["packet_id"] for packet in expected}
     by_id = {item.get("packet_id"): item for item in results}
+    if len(by_id) != len(results):
+        raise ValueError("second Pass B review returned duplicate packet IDs")
     if set(by_id) != expected_ids:
         raise ValueError("second Pass B packet IDs do not match the request")
     for packet_id, item in by_id.items():
@@ -385,20 +389,82 @@ def review(
     batch_size: int = 2,
     timeout: int = 480,
 ) -> dict[str, Any]:
+    if batch_size < 1:
+        raise ValueError("batch_size must be at least 1")
     cli = _resolve_cli(cli_path)
+    cli_version = _cli_version(cli)
     packets = _packet_inputs(dataset_dir, packet_ids)
     if not packets:
         raise ValueError("no complete Pass A packets are ready for Pass B")
-    results = []
-    calls = []
-    for offset in range(0, len(packets), batch_size):
-        batch = packets[offset : offset + batch_size]
-        batch_id = offset // batch_size + 1
+    results: list[dict[str, Any]] = []
+    calls: list[dict[str, Any]] = []
+    started_at = _utc_now()
+    if output_path.exists():
+        previous = json.loads(output_path.read_text(encoding="utf-8"))
+        if previous.get("status") != "partial":
+            raise FileExistsError(
+                f"refusing to overwrite completed review: {output_path}"
+            )
+        if previous.get("reviewer_model_mode") != model:
+            raise ValueError("partial review uses a different reviewer model")
+        results = list(previous.get("packets") or [])
+        calls = list(previous.get("calls") or [])
+        started_at = previous.get("reviewed_at") or started_at
+    completed_ids = [packet["packet_id"] for packet in results]
+    if len(set(completed_ids)) != len(completed_ids):
+        raise ValueError("partial Pass B review contains duplicate packets")
+    available_ids = {packet["packet_id"] for packet in packets}
+    if not set(completed_ids) <= available_ids:
+        raise ValueError("partial Pass B review contains packets outside the queue")
+    remaining = [
+        packet for packet in packets if packet["packet_id"] not in completed_ids
+    ]
+
+    def write_report(status: str) -> dict[str, Any]:
+        counts = Counter(
+            "escalated" if packet["escalations"] else "clear"
+            for packet in results
+        )
+        report = {
+            "review_type": "synthetic_pass_b_dual_independent",
+            "status": status,
+            "reviewed_at": started_at,
+            "completed_at": _utc_now() if status == "complete" else None,
+            "reviewer_model_mode": model,
+            "cli_version": cli_version,
+            "subscription_path": "Antigravity CLI",
+            "metered_api_call": False,
+            "second_check_policy": (
+                "All proposed defects and negatives plus a deterministic "
+                "visibility-stratified >=25% ordinary-claim sample."
+            ),
+            "counts": dict(sorted(counts.items())),
+            "packets": results,
+            "calls": calls,
+        }
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = output_path.with_suffix(output_path.suffix + ".tmp")
+        temporary.write_text(
+            json.dumps(report, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        temporary.replace(output_path)
+        return report
+
+    for offset in range(0, len(remaining), batch_size):
+        batch = remaining[offset : offset + batch_size]
+        batch_id = len(calls) + 1
+        print(
+            f"Pass B batch {batch_id}: first evidence labels "
+            f"({len(batch)} packet(s))",
+            flush=True,
+        )
         first_prompt = _label_prompt(batch, f"pass-b-label-{batch_id}")
         first_raw, first_wrapper, first_elapsed = _invoke(
             cli, model, first_prompt, timeout, dataset_dir
         )
         first = _validate_first(batch, first_raw)
+        print(f"Pass B batch {batch_id}: blind second checks", flush=True)
         second_prompt = _check_prompt(
             batch, first, f"pass-b-check-{batch_id}"
         )
@@ -494,31 +560,9 @@ def review(
                     "escalations": escalations,
                 }
             )
-    counts = Counter(
-        "escalated" if packet["escalations"] else "clear"
-        for packet in results
-    )
-    report = {
-        "review_type": "synthetic_pass_b_dual_independent",
-        "reviewed_at": _utc_now(),
-        "reviewer_model_mode": model,
-        "cli_version": _cli_version(cli),
-        "subscription_path": "Antigravity CLI",
-        "metered_api_call": False,
-        "second_check_policy": (
-            "All proposed defects and negatives plus a deterministic "
-            "visibility-stratified >=25% ordinary-claim sample."
-        ),
-        "counts": dict(sorted(counts.items())),
-        "packets": results,
-        "calls": calls,
-    }
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(report, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
-    return report
+        write_report("partial")
+        print(f"Pass B batch {batch_id}: checkpointed", flush=True)
+    return write_report("complete")
 
 
 def main() -> int:
@@ -526,15 +570,43 @@ def main() -> int:
     parser.add_argument("--dataset-dir", type=Path, default=DEFAULT_DATASET)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--packet", action="append", dest="packets")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="list eligible immutable packets without invoking Antigravity",
+    )
     parser.add_argument("--cli", type=Path)
     parser.add_argument("--model", default=MODEL_MODE)
     parser.add_argument("--batch-size", type=int, default=2)
     parser.add_argument("--timeout", type=int, default=480)
     args = parser.parse_args()
+    packet_ids = set(args.packets) if args.packets else None
+    if args.dry_run:
+        packets = _packet_inputs(args.dataset_dir, packet_ids)
+        print(
+            json.dumps(
+                {
+                    "review_type": "synthetic_pass_b_preflight",
+                    "count": len(packets),
+                    "packets": [
+                        {
+                            "packet_id": packet["packet_id"],
+                            "provider": packet["provider"],
+                            "image_sha256": [
+                                image["sha256"] for image in packet["images"]
+                            ],
+                        }
+                        for packet in packets
+                    ],
+                },
+                indent=2,
+            )
+        )
+        return 0
     report = review(
         args.dataset_dir,
         args.output,
-        set(args.packets) if args.packets else None,
+        packet_ids,
         args.cli,
         args.model,
         args.batch_size,

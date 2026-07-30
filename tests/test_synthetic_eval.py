@@ -3,9 +3,16 @@ import hashlib
 import json
 from pathlib import Path
 
+import pytest
+
+import evals.synthetic.review_pass_a as retry_pass_a
+import evals.synthetic.review_pass_b as pass_b
 from evals.synthetic.build_review import build
+from evals.synthetic.build_pass_a_gallery import build as build_pass_a_gallery
 from evals.synthetic.build_tasks import build_rows, write_tasks
 from evals.synthetic.apply_owner_adjudications import apply
+from evals.synthetic.apply_pass_b import apply as apply_pass_b
+from evals.synthetic.apply_retry_pass_a import apply as apply_retry_pass_a
 from evals.synthetic.audit_google_provenance import audit
 from evals.synthetic.generate_antigravity import _load_packets, _packet_prompt
 from evals.synthetic.record_outputs import record
@@ -456,6 +463,236 @@ def test_phase1_plan_keeps_production_architecture_and_complete_packets_only():
     assert {run["model"] for run in plan} == {"gemini-3.5-flash-low"}
     assert all(len(run["inputs"]) == 4 for run in plan)
     assert all(run["image_model"] == "GPT Image 2" for run in plan)
+
+
+def test_owner_gallery_accepts_dual_retry_review_schema(tmp_path):
+    dataset = tmp_path / "fixture"
+    image = dataset / "images/openai/gpt-image-2/RP-001-A-wide.png"
+    image.parent.mkdir(parents=True)
+    image.write_bytes(b"not decoded by the static builder")
+    scenarios = dataset / "scenarios"
+    scenarios.mkdir()
+    scenarios.joinpath("RP-001.json").write_text(json.dumps({
+        "id": "RP-001",
+        "views": [{
+            "id": "A-wide",
+            "intended_visible_items": ["kitchen units", "window"],
+            "intended_defects": ["small chip on a base-unit door"],
+        }],
+    }), encoding="utf-8")
+    report = dataset / "reports/phase3-retry-pass-a-review.json"
+    report.parent.mkdir(parents=True)
+    report.write_text(json.dumps({
+        "review_type": "phase3_retry_pass_a_visual_screen",
+        "reviewed_at": "2026-07-30T12:00:00+00:00",
+        "counts": {"accept": 0, "reject": 0, "escalate": 1},
+        "frames": [{
+            "task_id": "RP-001.gpt-image-2.A-wide",
+            "scenario_id": "RP-001",
+            "provider": "OpenAI",
+            "room_type": "Kitchen",
+            "view_id": "A-wide",
+            "image_path": str(image),
+            "frozen_generation_prompt": "Wide kitchen with a window.",
+            "pass_a_decision": "escalate",
+            "first_review": {"decision": "accept", "reason": "Kitchen is clear."},
+            "second_review": {"decision": "reject", "reason": "Window is absent."},
+        }],
+    }), encoding="utf-8")
+    output = dataset / "reports/retry-owner-gallery.html"
+
+    build_pass_a_gallery(dataset, report, output)
+
+    html = output.read_text(encoding="utf-8")
+    assert "RP-001.gpt-image-2.A-wide" in html
+    assert "Independent reviewers disagreed: accept vs reject" in html
+    assert "kitchen units, window" in html
+    assert "small chip on a base-unit door" in html
+    assert "First review:" in html
+    assert "Second review:" in html
+    assert "activeThumb.scrollIntoView" not in html
+    assert "els.filmstrip.scrollTo" in html
+    assert "pass-a-owner-adjudications-v2:${data.source_file" in html
+
+
+def test_owner_gallery_rejects_partial_review(tmp_path):
+    report = tmp_path / "partial.json"
+    report.write_text(json.dumps({
+        "status": "partial",
+        "frames": [],
+    }), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="partial"):
+        build_pass_a_gallery(tmp_path, report, tmp_path / "gallery.html")
+
+
+def test_partial_ai_reports_cannot_be_applied(tmp_path):
+    report = tmp_path / "partial.json"
+    report.write_text(json.dumps({"status": "partial"}), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="partial"):
+        apply_retry_pass_a(tmp_path, report)
+    with pytest.raises(ValueError, match="partial"):
+        apply_pass_b(tmp_path, report)
+
+
+def test_retry_adjudications_must_match_the_ai_review(tmp_path):
+    report = tmp_path / "retry.json"
+    report.write_text(json.dumps({
+        "status": "complete",
+        "frames": [],
+    }), encoding="utf-8")
+    owner = tmp_path / "owner.json"
+    owner.write_text(json.dumps({
+        "source_review": "different-review.json",
+        "decisions": [],
+    }), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="different Pass A review"):
+        apply_retry_pass_a(tmp_path, report, owner)
+
+
+def test_retry_pass_a_checkpoints_and_resumes_completed_batches(
+    tmp_path, monkeypatch
+):
+    dataset = tmp_path / "fixture"
+    (dataset / "images").mkdir(parents=True)
+    fields = [
+        "task_id", "scenario_id", "provider", "room_type", "view_id",
+        "status", "attempts", "output_path", "output_sha256", "exact_prompt",
+    ]
+    rows = []
+    for number in (1, 2):
+        task_id = f"RP-00{number}.gpt-image-2.A-wide"
+        image = dataset / "images" / f"{task_id}.png"
+        image.write_bytes(f"image-{number}".encode())
+        rows.append({
+            "task_id": task_id,
+            "scenario_id": f"RP-00{number}",
+            "provider": "OpenAI",
+            "room_type": "Kitchen",
+            "view_id": "A-wide",
+            "status": "review_pending",
+            "attempts": "2",
+            "output_path": image.relative_to(dataset).as_posix(),
+            "output_sha256": hashlib.sha256(image.read_bytes()).hexdigest(),
+            "exact_prompt": "Photographic kitchen.",
+        })
+    with (dataset / "tasks.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(rows)
+    output = dataset / "reports/retry.json"
+    monkeypatch.setattr(retry_pass_a, "_resolve_cli", lambda _: Path("fake"))
+    monkeypatch.setattr(retry_pass_a, "_cli_version", lambda _: "fake-1")
+
+    def interrupted(_cli, _model, prompt, _timeout, _cwd):
+        if "RP-002" in prompt:
+            raise RuntimeError("simulated interruption")
+        decision = [{
+            "task_id": "RP-001.gpt-image-2.A-wide",
+            "decision": "accept",
+            "reason": "clear",
+            "requested_evidence": [],
+        }]
+        return decision, {"status": "SUCCESS"}, 1.0
+
+    monkeypatch.setattr(retry_pass_a, "_invoke", interrupted)
+    with pytest.raises(RuntimeError, match="simulated interruption"):
+        retry_pass_a.review(dataset, output, batch_size=1)
+    partial = json.loads(output.read_text())
+    assert partial["status"] == "partial"
+    assert len(partial["frames"]) == 1
+
+    def successful(_cli, _model, prompt, _timeout, _cwd):
+        task_id = (
+            "RP-001.gpt-image-2.A-wide"
+            if "RP-001" in prompt
+            else "RP-002.gpt-image-2.A-wide"
+        )
+        decision = [{
+            "task_id": task_id,
+            "decision": "accept",
+            "reason": "clear",
+            "requested_evidence": [],
+        }]
+        return decision, {"status": "SUCCESS"}, 1.0
+
+    monkeypatch.setattr(retry_pass_a, "_invoke", successful)
+    completed = retry_pass_a.review(dataset, output, batch_size=1)
+    assert completed["status"] == "complete"
+    assert len(completed["frames"]) == 2
+    assert len(completed["calls"]) == 2
+
+
+def test_pass_b_checkpoints_and_resumes_completed_packets(tmp_path, monkeypatch):
+    packets = [
+        {
+            "packet_id": packet_id,
+            "scenario_id": packet_id.split(".")[0],
+            "provider": "OpenAI",
+            "room_type": "Kitchen",
+            "images": [],
+            "scene_hypotheses": {"views": [], "continuity_requirements": []},
+        }
+        for packet_id in ("RP-001.gpt-image-2", "RP-002.gpt-image-2")
+    ]
+    output = tmp_path / "pass-b.json"
+    monkeypatch.setattr(pass_b, "_resolve_cli", lambda _: Path("fake"))
+    monkeypatch.setattr(pass_b, "_cli_version", lambda _: "fake-1")
+    monkeypatch.setattr(pass_b, "_packet_inputs", lambda *_: packets)
+
+    def response(packet_id: str, second: bool) -> list[dict]:
+        if second:
+            return [{
+                "packet_id": packet_id,
+                "checks": [],
+                "additional_material_findings": [],
+                "continuity_concerns": [],
+            }]
+        return [{
+            "packet_id": packet_id,
+            "claims": [],
+            "negative_controls": [],
+            "generator_deviations": [],
+            "ambiguity_notes": [],
+            "continuity_concerns": [],
+        }]
+
+    def interrupted(_cli, _model, prompt, _timeout, _cwd):
+        packet_id = (
+            "RP-001.gpt-image-2"
+            if "RP-001.gpt-image-2" in prompt
+            else "RP-002.gpt-image-2"
+        )
+        if packet_id.startswith("RP-002"):
+            raise RuntimeError("simulated interruption")
+        second = "fresh, independent Pass B checker" in prompt
+        return response(packet_id, second), {"status": "SUCCESS"}, 1.0
+
+    monkeypatch.setattr(pass_b, "_invoke", interrupted)
+    with pytest.raises(RuntimeError, match="simulated interruption"):
+        pass_b.review(tmp_path, output, batch_size=1)
+    partial = json.loads(output.read_text())
+    assert partial["status"] == "partial"
+    assert [item["packet_id"] for item in partial["packets"]] == [
+        "RP-001.gpt-image-2"
+    ]
+
+    def successful(_cli, _model, prompt, _timeout, _cwd):
+        packet_id = (
+            "RP-001.gpt-image-2"
+            if "RP-001.gpt-image-2" in prompt
+            else "RP-002.gpt-image-2"
+        )
+        second = "fresh, independent Pass B checker" in prompt
+        return response(packet_id, second), {"status": "SUCCESS"}, 1.0
+
+    monkeypatch.setattr(pass_b, "_invoke", successful)
+    completed = pass_b.review(tmp_path, output, batch_size=1)
+    assert completed["status"] == "complete"
+    assert len(completed["packets"]) == 2
+    assert len(completed["calls"]) == 2
 
 
 def test_phase1_scorer_traces_items_defects_and_evidence_links():
