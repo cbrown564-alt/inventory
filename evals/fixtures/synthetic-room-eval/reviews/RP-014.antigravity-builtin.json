@@ -5,114 +5,200 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "hall walls",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "striped runner",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "coat hooks",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "entryphone",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "ceiling light",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Labeled mock diagram; illustrative not photographic"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Labeled mock diagram; illustrative not photographic",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-014.antigravity-builtin.A-wide",
+          "scenario_id": "RP-014",
+          "provider": "Google",
+          "view_id": "A-wide",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-A-wide.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Labeled mock diagram; illustrative not photographic",
+          "owner_decision": "reject",
+          "owner_reason": "Labeled mock diagram; illustrative not photographic",
+          "adjudicated_at": "2026-07-29T19:30:12.614Z"
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "front door",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "door chain",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "letter plate",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "shoe rack",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Same mock/schematic failure"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Same mock/schematic failure",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-014.antigravity-builtin.B-reverse",
+          "scenario_id": "RP-014",
+          "provider": "Google",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-B-reverse.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Same mock/schematic failure",
+          "owner_decision": "reject",
+          "owner_reason": "Same mock/schematic failure",
+          "adjudicated_at": "2026-07-29T19:30:13.655Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "entryphone",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "consumer unit",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "light switch",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "smoke alarm",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Same mock/schematic failure"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Same mock/schematic failure",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-014.antigravity-builtin.C-inventory",
+          "scenario_id": "RP-014",
+          "provider": "Google",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-C-inventory.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Same mock/schematic failure",
+          "owner_decision": "reject",
+          "owner_reason": "Same mock/schematic failure",
+          "adjudicated_at": "2026-07-29T19:30:14.342Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "front door",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "threshold",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "door seal",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "runner",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Same mock/schematic failure (text “three pale scuff marks” is not photographic evidence)"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Same mock/schematic failure (text “three pale scuff marks” is not photographic evidence)",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-014.antigravity-builtin.D-condition",
+          "scenario_id": "RP-014",
+          "provider": "Google",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-D-condition.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Same mock/schematic failure (text “three pale scuff marks” is not photographic evidence)",
+          "owner_decision": "reject",
+          "owner_reason": "Same mock/schematic failure (text “three pale scuff marks” is not photographic evidence)",
+          "adjudicated_at": "2026-07-29T19:30:14.909Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

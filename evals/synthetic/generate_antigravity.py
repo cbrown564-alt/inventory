@@ -101,19 +101,21 @@ def _load_packets(
         newline="", encoding="utf-8"
     ) as handle:
         rows = list(csv.DictReader(handle))
-    packets: dict[str, list[dict[str, str]]] = {}
+    all_packets: dict[str, list[dict[str, str]]] = {}
     for row in rows:
         if f".{PROVIDER_ID}." not in row["task_id"]:
             continue
         if scenario_ids and row["scenario_id"] not in scenario_ids:
             continue
-        if row["status"] in {
-            "accepted",
-            "pass_a_accepted",
-            "generator_failed",
-        }:
-            continue
-        packets.setdefault(row["scenario_id"], []).append(row)
+        all_packets.setdefault(row["scenario_id"], []).append(row)
+    packets = {
+        scenario_id: packet
+        for scenario_id, packet in all_packets.items()
+        if any(
+            row["status"] in {"pending", "retry_pending"}
+            for row in packet
+        )
+    }
     for scenario_id, packet in packets.items():
         if len(packet) != 4:
             raise ValueError(
@@ -170,13 +172,20 @@ def generate_packet(
     cli: Path,
     model: str,
 ) -> dict[str, Any]:
-    run_path = (
-        dataset_dir
-        / "generation_runs"
-        / "antigravity"
-        / f"{scenario_id}.json"
+    attempt = max(
+        1,
+        max(int(row.get("attempts") or 0) for row in rows) + 1,
     )
-    if run_path.exists():
+    run_dir = dataset_dir / "generation_runs" / "antigravity"
+    base_run_path = run_dir / f"{scenario_id}.json"
+    run_path = (
+        base_run_path
+        if attempt == 1 and not base_run_path.exists()
+        else run_dir / f"{scenario_id}-attempt-{attempt}.json"
+    )
+    if run_path.exists() and all(
+        (dataset_dir / row["output_path"]).is_file() for row in rows
+    ):
         outputs = _validate_packet(rows, dataset_dir)
         return {
             "scenario_id": scenario_id,
@@ -196,8 +205,12 @@ def generate_packet(
                     "sha256": _sha256(output),
                 }
             )
-        else:
+        elif row["status"] in {"pending", "retry_pending"}:
             missing_rows.append(row)
+        else:
+            raise FileNotFoundError(
+                f"{row['task_id']}: accepted packet reference is missing"
+            )
     if not missing_rows:
         outputs = _validate_packet(rows, dataset_dir)
         record = {
@@ -255,9 +268,10 @@ def generate_packet(
     )
     elapsed = round(time.perf_counter() - started, 3)
     if result.returncode:
+        diagnostic = result.stderr.strip() or result.stdout.strip()
         raise RuntimeError(
             f"{scenario_id}: Antigravity exited {result.returncode}: "
-            f"{result.stderr.strip()}"
+            f"{diagnostic}"
         )
     wrapper = json.loads(result.stdout)
     if wrapper.get("status") != "SUCCESS":

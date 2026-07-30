@@ -5,114 +5,196 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "wood-effect units",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "laminate worktop",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "freestanding cooker",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sink",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "patterned vinyl floor",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Readable Fairy logo; the owner note confirms a binding brand failure."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Readable Fairy logo on dish soap",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-004.antigravity-builtin.A-wide",
+          "scenario_id": "RP-004",
+          "provider": "Google",
+          "view_id": "A-wide",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-004-A-wide.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Readable Fairy logo on dish soap",
+          "owner_decision": "accept",
+          "owner_reason": "Readable Fairy logo on dish soap",
+          "adjudicated_at": "2026-07-29T19:26:50.336Z"
+        },
+        "protocol_correction": {
+          "task_id": "RP-004.antigravity-builtin.A-wide",
+          "replaces_decision": "accept",
+          "final_decision": "reject",
+          "reason": "Readable Fairy logo; the owner note confirms a binding brand failure."
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "entrance door",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "window blind",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "wall clock",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Required radiator and window blind absent; the owner note confirms binding missing-anchor failures."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Radiator absent; window blind absent (lace/curtains only); clock/door present",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-004.antigravity-builtin.B-reverse",
+          "scenario_id": "RP-004",
+          "provider": "Google",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-004-B-reverse.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Radiator absent; window blind absent (lace/curtains only); clock/door present",
+          "owner_decision": "accept",
+          "owner_reason": "Radiator absent; window blind absent (lace/curtains only); clock/door present",
+          "adjudicated_at": "2026-07-29T19:27:09.654Z"
+        },
+        "protocol_correction": {
+          "task_id": "RP-004.antigravity-builtin.B-reverse",
+          "replaces_decision": "accept",
+          "final_decision": "reject",
+          "reason": "Required radiator and window blind absent; the owner note confirms binding missing-anchor failures."
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "sink",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "draining board",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "mixer tap",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "under-counter fridge",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Sink, drainer, mixer, sockets, under-counter fridge present; brand text not clearly readable",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "plinth",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "base unit",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "cooker side",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Floor damage is large peel/lift, not small triangular tear; would falsify intended label [reconciled from reviewer disagreement: was reject, second review escalate]",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-004.antigravity-builtin.D-condition",
+          "scenario_id": "RP-004",
+          "provider": "Google",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-004-D-condition.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Floor damage is large peel/lift, not small triangular tear; would falsify intended label [reconciled from reviewer disagreement: was reject, second review escalate]",
+          "owner_decision": "accept",
+          "owner_reason": "Floor damage is large peel/lift, not small triangular tear; would falsify intended label [reconciled from reviewer disagreement: was reject, second review escalate]",
+          "adjudicated_at": "2026-07-29T19:19:47.329Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

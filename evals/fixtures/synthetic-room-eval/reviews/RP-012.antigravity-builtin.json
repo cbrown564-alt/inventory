@@ -5,114 +5,156 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "leather sofa",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "patterned rug",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "fireplace",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "bookshelves",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "coffee table",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Leather sofa, patterned rug, fireplace, bookshelves, coffee table; bay present",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "armchair",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "bay window",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "floorboards",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "**Bay window clearly present** with blinds/curtains; door, armchair, radiator, floorboards present",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "fireplace surround",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "mantel",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wall lights",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Fireplace surround, mantel, wall sconces, socket, skirting context present [reconciled from reviewer disagreement: was accept, second review escalate]",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-012.antigravity-builtin.C-inventory",
+          "scenario_id": "RP-012",
+          "provider": "Google",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-012-C-inventory.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Fireplace surround, mantel, wall sconces, socket, skirting context present [reconciled from reviewer disagreement: was accept, second review escalate]",
+          "owner_decision": "accept",
+          "owner_reason": "Fireplace surround, mantel, wall sconces, socket, skirting context present [reconciled from reviewer disagreement: was accept, second review escalate]",
+          "adjudicated_at": "2026-07-29T19:24:23.102Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "timber floorboards",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "rug edge",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting board",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "hearth",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Floorboards, rug edge, skirting, hearth present",
+          "second_review_agreed": true
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

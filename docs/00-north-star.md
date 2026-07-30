@@ -1,6 +1,6 @@
 # 00 — North star
 
-*Updated 28 Jul 2026. Single source of truth for v1 scope, current status,
+*Updated 30 Jul 2026. Single source of truth for v1 scope, current status,
 next work, and what is explicitly deferred. Supersedes scattered open items
 in docs/03, docs/12, and docs/22 when they conflict. Read this first;
 everything else is detail.*
@@ -17,7 +17,7 @@ The competition is not other tools; it is not bothering.
 
 ---
 
-## Current status (28 Jul 2026)
+## Current status (30 Jul 2026)
 
 **Current outcome:** the local web product completes the primary journey from
 walkthrough upload through draft, review, owner signature, tenant countersign,
@@ -39,14 +39,15 @@ gates below.
   50% to 100% and removed one unsupported defect, but item recall fell
   6.2 percentage points, so no winner was frozen. The 25-scenario, 200-task
   pilot and immutable splits are implemented. In the development and
-  validation splits, Phase 3 now has 8 previously accepted GPT images,
-  146 generated images awaiting independent AI Pass A, 4 terminal Google
-  generator failures and 2 pending tasks. Ambiguity, reviewer disagreement
-  and material evidential risk escalate to the project owner rather than
-  requiring blanket human review. The GPT Image 2 cohort is complete through
-  `RP-020`; only the Google `C-inventory` and `D-condition` views of `RP-016`
-  remain to generate. The authorised Antigravity subscription path is paused
-  at another provider quota reset. No image-generation API was used
+  validation splits, the complete 146-frame Pass A and owner adjudication have
+  been applied: 93 frames were accepted and 53 failed first attempts were
+  archived. Eighteen GPT Image 2 retries and 21 Google retries are ready for
+  dual independent retry Pass A. Fourteen Google retry files and the two
+  `RP-016` first-attempt views remain missing. The authorised Antigravity
+  subscription path is paused at a zero-token provider quota response. No
+  image-generation API was used. Seven complete packets are ready for Pass B
+  after the reset; three intact Google packets remain excluded because their
+  successful raw generation provenance is absent
   ([`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md)).
 - Capture-strategy scaffolding and Property A inputs exist, but the
   photo-versus-video decision is still unrun
@@ -176,8 +177,8 @@ API or metered Gemini endpoint is permitted.
 1. Complete the 200-image synthetic evaluation programme
    → resume Antigravity generation after its recorded quota reset and finish
      the Google development/validation packets without weakening failed scenes
-   → generate the remaining GPT Image 2 packets through Codex `imagegen`
-   → complete independent Pass A and Pass B review before scoring
+   → run dual independent retry Pass A on the 39 current retry outputs
+   → complete independent Pass B and its risk-label checks before scoring
    → freeze the winning prompt before comparing architectures
    → record cost and row-level failures; do not promote from synthetic data
    → keep public dataset publication post-v1 and subject to a separate terms,

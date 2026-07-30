@@ -5,114 +5,200 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "single bed",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wardrobe",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "desk",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "blue rug",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "toy storage",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Readable **LEGO CITY** poster branding [reconciled from reviewer disagreement: was reject, second review accept]",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-010.antigravity-builtin.A-wide",
+          "scenario_id": "RP-010",
+          "provider": "Google",
+          "view_id": "A-wide",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-010-A-wide.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Readable **LEGO CITY** poster branding [reconciled from reviewer disagreement: was reject, second review accept]",
+          "owner_decision": "accept",
+          "owner_reason": "Readable **LEGO CITY** poster branding [reconciled from reviewer disagreement: was reject, second review accept]",
+          "adjudicated_at": "2026-07-29T19:23:43.023Z"
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "bookcase",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "ceiling shade",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Recognisable **Toy Story / Disney** character poster (brand IP) [reconciled from reviewer disagreement: was reject, second review accept]",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-010.antigravity-builtin.B-reverse",
+          "scenario_id": "RP-010",
+          "provider": "Google",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-010-B-reverse.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Recognisable **Toy Story / Disney** character poster (brand IP) [reconciled from reviewer disagreement: was reject, second review accept]",
+          "owner_decision": "accept",
+          "owner_reason": "Recognisable **Toy Story / Disney** character poster (brand IP) [reconciled from reviewer disagreement: was reject, second review accept]",
+          "adjudicated_at": "2026-07-29T19:23:50.277Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "desk",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "chair",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "window blind",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Readable Catan Junior and LEGO-style branding; the owner note confirms a binding brand failure."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Readable **Catan Junior** + clear LEGO-style logo on box",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-010.antigravity-builtin.C-inventory",
+          "scenario_id": "RP-010",
+          "provider": "Google",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-010-C-inventory.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Readable **Catan Junior** + clear LEGO-style logo on box",
+          "owner_decision": "accept",
+          "owner_reason": "Readable **Catan Junior** + clear LEGO-style logo on box",
+          "adjudicated_at": "2026-07-29T19:28:39.833Z"
+        },
+        "protocol_correction": {
+          "task_id": "RP-010.antigravity-builtin.C-inventory",
+          "replaces_decision": "accept",
+          "final_decision": "reject",
+          "reason": "Readable Catan Junior and LEGO-style branding; the owner note confirms a binding brand failure."
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "bed frame",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting board",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "blue rug",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Clear LEGO-style logo on toy box under wardrobe [reconciled from reviewer disagreement: was reject, second review accept]",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-010.antigravity-builtin.D-condition",
+          "scenario_id": "RP-010",
+          "provider": "Google",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-010-D-condition.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Clear LEGO-style logo on toy box under wardrobe [reconciled from reviewer disagreement: was reject, second review accept]",
+          "owner_decision": "accept",
+          "owner_reason": "Clear LEGO-style logo on toy box under wardrobe [reconciled from reviewer disagreement: was reject, second review accept]",
+          "adjudicated_at": "2026-07-29T19:23:55.502Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

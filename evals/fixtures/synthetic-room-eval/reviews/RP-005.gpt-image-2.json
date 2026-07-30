@@ -5,114 +5,186 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "blue kitchen units",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "island",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "range cooker",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sink",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "pendant lights",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Blue units, island, range, sink, pendants present",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "patio doors",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "entrance door",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "bar stools",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "floor tiles",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Required floor tiles absent (wood planks); radiator/patio doors/stools present"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Required floor tiles absent (wood planks); radiator/patio doors/stools present",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-005.gpt-image-2.B-reverse",
+          "scenario_id": "RP-005",
+          "provider": "OpenAI",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-005-B-reverse.png",
+          "ai_decision": "reject",
+          "ai_reason": "Required floor tiles absent (wood planks); radiator/patio doors/stools present",
+          "owner_decision": "reject",
+          "owner_reason": "Required floor tiles absent (wood planks); radiator/patio doors/stools present",
+          "adjudicated_at": "2026-07-29T19:27:57.217Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "range cooker",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "extractor canopy",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "splashback",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "heat alarm",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Heat alarm absent; Waitrose-like bag also brand risk"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Heat alarm absent; Waitrose-like bag also brand risk",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-005.gpt-image-2.C-inventory",
+          "scenario_id": "RP-005",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-005-C-inventory.png",
+          "ai_decision": "reject",
+          "ai_reason": "Heat alarm absent; Waitrose-like bag also brand risk",
+          "owner_decision": "reject",
+          "owner_reason": "Heat alarm absent; Waitrose-like bag also brand risk",
+          "adjudicated_at": "2026-07-29T19:28:07.224Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "quartz worktop",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "island cabinet",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "bar stool",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "floor tile",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Floor tile absent (wood); stool/worktop/island present"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Floor tile absent (wood); stool/worktop/island present",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-005.gpt-image-2.D-condition",
+          "scenario_id": "RP-005",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-005-D-condition.png",
+          "ai_decision": "reject",
+          "ai_reason": "Floor tile absent (wood); stool/worktop/island present",
+          "owner_decision": "reject",
+          "owner_reason": "Floor tile absent (wood); stool/worktop/island present",
+          "adjudicated_at": "2026-07-29T19:28:08.479Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

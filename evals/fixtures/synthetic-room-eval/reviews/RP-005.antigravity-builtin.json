@@ -5,114 +5,210 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "blue kitchen units",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "island",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "range cooker",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sink",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "pendant lights",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Blue units, island, range, sink, pendants present [reconciled from reviewer disagreement: was accept, second review reject]",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-005.antigravity-builtin.A-wide",
+          "scenario_id": "RP-005",
+          "provider": "Google",
+          "view_id": "A-wide",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-A-wide.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Blue units, island, range, sink, pendants present [reconciled from reviewer disagreement: was accept, second review reject]",
+          "owner_decision": "accept",
+          "owner_reason": "Blue units, island, range, sink, pendants present [reconciled from reviewer disagreement: was accept, second review reject]",
+          "adjudicated_at": "2026-07-29T19:20:16.071Z"
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "patio doors",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "entrance door",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "bar stools",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "floor tiles",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Readable Marriage's flour brand; the owner note confirms a binding brand failure."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Readable “Marriage’s” flour brand; patio doors/radiator/stools/tiles present",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-005.antigravity-builtin.B-reverse",
+          "scenario_id": "RP-005",
+          "provider": "Google",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-B-reverse.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Readable “Marriage’s” flour brand; patio doors/radiator/stools/tiles present",
+          "owner_decision": "accept",
+          "owner_reason": "Readable “Marriage’s” flour brand; patio doors/radiator/stools/tiles present",
+          "adjudicated_at": "2026-07-29T19:27:32.747Z"
+        },
+        "protocol_correction": {
+          "task_id": "RP-005.antigravity-builtin.B-reverse",
+          "replaces_decision": "accept",
+          "final_decision": "reject",
+          "reason": "Readable Marriage's flour brand; the owner note confirms a binding brand failure."
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "range cooker",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "extractor canopy",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "splashback",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "heat alarm",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Required heat alarm absent; the owner note confirms a binding missing-anchor failure."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Heat alarm absent (smoke detector only); Rangemaster-like branding also concerning",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-005.antigravity-builtin.C-inventory",
+          "scenario_id": "RP-005",
+          "provider": "Google",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-C-inventory.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Heat alarm absent (smoke detector only); Rangemaster-like branding also concerning",
+          "owner_decision": "accept",
+          "owner_reason": "Heat alarm absent (smoke detector only); Rangemaster-like branding also concerning",
+          "adjudicated_at": "2026-07-29T19:27:38.239Z"
+        },
+        "protocol_correction": {
+          "task_id": "RP-005.antigravity-builtin.C-inventory",
+          "replaces_decision": "accept",
+          "final_decision": "reject",
+          "reason": "Required heat alarm absent; the owner note confirms a binding missing-anchor failure."
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "quartz worktop",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "island cabinet",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "bar stool",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "floor tile",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Bar stool absent; floor tile absent (wood planks); worktop/island present"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Bar stool absent; floor tile absent (wood planks); worktop/island present",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-005.antigravity-builtin.D-condition",
+          "scenario_id": "RP-005",
+          "provider": "Google",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-D-condition.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Bar stool absent; floor tile absent (wood planks); worktop/island present",
+          "owner_decision": "reject",
+          "owner_reason": "Bar stool absent; floor tile absent (wood planks); worktop/island present",
+          "adjudicated_at": "2026-07-29T19:27:52.960Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

@@ -5,114 +5,188 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "walk-in shower",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "WC",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vanity basin",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "heated towel rail",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "stone wall tiles",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Walk-in shower, WC, vanity, towel rail, stone tiles present",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vanity unit",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "mirror",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "extractor vent",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "floor tiles",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Door/vanity/mirror/tiles present; ceiling disc may be vent or detector",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-006.gpt-image-2.B-reverse",
+          "scenario_id": "RP-006",
+          "provider": "OpenAI",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-006-B-reverse.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Door/vanity/mirror/tiles present; ceiling disc may be vent or detector",
+          "owner_decision": "accept",
+          "owner_reason": "Door/vanity/mirror/tiles present; ceiling disc may be vent or detector",
+          "adjudicated_at": "2026-07-29T19:22:20.648Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "rain shower",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "handset",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "mixer controls",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "glass screen",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "floor drain",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Required floor drain absent; the owner note confirms a binding missing-anchor failure."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Floor drain absent; rain/handset/mixer/glass present",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-006.gpt-image-2.C-inventory",
+          "scenario_id": "RP-006",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-006-C-inventory.png",
+          "ai_decision": "reject",
+          "ai_reason": "Floor drain absent; rain/handset/mixer/glass present",
+          "owner_decision": "accept",
+          "owner_reason": "Floor drain absent; rain/handset/mixer/glass present",
+          "adjudicated_at": "2026-07-29T19:28:14.291Z"
+        },
+        "protocol_correction": {
+          "task_id": "RP-006.gpt-image-2.C-inventory",
+          "replaces_decision": "accept",
+          "final_decision": "reject",
+          "reason": "Required floor drain absent; the owner note confirms a binding missing-anchor failure."
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "vanity drawer",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "basin edge",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "mixer tap",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "silicone joint",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Chip + drawer/basin/tap present; silicone joint not clearly shown",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-006.gpt-image-2.D-condition",
+          "scenario_id": "RP-006",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-006-D-condition.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Chip + drawer/basin/tap present; silicone joint not clearly shown",
+          "owner_decision": "accept",
+          "owner_reason": "Chip + drawer/basin/tap present; silicone joint not clearly shown",
+          "adjudicated_at": "2026-07-29T19:22:24.435Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

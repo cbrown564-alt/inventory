@@ -1,0 +1,392 @@
+{
+  "schema_version": 1,
+  "record_type": "gpt_image_2_retry_generation_provenance",
+  "recorded_at": "2026-07-30T00:44:20.213455+00:00",
+  "dataset_id": "synthetic-room-eval",
+  "generation_policy": {
+    "authorized_path": "Codex built-in imagegen only",
+    "image_api_used": false,
+    "reference_rule": "Every retry used the accepted same-packet OpenAI A-wide frame as the explicit local reference image."
+  },
+  "retry_count": 18,
+  "retries": [
+    {
+      "task_id": "RP-003.gpt-image-2.C-inventory",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:05:44.718447+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a recently refurbished compact UK terrace with inexpensive white fittings. This is view C-inventory: facing the cooking wall; medium fixtures view. Visible evidence required in this view: extractor hood, ceramic hob, oven, heat alarm, sockets. Intended visible defects: none. Negative controls: hob reflection is not a stain. The room is clean and tidy with clear worktops under bright overcast daylight. Across views preserve: same white shaker units, oak-effect worktop, black appliances and rear window. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "c922283699789d4d78682d066fb57ae22a379ebbb19e8eeccea04c970fbad1d6",
+      "output_path": "images/openai/gpt-image-2/RP-003-C-inventory.png",
+      "output_sha256": "484371bee7922292ac99fcaf48392447b051dd2424ca9946a3005b31fccaf859",
+      "reference_image": {
+        "task_id": "RP-003.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-003-A-wide.png",
+        "sha256": "69c070dee258617fefaed0f9c6b13bd9119a25bfbad66f9bd1fa946accd06dd6",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-004.gpt-image-2.C-inventory",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:07:05.059169+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a dated 1970s UK maisonette with wood-effect cabinets. This is view C-inventory: facing the sink run; medium fixtures view. Visible evidence required in this view: sink, draining board, mixer tap, sockets, under-counter fridge. Intended visible defects: none. Negative controls: water reflection is not a stain. The room is ordinarily occupied with a few dishes and small appliances under warm artificial ceiling light. Across views preserve: same wood-effect units, cream laminate worktop, freestanding cooker and patterned floor. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "659c5c972b9c29fb8ce1617360c66f9c7df4b436f5eeb49daa4f440dbf7bf2e0",
+      "output_path": "images/openai/gpt-image-2/RP-004-C-inventory.png",
+      "output_sha256": "fd14f6ba411c16591216ea5216a5fa0e8bb4094ed709e517e690e5ac6b3a7a1b",
+      "reference_image": {
+        "task_id": "RP-004.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-004-A-wide.png",
+        "sha256": "07d4e347fe0823ca480c6b863468759a9fafe550cb353b76ee8016cac44ef7b7",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-005.gpt-image-2.B-reverse",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:08:20.650228+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a busy family kitchen in a modest UK semi-detached house. This is view B-reverse: far side of the island; wide establishing view. Visible evidence required in this view: patio doors, radiator, entrance door, bar stools, floor tiles. Intended visible defects: none. Negative controls: window reflection is not a stain. The room is noticeably cluttered but inspectable with groceries and cookware under mixed daylight and warm pendant light. Across views preserve: same blue units, pale quartz worktop, range cooker and island positions. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "a9f7b3b89b8fd9f674a409d0e8bfbc69e51976925315d377487720ec432fe9c3",
+      "output_path": "images/openai/gpt-image-2/RP-005-B-reverse.png",
+      "output_sha256": "f108a928af9673bc30b4b6aa6263c05ed56b3b769f6f5fd69c29126e17859973",
+      "reference_image": {
+        "task_id": "RP-005.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-005-A-wide.png",
+        "sha256": "24900a64a24067834f1662ef7f1bae4d08d6a1a2330631e6601bf5f3364ef297",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-005.gpt-image-2.C-inventory",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:09:23.630405+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a busy family kitchen in a modest UK semi-detached house. This is view C-inventory: facing the range cooker; medium fixtures view. Visible evidence required in this view: range cooker, extractor canopy, splashback, sockets, heat alarm. Intended visible defects: none. Negative controls: grease sheen does not prove poor cleaning. The room is noticeably cluttered but inspectable with groceries and cookware under mixed daylight and warm pendant light. Across views preserve: same blue units, pale quartz worktop, range cooker and island positions. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "2f3d014274d1239151b52d7d83d0119d8297c01a701c8d96369af509996c976f",
+      "output_path": "images/openai/gpt-image-2/RP-005-C-inventory.png",
+      "output_sha256": "f4e9db460482e355c2abe215a11466923ac920e21d68d26b3368d5ab4554af2e",
+      "reference_image": {
+        "task_id": "RP-005.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-005-A-wide.png",
+        "sha256": "24900a64a24067834f1662ef7f1bae4d08d6a1a2330631e6601bf5f3364ef297",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-005.gpt-image-2.D-condition",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:10:26.339579+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a busy family kitchen in a modest UK semi-detached house. This is view D-condition: close view along the island edge; condition detail. Visible evidence required in this view: quartz worktop, island cabinet, bar stool, floor tile. Intended visible defects: none. Negative controls: natural quartz vein is not a crack. The room is noticeably cluttered but inspectable with groceries and cookware under mixed daylight and warm pendant light. Across views preserve: same blue units, pale quartz worktop, range cooker and island positions. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "c88ef6428300824d2f1c07670e7c3e3a79d9befc9b0a50ffde12a3453e30a045",
+      "output_path": "images/openai/gpt-image-2/RP-005-D-condition.png",
+      "output_sha256": "ac55b63fb17fc1d20c5b329364e5dff5e9da0376ae522f678aff101881ae03bc",
+      "reference_image": {
+        "task_id": "RP-005.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-005-A-wide.png",
+        "sha256": "24900a64a24067834f1662ef7f1bae4d08d6a1a2330631e6601bf5f3364ef297",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-006.gpt-image-2.C-inventory",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:11:24.902740+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a bathroom in a clean modern bathroom in a UK build-to-rent flat. This is view C-inventory: facing the shower controls; medium fixtures view. Visible evidence required in this view: rain shower, handset, mixer controls, glass screen, floor drain. Intended visible defects: none. Negative controls: water droplets do not prove damp. The room is clean and tidy with minimal toiletries under neutral ceiling spots and soft daylight. Across views preserve: same white suite, pale stone tiles, walk-in shower and chrome towel rail. Avoid: people, logos, readable text, watermark, impossible geometry, extra sanitary fixtures. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "81bd85c9f0f6bdc5589728ee23f0603e3e992f73783ecd38699ad1fff5132099",
+      "output_path": "images/openai/gpt-image-2/RP-006-C-inventory.png",
+      "output_sha256": "966ad5bf4acb843bbb14268625a79378e7363c69f911f20ce2ec5e81e323ef98",
+      "reference_image": {
+        "task_id": "RP-006.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-006-A-wide.png",
+        "sha256": "88d76e41a0b559a5f897d9f6d35cbb298e14fe3d4f16e2478355e06a6a855fe0",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-009.gpt-image-2.C-inventory",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:12:25.770711+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a bedroom in a furnished double bedroom in a modest UK rental house. This is view C-inventory: beside the bed facing the bay; medium fixtures view. Visible evidence required in this view: bay window, curtains, radiator, blind, sockets. Intended visible defects: none. Negative controls: window shadow is not damp. The room is ordinarily occupied with made bed and a few belongings under warm bedside lamps with weak window daylight. Across views preserve: same double bed, oak wardrobes, cream carpet and bay window. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "e7dddc6daf184bbc280cde17bf053b2798736cb5f2e3d2aa1d9610b563f71936",
+      "output_path": "images/openai/gpt-image-2/RP-009-C-inventory.png",
+      "output_sha256": "9d9bd5cda01112c27ca062c826dc0aab5d6aea915652d518b77984a0bd479342",
+      "reference_image": {
+        "task_id": "RP-009.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-009-A-wide.png",
+        "sha256": "6eb364bbe95da6993d7a7c6f99e89304e73af4f1ff34641528b00742f429ac96",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-010.gpt-image-2.C-inventory",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:13:45.373872+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a bedroom in a compact child's bedroom in a UK family flat. This is view C-inventory: facing the desk wall; medium fixtures view. Visible evidence required in this view: desk, chair, sockets, radiator, window blind. Intended visible defects: none. Negative controls: no cracked socket. The room is noticeably cluttered but inspectable with toys and books under flash-like phone illumination at dusk. Across views preserve: same single bed, white wardrobe, blue rug and small window. Avoid: people, faces, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "d2e9e0efcee33184304ad36b667a836e75eea380bd9827c96791f819497bac1d",
+      "output_path": "images/openai/gpt-image-2/RP-010-C-inventory.png",
+      "output_sha256": "5e3bd569f27711b39aa46561813d95e6dc324e210e38304c51d2c14cc0003a5f",
+      "reference_image": {
+        "task_id": "RP-010.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-010-A-wide.png",
+        "sha256": "3137079b8700635da65a4ef328431d168bef600a4312b2725cfa46f39b10bc08",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-011.gpt-image-2.C-inventory",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:15:01.809200+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a living room in a furnished 1980s UK flat with neutral decor. This is view C-inventory: beside the sofa facing outside; medium fixtures view. Visible evidence required in this view: balcony door, vertical blinds, radiator, thermostat, sockets. Intended visible defects: none. Negative controls: glass reflection is not a stain. The room is ordinarily occupied with cushions and a few objects under mixed window backlight and floor lamp. Across views preserve: same grey sofa, timber television unit, beige carpet and balcony door. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "25ab9be84a87f5bf6b312843739966a3eebbfd3d641a4125d9e6fb3507f5ff23",
+      "output_path": "images/openai/gpt-image-2/RP-011-C-inventory.png",
+      "output_sha256": "ca7f2511d30efe7e23260afdae5d16bbf21060642a25913cd7163de238038189",
+      "reference_image": {
+        "task_id": "RP-011.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-011-A-wide.png",
+        "sha256": "a337a4a594ebd866d061bb381a49659b433af4e1b3b890782a77230b379de8d5",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-012.gpt-image-2.B-reverse",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:16:20.587539+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a living room in a colourful rented lounge in a Victorian UK terrace. This is view B-reverse: beside the fireplace looking back; wide establishing view. Visible evidence required in this view: door, armchair, bay window, radiator, floorboards. Intended visible defects: none. Negative controls: deep corner shadow is not damp. The room is noticeably cluttered but inspectable with books and throws under warm artificial light with deep corner shadows. Across views preserve: same green walls, patterned rug, brown leather sofa and fireplace. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "b54bac0539692464de88ff1a9469b268319fcd9eae75268bfc9a64b951034f62",
+      "output_path": "images/openai/gpt-image-2/RP-012-B-reverse.png",
+      "output_sha256": "c21ed0263f2eef53e205a6cb27b2c4d410c45913860d0b47b32d012cd6388b54",
+      "reference_image": {
+        "task_id": "RP-012.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-012-A-wide.png",
+        "sha256": "0272b4a1f5441c1a860e83fff482cd60dbb16e913c3ef7d5c2947afd491e55cc",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-012.gpt-image-2.C-inventory",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:17:22.345018+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a living room in a colourful rented lounge in a Victorian UK terrace. This is view C-inventory: facing the fireplace wall; medium fixtures view. Visible evidence required in this view: fireplace surround, mantel, wall lights, sockets, skirting. Intended visible defects: none. Negative controls: deliberately distressed paint is not peeling damage. The room is noticeably cluttered but inspectable with books and throws under warm artificial light with deep corner shadows. Across views preserve: same green walls, patterned rug, brown leather sofa and fireplace. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "f03232175b7310326bef3f2bb5ef066c6c326e015c3395f833532eebe3c766f9",
+      "output_path": "images/openai/gpt-image-2/RP-012-C-inventory.png",
+      "output_sha256": "b245db2b3e8ddd74141e3318bf0e6440dd987521d661a66a732267af70025084",
+      "reference_image": {
+        "task_id": "RP-012.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-012-A-wide.png",
+        "sha256": "0272b4a1f5441c1a860e83fff482cd60dbb16e913c3ef7d5c2947afd491e55cc",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-013.gpt-image-2.C-inventory",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:19:50.914882+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a living room in a small studio lounge partly hidden by moving boxes. This is view C-inventory: between boxes facing the window; medium fixtures view. Visible evidence required in this view: window, roller blind, radiator, sockets, skirting. Intended visible defects: none. Negative controls: partially hidden socket is not assumed damaged. The room is partially obscured and deliberately difficult but walkable under underexposed daylight through one small window. Across views preserve: same charcoal sofa, nested tables, boxed belongings and laminate floor. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "2dbd1f9239d307b730e297934065e393f683f36f3de3d26d26304a0e20598659",
+      "output_path": "images/openai/gpt-image-2/RP-013-C-inventory.png",
+      "output_sha256": "5f2ae2622f5ea5115252013cbe59a435bd97f84845aa6dfe1ac167dfce0181cb",
+      "reference_image": {
+        "task_id": "RP-013.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-013-A-wide.png",
+        "sha256": "b2e19525eec763506c9d8b5dd045c27e9c17724e11222b17b23a88ff4db22572",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-014.gpt-image-2.D-condition",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:21:31.602004+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a entrance hall in a narrow communal-entry flat hallway with dated finishes. This is view D-condition: close view of front door lower panel; condition detail. Visible evidence required in this view: front door, threshold, door seal, runner. Intended visible defects: three pale scuff marks low on the inner face of the front door. Negative controls: wood grain is not scratching. The room is ordinarily occupied with coats and shoes under warm ceiling light without daylight. Across views preserve: same cream walls, striped runner, entryphone and dark front door. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "f1f3f807685e90daeddb91f60e456928402becec30fdb28fd2e223007a3b16a7",
+      "output_path": "images/openai/gpt-image-2/RP-014-D-condition.png",
+      "output_sha256": "8acaceb8d5b0b985496ab048bb73d4b3bea44780bad3c92c3604efc5d1108b20",
+      "reference_image": {
+        "task_id": "RP-014.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-014-A-wide.png",
+        "sha256": "c350c1fce2a5591afb62da5a7d8a140fdab24bafdacdb2f5a374fbe7208a21a1",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-015.gpt-image-2.D-condition",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:23:25.207135+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a entrance hall in a family house entrance with open coat storage. This is view D-condition: low view across tiles and mat; condition detail. Visible evidence required in this view: floor tiles, doormat, threshold strip, skirting. Intended visible defects: none. Negative controls: mud-toned mat pattern is not a floor stain. The room is noticeably cluttered but inspectable with shoes, bags and coats under strong daylight through glazed front door. Across views preserve: same pale walls, tiled floor, glazed door and open coat bench. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "7488c964c4cde22fb6147e2b18a4eeb3c2aa11df8cf3fd0cc4e6f8dad6c36d56",
+      "output_path": "images/openai/gpt-image-2/RP-015-D-condition.png",
+      "output_sha256": "c304b000e027130a2f90f3cffe3e02850a03b82f96185c8cdb98676238953c70",
+      "reference_image": {
+        "task_id": "RP-015.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-015-A-wide.png",
+        "sha256": "fa2f17e2ecb0790ffbcb4468e94457c05e5593eaf4955d6733c3095a073191ee",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-018.gpt-image-2.D-condition",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:25:13.677853+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a utility room in a working utility room in a UK family house. This is view D-condition: close view beneath the utility sink; condition detail. Visible evidence required in this view: sink cabinet, plinth, vinyl floor, pipe boxing. Intended visible defects: small swollen patch along the bottom edge of the sink cabinet door. Negative controls: printed vinyl flecks are not mould. The room is noticeably cluttered but inspectable with laundry supplies under cool fluorescent ceiling light. Across views preserve: same washing machine, tumble dryer, white cupboards and speckled vinyl floor. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "21fc027596b972c408fafeaad02e37c64a5ba7c060fa715cb4645ea66876eadb",
+      "output_path": "images/openai/gpt-image-2/RP-018-D-condition.png",
+      "output_sha256": "a367ef2d8e5c99cc08ad6c6c76427bdbef00cd4ddd78a93277972c7c34d83597",
+      "reference_image": {
+        "task_id": "RP-018.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-018-A-wide.png",
+        "sha256": "90340ecf27fc0ec00b0fde3a79a4292ef11d8d54973e6fd70cece488673883ad",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-019.gpt-image-2.C-inventory",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:27:26.041668+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a utility cupboard in a deep apartment utility cupboard crowded with household storage. This is view C-inventory: facing the upper services; medium fixtures view. Visible evidence required in this view: boiler, consumer unit, isolator switches, air vent, pipework. Intended visible defects: none. Negative controls: pipe joint is not a crack. The room is partially obscured and deliberately difficult but accessible under single harsh bulb with deep shadows. Across views preserve: same stacked washer dryer, boiler, fuse box and crowded shelves. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "19416f49f32349d93dc44eed8912c586ff832540b297ef9078b132d93df802e1",
+      "output_path": "images/openai/gpt-image-2/RP-019-C-inventory.png",
+      "output_sha256": "04e984741d878ee254012d3ff8f2842aa806bfc2a1954867c73fcd6be9d1df39",
+      "reference_image": {
+        "task_id": "RP-019.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-019-A-wide.png",
+        "sha256": "b4171f990b80ed85dfa0c0a159d9dd95403e2ac59d068c7f940a002953604717",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-019.gpt-image-2.D-condition",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:28:24.351148+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a utility cupboard in a deep apartment utility cupboard crowded with household storage. This is view D-condition: low view behind storage basket; condition detail. Visible evidence required in this view: vinyl floor, plinth, pipe boxing, basket edge. Intended visible defects: none. Negative controls: unseen floor is not claimed clean or damaged. The room is partially obscured and deliberately difficult but accessible under single harsh bulb with deep shadows. Across views preserve: same stacked washer dryer, boiler, fuse box and crowded shelves. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "200f808755d5b06f539521858db2d55657875f31784d55ce00e1ea0bf23fcf82",
+      "output_path": "images/openai/gpt-image-2/RP-019-D-condition.png",
+      "output_sha256": "8421fcb99406af88221f966b8c417411fdb4238c57b6319503599e42ed425ad0",
+      "reference_image": {
+        "task_id": "RP-019.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-019-A-wide.png",
+        "sha256": "b4171f990b80ed85dfa0c0a159d9dd95403e2ac59d068c7f940a002953604717",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    },
+    {
+      "task_id": "RP-020.gpt-image-2.D-condition",
+      "attempt": 2,
+      "provider": "OpenAI",
+      "product": "Codex built-in image generation",
+      "model_display_name": "GPT Image 2",
+      "generation_path": "Codex built-in imagegen / GPT Image 2",
+      "metered_api_call": false,
+      "operator": "Codex GPT Image 2 built-in imagegen",
+      "generated_at": "2026-07-30T00:30:07.157905+00:00",
+      "exact_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a stairs and landing in a carpeted staircase in a maintained UK terrace. This is view D-condition: close view of lower steps; condition detail. Visible evidence required in this view: stair carpet, carpet rods, skirting string, newel post. Intended visible defects: none. Negative controls: compressed carpet pile is not damage. The room is ordinarily occupied but clear of objects under daylight from a small landing window. Across views preserve: same beige stair carpet, white balustrade, landing window and pendant. Avoid: people, logos, readable text, watermark, impossible geometry, unsafe missing balustrade. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "prompt_sha256": "88262c46f679dcaa9a3e356b984e8f09e55023d98aaabae9de6ba7ba626f8637",
+      "output_path": "images/openai/gpt-image-2/RP-020-D-condition.png",
+      "output_sha256": "9758013142f80beb25915f36e39416835282af9a058a074b9ed85de7518b809e",
+      "reference_image": {
+        "task_id": "RP-020.gpt-image-2.A-wide",
+        "path": "images/openai/gpt-image-2/RP-020-A-wide.png",
+        "sha256": "0e85a9bf6825275f4699a0cc56667edc0166262f1bdbdbab81793c8db81ff8b3",
+        "identity_note": "The built-in imagegen path exposed a local reference image, not a provider reference-image ID."
+      }
+    }
+  ]
+}

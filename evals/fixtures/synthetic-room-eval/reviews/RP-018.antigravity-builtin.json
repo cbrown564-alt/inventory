@@ -5,114 +5,200 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "washing machine",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "tumble dryer",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "utility sink",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "wall cupboards",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Flat illustration; not photographic."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Flat illustration; not photographic.",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-018.antigravity-builtin.A-wide",
+          "scenario_id": "RP-018",
+          "provider": "Google",
+          "view_id": "A-wide",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-018-A-wide.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Flat illustration; not photographic.",
+          "owner_decision": "reject",
+          "owner_reason": "Flat illustration; not photographic.",
+          "adjudicated_at": "2026-07-29T19:30:52.344Z"
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "coat hooks",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "shelving",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Flat illustration; not photographic."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Flat illustration; not photographic.",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-018.antigravity-builtin.B-reverse",
+          "scenario_id": "RP-018",
+          "provider": "Google",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-018-B-reverse.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Flat illustration; not photographic.",
+          "owner_decision": "reject",
+          "owner_reason": "Flat illustration; not photographic.",
+          "adjudicated_at": "2026-07-29T19:30:52.752Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "washing machine",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "tumble dryer",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "isolator switches",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "air vent",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Flat illustration; not photographic."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Flat illustration; not photographic.",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-018.antigravity-builtin.C-inventory",
+          "scenario_id": "RP-018",
+          "provider": "Google",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-018-C-inventory.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Flat illustration; not photographic.",
+          "owner_decision": "reject",
+          "owner_reason": "Flat illustration; not photographic.",
+          "adjudicated_at": "2026-07-29T19:30:53.182Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "sink cabinet",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "plinth",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "pipe boxing",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Flat illustration; intended swollen cabinet edge not photographically evidenced."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Flat illustration; intended swollen cabinet edge not photographically evidenced.",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-018.antigravity-builtin.D-condition",
+          "scenario_id": "RP-018",
+          "provider": "Google",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-018-D-condition.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Flat illustration; intended swollen cabinet edge not photographically evidenced.",
+          "owner_decision": "reject",
+          "owner_reason": "Flat illustration; intended swollen cabinet edge not photographically evidenced.",
+          "adjudicated_at": "2026-07-29T19:30:54.444Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

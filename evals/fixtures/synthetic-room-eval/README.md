@@ -59,22 +59,21 @@ is directional, so no prompt winner is frozen.
 
 ## Current pilot status
 
-Phase 2 is complete: all 25 scenarios, 200 tasks, review templates and hashed
-development/validation/sealed splits exist. Phase 3 is paused at the 29 Jul
-13:20 operator checkpoint. Across the full queue there are 8
-`pass_a_accepted`, 146 `review_pending`, 4 `generator_failed` and 42 `pending`
-tasks; the last 40 pending tasks are the untouched sealed split. Within
-development/validation, only Google `RP-016 C-inventory` and `D-condition`
-remain to generate.
+Phase 2 is complete. In Phase 3, the complete 146-frame Pass A plus owner
+adjudication has been applied: 93 frames were accepted and 53 failed first
+attempts were archived. The queue now contains 101 `pass_a_accepted`, 39
+`review_pending`, 14 `retry_pending`, 4 `generator_failed` and 42 `pending`
+tasks; the last 40 pending tasks are the untouched sealed split. Eighteen GPT
+Image 2 retries and 21 Google retries are ready for dual independent retry
+Pass A. Fourteen Google retry files and Google `RP-016 C-inventory` and
+`D-condition` remain missing.
 
-The GPT development/validation cohort is complete through RP-020. Google has
-the earlier terminal RP-003 failure and one partial packet (`RP-016`, A-wide
-and B-reverse present). Complete file packets RP-009, RP-012 and RP-018 came
-from wrapper-error runs and need provenance review as well as Pass A. Resume
-from `generation_runs/antigravity/pause-2026-07-29-1320.json`, keep the
-two-attempt rule, and do not start prompt or architecture selection until the
-required reviews are complete. Generated files remain provisional until
-independent review.
+Resume from `generation_runs/antigravity/pause-2026-07-30-0156.json` after
+the reported quota reset. The Google generation provenance audit in
+`reports/` records that Google RP-009 and RP-012 lack successful raw
+generation records and RP-018 has only an integrity recovery ledger. Those
+packets remain provisional and are excluded from Pass B. Do not start prompt
+or architecture selection until the required reviews are complete.
 
 The review path is AI-first. An AI reviewer independent of the generation
 call completes Pass A and Pass B. A second independent AI checks every defect,
@@ -92,10 +91,34 @@ rules.
 .\.venv\Scripts\python.exe -m evals.synthetic.build_review
 .\.venv\Scripts\python.exe -m evals.synthetic.generate_antigravity --workers 1
 .\.venv\Scripts\python.exe -m evals.synthetic.record_outputs --provider Google --operator "Antigravity operator name" --cli-version "Antigravity CLI 1.1.8"
+.\.venv\Scripts\python.exe -m evals.synthetic.build_pass_a_gallery
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_owner_adjudications reports/phase3-pass-a-review-2026-07-29.json owner-adjudications.json --corrections reports/pass-a-protocol-corrections-2026-07-30.json --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_owner_adjudications reports/phase3-pass-a-review-2026-07-29.json owner-adjudications.json --corrections reports/pass-a-protocol-corrections-2026-07-30.json --prepare-retries
+.\.venv\Scripts\python.exe -m evals.synthetic.record_imagegen_retries
+.\.venv\Scripts\python.exe -m evals.synthetic.audit_google_provenance
+.\.venv\Scripts\python.exe -m evals.synthetic.review_pass_a --output reports/phase3-retry-pass-a-review-2026-07-30.json
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_retry_pass_a reports/phase3-retry-pass-a-review-2026-07-30.json --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_retry_pass_a reports/phase3-retry-pass-a-review-2026-07-30.json
+.\.venv\Scripts\python.exe -m evals.synthetic.review_pass_b --output reports/phase3-pass-b-review-2026-07-30.json
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_pass_b reports/phase3-pass-b-review-2026-07-30.json --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_pass_b reports/phase3-pass-b-review-2026-07-30.json
 .\.venv\Scripts\python.exe -m evals.synthetic.run_eval --dry-run
 .\.venv\Scripts\python.exe -m evals.synthetic.run_eval
 .\.venv\Scripts\python.exe -m evals.synthetic.score
 ```
+
+`build_pass_a_gallery` writes `reports/pass-a-owner-gallery.html` from the latest
+`phase3-pass-a-review-*.json`. Serve the dataset root so image paths resolve:
+
+```powershell
+.\.venv\Scripts\python.exe -m http.server 8766 --directory evals/fixtures/synthetic-room-eval
+```
+
+Then open `http://127.0.0.1:8766/reports/pass-a-owner-gallery.html`. Export JSON
+from the gallery. `apply_owner_adjudications` combines the complete AI review,
+owner export and any explicit protocol-correction record. Always dry-run first;
+`--prepare-retries` archives rejected originals and marks their tasks ready for
+the final allowed attempt.
 
 `generate_antigravity` invokes the subscription CLI; it does not use image API
 credentials. Use `--require-complete` only after all 200 task rows say

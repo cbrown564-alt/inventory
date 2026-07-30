@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "record_type": "google_generation_provenance_audit",
+  "audited_at": "2026-07-30T00:54:58.658399+00:00",
+  "rule": "File integrity and task hashes do not substitute for a successful raw generation record. Integrity-only packets remain provisional.",
+  "packets": [
+    {
+      "packet_id": "RP-009.antigravity-builtin",
+      "integrity_verified": true,
+      "generation_provenance_status": "insufficient",
+      "pass_b_eligible": false,
+      "reason": "Current files pass local integrity checks, but one or more hashes lack a successful raw generation record.",
+      "outputs": [
+        {
+          "task_id": "RP-009.antigravity-builtin.A-wide",
+          "path": "images/antigravity/builtin/RP-009-A-wide.jpg",
+          "sha256": "063f2960f9e6ef6208662265403ec75b831381d1ee246fe3cc76cb6669ec2321",
+          "matches_task_record": true,
+          "prompt_sha256": "d20623aba7691e3fc1b1c2077d94672d504e125861716c0948ef738755091e29",
+          "format": "JPEG",
+          "width": 1792,
+          "height": 1024,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": false
+        },
+        {
+          "task_id": "RP-009.antigravity-builtin.B-reverse",
+          "path": "images/antigravity/builtin/RP-009-B-reverse.jpg",
+          "sha256": "9f0c03a91312076027d096fc0e30d46d48168cc512d03bba6ff1a7e65ff4a0cd",
+          "matches_task_record": true,
+          "prompt_sha256": "b8f27aabd4779f27a290fdb5431c8f46d05532a109576f4b579400ef04e60789",
+          "format": "JPEG",
+          "width": 1792,
+          "height": 1024,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": false
+        },
+        {
+          "task_id": "RP-009.antigravity-builtin.C-inventory",
+          "path": "images/antigravity/builtin/RP-009-C-inventory.jpg",
+          "sha256": "ef0837eadd750749edb092fb2163e619c7c7274270dc2827a4f0d8df6caea638",
+          "matches_task_record": true,
+          "prompt_sha256": "e7dddc6daf184bbc280cde17bf053b2798736cb5f2e3d2aa1d9610b563f71936",
+          "format": "JPEG",
+          "width": 1792,
+          "height": 1024,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": false
+        },
+        {
+          "task_id": "RP-009.antigravity-builtin.D-condition",
+          "path": "images/antigravity/builtin/RP-009-D-condition.jpg",
+          "sha256": "f608f694ac8ccab58999a77df4c4f7b749940dc3f9f5e6eee18b6aa022f6f075",
+          "matches_task_record": true,
+          "prompt_sha256": "d76aac72afc4a1f4d1e49ab7ede0f5991504bfc0a36165c5709a2eead90400d7",
+          "format": "JPEG",
+          "width": 1792,
+          "height": 1024,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": false
+        }
+      ],
+      "generation_records": []
+    },
+    {
+      "packet_id": "RP-012.antigravity-builtin",
+      "integrity_verified": true,
+      "generation_provenance_status": "insufficient",
+      "pass_b_eligible": false,
+      "reason": "Current files pass local integrity checks, but one or more hashes lack a successful raw generation record.",
+      "outputs": [
+        {
+          "task_id": "RP-012.antigravity-builtin.A-wide",
+          "path": "images/antigravity/builtin/RP-012-A-wide.jpg",
+          "sha256": "6017894d8e0afcd2532ce2647c048958459c3ae50e171469469f7a5db8faab43",
+          "matches_task_record": true,
+          "prompt_sha256": "d7104899b149f51f8efb74308f13d4ea6beeb505ab566417f26445c3b7fe5725",
+          "format": "JPEG",
+          "width": 1792,
+          "height": 1024,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": false
+        },
+        {
+          "task_id": "RP-012.antigravity-builtin.B-reverse",
+          "path": "images/antigravity/builtin/RP-012-B-reverse.jpg",
+          "sha256": "d1505b9c4ffdd857a7a5a6cf4f399b20e248d920c6cbd5fc20e7c7d963906d64",
+          "matches_task_record": true,
+          "prompt_sha256": "b54bac0539692464de88ff1a9469b268319fcd9eae75268bfc9a64b951034f62",
+          "format": "JPEG",
+          "width": 1792,
+          "height": 1024,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": false
+        },
+        {
+          "task_id": "RP-012.antigravity-builtin.C-inventory",
+          "path": "images/antigravity/builtin/RP-012-C-inventory.jpg",
+          "sha256": "c512014bb16957782e370837ec235170ba45cbf2ffa3e0b2c882668d3a812825",
+          "matches_task_record": true,
+          "prompt_sha256": "f03232175b7310326bef3f2bb5ef066c6c326e015c3395f833532eebe3c766f9",
+          "format": "JPEG",
+          "width": 1792,
+          "height": 1024,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": false
+        },
+        {
+          "task_id": "RP-012.antigravity-builtin.D-condition",
+          "path": "images/antigravity/builtin/RP-012-D-condition.jpg",
+          "sha256": "1688fe25c58f96b1df9e37b9eda2525097d2d7d13a270140c7657af64887241c",
+          "matches_task_record": true,
+          "prompt_sha256": "32cda6125d68585c44a4d748aea3af5737b9b58fca6d5e56a8f280e54676288e",
+          "format": "JPEG",
+          "width": 1792,
+          "height": 1024,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": false
+        }
+      ],
+      "generation_records": []
+    },
+    {
+      "packet_id": "RP-018.antigravity-builtin",
+      "integrity_verified": true,
+      "generation_provenance_status": "integrity_only",
+      "pass_b_eligible": false,
+      "reason": "All files are intact and pinned by a recovery ledger, but no successful raw generation response proves their origin.",
+      "outputs": [
+        {
+          "task_id": "RP-018.antigravity-builtin.A-wide",
+          "path": "images/antigravity/builtin/RP-018-A-wide.jpg",
+          "sha256": "a1714cc2df972a4246175d9ac94d0ffff13c0aa7abbbf5e5c0aeb0cda1d62321",
+          "matches_task_record": true,
+          "prompt_sha256": "84c7198a34cd4106e3bcc657139683a1c93d642a4348b0861454ec7970ad487b",
+          "format": "JPEG",
+          "width": 1024,
+          "height": 768,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": true
+        },
+        {
+          "task_id": "RP-018.antigravity-builtin.B-reverse",
+          "path": "images/antigravity/builtin/RP-018-B-reverse.jpg",
+          "sha256": "6c14377b4e0d1d9df1f00ccc6974077bf4b6ca0af3b7c4286fa40935dd0613cb",
+          "matches_task_record": true,
+          "prompt_sha256": "202981da3742a5182335ce4a20973682846f0bef153b1c530fdd0a9108146ec3",
+          "format": "JPEG",
+          "width": 1024,
+          "height": 768,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": true
+        },
+        {
+          "task_id": "RP-018.antigravity-builtin.C-inventory",
+          "path": "images/antigravity/builtin/RP-018-C-inventory.jpg",
+          "sha256": "1930894c7331087d0cb58becd910a690af025f3f883d4b511aec14b674f0737d",
+          "matches_task_record": true,
+          "prompt_sha256": "cafe6d66303bf2366a3a8234ff9fe6e05d9b422b7c54e8c5bfe36ff2b4434549",
+          "format": "JPEG",
+          "width": 1024,
+          "height": 768,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": true
+        },
+        {
+          "task_id": "RP-018.antigravity-builtin.D-condition",
+          "path": "images/antigravity/builtin/RP-018-D-condition.jpg",
+          "sha256": "971698e33b5f3cf29ca35357d63505f9d6a6cb78d475afcbd9970a0ea248809d",
+          "matches_task_record": true,
+          "prompt_sha256": "21fc027596b972c408fafeaad02e37c64a5ba7c060fa715cb4645ea66876eadb",
+          "format": "JPEG",
+          "width": 1024,
+          "height": 768,
+          "matched_successful_run": false,
+          "matched_recovery_ledger": true
+        }
+      ],
+      "generation_records": [
+        {
+          "path": "generation_runs/antigravity/RP-018-attempt-2.json",
+          "status": "files_recovered_after_wrapper_error",
+          "has_successful_raw_cli_response": false,
+          "output_hashes": {
+            "RP-018.antigravity-builtin.A-wide": "a1714cc2df972a4246175d9ac94d0ffff13c0aa7abbbf5e5c0aeb0cda1d62321",
+            "RP-018.antigravity-builtin.B-reverse": "6c14377b4e0d1d9df1f00ccc6974077bf4b6ca0af3b7c4286fa40935dd0613cb",
+            "RP-018.antigravity-builtin.C-inventory": "1930894c7331087d0cb58becd910a690af025f3f883d4b511aec14b674f0737d",
+            "RP-018.antigravity-builtin.D-condition": "971698e33b5f3cf29ca35357d63505f9d6a6cb78d475afcbd9970a0ea248809d"
+          }
+        }
+      ]
+    }
+  ]
+}

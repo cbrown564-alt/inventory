@@ -5,114 +5,172 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "leather sofa",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "patterned rug",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "fireplace",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "bookshelves",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "coffee table",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "All A anchors; bay clearly at far end",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "armchair",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "bay window",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "floorboards",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "**Required bay window absent** — flat back wall with door/radiator only; other B anchors present"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "**Required bay window absent** — flat back wall with door/radiator only; other B anchors present",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-012.gpt-image-2.B-reverse",
+          "scenario_id": "RP-012",
+          "provider": "OpenAI",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-012-B-reverse.png",
+          "ai_decision": "reject",
+          "ai_reason": "**Required bay window absent** — flat back wall with door/radiator only; other B anchors present",
+          "owner_decision": "reject",
+          "owner_reason": "**Required bay window absent** — flat back wall with door/radiator only; other B anchors present",
+          "adjudicated_at": "2026-07-29T19:29:59.496Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "fireplace surround",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "mantel",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "wall lights",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Fireplace/mantel/wall light/bay present; **sockets absent**"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Fireplace/mantel/wall light/bay present; **sockets absent**",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-012.gpt-image-2.C-inventory",
+          "scenario_id": "RP-012",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-012-C-inventory.png",
+          "ai_decision": "reject",
+          "ai_reason": "Fireplace/mantel/wall light/bay present; **sockets absent**",
+          "owner_decision": "reject",
+          "owner_reason": "Fireplace/mantel/wall light/bay present; **sockets absent**",
+          "adjudicated_at": "2026-07-29T19:30:06.666Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "timber floorboards",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "rug edge",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting board",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "hearth",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Floorboards, rug edge, skirting, hearth present",
+          "second_review_agreed": true
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

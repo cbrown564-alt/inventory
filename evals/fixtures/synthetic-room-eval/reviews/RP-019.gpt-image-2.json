@@ -5,114 +5,196 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "stacked washer dryer",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "boiler",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "shelves",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "cleaning tools",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Clear stacked washer/dryer, boiler, shelves, cleaning tools; floor reads wood-look laminate, not clearly vinyl.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-019.gpt-image-2.A-wide",
+          "scenario_id": "RP-019",
+          "provider": "OpenAI",
+          "view_id": "A-wide",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-019-A-wide.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Clear stacked washer/dryer, boiler, shelves, cleaning tools; floor reads wood-look laminate, not clearly vinyl.",
+          "owner_decision": "accept",
+          "owner_reason": "Clear stacked washer/dryer, boiler, shelves, cleaning tools; floor reads wood-look laminate, not clearly vinyl.",
+          "adjudicated_at": "2026-07-29T19:25:49.612Z"
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "cupboard door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "door hinges",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "shelves",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "storage baskets",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Door + shelves + baskets present; cupboard hinges / skirting not clearly shown.",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-019.gpt-image-2.B-reverse",
+          "scenario_id": "RP-019",
+          "provider": "OpenAI",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-019-B-reverse.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Door + shelves + baskets present; cupboard hinges / skirting not clearly shown.",
+          "owner_decision": "accept",
+          "owner_reason": "Door + shelves + baskets present; cupboard hinges / skirting not clearly shown.",
+          "adjudicated_at": "2026-07-29T19:25:54.630Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "boiler",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "consumer unit",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "isolator switches",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "air vent",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "pipework",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Boiler, consumer unit, pipework present; isolator switches and air vent not clearly shown."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Boiler, consumer unit, pipework present; isolator switches and air vent not clearly shown.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-019.gpt-image-2.C-inventory",
+          "scenario_id": "RP-019",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-019-C-inventory.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Boiler, consumer unit, pipework present; isolator switches and air vent not clearly shown.",
+          "owner_decision": "reject",
+          "owner_reason": "Boiler, consumer unit, pipework present; isolator switches and air vent not clearly shown.",
+          "adjudicated_at": "2026-07-29T19:26:12.906Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "plinth",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "pipe boxing",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "basket edge",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Basket/floor visible, but **plinth and pipe boxing absent** (pipes exposed); not the required low-level condition evidence set."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Basket/floor visible, but **plinth and pipe boxing absent** (pipes exposed); not the required low-level condition evidence set.",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-019.gpt-image-2.D-condition",
+          "scenario_id": "RP-019",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-019-D-condition.png",
+          "ai_decision": "reject",
+          "ai_reason": "Basket/floor visible, but **plinth and pipe boxing absent** (pipes exposed); not the required low-level condition evidence set.",
+          "owner_decision": "reject",
+          "owner_reason": "Basket/floor visible, but **plinth and pipe boxing absent** (pipes exposed); not the required low-level condition evidence set.",
+          "adjudicated_at": "2026-07-29T19:34:36.600Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

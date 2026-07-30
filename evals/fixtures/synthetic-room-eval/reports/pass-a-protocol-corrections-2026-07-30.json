@@ -1,0 +1,63 @@
+{
+  "review_type": "pass_a_protocol_corrections",
+  "source_adjudications": "owner-adjudications (1).json",
+  "decided_at": "2026-07-30",
+  "decision_authority": "Project owner instruction to implement the protocol audit",
+  "rule": "A frame must be rejected when a required anchor is absent or a readable brand or logo appears.",
+  "corrections": [
+    {
+      "task_id": "RP-001.antigravity-builtin.B-reverse",
+      "replaces_decision": "accept",
+      "final_decision": "reject",
+      "reason": "Required window blind absent; the owner note confirms a binding missing-anchor failure."
+    },
+    {
+      "task_id": "RP-002.antigravity-builtin.C-inventory",
+      "replaces_decision": "accept",
+      "final_decision": "reject",
+      "reason": "Readable Dove logo; the owner note confirms a binding brand failure."
+    },
+    {
+      "task_id": "RP-004.antigravity-builtin.A-wide",
+      "replaces_decision": "accept",
+      "final_decision": "reject",
+      "reason": "Readable Fairy logo; the owner note confirms a binding brand failure."
+    },
+    {
+      "task_id": "RP-004.antigravity-builtin.B-reverse",
+      "replaces_decision": "accept",
+      "final_decision": "reject",
+      "reason": "Required radiator and window blind absent; the owner note confirms binding missing-anchor failures."
+    },
+    {
+      "task_id": "RP-004.gpt-image-2.C-inventory",
+      "replaces_decision": "accept",
+      "final_decision": "reject",
+      "reason": "Required under-counter fridge absent; the owner note confirms a binding missing-anchor failure."
+    },
+    {
+      "task_id": "RP-005.antigravity-builtin.B-reverse",
+      "replaces_decision": "accept",
+      "final_decision": "reject",
+      "reason": "Readable Marriage's flour brand; the owner note confirms a binding brand failure."
+    },
+    {
+      "task_id": "RP-005.antigravity-builtin.C-inventory",
+      "replaces_decision": "accept",
+      "final_decision": "reject",
+      "reason": "Required heat alarm absent; the owner note confirms a binding missing-anchor failure."
+    },
+    {
+      "task_id": "RP-006.gpt-image-2.C-inventory",
+      "replaces_decision": "accept",
+      "final_decision": "reject",
+      "reason": "Required floor drain absent; the owner note confirms a binding missing-anchor failure."
+    },
+    {
+      "task_id": "RP-010.antigravity-builtin.C-inventory",
+      "replaces_decision": "accept",
+      "final_decision": "reject",
+      "reason": "Readable Catan Junior and LEGO-style branding; the owner note confirms a binding brand failure."
+    }
+  ]
+}

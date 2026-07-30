@@ -67,6 +67,7 @@ output/playwright/
 
 # Python test, type-checking, lint and coverage caches
 .pytest_cache/
+.test-tmp/
 .ruff_cache/
 .mypy_cache/
 .coverage

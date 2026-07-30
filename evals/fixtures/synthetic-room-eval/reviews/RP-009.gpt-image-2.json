@@ -5,114 +5,158 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "double bed",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "headboard",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "bedside tables",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wardrobe",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "cream carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "All A anchors + bay; photographic",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "chest of drawers",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wall mirror",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "ceiling light",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Door, chest, wall mirror, radiator, ceiling light; strong continuity with A",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "bay window",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "curtains",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "blind",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Bay/curtains/blinds/radiator present; **sockets absent**"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Bay/curtains/blinds/radiator present; **sockets absent**",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-009.gpt-image-2.C-inventory",
+          "scenario_id": "RP-009",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-009-C-inventory.png",
+          "ai_decision": "reject",
+          "ai_reason": "Bay/curtains/blinds/radiator present; **sockets absent**",
+          "owner_decision": "reject",
+          "owner_reason": "Bay/curtains/blinds/radiator present; **sockets absent**",
+          "adjudicated_at": "2026-07-29T19:28:38.229Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "drawer front",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "metal handle",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting board",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Drawer/handle/carpet/context clear; two short scratches match intended defect",
+          "second_review_agreed": true
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

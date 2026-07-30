@@ -5,114 +5,168 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "double bed",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "headboard",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "bedside tables",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wardrobe",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "cream carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Double bed, headboard, bedside tables, wardrobe, cream carpet; bay visible for continuity",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "chest of drawers",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wall mirror",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "ceiling light",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Required anchors present, but layout/headboard/wardrobe/bedding diverge from A/C enough to weaken multi-image pairing",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-009.antigravity-builtin.B-reverse",
+          "scenario_id": "RP-009",
+          "provider": "Google",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-009-B-reverse.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Required anchors present, but layout/headboard/wardrobe/bedding diverge from A/C enough to weaken multi-image pairing",
+          "owner_decision": "accept",
+          "owner_reason": "Required anchors present, but layout/headboard/wardrobe/bedding diverge from A/C enough to weaken multi-image pairing",
+          "adjudicated_at": "2026-07-29T19:23:22.419Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "bay window",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "curtains",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "blind",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Bay, curtains, blinds, radiator, socket present",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "drawer front",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "metal handle",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting board",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Anchors present; intended *two* scratches — only one clear scratch beside top handle",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-009.antigravity-builtin.D-condition",
+          "scenario_id": "RP-009",
+          "provider": "Google",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-009-D-condition.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Anchors present; intended *two* scratches — only one clear scratch beside top handle",
+          "owner_decision": "accept",
+          "owner_reason": "Anchors present; intended *two* scratches — only one clear scratch beside top handle",
+          "adjudicated_at": "2026-07-29T19:23:31.373Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

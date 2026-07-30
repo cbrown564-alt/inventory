@@ -5,114 +5,188 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "wood-effect units",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "laminate worktop",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "freestanding cooker",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sink",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "patterned vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Wood units, laminate top, freestanding cooker, sink, patterned vinyl present",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "entrance door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "window blind",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wall clock",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Door/radiator/clock present; “window blind” is lace+curtains; skirting unclear",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-004.gpt-image-2.B-reverse",
+          "scenario_id": "RP-004",
+          "provider": "OpenAI",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-004-B-reverse.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Door/radiator/clock present; “window blind” is lace+curtains; skirting unclear",
+          "owner_decision": "accept",
+          "owner_reason": "Door/radiator/clock present; “window blind” is lace+curtains; skirting unclear",
+          "adjudicated_at": "2026-07-29T19:19:57.400Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "sink",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "draining board",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "mixer tap",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "under-counter fridge",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Required under-counter fridge absent; the owner note confirms a binding missing-anchor failure."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Under-counter fridge absent (dishwasher in its place)",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-004.gpt-image-2.C-inventory",
+          "scenario_id": "RP-004",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-004-C-inventory.png",
+          "ai_decision": "reject",
+          "ai_reason": "Under-counter fridge absent (dishwasher in its place)",
+          "owner_decision": "accept",
+          "owner_reason": "Under-counter fridge absent (dishwasher in its place)",
+          "adjudicated_at": "2026-07-29T19:27:25.046Z"
+        },
+        "protocol_correction": {
+          "task_id": "RP-004.gpt-image-2.C-inventory",
+          "replaces_decision": "accept",
+          "final_decision": "reject",
+          "reason": "Required under-counter fridge absent; the owner note confirms a binding missing-anchor failure."
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "plinth",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "base unit",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "cooker side",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Triangular tear + required low evidence present; cooker reads built-in vs A freestanding",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-004.gpt-image-2.D-condition",
+          "scenario_id": "RP-004",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-004-D-condition.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Triangular tear + required low evidence present; cooker reads built-in vs A freestanding",
+          "owner_decision": "accept",
+          "owner_reason": "Triangular tear + required low evidence present; cooker reads built-in vs A freestanding",
+          "adjudicated_at": "2026-07-29T19:20:05.435Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

@@ -34,7 +34,10 @@ def record(
             raise ValueError(f"{row['task_id']}: output changed after provenance was recorded")
         row["output_sha256"] = digest
         row["generated_at"] = row.get("generated_at") or timestamp
-        row["operator"] = row.get("operator") or operator
+        if row.get("status") in {"pending", "retry_pending"}:
+            row["operator"] = operator
+        else:
+            row["operator"] = row.get("operator") or operator
         row["generator_cli_version"] = row.get("generator_cli_version") or cli_version
         if row.get("status") == "retry_pending":
             row["attempts"] = str(int(row.get("attempts") or 0) + 1)

@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "record_type": "sanitised_provider_quota_pause",
+  "observed_at": "2026-07-30T00:56:00+00:00",
+  "cli_version": "Antigravity CLI 1.1.8",
+  "operator_model_mode": "gemini-3.5-flash-low",
+  "metered_api_call": false,
+  "provider_response": {
+    "status": "ERROR",
+    "error": "Individual quota reached. Please upgrade your subscription to increase your limits.",
+    "resets_in_reported_by_provider": "4h11m4s",
+    "usage": {
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "thinking_tokens": 0,
+      "total_tokens": 0
+    }
+  },
+  "sanitisation": {
+    "conversation_id_removed": true,
+    "account_identifiers_recorded": false
+  },
+  "phase_3_state": {
+    "pass_a_accepted": 101,
+    "retry_outputs_awaiting_independent_pass_a": 39,
+    "google_retry_files_missing": 14,
+    "google_first_attempt_files_missing": 2,
+    "generator_failed": 4,
+    "sealed_tasks_untouched": 40,
+    "pass_b_packets_ready_after_quota_reset": 7
+  },
+  "missing_google_tasks": [
+    "RP-007.antigravity-builtin.C-inventory",
+    "RP-011.antigravity-builtin.C-inventory",
+    "RP-014.antigravity-builtin.A-wide",
+    "RP-014.antigravity-builtin.B-reverse",
+    "RP-014.antigravity-builtin.C-inventory",
+    "RP-014.antigravity-builtin.D-condition",
+    "RP-015.antigravity-builtin.A-wide",
+    "RP-015.antigravity-builtin.B-reverse",
+    "RP-015.antigravity-builtin.C-inventory",
+    "RP-015.antigravity-builtin.D-condition",
+    "RP-016.antigravity-builtin.C-inventory",
+    "RP-016.antigravity-builtin.D-condition",
+    "RP-019.antigravity-builtin.A-wide",
+    "RP-019.antigravity-builtin.B-reverse",
+    "RP-019.antigravity-builtin.C-inventory",
+    "RP-019.antigravity-builtin.D-condition"
+  ],
+  "provenance_blocks": [
+    "RP-009.antigravity-builtin",
+    "RP-012.antigravity-builtin",
+    "RP-018.antigravity-builtin"
+  ],
+  "resume_order": [
+    "Generate RP-016 C-inventory and D-condition.",
+    "Regenerate the 14 missing retry views without exceeding two image attempts.",
+    "Run dual independent retry Pass A for the 39 current review-pending retries and any newly generated views.",
+    "Apply clear retry decisions; obtain owner adjudication only for escalations.",
+    "Run Pass B on complete provenance-eligible four-view packets."
+  ]
+}

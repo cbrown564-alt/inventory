@@ -5,122 +5,196 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "bath",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "glass shower screen",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wash basin",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "WC",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "heated towel rail",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "grey wall tiles",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Bath, screen, basin, WC, towel rail, grey tiles all clear",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "WC",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wash basin",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "mirror",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "door furniture",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "extractor vent",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting board",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Core fixtures OK; skirting not clearly evidenced",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-002.antigravity-builtin.B-reverse",
+          "scenario_id": "RP-002",
+          "provider": "Google",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-B-reverse.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Core fixtures OK; skirting not clearly evidenced",
+          "owner_decision": "accept",
+          "owner_reason": "Core fixtures OK; skirting not clearly evidenced",
+          "adjudicated_at": "2026-07-29T19:18:47.377Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "glass shower screen",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "mixer taps",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "shower handset",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "extractor vent",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "heated towel rail",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Readable Dove logo; the owner note confirms a binding brand failure."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Readable Dove logo on bath ledge bottle",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-002.antigravity-builtin.C-inventory",
+          "scenario_id": "RP-002",
+          "provider": "Google",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-C-inventory.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Readable Dove logo on bath ledge bottle",
+          "owner_decision": "accept",
+          "owner_reason": "Readable Dove logo on bath ledge bottle",
+          "adjudicated_at": "2026-07-29T19:26:36.208Z"
+        },
+        "protocol_correction": {
+          "task_id": "RP-002.antigravity-builtin.C-inventory",
+          "replaces_decision": "accept",
+          "final_decision": "reject",
+          "reason": "Readable Dove logo; the owner note confirms a binding brand failure."
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "bath panel",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "silicone seal",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "lower wall tiles",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Bath panel/silicone/tiles present; scuff prominent vs “short shallow”; floor looks plank vs A seamless vinyl",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-002.antigravity-builtin.D-condition",
+          "scenario_id": "RP-002",
+          "provider": "Google",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-D-condition.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Bath panel/silicone/tiles present; scuff prominent vs “short shallow”; floor looks plank vs A seamless vinyl",
+          "owner_decision": "accept",
+          "owner_reason": "Bath panel/silicone/tiles present; scuff prominent vs “short shallow”; floor looks plank vs A seamless vinyl",
+          "adjudicated_at": "2026-07-29T19:19:12.180Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

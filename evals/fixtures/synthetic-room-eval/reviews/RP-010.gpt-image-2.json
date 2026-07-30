@@ -5,114 +5,170 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "single bed",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wardrobe",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "desk",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "blue rug",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "toy storage",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Single bed, wardrobe, desk, blue rug, toy storage present; no readable brand text",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "bookcase",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "ceiling shade",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Door, bookcase, radiator, ceiling shade, carpet present; continuity with A",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "desk",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "chair",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "window blind",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Desk/chair/radiator present; **window blind absent** (curtains only); sockets not evidenced"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Desk/chair/radiator present; **window blind absent** (curtains only); sockets not evidenced",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-010.gpt-image-2.C-inventory",
+          "scenario_id": "RP-010",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-010-C-inventory.png",
+          "ai_decision": "reject",
+          "ai_reason": "Desk/chair/radiator present; **window blind absent** (curtains only); sockets not evidenced",
+          "owner_decision": "reject",
+          "owner_reason": "Desk/chair/radiator present; **window blind absent** (curtains only); sockets not evidenced",
+          "adjudicated_at": "2026-07-29T19:29:35.027Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "bed frame",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting board",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "blue rug",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Bed frame, carpet, blue rug clear; **skirting board** not clearly evidenced",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-010.gpt-image-2.D-condition",
+          "scenario_id": "RP-010",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-010-D-condition.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Bed frame, carpet, blue rug clear; **skirting board** not clearly evidenced",
+          "owner_decision": "accept",
+          "owner_reason": "Bed frame, carpet, blue rug clear; **skirting board** not clearly evidenced",
+          "adjudicated_at": "2026-07-29T19:23:58.288Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

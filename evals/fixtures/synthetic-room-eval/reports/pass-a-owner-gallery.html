@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pass A owner gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f6f3ec;
+  --panel: #fffdf8;
+  --panel-muted: #f1ede3;
+  --ink: #22262d;
+  --muted: #626b76;
+  --line: #e4dfd3;
+  --brass: #9a7729;
+  --brass-deep: #7d5e1b;
+  --ok: #1d6f4c;
+  --warn: #8a6a1f;
+  --bad: #a3312a;
+  --media: #0e1116;
+  --shadow: 0 18px 40px rgba(34, 38, 45, 0.08);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --sans: "Avenir Next", Avenir, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --serif: Fraunces, "New York", "Iowan Old Style", Palatino, Charter, Georgia, serif;
+}
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(154, 119, 41, 0.08), transparent 60%),
+    linear-gradient(180deg, #f8f5ef 0%, var(--paper) 40%, #f3efe6 100%);
+  font: 14px/1.55 var(--sans);
+}
+button, textarea { font: inherit; color: inherit; }
+button {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 7px;
+  padding: 10px 14px;
+  min-height: 44px;
+  cursor: pointer;
+  transition: background 180ms var(--ease), border-color 180ms var(--ease), transform 180ms var(--ease);
+}
+button:hover { border-color: #d2c9b5; }
+button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+button[data-active="1"] {
+  border-color: var(--brass);
+  background: var(--primary-soft, #f0e7d2);
+  color: var(--brass-deep);
+}
+button.primary {
+  background: var(--brass);
+  border-color: var(--brass);
+  color: var(--panel);
+}
+button.primary:hover { background: var(--brass-deep); border-color: var(--brass-deep); }
+button.danger {
+  background: color-mix(in srgb, var(--bad) 10%, white);
+  border-color: color-mix(in srgb, var(--bad) 35%, white);
+  color: var(--bad);
+}
+button.ghost { background: transparent; }
+.app {
+  min-height: 100%;
+  width: 100%;
+  max-width: 100vw;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow-x: hidden;
+}
+.top {
+  display: grid;
+  gap: 16px;
+  padding: 20px 28px 14px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+@media (min-width: 1100px) {
+  .top {
+    grid-template-columns: minmax(280px, 1fr) auto;
+    align-items: end;
+    justify-content: space-between;
+  }
+}
+.controls { display: grid; gap: 10px; justify-items: start; }
+@media (min-width: 1100px) {
+  .controls { justify-items: end; }
+}
+.brand h1 {
+  margin: 0;
+  font: 600 28px/1.2 var(--serif);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.brand p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  max-width: 62ch;
+}
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.hint {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.75fr);
+  gap: 20px;
+  padding: 20px 28px;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.stage {
+  background: var(--media);
+  border-radius: 14px;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  position: relative;
+  align-self: start;
+}
+.stage img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(70vh, 760px);
+  object-fit: contain;
+}
+.stage .missing {
+  color: #c9c4b8;
+  padding: 40px;
+  text-align: center;
+}
+.rail {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 18px 16px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 108px;
+  min-width: 0;
+}
+.ask {
+  margin: 0;
+  font: 600 22px/1.25 var(--serif);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+.identity-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+.identity {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.identity h2 {
+  margin: 0;
+  font: 600 13px/1.35 var(--sans);
+  color: var(--muted);
+}
+.rail .subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.rail details.secondary {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+.rail details.secondary summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.rail details.secondary[open] summary { margin-bottom: 10px; }
+.rail details.secondary ol {
+  margin: 10px 0 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.badge.ok { background: color-mix(in srgb, var(--ok) 12%, white); color: var(--ok); }
+.badge.warn { background: color-mix(in srgb, var(--warn) 14%, white); color: var(--warn); }
+.badge.bad { background: color-mix(in srgb, var(--bad) 12%, white); color: var(--bad); }
+.focus {
+  padding: 14px 14px 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--warn) 12%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--warn) 28%, var(--line));
+}
+.focus-label {
+  margin: 0 0 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #6d5418;
+  letter-spacing: 0.01em;
+}
+.focus-body {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.section {
+  display: grid;
+  gap: 8px;
+}
+.section-label {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+#required-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+#required-list li {
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--panel-muted);
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--ink);
+}
+#required-list li.empty {
+  background: transparent;
+  border-style: dashed;
+  color: var(--muted);
+}
+.defect-block[hidden],
+.disagreement[hidden],
+#owner-badge[hidden] {
+  display: none !important;
+}
+.defect-block {
+  padding: 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bad) 8%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--bad) 22%, var(--line));
+}
+.defect-block .section-label { color: var(--bad); }
+.defect-block p:last-child {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.disagreement {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--panel-muted);
+  color: #6d5418;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.note-block {
+  display: grid;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+}
+.note-block label {
+  display: grid;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+textarea {
+  width: 100%;
+  min-height: 64px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px 12px;
+  background: var(--paper);
+}
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding-top: 2px;
+}
+.actions .primary,
+.actions .danger {
+  min-height: 48px;
+  font-weight: 600;
+}
+.nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.nav #progress {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-weight: 600;
+}
+.film {
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  padding: 14px 28px 18px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.film-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.film-head strong { font: 600 16px/1.3 var(--serif); }
+.film-head span { color: var(--muted); font-size: 12.5px; }
+#filmstrip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+  min-width: 0;
+  max-width: 100%;
+}
+.thumb {
+  flex: 0 0 auto;
+  width: 148px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--panel);
+  scroll-snap-align: start;
+  text-align: left;
+}
+.thumb img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background: #d9d4c8;
+}
+.thumb span {
+  display: block;
+  padding: 8px 10px 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.thumb[data-active="1"] { border-color: var(--brass); box-shadow: inset 0 0 0 1px var(--brass); }
+.thumb[data-decision="accept"] span { color: var(--ok); }
+.thumb[data-decision="reject"] span { color: var(--bad); }
+.thumb[data-decision="escalate"] span { color: var(--warn); }
+.toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  background: var(--ink);
+  color: var(--panel);
+  padding: 10px 14px;
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 180ms var(--ease), transform 180ms var(--ease);
+  pointer-events: none;
+  z-index: 20;
+}
+.toast[data-show="1"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (max-width: 980px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+  .controls { justify-items: start; }
+  .stage { min-height: 42vh; order: 1; }
+  .stage img { max-height: 42vh; }
+  .rail {
+    position: static;
+    order: 2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <h1>Pass A owner gallery</h1>
+      <p>Default queue is escalate-to-owner. Scan rejects when you want a fast second look. Decisions stay in this browser until you export JSON and apply it.</p>
+    </div>
+    <div class="controls">
+      <div class="row">
+        <button type="button" data-filter="escalate">Escalate</button>
+        <button type="button" data-filter="reject">Reject</button>
+        <button type="button" data-filter="accept">Accept</button>
+        <button type="button" data-filter="all">All</button>
+        <button type="button" id="pending-only">Owner pending</button>
+      </div>
+      <div class="row">
+        <button type="button" data-provider="all">All providers</button>
+        <button type="button" data-provider="Google">Google</button>
+        <button type="button" data-provider="OpenAI">OpenAI</button>
+        <button type="button" id="export" class="primary">Export JSON</button>
+        <button type="button" id="copy" class="ghost">Copy JSON</button>
+      </div>
+      <div class="hint">Keys: ←/→ or J/K · A accept · R reject · U clear · 1 escalate · 2 reject · 3 accept</div>
+      <div class="hint" id="counts"></div>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="stage" id="stage" aria-label="Evidence">
+      <img id="media" alt="">
+      <div class="missing" id="missing" hidden>No frame selected</div>
+    </section>
+    <aside class="rail" aria-label="Decision">
+      <p class="ask" id="ask">Loading review…</p>
+      <div class="identity-row">
+        <div class="identity">
+          <h2 id="title">Loading</h2>
+          <p class="subtitle" id="subtitle"></p>
+        </div>
+        <div class="badges">
+          <span class="badge warn" id="ai-badge">AI</span>
+          <span class="badge ok" id="owner-badge" hidden></span>
+        </div>
+      </div>
+      <section class="focus" aria-labelledby="focus-label">
+        <p class="focus-label" id="focus-label">Check this uncertainty in the photo</p>
+        <p class="focus-body" id="reason">—</p>
+      </section>
+      <section class="section" aria-labelledby="required-label">
+        <p class="section-label" id="required-label">Must be visible</p>
+        <ul id="required-list"></ul>
+      </section>
+      <section class="defect-block" id="defect-block" hidden aria-labelledby="defect-label">
+        <p class="section-label" id="defect-label">Intended defect to evidence</p>
+        <p id="defects"></p>
+      </section>
+      <div class="disagreement" id="disagreement" hidden></div>
+      <div class="actions">
+        <button type="button" id="accept" class="primary">Accept · A</button>
+        <button type="button" id="reject" class="danger">Reject · R</button>
+      </div>
+      <div class="nav">
+        <button type="button" id="prev">Previous</button>
+        <div id="progress">0 / 0</div>
+        <button type="button" id="next">Next</button>
+      </div>
+      <details class="secondary">
+        <summary>Note / clear / priority</summary>
+        <div class="note-block">
+          <label>
+            Optional note
+            <textarea id="owner-note" placeholder="Only if you need to explain the decision"></textarea>
+          </label>
+          <button type="button" id="clear" class="ghost">Clear owner decision</button>
+        </div>
+        <ol><li>RP-001 Google packet continuity / induction identity / chip severity</li><li>RP-009 Google continuity + scratch count + provenance</li><li>RP-012 Google provenance + mild continuity; OpenAI B missing bay</li><li>RP-013 OpenAI A unintended wall mark</li><li>RP-018 OpenAI appliance layout continuity</li><li>RP-019 OpenAI D missing plinth/boxing; A-C weak isolators</li><li>RP-020 Google rod continuity (A-C none, D has rods)</li><li>RP-004/006/007/008/011 selected frame escalations</li></ol>
+        <p class="hint">Apply export with:<br>
+        <code>.\.venv\Scripts\python.exe -m evals.synthetic.apply_owner_adjudications owner-adjudications.json</code></p>
+      </details>
+    </aside>
+  </main>
+
+  <section class="film" aria-label="Queue filmstrip">
+    <div class="film-head">
+      <strong>Queue</strong>
+      <span>Click any frame to jump. Colour marks AI or owner decision.</span>
+    </div>
+    <div id="filmstrip"></div>
+  </section>
+</div>
+<div class="toast" id="toast" data-show="0"></div>
+<script>window.PASS_A_REVIEW = {"review_type": "phase3_pass_a_visual_screen", "reviewed_at": "2026-07-29", "source_file": "phase3-pass-a-review-2026-07-29.json", "counts": {"escalate": 39, "reject": 50, "accept": 57}, "owner_escalations_priority": ["RP-001 Google packet continuity / induction identity / chip severity", "RP-009 Google continuity + scratch count + provenance", "RP-012 Google provenance + mild continuity; OpenAI B missing bay", "RP-013 OpenAI A unintended wall mark", "RP-018 OpenAI appliance layout continuity", "RP-019 OpenAI D missing plinth/boxing; A-C weak isolators", "RP-020 Google rod continuity (A-C none, D has rods)", "RP-004/006/007/008/011 selected frame escalations"], "reviewer_disagreements": [{"task_id": "RP-001.antigravity-builtin.A-wide", "first": "escalate", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-001.antigravity-builtin.C-inventory", "first": "escalate", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-002.antigravity-builtin.B-reverse", "first": "escalate", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-002.antigravity-builtin.D-condition", "first": "escalate", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-003.gpt-image-2.B-reverse", "first": "escalate", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-003.gpt-image-2.D-condition", "first": "escalate", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-004.antigravity-builtin.D-condition", "first": "reject", "second": "escalate", "reconciled": "escalate"}, {"task_id": "RP-004.gpt-image-2.B-reverse", "first": "escalate", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-004.gpt-image-2.D-condition", "first": "escalate", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-005.antigravity-builtin.A-wide", "first": "accept", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-006.antigravity-builtin.B-reverse", "first": "reject", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-006.gpt-image-2.B-reverse", "first": "escalate", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-007.antigravity-builtin.B-reverse", "first": "escalate", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-009.antigravity-builtin.B-reverse", "first": "escalate", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-009.antigravity-builtin.D-condition", "first": "escalate", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-010.antigravity-builtin.A-wide", "first": "reject", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-010.antigravity-builtin.B-reverse", "first": "reject", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-010.antigravity-builtin.D-condition", "first": "reject", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-010.gpt-image-2.D-condition", "first": "escalate", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-011.antigravity-builtin.B-reverse", "first": "escalate", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-012.antigravity-builtin.C-inventory", "first": "accept", "second": "escalate", "reconciled": "escalate"}, {"task_id": "RP-013.gpt-image-2.A-wide", "first": "escalate", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-013.gpt-image-2.C-inventory", "first": "reject", "second": "escalate", "reconciled": "escalate"}, {"task_id": "RP-014.gpt-image-2.B-reverse", "first": "accept", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-015.gpt-image-2.A-wide", "first": "reject", "second": "escalate", "reconciled": "escalate"}, {"task_id": "RP-015.gpt-image-2.B-reverse", "first": "reject", "second": "escalate", "reconciled": "escalate"}, {"task_id": "RP-015.gpt-image-2.C-inventory", "first": "accept", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-016.gpt-image-2.C-inventory", "first": "accept", "second": "escalate", "reconciled": "escalate"}, {"task_id": "RP-017.gpt-image-2.C-inventory", "first": "escalate", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-018.gpt-image-2.B-reverse", "first": "escalate", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-018.gpt-image-2.C-inventory", "first": "escalate", "second": "reject", "reconciled": "escalate"}, {"task_id": "RP-019.gpt-image-2.A-wide", "first": "escalate", "second": "accept", "reconciled": "escalate"}, {"task_id": "RP-019.gpt-image-2.C-inventory", "first": "escalate", "second": "reject", "reconciled": "escalate"}], "frames": [{"task_id": "RP-001.antigravity-builtin.A-wide", "scenario_id": "RP-001", "provider": "Google", "room_type": "Kitchen", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-A-wide.jpg", "required": "kitchen units, dark worktop, sink, oven, induction hob, extractor hood", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Kitchen clear; glass hob shows radiant rings, not clearly induction", "image_src": "../images/antigravity/builtin/RP-001-A-wide.jpg"}, {"task_id": "RP-001.antigravity-builtin.B-reverse", "scenario_id": "RP-001", "provider": "Google", "room_type": "Kitchen", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-B-reverse.jpg", "required": "kitchen units, window blind, radiator, door furniture, skirting boards", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Required window blind absent (bare window); skirting unclear", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-001-B-reverse.jpg"}, {"task_id": "RP-001.antigravity-builtin.C-inventory", "scenario_id": "RP-001", "provider": "Google", "room_type": "Kitchen", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-C-inventory.jpg", "required": "extractor hood, induction hob, oven, smoke alarm, splashback, electrical sockets", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Anchors mostly present; hob still not clearly induction; appliance style vs A/B drifts", "image_src": "../images/antigravity/builtin/RP-001-C-inventory.jpg"}, {"task_id": "RP-001.antigravity-builtin.D-condition", "scenario_id": "RP-001", "provider": "Google", "room_type": "Kitchen", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-D-condition.jpg", "required": "base unit door, plinth, vinyl floor, skirting board", "intended_defects": "one small chip on the lower edge of a base unit door", "pass_a_decision": "escalate", "pass_a_reason": "Required surfaces present; chip much larger than \u201csmall\u201d; handles/floor pattern vs A diverge", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-001-D-condition.jpg"}, {"task_id": "RP-002.antigravity-builtin.A-wide", "scenario_id": "RP-002", "provider": "Google", "room_type": "Bathroom", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-A-wide.jpg", "required": "bath, glass shower screen, wash basin, WC, heated towel rail, grey wall tiles", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Bath, screen, basin, WC, towel rail, grey tiles all clear", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-002-A-wide.jpg"}, {"task_id": "RP-002.antigravity-builtin.B-reverse", "scenario_id": "RP-002", "provider": "Google", "room_type": "Bathroom", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-B-reverse.jpg", "required": "WC, wash basin, mirror, door furniture, extractor vent, skirting board", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Core fixtures OK; skirting not clearly evidenced", "image_src": "../images/antigravity/builtin/RP-002-B-reverse.jpg"}, {"task_id": "RP-002.antigravity-builtin.C-inventory", "scenario_id": "RP-002", "provider": "Google", "room_type": "Bathroom", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-C-inventory.jpg", "required": "glass shower screen, mixer taps, shower handset, extractor vent, heated towel rail", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Readable Dove logo on bath ledge bottle", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-002-C-inventory.jpg"}, {"task_id": "RP-002.antigravity-builtin.D-condition", "scenario_id": "RP-002", "provider": "Google", "room_type": "Bathroom", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-002-D-condition.jpg", "required": "bath panel, silicone seal, vinyl floor, lower wall tiles", "intended_defects": "short shallow scuff on the lower bath panel", "pass_a_decision": "escalate", "pass_a_reason": "Bath panel/silicone/tiles present; scuff prominent vs \u201cshort shallow\u201d; floor looks plank vs A seamless vinyl", "image_src": "../images/antigravity/builtin/RP-002-D-condition.jpg"}, {"task_id": "RP-003.gpt-image-2.A-wide", "scenario_id": "RP-003", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-003-A-wide.png", "required": "white kitchen units, oak-effect worktop, sink, oven, ceramic hob", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "White units, oak-effect top, sink, oven, ceramic hob present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-003-A-wide.png"}, {"task_id": "RP-003.gpt-image-2.B-reverse", "scenario_id": "RP-003", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-003-B-reverse.png", "required": "fridge freezer, radiator, door, vinyl floor, skirting boards", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Fridge/radiator/door present; floor reads wood laminate not vinyl; skirting unclear", "image_src": "../images/openai/gpt-image-2/RP-003-B-reverse.png"}, {"task_id": "RP-003.gpt-image-2.C-inventory", "scenario_id": "RP-003", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-003-C-inventory.png", "required": "extractor hood, ceramic hob, oven, heat alarm, sockets", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Heat alarm absent (ceiling shows bare bulb only)", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-003-C-inventory.png"}, {"task_id": "RP-003.gpt-image-2.D-condition", "scenario_id": "RP-003", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-003-D-condition.png", "required": "splashback tiles, grout, worktop edge, socket", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Splashback/grout/worktop/socket present; subway tiles conflict with A wood upstand", "image_src": "../images/openai/gpt-image-2/RP-003-D-condition.png"}, {"task_id": "RP-004.antigravity-builtin.A-wide", "scenario_id": "RP-004", "provider": "Google", "room_type": "Kitchen", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-004-A-wide.jpg", "required": "wood-effect units, laminate worktop, freestanding cooker, sink, patterned vinyl floor", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Readable Fairy logo on dish soap", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-004-A-wide.jpg"}, {"task_id": "RP-004.antigravity-builtin.B-reverse", "scenario_id": "RP-004", "provider": "Google", "room_type": "Kitchen", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-004-B-reverse.jpg", "required": "entrance door, radiator, window blind, wall clock, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Radiator absent; window blind absent (lace/curtains only); clock/door present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-004-B-reverse.jpg"}, {"task_id": "RP-004.antigravity-builtin.C-inventory", "scenario_id": "RP-004", "provider": "Google", "room_type": "Kitchen", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-004-C-inventory.jpg", "required": "sink, draining board, mixer tap, sockets, under-counter fridge", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Sink, drainer, mixer, sockets, under-counter fridge present; brand text not clearly readable", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-004-C-inventory.jpg"}, {"task_id": "RP-004.antigravity-builtin.D-condition", "scenario_id": "RP-004", "provider": "Google", "room_type": "Kitchen", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-004-D-condition.jpg", "required": "vinyl floor, plinth, base unit, cooker side", "intended_defects": "small triangular tear in the vinyl floor beside the cooker", "pass_a_decision": "escalate", "pass_a_reason": "Floor damage is large peel/lift, not small triangular tear; would falsify intended label [reconciled from reviewer disagreement: was reject, second review escalate]", "reviewer_disagreement": true, "image_src": "../images/antigravity/builtin/RP-004-D-condition.jpg"}, {"task_id": "RP-004.gpt-image-2.A-wide", "scenario_id": "RP-004", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-004-A-wide.png", "required": "wood-effect units, laminate worktop, freestanding cooker, sink, patterned vinyl floor", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Wood units, laminate top, freestanding cooker, sink, patterned vinyl present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-004-A-wide.png"}, {"task_id": "RP-004.gpt-image-2.B-reverse", "scenario_id": "RP-004", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-004-B-reverse.png", "required": "entrance door, radiator, window blind, wall clock, skirting", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Door/radiator/clock present; \u201cwindow blind\u201d is lace+curtains; skirting unclear", "image_src": "../images/openai/gpt-image-2/RP-004-B-reverse.png"}, {"task_id": "RP-004.gpt-image-2.C-inventory", "scenario_id": "RP-004", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-004-C-inventory.png", "required": "sink, draining board, mixer tap, sockets, under-counter fridge", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Under-counter fridge absent (dishwasher in its place)", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-004-C-inventory.png"}, {"task_id": "RP-004.gpt-image-2.D-condition", "scenario_id": "RP-004", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-004-D-condition.png", "required": "vinyl floor, plinth, base unit, cooker side", "intended_defects": "small triangular tear in the vinyl floor beside the cooker", "pass_a_decision": "escalate", "pass_a_reason": "Triangular tear + required low evidence present; cooker reads built-in vs A freestanding", "image_src": "../images/openai/gpt-image-2/RP-004-D-condition.png"}, {"task_id": "RP-005.antigravity-builtin.A-wide", "scenario_id": "RP-005", "provider": "Google", "room_type": "Kitchen", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-A-wide.jpg", "required": "blue kitchen units, island, range cooker, sink, pendant lights", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Blue units, island, range, sink, pendants present [reconciled from reviewer disagreement: was accept, second review reject]", "reviewer_disagreement": true, "image_src": "../images/antigravity/builtin/RP-005-A-wide.jpg"}, {"task_id": "RP-005.antigravity-builtin.B-reverse", "scenario_id": "RP-005", "provider": "Google", "room_type": "Kitchen", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-B-reverse.jpg", "required": "patio doors, radiator, entrance door, bar stools, floor tiles", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Readable \u201cMarriage\u2019s\u201d flour brand; patio doors/radiator/stools/tiles present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-005-B-reverse.jpg"}, {"task_id": "RP-005.antigravity-builtin.C-inventory", "scenario_id": "RP-005", "provider": "Google", "room_type": "Kitchen", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-C-inventory.jpg", "required": "range cooker, extractor canopy, splashback, sockets, heat alarm", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Heat alarm absent (smoke detector only); Rangemaster-like branding also concerning", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-005-C-inventory.jpg"}, {"task_id": "RP-005.antigravity-builtin.D-condition", "scenario_id": "RP-005", "provider": "Google", "room_type": "Kitchen", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-D-condition.jpg", "required": "quartz worktop, island cabinet, bar stool, floor tile", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Bar stool absent; floor tile absent (wood planks); worktop/island present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-005-D-condition.jpg"}, {"task_id": "RP-005.gpt-image-2.A-wide", "scenario_id": "RP-005", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-005-A-wide.png", "required": "blue kitchen units, island, range cooker, sink, pendant lights", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Blue units, island, range, sink, pendants present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-005-A-wide.png"}, {"task_id": "RP-005.gpt-image-2.B-reverse", "scenario_id": "RP-005", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-005-B-reverse.png", "required": "patio doors, radiator, entrance door, bar stools, floor tiles", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Required floor tiles absent (wood planks); radiator/patio doors/stools present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-005-B-reverse.png"}, {"task_id": "RP-005.gpt-image-2.C-inventory", "scenario_id": "RP-005", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-005-C-inventory.png", "required": "range cooker, extractor canopy, splashback, sockets, heat alarm", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Heat alarm absent; Waitrose-like bag also brand risk", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-005-C-inventory.png"}, {"task_id": "RP-005.gpt-image-2.D-condition", "scenario_id": "RP-005", "provider": "OpenAI", "room_type": "Kitchen", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-005-D-condition.png", "required": "quartz worktop, island cabinet, bar stool, floor tile", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Floor tile absent (wood); stool/worktop/island present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-005-D-condition.png"}, {"task_id": "RP-006.antigravity-builtin.A-wide", "scenario_id": "RP-006", "provider": "Google", "room_type": "Bathroom", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-006-A-wide.jpg", "required": "walk-in shower, WC, vanity basin, heated towel rail, stone wall tiles", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Walk-in shower, WC, vanity, towel rail, stone tiles present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-006-A-wide.jpg"}, {"task_id": "RP-006.antigravity-builtin.B-reverse", "scenario_id": "RP-006", "provider": "Google", "room_type": "Bathroom", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-006-B-reverse.jpg", "required": "door, vanity unit, mirror, extractor vent, floor tiles", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Extractor vent absent; three towel rails + mirror reflection mismatch (geometry/continuity) [reconciled from reviewer disagreement: was reject, second review accept]", "reviewer_disagreement": true, "image_src": "../images/antigravity/builtin/RP-006-B-reverse.jpg"}, {"task_id": "RP-006.antigravity-builtin.C-inventory", "scenario_id": "RP-006", "provider": "Google", "room_type": "Bathroom", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-006-C-inventory.jpg", "required": "rain shower, handset, mixer controls, glass screen, floor drain", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Rain head, handset, mixer, glass, floor drain present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-006-C-inventory.jpg"}, {"task_id": "RP-006.antigravity-builtin.D-condition", "scenario_id": "RP-006", "provider": "Google", "room_type": "Bathroom", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-006-D-condition.jpg", "required": "vanity drawer, basin edge, mixer tap, silicone joint", "intended_defects": "small chip on the upper corner of the vanity drawer front", "pass_a_decision": "escalate", "pass_a_reason": "Chip on drawer corner present; silicone joint not clearly shown; mixer only partial", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-006-D-condition.jpg"}, {"task_id": "RP-006.gpt-image-2.A-wide", "scenario_id": "RP-006", "provider": "OpenAI", "room_type": "Bathroom", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-006-A-wide.png", "required": "walk-in shower, WC, vanity basin, heated towel rail, stone wall tiles", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Walk-in shower, WC, vanity, towel rail, stone tiles present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-006-A-wide.png"}, {"task_id": "RP-006.gpt-image-2.B-reverse", "scenario_id": "RP-006", "provider": "OpenAI", "room_type": "Bathroom", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-006-B-reverse.png", "required": "door, vanity unit, mirror, extractor vent, floor tiles", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Door/vanity/mirror/tiles present; ceiling disc may be vent or detector", "image_src": "../images/openai/gpt-image-2/RP-006-B-reverse.png"}, {"task_id": "RP-006.gpt-image-2.C-inventory", "scenario_id": "RP-006", "provider": "OpenAI", "room_type": "Bathroom", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-006-C-inventory.png", "required": "rain shower, handset, mixer controls, glass screen, floor drain", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Floor drain absent; rain/handset/mixer/glass present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-006-C-inventory.png"}, {"task_id": "RP-006.gpt-image-2.D-condition", "scenario_id": "RP-006", "provider": "OpenAI", "room_type": "Bathroom", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-006-D-condition.png", "required": "vanity drawer, basin edge, mixer tap, silicone joint", "intended_defects": "small chip on the upper corner of the vanity drawer front", "pass_a_decision": "escalate", "pass_a_reason": "Chip + drawer/basin/tap present; silicone joint not clearly shown", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-006-D-condition.png"}, {"task_id": "RP-007.antigravity-builtin.A-wide", "scenario_id": "RP-007", "provider": "Google", "room_type": "Shower room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-007-A-wide.jpg", "required": "shower enclosure, pedestal basin, WC, mosaic tiles, sloped ceiling", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Enclosure, pedestal basin, WC, mosaic, sloped ceiling present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-007-A-wide.jpg"}, {"task_id": "RP-007.antigravity-builtin.B-reverse", "scenario_id": "RP-007", "provider": "Google", "room_type": "Shower room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-007-B-reverse.jpg", "required": "door, mirror, towel ring, extractor vent, vinyl floor", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Door/mirror/towel ring/extractor/vinyl present; floor type vs A (tiles) drifts", "image_src": "../images/antigravity/builtin/RP-007-B-reverse.jpg"}, {"task_id": "RP-007.antigravity-builtin.C-inventory", "scenario_id": "RP-007", "provider": "Google", "room_type": "Shower room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-007-C-inventory.jpg", "required": "shower handset, mixer controls, glass door, soap tray, extractor vent", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Soap tray absent; handset/mixer/glass/extractor present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-007-C-inventory.jpg"}, {"task_id": "RP-007.antigravity-builtin.D-condition", "scenario_id": "RP-007", "provider": "Google", "room_type": "Shower room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-007-D-condition.jpg", "required": "mosaic tiles, grout, silicone seal, shower tray", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Mosaic, grout, silicone, shower tray present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-007-D-condition.jpg"}, {"task_id": "RP-007.gpt-image-2.A-wide", "scenario_id": "RP-007", "provider": "OpenAI", "room_type": "Shower room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-007-A-wide.png", "required": "shower enclosure, pedestal basin, WC, mosaic tiles, sloped ceiling", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Enclosure, pedestal basin, WC, mosaic, sloped ceiling present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-007-A-wide.png"}, {"task_id": "RP-007.gpt-image-2.B-reverse", "scenario_id": "RP-007", "provider": "OpenAI", "room_type": "Shower room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-007-B-reverse.png", "required": "door, mirror, towel ring, extractor vent, vinyl floor", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Door, mirror, towel ring, extractor, vinyl present; matches A identity", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-007-B-reverse.png"}, {"task_id": "RP-007.gpt-image-2.C-inventory", "scenario_id": "RP-007", "provider": "OpenAI", "room_type": "Shower room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-007-C-inventory.png", "required": "shower handset, mixer controls, glass door, soap tray, extractor vent", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Handset/mixer/glass/extractor present; soap dish on riser", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-007-C-inventory.png"}, {"task_id": "RP-007.gpt-image-2.D-condition", "scenario_id": "RP-007", "provider": "OpenAI", "room_type": "Shower room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-007-D-condition.png", "required": "mosaic tiles, grout, silicone seal, shower tray", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Mosaic, grout, silicone, shower tray present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-007-D-condition.png"}, {"task_id": "RP-008.antigravity-builtin.A-wide", "scenario_id": "RP-008", "provider": "Google", "room_type": "Bedroom", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-008-A-wide.jpg", "required": "painted walls, grey carpet, sash window, radiator, ceiling pendant", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Bedroom clear; painted walls, grey carpet, sash, radiator, pendant present; photographic", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-008-A-wide.jpg"}, {"task_id": "RP-008.antigravity-builtin.B-reverse", "scenario_id": "RP-008", "provider": "Google", "room_type": "Bedroom", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-008-B-reverse.jpg", "required": "door, door furniture, built-in wardrobe, sockets, skirting boards", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Door, furniture, built-in wardrobe, sockets, skirting clear; continuous with A", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-008-B-reverse.jpg"}, {"task_id": "RP-008.antigravity-builtin.C-inventory", "scenario_id": "RP-008", "provider": "Google", "room_type": "Bedroom", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-008-C-inventory.jpg", "required": "window, curtain pole, radiator, thermostatic valve, sockets", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Window, curtain pole, radiator, sockets clear; radiator valves support TRV", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-008-C-inventory.jpg"}, {"task_id": "RP-008.antigravity-builtin.D-condition", "scenario_id": "RP-008", "provider": "Google", "room_type": "Bedroom", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-008-D-condition.jpg", "required": "grey carpet, skirting board, doorstop, threshold strip", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Grey carpet, skirting, doorstop, threshold strip clear", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-008-D-condition.jpg"}, {"task_id": "RP-008.gpt-image-2.A-wide", "scenario_id": "RP-008", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-008-A-wide.png", "required": "painted walls, grey carpet, sash window, radiator, ceiling pendant", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "All A anchors present; photographic; continuous palette", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-008-A-wide.png"}, {"task_id": "RP-008.gpt-image-2.B-reverse", "scenario_id": "RP-008", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-008-B-reverse.png", "required": "door, door furniture, built-in wardrobe, sockets, skirting boards", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Door, furniture, built-in wardrobe, socket(s), skirting present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-008-B-reverse.png"}, {"task_id": "RP-008.gpt-image-2.C-inventory", "scenario_id": "RP-008", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-008-C-inventory.png", "required": "window, curtain pole, radiator, thermostatic valve, sockets", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Window/pole/radiator/sockets clear; thermostatic valve not clearly identifiable (pipes only)", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-008-C-inventory.png"}, {"task_id": "RP-008.gpt-image-2.D-condition", "scenario_id": "RP-008", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-008-D-condition.png", "required": "grey carpet, skirting board, doorstop, threshold strip", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Carpet, skirting, doorstop, threshold strip present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-008-D-condition.png"}, {"task_id": "RP-009.antigravity-builtin.A-wide", "scenario_id": "RP-009", "provider": "Google", "room_type": "Bedroom", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-009-A-wide.jpg", "required": "double bed, headboard, bedside tables, wardrobe, cream carpet", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Double bed, headboard, bedside tables, wardrobe, cream carpet; bay visible for continuity", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-009-A-wide.jpg"}, {"task_id": "RP-009.antigravity-builtin.B-reverse", "scenario_id": "RP-009", "provider": "Google", "room_type": "Bedroom", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-009-B-reverse.jpg", "required": "door, chest of drawers, wall mirror, radiator, ceiling light", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Required anchors present, but layout/headboard/wardrobe/bedding diverge from A/C enough to weaken multi-image pairing", "image_src": "../images/antigravity/builtin/RP-009-B-reverse.jpg"}, {"task_id": "RP-009.antigravity-builtin.C-inventory", "scenario_id": "RP-009", "provider": "Google", "room_type": "Bedroom", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-009-C-inventory.jpg", "required": "bay window, curtains, radiator, blind, sockets", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Bay, curtains, blinds, radiator, socket present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-009-C-inventory.jpg"}, {"task_id": "RP-009.antigravity-builtin.D-condition", "scenario_id": "RP-009", "provider": "Google", "room_type": "Bedroom", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-009-D-condition.jpg", "required": "drawer front, metal handle, skirting board, carpet", "intended_defects": "two short scratches beside the top drawer handle", "pass_a_decision": "escalate", "pass_a_reason": "Anchors present; intended *two* scratches \u2014 only one clear scratch beside top handle", "image_src": "../images/antigravity/builtin/RP-009-D-condition.jpg"}, {"task_id": "RP-009.gpt-image-2.A-wide", "scenario_id": "RP-009", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-009-A-wide.png", "required": "double bed, headboard, bedside tables, wardrobe, cream carpet", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "All A anchors + bay; photographic", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-009-A-wide.png"}, {"task_id": "RP-009.gpt-image-2.B-reverse", "scenario_id": "RP-009", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-009-B-reverse.png", "required": "door, chest of drawers, wall mirror, radiator, ceiling light", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Door, chest, wall mirror, radiator, ceiling light; strong continuity with A", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-009-B-reverse.png"}, {"task_id": "RP-009.gpt-image-2.C-inventory", "scenario_id": "RP-009", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-009-C-inventory.png", "required": "bay window, curtains, radiator, blind, sockets", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Bay/curtains/blinds/radiator present; **sockets absent**", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-009-C-inventory.png"}, {"task_id": "RP-009.gpt-image-2.D-condition", "scenario_id": "RP-009", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-009-D-condition.png", "required": "drawer front, metal handle, skirting board, carpet", "intended_defects": "two short scratches beside the top drawer handle", "pass_a_decision": "accept", "pass_a_reason": "Drawer/handle/carpet/context clear; two short scratches match intended defect", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-009-D-condition.png"}, {"task_id": "RP-010.antigravity-builtin.A-wide", "scenario_id": "RP-010", "provider": "Google", "room_type": "Bedroom", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-010-A-wide.jpg", "required": "single bed, wardrobe, desk, blue rug, toy storage", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Readable **LEGO CITY** poster branding [reconciled from reviewer disagreement: was reject, second review accept]", "reviewer_disagreement": true, "image_src": "../images/antigravity/builtin/RP-010-A-wide.jpg"}, {"task_id": "RP-010.antigravity-builtin.B-reverse", "scenario_id": "RP-010", "provider": "Google", "room_type": "Bedroom", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-010-B-reverse.jpg", "required": "door, bookcase, radiator, ceiling shade, carpet", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Recognisable **Toy Story / Disney** character poster (brand IP) [reconciled from reviewer disagreement: was reject, second review accept]", "reviewer_disagreement": true, "image_src": "../images/antigravity/builtin/RP-010-B-reverse.jpg"}, {"task_id": "RP-010.antigravity-builtin.C-inventory", "scenario_id": "RP-010", "provider": "Google", "room_type": "Bedroom", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-010-C-inventory.jpg", "required": "desk, chair, sockets, radiator, window blind", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Readable **Catan Junior** + clear LEGO-style logo on box", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-010-C-inventory.jpg"}, {"task_id": "RP-010.antigravity-builtin.D-condition", "scenario_id": "RP-010", "provider": "Google", "room_type": "Bedroom", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-010-D-condition.jpg", "required": "bed frame, carpet, skirting board, blue rug", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Clear LEGO-style logo on toy box under wardrobe [reconciled from reviewer disagreement: was reject, second review accept]", "reviewer_disagreement": true, "image_src": "../images/antigravity/builtin/RP-010-D-condition.jpg"}, {"task_id": "RP-010.gpt-image-2.A-wide", "scenario_id": "RP-010", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-010-A-wide.png", "required": "single bed, wardrobe, desk, blue rug, toy storage", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Single bed, wardrobe, desk, blue rug, toy storage present; no readable brand text", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-010-A-wide.png"}, {"task_id": "RP-010.gpt-image-2.B-reverse", "scenario_id": "RP-010", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-010-B-reverse.png", "required": "door, bookcase, radiator, ceiling shade, carpet", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Door, bookcase, radiator, ceiling shade, carpet present; continuity with A", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-010-B-reverse.png"}, {"task_id": "RP-010.gpt-image-2.C-inventory", "scenario_id": "RP-010", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-010-C-inventory.png", "required": "desk, chair, sockets, radiator, window blind", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Desk/chair/radiator present; **window blind absent** (curtains only); sockets not evidenced", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-010-C-inventory.png"}, {"task_id": "RP-010.gpt-image-2.D-condition", "scenario_id": "RP-010", "provider": "OpenAI", "room_type": "Bedroom", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-010-D-condition.png", "required": "bed frame, carpet, skirting board, blue rug", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Bed frame, carpet, blue rug clear; **skirting board** not clearly evidenced", "image_src": "../images/openai/gpt-image-2/RP-010-D-condition.png"}, {"task_id": "RP-011.antigravity-builtin.A-wide", "scenario_id": "RP-011", "provider": "Google", "room_type": "Living room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-011-A-wide.jpg", "required": "grey sofa, armchair, coffee table, television unit, beige carpet", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Grey sofa, armchair, coffee table, TV unit, beige carpet; photographic", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-011-A-wide.jpg"}, {"task_id": "RP-011.antigravity-builtin.B-reverse", "scenario_id": "RP-011", "provider": "Google", "room_type": "Living room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-011-B-reverse.jpg", "required": "door, bookcase, radiator, floor lamp, ceiling shade", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Door, bookcase, radiator, partial floor lamp present; ceiling fixture is directional spots, not a clear **ceiling shade**", "image_src": "../images/antigravity/builtin/RP-011-B-reverse.jpg"}, {"task_id": "RP-011.antigravity-builtin.C-inventory", "scenario_id": "RP-011", "provider": "Google", "room_type": "Living room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-011-C-inventory.jpg", "required": "balcony door, vertical blinds, radiator, thermostat, sockets", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Balcony door, vertical blinds, radiator, sockets present; **thermostat absent**", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-011-C-inventory.jpg"}, {"task_id": "RP-011.antigravity-builtin.D-condition", "scenario_id": "RP-011", "provider": "Google", "room_type": "Living room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-011-D-condition.jpg", "required": "sofa arm, seat cushion, fabric seam, carpet", "intended_defects": "small frayed patch on the outer sofa arm", "pass_a_decision": "escalate", "pass_a_reason": "Arm/cushion/carpet present; fray is large/jagged vs intended **small** frayed patch (label risk)", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-011-D-condition.jpg"}, {"task_id": "RP-011.gpt-image-2.A-wide", "scenario_id": "RP-011", "provider": "OpenAI", "room_type": "Living room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-011-A-wide.png", "required": "grey sofa, armchair, coffee table, television unit, beige carpet", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "All A anchors present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-011-A-wide.png"}, {"task_id": "RP-011.gpt-image-2.B-reverse", "scenario_id": "RP-011", "provider": "OpenAI", "room_type": "Living room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-011-B-reverse.png", "required": "door, bookcase, radiator, floor lamp, ceiling shade", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Door, bookcase, radiator, floor lamp, ceiling shade present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-011-B-reverse.png"}, {"task_id": "RP-011.gpt-image-2.C-inventory", "scenario_id": "RP-011", "provider": "OpenAI", "room_type": "Living room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-011-C-inventory.png", "required": "balcony door, vertical blinds, radiator, thermostat, sockets", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Balcony door, radiator, thermostat present; **vertical blinds absent** (curtains/sheers only); sockets not evidenced", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-011-C-inventory.png"}, {"task_id": "RP-011.gpt-image-2.D-condition", "scenario_id": "RP-011", "provider": "OpenAI", "room_type": "Living room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-011-D-condition.png", "required": "sofa arm, seat cushion, fabric seam, carpet", "intended_defects": "small frayed patch on the outer sofa arm", "pass_a_decision": "accept", "pass_a_reason": "Sofa arm, cushion, carpet; small fray/hole matches intended small fray", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-011-D-condition.png"}, {"task_id": "RP-012.antigravity-builtin.A-wide", "scenario_id": "RP-012", "provider": "Google", "room_type": "Living room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-012-A-wide.jpg", "required": "leather sofa, patterned rug, fireplace, bookshelves, coffee table", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Leather sofa, patterned rug, fireplace, bookshelves, coffee table; bay present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-012-A-wide.jpg"}, {"task_id": "RP-012.antigravity-builtin.B-reverse", "scenario_id": "RP-012", "provider": "Google", "room_type": "Living room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-012-B-reverse.jpg", "required": "door, armchair, bay window, radiator, floorboards", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "**Bay window clearly present** with blinds/curtains; door, armchair, radiator, floorboards present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-012-B-reverse.jpg"}, {"task_id": "RP-012.antigravity-builtin.C-inventory", "scenario_id": "RP-012", "provider": "Google", "room_type": "Living room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-012-C-inventory.jpg", "required": "fireplace surround, mantel, wall lights, sockets, skirting", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Fireplace surround, mantel, wall sconces, socket, skirting context present [reconciled from reviewer disagreement: was accept, second review escalate]", "reviewer_disagreement": true, "image_src": "../images/antigravity/builtin/RP-012-C-inventory.jpg"}, {"task_id": "RP-012.antigravity-builtin.D-condition", "scenario_id": "RP-012", "provider": "Google", "room_type": "Living room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-012-D-condition.jpg", "required": "timber floorboards, rug edge, skirting board, hearth", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Floorboards, rug edge, skirting, hearth present", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-012-D-condition.jpg"}, {"task_id": "RP-012.gpt-image-2.A-wide", "scenario_id": "RP-012", "provider": "OpenAI", "room_type": "Living room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-012-A-wide.png", "required": "leather sofa, patterned rug, fireplace, bookshelves, coffee table", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "All A anchors; bay clearly at far end", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-012-A-wide.png"}, {"task_id": "RP-012.gpt-image-2.B-reverse", "scenario_id": "RP-012", "provider": "OpenAI", "room_type": "Living room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-012-B-reverse.png", "required": "door, armchair, bay window, radiator, floorboards", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "**Required bay window absent** \u2014 flat back wall with door/radiator only; other B anchors present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-012-B-reverse.png"}, {"task_id": "RP-012.gpt-image-2.C-inventory", "scenario_id": "RP-012", "provider": "OpenAI", "room_type": "Living room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-012-C-inventory.png", "required": "fireplace surround, mantel, wall lights, sockets, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Fireplace/mantel/wall light/bay present; **sockets absent**", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-012-C-inventory.png"}, {"task_id": "RP-012.gpt-image-2.D-condition", "scenario_id": "RP-012", "provider": "OpenAI", "room_type": "Living room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-012-D-condition.png", "required": "timber floorboards, rug edge, skirting board, hearth", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Floorboards, rug edge, skirting, hearth present", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-012-D-condition.png"}, {"task_id": "RP-013.antigravity-builtin.A-wide", "scenario_id": "RP-013", "provider": "Google", "room_type": "Living room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-013-A-wide.jpg", "required": "charcoal sofa, nested tables, television stand, moving boxes, laminate floor", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Solid grey placeholder with task label; room not recognisable; illustrative not photographic", "image_src": "../images/antigravity/builtin/RP-013-A-wide.jpg"}, {"task_id": "RP-013.antigravity-builtin.B-reverse", "scenario_id": "RP-013", "provider": "Google", "room_type": "Living room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-013-B-reverse.jpg", "required": "entrance door, radiator, coat hooks, floor lamp, boxes", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Same blank placeholder failure", "image_src": "../images/antigravity/builtin/RP-013-B-reverse.jpg"}, {"task_id": "RP-013.antigravity-builtin.C-inventory", "scenario_id": "RP-013", "provider": "Google", "room_type": "Living room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-013-C-inventory.jpg", "required": "window, roller blind, radiator, sockets, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Same blank placeholder failure; sockets/window/radiator absent", "image_src": "../images/antigravity/builtin/RP-013-C-inventory.jpg"}, {"task_id": "RP-013.antigravity-builtin.D-condition", "scenario_id": "RP-013", "provider": "Google", "room_type": "Living room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-013-D-condition.jpg", "required": "laminate floor, table leg, rug edge, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Same blank placeholder failure", "image_src": "../images/antigravity/builtin/RP-013-D-condition.jpg"}, {"task_id": "RP-013.gpt-image-2.A-wide", "scenario_id": "RP-013", "provider": "OpenAI", "room_type": "Living room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-013-A-wide.png", "required": "charcoal sofa, nested tables, television stand, moving boxes, laminate floor", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Clear photographic living room with charcoal sofa, nested tables, TV stand, boxes, laminate; but a distinct dark wall mark above the TV with intended defects `none`", "image_src": "../images/openai/gpt-image-2/RP-013-A-wide.png"}, {"task_id": "RP-013.gpt-image-2.B-reverse", "scenario_id": "RP-013", "provider": "OpenAI", "room_type": "Living room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-013-B-reverse.png", "required": "entrance door, radiator, coat hooks, floor lamp, boxes", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Entrance door, radiator, coat hooks, floor lamp, boxes all present; photographic; no brands/people", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-013-B-reverse.png"}, {"task_id": "RP-013.gpt-image-2.C-inventory", "scenario_id": "RP-013", "provider": "OpenAI", "room_type": "Living room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-013-C-inventory.png", "required": "window, roller blind, radiator, sockets, skirting", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Required **sockets absent** (walls obscured by boxes/sofa; no outlet visible on recheck). Blind is horizontal slats, not a clear roller blind [reconciled from reviewer disagreement: was reject, second review escalate]", "reviewer_disagreement": true, "image_src": "../images/openai/gpt-image-2/RP-013-C-inventory.png"}, {"task_id": "RP-013.gpt-image-2.D-condition", "scenario_id": "RP-013", "provider": "OpenAI", "room_type": "Living room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-013-D-condition.png", "required": "laminate floor, table leg, rug edge, skirting", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Laminate, table leg, rug edge, skirting present; photographic floor detail; intended none holds", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-013-D-condition.png"}, {"task_id": "RP-014.antigravity-builtin.A-wide", "scenario_id": "RP-014", "provider": "Google", "room_type": "Entrance hall", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-A-wide.jpg", "required": "hall walls, striped runner, coat hooks, entryphone, ceiling light", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Labeled mock diagram; illustrative not photographic", "image_src": "../images/antigravity/builtin/RP-014-A-wide.jpg"}, {"task_id": "RP-014.antigravity-builtin.B-reverse", "scenario_id": "RP-014", "provider": "Google", "room_type": "Entrance hall", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-B-reverse.jpg", "required": "front door, door chain, letter plate, shoe rack, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Same mock/schematic failure", "image_src": "../images/antigravity/builtin/RP-014-B-reverse.jpg"}, {"task_id": "RP-014.antigravity-builtin.C-inventory", "scenario_id": "RP-014", "provider": "Google", "room_type": "Entrance hall", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-C-inventory.jpg", "required": "entryphone, consumer unit, light switch, smoke alarm, sockets", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Same mock/schematic failure", "image_src": "../images/antigravity/builtin/RP-014-C-inventory.jpg"}, {"task_id": "RP-014.antigravity-builtin.D-condition", "scenario_id": "RP-014", "provider": "Google", "room_type": "Entrance hall", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-D-condition.jpg", "required": "front door, threshold, door seal, runner", "intended_defects": "three pale scuff marks low on the inner face of the front door", "pass_a_decision": "reject", "pass_a_reason": "Same mock/schematic failure (text \u201cthree pale scuff marks\u201d is not photographic evidence)", "image_src": "../images/antigravity/builtin/RP-014-D-condition.jpg"}, {"task_id": "RP-014.gpt-image-2.A-wide", "scenario_id": "RP-014", "provider": "OpenAI", "room_type": "Entrance hall", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-014-A-wide.png", "required": "hall walls, striped runner, coat hooks, entryphone, ceiling light", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Hall walls, striped runner, coat hooks, entryphone, ceiling light; photographic", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-014-A-wide.png"}, {"task_id": "RP-014.gpt-image-2.B-reverse", "scenario_id": "RP-014", "provider": "OpenAI", "room_type": "Entrance hall", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-014-B-reverse.png", "required": "front door, door chain, letter plate, shoe rack, skirting", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Front door, door chain, letter plate (mail slot), shoe rack, skirting; photographic [reconciled from reviewer disagreement: was accept, second review reject]", "reviewer_disagreement": true, "image_src": "../images/openai/gpt-image-2/RP-014-B-reverse.png"}, {"task_id": "RP-014.gpt-image-2.C-inventory", "scenario_id": "RP-014", "provider": "OpenAI", "room_type": "Entrance hall", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-014-C-inventory.png", "required": "entryphone, consumer unit, light switch, smoke alarm, sockets", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Entryphone, consumer unit (fuse box), light switch, smoke alarm, sockets all clear", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-014-C-inventory.png"}, {"task_id": "RP-014.gpt-image-2.D-condition", "scenario_id": "RP-014", "provider": "OpenAI", "room_type": "Entrance hall", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-014-D-condition.png", "required": "front door, threshold, door seal, runner", "intended_defects": "three pale scuff marks low on the inner face of the front door", "pass_a_decision": "reject", "pass_a_reason": "Intended three pale door scuffs; close inspection shows **six** uniform horizontal scuffs in a 2\u00d73 grid \u2014 falsifies intended label. Threshold visible; door seal not clearly evidenced", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-014-D-condition.png"}, {"task_id": "RP-015.antigravity-builtin.A-wide", "scenario_id": "RP-015", "provider": "Google", "room_type": "Entrance hall", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-015-A-wide.jpg", "required": "tiled floor, coat bench, wall hooks, hall mirror, radiator", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Flat illustrative room diagram, not photographic", "image_src": "../images/antigravity/builtin/RP-015-A-wide.jpg"}, {"task_id": "RP-015.antigravity-builtin.B-reverse", "scenario_id": "RP-015", "provider": "Google", "room_type": "Entrance hall", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-015-B-reverse.jpg", "required": "glazed front door, door furniture, doormat, shoe storage, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Same illustrative failure", "image_src": "../images/antigravity/builtin/RP-015-B-reverse.jpg"}, {"task_id": "RP-015.antigravity-builtin.C-inventory", "scenario_id": "RP-015", "provider": "Google", "room_type": "Entrance hall", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-015-C-inventory.jpg", "required": "radiator, thermostat, sockets, light switch, smoke alarm", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Same illustrative failure", "image_src": "../images/antigravity/builtin/RP-015-C-inventory.jpg"}, {"task_id": "RP-015.antigravity-builtin.D-condition", "scenario_id": "RP-015", "provider": "Google", "room_type": "Entrance hall", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-015-D-condition.jpg", "required": "floor tiles, doormat, threshold strip, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Same illustrative failure; rug lines also geometrically incoherent", "image_src": "../images/antigravity/builtin/RP-015-D-condition.jpg"}, {"task_id": "RP-015.gpt-image-2.A-wide", "scenario_id": "RP-015", "provider": "OpenAI", "room_type": "Entrance hall", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-015-A-wide.png", "required": "tiled floor, coat bench, wall hooks, hall mirror, radiator", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Clear Nike swoosh on black sneaker (logo/readable brand). Anchors otherwise present [reconciled from reviewer disagreement: was reject, second review escalate]", "reviewer_disagreement": true, "image_src": "../images/openai/gpt-image-2/RP-015-A-wide.png"}, {"task_id": "RP-015.gpt-image-2.B-reverse", "scenario_id": "RP-015", "provider": "OpenAI", "room_type": "Entrance hall", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-015-B-reverse.png", "required": "glazed front door, door furniture, doormat, shoe storage, skirting", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Nike branding on foreground sneaker; required doormat absent; view still faces front door (not reverse) and introduces staircase absent from A [reconciled from reviewer disagreement: was reject, second review escalate]", "reviewer_disagreement": true, "image_src": "../images/openai/gpt-image-2/RP-015-B-reverse.png"}, {"task_id": "RP-015.gpt-image-2.C-inventory", "scenario_id": "RP-015", "provider": "OpenAI", "room_type": "Entrance hall", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-015-C-inventory.png", "required": "radiator, thermostat, sockets, light switch, smoke alarm", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Radiator, thermostat, sockets, light switch, smoke alarm present; photographic; no clear brands [reconciled from reviewer disagreement: was accept, second review reject]", "reviewer_disagreement": true, "image_src": "../images/openai/gpt-image-2/RP-015-C-inventory.png"}, {"task_id": "RP-015.gpt-image-2.D-condition", "scenario_id": "RP-015", "provider": "OpenAI", "room_type": "Entrance hall", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-015-D-condition.png", "required": "floor tiles, doormat, threshold strip, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Unreliable shoe geometry (melted/malformed footwear). Doormat/tiles/skirting present; threshold strip at door not clearly shown; branding ambiguous on recheck", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-015-D-condition.png"}, {"task_id": "RP-016.antigravity-builtin.A-wide", "scenario_id": "RP-016", "provider": "Google", "room_type": "Dining room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-016-A-wide.jpg", "required": "oak dining table, six chairs, French doors, pendant light, timber floor", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Oak table, six chairs, French doors, pendant, timber floor; photographic; only negligible faint wall mark", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-016-A-wide.jpg"}, {"task_id": "RP-016.antigravity-builtin.B-reverse", "scenario_id": "RP-016", "provider": "Google", "room_type": "Dining room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-016-B-reverse.jpg", "required": "internal door, sideboard, radiator, wall mirror, skirting", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Internal door(s), sideboard, radiator, wall mirror, skirting; coherent reverse from French doors", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-016-B-reverse.jpg"}, {"task_id": "RP-016.gpt-image-2.A-wide", "scenario_id": "RP-016", "provider": "OpenAI", "room_type": "Dining room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-016-A-wide.png", "required": "oak dining table, six chairs, French doors, pendant light, timber floor", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "All required dining anchors present; photographic", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-016-A-wide.png"}, {"task_id": "RP-016.gpt-image-2.B-reverse", "scenario_id": "RP-016", "provider": "OpenAI", "room_type": "Dining room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-016-B-reverse.png", "required": "internal door, sideboard, radiator, wall mirror, skirting", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Internal door, sideboard, radiator, mirror, skirting; mirror reflection consistent with French doors", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-016-B-reverse.png"}, {"task_id": "RP-016.gpt-image-2.C-inventory", "scenario_id": "RP-016", "provider": "OpenAI", "room_type": "Dining room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-016-C-inventory.png", "required": "French doors, curtain pole, radiator, sockets, thermostatic valve", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "French doors, curtain pole, radiator, sockets, TRV present [reconciled from reviewer disagreement: was accept, second review escalate]", "reviewer_disagreement": true, "image_src": "../images/openai/gpt-image-2/RP-016-C-inventory.png"}, {"task_id": "RP-016.gpt-image-2.D-condition", "scenario_id": "RP-016", "provider": "OpenAI", "room_type": "Dining room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-016-D-condition.png", "required": "oak tabletop, chair upholstery, timber floor, table leg", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Oak tabletop, chair upholstery, timber floor, table leg; intended none holds", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-016-D-condition.png"}, {"task_id": "RP-017.antigravity-builtin.A-wide", "scenario_id": "RP-017", "provider": "Google", "room_type": "Dining room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-017-A-wide.jpg", "required": "dark dining table, four chairs, display cabinet, chandelier, carpet", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Flat illustration with label text; not photographic.", "image_src": "../images/antigravity/builtin/RP-017-A-wide.jpg"}, {"task_id": "RP-017.antigravity-builtin.B-reverse", "scenario_id": "RP-017", "provider": "Google", "room_type": "Dining room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-017-B-reverse.jpg", "required": "door, fireplace, radiator, curtains, wallpaper", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Flat illustration; not photographic.", "image_src": "../images/antigravity/builtin/RP-017-B-reverse.jpg"}, {"task_id": "RP-017.antigravity-builtin.C-inventory", "scenario_id": "RP-017", "provider": "Google", "room_type": "Dining room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-017-C-inventory.jpg", "required": "glass cabinet, wall sockets, radiator, thermostat, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Flat illustration; not photographic.", "image_src": "../images/antigravity/builtin/RP-017-C-inventory.jpg"}, {"task_id": "RP-017.antigravity-builtin.D-condition", "scenario_id": "RP-017", "provider": "Google", "room_type": "Dining room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-017-D-condition.jpg", "required": "tabletop, table edge, tablecloth, chair back", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Abstract flat graphic; room/anchors not photographically recognisable.", "image_src": "../images/antigravity/builtin/RP-017-D-condition.jpg"}, {"task_id": "RP-017.gpt-image-2.A-wide", "scenario_id": "RP-017", "provider": "OpenAI", "room_type": "Dining room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-017-A-wide.png", "required": "dark dining table, four chairs, display cabinet, chandelier, carpet", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Clear photographic dining room; dark table (clothed), four chairs, display cabinet, chandelier, carpet.", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-017-A-wide.png"}, {"task_id": "RP-017.gpt-image-2.B-reverse", "scenario_id": "RP-017", "provider": "OpenAI", "room_type": "Dining room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-017-B-reverse.png", "required": "door, fireplace, radiator, curtains, wallpaper", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Door, fireplace, radiator under window, curtains, wallpaper all present; geometry stable.", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-017-B-reverse.png"}, {"task_id": "RP-017.gpt-image-2.C-inventory", "scenario_id": "RP-017", "provider": "OpenAI", "room_type": "Dining room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-017-C-inventory.png", "required": "glass cabinet, wall sockets, radiator, thermostat, skirting", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Glass cabinet, sockets, radiator, skirting present; wall plate may be switch rather than thermostat.", "image_src": "../images/openai/gpt-image-2/RP-017-C-inventory.png"}, {"task_id": "RP-017.gpt-image-2.D-condition", "scenario_id": "RP-017", "provider": "OpenAI", "room_type": "Dining room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-017-D-condition.png", "required": "tabletop, table edge, tablecloth, chair back", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Tabletop, edge, tablecloth, chair back all clear; photographic.", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-017-D-condition.png"}, {"task_id": "RP-018.antigravity-builtin.A-wide", "scenario_id": "RP-018", "provider": "Google", "room_type": "Utility room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-018-A-wide.jpg", "required": "washing machine, tumble dryer, utility sink, wall cupboards, vinyl floor", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Flat illustration; not photographic.", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-018-A-wide.jpg"}, {"task_id": "RP-018.antigravity-builtin.B-reverse", "scenario_id": "RP-018", "provider": "Google", "room_type": "Utility room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-018-B-reverse.jpg", "required": "door, coat hooks, shelving, radiator, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Flat illustration; not photographic.", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-018-B-reverse.jpg"}, {"task_id": "RP-018.antigravity-builtin.C-inventory", "scenario_id": "RP-018", "provider": "Google", "room_type": "Utility room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-018-C-inventory.jpg", "required": "washing machine, tumble dryer, isolator switches, sockets, air vent", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Flat illustration; not photographic.", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-018-C-inventory.jpg"}, {"task_id": "RP-018.antigravity-builtin.D-condition", "scenario_id": "RP-018", "provider": "Google", "room_type": "Utility room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-018-D-condition.jpg", "required": "sink cabinet, plinth, vinyl floor, pipe boxing", "intended_defects": "small swollen patch along the bottom edge of the sink cabinet door", "pass_a_decision": "reject", "pass_a_reason": "Flat illustration; intended swollen cabinet edge not photographically evidenced.", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-018-D-condition.jpg"}, {"task_id": "RP-018.gpt-image-2.A-wide", "scenario_id": "RP-018", "provider": "OpenAI", "room_type": "Utility room", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-018-A-wide.png", "required": "washing machine, tumble dryer, utility sink, wall cupboards, vinyl floor", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Photographic utility; WM/dryer pair, sink, wall cupboards, speckled vinyl; no readable brands.", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-018-A-wide.png"}, {"task_id": "RP-018.gpt-image-2.B-reverse", "scenario_id": "RP-018", "provider": "OpenAI", "room_type": "Utility room", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-018-B-reverse.png", "required": "door, coat hooks, shelving, radiator, skirting", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Door/hooks/shelving/radiator present, but appliance layout is stacked vs A/C side-by-side \u2014 packet continuity fails.", "image_src": "../images/openai/gpt-image-2/RP-018-B-reverse.png"}, {"task_id": "RP-018.gpt-image-2.C-inventory", "scenario_id": "RP-018", "provider": "OpenAI", "room_type": "Utility room", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-018-C-inventory.png", "required": "washing machine, tumble dryer, isolator switches, sockets, air vent", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "WM/dryer + socket visible; isolator switches and air vent not clearly evidenced.", "image_src": "../images/openai/gpt-image-2/RP-018-C-inventory.png"}, {"task_id": "RP-018.gpt-image-2.D-condition", "scenario_id": "RP-018", "provider": "OpenAI", "room_type": "Utility room", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-018-D-condition.png", "required": "sink cabinet, plinth, vinyl floor, pipe boxing", "intended_defects": "small swollen patch along the bottom edge of the sink cabinet door", "pass_a_decision": "reject", "pass_a_reason": "Utility sink on metal legs \u2014 no sink cabinet/plinth/pipe boxing; cannot support intended swollen door-edge defect.", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-018-D-condition.png"}, {"task_id": "RP-019.antigravity-builtin.A-wide", "scenario_id": "RP-019", "provider": "Google", "room_type": "Utility cupboard", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-019-A-wide.jpg", "required": "stacked washer dryer, boiler, shelves, cleaning tools, vinyl floor", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Labelled flat diagram; not photographic.", "image_src": "../images/antigravity/builtin/RP-019-A-wide.jpg"}, {"task_id": "RP-019.antigravity-builtin.B-reverse", "scenario_id": "RP-019", "provider": "Google", "room_type": "Utility cupboard", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-019-B-reverse.jpg", "required": "cupboard door, door hinges, shelves, storage baskets, skirting", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Abstract illustration; not photographic.", "image_src": "../images/antigravity/builtin/RP-019-B-reverse.jpg"}, {"task_id": "RP-019.antigravity-builtin.C-inventory", "scenario_id": "RP-019", "provider": "Google", "room_type": "Utility cupboard", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-019-C-inventory.jpg", "required": "boiler, consumer unit, isolator switches, air vent, pipework", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Flat diagram; not photographic.", "image_src": "../images/antigravity/builtin/RP-019-C-inventory.jpg"}, {"task_id": "RP-019.antigravity-builtin.D-condition", "scenario_id": "RP-019", "provider": "Google", "room_type": "Utility cupboard", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-019-D-condition.jpg", "required": "vinyl floor, plinth, pipe boxing, basket edge", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Flat diagram; low-level anchors not photographic.", "image_src": "../images/antigravity/builtin/RP-019-D-condition.jpg"}, {"task_id": "RP-019.gpt-image-2.A-wide", "scenario_id": "RP-019", "provider": "OpenAI", "room_type": "Utility cupboard", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-019-A-wide.png", "required": "stacked washer dryer, boiler, shelves, cleaning tools, vinyl floor", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Clear stacked washer/dryer, boiler, shelves, cleaning tools; floor reads wood-look laminate, not clearly vinyl.", "image_src": "../images/openai/gpt-image-2/RP-019-A-wide.png"}, {"task_id": "RP-019.gpt-image-2.B-reverse", "scenario_id": "RP-019", "provider": "OpenAI", "room_type": "Utility cupboard", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-019-B-reverse.png", "required": "cupboard door, door hinges, shelves, storage baskets, skirting", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Door + shelves + baskets present; cupboard hinges / skirting not clearly shown.", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-019-B-reverse.png"}, {"task_id": "RP-019.gpt-image-2.C-inventory", "scenario_id": "RP-019", "provider": "OpenAI", "room_type": "Utility cupboard", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-019-C-inventory.png", "required": "boiler, consumer unit, isolator switches, air vent, pipework", "intended_defects": "none", "pass_a_decision": "escalate", "pass_a_reason": "Boiler, consumer unit, pipework present; isolator switches and air vent not clearly shown.", "image_src": "../images/openai/gpt-image-2/RP-019-C-inventory.png"}, {"task_id": "RP-019.gpt-image-2.D-condition", "scenario_id": "RP-019", "provider": "OpenAI", "room_type": "Utility cupboard", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-019-D-condition.png", "required": "vinyl floor, plinth, pipe boxing, basket edge", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Basket/floor visible, but **plinth and pipe boxing absent** (pipes exposed); not the required low-level condition evidence set.", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-019-D-condition.png"}, {"task_id": "RP-020.antigravity-builtin.A-wide", "scenario_id": "RP-020", "provider": "Google", "room_type": "Stairs and landing", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-020-A-wide.jpg", "required": "stair carpet, handrail, balustrade, painted walls, landing window", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Photographic stairs/landing; carpet, handrail, balustrade, painted walls, landing window.", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-020-A-wide.jpg"}, {"task_id": "RP-020.antigravity-builtin.B-reverse", "scenario_id": "RP-020", "provider": "Google", "room_type": "Stairs and landing", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-020-B-reverse.jpg", "required": "stairs, front hall, handrail, newel post, ceiling pendant", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Stairs to front hall, handrail, newel, pendant; photographic.", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-020-B-reverse.jpg"}, {"task_id": "RP-020.antigravity-builtin.C-inventory", "scenario_id": "RP-020", "provider": "Google", "room_type": "Stairs and landing", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-020-C-inventory.jpg", "required": "landing window, radiator, smoke alarm, light switch, sockets", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Landing window, radiator, smoke alarm, switch, sockets all clear.", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-020-C-inventory.jpg"}, {"task_id": "RP-020.antigravity-builtin.D-condition", "scenario_id": "RP-020", "provider": "Google", "room_type": "Stairs and landing", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-020-D-condition.jpg", "required": "stair carpet, carpet rods, skirting string, newel post", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Stair carpet, brass carpet rod(s), skirting string, newel present \u2014 **but conflicts with A\u2013C rod absence (packet escalate).**", "second_review_agreed": true, "image_src": "../images/antigravity/builtin/RP-020-D-condition.jpg"}, {"task_id": "RP-020.gpt-image-2.A-wide", "scenario_id": "RP-020", "provider": "OpenAI", "room_type": "Stairs and landing", "view_id": "A-wide", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-020-A-wide.png", "required": "stair carpet, handrail, balustrade, painted walls, landing window", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Photographic; stair carpet, handrail, balustrade, painted walls, landing window.", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-020-A-wide.png"}, {"task_id": "RP-020.gpt-image-2.B-reverse", "scenario_id": "RP-020", "provider": "OpenAI", "room_type": "Stairs and landing", "view_id": "B-reverse", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-020-B-reverse.png", "required": "stairs, front hall, handrail, newel post, ceiling pendant", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Stairs, front hall/door, handrail, newel, pendant; photographic.", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-020-B-reverse.png"}, {"task_id": "RP-020.gpt-image-2.C-inventory", "scenario_id": "RP-020", "provider": "OpenAI", "room_type": "Stairs and landing", "view_id": "C-inventory", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-020-C-inventory.png", "required": "landing window, radiator, smoke alarm, light switch, sockets", "intended_defects": "none", "pass_a_decision": "accept", "pass_a_reason": "Landing window, radiator, smoke alarm, switch, sockets present.", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-020-C-inventory.png"}, {"task_id": "RP-020.gpt-image-2.D-condition", "scenario_id": "RP-020", "provider": "OpenAI", "room_type": "Stairs and landing", "view_id": "D-condition", "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-020-D-condition.png", "required": "stair carpet, carpet rods, skirting string, newel post", "intended_defects": "none", "pass_a_decision": "reject", "pass_a_reason": "Stair carpet / string / newel present; **carpet rods clearly omitted** (required anchor absent).", "second_review_agreed": true, "image_src": "../images/openai/gpt-image-2/RP-020-D-condition.png"}]};</script>
+<script>
+(() => {
+  const STORAGE_KEY = "pass-a-owner-adjudications-v1";
+  const data = window.PASS_A_REVIEW;
+  const frames = data.frames.map((frame, index) => {
+    const disagreement = (data.reviewer_disagreements || []).find(
+      (row) => row.task_id === frame.task_id
+    );
+    return { ...frame, index, disagreement: disagreement || null };
+  });
+
+  const state = {
+    filter: "escalate",
+    provider: "all",
+    onlyPending: false,
+    cursor: 0,
+    decisions: loadDecisions(),
+  };
+
+  const els = {
+    stage: document.getElementById("stage"),
+    media: document.getElementById("media"),
+    missing: document.getElementById("missing"),
+    ask: document.getElementById("ask"),
+    title: document.getElementById("title"),
+    subtitle: document.getElementById("subtitle"),
+    aiBadge: document.getElementById("ai-badge"),
+    ownerBadge: document.getElementById("owner-badge"),
+    focusLabel: document.getElementById("focus-label"),
+    reason: document.getElementById("reason"),
+    requiredList: document.getElementById("required-list"),
+    defectBlock: document.getElementById("defect-block"),
+    defects: document.getElementById("defects"),
+    disagreement: document.getElementById("disagreement"),
+    note: document.getElementById("owner-note"),
+    acceptBtn: document.getElementById("accept"),
+    rejectBtn: document.getElementById("reject"),
+    filmstrip: document.getElementById("filmstrip"),
+    progress: document.getElementById("progress"),
+    counts: document.getElementById("counts"),
+    toast: document.getElementById("toast"),
+  };
+
+  function loadDecisions() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return parsed.decisions || {};
+    } catch {
+      return {};
+    }
+  }
+
+  function saveDecisions() {
+    const payload = {
+      review_type: "owner_pass_a_adjudication",
+      source_review: data.source_file || data.review_type,
+      adjudicator: "project owner",
+      updated_at: new Date().toISOString(),
+      decisions: state.decisions,
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  }
+
+  function ownerOf(taskId) {
+    return state.decisions[taskId] || null;
+  }
+
+  function visibleFrames() {
+    return frames.filter((frame) => {
+      if (state.filter !== "all" && frame.pass_a_decision !== state.filter) {
+        return false;
+      }
+      if (state.provider !== "all" && frame.provider !== state.provider) {
+        return false;
+      }
+      if (state.onlyPending && ownerOf(frame.task_id)) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  function currentFrame() {
+    const list = visibleFrames();
+    if (!list.length) return null;
+    state.cursor = Math.max(0, Math.min(state.cursor, list.length - 1));
+    return list[state.cursor];
+  }
+
+  function toast(message) {
+    els.toast.textContent = message;
+    els.toast.dataset.show = "1";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => {
+      els.toast.dataset.show = "0";
+    }, 1600);
+  }
+
+  function setOwnerDecision(decision) {
+    const frame = currentFrame();
+    if (!frame) return;
+    const note = els.note.value.trim();
+    state.decisions[frame.task_id] = {
+      task_id: frame.task_id,
+      scenario_id: frame.scenario_id,
+      provider: frame.provider,
+      view_id: frame.view_id,
+      path: frame.path,
+      ai_decision: frame.pass_a_decision,
+      ai_reason: frame.pass_a_reason,
+      owner_decision: decision,
+      owner_reason: note || frame.pass_a_reason,
+      adjudicated_at: new Date().toISOString(),
+    };
+    saveDecisions();
+    toast(decision === "accept" ? "Accepted" : "Rejected");
+    // Stay in flow: jump to the next unresolved frame in this filter.
+    const list = visibleFrames();
+    const nextPending = list.findIndex(
+      (item, index) => index > state.cursor && !ownerOf(item.task_id)
+    );
+    if (nextPending >= 0) {
+      state.cursor = nextPending;
+    } else {
+      const firstPending = list.findIndex((item) => !ownerOf(item.task_id));
+      state.cursor = firstPending >= 0 ? firstPending : Math.min(state.cursor, Math.max(list.length - 1, 0));
+    }
+    render();
+  }
+
+  function clearOwnerDecision() {
+    const frame = currentFrame();
+    if (!frame || !state.decisions[frame.task_id]) return;
+    delete state.decisions[frame.task_id];
+    saveDecisions();
+    toast("Cleared");
+    render();
+  }
+
+  function move(delta) {
+    const list = visibleFrames();
+    if (!list.length) return;
+    state.cursor = (state.cursor + delta + list.length) % list.length;
+    render();
+  }
+
+  function exportPayload() {
+    const decisions = Object.values(state.decisions).sort((a, b) =>
+      a.task_id.localeCompare(b.task_id)
+    );
+    return {
+      review_type: "owner_pass_a_adjudication",
+      source_review: data.source_file || "phase3-pass-a-review.json",
+      adjudicator: "project owner",
+      adjudicated_at: new Date().toISOString(),
+      counts: {
+        total_recorded: decisions.length,
+        accept: decisions.filter((d) => d.owner_decision === "accept").length,
+        reject: decisions.filter((d) => d.owner_decision === "reject").length,
+        escalate_remaining: frames.filter(
+          (f) => f.pass_a_decision === "escalate" && !state.decisions[f.task_id]
+        ).length,
+      },
+      decisions,
+    };
+  }
+
+  function downloadExport() {
+    const payload = exportPayload();
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "owner-adjudications.json";
+    a.click();
+    URL.revokeObjectURL(url);
+    toast("Exported JSON");
+  }
+
+  async function copyExport() {
+    const payload = exportPayload();
+    await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+    toast("Copied JSON");
+  }
+
+  function badgeClass(decision) {
+    if (decision === "accept") return "ok";
+    if (decision === "reject") return "bad";
+    return "warn";
+  }
+
+  function renderFilmstrip(list, activeId) {
+    els.filmstrip.innerHTML = "";
+    list.forEach((frame, i) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "thumb";
+      if (frame.task_id === activeId) button.dataset.active = "1";
+      const owner = ownerOf(frame.task_id);
+      button.dataset.decision = owner
+        ? owner.owner_decision
+        : frame.pass_a_decision;
+      button.innerHTML = `
+        <img src="${frame.image_src}" alt="" loading="lazy">
+        <span>${frame.scenario_id} · ${frame.view_id}</span>
+      `;
+      button.addEventListener("click", () => {
+        state.cursor = i;
+        render();
+      });
+      els.filmstrip.appendChild(button);
+    });
+  }
+
+  function render() {
+    const list = visibleFrames();
+    const decided = Object.keys(state.decisions).length;
+    const escalateOpen = frames.filter(
+      (f) => f.pass_a_decision === "escalate" && !state.decisions[f.task_id]
+    ).length;
+    els.counts.textContent = `${data.counts.escalate} escalate · ${data.counts.reject} reject · ${data.counts.accept} accept · ${decided} owner decisions · ${escalateOpen} escalations left`;
+
+    document.querySelectorAll("[data-filter]").forEach((button) => {
+      button.dataset.active = button.dataset.filter === state.filter ? "1" : "0";
+    });
+    document.querySelectorAll("[data-provider]").forEach((button) => {
+      button.dataset.active =
+        button.dataset.provider === state.provider ? "1" : "0";
+    });
+    document.getElementById("pending-only").dataset.active = state.onlyPending
+      ? "1"
+      : "0";
+
+    if (!list.length) {
+      els.progress.textContent = "0 / 0";
+      els.ask.textContent = "Queue clear";
+      els.title.textContent = "Nothing to review";
+      els.subtitle.textContent = "Nothing matches this filter.";
+      els.media.hidden = true;
+      els.missing.hidden = false;
+      els.missing.textContent = "No frames in this view.";
+      els.filmstrip.innerHTML = "";
+      els.focusLabel.textContent = "Focus";
+      els.reason.textContent = "—";
+      els.requiredList.innerHTML = "";
+      els.defectBlock.hidden = true;
+      els.disagreement.hidden = true;
+      els.ownerBadge.hidden = true;
+      return;
+    }
+
+    const frame = currentFrame();
+    const decision = frame.pass_a_decision;
+    const prompt = {
+      escalate: {
+        ask: "Does this frame clear Pass A?",
+        focus: "Check this uncertainty in the photo",
+        accept: "Accept · A",
+        reject: "Reject · R",
+      },
+      reject: {
+        ask: "Was the AI reject right?",
+        focus: "Confirm this reject reason, or overturn it",
+        accept: "Overturn · A",
+        reject: "Keep reject · R",
+      },
+      accept: {
+        ask: "Spot-check: still accept?",
+        focus: "AI accepted — look for a hard fail only",
+        accept: "Keep accept · A",
+        reject: "Reject · R",
+      },
+    }[decision] || {
+      ask: "Does this frame clear Pass A?",
+      focus: "What to verify",
+      accept: "Accept · A",
+      reject: "Reject · R",
+    };
+
+    els.progress.textContent = `${state.cursor + 1} / ${list.length}`;
+    els.ask.textContent = prompt.ask;
+    els.title.textContent = `${frame.scenario_id} · ${frame.room_type}`;
+    els.subtitle.textContent = `${frame.provider} · ${frame.view_id}`;
+    els.aiBadge.textContent = `AI ${decision}`;
+    els.aiBadge.className = `badge ${badgeClass(decision)}`;
+    els.focusLabel.textContent = prompt.focus;
+    els.acceptBtn.textContent = prompt.accept;
+    els.rejectBtn.textContent = prompt.reject;
+
+    const owner = ownerOf(frame.task_id);
+    if (owner && owner.owner_decision) {
+      els.ownerBadge.hidden = false;
+      els.ownerBadge.textContent = `You: ${owner.owner_decision}`;
+      els.ownerBadge.className = `badge ${badgeClass(owner.owner_decision)}`;
+      els.note.value = owner.owner_reason || "";
+    } else {
+      els.ownerBadge.hidden = true;
+      els.ownerBadge.textContent = "";
+      els.note.value = "";
+    }
+
+    els.reason.textContent = frame.pass_a_reason || "No AI reason recorded.";
+    const requiredItems = (frame.required || "")
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+    els.requiredList.replaceChildren();
+    if (!requiredItems.length) {
+      const empty = document.createElement("li");
+      empty.className = "empty";
+      empty.textContent = "None listed";
+      els.requiredList.appendChild(empty);
+    } else {
+      for (const item of requiredItems) {
+        const li = document.createElement("li");
+        li.textContent = item;
+        els.requiredList.appendChild(li);
+      }
+    }
+
+    const defects = (frame.intended_defects || "").trim();
+    const hasDefect = defects && defects.toLowerCase() !== "none";
+    els.defectBlock.hidden = !hasDefect;
+    els.defects.textContent = defects || "none";
+
+    if (frame.disagreement) {
+      els.disagreement.hidden = false;
+      els.disagreement.textContent = `Reviewers disagreed: ${frame.disagreement.first} vs ${frame.disagreement.second} → escalated`;
+    } else {
+      els.disagreement.hidden = true;
+    }
+    els.media.hidden = false;
+    els.missing.hidden = true;
+    els.media.src = frame.image_src;
+    els.media.alt = frame.task_id;
+    renderFilmstrip(list, frame.task_id);
+    const activeThumb = els.filmstrip.querySelector('[data-active="1"]');
+    if (activeThumb) {
+      activeThumb.scrollIntoView({
+        inline: "center",
+        block: "nearest",
+        behavior: "smooth",
+      });
+    }
+  }
+
+  document.querySelectorAll("[data-filter]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.filter = button.dataset.filter;
+      state.cursor = 0;
+      render();
+    });
+  });
+  document.querySelectorAll("[data-provider]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.provider = button.dataset.provider;
+      state.cursor = 0;
+      render();
+    });
+  });
+  document.getElementById("pending-only").addEventListener("click", () => {
+    state.onlyPending = !state.onlyPending;
+    state.cursor = 0;
+    render();
+  });
+  document.getElementById("prev").addEventListener("click", () => move(-1));
+  document.getElementById("next").addEventListener("click", () => move(1));
+  document
+    .getElementById("accept")
+    .addEventListener("click", () => setOwnerDecision("accept"));
+  document
+    .getElementById("reject")
+    .addEventListener("click", () => setOwnerDecision("reject"));
+  document
+    .getElementById("clear")
+    .addEventListener("click", () => clearOwnerDecision());
+  document
+    .getElementById("export")
+    .addEventListener("click", () => downloadExport());
+  document.getElementById("copy").addEventListener("click", () => copyExport());
+  els.note.addEventListener("change", () => {
+    const frame = currentFrame();
+    const owner = frame && ownerOf(frame.task_id);
+    if (!owner) return;
+    owner.owner_reason = els.note.value.trim() || owner.ai_reason;
+    owner.adjudicated_at = new Date().toISOString();
+    saveDecisions();
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (
+      event.target instanceof HTMLTextAreaElement ||
+      event.target instanceof HTMLInputElement
+    ) {
+      return;
+    }
+    const key = event.key.toLowerCase();
+    if (key === "arrowright" || key === "j") {
+      event.preventDefault();
+      move(1);
+    } else if (key === "arrowleft" || key === "k") {
+      event.preventDefault();
+      move(-1);
+    } else if (key === "a") {
+      event.preventDefault();
+      setOwnerDecision("accept");
+    } else if (key === "r") {
+      event.preventDefault();
+      setOwnerDecision("reject");
+    } else if (key === "u" || key === "backspace") {
+      event.preventDefault();
+      clearOwnerDecision();
+    } else if (key === "1") {
+      state.filter = "escalate";
+      state.cursor = 0;
+      render();
+    } else if (key === "2") {
+      state.filter = "reject";
+      state.cursor = 0;
+      render();
+    } else if (key === "3") {
+      state.filter = "accept";
+      state.cursor = 0;
+      render();
+    } else if (key === "0") {
+      state.filter = "all";
+      state.cursor = 0;
+      render();
+    } else if (key === "e" && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      downloadExport();
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

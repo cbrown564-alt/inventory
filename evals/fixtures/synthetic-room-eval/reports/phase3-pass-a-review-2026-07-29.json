@@ -9,14 +9,14 @@
   },
   "by_provider": {
     "Google": {
-      "escalate": 11,
-      "reject": 39,
-      "accept": 24
+      "escalate": 18,
+      "reject": 34,
+      "accept": 22
     },
     "OpenAI": {
-      "accept": 38,
-      "escalate": 15,
-      "reject": 19
+      "accept": 35,
+      "escalate": 21,
+      "reject": 16
     }
   },
   "frames": [

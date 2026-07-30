@@ -5,114 +5,144 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "stair carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "handrail",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "balustrade",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "painted walls",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "landing window",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Photographic stairs/landing; carpet, handrail, balustrade, painted walls, landing window.",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "stairs",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "front hall",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "handrail",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "newel post",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "ceiling pendant",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Stairs to front hall, handrail, newel, pendant; photographic.",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "landing window",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "smoke alarm",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "light switch",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Landing window, radiator, smoke alarm, switch, sockets all clear.",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "stair carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "carpet rods",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting string",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "newel post",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Stair carpet, brass carpet rod(s), skirting string, newel present — **but conflicts with A–C rod absence (packet escalate).**",
+          "second_review_agreed": true
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

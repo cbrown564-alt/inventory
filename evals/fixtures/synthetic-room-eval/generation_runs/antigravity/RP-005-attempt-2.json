@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "scenario_id": "RP-005",
+  "recorded_at": "2026-07-30T00:51:07.966832+00:00",
+  "generation_path": "Antigravity CLI built-in generate_image",
+  "backend_model": "unknown",
+  "metered_api_call": false,
+  "cli_version": "1.1.8",
+  "operator_model_mode": "gemini-3.5-flash-low",
+  "status": "files_recovered_after_wrapper_error",
+  "provenance_warning": "All four original files were present, but the prior CLI wrapper returned ERROR and no successful raw run record was available. File hashes and task timestamps are retained.",
+  "outputs": [
+    {
+      "task_id": "RP-005.antigravity-builtin.A-wide",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-A-wide.jpg",
+      "sha256": "1dbb053e72de4379da803d9e312c72f8296ab43af55fe19d9c393ce1b49de0a4",
+      "width": 1376,
+      "height": 768
+    },
+    {
+      "task_id": "RP-005.antigravity-builtin.B-reverse",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-B-reverse.jpg",
+      "sha256": "1934ed81b93be0636fcb0d2a2229a41b32c17145b20d1d9af9fece496b29bb57",
+      "width": 1376,
+      "height": 768
+    },
+    {
+      "task_id": "RP-005.antigravity-builtin.C-inventory",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-C-inventory.jpg",
+      "sha256": "aff6e28ba0b53b788963cdf2ce671161377a619052dae1b19b36cd1667e367a6",
+      "width": 1376,
+      "height": 768
+    },
+    {
+      "task_id": "RP-005.antigravity-builtin.D-condition",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-005-D-condition.jpg",
+      "sha256": "04fab85a5ce4019a5b38c61b17d1a6907567fa09b024fe5920d5c64d45a6603e",
+      "width": 1264,
+      "height": 848
+    }
+  ]
+}

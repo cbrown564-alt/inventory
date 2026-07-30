@@ -5,114 +5,182 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "white kitchen units",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "oak-effect worktop",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sink",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "oven",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "ceramic hob",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "White units, oak-effect top, sink, oven, ceramic hob present",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "fridge freezer",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting boards",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Fridge/radiator/door present; floor reads wood laminate not vinyl; skirting unclear",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-003.gpt-image-2.B-reverse",
+          "scenario_id": "RP-003",
+          "provider": "OpenAI",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-003-B-reverse.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Fridge/radiator/door present; floor reads wood laminate not vinyl; skirting unclear",
+          "owner_decision": "accept",
+          "owner_reason": "Fridge/radiator/door present; floor reads wood laminate not vinyl; skirting unclear",
+          "adjudicated_at": "2026-07-29T19:19:18.067Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "extractor hood",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "ceramic hob",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "oven",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "heat alarm",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Heat alarm absent (ceiling shows bare bulb only)"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Heat alarm absent (ceiling shows bare bulb only)",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-003.gpt-image-2.C-inventory",
+          "scenario_id": "RP-003",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-003-C-inventory.png",
+          "ai_decision": "reject",
+          "ai_reason": "Heat alarm absent (ceiling shows bare bulb only)",
+          "owner_decision": "reject",
+          "owner_reason": "Heat alarm absent (ceiling shows bare bulb only)",
+          "adjudicated_at": "2026-07-29T19:26:41.826Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "splashback tiles",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "grout",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "worktop edge",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "socket",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Splashback/grout/worktop/socket present; subway tiles conflict with A wood upstand",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-003.gpt-image-2.D-condition",
+          "scenario_id": "RP-003",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-003-D-condition.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Splashback/grout/worktop/socket present; subway tiles conflict with A wood upstand",
+          "owner_decision": "accept",
+          "owner_reason": "Splashback/grout/worktop/socket present; subway tiles conflict with A wood upstand",
+          "adjudicated_at": "2026-07-29T19:19:39.771Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

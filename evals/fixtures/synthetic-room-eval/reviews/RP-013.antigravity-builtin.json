@@ -5,114 +5,200 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "charcoal sofa",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "nested tables",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "television stand",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "moving boxes",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "laminate floor",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Solid grey placeholder with task label; room not recognisable; illustrative not photographic"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Solid grey placeholder with task label; room not recognisable; illustrative not photographic",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-013.antigravity-builtin.A-wide",
+          "scenario_id": "RP-013",
+          "provider": "Google",
+          "view_id": "A-wide",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-013-A-wide.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Solid grey placeholder with task label; room not recognisable; illustrative not photographic",
+          "owner_decision": "reject",
+          "owner_reason": "Solid grey placeholder with task label; room not recognisable; illustrative not photographic",
+          "adjudicated_at": "2026-07-29T19:30:08.411Z"
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "entrance door",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "coat hooks",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "floor lamp",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "boxes",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Same blank placeholder failure"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Same blank placeholder failure",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-013.antigravity-builtin.B-reverse",
+          "scenario_id": "RP-013",
+          "provider": "Google",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-013-B-reverse.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Same blank placeholder failure",
+          "owner_decision": "reject",
+          "owner_reason": "Same blank placeholder failure",
+          "adjudicated_at": "2026-07-29T19:30:09.157Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "window",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "roller blind",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Same blank placeholder failure; sockets/window/radiator absent"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Same blank placeholder failure; sockets/window/radiator absent",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-013.antigravity-builtin.C-inventory",
+          "scenario_id": "RP-013",
+          "provider": "Google",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-013-C-inventory.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Same blank placeholder failure; sockets/window/radiator absent",
+          "owner_decision": "reject",
+          "owner_reason": "Same blank placeholder failure; sockets/window/radiator absent",
+          "adjudicated_at": "2026-07-29T19:30:09.986Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "laminate floor",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "table leg",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "rug edge",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Same blank placeholder failure"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Same blank placeholder failure",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-013.antigravity-builtin.D-condition",
+          "scenario_id": "RP-013",
+          "provider": "Google",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-013-D-condition.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Same blank placeholder failure",
+          "owner_decision": "reject",
+          "owner_reason": "Same blank placeholder failure",
+          "adjudicated_at": "2026-07-29T19:30:10.365Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

@@ -1,7 +1,7 @@
 {
   "dataset_id": "synthetic-room-eval",
   "phase": "phase-3-development-and-validation-generation",
-  "status": "blocked_antigravity_quota_and_ai_review",
+  "status": "blocked_antigravity_quota_during_retry_and_review",
   "observed_truth_rule": "Only independently AI-reviewed Pass B claims, with required owner adjudication resolved, may be scored as gold.",
   "target_design": {
     "matched_scenarios": 25,
@@ -25,7 +25,7 @@
     "primary_path": "Independent AI Pass A and Pass B",
     "second_check": "A separate independent AI checks every defect, every negative and the defined ordinary-label sample.",
     "human_escalation": "Owner review is required only for ambiguity, AI disagreement, material evidential risk, validation failures and periodic drift-audit samples.",
-    "implementation_status": "Review schema and templates must add AI reviewer provenance, review-prompt hashes and escalation outcomes before the scale review."
+    "implementation_status": "Implemented: dual independent Pass A and Pass B runners pin model mode, CLI version, prompt hashes, image hashes, raw sanitised wrappers, escalation outcomes and owner resolutions."
   },
   "providers": {
     "nano-banana-2-lite": {
@@ -112,32 +112,36 @@
     }
   },
   "phase_3_execution": {
-    "status": "blocked",
-    "observed_at": "2026-07-29T13:20:17+01:00",
+    "status": "blocked_provider_quota",
+    "observed_at": "2026-07-30T00:56:00+00:00",
     "task_status": {
       "total": 200,
-      "pass_a_accepted": 8,
-      "review_pending": 146,
+      "pass_a_accepted": 101,
+      "review_pending": 39,
+      "retry_pending": 14,
       "generator_failed": 4,
       "pending": 42
     },
     "provider_status": {
       "Google": {
-        "review_pending": 74,
+        "pass_a_accepted": 39,
+        "review_pending": 21,
+        "retry_pending": 14,
         "generator_failed": 4,
         "pending": 22
       },
       "OpenAI": {
-        "pass_a_accepted": 8,
-        "review_pending": 72,
+        "pass_a_accepted": 62,
+        "review_pending": 18,
         "pending": 20
       }
     },
-    "stop_record": "generation_runs/antigravity/pause-2026-07-29-1320.json",
+    "stop_record": "generation_runs/antigravity/pause-2026-07-30-0156.json",
     "blocked_by": [
-      "Google RP-016 C-inventory and D-condition remain pending after Antigravity RESOURCE_EXHAUSTED/429.",
-      "Pass A and Pass B require independent AI review, defined second checks and owner adjudication only for escalated cases; generated files cannot be self-promoted to verified_synthetic_gold.",
-      "Review metadata support must be implemented before the scale review.",
+      "The Antigravity subscription reported an individual quota reset in 4h11m4s with zero tokens used by the failed RP-016 attempt.",
+      "Google RP-016 C-inventory and D-condition remain pending; 14 rejected Google views also still lack their final allowed retry output.",
+      "Thirty-nine generated retries await dual independent Pass A through the same subscription path.",
+      "Seven complete packets are ready for Pass B after quota reset. Google RP-009, RP-012 and RP-018 remain excluded because their current files lack successful raw generation provenance.",
       "No prompt or architecture winner may be frozen before complete development and validation evidence."
     ],
     "downstream_effect": "Phase 4 sealed comparison and Phase 5 real transfer remain dependency-blocked. They have not run."

@@ -1,6 +1,6 @@
 # 31 — Synthetic room evaluation dataset
 
-*Updated 29 Jul 2026. Implementation plan for a public, independently
+*Updated 30 Jul 2026. Implementation plan for a public, independently
 AI-reviewed synthetic room dataset with human escalation, used to develop
 prompts and compare off-the-shelf VLM pipelines. This document owns the
 synthetic evaluation dataset. It does not change the real-property v1 quality
@@ -40,28 +40,27 @@ with the AI-first, exception-based review policy below. Those reviewed batches
 are calibration evidence for the policy, not automatic acceptance of later
 images.
 
-## Current execution status — 29 Jul 2026
+## Current execution status — 30 Jul 2026
 
 | Phase | Status | Evidence |
 |---|---|---|
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
-| 3 — development and validation | **Paused** | Across the 160 development/validation tasks, 8 previously accepted GPT images remain accepted, 146 generated images await independent AI Pass A, 4 Google tasks are terminal generator failures and 2 Google tasks remain pending. The GPT Image 2 development/validation cohort is complete through `RP-020`; only the `C-inventory` and `D-condition` Google views of `RP-016` remain to generate. |
+| 3 — development and validation | **Provider-blocked** | The complete 146-frame Pass A plus owner adjudication has been applied: 93 frames were accepted and 53 first attempts were archived for retry. Eighteen GPT Image 2 retries and 21 Google retries now await dual independent retry Pass A. Fourteen Google retry files and the two first-attempt `RP-016` views are still missing after the subscription reported a quota reset in about four hours. |
 | 4 — sealed comparison | **Dependency-blocked** | No validation winner exists, so opening the sealed model comparison would violate the frozen order. |
 | 5 — real transfer | **Dependency-blocked** | There is no selected winner to run on real fixtures. The separate native-resolution evidence gate also remains open. |
 
 The quota responses are provider-internal limits reached through Antigravity
 CLI; they are not metered image API calls made by this project. Resume Phase 3
-from `generation_runs/antigravity/pause-2026-07-29-1320.json`, complete the
-pending generation tasks, then run the independent AI reviews and send only
-the required exceptions to the project owner. Do not mark generated files
-accepted or gold without the recorded review path.
+from `generation_runs/antigravity/pause-2026-07-30-0156.json`. The review
+tooling now pins reviewer model mode, CLI version, prompt and image hashes,
+sanitised raw wrappers, blind second checks and owner resolutions. Do not mark
+retry outputs accepted or any packet gold without that recorded path.
 
-The existing review schema and templates predate the AI-first decision: they
-have free-text reviewer fields but do not yet pin reviewer model/version and
-review-prompt hashes or record an escalation decision. Update them before
-starting the 146-image review run. The policy is decided; its metadata support
-is a Phase 3 implementation task.
+The special Google provenance audit separates intact files from proved
+generation origin. `RP-009` and `RP-012` have no successful raw generation
+record, while `RP-018` has only an integrity recovery ledger. All three remain
+provisional and are automatically excluded from Pass B.
 
 ## The question this dataset answers
 
@@ -629,7 +628,7 @@ packet assignments are frozen in `splits/` and recorded by SHA-256 in
 ### Phase 3 — complete development and validation sets
 
 - [ ] Generate the remaining development and validation packets.
-- [ ] Extend the review schema and templates with AI reviewer provenance,
+- [x] Extend the review schema and templates with AI reviewer provenance,
       review-prompt hashes and escalation outcomes.
 - [ ] Run independent AI Pass A and Pass B, escalate only the defined
       exceptions, and repair labels without repairing image pixels.
@@ -724,6 +723,29 @@ are Google `RP-016 C-inventory` and `D-condition`. Dataset validation reports
 zero errors and the 12 focused synthetic-evaluation tests pass. The sanitised
 checkpoint is
 `generation_runs/antigravity/pause-2026-07-29-1320.json`.
+
+**30 Jul 2026 01:56 checkpoint:** the complete 146-frame AI Pass A and 89
+owner exceptions were imported atomically. The final result was 93 accepted
+and 53 rejected first attempts. Nine owner accepts that contradicted hard
+Pass A criteria were retained in the audit trail and corrected by a separate
+protocol record; the raw owner export was not rewritten. All 53 rejected
+files were hash-checked and archived before retry. Codex `imagegen` produced
+and recorded all 18 required GPT Image 2 retries with exact prompt, output and
+same-packet A-wide reference hashes. Antigravity produced 21 of 35 required
+Google retries; 14 remain missing. Its isolated attempt to complete Google
+`RP-016 C-inventory` and `D-condition` returned a zero-token individual-quota
+error with a reported reset in `4h11m4s`, so those two first attempts remain
+pending. The full queue is now 101 `pass_a_accepted`, 39 `review_pending`, 14
+`retry_pending`, 4 `generator_failed` and 42 `pending`; 40 pending tasks are
+the untouched sealed split.
+
+Dual independent retry Pass A, its atomic applicator, observed-evidence Pass B
+with blind risk-label checks, Pass B promotion guards, GPT retry provenance
+and the special Google provenance audit are implemented. Thirty-nine retry
+outputs are ready for Pass A and seven complete, provenance-eligible packets
+are ready for Pass B after the quota reset. No development/validation scoring,
+prompt selection, sealed work or real transfer has started. Dataset validation
+reports zero errors and the focused synthetic suite has 17 passing tests.
 
 ### Phase 4 — sealed synthetic comparison
 

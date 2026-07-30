@@ -5,122 +5,210 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "kitchen units",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "dark worktop",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sink",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "oven",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "induction hob",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "extractor hood",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Kitchen clear; glass hob shows radiant rings, not clearly induction",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-001.antigravity-builtin.A-wide",
+          "scenario_id": "RP-001",
+          "provider": "Google",
+          "view_id": "A-wide",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-A-wide.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Kitchen clear; glass hob shows radiant rings, not clearly induction",
+          "owner_decision": "accept",
+          "owner_reason": "Kitchen clear; glass hob shows radiant rings, not clearly induction",
+          "adjudicated_at": "2026-07-29T19:18:17.397Z"
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "kitchen units",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "window blind",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "door furniture",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting boards",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Required window blind absent; the owner note confirms a binding missing-anchor failure."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Required window blind absent (bare window); skirting unclear",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-001.antigravity-builtin.B-reverse",
+          "scenario_id": "RP-001",
+          "provider": "Google",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-B-reverse.jpg",
+          "ai_decision": "reject",
+          "ai_reason": "Required window blind absent (bare window); skirting unclear",
+          "owner_decision": "accept",
+          "owner_reason": "Required window blind absent (bare window); skirting unclear",
+          "adjudicated_at": "2026-07-29T19:26:32.384Z"
+        },
+        "protocol_correction": {
+          "task_id": "RP-001.antigravity-builtin.B-reverse",
+          "replaces_decision": "accept",
+          "final_decision": "reject",
+          "reason": "Required window blind absent; the owner note confirms a binding missing-anchor failure."
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "extractor hood",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "induction hob",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "oven",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "smoke alarm",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "splashback",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "electrical sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Anchors mostly present; hob still not clearly induction; appliance style vs A/B drifts",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-001.antigravity-builtin.C-inventory",
+          "scenario_id": "RP-001",
+          "provider": "Google",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-C-inventory.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Anchors mostly present; hob still not clearly induction; appliance style vs A/B drifts",
+          "owner_decision": "accept",
+          "owner_reason": "Anchors mostly present; hob still not clearly induction; appliance style vs A/B drifts",
+          "adjudicated_at": "2026-07-29T19:18:22.900Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "base unit door",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "plinth",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting board",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Required surfaces present; chip much larger than “small”; handles/floor pattern vs A diverge"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Required surfaces present; chip much larger than “small”; handles/floor pattern vs A diverge",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-001.antigravity-builtin.D-condition",
+          "scenario_id": "RP-001",
+          "provider": "Google",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-001-D-condition.jpg",
+          "ai_decision": "escalate",
+          "ai_reason": "Required surfaces present; chip much larger than “small”; handles/floor pattern vs A diverge",
+          "owner_decision": "reject",
+          "owner_reason": "Required surfaces present; chip much larger than “small”; handles/floor pattern vs A diverge",
+          "adjudicated_at": "2026-07-29T19:18:39.455Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

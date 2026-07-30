@@ -5,114 +5,158 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "stair carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "handrail",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "balustrade",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "painted walls",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "landing window",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Photographic; stair carpet, handrail, balustrade, painted walls, landing window.",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "stairs",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "front hall",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "handrail",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "newel post",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "ceiling pendant",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Stairs, front hall/door, handrail, newel, pendant; photographic.",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "landing window",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "smoke alarm",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "light switch",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Landing window, radiator, smoke alarm, switch, sockets present.",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "stair carpet",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "carpet rods",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting string",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "newel post",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Stair carpet / string / newel present; **carpet rods clearly omitted** (required anchor absent)."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Stair carpet / string / newel present; **carpet rods clearly omitted** (required anchor absent).",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-020.gpt-image-2.D-condition",
+          "scenario_id": "RP-020",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-020-D-condition.png",
+          "ai_decision": "reject",
+          "ai_reason": "Stair carpet / string / newel present; **carpet rods clearly omitted** (required anchor absent).",
+          "owner_decision": "reject",
+          "owner_reason": "Stair carpet / string / newel present; **carpet rods clearly omitted** (required anchor absent).",
+          "adjudicated_at": "2026-07-29T19:34:43.043Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

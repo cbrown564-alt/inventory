@@ -5,114 +5,194 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "tiled floor",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "coat bench",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wall hooks",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "hall mirror",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Clear Nike swoosh on black sneaker (logo/readable brand). Anchors otherwise present [reconciled from reviewer disagreement: was reject, second review escalate]",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-015.gpt-image-2.A-wide",
+          "scenario_id": "RP-015",
+          "provider": "OpenAI",
+          "view_id": "A-wide",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-015-A-wide.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Clear Nike swoosh on black sneaker (logo/readable brand). Anchors otherwise present [reconciled from reviewer disagreement: was reject, second review escalate]",
+          "owner_decision": "accept",
+          "owner_reason": "Clear Nike swoosh on black sneaker (logo/readable brand). Anchors otherwise present [reconciled from reviewer disagreement: was reject, second review escalate]",
+          "adjudicated_at": "2026-07-29T19:25:01.496Z"
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "glazed front door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "door furniture",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "doormat",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "shoe storage",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Nike branding on foreground sneaker; required doormat absent; view still faces front door (not reverse) and introduces staircase absent from A [reconciled from reviewer disagreement: was reject, second review escalate]",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-015.gpt-image-2.B-reverse",
+          "scenario_id": "RP-015",
+          "provider": "OpenAI",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-015-B-reverse.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Nike branding on foreground sneaker; required doormat absent; view still faces front door (not reverse) and introduces staircase absent from A [reconciled from reviewer disagreement: was reject, second review escalate]",
+          "owner_decision": "accept",
+          "owner_reason": "Nike branding on foreground sneaker; required doormat absent; view still faces front door (not reverse) and introduces staircase absent from A [reconciled from reviewer disagreement: was reject, second review escalate]",
+          "adjudicated_at": "2026-07-29T19:25:03.340Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "thermostat",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "light switch",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "smoke alarm",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Radiator, thermostat, sockets, light switch, smoke alarm present; photographic; no clear brands [reconciled from reviewer disagreement: was accept, second review reject]",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-015.gpt-image-2.C-inventory",
+          "scenario_id": "RP-015",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-015-C-inventory.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Radiator, thermostat, sockets, light switch, smoke alarm present; photographic; no clear brands [reconciled from reviewer disagreement: was accept, second review reject]",
+          "owner_decision": "accept",
+          "owner_reason": "Radiator, thermostat, sockets, light switch, smoke alarm present; photographic; no clear brands [reconciled from reviewer disagreement: was accept, second review reject]",
+          "adjudicated_at": "2026-07-29T19:25:05.544Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "floor tiles",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "doormat",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "threshold strip",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Unreliable shoe geometry (melted/malformed footwear). Doormat/tiles/skirting present; threshold strip at door not clearly shown; branding ambiguous on recheck"
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Unreliable shoe geometry (melted/malformed footwear). Doormat/tiles/skirting present; threshold strip at door not clearly shown; branding ambiguous on recheck",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-015.gpt-image-2.D-condition",
+          "scenario_id": "RP-015",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-015-D-condition.png",
+          "ai_decision": "reject",
+          "ai_reason": "Unreliable shoe geometry (melted/malformed footwear). Doormat/tiles/skirting present; threshold strip at door not clearly shown; branding ambiguous on recheck",
+          "owner_decision": "reject",
+          "owner_reason": "Unreliable shoe geometry (melted/malformed footwear). Doormat/tiles/skirting present; threshold strip at door not clearly shown; branding ambiguous on recheck",
+          "adjudicated_at": "2026-07-29T19:30:49.727Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

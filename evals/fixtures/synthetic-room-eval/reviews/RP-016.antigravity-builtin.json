@@ -5,62 +5,76 @@
   "model_display_name": "Antigravity built-in image generator",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "oak dining table",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "six chairs",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "French doors",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "pendant light",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "timber floor",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Oak table, six chairs, French doors, pendant, timber floor; photographic; only negligible faint wall mark",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "internal door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sideboard",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wall mirror",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Internal door(s), sideboard, radiator, wall mirror, skirting; coherent reverse from French doors",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "C-inventory",
@@ -112,7 +126,9 @@
         ],
         "rejection_reasons": []
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

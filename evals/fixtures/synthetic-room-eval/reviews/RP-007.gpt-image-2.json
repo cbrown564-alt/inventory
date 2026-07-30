@@ -5,114 +5,144 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "shower enclosure",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "pedestal basin",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "WC",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "mosaic tiles",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sloped ceiling",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Enclosure, pedestal basin, WC, mosaic, sloped ceiling present",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "mirror",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "towel ring",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "extractor vent",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Door, mirror, towel ring, extractor, vinyl present; matches A identity",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "shower handset",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "mixer controls",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "glass door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "soap tray",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "extractor vent",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Handset/mixer/glass/extractor present; soap dish on riser",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "mosaic tiles",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "grout",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "silicone seal",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "shower tray",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Mosaic, grout, silicone, shower tray present",
+          "second_review_agreed": true
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",

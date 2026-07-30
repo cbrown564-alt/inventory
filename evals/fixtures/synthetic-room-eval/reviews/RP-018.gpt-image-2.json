@@ -5,114 +5,182 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-07-29",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "washing machine",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "tumble dryer",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "utility sink",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wall cupboards",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "accept",
+          "reason": "Photographic utility; WM/dryer pair, sink, wall cupboards, speckled vinyl; no readable brands.",
+          "second_review_agreed": true
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "coat hooks",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "shelving",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "Door/hooks/shelving/radiator present, but appliance layout is stacked vs A/C side-by-side — packet continuity fails.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-018.gpt-image-2.B-reverse",
+          "scenario_id": "RP-018",
+          "provider": "OpenAI",
+          "view_id": "B-reverse",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-018-B-reverse.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Door/hooks/shelving/radiator present, but appliance layout is stacked vs A/C side-by-side — packet continuity fails.",
+          "owner_decision": "accept",
+          "owner_reason": "Door/hooks/shelving/radiator present, but appliance layout is stacked vs A/C side-by-side — packet continuity fails.",
+          "adjudicated_at": "2026-07-29T19:25:39.489Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "washing machine",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "tumble dryer",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "isolator switches",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "air vent",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "escalate",
+          "reason": "WM/dryer + socket visible; isolator switches and air vent not clearly evidenced.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-018.gpt-image-2.C-inventory",
+          "scenario_id": "RP-018",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-018-C-inventory.png",
+          "ai_decision": "escalate",
+          "ai_reason": "WM/dryer + socket visible; isolator switches and air vent not clearly evidenced.",
+          "owner_decision": "accept",
+          "owner_reason": "WM/dryer + socket visible; isolator switches and air vent not clearly evidenced.",
+          "adjudicated_at": "2026-07-29T19:25:44.824Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "sink cabinet",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "plinth",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "pipe boxing",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Utility sink on metal legs — no sink cabinet/plinth/pipe boxing; cannot support intended swollen door-edge defect."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-07-29.json",
+          "reviewed_at": "2026-07-29",
+          "decision": "reject",
+          "reason": "Utility sink on metal legs — no sink cabinet/plinth/pipe boxing; cannot support intended swollen door-edge defect.",
+          "second_review_agreed": true
+        },
+        "owner_adjudication": {
+          "task_id": "RP-018.gpt-image-2.D-condition",
+          "scenario_id": "RP-018",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-018-D-condition.png",
+          "ai_decision": "reject",
+          "ai_reason": "Utility sink on metal legs — no sink cabinet/plinth/pipe boxing; cannot support intended swollen door-edge defect.",
+          "owner_decision": "reject",
+          "owner_reason": "Utility sink on metal legs — no sink cabinet/plinth/pipe boxing; cannot support intended swollen door-edge defect.",
+          "adjudicated_at": "2026-07-29T19:34:28.044Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-07-29.json",
+    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
   },
   "pass_b": {
     "reviewer": "",
