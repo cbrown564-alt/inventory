@@ -1168,47 +1168,6 @@ class ReviewHandler(BaseHandler):
             pairing_available=extra.get("pairing_available", False),
             route_prefix=prefix)
 
-    def _render_workspace(self, st: SessionState, *, route_prefix: str = "",
-                          show_picker: bool = False,
-                          initial_screen: str = "overview", **extra) -> str:
-        """Render the phone-first field workspace.
-
-        The workspace is deliberately a new surface over the existing
-        evidence contract.  Capture, review and issue all continue to use the
-        same upload API, Inventory schema, acknowledgement trail and renderer;
-        the old evidence-room interface remains available at ``/review`` while
-        users need its more specialised controls.
-        """
-        env = Environment(loader=FileSystemLoader(TEMPLATES),
-                          autoescape=select_autoescape(["html"]))
-        has_inventory = st.inv_path.exists()
-        inv = st.load() if has_inventory else None
-        share_url = ""
-        if st.tenant_token:
-            share_url = f"{st.route_prefix}/t/{st.tenant_token}" \
-                if self.project.is_multi else f"/t/{st.tenant_token}"
-        return env.get_template("workspace.html.j2").render(
-            prebuild=not has_inventory,
-            inv=inv,
-            payload=(self._review_payload(st, inv, route_prefix, **extra)
-                     if inv else {}),
-            capture=st.scan_capture(),
-            spend=spend_info(st.backend, st.model),
-            walkthrough_room=WALKTHROUGH_ROOM,
-            has_inventory=has_inventory,
-            show_picker=show_picker,
-            use_case=st.uc.key,
-            use_case_label=st.uc.display_name,
-            use_cases=[{"key": u.key, "label": u.display_name,
-                        "description": u.description,
-                        "outcome": _USE_CASE_OUTCOMES.get(u.key, "")}
-                       for u in REGISTRY.values()],
-            share_url=share_url,
-            project_url=(route_prefix.rsplit("/s/", 1)[0] or "/")
-                        if self.project.is_multi else "",
-            initial_screen=initial_screen,
-            route_prefix=route_prefix)
-
     def _render_start(self, st: SessionState, *, show_picker: bool | None = None,
                       route_prefix: Optional[str] = None) -> str:
         proj = self.project
@@ -1281,8 +1240,8 @@ class ReviewHandler(BaseHandler):
             "application/octet-stream"
         self._file(target, ctype)
 
-    def _redirect(self, location: str) -> None:
-        self.send_response(301)
+    def _redirect(self, location: str, status: int = 301) -> None:
+        self.send_response(status)
         self.send_header("Location", location)
         self.end_headers()
 
@@ -1427,17 +1386,17 @@ class ReviewHandler(BaseHandler):
                 self._err(404, "not found")
                 return
 
-        if path in ("/", "/finish"):
+        if path in ("/", "/finish", "/review"):
+            # One owner app (docs/32 step 1): the review app is the unified
+            # experience at "/"; "/review" stays as the deep-link alias the
+            # report and compare surfaces already target, and "/finish"
+            # lands on the same app at its finish checklist.  Prebuild
+            # sessions hand capture to the start page instead of a parallel
+            # workspace.
             route_prefix = owner_prefix + st.route_prefix
-            self._html(self._render_workspace(
-                st, route_prefix=route_prefix,
-                show_picker=(not proj.project_path.exists() and not proj.is_legacy
-                             and not st.inv_path.exists()),
-                initial_screen="finish" if path == "/finish" else "overview"))
-            return
-        if path == "/review":
-            # Transitional evidence desk: preserves every specialist review
-            # control while the field workspace owns the default journey.
+            if not st.inv_path.exists():
+                self._redirect(route_prefix + "/start", status=302)
+                return
             share_url = ""
             if st.tenant_token:
                 share_url = f"{st.route_prefix}/t/{st.tenant_token}" \
@@ -1446,15 +1405,14 @@ class ReviewHandler(BaseHandler):
             pair_url = self._owner_pair_url() if local_owner else ""
             self._html(self._render_app(
                 st, "review.html.j2",
-                route_prefix=owner_prefix + st.route_prefix,
+                route_prefix=route_prefix,
                 share_url=share_url, pair_url=pair_url,
                 paired_phone=owner_authenticated,
                 pairing_available=bool(pair_url)))
             return
         if path == "/start":
-            self._html(self._render_workspace(
-                st, show_picker=False,
-                route_prefix=owner_prefix + st.route_prefix))
+            self._html(self._render_start(
+                st, route_prefix=owner_prefix + st.route_prefix))
             return
         if path == "/pdf":
             self._file(st.out_dir / "inventory.pdf", "application/pdf")

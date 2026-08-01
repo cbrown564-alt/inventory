@@ -586,6 +586,34 @@
     padding: 12px 22px; font-size: var(--fs-base);
   }
   .overview-ctas .btn.ghost { color: var(--muted); }
+  /* next-decision band — the one claim that still needs the owner's
+     judgement, deep-linking into the items queue (docs/32 step 1) */
+  .decision-band {
+    display: flex; gap: 18px; align-items: center;
+    justify-content: space-between; flex-wrap: wrap;
+    margin: 0 0 26px; padding: 16px 18px;
+    background: var(--brass-soft); border: 1px solid var(--line);
+    border-radius: var(--r-md); box-shadow: var(--e-1);
+  }
+  .decision-band .band-copy { min-width: 0; }
+  .decision-band .band-kicker {
+    margin: 0 0 6px; font: 600 var(--fs-xs)/1 var(--mono);
+    letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+  }
+  .decision-band h2 {
+    margin: 0 0 4px; font: 600 var(--fs-lg)/1.2 var(--display);
+    letter-spacing: -.01em;
+  }
+  .decision-band p { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
+  .decision-band .reasons {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;
+  }
+  .decision-band .reason {
+    padding: 3px 9px; border: 1px solid var(--line);
+    border-radius: 999px; background: var(--paper);
+    font: var(--fs-2xs) var(--ui); color: var(--muted);
+  }
+  .decision-band .btn.primary { flex: 0 0 auto; }
   /* overview walkthrough spine (Craft C2-D) */
   .overview-spine {
     margin: 0 0 28px; padding: 14px 16px 12px;
@@ -1415,6 +1443,28 @@
     });
   }
   function isDone(it) { return it.reviewed || it.rejected; }
+  /* Why a claim still needs the owner's judgement (the exception queue,
+     ported from the retired field workspace — docs/32 step 1). */
+  function decisionReasons(it) {
+    var reasons = [];
+    if (it.confidence == null || it.confidence < 0.8)
+      reasons.push("draft confidence");
+    if (!(it.photo_ids || []).length) reasons.push("linked evidence");
+    if (!it.condition || !it.cleanliness) reasons.push("condition details");
+    if ((it.defects || []).length) reasons.push("a drafted defect");
+    if (it.category === "safety") reasons.push("a safety item");
+    if (it.category === "meter") reasons.push("a meter reading");
+    return reasons;
+  }
+  function nextDecision() {
+    var open = ix.items.filter(function (it) {
+      return !isDone(it) && decisionReasons(it).length > 0;
+    }).sort(function (a, b) {
+      return (a.confidence == null ? 1.01 : a.confidence) -
+             (b.confidence == null ? 1.01 : b.confidence);
+    });
+    return open[0] || null;
+  }
   function hasEvidence(it) {
     return (it.photo_ids || []).some(function (p) { return photoSrc[p]; });
   }
@@ -1840,6 +1890,41 @@
     box.appendChild(dismiss);
     host.insertBefore(box, host.firstChild);
   }
+  function decisionBand() {
+    var next = nextDecision();
+    var band = el("section", { "class": "decision-band",
+      "aria-label": "Next claim to decide" });
+    var copy = el("div", { "class": "band-copy" });
+    if (next) {
+      var room = ix.roomOf[next.id];
+      copy.appendChild(el("p", { "class": "band-kicker",
+        text: "Next claim to decide" }));
+      copy.appendChild(el("h2", { text: next.name || "Unnamed claim" }));
+      copy.appendChild(el("p", {
+        text: (room ? room.name + " \u00b7 " : "")
+          + decisionReasons(next).join(", ") }));
+      var reasons = el("div", { "class": "reasons" });
+      decisionReasons(next).forEach(function (reason) {
+        reasons.appendChild(el("span", { "class": "reason", text: reason }));
+      });
+      copy.appendChild(reasons);
+      band.appendChild(copy);
+      band.appendChild(el("button", {
+        "class": "btn primary", type: "button", text: "Open the claim",
+        onclick: function () { startReview(next.id); } }));
+    } else {
+      copy.appendChild(el("p", { "class": "band-kicker", text: "Decisions" }));
+      copy.appendChild(el("h2", { text: "No claims need a decision" }));
+      copy.appendChild(el("p", {
+        text: "Every drafted claim is checked. Finish the record when the "
+          + "property details are complete." }));
+      band.appendChild(copy);
+      band.appendChild(el("button", {
+        "class": "btn primary", type: "button", text: "Finish the record",
+        onclick: showFinish }));
+    }
+    return band;
+  }
   function renderOverview() {
     viewMode = "overview";
     overviewHost = null;
@@ -1943,6 +2028,8 @@
       }));
     }
     host.appendChild(ctas);
+
+    if (ix.items.length) host.appendChild(decisionBand());
 
     if (wt && wt.meta && wt.meta.duration) {
       host.appendChild(buildOverviewSpine(wt));
@@ -2149,7 +2236,7 @@
     if (preferred) select({ type: "item", id: preferred.id });
     else if (open.length) select({ type: "item", id: open[0].id });
     else {
-      toast("All items are already reviewed");
+      toast("Every claim already has a decision");
       updateMobileAction();
     }
   }
