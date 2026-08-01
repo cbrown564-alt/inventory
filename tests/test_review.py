@@ -763,9 +763,10 @@ def _upload(base, room, filename, data: bytes, url_prefix: str = "",
 
 def test_start_page_empty_capture(fresh_server):
     base, _state, _out, _cap = fresh_server
-    _, html_root = _get_text(base + "/")
-    # prebuild "/" hands off to the start page (use-case picker first)
-    assert 'id="use-case-picker"' in html_root
+    status, html = _get_text(base + "/start")
+    assert status == 200
+    assert 'id="use-case-picker"' in html
+    assert _req("POST", base + "/api/project", {"use_case": "tenancy"})[0] == 200
     status, html = _get_text(base + "/start")
     assert status == 200
     assert "Capture the property." in html
@@ -1174,6 +1175,7 @@ def test_stream_upload_walkthrough_video_lands_at_capture_root(fresh_server):
 def test_camera_first_picker_uses_the_existing_video_library(fresh_server):
     """The primary handoff must not force a second browser-camera capture."""
     base, _state, _out, _cap = fresh_server
+    assert _req("POST", base + "/api/project", {"use_case": "tenancy"})[0] == 200
     status, html = _get_text(base + "/start")
     assert status == 200
     file_input = re.search(r'<input type="file" id="up-files"[^>]*>', html)
