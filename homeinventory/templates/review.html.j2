@@ -548,6 +548,40 @@
     color: var(--ink); font-weight: 600;
     box-shadow: inset 0 -2px 0 var(--brass);
   }
+  .property-strip {
+    margin: 28px 0 8px; padding: 16px 0 4px;
+    border-top: 1px solid var(--line);
+  }
+  .property-strip .strip-label {
+    font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .14em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 12px;
+  }
+  .strip-row {
+    display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px;
+    scrollbar-width: thin; -webkit-overflow-scrolling: touch;
+  }
+  .strip-cell {
+    flex: 0 0 92px; display: flex; flex-direction: column; align-items: stretch;
+    padding: 0; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--panel); cursor: pointer; font: inherit; color: inherit;
+    text-align: left; overflow: hidden;
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .strip-cell:hover { border-color: var(--brass); transform: translateY(-2px); }
+  .strip-cell.heat-hot { border-color: var(--danger); box-shadow: inset 0 -3px 0 var(--danger-soft); }
+  .strip-cell.heat-warm { border-color: var(--pend); box-shadow: inset 0 -3px 0 var(--pend-soft); }
+  .strip-cell.heat-cool { border-color: var(--confirm); }
+  .strip-thumb {
+    aspect-ratio: 4/3; background: var(--panel-2); overflow: hidden;
+  }
+  .strip-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .strip-name {
+    font: 600 11px/1.25 var(--ui); padding: 6px 8px 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .strip-stat {
+    font: var(--fs-2xs) var(--mono); color: var(--muted); padding: 0 8px 6px;
+  }
   .overview {
     width: 100%; max-width: 1200px; margin: 0 auto;
   }
@@ -963,6 +997,41 @@
   }
   .finish-handoff-actions a.btn { text-decoration: none; }
   .finish-handoff-actions .btn.primary { min-width: 10em; }
+  .issue-ceremony {
+    margin: 16px 0 18px; padding: 14px 16px;
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: var(--r-md);
+  }
+  .issue-room-preview {
+    display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px;
+    padding-bottom: 2px;
+  }
+  .issue-room-tile {
+    flex: 0 0 72px; aspect-ratio: 4/3; border-radius: 4px;
+    overflow: hidden; border: 1px solid var(--line-strong);
+    background: var(--panel-2);
+  }
+  .issue-room-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .issue-ceremony-stats {
+    display: flex; flex-wrap: wrap; gap: 8px 16px;
+    font-size: var(--fs-sm); color: var(--muted); margin-bottom: 12px;
+  }
+  .issue-ceremony-stats strong { color: var(--ink); }
+  .issue-share-card {
+    padding: 12px 14px; border-radius: var(--r-sm);
+    background: var(--brass-soft); border: 1px solid rgba(154, 119, 41, .28);
+    font-size: var(--fs-sm); line-height: 1.5;
+  }
+  .issue-share-card .share-url {
+    display: block; margin-top: 6px; font-family: var(--mono);
+    font-size: var(--fs-2xs); word-break: break-all; color: var(--ink);
+  }
+  .issue-pdf-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font: 600 var(--fs-xs) var(--mono); letter-spacing: .06em;
+    text-transform: uppercase; color: var(--confirm);
+    background: var(--confirm-soft); padding: 4px 10px; border-radius: var(--r-pill);
+  }
   @media (max-width: 480px) {
     .finish { max-width: none; }
     .finish-step-head { padding: 14px; }
@@ -1137,13 +1206,13 @@
 <body>
 <header class="app-header">
   <button class="btn ghost" id="btn-queue" aria-label="Show item list">☰ Items</button>
-  {% set shell_base = route_prefix ~ "/" %}{% set shell_active = "review" %}
+  {% set shell_base = route_prefix ~ "/" %}{% set shell_active = "check" %}
   {%- include "_shell.html.j2" %}
-  <nav class="review-subnav" aria-label="Review mode">
-    <a href="#overview" id="nav-overview" aria-current="page">Overview</a>
-    <a href="#items" id="nav-items">Items</a>
+  <nav class="review-subnav" aria-label="Check phases">
+    <a href="#overview" id="nav-overview" aria-current="page">Orient</a>
+    <a href="#items" id="nav-items">Claims</a>
     <a href="#rooms" id="nav-rooms">Rooms</a>
-    <a href="#finish" id="nav-finish">Finish</a>
+    <a href="#finish" id="nav-finish">Finalize</a>
   </nav>
   <span class="addr" id="hdr-addr">{{ inv.property_address or "No address yet" }}</span>
   <div id="progress">
@@ -1162,9 +1231,10 @@
     <summary class="btn ghost header-more-btn" aria-label="Navigation menu">⋯</summary>
     <div class="header-more-panel">
       <nav class="header-more-shell" aria-label="Sections">
-        <a href="{{ route_prefix ~ '/' }}"{% if shell_active == "review" %} aria-current="page"{% endif %}>Review</a>
+        <a href="{{ route_prefix ~ '/start' }}"{% if shell_active == "capture" %} aria-current="page"{% endif %}>Capture</a>
+        <a href="{{ route_prefix ~ '/' }}"{% if shell_active == "check" %} aria-current="page"{% endif %}>Check</a>
         <a href="{{ route_prefix ~ '/report' }}"{% if shell_active == "report" %} aria-current="page"{% endif %}>Report</a>
-        <a href="{{ route_prefix ~ '/issue' }}"{% if shell_active == "issue" %} aria-current="page"{% endif %}>Send to tenant</a>
+        <a href="{{ route_prefix ~ '/issue' }}"{% if shell_active == "issue" %} aria-current="page"{% endif %}>Issue</a>
       </nav>
       {% if pairing_available|default(false) %}<button class="btn ghost pair-phone" type="button">Pair phone</button>{% endif %}
       <a href="#finish" class="header-more-finish">Finish checklist</a>
@@ -2022,6 +2092,99 @@
     });
     return n;
   }
+  function walkthroughRoomOrder() {
+    var wt = primaryWalkthrough();
+    var order = [];
+    var seen = {};
+    if (wt && wt.meta && wt.meta.segments) {
+      wt.meta.segments.forEach(function (s) {
+        var name = (s.room || "").trim();
+        if (name && !seen[name]) {
+          seen[name] = true;
+          order.push(name);
+        }
+      });
+    }
+    inv.rooms.forEach(function (r) {
+      if (!seen[r.name]) order.push(r.name);
+    });
+    return order.map(function (name) {
+      return inv.rooms.find(function (r) { return r.name === name; });
+    }).filter(Boolean);
+  }
+  function roomHeat(room) {
+    var defects = 0;
+    var pending = 0;
+    (room.items || []).forEach(function (it) {
+      if (isDone(it)) return;
+      if ((it.defects || []).length) defects++;
+      else pending++;
+    });
+    if (defects > 0) return "hot";
+    if (pending > 0) return "warm";
+    return "cool";
+  }
+  function renderPropertyStrip() {
+    var rooms = walkthroughRoomOrder();
+    if (!rooms.length) return null;
+    var strip = el("div", { "class": "property-strip",
+      "aria-label": "Property walkthrough map" });
+    strip.appendChild(el("p", { "class": "strip-label", text: "Walkthrough map" }));
+    var row = el("div", { "class": "strip-row" });
+    rooms.forEach(function (room) {
+      var heat = roomHeat(room);
+      var total = (room.items || []).length;
+      var doneN = roomReviewDone(room);
+      var cell = el("button", {
+        type: "button",
+        "class": "strip-cell heat-" + heat,
+        title: room.name + " \u00b7 " + doneN + " of " + total + " confirmed",
+        onclick: function () { select({ type: "room", name: room.name }); }
+      });
+      var thumb = el("div", { "class": "strip-thumb" });
+      var src = roomHeroSrc(room);
+      if (src) thumb.appendChild(el("img", { src: src, alt: "", loading: "lazy" }));
+      cell.appendChild(thumb);
+      cell.appendChild(el("span", { "class": "strip-name", text: room.name }));
+      cell.appendChild(el("span", { "class": "strip-stat",
+        text: doneN + "/" + total }));
+      row.appendChild(cell);
+    });
+    strip.appendChild(row);
+    return strip;
+  }
+  function buildIssueCeremonyCard() {
+    var card = el("div", { "class": "issue-ceremony", "aria-label": "Issue record preview" });
+    var preview = el("div", { "class": "issue-room-preview" });
+    inv.rooms.slice(0, 6).forEach(function (room) {
+      var tile = el("div", { "class": "issue-room-tile", title: room.name });
+      var src = roomHeroSrc(room);
+      if (src) tile.appendChild(el("img", { src: src, alt: "" }));
+      preview.appendChild(tile);
+    });
+    if (preview.childNodes.length) card.appendChild(preview);
+    var stats = inventoryStats();
+    var done = ix.items.filter(isDone).length;
+    var statRow = el("div", { "class": "issue-ceremony-stats" });
+    statRow.appendChild(el("span", {
+      text: stats.rooms + " room" + (stats.rooms === 1 ? "" : "s") }));
+    statRow.appendChild(el("span", {
+      text: done + " / " + ix.items.length + " claims confirmed" }));
+    if (pdfReady()) {
+      var chip = el("span", { "class": "issue-pdf-chip", text: "PDF ready" });
+      statRow.appendChild(chip);
+    }
+    card.appendChild(statRow);
+    if (SHARE_URL) {
+      var share = el("div", { "class": "issue-share-card" });
+      share.appendChild(el("strong", {
+        text: "Tenant " + (shareSpec.link_noun || "review") + " link" }));
+      share.appendChild(el("span", {
+        "class": "share-url", text: SHARE_URL }));
+      card.appendChild(share);
+    }
+    return card;
+  }
   function updateSubNav() {
     var o = document.getElementById("nav-overview");
     var i = document.getElementById("nav-items");
@@ -2247,6 +2410,9 @@
     if (wt && wt.meta && wt.meta.duration) {
       host.appendChild(buildOverviewSpine(wt));
     }
+
+    var propStrip = renderPropertyStrip();
+    if (propStrip) host.appendChild(propStrip);
 
     host.appendChild(el("p", { "class": "register-label",
       text: "Room plates" }));
@@ -2857,7 +3023,8 @@
         text: "\u2713" }));
       mark.appendChild(el("span", { "class": "kind", text: "Signed & sealed" }));
       inner.appendChild(mark);
-      inner.appendChild(el("h2", { text: "Attested and ready" }));
+      inner.appendChild(buildIssueCeremonyCard());
+      inner.appendChild(el("h2", { text: "Issue record ready" }));
       inner.appendChild(el("p", {
         text: "Your signature seals this inventory. Open the clean final issue"
           + " or share the " + (shareSpec.link_noun || "tenant") + " link."
@@ -2874,7 +3041,7 @@
           onclick: copyShareLink }));
       } else {
         hact.appendChild(el("button", { type: "button", "class": "btn",
-          text: "Send to tenant",
+          text: "Share tenant link",
           onclick: function () { enableShareLink(this); } }));
       }
       hact.appendChild(el("button", {

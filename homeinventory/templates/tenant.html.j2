@@ -124,14 +124,16 @@
   .c-line .who.tenant { color: var(--tenant); }
   .c-line .at { font-family: var(--mono); font-size: 10px; color: var(--muted);
                 margin-left: 8px; }
-  .c-add { display: flex; gap: 8px; margin-top: 10px; }
-  .c-add input { flex: 1; font: 14px var(--ui); padding: 9px 12px;
+  .c-add { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+  .c-add input[type="text"] { flex: 1 1 160px; font: 14px var(--ui); padding: 9px 12px;
     border: 1px solid var(--line-strong); border-radius: 4px; background: #fff; }
+  .c-add input[type="file"] { display: none; }
   .c-add button { font: 600 13px var(--ui); padding: 9px 16px; cursor: pointer;
     border: 1px solid var(--line-strong); background: var(--panel);
     border-radius: 4px; }
   .c-add button.agree { border-color: var(--confirm); color: var(--confirm); }
   .c-add button.agree.on { background: var(--confirm-soft); font-weight: 600; }
+  .c-add button.photo.on { border-color: var(--confirm); color: var(--confirm); }
   .item-agreed { display: inline-flex; align-items: center; gap: 6px;
     margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--confirm); }
 
@@ -389,7 +391,7 @@
     if (room.summary) m.appendChild(el("p", { "class": "room-summary",
       text: room.summary }));
     (room.items || []).forEach(function (it) {
-      m.appendChild(itemCard(it, room.photos || []));
+      m.appendChild(itemCard(it, room.photos || [], room.name));
     });
     var next = ri + 1;
     var nextAction = el("div", { "class": "room-next" });
@@ -489,7 +491,27 @@
     m.appendChild(sig);
   }
 
-  function itemCard(it, roomPhotos) {
+  function tenantUploadPhoto(file, room, onProgress) {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/api/t/" + token + "/upload");
+      xhr.setRequestHeader("X-Room", encodeURIComponent(room));
+      xhr.setRequestHeader("X-Filename", encodeURIComponent(file.name));
+      xhr.upload.onprogress = function (e) {
+        if (onProgress && e.lengthComputable) onProgress(e.loaded, e.total);
+      };
+      xhr.onload = function () {
+        var resp = {};
+        try { resp = JSON.parse(xhr.responseText || "{}"); } catch (e) {}
+        if (xhr.status === 200) resolve(resp);
+        else reject(new Error(resp.error || ("upload failed (" + xhr.status + ")")));
+      };
+      xhr.onerror = function () { reject(new Error("upload failed")); };
+      xhr.send(file);
+    });
+  }
+
+  function itemCard(it, roomPhotos, roomName) {
     var card = el("div", { "class": "item" + (it.rejected ? " rejected" : "") });
     var copy = el("div", { "class": "item-copy" });
     var head = el("div", { "class": "head" });
@@ -569,6 +591,9 @@
       thread.appendChild(line);
     });
     var add = el("div", { "class": "c-add" });
+    var pendingPhoto = null;
+    var photoInput = el("input", { type: "file", accept: "image/*",
+      capture: "environment" });
     if (agreed[it.id]) {
       thread.appendChild(el("div", { "class": "item-agreed", text: "✓ Agreed as recorded" }));
     } else {
@@ -581,12 +606,32 @@
       });
       add.appendChild(agreeBtn);
     }
+    var photoBtn = el("button", { type: "button", "class": "photo", text: "Photo" });
+    photoBtn.addEventListener("click", function () { photoInput.click(); });
+    photoInput.addEventListener("change", function () {
+      var file = photoInput.files && photoInput.files[0];
+      if (!file) return;
+      photoBtn.disabled = true;
+      photoBtn.textContent = "Uploading…";
+      tenantUploadPhoto(file, roomName).then(function (resp) {
+        pendingPhoto = resp.path;
+        photoBtn.disabled = false;
+        photoBtn.textContent = "Photo ✓";
+        photoBtn.classList.add("on");
+        toast("Photo ready — add your comment and send");
+      }).catch(function (e) {
+        photoBtn.disabled = false;
+        photoBtn.textContent = "Photo";
+        toast("Could not upload photo: " + e.message);
+      });
+      photoInput.value = "";
+    });
     var input = el("input", { type: "text",
       placeholder: "Raise an issue on this item…" });
     var btn = el("button", { text: "Comment" });
     function send() {
       var text = input.value.trim();
-      if (!text) return;
+      if (!text && !pendingPhoto) return;
       if (!savedName) {
         ui.form({
           title: "Who is commenting?",
@@ -602,12 +647,16 @@
         return;
       }
       btn.disabled = true;
-      api("POST", "/comments", { item_id: it.id, text: text, author: savedName })
+      var body = { item_id: it.id, text: text, author: savedName };
+      if (pendingPhoto) body.attach_path = pendingPhoto;
+      api("POST", "/comments", body)
         .then(function () {
           if (!it.comments) it.comments = [];
-          it.comments.push({ author: savedName, role: counterparty.key, text: text });
+          var commentText = text || "Photo evidence attached";
+          it.comments.push({ author: savedName, role: counterparty.key, text: commentText });
           btn.disabled = false;
           input.value = "";
+          pendingPhoto = null;
           toast("Comment recorded on " + it.id);
           render();
         }).catch(function (e) {
@@ -619,6 +668,8 @@
     input.addEventListener("keydown", function (e) {
       if (e.key === "Enter") send();
     });
+    add.appendChild(photoInput);
+    add.appendChild(photoBtn);
     add.appendChild(input);
     add.appendChild(btn);
     thread.appendChild(add);

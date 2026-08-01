@@ -655,7 +655,9 @@ class SessionState:
         return f"P{number:03d}"
 
     def attach_review_photo(self, item_id: str, source_path: str,
-                            author: str = "reviewer") -> dict:
+                            author: str = "reviewer",
+                            ack_role: Optional[str] = None,
+                            review_context: str = "mobile review") -> dict:
         """Attach an already streamed close-up to one existing claim.
 
         ``/api/upload`` is deliberately the only binary ingress.  This
@@ -717,7 +719,7 @@ class SessionState:
                     id=self._next_photo_id(inv), path=portable_path,
                     room=room.name, sha256=source_hash,
                     captured_at=exif_capture_time(source),
-                    note=f"close photo added during mobile review by {author}",
+                    note=f"close photo added during {review_context} by {author}",
                 )
                 room.photos.append(photo)
                 self._append_manifest_entry(photo, source)
@@ -728,8 +730,8 @@ class SessionState:
                 self.save(inv)
 
         if created or linked:
-            self.ack(author, self.uc.owner_role.key, "attach_review_photo",
-                     portable_path, item_id)
+            self.ack(author, ack_role or self.uc.owner_role.key,
+                     "attach_review_photo", portable_path, item_id)
             with self.lock:
                 self.rerender()
         return {"photo": asdict(photo), "item_id": item_id,
@@ -1336,6 +1338,16 @@ class ReviewHandler(BaseHandler):
                         "crop_src": st.crop_src(inv),
                         "content_sha256": inv.content_sha256()})
             return
+        m = re.fullmatch(r"/api/t/([\w\-]+)/upload/([\w\-]{8,64})", path)
+        if m:
+            if not self._tenant_token_ok(m.group(1)):
+                self._err(403, "invalid or expired link")
+                return
+            st = proj.followup_session() if proj.is_multi else proj.session()
+            payload = self._upload_status(st.capture_dir, m.group(2))
+            if payload is not None:
+                self._json(payload)
+            return
 
         st: Optional[SessionState] = None
         if not proj.is_multi:
@@ -1481,6 +1493,22 @@ class ReviewHandler(BaseHandler):
                     return
                 st = proj.followup_session() if proj.is_multi else proj.session()
                 self._tenant_comment(st, self._body())
+                return
+            m = re.fullmatch(r"/api/t/([\w\-]+)/upload", path)
+            if m:
+                if not self._tenant_token_ok(m.group(1)):
+                    self._err(403, "invalid or expired link")
+                    return
+                st = proj.followup_session() if proj.is_multi else proj.session()
+                payload = self._upload_stream_common(st.capture_dir, st.lock)
+                if payload is None:
+                    return
+                if payload.get("complete") is False:
+                    self._json(payload)
+                    return
+                cp = st.uc.counterparty_role
+                st.ack(cp.label, cp.key, "upload_media", payload["path"])
+                self._json(payload)
                 return
             m = re.fullmatch(r"/api/t/([\w\-]+)/sign", path)
             if m:
@@ -1745,12 +1773,15 @@ class ReviewHandler(BaseHandler):
     def _tenant_comment(self, st: SessionState, b: dict):
         item_id = b.get("item_id")
         text = (b.get("text") or "").strip()
+        attach_path = (b.get("attach_path") or "").strip()
         author = (b.get("author") or st.uc.counterparty_role.key).strip() or \
             st.uc.counterparty_role.key
         cp_role = st.uc.counterparty_role.key
-        if not item_id or not text:
-            self._err(400, "item_id and text are required")
+        if not item_id or (not text and not attach_path):
+            self._err(400, "item_id and text or attach_path are required")
             return
+        if not text and attach_path:
+            text = "Photo evidence attached"
         with st.lock:
             inv = st.load()
             for room in inv.rooms:
@@ -1767,7 +1798,20 @@ class ReviewHandler(BaseHandler):
                 self._err(404, f"no such item: {item_id}")
                 return
         st.ack(author, cp_role, "comment", text, item_id)
-        self._json({"ok": True})
+        photo = None
+        if attach_path:
+            try:
+                result = st.attach_review_photo(
+                    item_id, attach_path, author,
+                    ack_role=cp_role, review_context="tenant review")
+                photo = result.get("photo")
+            except (ValueError, KeyError) as e:
+                self._err(400, str(e))
+                return
+        payload = {"ok": True}
+        if photo:
+            payload["photo"] = photo
+        self._json(payload)
 
     def _tenant_sign(self, st: SessionState, b: dict):
         name = (b.get("name") or "").strip()

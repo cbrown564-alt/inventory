@@ -1333,11 +1333,65 @@ def test_overview_triage_panel_and_trust_meter(server):
     assert "Preview as tenant" in html or "SHARE_URL" in html
 
 
-def test_shell_uses_send_to_tenant_label(server):
+def test_shell_uses_journey_nav_labels(server):
     base, _state, _out, _cap = server
     _, html = _get_text(base + "/")
-    assert "Send to tenant" in html
+    assert "Capture</a>" in html
+    assert "Check</a>" in html
+    assert "Issue</a>" in html
+    assert "Orient</a>" in html
+    assert "Finalize</a>" in html
+    assert "Send to tenant" not in html
     assert "Final issue" not in html
+
+
+def test_overview_property_strip(server):
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "function renderPropertyStrip()" in html
+    assert "function walkthroughRoomOrder()" in html
+    assert "Walkthrough map" in html
+
+
+def test_finish_issue_ceremony_card(server):
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "function buildIssueCeremonyCard()" in html
+    assert "Issue record ready" in html
+    assert "issue-ceremony" in html
+
+
+def test_tenant_photo_comment(server):
+    base, state, out, cap = server
+    t = state.tenant_token
+    _, body = _req("GET", base + f"/api/t/{t}/inventory")
+    item_id = body["inventory"]["rooms"][0]["items"][0]["id"]
+    room = body["inventory"]["rooms"][0]["name"]
+    source = _jpeg_bytes("#334455")
+    from urllib.parse import quote
+    import urllib.request
+    headers = {"Content-Type": "application/octet-stream",
+               "X-Room": quote(room), "X-Filename": quote("tenant-close.jpg")}
+    req = urllib.request.Request(
+        base + f"/api/t/{t}/upload", data=source, method="POST", headers=headers)
+    with urllib.request.urlopen(req) as r:
+        status = r.status
+        uploaded = json.loads(r.read().decode("utf-8") or "{}")
+    assert status == 200, uploaded
+    status, resp = _req("POST", base + f"/api/t/{t}/comments", {
+        "item_id": item_id,
+        "text": "this scratch was here on move-in",
+        "author": "T. Okafor",
+        "attach_path": uploaded["path"],
+    })
+    assert status == 200, resp
+    assert resp.get("photo")
+    on_disk = Inventory.from_json(
+        (out / "inventory.json").read_text(encoding="utf-8"))
+    item = [i for r in on_disk.rooms for i in r.items if i.id == item_id][0]
+    assert item.comments[-1]["text"] == "this scratch was here on move-in"
+    assert resp["photo"]["id"] in item.photo_ids
+    assert (cap / resp["photo"]["path"]).exists()
 
 
 def test_tenant_agree_before_comment(server):
@@ -1345,6 +1399,8 @@ def test_tenant_agree_before_comment(server):
     _, html = _get_text(base + f"/t/{state.tenant_token}")
     assert "hi-tenant-agreed-" in html
     assert 'text: "Agree"' in html
+    assert "tenantUploadPhoto" in html
+    assert 'text: "Photo"' in html
     assert "Raise an issue" in html
 
 
@@ -1799,7 +1855,7 @@ def test_craft_c1_deed_exhibit_conveyor(server):
     assert "scrubAroundMoment" in html
     assert "evidence-focus" in html
     assert "Closing the register" in html
-    assert "Attested and ready" in html
+    assert "Issue record ready" in html
     assert "finish-handoff-mark" in html
     assert "Signed & sealed" in html
 

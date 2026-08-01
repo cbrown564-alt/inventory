@@ -7,7 +7,7 @@
       shell_base   URL prefix for section links — "<route_prefix>/" in the
                    served apps, "./" in the report document (relative links
                    survive both "/report" and "/s/<key>/report").
-      shell_active "review" | "report" | "issue" — the current section. -#}
+      shell_active "capture" | "check" | "report" | "issue" — current section. -#}
 <a class="wordmark" href="{{ shell_base }}">
   <svg class="wordmark-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M6 5v14" />
@@ -17,7 +17,8 @@
   Home Inventory
 </a>
 <nav class="app-nav" aria-label="Sections">
-  <a href="{{ shell_base }}"{% if shell_active == "review" %} aria-current="page"{% endif %}>Review</a>
+  <a href="{{ shell_base }}start"{% if shell_active == "capture" %} aria-current="page"{% endif %}>Capture</a>
+  <a href="{{ shell_base }}"{% if shell_active == "check" or shell_active == "review" %} aria-current="page"{% endif %}>Check</a>
   <a href="{{ shell_base }}report"{% if shell_active == "report" %} aria-current="page"{% endif %}>Report</a>
-  <a href="{{ shell_base }}issue" title="Clean copy for sending — no review controls"{% if shell_active == "issue" %} aria-current="page"{% endif %}>Send to tenant</a>
+  <a href="{{ shell_base }}issue" title="Clean copy for sending — no review controls"{% if shell_active == "issue" %} aria-current="page"{% endif %}>Issue</a>
 </nav>
