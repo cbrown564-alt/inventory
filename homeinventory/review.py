@@ -1243,6 +1243,7 @@ class ReviewHandler(BaseHandler):
     def _redirect(self, location: str, status: int = 301) -> None:
         self.send_response(status)
         self.send_header("Location", location)
+        self.send_header("Content-Length", "0")
         self.end_headers()
 
     # ---- routing -------------------------------------------------------

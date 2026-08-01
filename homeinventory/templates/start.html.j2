@@ -301,10 +301,10 @@
   <section id="upload" class="action">
     <div class="action-col">
       <div class="slate-wrap">
-        <div class="outcome-preview" aria-hidden="false">
+        <div class="outcome-preview" id="outcome-preview" aria-hidden="false">
           <b>What you get back</b>
-          Typical 3-bed: <em>~8 rooms</em>, <em>~200 items</em>,
-          <em>~15 min review</em>.
+          <span id="outcome-copy">Typical 3-bed: <em>~8 rooms</em>, <em>~200 items</em>,
+          <em>~15 min review</em>.</span>
         </div>
         <div class="slate">
           <div id="drop" role="button" tabindex="0"
@@ -434,6 +434,39 @@
     else if (active === 0 && upList && !upList.querySelector(".up-file")) {
       bBtn.disabled = true;
     }
+    updateOutcomePreview();
+  }
+
+  function updateOutcomePreview() {
+    var copy = document.getElementById("outcome-copy");
+    if (!copy || !upList) return;
+    var videos = 0, photos = 0, totalDur = 0;
+    upList.querySelectorAll(".up-file").forEach(function (row) {
+      var kind = row.querySelector(".kind");
+      var label = kind ? kind.textContent : "";
+      if (label.indexOf("walkthrough") >= 0) videos += 1;
+      else photos += 1;
+      var dims = row.querySelector(".dims");
+      if (dims) {
+        var m = dims.textContent.match(/^(\d+):(\d{2})/);
+        if (m) totalDur += parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
+      }
+    });
+    if (!videos && !photos) {
+      copy.innerHTML = "Typical 3-bed: <em>~8 rooms</em>, <em>~200 items</em>, "
+        + "<em>~15 min review</em>.";
+      return;
+    }
+    var estRooms = videos ? Math.max(4, Math.min(14, Math.round(totalDur / 45) || 6))
+      : Math.max(1, photos);
+    var estItems = estRooms * 22;
+    var estMin = Math.max(8, Math.round(estItems * 0.07));
+    var bits = [];
+    if (videos) bits.push("<em>~" + estRooms + " rooms</em> from your walkthrough");
+    if (photos) bits.push("<em>" + photos + " photo set" + (photos > 1 ? "s" : "") + "</em>");
+    bits.push("<em>~" + estItems + " drafted items</em>");
+    bits.push("<em>~" + estMin + " min review</em>");
+    copy.innerHTML = bits.join(" · ");
   }
 
   function makeFileRow(opts) {
@@ -649,11 +682,11 @@
 
   /* Build progress — staged journey, not subprocess stdout. */
   var STAGES = [
-    { key: "segmenting", label: "Watching footage" },
-    { key: "segmented", label: "Finding rooms" },
-    { key: "extracting", label: "Extracting frames" },
-    { key: "describing", label: "Drafting items" },
-    { key: "rendering", label: "Rendering report" }
+    { key: "segmenting", label: "Watching your walkthrough" },
+    { key: "segmented", label: "Finding room boundaries" },
+    { key: "extracting", label: "Selecting the best frames" },
+    { key: "describing", label: "Drafting the schedule" },
+    { key: "rendering", label: "Sealing evidence & building PDF" }
   ];
 
   var overlay = document.getElementById("build-overlay");

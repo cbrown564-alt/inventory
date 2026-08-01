@@ -130,7 +130,10 @@
   .c-add button { font: 600 13px var(--ui); padding: 9px 16px; cursor: pointer;
     border: 1px solid var(--line-strong); background: var(--panel);
     border-radius: 4px; }
-  .c-add button:hover { border-color: var(--tenant); color: var(--tenant); }
+  .c-add button.agree { border-color: var(--confirm); color: var(--confirm); }
+  .c-add button.agree.on { background: var(--confirm-soft); font-weight: 600; }
+  .item-agreed { display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--confirm); }
 
   .sign-section { margin-top: 40px; border-top: 2px solid var(--ink);
                   padding-top: 24px; }
@@ -192,6 +195,12 @@
   var currentSha = payload.content_sha256 || "";
   var el = ui.el, toast = ui.toast;
   var VIEW_KEY = "hi-tenant-viewed-" + token;
+  var AGREE_KEY = "hi-tenant-agreed-" + token;
+  var agreed = {};
+  try {
+    var savedAgreed = JSON.parse(localStorage.getItem(AGREE_KEY) || "{}");
+    if (savedAgreed && typeof savedAgreed === "object") agreed = savedAgreed;
+  } catch (e) {}
 
   var view = { mode: "gallery", roomIndex: null };
   var viewed = {};
@@ -560,8 +569,20 @@
       thread.appendChild(line);
     });
     var add = el("div", { "class": "c-add" });
+    if (agreed[it.id]) {
+      thread.appendChild(el("div", { "class": "item-agreed", text: "✓ Agreed as recorded" }));
+    } else {
+      var agreeBtn = el("button", { "class": "agree", type: "button", text: "Agree" });
+      agreeBtn.addEventListener("click", function () {
+        agreed[it.id] = true;
+        try { localStorage.setItem(AGREE_KEY, JSON.stringify(agreed)); } catch (e) {}
+        toast("Noted — you agree with this entry");
+        render();
+      });
+      add.appendChild(agreeBtn);
+    }
     var input = el("input", { type: "text",
-      placeholder: "Anything to flag on this item? e.g. “stain was already here”" });
+      placeholder: "Raise an issue on this item…" });
     var btn = el("button", { text: "Comment" });
     function send() {
       var text = input.value.trim();

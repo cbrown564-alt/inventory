@@ -1316,6 +1316,59 @@ def test_overview_surfaces_next_claim_decision(server):
     assert '/^item-(.+)$/' in html
 
 
+def test_overview_triage_panel_and_trust_meter(server):
+    """Overview shows triage buckets, time estimate, and trust meter."""
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "function triageBucket(it)" in html
+    assert "function renderTriagePanel()" in html
+    assert "function renderTrustMeter(" in html
+    assert "What still needs you" in html
+    assert "Worth a look" in html
+    assert "Looks right" in html
+    assert "Needs a fix" in html
+    assert 'id="bulk-routine"' in html
+    assert "Preview as tenant" in html or "SHARE_URL" in html
+
+
+def test_shell_uses_send_to_tenant_label(server):
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "Send to tenant" in html
+    assert "Final issue" not in html
+
+
+def test_tenant_agree_before_comment(server):
+    base, state, _out, _cap = server
+    _, html = _get_text(base + f"/t/{state.tenant_token}")
+    assert "hi-tenant-agreed-" in html
+    assert 'text: "Agree"' in html
+    assert "Raise an issue" in html
+
+
+def test_compare_hero_framing():
+    env = Environment(loader=FileSystemLoader(TEMPLATES))
+    html = env.get_template("compare.html.j2").render(
+        result={
+            "comparison": {"title": "Check-in vs check-out", "intro_note": "Test."},
+            "checkin": {"address": "1 Test St", "inspected_at": "2026-01-01",
+                        "backend": "offline"},
+            "checkout": {"inspected_at": "2026-07-01", "backend": "offline"},
+            "totals": {"matched": 10, "changed": 0, "unchanged": 10,
+                       "added": 0, "removed": 0},
+            "params": {"context": {}, "backend": "offline", "model": None},
+        },
+        labels={"baseline": "Check-in", "followup": "Check-out"},
+        context_params=[],
+        class_tones={"worse": "danger", "better": "confirm"},
+        filter_classes=[],
+        class_labels={},
+        rooms=[],
+    )
+    assert "The artefact adjudicators actually read" in html
+    assert "compare-hero" in html
+
+
 def test_tenant_walkthrough_precedes_countersign(server):
     """Tenant review guides room-by-room evidence inspection before signing."""
     base, state, _out, _cap = server
@@ -1691,7 +1744,8 @@ def test_root_redirects_prebuild_to_start(fresh_server):
     import http.client
     from urllib.parse import urlparse
     base, _state, _out, _cap = fresh_server
-    conn = http.client.HTTPConnection(urlparse(base).netloc)
+    parsed = urlparse(base)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port, timeout=5)
     try:
         conn.request("GET", "/")
         resp = conn.getresponse()
