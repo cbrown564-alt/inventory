@@ -23,9 +23,22 @@
     }
   },
   "reference_frame_policy": {
-    "rule": "Every clip is conditioned on one accepted still from the parent dataset, pinned by path and SHA-256.",
+    "rule": "Every clip is conditioned on one still from the parent dataset, pinned by path and SHA-256.",
     "reason": "Room identity is the thing that drifts. The parent pilot's 36% first-attempt rejection rate was overwhelmingly continuity failure across four static views; a moving camera has strictly more drift surface, so identity is pinned to an artefact rather than to prose.",
-    "eligible_source": "images/google/gemini-omni/*, restricted to the nine scenarios holding a complete four-view Omni packet"
+    "eligible_source": "images/google/gemini-omni/*, restricted to the nine scenarios holding a complete four-view Omni packet",
+    "provenance_gate": {
+      "status": "OPEN",
+      "fact": "The 57 Gemini Omni stills are not in the parent tasks.csv at all. They have owner review and no recorded Pass A.",
+      "required": "docs/31 Amendment B work order item 6 — the Gemini Omni Pass A import — which that work order names in advance as the droppable item if the schedule slips.",
+      "effect": "Until the import lands, every clip here is conditioned on an artefact with no recorded provenance. build_video_tasks.py refuses to write the queue unless --allow-unimported-reference is passed, and stamps reference_provenance on every row.",
+      "inherited_risk": "If item 6 is dropped, this probe's reference frames never acquire recorded provenance and the probe cannot produce gold. It is gated on the one item most likely to be cut."
+    }
+  },
+  "terms_and_publication": {
+    "arm": "Google",
+    "excluded_from_publication": true,
+    "excluded_from_training_corpus": true,
+    "basis": "docs/31 Amendment B B9. UK Google consumer terms prohibit using output to develop machine-learning models or related AI technology, and the whole Google arm is excluded on terms grounds. Video output from Gemini Omni inherits this without exception."
   },
   "acceptance_criteria": [
     "The opening frame matches the pinned reference frame in layout, fittings, finishes and lighting.",

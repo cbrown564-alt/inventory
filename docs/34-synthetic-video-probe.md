@@ -50,6 +50,47 @@ by construction — no resemblance to real footage is required for that to hold.
 It is the only use case here that can produce a positive finding, which is why
 it is in the first day's batch.
 
+## Two gates from docs/31 Amendment B
+
+Amendment B landed the same day as this document and governs where the two
+conflict. It changes two things here, and neither is cosmetic.
+
+**1. The reference frames have no recorded provenance.** The 57 Gemini Omni
+stills are not in the parent `tasks.csv` at all — zero rows. They have owner
+review, which Amendment B states plainly "is not the recorded protocol". Their
+Pass A import is **item 6 of the B work order, named there in advance as the
+droppable item** if the schedule slips.
+
+So this probe is gated on the one piece of work most likely to be cut, and
+every clip generated before that import rests its ground truth on an unrecorded
+protocol — the exact thing docs/31 forbids. `build_video_tasks.py` therefore
+refuses to write the queue unless `--allow-unimported-reference` is passed, and
+stamps `reference_provenance` on every row so an ungated queue cannot be
+mistaken for a gated one later.
+
+The honest options are: run the Omni Pass A import first, or run day 1 as an
+explicitly ungated **feasibility** probe whose only question is "can Omni hold a
+room through motion at all" — a question that does not need gold, because its
+answers are "yes" and "no". Day 2 onward produces numbers, and numbers need the
+import. Recommendation: day 1 ungated, everything after it gated.
+
+**2. The whole thing is unpublishable.** B9 excludes the entire Google arm from
+publication and from any future training corpus on terms grounds — UK Google
+consumer terms prohibit using output to develop "machine-learning models or
+related AI technology". Gemini Omni video inherits that without exception. This
+probe can inform internal design decisions and nothing else.
+
+**Related: VU-4 has a cheaper competitor.** Amendment B already adopts a
+deterministic **degradation ladder** — motion blur, downscale-and-reupscale,
+JPEG compression, off-axis crop applied to already-accepted stills, with labels
+inherited unchanged, no quota, no Pass B, no terms question. That is strictly
+cheaper than VU-4 and should run first. VU-4's remaining justification is
+narrow but real: the ladder degrades frames *independently*, whereas rendered
+camera motion produces blur that is temporally coherent across a sequence — and
+a sequence is what `curate.py` actually chooses among. Run the free ladder
+first; run VU-4 only if the ladder's answer looks like it depends on that
+difference.
+
 ## The five use cases
 
 Specs live in `evals/fixtures/synthetic-room-eval/video/clips/VU-*.json`.
@@ -68,7 +109,7 @@ content-addressed the same way an image task's is.
 
 Design decisions worth stating:
 
-**Every clip is conditioned on an accepted still, pinned by SHA-256.** Room
+**Every clip is conditioned on one still, pinned by SHA-256.** Room
 identity is what drifts. The parent pilot rejected 36% of first attempts across
 four *static* views; a moving camera has strictly more drift surface. Identity
 is anchored to an artefact, never to prose.
@@ -121,10 +162,14 @@ instruction. Day 1 generates only the clips that test those:
 Five retry slots is not generosity, it is the parent pilot's observed
 first-attempt rejection rate applied honestly.
 
-**Day 2 — scale (conditional).** `VU-1.RP-024`, the three `VU-4` rungs, and the
-`VU-5` scale-up onto RP-023. Only for use cases whose day-1 clip was accepted.
-A use case that failed day 1 is recorded as a negative result and not retried
-into existence.
+**Day 2 — scale (conditional, and gated).** `VU-1.RP-024` and the `VU-5`
+scale-up onto RP-023, only for use cases whose day-1 clip was accepted. A use
+case that failed day 1 is recorded as a negative result and not retried into
+existence. Day 2 produces numbers rather than yes/no answers, so it does not
+start until the Omni Pass A import has landed.
+
+The three `VU-4` rungs are **not** on day 2. They sit behind Amendment B's free
+degradation ladder, for the reason given above.
 
 ## Acceptance
 
@@ -151,8 +196,9 @@ only metric those two clips have.
   ten-room video is out of reach at this clip length and would compound drift
   past any usable gold.
 - It does not test capture *UX*. Nobody is holding the phone.
-- It does not touch training. The parent dataset's out-of-scope rule stands:
-  no synthetic artefact trains, fine-tunes or distils weights.
+- It does not touch training, and cannot. The parent out-of-scope rule stands,
+  and B9 adds a terms-grounds prohibition on top of it.
+- It does not produce anything publishable. See gate 2.
 - It does not unblock Phase 4 or Phase 5. Those remain dependency-blocked on a
   validation winner in the image arm.
 

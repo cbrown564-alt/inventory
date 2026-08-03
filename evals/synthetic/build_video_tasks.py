@@ -51,10 +51,27 @@ AUDIO_CLAUSE = {
 FIELDNAMES = [
     "task_id", "use_case_id", "use_case", "clip_id", "scenario_id", "room_type",
     "arm", "speed_rung", "provider", "product", "model_display_name",
-    "reference_path", "reference_sha256", "output_path", "prompt_sha256",
-    "exact_prompt", "audio_mode", "status", "attempts", "operator",
-    "generated_at", "duration_s", "output_sha256",
+    "reference_path", "reference_sha256", "reference_provenance", "output_path",
+    "prompt_sha256", "exact_prompt", "audio_mode", "status", "attempts",
+    "operator", "generated_at", "duration_s", "output_sha256",
 ]
+
+
+def _ledger_status(dataset_dir: Path) -> dict[str, str]:
+    """Map parent output paths to their ledger status.
+
+    The Gemini Omni stills are not in ``tasks.csv`` at all as of Amendment B:
+    their Pass A import is item 6 of the B work order and is named there as
+    the droppable one. A clip conditioned on an unimported still is therefore
+    conditioned on an artefact with no recorded provenance, which is the exact
+    failure docs/31 forbids ("do not mark ... any packet gold without that
+    recorded path"). This lookup makes that visible instead of assumed.
+    """
+    path = dataset_dir / "tasks.csv"
+    if not path.exists():
+        return {}
+    with path.open(newline="", encoding="utf-8") as handle:
+        return {row["output_path"]: row["status"] for row in csv.DictReader(handle)}
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -142,6 +159,7 @@ def build_rows(dataset_dir: Path) -> list[dict[str, str]]:
     video_dir = dataset_dir / "video"
     config = _load(video_dir / "dataset.json")
     provider_id, provider = next(iter(config["providers"].items()))
+    ledger = _ledger_status(dataset_dir)
 
     rows: list[dict[str, str]] = []
     for spec_path in sorted((video_dir / "clips").glob("VU-*.json")):
@@ -156,9 +174,10 @@ def build_rows(dataset_dir: Path) -> list[dict[str, str]]:
             if not reference_abs.exists():
                 raise FileNotFoundError(
                     f"{clip['id']}: reference frame {reference} is missing. A clip "
-                    "may only be conditioned on an accepted still from the parent "
+                    "may only be conditioned on a still that exists in the parent "
                     "pilot."
                 )
+            provenance = ledger.get(reference.as_posix(), "unimported")
             prompt = build_prompt(scene, use_case, clip)
             output = Path("video") / provider["video_directory"] / f"{clip['id']}.{provider['file_extension']}"
             rows.append({
@@ -175,6 +194,7 @@ def build_rows(dataset_dir: Path) -> list[dict[str, str]]:
                 "model_display_name": provider["model_display_name"],
                 "reference_path": reference.as_posix(),
                 "reference_sha256": _sha256_file(reference_abs),
+                "reference_provenance": provenance,
                 "output_path": output.as_posix(),
                 "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
                 "exact_prompt": prompt,
@@ -189,8 +209,26 @@ def build_rows(dataset_dir: Path) -> list[dict[str, str]]:
     return rows
 
 
-def write_tasks(dataset_dir: Path) -> list[dict[str, str]]:
+def check_reference_provenance(rows: list[dict[str, str]]) -> list[str]:
+    """Return the clips whose reference still is not ``pass_a_accepted``."""
+    return [row["clip_id"] for row in rows
+            if row["reference_provenance"] != "pass_a_accepted"]
+
+
+def write_tasks(dataset_dir: Path, allow_unimported: bool = False) -> list[dict[str, str]]:
     rows = build_rows(dataset_dir)
+    ungated = check_reference_provenance(rows)
+    if ungated and not allow_unimported:
+        raise SystemExit(
+            f"{len(ungated)} of {len(rows)} clips are conditioned on a still with no "
+            "pass_a_accepted ledger row:\n  " + "\n  ".join(ungated) + "\n\n"
+            "The Gemini Omni stills have owner review but no recorded Pass A "
+            "(docs/31 Amendment B, work order item 6). Generating against them "
+            "produces clips whose ground truth rests on an unrecorded protocol.\n"
+            "Either complete the Omni Pass A import first, or pass "
+            "--allow-unimported-reference to write the queue as an explicitly "
+            "ungated probe."
+        )
     path = dataset_dir / "video" / "tasks.csv"
     previous: dict[str, dict[str, str]] = {}
     if path.exists():
@@ -217,6 +255,9 @@ def main() -> int:
     parser.add_argument("--dataset-dir", type=Path, default=DEFAULT_DATASET)
     parser.add_argument("--print", dest="print_prompts", action="store_true",
                         help="print each composed prompt instead of writing tasks.csv")
+    parser.add_argument("--allow-unimported-reference", action="store_true",
+                        help="write the queue even though the reference stills lack "
+                             "a pass_a_accepted ledger row (docs/31 Amendment B item 6)")
     args = parser.parse_args()
 
     if args.print_prompts:
@@ -226,9 +267,13 @@ def main() -> int:
             print()
         return 0
 
-    rows = write_tasks(args.dataset_dir)
+    rows = write_tasks(args.dataset_dir, args.allow_unimported_reference)
     print(f"wrote {len(rows)} video tasks to "
           f"{args.dataset_dir / 'video' / 'tasks.csv'}")
+    ungated = check_reference_provenance(rows)
+    if ungated:
+        print(f"WARNING: {len(ungated)} clips are conditioned on stills with no "
+              "recorded Pass A. This queue is an ungated probe.")
     return 0
 
 
