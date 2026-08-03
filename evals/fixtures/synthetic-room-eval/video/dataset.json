@@ -1,0 +1,45 @@
+{
+  "dataset_id": "synthetic-room-video-probe",
+  "phase": "phase-3.6-video-feasibility-probe",
+  "status": "specified_not_started",
+  "parent_dataset": "synthetic-room-eval",
+  "observed_truth_rule": "Only independently AI-reviewed Pass B claims, with required owner adjudication resolved, may be scored as gold. Unchanged from the parent dataset.",
+  "wall": "Synthetic video is development evidence. No result from this dataset promotes a capture-strategy claim, a compare claim, or a product accuracy claim. docs/26 still resolves photo-vs-video on real capture.",
+  "generation_policy": {
+    "api_calls_permitted": false,
+    "path": "Gemini Omni subscription surface, operated by the project owner",
+    "daily_budget_clips": 10,
+    "note": "Inherits the parent dataset's permanent restriction: no metered generation endpoint. The budget is a hard per-day ceiling that includes retries."
+  },
+  "providers": {
+    "gemini-omni-video": {
+      "provider": "Google",
+      "product": "Gemini Omni video generation",
+      "model_display_name": "Gemini Omni",
+      "video_directory": "google/gemini-omni",
+      "file_extension": "mp4",
+      "terms_record": "google-consumer-2026-07-15",
+      "note": "Same provider as the parent dataset's Google image arm. Any comparison against that arm is a service comparison within one provider, not an independent-provider comparison."
+    }
+  },
+  "reference_frame_policy": {
+    "rule": "Every clip is conditioned on one accepted still from the parent dataset, pinned by path and SHA-256.",
+    "reason": "Room identity is the thing that drifts. The parent pilot's 36% first-attempt rejection rate was overwhelmingly continuity failure across four static views; a moving camera has strictly more drift surface, so identity is pinned to an artefact rather than to prose.",
+    "eligible_source": "images/google/gemini-omni/*, restricted to the nine scenarios holding a complete four-view Omni packet"
+  },
+  "acceptance_criteria": [
+    "The opening frame matches the pinned reference frame in layout, fittings, finishes and lighting.",
+    "Every element of the clip's continuity list holds for the whole take; nothing morphs, gains, or loses identity mid-move.",
+    "Every required evidence item is legible in at least one frame.",
+    "No enumerated negative control is rendered as a real defect.",
+    "No unenumerated material difference from the reference frame appears at any point in the take.",
+    "One unbroken take: no cuts, dissolves, speed ramps, titles, borders or annotations.",
+    "No people, no readable text, no logos, no watermark.",
+    "Geometry stays coherent through camera motion: no furniture sliding, no doorways changing count or position, no room growing.",
+    "Audio matches the clip's declared audio mode exactly, including the silent case."
+  ],
+  "review_policy": {
+    "inherits": "parent dataset review_policy",
+    "video_addendum": "Pass A samples frames at a fixed cadence (1 fps) plus every declared gold timestamp. Continuity is judged across the sampled strip, not on a single frame. Any accepted clip records the sampled strip's hash alongside the clip hash."
+  }
+}

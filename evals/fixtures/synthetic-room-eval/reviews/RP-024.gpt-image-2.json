@@ -5,114 +5,156 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-08-03",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "desk",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "office chair",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "bookcase",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "roller blind",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "pale carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Desk, office chair, bookcase, roller blind and pale carpet all clear in coherent home-office wide view.",
+          "second_review_agreed": null
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "filing cabinet",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "ceiling light",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Door, radiator, filing cabinet, ceiling light and sockets all clear.",
+          "second_review_agreed": null
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "desk",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "monitor with blank screen",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "task lamp",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "thermostat",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "escalate",
+          "reason": "Desk, task lamp, sockets and thermostat clear; monitor present but blank-screen state is not certain enough to accept without a second look.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-024.gpt-image-2.C-inventory",
+          "scenario_id": "RP-024",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-024-C-inventory.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Desk, task lamp, sockets and thermostat clear; monitor present but blank-screen state is not certain enough to accept without a second look.",
+          "owner_decision": "accept",
+          "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "desk surface",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "drawer",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "chair arm",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "carpet",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Desk surface, drawer, chair arm and carpet all clear; no unintended defect falsifying labels.",
+          "second_review_agreed": null
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-08-03.json",
+    "provenance_warning": "Applied from phase3-pass-a-review-2026-08-03.json with owner adjudications owner-adjudications-2026-08-03.json. Reviewer provenance for this Pass A slice is the Cursor visual review plus project-owner escalation accepts."
   },
   "pass_b": {
     "reviewer": "",

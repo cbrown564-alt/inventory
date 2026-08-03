@@ -6,7 +6,7 @@
   "review_status": "provisional",
   "pass_a": {
     "reviewer": "Independent AI review with owner exceptions",
-    "completed_at": "2026-07-29",
+    "completed_at": "2026-08-03",
     "frames": [
       {
         "frame_id": "A-wide",
@@ -102,7 +102,7 @@
       },
       {
         "frame_id": "C-inventory",
-        "decision": "rejected",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "boiler",
@@ -125,14 +125,12 @@
             "visibility": "absent"
           }
         ],
-        "rejection_reasons": [
-          "Boiler, consumer unit, pipework present; isolator switches and air vent not clearly shown."
-        ],
+        "rejection_reasons": [],
         "ai_review": {
-          "source": "phase3-pass-a-review-2026-07-29.json",
-          "reviewed_at": "2026-07-29",
-          "decision": "escalate",
-          "reason": "Boiler, consumer unit, pipework present; isolator switches and air vent not clearly shown.",
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Boiler, consumer unit, red isolator switches, air vent and pipework all clear on the service wall.",
           "second_review_agreed": null
         },
         "owner_adjudication": {
@@ -170,31 +168,31 @@
           }
         ],
         "rejection_reasons": [
-          "Basket/floor visible, but **plinth and pipe boxing absent** (pipes exposed); not the required low-level condition evidence set."
+          "Basket edge and floor visible, but plinth and pipe boxing absent; pipes/cabinet remain exposed. Required low-level evidence set not met (attempt 2)."
         ],
         "ai_review": {
-          "source": "phase3-pass-a-review-2026-07-29.json",
-          "reviewed_at": "2026-07-29",
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
           "decision": "reject",
-          "reason": "Basket/floor visible, but **plinth and pipe boxing absent** (pipes exposed); not the required low-level condition evidence set.",
-          "second_review_agreed": true
+          "reason": "Basket edge and floor visible, but plinth and pipe boxing absent; pipes/cabinet remain exposed. Required low-level evidence set not met (attempt 2).",
+          "second_review_agreed": null
         },
         "owner_adjudication": {
           "task_id": "RP-019.gpt-image-2.D-condition",
           "scenario_id": "RP-019",
           "provider": "OpenAI",
           "view_id": "D-condition",
-          "path": "evals\\fixtures\\synthetic-room-eval\\images\\openai\\gpt-image-2\\RP-019-D-condition.png",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-019-D-condition.png",
           "ai_decision": "reject",
-          "ai_reason": "Basket/floor visible, but **plinth and pipe boxing absent** (pipes exposed); not the required low-level condition evidence set.",
+          "ai_reason": "Basket edge and floor visible, but plinth and pipe boxing absent; pipes/cabinet remain exposed. Required low-level evidence set not met (attempt 2).",
           "owner_decision": "reject",
-          "owner_reason": "Basket/floor visible, but **plinth and pipe boxing absent** (pipes exposed); not the required low-level condition evidence set.",
-          "adjudicated_at": "2026-07-29T19:34:36.600Z"
+          "owner_reason": "Basket edge and floor visible, but plinth and pipe boxing absent; pipes/cabinet remain exposed. Required low-level evidence set not met (attempt 2).",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
         }
       }
     ],
-    "source_review": "phase3-pass-a-review-2026-07-29.json",
-    "provenance_warning": "The source aggregate did not record reviewer model IDs or review-prompt hashes. This historical Pass A decision set is retained, but does not satisfy the stronger provenance requirement for retry reviews."
+    "source_review": "phase3-pass-a-review-2026-08-03.json",
+    "provenance_warning": "Applied from phase3-pass-a-review-2026-08-03.json with owner adjudications owner-adjudications-2026-08-03.json. Reviewer provenance for this Pass A slice is the Cursor visual review plus project-owner escalation accepts."
   },
   "pass_b": {
     "reviewer": "",

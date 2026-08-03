@@ -1,0 +1,150 @@
+{
+  "review_type": "owner_pass_a_adjudication",
+  "source_review": "phase3-pass-a-review-2026-08-03.json",
+  "adjudicator": "project owner",
+  "adjudicated_at": "2026-08-03T22:27:03.303319Z",
+  "counts": {
+    "total_recorded": 11,
+    "accept": 7,
+    "reject": 4,
+    "escalate_remaining": 0
+  },
+  "decisions": [
+    {
+      "task_id": "RP-019.gpt-image-2.D-condition",
+      "scenario_id": "RP-019",
+      "provider": "OpenAI",
+      "view_id": "D-condition",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-019-D-condition.png",
+      "ai_decision": "reject",
+      "ai_reason": "Basket edge and floor visible, but plinth and pipe boxing absent; pipes/cabinet remain exposed. Required low-level evidence set not met (attempt 2).",
+      "owner_decision": "reject",
+      "owner_reason": "Basket edge and floor visible, but plinth and pipe boxing absent; pipes/cabinet remain exposed. Required low-level evidence set not met (attempt 2).",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    },
+    {
+      "task_id": "RP-021.gpt-image-2.C-inventory",
+      "scenario_id": "RP-021",
+      "provider": "OpenAI",
+      "view_id": "C-inventory",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-021-C-inventory.png",
+      "ai_decision": "reject",
+      "ai_reason": "Required smoke alarm absent from ceiling/landing. Landing light, switch and radiator present; skirting weak.",
+      "owner_decision": "reject",
+      "owner_reason": "Required smoke alarm absent from ceiling/landing. Landing light, switch and radiator present; skirting weak.",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    },
+    {
+      "task_id": "RP-021.gpt-image-2.D-condition",
+      "scenario_id": "RP-021",
+      "provider": "OpenAI",
+      "view_id": "D-condition",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-021-D-condition.png",
+      "ai_decision": "escalate",
+      "ai_reason": "Runner, tread edge, riser and wall string present, but the intended frayed tread-edge strip reads as a possible texture glitch rather than clear fray.",
+      "owner_decision": "accept",
+      "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    },
+    {
+      "task_id": "RP-022.gpt-image-2.A-wide",
+      "scenario_id": "RP-022",
+      "provider": "OpenAI",
+      "view_id": "A-wide",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-022-A-wide.png",
+      "ai_decision": "reject",
+      "ai_reason": "WC, basin, mirror and wallpaper present, but floor is dark ceramic/stone tiles rather than the required vinyl.",
+      "owner_decision": "reject",
+      "owner_reason": "WC, basin, mirror and wallpaper present, but floor is dark ceramic/stone tiles rather than the required vinyl.",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    },
+    {
+      "task_id": "RP-022.gpt-image-2.D-condition",
+      "scenario_id": "RP-022",
+      "provider": "OpenAI",
+      "view_id": "D-condition",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-022-D-condition.png",
+      "ai_decision": "reject",
+      "ai_reason": "WC base and skirting present, but pipe boxing absent (exposed PVC/supply pipes) and floor remains dark tiles rather than vinyl.",
+      "owner_decision": "reject",
+      "owner_reason": "WC base and skirting present, but pipe boxing absent (exposed PVC/supply pipes) and floor remains dark tiles rather than vinyl.",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    },
+    {
+      "task_id": "RP-023.gpt-image-2.A-wide",
+      "scenario_id": "RP-023",
+      "provider": "OpenAI",
+      "view_id": "A-wide",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-023-A-wide.png",
+      "ai_decision": "escalate",
+      "ai_reason": "Sloped ceiling, shelves, vacuum and storage boxes clear; floor reads wood-look laminate/plank and is not clearly vinyl.",
+      "owner_decision": "accept",
+      "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    },
+    {
+      "task_id": "RP-023.gpt-image-2.B-reverse",
+      "scenario_id": "RP-023",
+      "provider": "OpenAI",
+      "view_id": "B-reverse",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-023-B-reverse.png",
+      "ai_decision": "escalate",
+      "ai_reason": "Cupboard door, coat hooks, shelf ends and skirting present; door hinges not clearly evidenced.",
+      "owner_decision": "accept",
+      "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    },
+    {
+      "task_id": "RP-023.gpt-image-2.D-condition",
+      "scenario_id": "RP-023",
+      "provider": "OpenAI",
+      "view_id": "D-condition",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-023-D-condition.png",
+      "ai_decision": "escalate",
+      "ai_reason": "Door threshold and vacuum present with skirting; floor again reads wood-look rather than clearly vinyl, and vacuum wheel evidence is only partial.",
+      "owner_decision": "accept",
+      "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    },
+    {
+      "task_id": "RP-024.gpt-image-2.C-inventory",
+      "scenario_id": "RP-024",
+      "provider": "OpenAI",
+      "view_id": "C-inventory",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-024-C-inventory.png",
+      "ai_decision": "escalate",
+      "ai_reason": "Desk, task lamp, sockets and thermostat clear; monitor present but blank-screen state is not certain enough to accept without a second look.",
+      "owner_decision": "accept",
+      "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    },
+    {
+      "task_id": "RP-025.gpt-image-2.B-reverse",
+      "scenario_id": "RP-025",
+      "provider": "OpenAI",
+      "view_id": "B-reverse",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-025-B-reverse.png",
+      "ai_decision": "escalate",
+      "ai_reason": "Patio door, external light, wall vent and chairs clear; door threshold is not clearly distinct from the floor/door junction.",
+      "owner_decision": "accept",
+      "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    },
+    {
+      "task_id": "RP-025.gpt-image-2.D-condition",
+      "scenario_id": "RP-025",
+      "provider": "OpenAI",
+      "view_id": "D-condition",
+      "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-025-D-condition.png",
+      "ai_decision": "escalate",
+      "ai_reason": "Floor tiles, grout, drain channel and chair leg present, but the intended short hairline crack is only a faint/ambiguous mark on one tile.",
+      "owner_decision": "accept",
+      "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+      "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+    }
+  ],
+  "notes": [
+    "Owner accepted every AI escalate frame from phase3-pass-a-review-2026-08-03.json.",
+    "Owner confirmed the four AI reject frames."
+  ]
+}

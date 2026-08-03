@@ -5,114 +5,180 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-08-03",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "sloped ceiling",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "shelves",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vacuum cleaner",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "storage boxes",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "escalate",
+          "reason": "Sloped ceiling, shelves, vacuum and storage boxes clear; floor reads wood-look laminate/plank and is not clearly vinyl.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-023.gpt-image-2.A-wide",
+          "scenario_id": "RP-023",
+          "provider": "OpenAI",
+          "view_id": "A-wide",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-023-A-wide.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Sloped ceiling, shelves, vacuum and storage boxes clear; floor reads wood-look laminate/plank and is not clearly vinyl.",
+          "owner_decision": "accept",
+          "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "cupboard door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "hinges",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "coat hooks",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "shelf ends",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "escalate",
+          "reason": "Cupboard door, coat hooks, shelf ends and skirting present; door hinges not clearly evidenced.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-023.gpt-image-2.B-reverse",
+          "scenario_id": "RP-023",
+          "provider": "OpenAI",
+          "view_id": "B-reverse",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-023-B-reverse.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Cupboard door, coat hooks, shelf ends and skirting present; door hinges not clearly evidenced.",
+          "owner_decision": "accept",
+          "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "electric meter",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "consumer unit",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "sockets",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "shelf brackets",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "light fitting",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Electric meter, consumer unit, sockets, shelf bracket and overhead light fitting all clear on the service wall.",
+          "second_review_agreed": null
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "door threshold",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "vacuum wheel",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "escalate",
+          "reason": "Door threshold and vacuum present with skirting; floor again reads wood-look rather than clearly vinyl, and vacuum wheel evidence is only partial.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-023.gpt-image-2.D-condition",
+          "scenario_id": "RP-023",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-023-D-condition.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Door threshold and vacuum present with skirting; floor again reads wood-look rather than clearly vinyl, and vacuum wheel evidence is only partial.",
+          "owner_decision": "accept",
+          "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-08-03.json",
+    "provenance_warning": "Applied from phase3-pass-a-review-2026-08-03.json with owner adjudications owner-adjudications-2026-08-03.json. Reviewer provenance for this Pass A slice is the Cursor visual review plus project-owner escalation accepts."
   },
   "pass_b": {
     "reviewer": "",

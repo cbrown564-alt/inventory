@@ -66,6 +66,146 @@ Omni batch has been reviewed and passes. The pilot therefore returns to
 
 The dated Phase 3 execution record below is history and is left unedited.
 
+### Amendment B, 3 Aug 2026 — delta pairs become the ambition; Google demoted
+
+*Supersedes parts of Amendment A above, which was written the same day before
+the ledger was read against the plan. Where the two conflict, B governs.*
+
+Amendment A restored a 200-image target that the ledger cannot reach: 39 tasks
+are terminally `generator_failed` under a two-attempt cap, and Google
+generation is retired. It also left the programme's ambition at "pick a
+prompt", which is below what the apparatus can produce. Eight decisions
+follow.
+
+**B1. The dataset is an evaluation instrument, not a training corpus.** The
+Out-of-scope ban on weight training stands. A permissive-licence GPT-only
+slice makes tuning *legal*, not *useful*, at n=100 images — two orders of
+magnitude short. If a training corpus is wanted later it is a separate,
+high-volume, low-rigour GPT-only generation arm, sourced and reported
+independently of this dataset, and it belongs to docs/19. The unique
+contribution here is enumerated ground truth — negatives and delta pairs —
+which is what you need to *measure* whether a tuned model helped.
+
+**B2. Splits stay frozen; the attempt cap is amended once.** Re-splitting
+around whichever packets happen to be complete would select on generation
+success, which correlates with scene difficulty, and would quietly load the
+sealed split with easy rooms. That is irreversible and is permanently off the
+table. Instead the attempt cap moves 2 → 3 for a **single recorded GPT-only
+repair pass** over every incomplete packet, at the same Pass A bar with no
+scene-specification weakening. The cap exists to stop a spec being softened
+until the generator complies; a third attempt against the unchanged frozen
+prompt does not do that. Record generation yield before and after, and state
+the amended cap in every report.
+
+**B3. Partial packets are first-class.** Frame-level metrics are computed on
+all accepted views; room-level metrics only on complete four-view packets. The
+two are reported as separate tables with `n` stated. Packet completeness stops
+being a single point of failure for the whole programme.
+
+**B4. Validation grows the only legitimate way.** Validation currently holds
+two complete GPT packets, which cannot freeze a prompt. Author approximately
+five **new** specifications and assign them to the validation split *before*
+generating them. Existing split membership does not move.
+
+**B5. Pass B is tiered by split.** Development labels steer iteration;
+validation and sealed labels make decisions.
+
+- *Validation + sealed* (10 existing specs plus the new ones from B4): the
+  full protocol, no shortcuts. These records carry every Phase 4–5 decision.
+- *Development* (15 specs): primary Pass B only, with the blind second check
+  retained on 100% of defects and negatives — the metrics where a single label
+  error is most visible and counts are smallest. Ordinary item labels run
+  single-pass. These records are marked `provisional_development` and are
+  never gold.
+- The Pass B promotion guard must **refuse** to mark a validation or sealed
+  record gold without the full protocol present. This is enforced in tooling,
+  not by discipline.
+
+**B6. Reviewer identity is pinned, and independence is by model family.**
+Existing records name the reviewer as "Cursor visual review" with no model id
+or version, which does not meet this document's own requirement.
+
+- The Pass B primary reviewer must be **non-OpenAI-family**, because all
+  imagery is now GPT Image 2 and a same-family reviewer judges what is visible
+  in its own family's output. A biased backend shows up as a score; a biased
+  label silently corrupts every score.
+- The blind second check must be a **different family again** from the
+  primary, so the two cannot share a blind spot.
+- `validate_dataset.py` rejects any review record missing reviewer model id
+  and version.
+- Validation and sealed Pass B runs through a **pinned, scriptable path** with
+  a hashed review prompt and cached raw output, so those 15-odd records are
+  re-runnable. Development Pass B may remain in-session and is recorded as
+  **attested**, never described as reproducible.
+
+**B7. Delta pairs are the ambition; the prompt winner is a by-product.**
+Phase 3.5 is promoted from optional extension to the programme's centre.
+Comparison is the decisive artefact in docs/00; that surface has no ground
+truth in these fixtures or in any public dataset; it cannot be obtained from a
+real property without waiting out a 12-month tenancy; and docs/22 records
+ML-E14 as blocked precisely because "no paired check-in/out fixture exists".
+The headline metric — **false-change rate** — decides whether compare can ship
+at all, and is currently unmeasured. The probe runs first (see B8). The
+docs/00 wall is unchanged: delta pairs remain development evidence and promote
+nothing.
+
+**B8. Two additional avenues adopted; sequencing and a WIP limit.**
+
+Adopted now:
+
+- **Degradation ladder.** The production journey is video-first, but this set
+  is clean, well-framed stills, so every synthetic number likely overstates
+  real performance by an unmeasured margin. Apply a deterministic ladder to
+  already-accepted images — motion blur, downscale-and-reupscale, JPEG
+  compression, off-axis crop — and re-run the same pipeline. Labels are
+  inherited unchanged: no new generation, no quota, no Pass B, no provider
+  terms question. This converts the static set into a sensitivity instrument.
+- **CI regression suite.** `gemini-3.5-flash` will change without notice. A
+  scheduled sealed-slice run makes the dataset a permanent tripwire rather
+  than a one-shot comparison. Added once a sealed run exists to regress
+  against.
+
+Queued behind the delta probe: a **defect-visibility threshold curve** —
+render the same defect at controlled apparent sizes to find where recall
+collapses, characterising the resolution-bound 64–71% defect-recall ceiling in
+docs/04. Its output is a capture instruction feeding docs/26 and docs/33, not
+a score. Parked: the docs/22 §1 distillation flywheel, per B1.
+
+Order of work, with a **WIP limit of two active lanes** — one generation, one
+review:
+
+1. Delta-pair feasibility probe (6 generations). *Stop rule: fails the
+   ≥2-of-3 bar → record the negative result, abandon the extension, ambition
+   reverts to the prompt winner.*
+2. Repair generation at cap 3 — validation and sealed holes first, development
+   second; author and generate the B4 validation specs in the same pass.
+3. Full-protocol Pass B on validation + sealed (review lane, concurrent
+   with 2).
+4. Degradation ladder (no quota; slots in whenever compute is free).
+5. Development Pass B, primary-only.
+6. Gemini Omni Pass A import — **last, and named in advance as the droppable
+   item** if the schedule slips.
+7. CI regression harness.
+
+**B9. The Google arm is demoted, not deleted.** It has 27 terminal failures,
+5 complete packets, `backend_model: unknown` throughout, three packets with no
+proved generation origin, and UK terms that prohibit using output to develop
+"machine-learning models or related AI technology" — so it is unpublishable
+and unusable for any future training corpus. Its one remaining value is as the
+only cross-generator control against the GPT Image 2 house-style confound,
+which the degradation ladder does not address.
+
+- "Exactly 200 accepted images" is **removed** from the definition of done. A
+  gate that cannot be passed is not a gate.
+- The 57 Gemini Omni candidates are imported through the **normal Pass A
+  path** — owner review alone is not the recorded protocol — but as a
+  bias-check slice with **no completeness obligation**.
+- The entire Google arm is **excluded from publication and from any future
+  training corpus**, on terms grounds.
+- The **real-transfer gate remains the primary house-style control**. The
+  cross-generator slice is opportunistic and unbalanced and cannot carry a
+  conclusion alone; that is the only claim to be made for it.
+
 **1. Stop searching for a single prompt winner.** Phase 1's frozen four-run
 comparison did not stall by accident. The evidence-bounded prompt took defect
 recall from 50% to 100% and removed an unsupported defect while item recall
@@ -104,16 +244,33 @@ The docs/00 wall stands unchanged. Delta pairs are development evidence. No
 synthetic result promotes a compare claim; that remains gated on real
 check-in/check-out evidence.
 
-## Current execution status — 30 Jul 2026
+## Current execution status — 3 Aug 2026 (Amendment B)
+
+Read against the ledger, not against the narrative. `tasks.csv` currently
+holds **126 `pass_a_accepted`** (85 OpenAI, 41 Google), **39
+`generator_failed`** (12 OpenAI, 27 Google), **13 `retry_pending`** and
+**22 `pending`**. No rows remain `review_pending`.
+
+Complete four-view packets, which is the number room-level scoring depends on:
+
+| Split | Specs | GPT Image 2 complete | Google complete |
+|---|---:|---:|---:|
+| Development | 15 | 8 | 4 |
+| Validation | 5 | **2** | 1 |
+| Sealed | 5 | 3 | 0 |
 
 | Phase | Status | Evidence |
 |---|---|---|
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
-| 3 — development and validation | **In progress; review-blocked** | The 200-row ledger records 108 `pass_a_accepted`, 22 `review_pending`, 10 `retry_pending`, 38 `generator_failed` and 22 `pending` rows. The 57 Gemini Omni candidate images have been generated and owner-reviewed as passing; their ledger import, hashes and independent review records remain to be applied. The 20 previously untouched GPT Image 2 rows were generated on 3 Aug 2026 and are awaiting Pass A. |
-| 3.5 — delta pairs | **Not started** | Three-scenario feasibility probe gates an 8-pair temporal and 4-pair counterfactual set. |
-| 4 — sealed comparison | **Dependency-blocked** | No validation winner exists, so opening the sealed model comparison would violate the frozen order. The amended order admits a per-task prompt assignment as a winner. |
-| 5 — real transfer | **Dependency-blocked** | There is no selected winner to run on real fixtures. The separate native-resolution evidence gate also remains open. |
+| 3 — development and validation | **In progress; blocked on Pass B, not on generation** | 46 of 50 packet review records are `provisional`. Only the four Phase-1 records are `verified_synthetic_gold`. Every remaining generation task could complete tomorrow and Phase 4 would still be blocked. Amendment B repairs generation (B2–B4) and tiers Pass B (B5–B6). |
+| 3.5 — delta pairs | **Next; runs first** | Promoted to the programme's centre by B7. Three-scenario feasibility probe gates an 8-pair temporal and 4-pair counterfactual set. |
+| 4 — sealed comparison | **Not started** | Downstream of a validation prompt decision that has not been made. Validation holds two complete GPT packets, so no decision is currently possible on it; B4 addresses that. The amended order admits a per-task prompt assignment as a winner. |
+| 5 — real transfer | **Not started** | Downstream of Phase 4. The separate native-resolution evidence gate also remains open. |
+
+Phases 4 and 5 are recorded as *not started* rather than *dependency-blocked*.
+They are downstream of work that has not been done, which is a schedule fact
+rather than an external obstruction.
 
 **Status after the 3 Aug 200-image amendment:** Phase 3 is review-blocked.
 The 57 Gemini Omni candidates have an owner-reported passing review but are
@@ -167,6 +324,10 @@ The pilot should distinguish four failure sources:
 - matched delta pairs of one room — temporal (check-in/check-out) and
   counterfactual (defect present/absent) — with an enumerated change list,
   subject to the Phase 3.5 feasibility gate;
+- a deterministic degradation ladder applied to accepted images — motion blur,
+  downscale-and-reupscale, JPEG compression, off-axis crop — with labels
+  inherited unchanged, measuring sensitivity toward video-frame conditions;
+- a scheduled CI regression run of a sealed slice, to detect backend drift;
 - an internal dataset with prompts, provenance, independent AI-reviewed labels
   and human adjudication records where required;
 - a later public release only after the separate terms, provenance, metadata
@@ -1076,6 +1237,8 @@ claim.
 | `evals/synthetic/build_delta_tasks.py` | Turn `delta_of` specs into T1/counterfactual generation tasks with reference frames |
 | `evals/synthetic/review_delta_pair.py` | Pair review: same-room identity, enumerated-change visibility, unenumerated-change detection |
 | `evals/synthetic/score_delta.py` | Delta recall, false-change rate, unchanged stability, severity direction |
+| `evals/synthetic/degrade.py` | Deterministic degradation ladder over accepted images; labels inherited unchanged |
+| `evals/synthetic/review_pass_b.py` | Pinned, scriptable Pass B for validation and sealed records: hashed review prompt, cached raw output, reviewer model id and version |
 | `evals/synthetic/run_eval.py` | Run named off-the-shelf VLM configurations and cache raw output |
 | `evals/synthetic/score.py` | Existing metric contract plus slices and paired comparisons |
 | `evals/fixtures/synthetic-room-eval/README.md` | Dataset card and operator instructions |
@@ -1104,16 +1267,30 @@ new metric only when the current schema cannot express the decision.
 
 ## Definition of done
 
+*Revised by Amendment B, 3 Aug 2026. The "exactly 200 accepted images" clause
+is removed: 39 tasks are terminally failed and Google generation is retired,
+so it was unreachable.*
+
 - [x] 25 matched four-view specifications and immutable packet splits implemented.
-- [ ] Exactly 200 accepted images: 100 Google-arm images (Antigravity and/or
-  Gemini Omni, reported by service) and 100 GPT Image 2 images.
+- [ ] Every validation and sealed specification has a complete four-view GPT
+  Image 2 packet after the cap-3 repair pass, or a recorded terminal failure.
+- [ ] The Google slice is reported at whatever size it lands, excluded from
+  publication and from any training corpus, and described only as an
+  opportunistic cross-generator check.
 - [ ] Every accepted image has exact prompt, provenance, AI-observed labels
   and any required human adjudication.
-- [ ] Defects and negatives are all double-checked by an independent AI, with
-  disagreements and ambiguity resolved by the project owner.
-- [ ] Baseline and candidate results are reported, with Antigravity and Gemini
-  Omni service slices broken out separately.
+- [ ] Defects and negatives are all double-checked by an independent AI of a
+  different model family from both the generator and the primary reviewer,
+  with disagreements and ambiguity resolved by the project owner.
+- [ ] Validation and sealed Pass B records are re-runnable through the pinned
+  scriptable path; development records are marked attested and
+  `provisional_development`.
+- [ ] Baseline and candidate results are reported at both frame level and
+  room level with `n` stated, with Antigravity and Gemini Omni service slices
+  broken out separately.
 - [ ] Phase 3.5 has either a scored delta set or a recorded negative result.
+- [ ] Degradation-ladder sensitivity results are reported alongside the clean
+  synthetic numbers.
 - [ ] A sealed synthetic comparison is complete.
 - [ ] The winning change passes held-out real-property regression gates.
 - [ ] Public dataset card and customer-facing synthetic disclosure are ready.

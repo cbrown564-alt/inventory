@@ -5,114 +5,168 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-08-03",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "glass balustrade",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "two metal chairs",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "small table",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "planters",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "floor tiles",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Glass balustrade, two metal chairs, small table, planters and floor tiles all clear.",
+          "second_review_agreed": null
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "patio door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "external light",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wall vent",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "chairs",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "threshold",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "escalate",
+          "reason": "Patio door, external light, wall vent and chairs clear; door threshold is not clearly distinct from the floor/door junction.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-025.gpt-image-2.B-reverse",
+          "scenario_id": "RP-025",
+          "provider": "OpenAI",
+          "view_id": "B-reverse",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-025-B-reverse.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Patio door, external light, wall vent and chairs clear; door threshold is not clearly distinct from the floor/door junction.",
+          "owner_decision": "accept",
+          "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "balustrade glass",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "metal posts",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "drain outlet",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "planters",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "external socket",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Balustrade glass, metal posts, drain outlet/grate, planters and external socket all clear.",
+          "second_review_agreed": null
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "floor tiles",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "grout",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "drain channel",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "chair leg",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "escalate",
+          "reason": "Floor tiles, grout, drain channel and chair leg present, but the intended short hairline crack is only a faint/ambiguous mark on one tile.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-025.gpt-image-2.D-condition",
+          "scenario_id": "RP-025",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-025-D-condition.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Floor tiles, grout, drain channel and chair leg present, but the intended short hairline crack is only a faint/ambiguous mark on one tile.",
+          "owner_decision": "accept",
+          "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-08-03.json",
+    "provenance_warning": "Applied from phase3-pass-a-review-2026-08-03.json with owner adjudications owner-adjudications-2026-08-03.json. Reviewer provenance for this Pass A slice is the Cursor visual review plus project-owner escalation accepts."
   },
   "pass_b": {
     "reviewer": "",

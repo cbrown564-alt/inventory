@@ -5,114 +5,170 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-08-03",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "stair runner",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "timber handrail",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "painted walls",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "boxes",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "ceiling light",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Stairs and landing clear; dark runner, timber handrail, painted walls, stacked boxes and partially framed ceiling light all visible.",
+          "second_review_agreed": null
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "stairs",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "lower door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "handrail",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "newel post",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "boxes",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Downward stair view coherent; stairs, lower door, handrail, newel post and boxes all clear.",
+          "second_review_agreed": null
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "smoke alarm",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "landing light",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "light switch",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "radiator",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "Required smoke alarm absent from ceiling/landing. Landing light, switch and radiator present; skirting weak."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "reject",
+          "reason": "Required smoke alarm absent from ceiling/landing. Landing light, switch and radiator present; skirting weak.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-021.gpt-image-2.C-inventory",
+          "scenario_id": "RP-021",
+          "provider": "OpenAI",
+          "view_id": "C-inventory",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-021-C-inventory.png",
+          "ai_decision": "reject",
+          "ai_reason": "Required smoke alarm absent from ceiling/landing. Landing light, switch and radiator present; skirting weak.",
+          "owner_decision": "reject",
+          "owner_reason": "Required smoke alarm absent from ceiling/landing. Landing light, switch and radiator present; skirting weak.",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "stair runner",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "tread edge",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "riser",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "wall string",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "escalate",
+          "reason": "Runner, tread edge, riser and wall string present, but the intended frayed tread-edge strip reads as a possible texture glitch rather than clear fray.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-021.gpt-image-2.D-condition",
+          "scenario_id": "RP-021",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-021-D-condition.png",
+          "ai_decision": "escalate",
+          "ai_reason": "Runner, tread edge, riser and wall string present, but the intended frayed tread-edge strip reads as a possible texture glitch rather than clear fray.",
+          "owner_decision": "accept",
+          "owner_reason": "Owner accepted after Pass A escalation review on 2026-08-03.",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-08-03.json",
+    "provenance_warning": "Applied from phase3-pass-a-review-2026-08-03.json with owner adjudications owner-adjudications-2026-08-03.json. Reviewer provenance for this Pass A slice is the Cursor visual review plus project-owner escalation accepts."
   },
   "pass_b": {
     "reviewer": "",

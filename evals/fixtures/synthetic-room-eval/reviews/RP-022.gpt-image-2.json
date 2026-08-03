@@ -5,114 +5,172 @@
   "model_display_name": "GPT Image 2",
   "review_status": "provisional",
   "pass_a": {
-    "reviewer": "",
-    "completed_at": null,
+    "reviewer": "Independent AI review with owner exceptions",
+    "completed_at": "2026-08-03",
     "frames": [
       {
         "frame_id": "A-wide",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "WC",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "corner basin",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "mirror",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "wallpaper",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "WC, basin, mirror and wallpaper present, but floor is dark ceramic/stone tiles rather than the required vinyl."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "reject",
+          "reason": "WC, basin, mirror and wallpaper present, but floor is dark ceramic/stone tiles rather than the required vinyl.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-022.gpt-image-2.A-wide",
+          "scenario_id": "RP-022",
+          "provider": "OpenAI",
+          "view_id": "A-wide",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-022-A-wide.png",
+          "ai_decision": "reject",
+          "ai_reason": "WC, basin, mirror and wallpaper present, but floor is dark ceramic/stone tiles rather than the required vinyl.",
+          "owner_decision": "reject",
+          "owner_reason": "WC, basin, mirror and wallpaper present, but floor is dark ceramic/stone tiles rather than the required vinyl.",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+        }
       },
       {
         "frame_id": "B-reverse",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "door",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "toilet roll holder",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "towel ring",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "cleaning basket",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Door, toilet-roll holder, towel ring, skirting and cleaning basket all clear in reverse WC view.",
+          "second_review_agreed": null
+        }
       },
       {
         "frame_id": "C-inventory",
-        "decision": "pending",
+        "decision": "accepted",
         "requested_evidence": [
           {
             "name": "corner basin",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "mixer tap",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "mirror",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "extractor vent",
-            "visibility": "pending"
+            "visibility": "clear"
           },
           {
             "name": "light switch",
-            "visibility": "pending"
+            "visibility": "clear"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "accept",
+          "reason": "Corner basin, mixer tap, mirror, extractor vent and light switch all clear.",
+          "second_review_agreed": null
+        }
       },
       {
         "frame_id": "D-condition",
-        "decision": "pending",
+        "decision": "rejected",
         "requested_evidence": [
           {
             "name": "WC base",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "vinyl floor",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "skirting",
-            "visibility": "pending"
+            "visibility": "absent"
           },
           {
             "name": "pipe boxing",
-            "visibility": "pending"
+            "visibility": "absent"
           }
         ],
-        "rejection_reasons": []
+        "rejection_reasons": [
+          "WC base and skirting present, but pipe boxing absent (exposed PVC/supply pipes) and floor remains dark tiles rather than vinyl."
+        ],
+        "ai_review": {
+          "source": "phase3-pass-a-review-2026-08-03.json",
+          "reviewed_at": "2026-08-03",
+          "decision": "reject",
+          "reason": "WC base and skirting present, but pipe boxing absent (exposed PVC/supply pipes) and floor remains dark tiles rather than vinyl.",
+          "second_review_agreed": null
+        },
+        "owner_adjudication": {
+          "task_id": "RP-022.gpt-image-2.D-condition",
+          "scenario_id": "RP-022",
+          "provider": "OpenAI",
+          "view_id": "D-condition",
+          "path": "evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-022-D-condition.png",
+          "ai_decision": "reject",
+          "ai_reason": "WC base and skirting present, but pipe boxing absent (exposed PVC/supply pipes) and floor remains dark tiles rather than vinyl.",
+          "owner_decision": "reject",
+          "owner_reason": "WC base and skirting present, but pipe boxing absent (exposed PVC/supply pipes) and floor remains dark tiles rather than vinyl.",
+          "adjudicated_at": "2026-08-03T22:27:03.303319Z"
+        }
       }
-    ]
+    ],
+    "source_review": "phase3-pass-a-review-2026-08-03.json",
+    "provenance_warning": "Applied from phase3-pass-a-review-2026-08-03.json with owner adjudications owner-adjudications-2026-08-03.json. Reviewer provenance for this Pass A slice is the Cursor visual review plus project-owner escalation accepts."
   },
   "pass_b": {
     "reviewer": "",
