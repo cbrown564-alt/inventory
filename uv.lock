@@ -1617,6 +1617,7 @@ dependencies = [
 all = [
     { name = "anthropic" },
     { name = "opencv-python-headless" },
+    { name = "transformers" },
     { name = "ultralytics" },
     { name = "weasyprint" },
 ]
@@ -1625,6 +1626,7 @@ claude = [
 ]
 detect = [
     { name = "opencv-python-headless" },
+    { name = "transformers" },
     { name = "ultralytics" },
 ]
 dev = [
@@ -1676,6 +1678,7 @@ requires-dist = [
     { name = "timm", marker = "extra == 'ml'", specifier = ">=1.0" },
     { name = "torch", marker = "extra == 'ml'", specifier = ">=2.2" },
     { name = "torchvision", marker = "extra == 'ml'", specifier = ">=0.17" },
+    { name = "transformers", marker = "extra == 'detect'", specifier = ">=4.44" },
     { name = "transformers", marker = "extra == 'ml'", specifier = ">=4.44" },
     { name = "ultralytics", marker = "extra == 'detect'", specifier = ">=8.3" },
     { name = "weasyprint", marker = "extra == 'pdf'", specifier = ">=61" },
