@@ -52,10 +52,12 @@ gates below.
   image-generation API was used. Seven complete packets are currently ready
   for Pass B; three intact Google packets remain excluded because their
   successful raw generation provenance is absent.
-  **Superseded 3 Aug 2026:** generation is now single-provider on GPT Image 2,
-  so the Google quota and provenance blockers no longer gate the programme —
-  `RP-015` and `RP-019` are regenerated on the GPT Image 2 path and the
-  provider-pair balance requirement is deleted. Phase 3 is owner-blocked only
+  **Updated 3 Aug 2026:** the 200-image plan is restored. Gemini Omni is the
+  Google service for the previously missing Google-arm images; the project
+  owner reports that its complete batch passes review. The 20 previously
+  untouched GPT Image 2 rows (`RP-021`–`RP-025`, four views each) are now
+  generated and awaiting independent Pass A. Phase 3 remains review-blocked;
+  Google service slices must be reported separately
   ([`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md)).
 - A preliminary Property A V0/V1/`P2+` matrix exists, but it is not the
   qualifying capture decision: it used a non-independent proxy, omitted P1
@@ -185,12 +187,11 @@ API or metered Gemini endpoint is permitted.
 ## Next work (ordered)
 
 ```text
-1. Complete the 100-image synthetic evaluation programme
-   → single-provider from 3 Aug 2026: GPT Image 2 via Codex `imagegen` only;
-     Google/Antigravity generation retired, accepted Google images retained as
-     a reported secondary slice (docs/31 amendment)
-   → regenerate the RP-015 and RP-019 packets on the GPT Image 2 path
-   → run retry Pass A for the 8 views generated on 3 Aug 2026
+1. Complete the 200-image synthetic evaluation programme
+   → import and independently review the Gemini Omni Google-arm images;
+     report Antigravity and Gemini Omni as separate Google service slices
+   → run independent Pass A for the 20 newly generated GPT Image 2 views and
+     the two earlier `RP-019` replacements
    → adjudicate the six retry Pass A exceptions and atomically apply all
      39 AI-reviewed outcomes
    → complete independent Pass B and its risk-label checks before scoring

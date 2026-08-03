@@ -8,13 +8,12 @@ gate in docs/00 or the ML training programme in docs/19.*
 
 ## Decision
 
-Build a **100-image pilot** as 25 four-view room specifications rendered
-through Codex's GPT Image 2 generator. Use it to find prompt and pipeline
-failures quickly. Do not train or fine-tune model weights on the images.
-
-**Generation is single-provider from 3 Aug 2026** (see the amendment below).
-GPT Image 2 through Codex's built-in `imagegen` path is the only generation
-route. Google/Antigravity generation is retired.
+Build a **200-image pilot** as 25 four-view room specifications rendered
+through a Google generation arm and Codex's GPT Image 2 generator. The Google
+arm may contain images from Antigravity and Gemini Omni, which are separate
+Google services and must be reported separately. Use it to find prompt and
+pipeline failures quickly. Do not train or fine-tune model weights on the
+images.
 
 Vision-description *evaluation* is unchanged and still includes the Google
 path through subscription-backed Antigravity CLI, because `gemini-3.5-flash`
@@ -22,7 +21,7 @@ is the production describe default in docs/00 and cannot be evaluated by
 proxy. Never use Gemini API credentials or a metered Gemini endpoint. This is
 narrower than the production backend policy in docs/00.
 
-Completing and using the 100-image pilot is next-phase v1 evidence work.
+Completing and using the 200-image pilot is next-phase v1 evidence work.
 Publishing the dataset is post-v1 and requires a separate review of provider
 terms, provenance, metadata removal and dataset licensing.
 
@@ -43,36 +42,27 @@ with the AI-first, exception-based review policy below. Those reviewed batches
 are calibration evidence for the policy, not automatic acceptance of later
 images.
 
-### Amendment, 3 Aug 2026 — single provider, delta pairs, prompt routing
+### Amendment, 3 Aug 2026 — restore the 200-image arm, delta pairs, prompt routing
 
 Three changes follow from what Phases 1–3 actually produced.
 
-**0. Retire Google/Antigravity generation.** The two-provider design was
-bought at a price the results do not justify. Google generation produced the
-`RESOURCE_EXHAUSTED` stop of 28 Jul, the pause/resume cycles of 29–30 Jul, the
-`RP-015` terminal generator failure, the still-blocked `RP-019`, the copy
-symptom that required same-room reference mitigation, an unresolved consumer-terms
-question over "related AI technology", and a provenance audit built solely to
-separate intact Google files from proved ones. GPT Image 2 through Codex
-`imagegen` completed every remaining task on 29 Jul without any of it.
+**0. Restore the 200-image generation arm.** The 100-image reduction was a
+quota response to the Antigravity service, not a decision that the Google arm
+was unnecessary. Gemini Omni is now the Google service for the previously
+missing Google images, and the project owner reports that the complete Gemini
+Omni batch has been reviewed and passes. The pilot therefore returns to
+**25 specifications × 4 views × 2 arms = 200 images**: 100 Google-arm images
+(Antigravity and Gemini Omni, reported by service) and 100 GPT Image 2 images.
 
-From 3 Aug 2026 the pilot is single-provider: **25 specifications × 4 views =
-100 GPT Image 2 images**. Consequences, stated plainly:
-
-- Phase 3 is no longer provider-blocked. `RP-019`'s quota block and `RP-015`'s
-  terminal failure both cease to be blockers, because neither has a Google arm
-  to complete. Regenerate those two packets on the GPT Image 2 path.
-- The "Pair balance" gate — all 25 specifications needing complete packets
-  from *both* providers — is deleted. It was unsatisfiable after `RP-015` was
-  declared terminal, so it would have blocked the definition of done forever.
-- Accepted Google images already in the dataset are **retained** as a
-  secondary cross-generator slice where complete packets exist, and reported
-  separately. They are not regenerated, not completed, and not required.
-- The cost is real and is recorded under Bias checks: a single generator's
-  house style can make evaluation artificially easy, and the cross-provider
-  arm was one control against it. The remaining controls are the retained
-  Google slice, difficult phone-like framing, and the real-transfer gate —
-  which is the control that actually decides anything.
+- The 200-task queue and pair-balance gate are restored.
+- Gemini Omni candidates must be imported into the task ledger with hashes and
+  service provenance; owner review is recorded separately from independent AI
+  Pass A/B review.
+- The 20 previously untouched GPT Image 2 rows have now been generated and
+  are `review_pending`; they still require the normal independent review path.
+- Google and Gemini Omni are the same image provider, so this is a service
+  comparison, not an independent-provider comparison. Report that limitation
+  explicitly and retain the real-transfer gate.
 
 The dated Phase 3 execution record below is history and is left unedited.
 
@@ -120,16 +110,17 @@ check-in/check-out evidence.
 |---|---|---|
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
-| 3 — development and validation | **Owner- and provider-blocked** | The complete 146-frame first-attempt Pass A plus owner adjudication has been applied: 93 frames were accepted and 53 first attempts were archived for retry. Dual independent retry Pass A is complete for the 39 earlier retries: 5 accepted, 28 rejected and 6 escalated. The six owner decisions and atomic application remain. On 3 Aug 2026 the two first-attempt `RP-016` views and 6 of the 14 missing retry views were generated; `RP-015` was declared a terminal generator failure and `RP-019`'s four views remain quota-blocked. The 8 new views still need retry Pass A. |
+| 3 — development and validation | **In progress; review-blocked** | The 200-row ledger records 108 `pass_a_accepted`, 22 `review_pending`, 10 `retry_pending`, 38 `generator_failed` and 22 `pending` rows. The 57 Gemini Omni candidate images have been generated and owner-reviewed as passing; their ledger import, hashes and independent review records remain to be applied. The 20 previously untouched GPT Image 2 rows were generated on 3 Aug 2026 and are awaiting Pass A. |
 | 3.5 — delta pairs | **Not started** | Three-scenario feasibility probe gates an 8-pair temporal and 4-pair counterfactual set. |
 | 4 — sealed comparison | **Dependency-blocked** | No validation winner exists, so opening the sealed model comparison would violate the frozen order. The amended order admits a per-task prompt assignment as a winner. |
 | 5 — real transfer | **Dependency-blocked** | There is no selected winner to run on real fixtures. The separate native-resolution evidence gate also remains open. |
 
-**Status after the 3 Aug single-provider amendment:** Phase 3 is
-owner-blocked only. The six escalated retry decisions and the atomic
-application of all 39 AI-reviewed outcomes remain; the provider block is
-dissolved, and `RP-015`/`RP-019` are regenerated on GPT Image 2 rather than
-waiting on Google quota.
+**Status after the 3 Aug 200-image amendment:** Phase 3 is review-blocked.
+The 57 Gemini Omni candidates have an owner-reported passing review but are
+not yet promoted into the task ledger. The 20 newly generated GPT Image 2
+rows and the two earlier `RP-019` replacements remain `review_pending`. The
+historical retry decisions and their atomic application remain part of the
+review record.
 
 The quota responses are provider-internal limits reached through Antigravity
 CLI; they are not metered image API calls made by this project. Resume Phase 3
@@ -542,9 +533,9 @@ it is not required to clear the v1 product gate.
 
 | Gate | Requirement |
 |---|---|
-| Initial generation yield | At least 75/100 first or second attempts accepted (75%); retain and exclude failed outputs rather than stopping prompt/VLM work |
+| Initial generation yield | At least 150/200 first or second attempts accepted (75%); retain and exclude failed outputs rather than stopping prompt/VLM work |
 | Label quality | 100% defects/negatives double-checked; ≥25% ordinary labels double-checked |
-| Packet completeness | All 25 specifications have a complete four-view GPT Image 2 packet |
+| Packet completeness | All 25 specifications have complete four-view Google and GPT Image 2 packets |
 | Delta probe (Phase 3.5) | ≥2 of 3 probe scenarios yield an acceptable pair within 2 attempts, with zero unenumerated material changes |
 | Prompt win | Either a single prompt improves validation notable recall ≥5 pp or drops hallucination ≥2 pp with the other metric non-regressing, **or** a per-task assignment beats the production prompt on both passes with no metric regressing on the pass it is assigned to |
 | Architecture win | Validation quality improves and per-property projected cost remains ≤ docs/00 budget |
@@ -901,15 +892,13 @@ Because that appeared only in a failed response, every `backend_model` remains
 `generation_runs/antigravity/pause-2026-08-03-1733.json`, not promoted to
 provenance.
 
-**3 Aug 2026 GPT Image 2 fallback disposition:** for Codex-run new generation,
-the current fallback remains GPT Image 2 through Codex built-in `imagegen`.
-The quota-affected scenarios now have GPT counterparts: `RP-015` and `RP-016`
-already had complete GPT packets, and `RP-019` now has GPT `C-inventory` and
-`D-condition` generated from its accepted GPT `A-wide` reference. The
-successful post-reset Google outputs for `RP-007`, `RP-011` and `RP-014` are
-retained as historical secondary evidence only. Their separate GPT Image 2
-Pass A failures remain quality-review failures, not quota failures, and must
-not be silently reclassified or regenerated under this fallback rule.
+**3 Aug 2026 GPT Image 2 generation disposition:** Codex-run new generation
+uses GPT Image 2 through the built-in `imagegen` path. The 20 previously
+untouched GPT rows (`RP-021` through `RP-025`, four views each) were generated
+on 3 Aug 2026 using each packet's A-wide frame as the local continuity
+reference for B/C/D. Their exact prompts, hashes and reference hashes are in
+`reports/gpt-image-2-generation-2026-08-03.json`; all remain `review_pending`.
+The two earlier `RP-019` replacements remain `review_pending` as well.
 
 **3 Aug 2026 Gemini Omni candidate cohort:** the project owner supplied a
 second batch of images generated with Gemini Omni, using the frozen prompts and
@@ -924,19 +913,17 @@ the stated attachment order. These are staged as candidate evidence only; no
 
 The candidates are stored under
 `images/google/gemini-omni/` with SHA-256 hashes and source filenames. `RP-021`
-is the stairs-and-landing batch; `RP-020` was not supplied. Gemini Omni has
-not yet been promoted as a generation backend: every candidate still needs
-the normal independent Pass A review and complete provenance before it can
-replace a failed Google/Antigravity row. The existing task ledger therefore
-retains its prior counts until that review is applied.
+is the stairs-and-landing batch; `RP-020` was not supplied. The project owner
+has reviewed the 57 candidates and reports that they pass. They still need to
+be imported into the 200-row task ledger and run through the normal
+independent Pass A/B recording path before promotion.
 
-After the owner retry adjudication and the GPT Image 2 fallback recording, the
-task ledger remains 108 `pass_a_accepted`, 2 GPT `review_pending` replacements
-for `RP-019`, 10 historical Google `retry_pending`, 38 `generator_failed` and
-42 `pending`. The 57 Gemini Omni files are separate candidate artifacts and
-are not included in those counts. Dataset validation reports zero errors (92
-existing warnings). The two GPT replacements and the Gemini candidates must
-complete the normal independent Pass A review before promotion.
+After the owner review note and GPT Image 2 generation recording, the task
+ledger contains 108 `pass_a_accepted`, 22 `review_pending`, 10
+`retry_pending`, 38 `generator_failed` and 22 `pending` rows. Dataset
+validation reports zero errors (92 existing warnings). The 57 Gemini Omni
+files remain separate candidate artifacts until their ledger import is
+applied.
 
 **Next actions:** review the 57 Gemini Omni candidates against their frozen
 view prompts; record accepted/rejected decisions and provenance in the task
@@ -1118,15 +1105,14 @@ new metric only when the current schema cannot express the decision.
 ## Definition of done
 
 - [x] 25 matched four-view specifications and immutable packet splits implemented.
-- [ ] Exactly 100 accepted GPT Image 2 images (single-provider design,
-  3 Aug 2026). Retained Google images are a reported secondary slice and are
-  not required by this gate.
+- [ ] Exactly 200 accepted images: 100 Google-arm images (Antigravity and/or
+  Gemini Omni, reported by service) and 100 GPT Image 2 images.
 - [ ] Every accepted image has exact prompt, provenance, AI-observed labels
   and any required human adjudication.
 - [ ] Defects and negatives are all double-checked by an independent AI, with
   disagreements and ambiguity resolved by the project owner.
-- [ ] Baseline and candidate results are reported, with the retained Google
-  slice broken out separately where it exists.
+- [ ] Baseline and candidate results are reported, with Antigravity and Gemini
+  Omni service slices broken out separately.
 - [ ] Phase 3.5 has either a scored delta set or a recorded negative result.
 - [ ] A sealed synthetic comparison is complete.
 - [ ] The winning change passes held-out real-property regression gates.
