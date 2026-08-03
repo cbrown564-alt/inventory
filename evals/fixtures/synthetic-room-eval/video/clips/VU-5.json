@@ -1,0 +1,55 @@
+{
+  "id": "VU-5",
+  "use_case": "occlusion-counterfactual",
+  "question": "Does the describer confine its claims to what the camera actually saw, when the room is identical and only the camera's reach changes?",
+  "feeds": ["docs/00", "docs/29-evidential-spec-audit", "docs/33"],
+  "one_way": "both_ways",
+  "one_way_note": "This is the only use case here that can produce a positive finding, because it does not depend on the footage resembling real capture. The two clips show the same room under the same light; the sole difference is whether the occluded rear was ever in view. Any claim about the rear that appears in the hold clip's output is a hallucination by construction, and any claim about the rear missing from the push-in clip's output is a recall failure by construction. No transfer argument is needed.",
+  "pair_design": {
+    "class": "counterfactual",
+    "varied": ["camera reach only"],
+    "held_fixed": ["scenario", "reference frame", "room contents", "lighting", "audio mode", "requested duration", "opening framing"],
+    "unchanged_assertions": [
+      "the stacked washer dryer, boiler, fuse box and shelf contents are identical in both clips",
+      "the harsh single-bulb lighting and its shadow pattern are identical in both clips",
+      "no item is added, removed, moved or cleaned between the two clips",
+      "no defect exists in either clip; the rear floor is ordinary and undamaged in both"
+    ],
+    "invalidation_rule": "Any material difference between the two clips other than camera reach voids the pair. The pair is the evidence; a single surviving clip is worth nothing on its own."
+  },
+  "clips": [
+    {
+      "id": "VU-5.RP-019-push",
+      "scenario_id": "RP-019",
+      "reference_view": "A-wide",
+      "camera": "start on the reference framing at the open cupboard door, then move slowly forward into the cupboard, past the storage baskets, until the rear floor and the lower rear wall behind the storage are fully in frame, and hold there",
+      "arm": "revealed",
+      "required_evidence": ["stacked washer dryer", "boiler", "shelves", "cleaning tools", "vinyl floor", "storage baskets", "pipework", "rear floor behind the storage", "lower rear wall behind the storage"],
+      "intended_defects": [],
+      "intended_negatives": ["deep shadow is not mould", "pipe joint is not a crack", "the revealed rear floor is ordinary and undamaged"],
+      "audio_mode": "silent"
+    },
+    {
+      "id": "VU-5.RP-019-hold",
+      "scenario_id": "RP-019",
+      "reference_view": "A-wide",
+      "camera": "start on the reference framing at the open cupboard door and stay at the doorway for the whole take, panning gently up and down the visible front of the cupboard without ever advancing past the storage baskets; the rear floor and the lower rear wall behind the storage stay occluded and are never visible in any frame",
+      "arm": "occluded",
+      "required_evidence": ["stacked washer dryer", "boiler", "shelves", "cleaning tools", "storage baskets", "pipework"],
+      "must_not_be_visible": ["rear floor behind the storage", "lower rear wall behind the storage"],
+      "intended_defects": [],
+      "intended_negatives": ["deep shadow is not mould", "hidden areas are not assumed damaged", "unseen floor is not claimed clean or damaged"],
+      "audio_mode": "silent"
+    }
+  ],
+  "gold": {
+    "rooms": ["Utility cupboard"],
+    "scored_by": "run both clips through the full pipeline under the same prompt and model; the reportable numbers are (a) hallucination rate - claims about the rear floor or rear wall appearing in the hold clip's output, and (b) reveal recall - whether the push-in clip's output records the rear floor it did see",
+    "pass_bar": "the hold clip's output makes no condition claim, positive or negative, about the rear floor or rear wall; docs/00 treats an unsupported 'clean and undamaged' as the same failure as an unsupported defect, because both are claims the evidence cannot carry",
+    "note": "This pair also tests the docs/33 instruction that has no product surface yet - 'move closer'. The push-in clip is what a guided owner would do; the hold clip is what an unguided one does. The output gap between them is the upper bound on what any capture guide could ever be worth."
+  },
+  "scale_up_if_passes": {
+    "scenario_id": "RP-023",
+    "reason": "RP-023 is an under-stairs storage cupboard with the same occlusion structure, a sloped ceiling that makes the rear harder to reach, and an enumerated negative of its own ('no proven damage behind boxes'). Running the same pair on a second room separates a per-room fluke from a pipeline property."
+  }
+}

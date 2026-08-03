@@ -1,0 +1,33 @@
+{
+  "id": "VU-2",
+  "use_case": "room-boundary",
+  "question": "Can the segmenter place a room boundary it has never had ground truth for, on footage where the true boundary frame is known?",
+  "feeds": ["docs/11"],
+  "one_way": "falsify_only",
+  "one_way_note": "docs/11 judged boundaries by eyeballing the strip against a hand cut of one owner video. This clip manufactures a boundary with a known frame index. It cannot validate segmentation on real properties; it can show that a boundary this unambiguous is still missed or misnamed.",
+  "known_limitation": "Gemini Omni is conditioned on one reference frame. The hallway identity is pinned to RP-014; the kitchen the model invents on the far side of the door is a new identity and is NOT the RP-003 packet. Score room naming and boundary timing only. Do not score kitchen item recall against RP-003 gold.",
+  "clips": [
+    {
+      "id": "VU-2.RP-014-transit",
+      "scenario_id": "RP-014",
+      "reference_view": "A-wide",
+      "camera": "start on the reference framing just inside the front door, walk steadily down the hall, pass through the open doorway at the inner end, continue two paces into the kitchen beyond and come to rest facing its units; one continuous forward walk, no pause at the threshold, no turn back",
+      "required_evidence": ["hall walls", "striped runner", "coat hooks", "entryphone", "ceiling light", "skirting"],
+      "second_room": {
+        "room_type": "Kitchen",
+        "prose": "an ordinary compact UK kitchen with pale units, a worktop and a window, lit by daylight that is visibly cooler and brighter than the hallway's ceiling light",
+        "identity_pinned": false
+      },
+      "intended_defects": [],
+      "intended_negatives": ["runner stripe is not a stain", "door shadow is not damp"],
+      "audio_mode": "silent",
+      "gold": {
+        "rooms": ["Entrance hall", "Kitchen"],
+        "boundary_at_s": null,
+        "boundary_rule": "the first frame in which the doorway plane is behind the camera; recorded by frame inspection of the delivered file, never assumed from the requested duration",
+        "scored_by": "segment.py at the production sampling cadence; report exact and semantic room-name accuracy, boundary error in seconds, invented rooms, and whether the normaliser's midpoint seam lands inside the true transition"
+      },
+      "design_note": "The lighting change across the threshold (warm ceiling light to cool daylight) is the strongest natural boundary cue there is. That is deliberate: this is the easy case. A miss here is decisive; a hit here is weak evidence."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "VU-1",
+  "use_case": "extraction-fidelity",
+  "question": "Does the video path recover the evidence that the still path recovers, from footage whose contents are known exactly?",
+  "feeds": ["docs/26", "docs/18", "docs/12"],
+  "one_way": "falsify_only",
+  "one_way_note": "A clean, well-lit, slow synthetic sweep is a best case for frame extraction. If item recall from the clip falls materially below item recall from the four source stills, real handheld footage cannot do better and the video-first assumption is damaged. Parity here proves nothing about real capture.",
+  "clips": [
+    {
+      "id": "VU-1.RP-003",
+      "scenario_id": "RP-003",
+      "reference_view": "A-wide",
+      "camera": "hold the reference framing for about one second, then turn slowly and steadily to the right across the run of units and on to the cooking wall, and come to rest there; the operator stands still and pivots, at the pace of someone looking rather than searching; keep worktop and floor in frame throughout; small natural handheld wobble only",
+      "required_evidence": ["white kitchen units", "oak-effect worktop", "sink", "oven", "ceramic hob", "extractor hood", "splashback tiles", "grout", "sockets", "vinyl floor", "skirting boards"],
+      "intended_defects": [],
+      "intended_negatives": ["clean timber grain is not mould", "hob reflection is not a stain", "dark grout line is not a crack", "ordinary shadow is not damp"],
+      "audio_mode": "silent",
+      "gold": {
+        "rooms": ["Kitchen"],
+        "item_recall_baseline": "the union of the four accepted RP-003 Gemini Omni stills, scored under the same Pass B labels",
+        "scored_by": "run the clip through segment + curate + describe; score item recall and false-item rate against the parent packet's Pass B gold"
+      }
+    },
+    {
+      "id": "VU-1.RP-024",
+      "scenario_id": "RP-024",
+      "reference_view": "A-wide",
+      "camera": "hold the reference framing for about one second, then walk slowly forward from the doorway toward the desk wall and come to rest facing it; steady walking pace, no turn at the end; small natural handheld wobble only",
+      "required_evidence": ["desk", "office chair", "bookcase", "roller blind", "pale carpet", "monitor with blank screen", "task lamp", "sockets", "thermostat", "radiator", "filing cabinet"],
+      "intended_defects": [],
+      "intended_negatives": ["carpet shading is not a stain", "ordinary shadow is not damp", "blank wall mount does not identify a missing item", "deliberate distressed paint is not fresh damage"],
+      "audio_mode": "silent",
+      "gold": {
+        "rooms": ["Home office"],
+        "item_recall_baseline": "the union of the four accepted RP-024 Gemini Omni stills, scored under the same Pass B labels",
+        "scored_by": "as VU-1.RP-003; this clip is the dolly-in counterpart to the pivot sweep, so the pair also isolates whether forward motion or rotation costs more recall"
+      }
+    }
+  ]
+}

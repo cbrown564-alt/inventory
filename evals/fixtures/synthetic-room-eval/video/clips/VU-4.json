@@ -1,0 +1,54 @@
+{
+  "id": "VU-4",
+  "use_case": "motion-quality-ladder",
+  "question": "At what sweep speed does frame extraction stop returning a usable hero and start losing items — with the room, the lighting and the evidence held fixed?",
+  "feeds": ["docs/18", "docs/22", "docs/26"],
+  "one_way": "falsify_only",
+  "one_way_note": "This is the one degradation axis that exists only in video and cannot be studied with any number of stills. It is a controlled ladder, not a claim about how fast real owners move.",
+  "controlled_design": {
+    "held_fixed": ["scenario", "reference frame", "camera path", "required evidence", "lighting", "audio mode", "requested duration"],
+    "varied": ["camera speed only"],
+    "invalidation_rule": "If any two rungs differ in framing, path or contents beyond the speed of travel, the ladder is void and must be regenerated. A rung that traverses less of the room than its neighbours is not a slower rung, it is a different clip."
+  },
+  "clips": [
+    {
+      "id": "VU-4.RP-022-slow",
+      "scenario_id": "RP-022",
+      "reference_view": "A-wide",
+      "camera": "start on the reference framing at the doorway and pivot left to right across the whole cloakroom, coming to rest on the basin wall; deliberate and slow, as if being careful, with only faint handheld wobble",
+      "speed_rung": "slow",
+      "required_evidence": ["WC", "corner basin", "mirror", "wallpaper", "vinyl floor", "mixer tap", "extractor vent", "light switch", "toilet roll holder", "towel ring", "skirting", "pipe boxing"],
+      "intended_defects": [],
+      "intended_negatives": ["wallpaper pattern is not mould", "mirror reflection is not a stain", "vinyl pattern is not staining", "door shadow is not damp"],
+      "audio_mode": "silent"
+    },
+    {
+      "id": "VU-4.RP-022-ordinary",
+      "scenario_id": "RP-022",
+      "reference_view": "A-wide",
+      "camera": "start on the reference framing at the doorway and pivot left to right across the whole cloakroom, coming to rest on the basin wall; an ordinary unhurried pace with the natural handheld wobble of a phone held in one hand",
+      "speed_rung": "ordinary",
+      "required_evidence": ["WC", "corner basin", "mirror", "wallpaper", "vinyl floor", "mixer tap", "extractor vent", "light switch", "toilet roll holder", "towel ring", "skirting", "pipe boxing"],
+      "intended_defects": [],
+      "intended_negatives": ["wallpaper pattern is not mould", "mirror reflection is not a stain", "vinyl pattern is not staining", "door shadow is not damp"],
+      "audio_mode": "silent"
+    },
+    {
+      "id": "VU-4.RP-022-hurried",
+      "scenario_id": "RP-022",
+      "reference_view": "A-wide",
+      "camera": "start on the reference framing at the doorway and pivot left to right across the whole cloakroom, coming to rest on the basin wall; a hurried impatient pace with pronounced handheld wobble and visible motion blur through the middle of the move",
+      "speed_rung": "hurried",
+      "required_evidence": ["WC", "corner basin", "mirror", "wallpaper", "vinyl floor", "mixer tap", "extractor vent", "light switch", "toilet roll holder", "towel ring", "skirting", "pipe boxing"],
+      "intended_defects": [],
+      "intended_negatives": ["wallpaper pattern is not mould", "mirror reflection is not a stain", "vinyl pattern is not staining", "door shadow is not damp"],
+      "audio_mode": "silent"
+    }
+  ],
+  "gold": {
+    "rooms": ["WC"],
+    "expected_evidence_identical_across_rungs": true,
+    "scored_by": "for each rung report the IQA score distribution of extracted frames, the selected hero, item recall, false-item rate, and the number of frames curate.py had to discard to reach its budget; the reportable result is the shape of the curve across rungs, not any single rung's absolute number",
+    "watch_for": "the failure docs/18 names by example - a hero that is a blurred close-up of nothing. If the hurried rung's hero is unusable while its item recall holds, hero selection and item extraction degrade at different speeds, and they need separate frame budgets."
+  }
+}

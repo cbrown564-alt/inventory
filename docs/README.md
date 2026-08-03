@@ -28,7 +28,7 @@ Update the owner instead of creating a second live plan. Implementation and test
 | **Milestone ledger** | [03](03-implementation-plan.md) | Historical — what shipped when (frozen) |
 | **Feature records** | [06](06-professional-report-benchmark.md)–[09](09-web-ui-and-capture.md), [15](15-curation-and-one-app.md)–[16](16-report-redesign.md) | Deep dive on a shipped milestone |
 | **Design reference** | [05](05-review-experience.md), [14](14-frontend-craft.md), [17](17-experience-redesign.md) | Review UX principles and next work |
-| **Evidence and technical work** | [02](02-research.md), [11](11-video-segmentation.md), [13](13-yoloe-detection.md), [18](18-hero-image-selection.md), [26](26-capture-strategy-experiment.md), [29 evidential](29-evidential-spec-audit.md), [29 local](29-local-inference-tuning.md), [30 quality gate](30-phase4-quality-gate.md), [31](31-synthetic-evaluation-dataset-plan.md), [market-research](market-research-2026-07.md) | Current evidence gates, research and evaluation method |
+| **Evidence and technical work** | [02](02-research.md), [11](11-video-segmentation.md), [13](13-yoloe-detection.md), [18](18-hero-image-selection.md), [26](26-capture-strategy-experiment.md), [29 evidential](29-evidential-spec-audit.md), [29 local](29-local-inference-tuning.md), [30 quality gate](30-phase4-quality-gate.md), [31](31-synthetic-evaluation-dataset-plan.md), [34](34-synthetic-video-probe.md), [market-research](market-research-2026-07.md) | Current evidence gates, research and evaluation method |
 | **ML programme** | [19](19-ml-dl-exploration-plan.md), [21](21-ml-dl-experiment-log.md), [22](22-ml-programme-review-and-roadmap.md), [23](23-gpu-rerun-runbook.md) | ML experiments — subordinate to docs/00 |
 | **Future** | [20](20-ios-native-app.md) | Post-v1 iOS track |
 
@@ -110,4 +110,5 @@ Update the owner instead of creating a second live plan. Implementation and test
 | 31 | [synthetic-evaluation-dataset-plan](31-synthetic-evaluation-dataset-plan.md) | active | Human-verified generated rooms for prompt and VLM architecture evaluation |
 | 32 | [acoustic-evidence-synthetic-lab](32-acoustic-evidence-synthetic-lab.md) | active | Acoustic observations, adversarial spoken labels, audiovisual delta pairs |
 | 33 | [speaking-capture-guide](33-speaking-capture-guide.md) | exploratory | Research prototype; blocked on live capture, not on the v1 path |
+| 34 | [synthetic-video-probe](34-synthetic-video-probe.md) | active | Five Gemini Omni video use cases over the docs/31 scenarios; falsification-only except the occlusion pair |
 | — | [market-research-2026-07](market-research-2026-07.md) | active | Competitive map, evidential spec, pricing anchors |

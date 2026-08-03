@@ -1,0 +1,35 @@
+{
+  "id": "VU-3",
+  "use_case": "narrated-cue",
+  "question": "Does one spoken room-name cue change segmentation or description, on footage where the cue's wording and timing are known exactly?",
+  "feeds": ["docs/11", "docs/33", "docs/26"],
+  "one_way": "falsify_only",
+  "one_way_note": "A generated voice is clean, close-miked and unaccented. Real walkthrough narration is muffled, off-axis and half-finished. If a perfect cue produces no S1-minus-S0 lift, the audio hypothesis is dead without needing real audio; a lift here does not carry to real audio.",
+  "matched_pair_note": "S0 and S1 do not need two generations. Generate the narrated clip once, then strip the audio track with ffmpeg to produce S0. The footage is then byte-identical between arms, which is a cleaner control than two renders could ever be.",
+  "clips": [
+    {
+      "id": "VU-3.RP-021-narrated",
+      "scenario_id": "RP-021",
+      "reference_view": "A-wide",
+      "camera": "start on the reference framing at the foot of the stairs, climb slowly and steadily, pause for about one second on a clear tread edge partway up, then continue to the landing and come to rest facing it; keep the handrail and the boxed storage in frame during the climb",
+      "required_evidence": ["stair runner", "timber handrail", "painted walls", "boxes", "ceiling light", "smoke alarm", "light switch", "newel post", "tread edge", "riser"],
+      "intended_defects": ["frayed strip along the front edge of one stair tread"],
+      "intended_negatives": ["shadow behind boxes is not damp", "hidden treads are not assumed damaged", "runner weave is not tearing", "light shadow is not staining"],
+      "audio_mode": "narrated",
+      "audio": {
+        "cue_text": "This is the stairs and landing.",
+        "cue_at_s": 1.0,
+        "voice": "one calm unhurried adult voice, off camera, ordinary UK domestic recording made on a phone held at chest height",
+        "after_cue": "room tone only; no further speech, no music, no sound effects",
+        "cue_timing_rule": "requested placement is a target; the gold cue timestamp is read from the delivered audio track, never assumed"
+      },
+      "gold": {
+        "rooms": ["Stairs and landing"],
+        "cue_transcript": "This is the stairs and landing.",
+        "scored_by": "run S0 (audio stripped) and S1 (audio intact) through audio_cues.py + segment.py + curate.py + describe.py; report S1-S0 on room-name accuracy, boundary error, defect recall for the frayed tread, hero selection, and review corrections",
+        "guardrail": "S1 cues are soft evidence per docs/11: they may raise the probability of a nearby name but must not create a hard cut. A silent clip must reproduce S0 exactly."
+      },
+      "design_note": "RP-021 carries a real enumerated defect on a tread and a deliberate occlusion (boxes). The one-second pause on a clear tread edge is the pause-detection signal from eval_pause_detect.py, so this clip exercises three consumers of audio and motion at once."
+    }
+  ]
+}
