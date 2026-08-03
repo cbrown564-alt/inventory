@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "record_type": "sanitised_provider_quota_pause",
+  "observed_at": "2026-08-03T17:33:20+00:00",
+  "cli_version": "Antigravity CLI 1.1.8",
+  "operator_model_mode": "gemini-3.5-flash-low",
+  "metered_api_call": false,
+  "provider_response": {
+    "status": "ERROR",
+    "error": "429 Too Many Requests (RESOURCE_EXHAUSTED): capacity exhausted on this model.",
+    "resets_in_reported_by_provider": "4h47m (RP-015), 4h44m (RP-019)",
+    "underlying_image_model_named_in_error": "gemini-3.1-flash-image",
+    "backend_model_inference_note": "The image model name appeared only in a failed response. Per the dataset rule, backend_model remains \"unknown\"; this is recorded as an observation, not provenance."
+  },
+  "sanitisation": {
+    "conversation_id_removed": true,
+    "account_identifiers_recorded": false
+  },
+  "cli_version_incident": {
+    "summary": "An earlier run on 2026-08-03 self-updated the CLI from 1.1.8 to 1.1.10 mid-run. Its two RP-016 outputs were discarded, 1.1.8 was restored from the retained .old binary and marked read-only, and RP-016 was regenerated on 1.1.8.",
+    "all_records_in_this_session": "1.1.8"
+  },
+  "regeneration_outcome": {
+    "views_targeted": 14,
+    "views_regenerated_with_successful_run_record": 6,
+    "scenarios_complete": [
+      "RP-007",
+      "RP-011",
+      "RP-014"
+    ],
+    "scenarios_failed": [
+      "RP-015",
+      "RP-019"
+    ]
+  },
+  "rp_015_terminal_declaration": {
+    "decided_by": "project owner",
+    "decided_at": "2026-08-03",
+    "reason": "Attempt 2 stopped at 429 after three views were written but before D-condition. The CLI wrapper returned ERROR, so no successful raw run record exists for those three views — the same absent-provenance condition that blocks RP-009, RP-012 and RP-018. Regenerating them would have been a third attempt, exceeding the two-attempt cap, so the scenario was declared a terminal generator failure instead.",
+    "attempt_2_archived_views": [
+      {
+        "view_id": "A-wide",
+        "archived_path": "rejected/RP-015.antigravity-builtin.A-wide-attempt-2.jpg",
+        "sha256": "ec803e25615f479840cc37380f3c5423448082e318c3be6157a6c37900807388"
+      },
+      {
+        "view_id": "B-reverse",
+        "archived_path": "rejected/RP-015.antigravity-builtin.B-reverse-attempt-2.jpg",
+        "sha256": "d3bf19f8fab9e10005335c6c63d87cb8690ee6a222598bea5507fb5354ff398e"
+      },
+      {
+        "view_id": "C-inventory",
+        "archived_path": "rejected/RP-015.antigravity-builtin.C-inventory-attempt-2.jpg",
+        "sha256": "7e140ee5b1da2a3ec0d1177fb45d51082d5a15d9c597912f7f0c730c547f4882"
+      }
+    ],
+    "d_condition_note": "D-condition has attempts=1: its second attempt never executed because quota was exhausted first. It is terminal by owner decision, not by the two-attempt stopping rule. No file exists to archive.",
+    "scene_specification_unchanged": true
+  },
+  "rp_019_note": "Blocked before any output was written. No files, no partial provenance. Its four views remain retry_pending at attempts=1 and are still eligible for a second attempt.",
+  "raw_cli_error_responses": {
+    "RP-015": {
+      "status": "ERROR",
+      "response": "```json\n{\n  \"scenario_id\": \"RP-015\",\n  \"tool_name\": \"generate_image\",\n  \"backend_model\": \"unknown\",\n  \"outputs\": [\n    {\n      \"task_id\": \"RP-015.antigravity-builtin.A-wide\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-015-A-wide.jpg\",\n      \"sha256\": \"ec803e25615f479840cc37380f3c5423448082e318c3be6157a6c37900807388\"\n    },\n    {\n      \"task_id\": \"RP-015.antigravity-builtin.B-reverse\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-015-B-reverse.jpg\",\n      \"sha256\": \"d3bf19f8fab9e10005335c6c63d87cb8690ee6a222598bea5507fb5354ff398e\"\n    },\n    {\n      \"task_id\": \"RP-015.antigravity-builtin.C-inventory\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-015-C-inventory.jpg\",\n      \"sha256\": \"7e140ee5b1da2a3ec0d1177fb45d51082d5a15d9c597912f7f0c730c547f4882\"\n    }\n  ],\n  \"error\": \"Failed to complete view D-condition because generate_image failed with 429 Too Many Requests (RESOURCE_EXHAUSTED): You have exhausted your capacity on this model. Your quota will reset after 4h47m.\"\n}\n```\n",
+      "error": "Image failed to generate.",
+      "duration_seconds": 65.7650722,
+      "num_turns": 1,
+      "usage": {
+        "input_tokens": 247820,
+        "output_tokens": 13374,
+        "thinking_tokens": 9963,
+        "cache_read_tokens": 252697,
+        "total_tokens": 261194
+      }
+    },
+    "RP-019": {
+      "status": "ERROR",
+      "response": "I will wait for the search to complete.\nI will wait for the search of image files to complete.\n{\n  \"scenario_id\": \"RP-019\",\n  \"tool_name\": \"generate_image\",\n  \"backend_model\": \"unknown\",\n  \"outputs\": [],\n  \"error\": \"The image-generation tool cannot proceed because the underlying model gemini-3.1-flash-image is blocked by quota exhaustion: 429 Too Many Requests. The quota will reset after approximately 4 hours and 44 minutes.\"\n}\n",
+      "error": "Image failed to generate.",
+      "duration_seconds": 156.9660622,
+      "num_turns": 1,
+      "usage": {
+        "input_tokens": 634247,
+        "output_tokens": 24281,
+        "thinking_tokens": 18884,
+        "cache_read_tokens": 3462512,
+        "total_tokens": 658528
+      }
+    }
+  },
+  "resume_order": [
+    "After quota reset, regenerate the four RP-019 views as attempt 2.",
+    "Run dual independent retry Pass A for the newly generated RP-007, RP-011, RP-014 and RP-019 views.",
+    "Apply clear retry decisions; obtain owner adjudication only for escalations.",
+    "Run Pass B on complete provenance-eligible four-view packets."
+  ]
+}

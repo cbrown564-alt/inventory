@@ -46,7 +46,7 @@ images.
 |---|---|---|
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
-| 3 — development and validation | **Owner- and provider-blocked** | The complete 146-frame first-attempt Pass A plus owner adjudication has been applied: 93 frames were accepted and 53 first attempts were archived for retry. Dual independent retry Pass A is complete for the 39 available retries: 5 accepted, 28 rejected and 6 escalated. The six owner decisions and atomic application remain. Fourteen Google retry files and the two first-attempt `RP-016` views are still missing. |
+| 3 — development and validation | **Owner- and provider-blocked** | The complete 146-frame first-attempt Pass A plus owner adjudication has been applied: 93 frames were accepted and 53 first attempts were archived for retry. Dual independent retry Pass A is complete for the 39 earlier retries: 5 accepted, 28 rejected and 6 escalated. The six owner decisions and atomic application remain. On 3 Aug 2026 the two first-attempt `RP-016` views and 6 of the 14 missing retry views were generated; `RP-015` was declared a terminal generator failure and `RP-019`'s four views remain quota-blocked. The 8 new views still need retry Pass A. |
 | 4 — sealed comparison | **Dependency-blocked** | No validation winner exists, so opening the sealed model comparison would violate the frozen order. |
 | 5 — real transfer | **Dependency-blocked** | There is no selected winner to run on real fixtures. The separate native-resolution evidence gate also remains open. |
 
@@ -749,6 +749,53 @@ Seven complete, provenance-eligible packets are currently ready for Pass B.
 No development/validation scoring, prompt selection, sealed work or real
 transfer has started. Dataset validation reports zero errors and the focused
 synthetic suite has 24 passing tests.
+
+**3 Aug 2026 session:** quota had reset, so generation resumed for the missing
+Google views. Two things must be read together with the results.
+
+*CLI version incident.* `agy.exe` self-updated from 1.1.8 to 1.1.10 during the
+first run, and its two `RP-016` outputs were generated on the unsanctioned
+version. Those outputs were discarded, 1.1.8 was restored from the retained
+`.old` binary and marked read-only, and `RP-016` was regenerated on 1.1.8. The
+read-only lock held for the remainder of the session; every run record from
+3 Aug is stamped 1.1.8. Clear the lock deliberately when moving the programme
+to a new pinned version — an unnoticed update would otherwise split a cohort
+across two generator versions.
+
+*Generation outcome.* `RP-016` C-inventory and D-condition were generated, and
+6 of the 14 missing retry views completed with successful run records
+(`RP-007` C-inventory, `RP-011` C-inventory and all four `RP-014` views).
+Where a packet reused accepted views as continuity references, those files
+were verified byte-identical to `tasks.csv` afterwards. Generation then hit
+`RESOURCE_EXHAUSTED`/429 again.
+
+*`RP-015` terminal generator failure.* Attempt 2 wrote A-wide, B-reverse and
+C-inventory and then hit the 429 before D-condition, and the CLI wrapper
+returned ERROR — so no successful raw run record exists for those three views,
+the same absent-provenance condition that blocks `RP-009`, `RP-012` and
+`RP-018`. Regenerating them would have been a third attempt, exceeding the
+two-attempt cap, so the project owner declared the scenario a terminal
+generator failure on 3 Aug 2026. The three views are archived at
+`rejected/RP-015.antigravity-builtin.<view>-attempt-2.jpg`. D-condition stays
+at `attempts=1` because its second attempt never executed; it is terminal by
+owner decision, not by the stopping rule. The scene specification was not
+weakened.
+
+*`RP-019`* was blocked before writing any output, so it has no orphaned files
+and no partial provenance. Its four views remain `retry_pending` at
+`attempts=1` and are still eligible for a second attempt after the reset.
+
+The 429 text named the underlying image model as `gemini-3.1-flash-image`.
+Because that appeared only in a failed response, every `backend_model` remains
+`unknown`; the naming is recorded as an observation in
+`generation_runs/antigravity/pause-2026-08-03-1733.json`, not promoted to
+provenance.
+
+The queue is now 101 `pass_a_accepted`, 39 `review_pending`, 10
+`retry_pending`, 8 `generator_failed` and 42 `pending`. Dataset validation
+reports zero errors and the focused synthetic suite still has 24 passing
+tests. The 8 views generated on 3 Aug have not been through retry Pass A and
+hold no accepted status.
 
 ### Phase 4 — sealed synthetic comparison
 

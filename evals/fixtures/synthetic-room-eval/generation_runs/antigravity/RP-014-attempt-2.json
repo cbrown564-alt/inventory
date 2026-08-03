@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "scenario_id": "RP-014",
+  "started_at": "2026-08-03T17:31:39.827797+00:00",
+  "completed_at": "2026-08-03T17:32:34.872081+00:00",
+  "latency_seconds": 55.039,
+  "generation_path": "Antigravity CLI built-in generate_image",
+  "backend_model": "unknown",
+  "metered_api_call": false,
+  "cli_version": "1.1.8",
+  "operator_model_mode": "gemini-3.5-flash-low",
+  "prompt": "Act only as the image-generation operator for this bounded synthetic property-room evaluation. Do not edit source code, documentation, task CSV files or review records.\n\nComplete the four-view packet for RP-014. When A-wide is among the tasks, generate and save it first. For every later view, invoke generate_image with the saved A-wide image as an explicit visual reference/input as well as that task's exact prompt. Preserve the same room geometry, fixed fittings, finishes, windows, doors and object positions while moving the camera to the requested viewpoint. If the tool cannot accept the reference image, stop and report that limitation rather than generating unrelated rooms. Save the original generated JPEG bytes at required_output_path. Do not crop, resize, retouch, recompress or substitute an earlier image. Do not create a collage. Do not copy one view to another. The four outputs must be distinct files.\n\nAfter the required tool calls finish, verify every listed required path and calculate its SHA-256. Return only a JSON object with scenario_id, tool_name, backend_model (use \"unknown\" unless the tool explicitly exposes it), and outputs [{task_id,path,sha256}].\n\n[\n  {\n    \"task_id\": \"RP-014.antigravity-builtin.A-wide\",\n    \"view_id\": \"A-wide\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a entrance hall in a narrow communal-entry flat hallway with dated finishes. This is view A-wide: inside the front door; wide establishing view. Visible evidence required in this view: hall walls, striped runner, coat hooks, entryphone, ceiling light. Intended visible defects: none. Negative controls: runner stripe is not a stain. The room is ordinarily occupied with coats and shoes under warm ceiling light without daylight. Across views preserve: same cream walls, striped runner, entryphone and dark front door. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-014-A-wide.jpg\"\n  },\n  {\n    \"task_id\": \"RP-014.antigravity-builtin.B-reverse\",\n    \"view_id\": \"B-reverse\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a entrance hall in a narrow communal-entry flat hallway with dated finishes. This is view B-reverse: inner end facing the front door; wide establishing view. Visible evidence required in this view: front door, door chain, letter plate, shoe rack, skirting. Intended visible defects: none. Negative controls: door shadow is not damp. The room is ordinarily occupied with coats and shoes under warm ceiling light without daylight. Across views preserve: same cream walls, striped runner, entryphone and dark front door. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-014-B-reverse.jpg\"\n  },\n  {\n    \"task_id\": \"RP-014.antigravity-builtin.C-inventory\",\n    \"view_id\": \"C-inventory\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a entrance hall in a narrow communal-entry flat hallway with dated finishes. This is view C-inventory: facing the entry controls; medium fixtures view. Visible evidence required in this view: entryphone, consumer unit, light switch, smoke alarm, sockets. Intended visible defects: none. Negative controls: empty wall hook is not a missing identified item. The room is ordinarily occupied with coats and shoes under warm ceiling light without daylight. Across views preserve: same cream walls, striped runner, entryphone and dark front door. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-014-C-inventory.jpg\"\n  },\n  {\n    \"task_id\": \"RP-014.antigravity-builtin.D-condition\",\n    \"view_id\": \"D-condition\",\n    \"exact_generation_prompt\": \"Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a entrance hall in a narrow communal-entry flat hallway with dated finishes. This is view D-condition: close view of front door lower panel; condition detail. Visible evidence required in this view: front door, threshold, door seal, runner. Intended visible defects: three pale scuff marks low on the inner face of the front door. Negative controls: wood grain is not scratching. The room is ordinarily occupied with coats and shoes under warm ceiling light without daylight. Across views preserve: same cream walls, striped runner, entryphone and dark front door. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.\",\n    \"required_output_path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-014-D-condition.jpg\"\n  }\n]",
+  "raw_cli_response": {
+    "status": "SUCCESS",
+    "response": "{\n  \"scenario_id\": \"RP-014\",\n  \"tool_name\": \"generate_image\",\n  \"backend_model\": \"unknown\",\n  \"outputs\": [\n    {\n      \"task_id\": \"RP-014.antigravity-builtin.A-wide\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-014-A-wide.jpg\",\n      \"sha256\": \"6e331340b0f298e06c52f29e79f0b7c5267171df1309616d8d995205cac214fe\"\n    },\n    {\n      \"task_id\": \"RP-014.antigravity-builtin.B-reverse\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-014-B-reverse.jpg\",\n      \"sha256\": \"2f07cace55d911f2658ba4147079f284fad1e1c42abf8b50657d1c71a7b1cb06\"\n    },\n    {\n      \"task_id\": \"RP-014.antigravity-builtin.C-inventory\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-014-C-inventory.jpg\",\n      \"sha256\": \"117b5355b98c1566b3e0dc8a451676daf7e4dbc2c45949419a90709da5552aaf\"\n    },\n    {\n      \"task_id\": \"RP-014.antigravity-builtin.D-condition\",\n      \"path\": \"C:\\\\Users\\\\cbrow\\\\Code\\\\inventory\\\\evals\\\\fixtures\\\\synthetic-room-eval\\\\images\\\\antigravity\\\\builtin\\\\RP-014-D-condition.jpg\",\n      \"sha256\": \"9209d0287875eab4eeed8d38b374f7533efa881f03b63d5df5810cfd0fdb3c6d\"\n    }\n  ]\n}\n",
+    "duration_seconds": 51.4249497,
+    "num_turns": 1,
+    "usage": {
+      "input_tokens": 75438,
+      "output_tokens": 8364,
+      "thinking_tokens": 5699,
+      "cache_read_tokens": 142684,
+      "total_tokens": 83802
+    }
+  },
+  "stderr": "",
+  "preexisting_outputs": [],
+  "outputs": [
+    {
+      "task_id": "RP-014.antigravity-builtin.A-wide",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-A-wide.jpg",
+      "sha256": "6e331340b0f298e06c52f29e79f0b7c5267171df1309616d8d995205cac214fe",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-014.antigravity-builtin.B-reverse",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-B-reverse.jpg",
+      "sha256": "2f07cace55d911f2658ba4147079f284fad1e1c42abf8b50657d1c71a7b1cb06",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-014.antigravity-builtin.C-inventory",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-C-inventory.jpg",
+      "sha256": "117b5355b98c1566b3e0dc8a451676daf7e4dbc2c45949419a90709da5552aaf",
+      "width": 1264,
+      "height": 848
+    },
+    {
+      "task_id": "RP-014.antigravity-builtin.D-condition",
+      "path": "C:\\Users\\cbrow\\Code\\inventory\\evals\\fixtures\\synthetic-room-eval\\images\\antigravity\\builtin\\RP-014-D-condition.jpg",
+      "sha256": "9209d0287875eab4eeed8d38b374f7533efa881f03b63d5df5810cfd0fdb3c6d",
+      "width": 1264,
+      "height": 848
+    }
+  ]
+}

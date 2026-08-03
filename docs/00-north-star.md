@@ -41,10 +41,14 @@ gates below.
   pilot and immutable splits are implemented. In the development and
   validation splits, the complete 146-frame Pass A and owner adjudication have
   been applied: 93 frames were accepted and 53 failed first attempts were
-  archived. Dual independent retry Pass A is complete for the 39 available
+  archived. Dual independent retry Pass A is complete for the 39 earlier
   retry images: 5 accepted, 28 rejected and 6 escalated for owner
-  adjudication. Those outcomes are not applied yet. Fourteen Google retry
-  files and the two `RP-016` first-attempt views remain missing. No
+  adjudication. Those outcomes are not applied yet. On 3 Aug 2026 the two
+  `RP-016` first-attempt views and 6 of the 14 missing retry views were
+  generated on the pinned CLI 1.1.8; those 8 views still need retry Pass A.
+  `RP-015` was declared a terminal generator failure after a quota stop left
+  it without successful generation provenance and within its attempt cap, and
+  `RP-019`'s four views remain quota-blocked. No
   image-generation API was used. Seven complete packets are currently ready
   for Pass B; three intact Google packets remain excluded because their
   successful raw generation provenance is absent
@@ -178,8 +182,9 @@ API or metered Gemini endpoint is permitted.
 
 ```text
 1. Complete the 200-image synthetic evaluation programme
-   → resume Antigravity generation after its recorded quota reset and finish
-     the Google development/validation packets without weakening failed scenes
+   → regenerate RP-019's four views after the recorded quota reset, on the
+     pinned CLI 1.1.8, without weakening failed scenes
+   → run retry Pass A for the 8 views generated on 3 Aug 2026
    → adjudicate the six retry Pass A exceptions and atomically apply all
      39 AI-reviewed outcomes
    → complete independent Pass B and its risk-label checks before scoring
