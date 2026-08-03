@@ -108,4 +108,6 @@ Update the owner instead of creating a second live plan. Implementation and test
 | 30 | [evidence-register-experience-pass](30-evidence-register-experience-pass.md) | record | Cross-surface evidence register redesign and measured impact |
 | 30 | [phase4-quality-gate](30-phase4-quality-gate.md) | active | Native-resolution accuracy gate and evidence limits |
 | 31 | [synthetic-evaluation-dataset-plan](31-synthetic-evaluation-dataset-plan.md) | active | Human-verified generated rooms for prompt and VLM architecture evaluation |
+| 32 | [acoustic-evidence-synthetic-lab](32-acoustic-evidence-synthetic-lab.md) | active | Acoustic observations, adversarial spoken labels, audiovisual delta pairs |
+| 33 | [speaking-capture-guide](33-speaking-capture-guide.md) | exploratory | Research prototype; blocked on live capture, not on the v1 path |
 | — | [market-research-2026-07](market-research-2026-07.md) | active | Competitive map, evidential spec, pricing anchors |
