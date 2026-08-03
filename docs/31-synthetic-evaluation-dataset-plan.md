@@ -901,11 +901,46 @@ Because that appeared only in a failed response, every `backend_model` remains
 `generation_runs/antigravity/pause-2026-08-03-1733.json`, not promoted to
 provenance.
 
-The queue is now 101 `pass_a_accepted`, 39 `review_pending`, 10
-`retry_pending`, 8 `generator_failed` and 42 `pending`. Dataset validation
-reports zero errors and the focused synthetic suite still has 24 passing
-tests. The 8 views generated on 3 Aug have not been through retry Pass A and
-hold no accepted status.
+**3 Aug 2026 GPT Image 2 fallback disposition:** for Codex-run new generation,
+the current fallback remains GPT Image 2 through Codex built-in `imagegen`.
+The quota-affected scenarios now have GPT counterparts: `RP-015` and `RP-016`
+already had complete GPT packets, and `RP-019` now has GPT `C-inventory` and
+`D-condition` generated from its accepted GPT `A-wide` reference. The
+successful post-reset Google outputs for `RP-007`, `RP-011` and `RP-014` are
+retained as historical secondary evidence only. Their separate GPT Image 2
+Pass A failures remain quality-review failures, not quota failures, and must
+not be silently reclassified or regenerated under this fallback rule.
+
+**3 Aug 2026 Gemini Omni candidate cohort:** the project owner supplied a
+second batch of images generated with Gemini Omni, using the frozen prompts and
+the stated attachment order. These are staged as candidate evidence only; no
+`tasks.csv` row or approved image was overwritten. The staged material is:
+
+- 21 isolated candidates in
+  `reports/gemini-omni-user-batch-2026-08-03.json`.
+- 36 candidates in nine four-view batches: `RP-003`, `RP-014`, `RP-015`,
+  `RP-019`, `RP-021`, `RP-022`, `RP-023`, `RP-024` and `RP-025`, recorded in
+  `reports/gemini-omni-prior-batches-2026-08-03.json`.
+
+The candidates are stored under
+`images/google/gemini-omni/` with SHA-256 hashes and source filenames. `RP-021`
+is the stairs-and-landing batch; `RP-020` was not supplied. Gemini Omni has
+not yet been promoted as a generation backend: every candidate still needs
+the normal independent Pass A review and complete provenance before it can
+replace a failed Google/Antigravity row. The existing task ledger therefore
+retains its prior counts until that review is applied.
+
+After the owner retry adjudication and the GPT Image 2 fallback recording, the
+task ledger remains 108 `pass_a_accepted`, 2 GPT `review_pending` replacements
+for `RP-019`, 10 historical Google `retry_pending`, 38 `generator_failed` and
+42 `pending`. The 57 Gemini Omni files are separate candidate artifacts and
+are not included in those counts. Dataset validation reports zero errors (92
+existing warnings). The two GPT replacements and the Gemini candidates must
+complete the normal independent Pass A review before promotion.
+
+**Next actions:** review the 57 Gemini Omni candidates against their frozen
+view prompts; record accepted/rejected decisions and provenance in the task
+ledger; then rebuild the static review gallery and rerun dataset validation.
 
 ### Phase 3.5 — delta pairs (check-in/check-out and counterfactual)
 

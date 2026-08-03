@@ -1,0 +1,429 @@
+import copy
+import csv
+import json
+from pathlib import Path
+
+import pytest
+
+from evals.synthetic.build_delta_tasks import (
+    DELTA_VIEWS,
+    build_prompt,
+    build_rows,
+    load_specs,
+    validate_spec,
+    write_tasks,
+)
+from evals.synthetic.review_delta_pair import (
+    combine,
+    probe_verdict,
+    review_inputs,
+)
+from evals.synthetic.score_delta import build_report, score_delta
+
+DATASET = Path(__file__).resolve().parents[1] / "evals/fixtures/synthetic-room-eval"
+
+PARENT = {
+    "id": "RP-901",
+    "room_type": "Living Room",
+    "property_profile": "modest 1990s UK flat",
+    "cleanliness": "clean and tidy",
+    "lighting": "overcast daylight",
+    "continuity_requirements": ["same sofa, carpet and window"],
+    "avoid": ["people", "logos"],
+    "provider_assignments": ["gpt-image-2"],
+    "views": [
+        {
+            "id": "A-wide",
+            "viewpoint": "standing at the doorway",
+            "shot_scale": "wide establishing view",
+            "intended_visible_items": ["sofa", "carpet", "radiator"],
+            "intended_defects": [],
+            "intended_negatives": [],
+        },
+        {
+            "id": "D-condition",
+            "viewpoint": "close to the carpet",
+            "shot_scale": "condition detail",
+            "intended_visible_items": ["carpet", "skirting board"],
+            "intended_defects": [],
+            "intended_negatives": [],
+        },
+    ],
+}
+
+SPEC = {
+    "id": "RP-901-T1",
+    "delta_of": "RP-901",
+    "delta_class": "temporal",
+    "timepoint": "T1",
+    "changes": [
+        {
+            "id": "D1",
+            "kind": "new_defect",
+            "target": "carpet",
+            "description": "dark stain roughly 15cm across by the radiator",
+            "material": True,
+        },
+        {
+            "id": "D2",
+            "kind": "item_removed",
+            "target": "floor lamp",
+            "description": "lamp present at T0 is absent at T1",
+            "material": True,
+        },
+    ],
+    "unchanged_assertions": ["same sofa, window and skirting boards"],
+}
+
+
+def _write_dataset(tmp_path: Path) -> Path:
+    dataset = tmp_path / "dataset"
+    (dataset / "scenarios").mkdir(parents=True)
+    (dataset / "deltas").mkdir(parents=True)
+    images = dataset / "images/openai/gpt-image-2"
+    images.mkdir(parents=True)
+    (dataset / "dataset.json").write_text(json.dumps({
+        "providers": {
+            "gpt-image-2": {
+                "provider": "OpenAI",
+                "product": "Codex built-in image generation",
+                "model_display_name": "GPT Image 2",
+                "image_directory": "openai/gpt-image-2",
+                "file_extension": "png",
+            }
+        }
+    }), encoding="utf-8")
+    (dataset / "scenarios/RP-901.json").write_text(json.dumps(PARENT), encoding="utf-8")
+    (dataset / "deltas/RP-901-T1.json").write_text(json.dumps(SPEC), encoding="utf-8")
+    for view in DELTA_VIEWS:
+        (images / f"RP-901-{view}.png").write_bytes(b"t0-" + view.encode())
+    return dataset
+
+
+# --------------------------------------------------------------------------
+# build_delta_tasks
+# --------------------------------------------------------------------------
+
+
+def test_build_rows_pins_two_views_and_the_accepted_t0_reference(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    rows = build_rows(dataset)
+    assert len(rows) == 2
+    assert {row["view_id"] for row in rows} == set(DELTA_VIEWS)
+    for row in rows:
+        assert row["provider"] == "OpenAI"
+        assert row["reference_path"].endswith(f"RP-901-{row['view_id']}.png")
+        assert row["reference_sha256"]
+        assert "deltas/" in row["output_path"]
+
+
+def test_delta_pair_requires_an_accepted_t0_frame(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    (dataset / "images/openai/gpt-image-2/RP-901-A-wide.png").unlink()
+    with pytest.raises(FileNotFoundError, match="T0 reference"):
+        build_rows(dataset)
+
+
+def test_write_tasks_preserves_operator_progress_on_a_stable_prompt(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    write_tasks(dataset)
+    path = dataset / "delta_tasks.csv"
+    with path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    rows[0]["status"] = "review_pending"
+    rows[0]["attempts"] = "1"
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+
+    rebuilt = write_tasks(dataset)
+    assert rebuilt[0]["status"] == "review_pending"
+    assert rebuilt[0]["attempts"] == "1"
+
+
+def test_prompt_pins_the_reference_and_forbids_a_collage(tmp_path):
+    prompt = build_prompt(SPEC, PARENT, PARENT["views"][0], "RP-901-A-wide.png")
+    assert "RP-901-A-wide.png" in prompt
+    assert "dark stain roughly 15cm across" in prompt
+    assert "same sofa, window and skirting boards" in prompt
+    assert "Introduce no other new object" in prompt
+    assert "side-by-side" in prompt
+
+
+@pytest.mark.parametrize(
+    "mutate, message",
+    [
+        (lambda s: s.update(unchanged_assertions=[]), "unchanged_assertions"),
+        (lambda s: s.update(changes=[]), "changes must be"),
+        (lambda s: s.update(delta_class="drift"), "delta_class"),
+        (lambda s: s["changes"].append(dict(s["changes"][0])), "duplicate change id"),
+        (lambda s: s["changes"][0].update(kind="teleported"), "kind must be"),
+        (lambda s: s["changes"][0].pop("material"), "material must be"),
+        (
+            lambda s: s.update(changes=[dict(s["changes"][0], material=False)]),
+            "at least one change must be material",
+        ),
+    ],
+)
+def test_validate_spec_rejects_unscorable_specifications(mutate, message):
+    spec = copy.deepcopy(SPEC)
+    mutate(spec)
+    with pytest.raises(ValueError, match=message):
+        validate_spec(spec, PARENT)
+
+
+def test_load_specs_rejects_a_missing_parent(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    (dataset / "scenarios/RP-901.json").unlink()
+    with pytest.raises(FileNotFoundError, match="parent scenario"):
+        load_specs(dataset)
+
+
+# --------------------------------------------------------------------------
+# review_delta_pair
+# --------------------------------------------------------------------------
+
+
+def _accepting_review(delta_id="RP-901-T1", **overrides):
+    review = {
+        "delta_id": delta_id,
+        "decision": "accept",
+        "same_room": True,
+        "same_room_notes": "",
+        "enumerated": [
+            {"change_id": "D1", "visibility": "clear", "notes": ""},
+            {"change_id": "D2", "visibility": "clear", "notes": ""},
+        ],
+        "unenumerated_changes": [],
+        "reason": "",
+    }
+    review.update(overrides)
+    return review
+
+
+EXPECTED = {
+    "delta_id": "RP-901-T1",
+    "delta_class": "temporal",
+    "enumerated_changes": SPEC["changes"],
+}
+
+
+def test_two_accepting_reviews_accept_the_pair():
+    result = combine(EXPECTED, _accepting_review(), _accepting_review())
+    assert result["decision"] == "accept"
+    assert result["reviewers_agreed"] is True
+
+
+def test_any_unenumerated_material_change_rejects_the_pair():
+    drifted = _accepting_review(unenumerated_changes=[
+        {"target": "curtains", "description": "now patterned", "material": True}
+    ])
+    result = combine(EXPECTED, drifted, _accepting_review())
+    assert result["decision"] == "reject"
+    assert "unenumerated material change" in result["decision_basis"]
+
+
+def test_drift_rejects_even_when_both_reviewers_said_accept():
+    drifted = _accepting_review(unenumerated_changes=[
+        {"target": "flooring", "description": "laminate replaced carpet"}
+    ])
+    result = combine(EXPECTED, drifted, drifted)
+    assert result["decision"] == "reject"
+
+
+def test_failed_room_identity_rejects_the_pair():
+    result = combine(
+        EXPECTED,
+        _accepting_review(same_room=False, decision="reject"),
+        _accepting_review(),
+    )
+    assert result["decision"] == "reject"
+    assert result["decision_basis"] == "room identity failed"
+
+
+def test_missing_material_change_rejects_the_pair():
+    absent = _accepting_review(enumerated=[
+        {"change_id": "D1", "visibility": "absent", "notes": ""},
+        {"change_id": "D2", "visibility": "clear", "notes": ""},
+    ])
+    result = combine(EXPECTED, absent, _accepting_review())
+    assert result["decision"] == "reject"
+    assert "D1" in result["decision_basis"]
+
+
+def test_reviewer_disagreement_escalates():
+    result = combine(
+        EXPECTED, _accepting_review(), _accepting_review(decision="escalate")
+    )
+    assert result["decision"] == "escalate"
+    assert result["reviewers_agreed"] is False
+
+
+def test_review_inputs_only_offers_pairs_with_every_view(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    rows = write_tasks(dataset)
+    for row in rows:
+        row["status"] = "review_pending"
+        row["output_sha256"] = "abc"
+    output = dataset / "images/openai/gpt-image-2/deltas"
+    output.mkdir(parents=True)
+    for row in rows:
+        (dataset / row["output_path"]).write_bytes(b"t1")
+    path = dataset / "delta_tasks.csv"
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+
+    inputs = review_inputs(dataset)
+    assert len(inputs) == 1
+    assert {view["view_id"] for view in inputs[0]["views"]} == set(DELTA_VIEWS)
+    assert len(inputs[0]["enumerated_changes"]) == 2
+
+    rows[0]["status"] = "pending"
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+    with pytest.raises(ValueError, match="needs every view"):
+        review_inputs(dataset)
+
+
+def test_probe_gate_needs_two_clean_accepted_pairs():
+    def pair(delta_id, decision, drift=()):
+        return {
+            "delta_id": delta_id,
+            "decision": decision,
+            "unenumerated_material_changes": list(drift),
+        }
+
+    passing = {"pairs": [
+        pair("a", "accept"), pair("b", "accept"), pair("c", "reject")
+    ]}
+    assert probe_verdict(passing)["probe_passed"] is True
+
+    failing = {"pairs": [pair("a", "accept"), pair("b", "reject")]}
+    assert probe_verdict(failing)["probe_passed"] is False
+    assert "Do not retry at a looser bar" in probe_verdict(failing)["verdict"]
+
+
+# --------------------------------------------------------------------------
+# score_delta
+# --------------------------------------------------------------------------
+
+
+def _comparison(**overrides):
+    room = {
+        "name": "Living Room",
+        "changed": [
+            {
+                "name": "carpet",
+                "grade_delta": 1,
+                "new_defects": ["dark stain by the radiator"],
+                "checkout_defects": ["dark stain by the radiator"],
+            }
+        ],
+        "unchanged": [{"name": "sofa"}, {"name": "radiator"}],
+        "removed": [{"name": "floor lamp"}],
+        "added": [],
+    }
+    room.update(overrides)
+    return {"rooms": [room]}
+
+
+def test_perfect_compare_run_scores_full_recall_and_no_false_changes():
+    report = score_delta(_comparison(), [SPEC])
+    assert report["metrics"]["delta_recall"] == 100.0
+    assert report["metrics"]["false_change_rate"] == 0.0
+    assert report["metrics"]["unchanged_stability"] == 100.0
+    assert report["missed_material_changes"] == []
+
+
+def test_an_invented_change_is_counted_against_the_run():
+    comparison = _comparison(added=[{"name": "wall mirror"}])
+    report = score_delta(comparison, [SPEC])
+    assert report["metrics"]["delta_recall"] == 100.0
+    assert report["counts"]["false_changes"] == 1
+    assert report["metrics"]["false_change_rate"] == pytest.approx(33.3)
+    assert report["false_changes"][0]["name"] == "wall mirror"
+
+
+def test_a_missed_defect_is_named_in_the_report():
+    comparison = _comparison(changed=[])
+    report = score_delta(comparison, [SPEC])
+    assert report["metrics"]["delta_recall"] == 50.0
+    assert [row["change_id"] for row in report["missed_material_changes"]] == ["D1"]
+
+
+def test_unchanged_items_are_not_counted_as_reported_changes():
+    report = score_delta(_comparison(), [SPEC])
+    assert report["counts"]["reported_changes"] == 2
+    assert report["counts"]["unchanged_reported"] == 2
+
+
+def test_severity_direction_is_scored_on_directional_kinds():
+    spec = copy.deepcopy(SPEC)
+    spec["changes"] = [{
+        "id": "D3", "kind": "worsened", "target": "carpet",
+        "description": "existing stain widened", "material": True,
+    }]
+    improved = _comparison(changed=[{
+        "name": "carpet", "grade_delta": -1, "new_defects": [],
+    }])
+    report = score_delta(improved, [spec])
+    assert report["metrics"]["delta_recall"] == 100.0
+    assert report["metrics"]["severity_direction_accuracy"] == 0.0
+
+
+def test_immaterial_changes_do_not_count_toward_recall():
+    spec = copy.deepcopy(SPEC)
+    spec["changes"].append({
+        "id": "D9", "kind": "immaterial", "target": "cushion",
+        "description": "cushion moved along the sofa", "material": False,
+    })
+    report = score_delta(_comparison(), [spec])
+    assert report["counts"]["material_changes"] == 2
+    assert report["counts"]["immaterial_changes"] == 1
+    assert report["metrics"]["delta_recall"] == 100.0
+
+
+def test_build_report_scores_only_review_accepted_pairs(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    comparison_path = tmp_path / "comparison.json"
+    comparison_path.write_text(json.dumps(_comparison()), encoding="utf-8")
+    review_path = tmp_path / "review.json"
+    review_path.write_text(json.dumps({
+        "status": "complete",
+        "pairs": [{"delta_id": "RP-901-T1", "decision": "reject",
+                   "unenumerated_material_changes": []}],
+    }), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="no accepted delta specifications"):
+        build_report(dataset, comparison_path, review_path)
+
+    review_path.write_text(json.dumps({
+        "status": "complete",
+        "pairs": [{"delta_id": "RP-901-T1", "decision": "accept",
+                   "unenumerated_material_changes": []}],
+    }), encoding="utf-8")
+    report = build_report(dataset, comparison_path, review_path)
+    assert report["scored_deltas"] == ["RP-901-T1"]
+    assert report["review_gated"] is True
+    assert "cannot promote compare behaviour" in report["evidence_class"]
+
+
+def test_build_report_refuses_an_incomplete_review(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    comparison_path = tmp_path / "comparison.json"
+    comparison_path.write_text(json.dumps(_comparison()), encoding="utf-8")
+    review_path = tmp_path / "review.json"
+    review_path.write_text(json.dumps({"status": "partial", "pairs": []}),
+                           encoding="utf-8")
+    with pytest.raises(ValueError, match="not complete"):
+        build_report(dataset, comparison_path, review_path)
+
+
+def test_the_shipped_dataset_has_no_delta_specs_yet():
+    """Phase 3.5 is gated on the probe; nothing should be scoreable yet."""
+    assert load_specs(DATASET) == []

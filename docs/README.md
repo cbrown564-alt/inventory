@@ -40,7 +40,7 @@ Update the owner instead of creating a second live plan. Implementation and test
 
 **Current v1 work, in order**
 
-1. [31](31-synthetic-evaluation-dataset-plan.md) → resume the 200-image pilot after the recorded Antigravity quota stop, then complete human review and validation
+1. [31](31-synthetic-evaluation-dataset-plan.md) → review the staged Gemini Omni candidate cohort and GPT replacements, then complete human review and validation for the 200-image pilot
 2. [26](26-capture-strategy-experiment.md) → decide Property A capture strategy
 3. [30](30-phase4-quality-gate.md) → freeze independent native-resolution evidence and run the gate
 4. [25](25-design-overhaul.md) → complete first-screen trust sign-off
