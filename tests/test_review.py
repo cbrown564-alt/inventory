@@ -180,8 +180,8 @@ def _get_text(url):
 def test_owner_app_and_inventory_api(server):
     base, _state, _out, _cap = server
     status, html = _get_text(base + "/")
-    assert status == 200 and 'id="field-workspace"' in html
-    assert 'href="/review"' in html
+    assert status == 200 and 'id="q-search"' in html   # "/" is the review app
+    assert 'href="/report"' in html                    # shared shell nav
     status, body = _req("GET", base + "/api/inventory")
     assert status == 200
     assert {r["name"] for r in body["inventory"]["rooms"]} == \
@@ -763,15 +763,17 @@ def _upload(base, room, filename, data: bytes, url_prefix: str = "",
 
 def test_start_page_empty_capture(fresh_server):
     base, _state, _out, _cap = fresh_server
-    _, html_root = _get_text(base + "/")
-    assert 'id="use-case-picker"' in html_root
     status, html = _get_text(base + "/start")
     assert status == 200
-    assert "Take a walkthrough. We’ll take it from there." in html
-    assert "Choose video from Camera" in html
-    assert 'id="video-input"' in html
-    assert 'id="photo-input"' in html
-    assert "Three optional filming tips" in html
+    assert 'id="use-case-picker"' in html
+    assert _req("POST", base + "/api/project", {"use_case": "tenancy"})[0] == 200
+    status, html = _get_text(base + "/start")
+    assert status == 200
+    assert "Capture the property." in html
+    assert 'id="drop"' in html
+    assert 'id="up-files"' in html
+    assert 'id="photo-room"' in html
+    assert "walk slowly, say each room name" in html
     assert "one folder per" not in html
 
 
@@ -994,10 +996,10 @@ def test_build_e2e_offline(fresh_server):
     assert status == 200
     assert {r["name"] for r in body["inventory"]["rooms"]} == \
         {"Kitchen", "Living Room"}
-    # "/" now serves the field workspace instead of the capture page.
+    # "/" serves the unified owner app (the review desk) once built.
     status, html = _get_text(base + "/")
-    assert status == 200 and 'id="field-workspace"' in html
-    assert "Review only the claims that still need your judgement." in html
+    assert status == 200 and "deed-masthead" in html
+    assert "Next claim to decide" in html
 
 
 def test_build_and_redescribe_concurrency_409(fresh_server):
@@ -1173,11 +1175,12 @@ def test_stream_upload_walkthrough_video_lands_at_capture_root(fresh_server):
 def test_camera_first_picker_uses_the_existing_video_library(fresh_server):
     """The primary handoff must not force a second browser-camera capture."""
     base, _state, _out, _cap = fresh_server
+    assert _req("POST", base + "/api/project", {"use_case": "tenancy"})[0] == 200
     status, html = _get_text(base + "/start")
     assert status == 200
-    video_input = re.search(r'<input id="video-input"[^>]*>', html)
-    assert video_input and 'capture=' not in video_input.group(0)
-    assert "Choose video from Camera" in html
+    file_input = re.search(r'<input type="file" id="up-files"[^>]*>', html)
+    assert file_input and 'capture=' not in file_input.group(0)
+    assert "Add property evidence" in html
     assert "resumeAfterError" in html
     assert '"/api/upload/" + uploadId' in html
 
@@ -1296,23 +1299,132 @@ def test_review_mobile_journey_resumes_and_recovers_local_changes(server):
     assert "All items reviewed — ready to finish" in html
 
 
-def test_field_workspace_queues_exceptions_before_routine_claims(server):
-    """The default phone queue asks only for claims that need a judgement.
+def test_overview_surfaces_next_claim_decision(server):
+    """The overview names the one claim that still needs a judgement.
 
-    Routine, well-evidenced claims remain available from the specialist desk;
-    the phone flow must surface uncertainty, missing evidence and the
-    consequential safety/meter categories first (docs/28).
+    Ported from the retired field workspace (docs/28 → docs/32 step 1):
+    uncertainty, missing evidence and the consequential safety/meter
+    categories surface first, with a deep link into the items queue.
     """
     base, _state, _out, _cap = server
     _, html = _get_text(base + "/")
-    assert "function needsAttention(item)" in html
-    assert 'item.category === "safety"' in html
-    assert 'item.category === "meter"' in html
-    assert "No more decisions need your judgement" in html
-    assert "Routine claims remain available in the full evidence desk" in html
-    assert 'text: "Decision " + queuePosition + " of " + queue.length' in html
-    assert "Retry linking photo" in html
-    assert "The photo is saved, but is not linked yet." in html
+    assert "function decisionReasons(it)" in html
+    assert 'it.category === "safety"' in html
+    assert 'it.category === "meter"' in html
+    assert "Next claim to decide" in html
+    assert "No claims need a decision" in html
+    assert "startReview(next.id)" in html
+    # the deep-link pattern the band relies on
+    assert '/^item-(.+)$/' in html
+
+
+def test_overview_triage_panel_and_trust_meter(server):
+    """Overview shows triage buckets, time estimate, and trust meter."""
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "function triageBucket(it)" in html
+    assert "function renderTriagePanel()" in html
+    assert "function renderTrustMeter(" in html
+    assert "What still needs you" in html
+    assert "Worth a look" in html
+    assert "Looks right" in html
+    assert "Needs a fix" in html
+    assert 'id="bulk-routine"' in html
+    assert "Preview as tenant" in html or "SHARE_URL" in html
+
+
+def test_shell_uses_journey_nav_labels(server):
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "Capture</a>" in html
+    assert "Check</a>" in html
+    assert "Issue</a>" in html
+    assert "Orient</a>" in html
+    assert "Finalize</a>" in html
+    assert "Send to tenant" not in html
+    assert "Final issue" not in html
+
+
+def test_overview_property_strip(server):
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "function renderPropertyStrip()" in html
+    assert "function walkthroughRoomOrder()" in html
+    assert "Walkthrough map" in html
+
+
+def test_finish_issue_ceremony_card(server):
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/")
+    assert "function buildIssueCeremonyCard()" in html
+    assert "Issue record ready" in html
+    assert "issue-ceremony" in html
+
+
+def test_tenant_photo_comment(server):
+    base, state, out, cap = server
+    t = state.tenant_token
+    _, body = _req("GET", base + f"/api/t/{t}/inventory")
+    item_id = body["inventory"]["rooms"][0]["items"][0]["id"]
+    room = body["inventory"]["rooms"][0]["name"]
+    source = _jpeg_bytes("#334455")
+    from urllib.parse import quote
+    import urllib.request
+    headers = {"Content-Type": "application/octet-stream",
+               "X-Room": quote(room), "X-Filename": quote("tenant-close.jpg")}
+    req = urllib.request.Request(
+        base + f"/api/t/{t}/upload", data=source, method="POST", headers=headers)
+    with urllib.request.urlopen(req) as r:
+        status = r.status
+        uploaded = json.loads(r.read().decode("utf-8") or "{}")
+    assert status == 200, uploaded
+    status, resp = _req("POST", base + f"/api/t/{t}/comments", {
+        "item_id": item_id,
+        "text": "this scratch was here on move-in",
+        "author": "T. Okafor",
+        "attach_path": uploaded["path"],
+    })
+    assert status == 200, resp
+    assert resp.get("photo")
+    on_disk = Inventory.from_json(
+        (out / "inventory.json").read_text(encoding="utf-8"))
+    item = [i for r in on_disk.rooms for i in r.items if i.id == item_id][0]
+    assert item.comments[-1]["text"] == "this scratch was here on move-in"
+    assert resp["photo"]["id"] in item.photo_ids
+    assert (cap / resp["photo"]["path"]).exists()
+
+
+def test_tenant_agree_before_comment(server):
+    base, state, _out, _cap = server
+    _, html = _get_text(base + f"/t/{state.tenant_token}")
+    assert "hi-tenant-agreed-" in html
+    assert 'text: "Agree"' in html
+    assert "tenantUploadPhoto" in html
+    assert 'text: "Photo"' in html
+    assert "Raise an issue" in html
+
+
+def test_compare_hero_framing():
+    env = Environment(loader=FileSystemLoader(TEMPLATES))
+    html = env.get_template("compare.html.j2").render(
+        result={
+            "comparison": {"title": "Check-in vs check-out", "intro_note": "Test."},
+            "checkin": {"address": "1 Test St", "inspected_at": "2026-01-01",
+                        "backend": "offline"},
+            "checkout": {"inspected_at": "2026-07-01", "backend": "offline"},
+            "totals": {"matched": 10, "changed": 0, "unchanged": 10,
+                       "added": 0, "removed": 0},
+            "params": {"context": {}, "backend": "offline", "model": None},
+        },
+        labels={"baseline": "Check-in", "followup": "Check-out"},
+        context_params=[],
+        class_tones={"worse": "danger", "better": "confirm"},
+        filter_classes=[],
+        class_labels={},
+        rooms=[],
+    )
+    assert "The artefact adjudicators actually read" in html
+    assert "compare-hero" in html
 
 
 def test_tenant_walkthrough_precedes_countersign(server):
@@ -1327,15 +1439,13 @@ def test_tenant_walkthrough_precedes_countersign(server):
 
 
 def test_live_surfaces_share_evidence_register_grammar(server):
-    """The primary and specialist owner views expose honest image-led evidence."""
+    """"/" and "/review" are the same owner app with honest image-led evidence."""
     base, _state, _out, _cap = server
-    _, workspace = _get_text(base + "/")
+    _, root = _get_text(base + "/")
     _, desk = _get_text(base + "/review")
-    assert "evidence register" in workspace
-    assert 'kind: "Context"' in workspace
-    assert "No item evidence is linked" in workspace
-    assert "q-evidence" in desk
-    assert 'text: directCrop ?' in desk
+    assert "q-evidence" in root
+    assert 'text: directCrop ?' in root
+    assert root == desk
 
 
 def test_project_advances_to_after_when_before_is_ready():
@@ -1353,14 +1463,14 @@ def test_project_advances_to_after_when_before_is_ready():
     assert re.search(r'class="step current"\s+id="after-step"', html)
 
 
-def test_finish_route_opens_field_finish_workspace(server):
-    """Optional /finish opens the phone-first issuing workspace."""
+def test_finish_route_opens_review_finish_checklist(server):
+    """Optional /finish lands on the unified app's finish checklist."""
     base, _state, _out, _cap = server
     status, html = _get_text(base + "/finish")
     assert status == 200
-    assert 'id="field-workspace"' in html
-    assert 'var INITIAL_SCREEN = "finish"' in html
-    assert "Close the file calmly." in html
+    assert 'id="q-search"' in html                 # same review app as "/"
+    assert "\\/finish\\/?$/.test(location.pathname)" in html
+    assert "showFinish" in html
 
 
 def test_sign_blocks_without_address(server):
@@ -1679,12 +1789,59 @@ def test_compare_serving_paths_and_trailing_slash(tmp_path):
 # --------------------------------------------------------------------------
 
 def test_review_defaults_to_overview_mode(server):
-    """The field workspace starts at rooms, not the first item."""
+    """The owner app starts at the overview, not the first item."""
     base, _state, _out, _cap = server
     _, html = _get_text(base + "/")
-    assert 'id="field-workspace"' in html
-    assert 'var screen = "overview"' in html
-    assert "Review only the claims that still need your judgement." in html
+    assert 'var viewMode = "overview"' in html
+    assert "deed-masthead" in html
+    assert "Next claim to decide" in html
+
+
+def test_root_redirects_prebuild_to_start(fresh_server):
+    """docs/32 step 1: prebuild "/" hands capture to the start page."""
+    import http.client
+    from urllib.parse import urlparse
+    base, _state, _out, _cap = fresh_server
+    parsed = urlparse(base)
+    conn = http.client.HTTPConnection(parsed.hostname, parsed.port, timeout=5)
+    try:
+        conn.request("GET", "/")
+        resp = conn.getresponse()
+        resp.read()
+        assert resp.status == 302
+        assert resp.getheader("Location") == "/start"
+    finally:
+        conn.close()
+
+
+def test_comparison_project_keeps_hub_and_session_app(tmp_path):
+    """docs/32 step 1: a comparison project keeps the hub at "/"; each
+    session route serves the same unified app (start page prebuild)."""
+    cap = tmp_path / "capture"
+    cap.mkdir()
+    out = tmp_path / "report"
+    base, httpd = _start_server(cap, out)
+    try:
+        assert _req("POST", base + "/api/project",
+                    {"use_case": "deepclean"})[0] == 200
+        status, html = _get_text(base + "/")
+        assert status == 200 and 'class="stepper"' in html    # hub, not the app
+        status, html = _get_text(base + "/s/before/")
+        assert status == 200 and 'id="drop"' in html          # prebuild → start
+        assert 'id="use-case-picker"' not in html             # type already set
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
+def test_review_deep_links_survive_the_merge(server):
+    """docs/32 step 1: #item-<id> / #room-<name> deep links and the
+    /review alias the report and compare surfaces target stay intact."""
+    base, _state, _out, _cap = server
+    _, html = _get_text(base + "/review")
+    assert '/^item-(.+)$/' in html
+    assert '/^room-(.+)$/' in html
+    assert '"item-" + arg' in html
 
 
 def test_craft_c1_deed_exhibit_conveyor(server):
@@ -1698,17 +1855,17 @@ def test_craft_c1_deed_exhibit_conveyor(server):
     assert "scrubAroundMoment" in html
     assert "evidence-focus" in html
     assert "Closing the register" in html
-    assert "Attested and ready" in html
+    assert "Issue record ready" in html
     assert "finish-handoff-mark" in html
     assert "Signed & sealed" in html
 
 
 def test_start_page_redirects_to_overview_after_build(fresh_server):
-    """The capture surface opens the room workspace after a build."""
+    """The capture surface opens the owner app's overview after a build."""
     base, _httpd, _out, _cap = fresh_server
     _, html = _get_text(base + "/start")
-    assert 'location.href = PREFIX + "/"' in html
-    assert "Preparing your draft" in html
+    assert 'location.href = PREFIX + "/#overview"' in html
+    assert "Building your report" in html
 
 
 def test_report_continue_links_to_overview(server):
@@ -1736,8 +1893,8 @@ def test_finish_sign_issue_chain(server):
     """X2: address → sign → issue reachable without hunting."""
     base, _state, out, _cap = server
     _, html = _get_text(base + "/")
-    assert 'data-screen="finish"' in html
-    assert "Sign this version" in html
+    assert 'href="#finish"' in html
+    assert "Sign inventory" in html
     assert 'href="/issue"' in html
 
     status, resp = _req("POST", base + "/api/sign",
@@ -1775,7 +1932,7 @@ def test_offline_create_build_review_flow(fresh_server):
     assert resp["status"] == "done", resp
 
     _, html = _get_text(base + "/")
-    assert 'id="field-workspace"' in html
+    assert "deed-masthead" in html
     assert (out / "inventory.json").is_file()
     assert (out / "inventory.html").is_file()
 

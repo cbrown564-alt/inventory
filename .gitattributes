@@ -1,1 +1,3 @@
-evals/fixtures/own-property/*.html text eol=lf
+# Eval fixtures are content-addressed (see evals/hero_gold.py). Keep LF on
+# every platform so Windows CI does not rewrite hashes at checkout.
+evals/fixtures/** text eol=lf

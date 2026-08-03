@@ -116,7 +116,7 @@
     color: var(--ink); font-weight: 600;
   }
   .tools .row2 { display: flex; gap: var(--sp-2); margin-top: var(--sp-3);
-                 align-items: center; }
+                 align-items: center; flex-wrap: wrap; }
   .tools-more { margin-top: var(--sp-3); border-top: 1px solid var(--line);
                 padding-top: var(--sp-3); }
   .tools-more > summary {
@@ -548,6 +548,40 @@
     color: var(--ink); font-weight: 600;
     box-shadow: inset 0 -2px 0 var(--brass);
   }
+  .property-strip {
+    margin: 28px 0 8px; padding: 16px 0 4px;
+    border-top: 1px solid var(--line);
+  }
+  .property-strip .strip-label {
+    font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .14em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 12px;
+  }
+  .strip-row {
+    display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px;
+    scrollbar-width: thin; -webkit-overflow-scrolling: touch;
+  }
+  .strip-cell {
+    flex: 0 0 92px; display: flex; flex-direction: column; align-items: stretch;
+    padding: 0; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--panel); cursor: pointer; font: inherit; color: inherit;
+    text-align: left; overflow: hidden;
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .strip-cell:hover { border-color: var(--brass); transform: translateY(-2px); }
+  .strip-cell.heat-hot { border-color: var(--danger); box-shadow: inset 0 -3px 0 var(--danger-soft); }
+  .strip-cell.heat-warm { border-color: var(--pend); box-shadow: inset 0 -3px 0 var(--pend-soft); }
+  .strip-cell.heat-cool { border-color: var(--confirm); }
+  .strip-thumb {
+    aspect-ratio: 4/3; background: var(--panel-2); overflow: hidden;
+  }
+  .strip-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .strip-name {
+    font: 600 11px/1.25 var(--ui); padding: 6px 8px 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .strip-stat {
+    font: var(--fs-2xs) var(--mono); color: var(--muted); padding: 0 8px 6px;
+  }
   .overview {
     width: 100%; max-width: 1200px; margin: 0 auto;
   }
@@ -586,6 +620,104 @@
     padding: 12px 22px; font-size: var(--fs-base);
   }
   .overview-ctas .btn.ghost { color: var(--muted); }
+  /* next-decision band — the one claim that still needs the owner's
+     judgement, deep-linking into the items queue (docs/32 step 1) */
+  .decision-band {
+    display: flex; gap: 18px; align-items: center;
+    justify-content: space-between; flex-wrap: wrap;
+    margin: 0 0 26px; padding: 16px 18px;
+    background: var(--brass-soft); border: 1px solid var(--line);
+    border-radius: var(--r-md); box-shadow: var(--e-1);
+  }
+  .decision-band .band-copy { min-width: 0; }
+  .decision-band .band-kicker {
+    margin: 0 0 6px; font: 600 var(--fs-xs)/1 var(--mono);
+    letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+  }
+  .decision-band h2 {
+    margin: 0 0 4px; font: 600 var(--fs-lg)/1.2 var(--display);
+    letter-spacing: -.01em;
+  }
+  .decision-band p { margin: 0; color: var(--muted); font-size: var(--fs-sm); }
+  .decision-band .reasons {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;
+  }
+  .decision-band .reason {
+    padding: 3px 9px; border: 1px solid var(--line);
+    border-radius: 999px; background: var(--paper);
+    font: var(--fs-2xs) var(--ui); color: var(--muted);
+  }
+  .decision-band .btn.primary { flex: 0 0 auto; }
+  /* triage buckets — routine / review / fix (design journey overhaul) */
+  .triage-panel {
+    margin: 0 0 22px; padding: 16px 18px;
+    border: 1px solid var(--line-strong); border-radius: var(--r-md);
+    background: var(--panel); box-shadow: var(--e-1);
+  }
+  .triage-panel .triage-head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 14px; flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .triage-panel h2 {
+    margin: 0; font: 600 var(--fs-lg)/1.2 var(--display);
+    letter-spacing: -.01em;
+  }
+  .triage-panel .triage-est {
+    font: var(--fs-sm) var(--mono); color: var(--brass-bright);
+    white-space: nowrap;
+  }
+  .triage-panel .triage-lede {
+    margin: 4px 0 0; color: var(--muted); font-size: var(--fs-sm);
+    line-height: 1.5; max-width: 52ch;
+  }
+  .triage-buckets {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  @media (max-width: 720px) {
+    .triage-buckets { grid-template-columns: 1fr; }
+  }
+  .triage-bucket {
+    padding: 12px 14px; border-radius: var(--r-sm);
+    border: 1px solid var(--line); background: var(--paper);
+  }
+  .triage-bucket .n {
+    font: 600 clamp(22px, 3vw, 28px)/1 var(--display);
+    letter-spacing: -.02em;
+  }
+  .triage-bucket .lbl {
+    margin-top: 4px; font-size: var(--fs-xs); font-weight: 600;
+    letter-spacing: .06em; text-transform: uppercase;
+  }
+  .triage-bucket .sub {
+    margin-top: 6px; font-size: var(--fs-xs); color: var(--muted);
+    line-height: 1.45;
+  }
+  .triage-bucket.review { border-color: rgba(154, 119, 41, .45);
+    background: var(--brass-soft); }
+  .triage-bucket.review .n { color: var(--brass-bright); }
+  .triage-bucket.fix { border-color: var(--danger-soft); }
+  .triage-bucket.fix .n { color: var(--danger); }
+  .triage-bucket.routine .n { color: var(--confirm); }
+  .triage-actions {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
+  }
+  .trust-meter {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px;
+  }
+  .trust-meter .meter-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 11px; border: 1px solid var(--line);
+    border-radius: var(--r-pill); background: var(--panel);
+    font-size: var(--fs-xs); color: var(--muted);
+  }
+  .trust-meter .meter-pill b { color: var(--ink); font-weight: 600; }
+  .trust-meter .meter-pill.ok b { color: var(--confirm); }
+  .trust-meter .meter-pill.warn b { color: var(--brass-bright); }
+  #progress .triage-pill {
+    display: block; font-size: var(--fs-xs); color: var(--brass-bright);
+    font-weight: 600; margin-bottom: 4px;
+  }
   /* overview walkthrough spine (Craft C2-D) */
   .overview-spine {
     margin: 0 0 28px; padding: 14px 16px 12px;
@@ -836,6 +968,12 @@
     flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     background: var(--brass); color: #14100a; font: 700 14px/1 var(--ui);
+    animation: finish-stamp .55s cubic-bezier(.16, 1, .3, 1);
+  }
+  @keyframes finish-stamp {
+    0% { transform: scale(.35); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
   }
   .finish-handoff-mark .kind {
     font: 600 var(--fs-xs)/1 var(--mono); letter-spacing: .14em;
@@ -859,6 +997,41 @@
   }
   .finish-handoff-actions a.btn { text-decoration: none; }
   .finish-handoff-actions .btn.primary { min-width: 10em; }
+  .issue-ceremony {
+    margin: 16px 0 18px; padding: 14px 16px;
+    background: var(--paper); border: 1px solid var(--line);
+    border-radius: var(--r-md);
+  }
+  .issue-room-preview {
+    display: flex; gap: 8px; overflow-x: auto; margin-bottom: 12px;
+    padding-bottom: 2px;
+  }
+  .issue-room-tile {
+    flex: 0 0 72px; aspect-ratio: 4/3; border-radius: 4px;
+    overflow: hidden; border: 1px solid var(--line-strong);
+    background: var(--panel-2);
+  }
+  .issue-room-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .issue-ceremony-stats {
+    display: flex; flex-wrap: wrap; gap: 8px 16px;
+    font-size: var(--fs-sm); color: var(--muted); margin-bottom: 12px;
+  }
+  .issue-ceremony-stats strong { color: var(--ink); }
+  .issue-share-card {
+    padding: 12px 14px; border-radius: var(--r-sm);
+    background: var(--brass-soft); border: 1px solid rgba(154, 119, 41, .28);
+    font-size: var(--fs-sm); line-height: 1.5;
+  }
+  .issue-share-card .share-url {
+    display: block; margin-top: 6px; font-family: var(--mono);
+    font-size: var(--fs-2xs); word-break: break-all; color: var(--ink);
+  }
+  .issue-pdf-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font: 600 var(--fs-xs) var(--mono); letter-spacing: .06em;
+    text-transform: uppercase; color: var(--confirm);
+    background: var(--confirm-soft); padding: 4px 10px; border-radius: var(--r-pill);
+  }
   @media (max-width: 480px) {
     .finish { max-width: none; }
     .finish-step-head { padding: 14px; }
@@ -1033,13 +1206,13 @@
 <body>
 <header class="app-header">
   <button class="btn ghost" id="btn-queue" aria-label="Show item list">☰ Items</button>
-  {% set shell_base = route_prefix ~ "/" %}{% set shell_active = "review" %}
+  {% set shell_base = route_prefix ~ "/" %}{% set shell_active = "check" %}
   {%- include "_shell.html.j2" %}
-  <nav class="review-subnav" aria-label="Review mode">
-    <a href="#overview" id="nav-overview" aria-current="page">Overview</a>
-    <a href="#items" id="nav-items">Items</a>
+  <nav class="review-subnav" aria-label="Check phases">
+    <a href="#overview" id="nav-overview" aria-current="page">Orient</a>
+    <a href="#items" id="nav-items">Claims</a>
     <a href="#rooms" id="nav-rooms">Rooms</a>
-    <a href="#finish" id="nav-finish">Finish</a>
+    <a href="#finish" id="nav-finish">Finalize</a>
   </nav>
   <span class="addr" id="hdr-addr">{{ inv.property_address or "No address yet" }}</span>
   <div id="progress">
@@ -1058,9 +1231,10 @@
     <summary class="btn ghost header-more-btn" aria-label="Navigation menu">⋯</summary>
     <div class="header-more-panel">
       <nav class="header-more-shell" aria-label="Sections">
-        <a href="{{ route_prefix ~ '/' }}"{% if shell_active == "review" %} aria-current="page"{% endif %}>Review</a>
+        <a href="{{ route_prefix ~ '/start' }}"{% if shell_active == "capture" %} aria-current="page"{% endif %}>Capture</a>
+        <a href="{{ route_prefix ~ '/' }}"{% if shell_active == "check" %} aria-current="page"{% endif %}>Check</a>
         <a href="{{ route_prefix ~ '/report' }}"{% if shell_active == "report" %} aria-current="page"{% endif %}>Report</a>
-        <a href="{{ route_prefix ~ '/issue' }}"{% if shell_active == "issue" %} aria-current="page"{% endif %}>Final issue</a>
+        <a href="{{ route_prefix ~ '/issue' }}"{% if shell_active == "issue" %} aria-current="page"{% endif %}>Issue</a>
       </nav>
       {% if pairing_available|default(false) %}<button class="btn ghost pair-phone" type="button">Pair phone</button>{% endif %}
       <a href="#finish" class="header-more-finish">Finish checklist</a>
@@ -1090,7 +1264,8 @@
             <option value="conf" selected>Least confident first</option>
             <option value="room">By room</option>
           </select>
-          <button class="btn" id="bulk">Accept remaining</button>
+          <button class="btn" id="bulk-routine">Accept routine</button>
+          <button class="btn" id="bulk">Accept all remaining</button>
         </div>
       </details>
     </div>
@@ -1219,7 +1394,7 @@
       label = "Start review";
       action = startReview;
     } else if (viewMode === "items" && sel && sel.type === "item" && ix.byId[sel.id]) {
-      label = "Confirm and next";
+      label = "Yes, this is right";
       action = function () { confirmItem(ix.byId[sel.id]); };
       secondaryLabel = "Add defect";
       secondaryAction = openDefectEntry;
@@ -1415,6 +1590,138 @@
     });
   }
   function isDone(it) { return it.reviewed || it.rejected; }
+  /* Why a claim still needs the owner's judgement (the exception queue,
+     ported from the retired field workspace — docs/32 step 1). */
+  function decisionReasons(it) {
+    var reasons = [];
+    if (it.confidence == null || it.confidence < 0.8)
+      reasons.push("draft confidence");
+    if (!(it.photo_ids || []).length) reasons.push("linked evidence");
+    if (!it.condition || !it.cleanliness) reasons.push("condition details");
+    if ((it.defects || []).length) reasons.push("a drafted defect");
+    if (it.category === "safety") reasons.push("a safety item");
+    if (it.category === "meter") reasons.push("a meter reading");
+    return reasons;
+  }
+  function nextDecision() {
+    var open = ix.items.filter(function (it) {
+      return !isDone(it) && decisionReasons(it).length > 0;
+    }).sort(function (a, b) {
+      return (a.confidence == null ? 1.01 : a.confidence) -
+             (b.confidence == null ? 1.01 : b.confidence);
+    });
+    return open[0] || null;
+  }
+  function triageBucket(it) {
+    if (isDone(it)) return "done";
+    if (!(it.photo_ids || []).length || !hasEvidence(it)) return "fix";
+    if (decisionReasons(it).length > 0) return "review";
+    return "routine";
+  }
+  function triageStats() {
+    var stats = { routine: 0, review: 0, fix: 0, done: 0 };
+    ix.items.forEach(function (it) {
+      stats[triageBucket(it)]++;
+    });
+    return stats;
+  }
+  function estimateReviewMinutes(stats) {
+    var mins = Math.ceil(
+      stats.review * 0.75 + stats.fix * 1.5 + stats.routine * 0.08
+    );
+    return Math.max(stats.review + stats.fix + stats.routine ? 1 : 0, mins);
+  }
+  function routineOpen() {
+    return ix.items.filter(function (it) {
+      return triageBucket(it) === "routine";
+    });
+  }
+  function renderTrustMeter(stats) {
+    var cov = coverageSummary();
+    var wrap = el("div", { "class": "trust-meter", "aria-label": "Evidence trust" });
+    var roomPill = el("span", {
+      "class": "meter-pill" + (cov.weak ? " warn" : " ok")
+    });
+    roomPill.appendChild(el("b", { text: cov.confident + "/" + cov.total }));
+    roomPill.appendChild(document.createTextNode(" rooms covered"));
+    wrap.appendChild(roomPill);
+    if (contentSeal()) {
+      var sealed = el("span", { "class": "meter-pill ok" });
+      sealed.appendChild(el("b", { text: "Evidence sealed" }));
+      wrap.appendChild(sealed);
+    }
+    var left = stats.review + stats.fix;
+    var eyes = el("span", {
+      "class": "meter-pill" + (left ? " warn" : " ok")
+    });
+    if (left) {
+      eyes.appendChild(el("b", { text: String(left) }));
+      eyes.appendChild(document.createTextNode(" need your eyes"));
+    } else {
+      eyes.appendChild(el("b", { text: "Ready" }));
+      eyes.appendChild(document.createTextNode(" to sign"));
+    }
+    wrap.appendChild(eyes);
+    if (inv.signatures && inv.signatures.length) {
+      var signed = el("span", { "class": "meter-pill ok" });
+      signed.appendChild(el("b", { text: "Signed" }));
+      signed.appendChild(document.createTextNode(" on file"));
+      wrap.appendChild(signed);
+    }
+    return wrap;
+  }
+  function renderTriagePanel() {
+    var stats = triageStats();
+    var remaining = stats.routine + stats.review + stats.fix;
+    if (!remaining) return null;
+    var panel = el("section", { "class": "triage-panel", "aria-label": "Review triage" });
+    var head = el("div", { "class": "triage-head" });
+    var copy = el("div", {});
+    copy.appendChild(el("h2", { text: "What still needs you" }));
+    copy.appendChild(el("p", { "class": "triage-lede",
+      text: "Routine claims look well-evidenced — accept them in one tap. "
+        + "Focus your time on defects, safety, meters, and anything missing proof." }));
+    head.appendChild(copy);
+    head.appendChild(el("span", { "class": "triage-est",
+      text: "~" + estimateReviewMinutes(stats) + " min left" }));
+    panel.appendChild(head);
+    var buckets = el("div", { "class": "triage-buckets" });
+    [
+      { key: "review", label: "Worth a look",
+        sub: "Defects, low confidence, safety, meters" },
+      { key: "routine", label: "Looks right",
+        sub: "Well-evidenced — bulk accept per room" },
+      { key: "fix", label: "Needs a fix",
+        sub: "Missing or unlinked evidence" }
+    ].forEach(function (b) {
+      var box = el("div", { "class": "triage-bucket " + b.key });
+      box.appendChild(el("div", { "class": "n", text: String(stats[b.key]) }));
+      box.appendChild(el("div", { "class": "lbl", text: b.label }));
+      box.appendChild(el("div", { "class": "sub", text: b.sub }));
+      buckets.appendChild(box);
+    });
+    panel.appendChild(buckets);
+    var actions = el("div", { "class": "triage-actions" });
+    if (stats.review + stats.fix) {
+      actions.appendChild(el("button", {
+        "class": "btn primary", type: "button",
+        text: "Review " + (stats.review + stats.fix) + " flagged",
+        onclick: function () {
+          var next = nextDecision();
+          startReview(next ? next.id : undefined);
+        }
+      }));
+    }
+    if (stats.routine) {
+      actions.appendChild(el("button", {
+        "class": "btn", type: "button",
+        text: "Accept " + stats.routine + " routine",
+        onclick: function () { document.getElementById("bulk-routine").click(); }
+      }));
+    }
+    panel.appendChild(actions);
+    return panel;
+  }
   function hasEvidence(it) {
     return (it.photo_ids || []).some(function (p) { return photoSrc[p]; });
   }
@@ -1617,6 +1924,20 @@
   }
   function renderProgress() {
     var done = ix.items.filter(isDone).length;
+    var stats = triageStats();
+    var remaining = stats.routine + stats.review + stats.fix;
+    var progLabel = document.querySelector("#progress .label");
+    var existingPill = document.getElementById("prog-triage");
+    if (remaining && progLabel) {
+      if (!existingPill) {
+        existingPill = el("span", { "class": "triage-pill", id: "prog-triage" });
+        progLabel.insertBefore(existingPill, progLabel.firstChild);
+      }
+      existingPill.textContent = "~" + estimateReviewMinutes(stats) + " min · "
+        + stats.review + " to review · " + stats.routine + " routine";
+    } else if (existingPill) {
+      existingPill.remove();
+    }
     document.getElementById("prog-n").textContent = done;
     document.getElementById("prog-d").textContent = ix.items.length;
     document.getElementById("prog-fill").style.width =
@@ -1771,6 +2092,99 @@
     });
     return n;
   }
+  function walkthroughRoomOrder() {
+    var wt = primaryWalkthrough();
+    var order = [];
+    var seen = {};
+    if (wt && wt.meta && wt.meta.segments) {
+      wt.meta.segments.forEach(function (s) {
+        var name = (s.room || "").trim();
+        if (name && !seen[name]) {
+          seen[name] = true;
+          order.push(name);
+        }
+      });
+    }
+    inv.rooms.forEach(function (r) {
+      if (!seen[r.name]) order.push(r.name);
+    });
+    return order.map(function (name) {
+      return inv.rooms.find(function (r) { return r.name === name; });
+    }).filter(Boolean);
+  }
+  function roomHeat(room) {
+    var defects = 0;
+    var pending = 0;
+    (room.items || []).forEach(function (it) {
+      if (isDone(it)) return;
+      if ((it.defects || []).length) defects++;
+      else pending++;
+    });
+    if (defects > 0) return "hot";
+    if (pending > 0) return "warm";
+    return "cool";
+  }
+  function renderPropertyStrip() {
+    var rooms = walkthroughRoomOrder();
+    if (!rooms.length) return null;
+    var strip = el("div", { "class": "property-strip",
+      "aria-label": "Property walkthrough map" });
+    strip.appendChild(el("p", { "class": "strip-label", text: "Walkthrough map" }));
+    var row = el("div", { "class": "strip-row" });
+    rooms.forEach(function (room) {
+      var heat = roomHeat(room);
+      var total = (room.items || []).length;
+      var doneN = roomReviewDone(room);
+      var cell = el("button", {
+        type: "button",
+        "class": "strip-cell heat-" + heat,
+        title: room.name + " \u00b7 " + doneN + " of " + total + " confirmed",
+        onclick: function () { select({ type: "room", name: room.name }); }
+      });
+      var thumb = el("div", { "class": "strip-thumb" });
+      var src = roomHeroSrc(room);
+      if (src) thumb.appendChild(el("img", { src: src, alt: "", loading: "lazy" }));
+      cell.appendChild(thumb);
+      cell.appendChild(el("span", { "class": "strip-name", text: room.name }));
+      cell.appendChild(el("span", { "class": "strip-stat",
+        text: doneN + "/" + total }));
+      row.appendChild(cell);
+    });
+    strip.appendChild(row);
+    return strip;
+  }
+  function buildIssueCeremonyCard() {
+    var card = el("div", { "class": "issue-ceremony", "aria-label": "Issue record preview" });
+    var preview = el("div", { "class": "issue-room-preview" });
+    inv.rooms.slice(0, 6).forEach(function (room) {
+      var tile = el("div", { "class": "issue-room-tile", title: room.name });
+      var src = roomHeroSrc(room);
+      if (src) tile.appendChild(el("img", { src: src, alt: "" }));
+      preview.appendChild(tile);
+    });
+    if (preview.childNodes.length) card.appendChild(preview);
+    var stats = inventoryStats();
+    var done = ix.items.filter(isDone).length;
+    var statRow = el("div", { "class": "issue-ceremony-stats" });
+    statRow.appendChild(el("span", {
+      text: stats.rooms + " room" + (stats.rooms === 1 ? "" : "s") }));
+    statRow.appendChild(el("span", {
+      text: done + " / " + ix.items.length + " claims confirmed" }));
+    if (pdfReady()) {
+      var chip = el("span", { "class": "issue-pdf-chip", text: "PDF ready" });
+      statRow.appendChild(chip);
+    }
+    card.appendChild(statRow);
+    if (SHARE_URL) {
+      var share = el("div", { "class": "issue-share-card" });
+      share.appendChild(el("strong", {
+        text: "Tenant " + (shareSpec.link_noun || "review") + " link" }));
+      share.appendChild(el("span", {
+        "class": "share-url", text: SHARE_URL }));
+      card.appendChild(share);
+    }
+    return card;
+  }
   function updateSubNav() {
     var o = document.getElementById("nav-overview");
     var i = document.getElementById("nav-items");
@@ -1839,6 +2253,41 @@
     dismiss.addEventListener("click", function () { box.remove(); });
     box.appendChild(dismiss);
     host.insertBefore(box, host.firstChild);
+  }
+  function decisionBand() {
+    var next = nextDecision();
+    var band = el("section", { "class": "decision-band",
+      "aria-label": "Next claim to decide" });
+    var copy = el("div", { "class": "band-copy" });
+    if (next) {
+      var room = ix.roomOf[next.id];
+      copy.appendChild(el("p", { "class": "band-kicker",
+        text: "Next claim to decide" }));
+      copy.appendChild(el("h2", { text: next.name || "Unnamed claim" }));
+      copy.appendChild(el("p", {
+        text: (room ? room.name + " \u00b7 " : "")
+          + decisionReasons(next).join(", ") }));
+      var reasons = el("div", { "class": "reasons" });
+      decisionReasons(next).forEach(function (reason) {
+        reasons.appendChild(el("span", { "class": "reason", text: reason }));
+      });
+      copy.appendChild(reasons);
+      band.appendChild(copy);
+      band.appendChild(el("button", {
+        "class": "btn primary", type: "button", text: "Open the claim",
+        onclick: function () { startReview(next.id); } }));
+    } else {
+      copy.appendChild(el("p", { "class": "band-kicker", text: "Decisions" }));
+      copy.appendChild(el("h2", { text: "No claims need a decision" }));
+      copy.appendChild(el("p", {
+        text: "Every drafted claim is checked. Finish the record when the "
+          + "property details are complete." }));
+      band.appendChild(copy);
+      band.appendChild(el("button", {
+        "class": "btn primary", type: "button", text: "Finish the record",
+        onclick: showFinish }));
+    }
+    return band;
   }
   function renderOverview() {
     viewMode = "overview";
@@ -1936,6 +2385,14 @@
       title: "Open the clean final issue the landlord would receive",
       onclick: function () { window.open(PREFIX + "/issue", "_blank"); }
     }));
+    if (SHARE_URL) {
+      ctas.appendChild(el("button", {
+        "class": "btn ghost", type: "button",
+        text: "Preview as tenant",
+        title: "Open the tenant review link in a new tab",
+        onclick: function () { window.open(SHARE_URL, "_blank"); }
+      }));
+    }
     if (PAIRING_AVAILABLE) {
       ctas.appendChild(el("button", {
         "class": "btn ghost pair-phone", type: "button",
@@ -1944,9 +2401,18 @@
     }
     host.appendChild(ctas);
 
+    var triageStatsNow = triageStats();
+    host.appendChild(renderTrustMeter(triageStatsNow));
+    var triage = renderTriagePanel();
+    if (triage) host.appendChild(triage);
+    if (ix.items.length) host.appendChild(decisionBand());
+
     if (wt && wt.meta && wt.meta.duration) {
       host.appendChild(buildOverviewSpine(wt));
     }
+
+    var propStrip = renderPropertyStrip();
+    if (propStrip) host.appendChild(propStrip);
 
     host.appendChild(el("p", { "class": "register-label",
       text: "Room plates" }));
@@ -2149,7 +2615,7 @@
     if (preferred) select({ type: "item", id: preferred.id });
     else if (open.length) select({ type: "item", id: open[0].id });
     else {
-      toast("All items are already reviewed");
+      toast("Every claim already has a decision");
       updateMobileAction();
     }
   }
@@ -2557,7 +3023,8 @@
         text: "\u2713" }));
       mark.appendChild(el("span", { "class": "kind", text: "Signed & sealed" }));
       inner.appendChild(mark);
-      inner.appendChild(el("h2", { text: "Attested and ready" }));
+      inner.appendChild(buildIssueCeremonyCard());
+      inner.appendChild(el("h2", { text: "Issue record ready" }));
       inner.appendChild(el("p", {
         text: "Your signature seals this inventory. Open the clean final issue"
           + " or share the " + (shareSpec.link_noun || "tenant") + " link."
@@ -2574,7 +3041,7 @@
           onclick: copyShareLink }));
       } else {
         hact.appendChild(el("button", { type: "button", "class": "btn",
-          text: "Send to tenant",
+          text: "Share tenant link",
           onclick: function () { enableShareLink(this); } }));
       }
       hact.appendChild(el("button", {
@@ -3510,6 +3977,31 @@
       go();
     }
   }
+  function attachItemSwipe(host, it) {
+    if (!window.matchMedia("(hover: none), (pointer: coarse)").matches) return;
+    var startX = 0, startY = 0, tracking = false;
+    host.addEventListener("touchstart", function (e) {
+      if (!e.changedTouches || !e.changedTouches.length) return;
+      startX = e.changedTouches[0].clientX;
+      startY = e.changedTouches[0].clientY;
+      tracking = true;
+    }, { passive: true });
+    host.addEventListener("touchend", function (e) {
+      if (!tracking || !e.changedTouches || !e.changedTouches.length) return;
+      tracking = false;
+      var dx = e.changedTouches[0].clientX - startX;
+      var dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) < 72 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+      if (dx > 0 && !isDone(it)) confirmItem(it);
+      else if (dx < 0) {
+        var entries = queueEntries();
+        var idx = entries.findIndex(function (x) { return x.id === it.id; });
+        if (idx >= 0 && idx < entries.length - 1) {
+          select({ type: "item", id: entries[idx + 1].id });
+        }
+      }
+    }, { passive: true });
+  }
   function renderItem(it) {
     var room = ix.roomOf[it.id];
     var d = document.getElementById("detail");
@@ -3636,7 +4128,8 @@
     var act = el("div", { id: "actions" });
     var row = el("div", { "class": "row" });
     row.appendChild(el("button", {
-      "class": "btn confirm", text: it.reviewed ? "✓ Confirmed" : "✓ Confirm",
+      "class": "btn confirm",
+      text: it.reviewed ? "✓ Confirmed" : "Yes, this is right",
       onclick: function () { confirmItem(it); } }));
     row.appendChild(el("button", {
       "class": "btn danger",
@@ -3791,6 +4284,7 @@
       body.appendChild(kb);
     }, false));
     claim.appendChild(foot);
+    attachItemSwipe(work, it);
   }
   function openDefectEntry() {
     var section = document.getElementById("item-defects");
@@ -4477,6 +4971,24 @@
         searchBox.blur();
       }
     }
+  });
+  document.getElementById("bulk-routine").addEventListener("click", function () {
+    var open = routineOpen();
+    if (!open.length) { toast("No routine claims left to accept"); return; }
+    ui.confirmDialog({
+      title: "Accept " + open.length + " routine claim" +
+             (open.length > 1 ? "s" : "") + "?",
+      message: "These items look well-evidenced with no drafted defects or flags.",
+      note: "You can undo this with ⌘Z / Ctrl+Z.",
+      confirmLabel: "Accept routine"
+    }).then(function (yes) {
+      if (!yes) return;
+      pushUndo("accept " + open.length + " routine items", open);
+      open.forEach(function (i) { i.reviewed = true; i.rejected = false; });
+      markDirty(); renderQueue();
+      toast(open.length + " routine claims accepted");
+      if (viewMode === "overview") renderOverview();
+    });
   });
   document.getElementById("bulk").addEventListener("click", function () {
     var open = queueEntries().filter(function (i) { return !isDone(i); });
