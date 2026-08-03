@@ -1,3 +1,15 @@
 # Eval fixtures are content-addressed (see evals/hero_gold.py). Keep LF on
 # every platform so Windows CI does not rewrite hashes at checkout.
 evals/fixtures/** text eol=lf
+
+# ...but only for the text ones. `text` is an assertion, not a hint: it
+# disables git's binary auto-detection, so the rule above silently stripped CR
+# bytes out of every generated image on commit and would have done the same to
+# the clips. That is the exact failure the rule exists to prevent — the whole
+# dataset is pinned by SHA-256, so one rewritten byte invalidates the ledger
+# row and, for a clip, the file. Media is byte-exact or it is not evidence.
+evals/fixtures/**/*.jpg binary
+evals/fixtures/**/*.jpeg binary
+evals/fixtures/**/*.png binary
+evals/fixtures/**/*.webp binary
+evals/fixtures/**/*.mp4 binary
