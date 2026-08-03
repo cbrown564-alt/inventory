@@ -51,7 +51,11 @@ gates below.
   `RP-019`'s four views remain quota-blocked. No
   image-generation API was used. Seven complete packets are currently ready
   for Pass B; three intact Google packets remain excluded because their
-  successful raw generation provenance is absent
+  successful raw generation provenance is absent.
+  **Superseded 3 Aug 2026:** generation is now single-provider on GPT Image 2,
+  so the Google quota and provenance blockers no longer gate the programme —
+  `RP-015` and `RP-019` are regenerated on the GPT Image 2 path and the
+  provider-pair balance requirement is deleted. Phase 3 is owner-blocked only
   ([`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md)).
 - A preliminary Property A V0/V1/`P2+` matrix exists, but it is not the
   qualifying capture decision: it used a non-independent proxy, omitted P1
@@ -181,14 +185,19 @@ API or metered Gemini endpoint is permitted.
 ## Next work (ordered)
 
 ```text
-1. Complete the 200-image synthetic evaluation programme
-   → regenerate RP-019's four views after the recorded quota reset, on the
-     pinned CLI 1.1.8, without weakening failed scenes
+1. Complete the 100-image synthetic evaluation programme
+   → single-provider from 3 Aug 2026: GPT Image 2 via Codex `imagegen` only;
+     Google/Antigravity generation retired, accepted Google images retained as
+     a reported secondary slice (docs/31 amendment)
+   → regenerate the RP-015 and RP-019 packets on the GPT Image 2 path
    → run retry Pass A for the 8 views generated on 3 Aug 2026
    → adjudicate the six retry Pass A exceptions and atomically apply all
      39 AI-reviewed outcomes
    → complete independent Pass B and its risk-label checks before scoring
-   → freeze the winning prompt before comparing architectures
+   → freeze the winning prompt, or a per-task prompt assignment when the
+     comparison shows a genuine trade-off, before comparing architectures
+   → run the Phase 3.5 delta-pair probe; on pass, build the check-in/check-out
+     and counterfactual delta set that the compare surface has no gold for
    → record cost and row-level failures; do not promote from synthetic data
    → keep public dataset publication post-v1 and subject to a separate terms,
      provenance, metadata and licensing review

@@ -1,6 +1,6 @@
 # 31 — Synthetic room evaluation dataset
 
-*Updated 30 Jul 2026. Implementation plan for a public, independently
+*Updated 3 Aug 2026. Implementation plan for a public, independently
 AI-reviewed synthetic room dataset with human escalation, used to develop
 prompts and compare off-the-shelf VLM pipelines. This document owns the
 synthetic evaluation dataset. It does not change the real-property v1 quality
@@ -8,18 +8,21 @@ gate in docs/00 or the ML training programme in docs/19.*
 
 ## Decision
 
-Build a **200-image pilot** as 25 matched four-view room specifications
-rendered once through Antigravity CLI's built-in Google image generator and
-once through Codex's GPT Image 2 generator. Use it to find prompt and pipeline
+Build a **100-image pilot** as 25 four-view room specifications rendered
+through Codex's GPT Image 2 generator. Use it to find prompt and pipeline
 failures quickly. Do not train or fine-tune model weights on the images.
 
-For this synthetic programme, both Google image generation and Google
-vision-description evaluation use the subscription-backed Antigravity CLI.
-Never use Gemini API credentials or a metered Gemini endpoint. GPT Image 2
-generation uses only Codex's built-in `imagegen` path. This is narrower than
-the production backend policy in docs/00.
+**Generation is single-provider from 3 Aug 2026** (see the amendment below).
+GPT Image 2 through Codex's built-in `imagegen` path is the only generation
+route. Google/Antigravity generation is retired.
 
-Completing and using the 200-image pilot is next-phase v1 evidence work.
+Vision-description *evaluation* is unchanged and still includes the Google
+path through subscription-backed Antigravity CLI, because `gemini-3.5-flash`
+is the production describe default in docs/00 and cannot be evaluated by
+proxy. Never use Gemini API credentials or a metered Gemini endpoint. This is
+narrower than the production backend policy in docs/00.
+
+Completing and using the 100-image pilot is next-phase v1 evidence work.
 Publishing the dataset is post-v1 and requires a separate review of provider
 terms, provenance, metadata removal and dataset licensing.
 
@@ -40,6 +43,77 @@ with the AI-first, exception-based review policy below. Those reviewed batches
 are calibration evidence for the policy, not automatic acceptance of later
 images.
 
+### Amendment, 3 Aug 2026 — single provider, delta pairs, prompt routing
+
+Three changes follow from what Phases 1–3 actually produced.
+
+**0. Retire Google/Antigravity generation.** The two-provider design was
+bought at a price the results do not justify. Google generation produced the
+`RESOURCE_EXHAUSTED` stop of 28 Jul, the pause/resume cycles of 29–30 Jul, the
+`RP-015` terminal generator failure, the still-blocked `RP-019`, the copy
+symptom that required same-room reference mitigation, an unresolved consumer-terms
+question over "related AI technology", and a provenance audit built solely to
+separate intact Google files from proved ones. GPT Image 2 through Codex
+`imagegen` completed every remaining task on 29 Jul without any of it.
+
+From 3 Aug 2026 the pilot is single-provider: **25 specifications × 4 views =
+100 GPT Image 2 images**. Consequences, stated plainly:
+
+- Phase 3 is no longer provider-blocked. `RP-019`'s quota block and `RP-015`'s
+  terminal failure both cease to be blockers, because neither has a Google arm
+  to complete. Regenerate those two packets on the GPT Image 2 path.
+- The "Pair balance" gate — all 25 specifications needing complete packets
+  from *both* providers — is deleted. It was unsatisfiable after `RP-015` was
+  declared terminal, so it would have blocked the definition of done forever.
+- Accepted Google images already in the dataset are **retained** as a
+  secondary cross-generator slice where complete packets exist, and reported
+  separately. They are not regenerated, not completed, and not required.
+- The cost is real and is recorded under Bias checks: a single generator's
+  house style can make evaluation artificially easy, and the cross-provider
+  arm was one control against it. The remaining controls are the retained
+  Google slice, difficult phone-like framing, and the real-transfer gate —
+  which is the control that actually decides anything.
+
+The dated Phase 3 execution record below is history and is left unedited.
+
+**1. Stop searching for a single prompt winner.** Phase 1's frozen four-run
+comparison did not stall by accident. The evidence-bounded prompt took defect
+recall from 50% to 100% and removed an unsupported defect while item recall
+fell 6.2 percentage points. The pass bar requires one metric to improve while
+"the other metric non-regress[es]", so a genuine trade-off can never clear it,
+and Phase 4 stays dependency-blocked indefinitely. The product already routes
+work by task through `TieredBackend`. The comparison order below is amended so
+a per-task assignment — coverage prompt on the defect pass, production prompt
+on the inventory pass — is an admissible outcome alongside a single winner.
+
+**2. Extend the generator to delta pairs.** The scene specifications already
+carry `continuity_requirements` that hold one room identity across four
+viewpoints. That capability is currently spent on four views of a *static*
+room. The same mechanism can render a room twice with an enumerated change
+between renders, which produces the one class of evidence no real fixture can
+supply on any useful timescale:
+
+- **Temporal deltas** — the same room at check-in and at check-out. docs/00
+  records that comparison is "the decisive artefact", because adjudicators
+  decide by comparing the two. There is no ground-truthed check-out set today
+  (`evals/fixtures/own-property/siamese-compare-demo.json` is a demo), and
+  obtaining one from a real property means waiting out a 12-month tenancy.
+- **Counterfactual deltas** — the same room with a defect present and absent.
+  Real fixtures can only be annotated for what happens to be in them; a
+  matched pair isolates whether the pipeline sees the defect that exists and
+  stays silent about the one that does not.
+
+This is a bounded extension, not a virtual home: continuity is required within
+a room packet and within one matched pair, never across the dataset. It is
+gated behind a three-scenario feasibility probe (Phase 3.5) because unenumerated
+drift between renders would silently poison the gold, and the 36% first-attempt
+rejection rate in Phase 3 shows continuity is already the hard part. If the
+probe fails, the extension is abandoned and recorded as a negative result.
+
+The docs/00 wall stands unchanged. Delta pairs are development evidence. No
+synthetic result promotes a compare claim; that remains gated on real
+check-in/check-out evidence.
+
 ## Current execution status — 30 Jul 2026
 
 | Phase | Status | Evidence |
@@ -47,8 +121,15 @@ images.
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
 | 3 — development and validation | **Owner- and provider-blocked** | The complete 146-frame first-attempt Pass A plus owner adjudication has been applied: 93 frames were accepted and 53 first attempts were archived for retry. Dual independent retry Pass A is complete for the 39 earlier retries: 5 accepted, 28 rejected and 6 escalated. The six owner decisions and atomic application remain. On 3 Aug 2026 the two first-attempt `RP-016` views and 6 of the 14 missing retry views were generated; `RP-015` was declared a terminal generator failure and `RP-019`'s four views remain quota-blocked. The 8 new views still need retry Pass A. |
-| 4 — sealed comparison | **Dependency-blocked** | No validation winner exists, so opening the sealed model comparison would violate the frozen order. |
+| 3.5 — delta pairs | **Not started** | Three-scenario feasibility probe gates an 8-pair temporal and 4-pair counterfactual set. |
+| 4 — sealed comparison | **Dependency-blocked** | No validation winner exists, so opening the sealed model comparison would violate the frozen order. The amended order admits a per-task prompt assignment as a winner. |
 | 5 — real transfer | **Dependency-blocked** | There is no selected winner to run on real fixtures. The separate native-resolution evidence gate also remains open. |
+
+**Status after the 3 Aug single-provider amendment:** Phase 3 is
+owner-blocked only. The six escalated retry decisions and the atomic
+application of all 39 AI-reviewed outcomes remain; the provider block is
+dissolved, and `RP-015`/`RP-019` are regenerated on GPT Image 2 rather than
+waiting on Google quota.
 
 The quota responses are provider-internal limits reached through Antigravity
 CLI; they are not metered image API calls made by this project. Resume Phase 3
@@ -68,6 +149,13 @@ provisional and are automatically excluded from Pass B.
 > defects, which prompt and VLM pipeline most reliably produces a
 > review-ready inventory without omissions or invented claims?
 
+From Phase 3.5 the dataset answers a second question, on the artefact
+adjudicators actually decide on:
+
+> Given two controlled renders of one room separated by an enumerated set of
+> changes, does the pipeline report every real change, and does it stay silent
+> about everything that did not change?
+
 The pilot should distinguish four failure sources:
 
 1. image evidence is insufficient or ambiguous;
@@ -79,12 +167,15 @@ The pilot should distinguish four failure sources:
 
 ### In scope
 
-- still-image description using the approved Antigravity CLI model path;
+- still-image description using the approved evaluation model paths;
 - single-image and room-level multi-image pipelines;
 - prompt, schema, frame-selection, merge, verification and retry changes;
 - items, condition, cleanliness and visible defects;
 - exact negatives and near-negatives that test hallucination;
 - paired comparison across image generators;
+- matched delta pairs of one room — temporal (check-in/check-out) and
+  counterfactual (defect present/absent) — with an enumerated change list,
+  subject to the Phase 3.5 feasibility gate;
 - an internal dataset with prompts, provenance, independent AI-reviewed labels
   and human adjudication records where required;
 - a later public release only after the separate terms, provenance, metadata
@@ -98,7 +189,11 @@ The pilot should distinguish four failure sources:
 - proving real-world defect recall;
 - generating evidence for an actual tenancy report;
 - claiming that a generated image depicts a real property;
-- a 200-image continuous virtual home with perfect object permanence.
+- a 200-image continuous virtual home with perfect object permanence — the
+  Phase 3.5 delta pairs require continuity only within one room packet and
+  within one matched pair, never across the dataset;
+- proving real-world change detection, or promoting any compare behaviour on
+  synthetic deltas alone.
 
 ## Terms gate
 
@@ -111,13 +206,15 @@ permit this use.
   change model weights, but the planned public/commercial dataset use should
   still be recorded with the terms version and, before scaling, confirmed in
   writing if there is doubt.
-- **Google consumer services:** [current UK terms](https://policies.google.com/terms?gl=GB&hl=en)
-  prohibit using generated
-  content to develop machine-learning models or related AI technology. Merely
-  avoiding weight tuning may not resolve the broader "related AI technology"
-  wording. Re-check the terms due to take effect on 30 Jul 2026 or obtain
-  written confirmation before accepting Google-generated images into the
-  dataset.
+- **Google consumer services:** moot for new generation from 3 Aug 2026 —
+  Google/Antigravity generation is retired, so no further Google images are
+  accepted. The open question is recorded because it applies to the retained
+  slice: [current UK terms](https://policies.google.com/terms?gl=GB&hl=en)
+  prohibit using generated content to develop machine-learning models or
+  related AI technology, and merely avoiding weight tuning may not resolve the
+  broader "related AI technology" wording. Resolve it before the retained
+  Google images appear in any published dataset; until then they stay internal
+  and are excluded from publication.
 - Subscription interfaces must be used interactively. Do not automate
   extraction, bypass limits, rotate accounts or use API credentials for image
   generation.
@@ -128,54 +225,56 @@ accepted image.
 
 ## Pilot design
 
-### Matched-pair structure
+### Single-provider structure
 
-Create 25 room specifications. Each becomes one four-view Antigravity packet
-and one four-view GPT Image 2 packet. This yields 50 generated rooms and
-200 images:
+*Superseded the two-provider matched-pair design on 3 Aug 2026.*
+
+Create 25 room specifications. Each becomes one four-view GPT Image 2 packet.
+This yields 25 generated rooms and 100 images:
 
 | Provider | Model assignment | Images |
 |---|---|---:|
-| Google | Antigravity CLI built-in `generate_image`; successful records keep `backend_model: unknown` | 100 |
 | OpenAI | GPT Image 2 through Codex `imagegen` | 100 |
-| **Total** |  | **200** |
+| **Total** |  | **100** |
 
-Antigravity does not expose a selectable image backend in successful run
-records. A provider failure message named `gemini-3.1-flash-image`, but that
-diagnostic does not pin the successful cohort. Do not relabel these images as
-one of the older Nano Banana assignments. Every Google result has an OpenAI
-result with the same intended evidence.
+Google/Antigravity images already accepted are retained as a secondary
+cross-generator slice and reported separately wherever a complete four-view
+packet exists. They are not completed, not regenerated, and not required by
+any gate. Antigravity did not expose a selectable image backend in successful
+run records, so those retained records keep `backend_model: unknown`; a
+provider failure message named `gemini-3.1-flash-image`, but that diagnostic
+does not pin the cohort. Do not relabel them as one of the older Nano Banana
+assignments.
 
 ### Generation assignments
 
-| Room type | Antigravity packets | GPT Image 2 packets |
-|---|---:|---:|
-| Kitchen | 4 | 4 |
-| Bathroom / shower room | 3 | 3 |
-| Bedroom | 3 | 3 |
-| Living room | 3 | 3 |
-| Entrance hall | 2 | 2 |
-| Dining room | 2 | 2 |
-| Utility room / cupboard | 2 | 2 |
-| Stairs / landing | 2 | 2 |
-| WC / cloakroom | 1 | 1 |
-| Storage / wardrobe | 1 | 1 |
-| Home office | 1 | 1 |
-| Balcony / patio | 1 | 1 |
-| **Total packets** | **25** | **25** |
-| **Total images** | **100** | **100** |
+| Room type | GPT Image 2 packets |
+|---|---:|
+| Kitchen | 4 |
+| Bathroom / shower room | 3 |
+| Bedroom | 3 |
+| Living room | 3 |
+| Entrance hall | 2 |
+| Dining room | 2 |
+| Utility room / cupboard | 2 |
+| Stairs / landing | 2 |
+| WC / cloakroom | 1 |
+| Storage / wardrobe | 1 |
+| Home office | 1 |
+| Balcony / patio | 1 |
+| **Total packets** | **25** |
+| **Total images** | **100** |
 
-This paired design supports:
+This design supports:
 
-- aggregate VLM accuracy by image generator;
-- paired failure analysis on the same intended scene;
-- self-family checks, such as the Antigravity Google VLM path on
-  Antigravity-generated imagery;
-- image-model comparison without changing the content mix.
+- aggregate VLM accuracy on a consistent generator;
+- failure analysis on a known intended scene;
+- architecture comparison without changing the content mix;
+- an opportunistic cross-generator check against the retained Google slice.
 
 ### Room packets
 
-| Room type | Matched specifications | Frames per provider packet | Images per provider |
+| Room type | Specifications | Frames per packet | Images |
 |---|---:|---:|---:|
 | Kitchen | 4 | 4 | 16 |
 | Bathroom / shower room | 3 | 4 | 12 |
@@ -193,7 +292,7 @@ This paired design supports:
 
 ### Four-view pattern
 
-Each provider packet requests:
+Each packet requests:
 
 1. doorway establishing view;
 2. opposite-corner establishing view;
@@ -207,7 +306,7 @@ visible result and record the continuity failure.
 
 ### Content balance
 
-Across the 25 matched room specifications:
+Across the 25 room specifications:
 
 - 6 clean and tidy;
 - 9 ordinarily occupied or mildly cluttered;
@@ -373,17 +472,17 @@ escalations and resolutions so the review path remains inspectable.
 
 ## Development and sealed splits
 
-Split by room packet so related angles and the matched provider pair never
-cross a boundary:
+Split by room packet so related angles never cross a boundary. Where a
+retained Google packet exists for a specification, it stays in that
+specification's split:
 
 | Split | Matched room specifications | Images | Use |
 |---|---:|---:|---|
-| Development | 15 | 120 | Prompt and architecture iteration |
-| Validation | 5 | 40 | Choose among named candidates |
-| Sealed synthetic test | 5 | 40 | One final synthetic comparison |
+| Development | 15 | 60 | Prompt and architecture iteration |
+| Validation | 5 | 20 | Choose among named candidates |
+| Sealed synthetic test | 5 | 20 | One final synthetic comparison |
 
-Stratify room types, defects, near-negatives and generator models across the
-three splits. Publish split hashes before running the sealed comparison.
+Stratify room types, defects and near-negatives across the three splits. Publish split hashes before running the sealed comparison.
 
 The real-property fixtures remain separate. No synthetic result can satisfy
 the native-resolution accuracy criterion in docs/00.
@@ -423,10 +522,16 @@ Report:
 
 ### Bias checks
 
-- Compare the Antigravity VLM path on Google and OpenAI imagery.
-- Compare any approved OpenAI backend on Google and OpenAI imagery.
-- Flag a self-generator advantage when a backend improves materially only on
-  imagery from its own provider.
+Single-provider generation weakens these checks; say so in every report
+rather than implying a control that no longer exists.
+
+- Where a complete retained Google packet exists, compare each backend on
+  Google and GPT Image 2 imagery for that specification. This slice is
+  opportunistic and unbalanced — it cannot carry a conclusion on its own.
+- Flag a self-generator advantage when an OpenAI-family backend improves
+  materially on GPT Image 2 imagery but not on the retained Google slice.
+- Treat "GPT Image 2 house style" as an unmeasured confound on every synthetic
+  result. The control that decides is real transfer, not the slice.
 - Compare synthetic rankings with real-fixture rankings. A candidate that wins
   synthetically but regresses on real photographs does not ship.
 
@@ -437,10 +542,11 @@ it is not required to clear the v1 product gate.
 
 | Gate | Requirement |
 |---|---|
-| Initial generation yield | At least 150/200 first or second attempts accepted (75%); retain and exclude failed outputs rather than stopping prompt/VLM work |
+| Initial generation yield | At least 75/100 first or second attempts accepted (75%); retain and exclude failed outputs rather than stopping prompt/VLM work |
 | Label quality | 100% defects/negatives double-checked; ≥25% ordinary labels double-checked |
-| Pair balance | All 25 matched specifications have complete four-view Antigravity and GPT Image 2 packets |
-| Prompt win | Validation notable recall improves ≥5 pp or hallucination falls ≥2 pp with the other metric non-regressing |
+| Packet completeness | All 25 specifications have a complete four-view GPT Image 2 packet |
+| Delta probe (Phase 3.5) | ≥2 of 3 probe scenarios yield an acceptable pair within 2 attempts, with zero unenumerated material changes |
+| Prompt win | Either a single prompt improves validation notable recall ≥5 pp or drops hallucination ≥2 pp with the other metric non-regressing, **or** a per-task assignment beats the production prompt on both passes with no metric regressing on the pass it is assigned to |
 | Architecture win | Validation quality improves and per-property projected cost remains ≤ docs/00 budget |
 | Sealed confirmation | Named winner retains the direction of improvement on sealed synthetic packets |
 | Real transfer | Winner does not regress real notable recall, hallucination or defect recall |
@@ -455,7 +561,9 @@ The programme changes one decision class at a time:
 1. hold the production backend and architecture fixed;
 2. compare the production prompt with the named
    **evidence-bounded coverage prompt**;
-3. freeze the winning prompt;
+3. freeze the winning prompt **or**, when the comparison shows a genuine
+   trade-off rather than a dominant candidate, freeze a per-task assignment
+   (named prompt per pass) and carry that assignment forward as the unit;
 4. compare merge and verifier architectures using that prompt;
 5. run the selected configuration once on the sealed synthetic split; and
 6. require non-regression on real fixtures before changing production.
@@ -474,10 +582,12 @@ claim's evidence link, even when an aggregate prompt metric improves.
 
 ## Generation workflow without image APIs
 
-**Permanent project rule, 28 Jul 2026:** image-generation API calls are never
-permitted. Nano Banana images may be generated only through Antigravity CLI;
-GPT Image 2 images may be generated only through Codex's `imagegen` skill.
-Configured API credentials do not change this boundary. Vision-description
+**Permanent project rule, 28 Jul 2026, amended 3 Aug 2026:** image-generation
+API calls are never permitted. GPT Image 2 images may be generated only
+through Codex's `imagegen` skill, which is the sole generation route from
+3 Aug 2026. Configured API credentials do not change this boundary. The
+retired Antigravity route was likewise subscription-only; do not reinstate it
+without an explicit decision recorded here. Vision-description
 evaluation is a separate action and still requires task-specific approval.
 
 1. Generate `tasks.csv` and exact prompts locally from the scenario manifests.
@@ -797,6 +907,118 @@ reports zero errors and the focused synthetic suite still has 24 passing
 tests. The 8 views generated on 3 Aug have not been through retry Pass A and
 hold no accepted status.
 
+### Phase 3.5 — delta pairs (check-in/check-out and counterfactual)
+
+*Added 3 Aug 2026. Gated: the probe must pass before the pilot runs.*
+
+The compare surface is the artefact adjudicators decide on, and it has no
+ground truth. This phase manufactures it. A **delta pair** is two renders of
+one room specification with an enumerated `changes` list between them and an
+explicit assertion that nothing else material changed.
+
+Two classes:
+
+| Class | Pair | Question it answers |
+|---|---|---|
+| Temporal | T0 check-in → T1 check-out | Does compare report every real change and stay silent on everything else? |
+| Counterfactual | defect absent → defect present, same timepoint | Does describe see the defect that exists and not the one that does not? |
+
+#### Scene specification extension
+
+Delta specifications reuse the existing scene schema and add:
+
+```json
+{
+  "delta_of": "RP-004",
+  "timepoint": "T1",
+  "reference_image": "RP-004.gpt-image-2.A-wide.jpg",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "carpet by the radiator",
+     "description": "dark stain roughly 15cm across", "material": true},
+    {"id": "D2", "kind": "item_removed", "target": "floor lamp",
+     "description": "lamp present at T0 is absent at T1", "material": true},
+    {"id": "D3", "kind": "worsened", "target": "chip on base unit door",
+     "description": "chip widened and paint lifted at the edge", "material": true}
+  ],
+  "unchanged_assertions": [
+    "same units, worktop, flooring, window and appliance positions",
+    "no change to the splashback or skirting"
+  ]
+}
+```
+
+`changes` is the delta gold. `unchanged_assertions` is what makes the pair
+scorable at all: without it, an unenumerated drift is indistinguishable from a
+true change, and a false-change metric is meaningless.
+
+#### Views
+
+Delta pairs render **two views per timepoint**, not four: `A-wide` (the
+establishing view compare works from) and `D-condition` (where defects live).
+Four views per timepoint doubles the drift surface for no extra signal at
+probe scale.
+
+#### Feasibility probe (gate)
+
+Three scenarios only, one provider (GPT Image 2 via Codex `imagegen`), reusing
+already-accepted T0 packets as the reference so the probe pays only for T1:
+
+- [ ] Pick 3 accepted development-split specifications spanning a kitchen, a
+      soft-furnished room and a bathroom.
+- [ ] Author a T1 delta spec for each with 2–3 enumerated material changes.
+- [ ] Render `A-wide` and `D-condition` at T1 with the T0 frame as reference.
+- [ ] Independent AI review of each pair records, per pair: (a) is this the
+      same room, (b) is each enumerated change visible, (c) list every
+      *unenumerated* material difference observed.
+- [ ] Owner adjudicates all three pairs. Probe images are calibration
+      evidence, not scored data.
+
+**Pass:** ≥2 of 3 scenarios yield an acceptable pair within 2 attempts each,
+with zero unenumerated material changes in an accepted pair, and median
+operator time within the existing 8-minute-per-accepted-image bar.
+
+**Fail:** record the drift modes observed, abandon the extension, and keep
+this section as a negative result. Do not retry with a looser bar — a delta
+set that cannot hold identity produces confidently wrong gold, which is worse
+than no gold.
+
+#### Pilot, if the probe passes
+
+- [ ] 8 temporal pairs and 4 counterfactual pairs, drawn from accepted
+      development and validation specifications, stratified across room types
+      and change kinds (new defect, worsened defect, item removed, item added,
+      cleanliness change, and at least 2 pairs whose only changes are
+      immaterial).
+- [ ] Every pair passes the same Pass A / Pass B review path as the main
+      dataset, plus the unenumerated-change check.
+- [ ] Delta pairs inherit the split of the specification they derive from.
+      A delta pair never crosses into a different split from its T0 parent.
+
+#### Metrics
+
+Reported separately from the static-image metrics; these are compare metrics,
+not description metrics:
+
+- **delta recall** — enumerated material changes correctly reported;
+- **false-change rate** — reported changes with no enumerated counterpart.
+  This is the headline: a compare feature that invents change is worse than
+  useless in an adjudication, because it converts the landlord's evidence into
+  the tenant's;
+- **unchanged stability** — items correctly reported as unchanged;
+- **severity direction** — worsened/improved called in the right direction;
+- **evidence-link accuracy** across both timepoints.
+
+#### Boundaries
+
+- Delta pairs are development evidence. They cannot promote compare behaviour;
+  that needs real check-in/check-out evidence, and docs/08 owns the product
+  surface.
+- Do not train on delta pairs. The Out-of-scope rule is unchanged.
+- Never present a synthetic delta pair as a real tenancy comparison.
+
+Exit: either a scored delta set with the metrics above, or a recorded negative
+result explaining which drift mode defeated it.
+
 ### Phase 4 — sealed synthetic comparison
 
 - [ ] Hash prompts, labels and selected candidate configuration.
@@ -828,7 +1050,10 @@ claim.
 | `evals/synthetic/build_tasks.py` | Deterministically turn scene specs into prompts and `tasks.csv` |
 | `evals/synthetic/validate_dataset.py` | Schema, file, dimensions, pair and provenance checks |
 | `evals/synthetic/build_review.py` | Static AI-review and human-escalation/contact-sheet artifact |
-| `evals/synthetic/generate_antigravity.py` | Generate Google packets through Antigravity CLI without image API credentials |
+| `evals/synthetic/generate_antigravity.py` | Retired for generation on 3 Aug 2026; retained to read existing Google run records |
+| `evals/synthetic/build_delta_tasks.py` | Turn `delta_of` specs into T1/counterfactual generation tasks with reference frames |
+| `evals/synthetic/review_delta_pair.py` | Pair review: same-room identity, enumerated-change visibility, unenumerated-change detection |
+| `evals/synthetic/score_delta.py` | Delta recall, false-change rate, unchanged stability, severity direction |
 | `evals/synthetic/run_eval.py` | Run named off-the-shelf VLM configurations and cache raw output |
 | `evals/synthetic/score.py` | Existing metric contract plus slices and paired comparisons |
 | `evals/fixtures/synthetic-room-eval/README.md` | Dataset card and operator instructions |
@@ -842,7 +1067,10 @@ new metric only when the current schema cannot express the decision.
 |---|---|
 | Prompt manifest is mistaken for observed truth | Independent AI reviews treat intended facts as hypotheses; observed labels cite visible frames |
 | AI review silently misses a repeated error | Separate second checks, owner escalation triggers and periodic stratified human audit |
-| Generator style makes evaluation artificially easy | Paired providers, difficult phone-like framing, real transfer gate |
+| Generator style makes evaluation artificially easy | Single-provider from 3 Aug 2026, so this is now an unmeasured confound: difficult phone-like framing, the retained Google slice and the real-transfer gate are the remaining controls; state the limitation in every report |
+| Delta pair drifts in unenumerated ways | Pair review lists every unenumerated material difference; any such difference rejects the pair; probe fails the whole extension rather than loosening the bar |
+| Delta gold is mistaken for real compare evidence | Delta metrics reported in a separate table; compare promotion gated on real check-in/check-out evidence (docs/08) |
+| Single-generator dependence on one provider | Accept the concentration risk deliberately; if Codex `imagegen` becomes unavailable, stop and re-decide rather than silently reinstating Google |
 | Same-family VLM advantage | Report provider × backend matrix |
 | Multi-angle item drift | Record continuity failure; never silently reconcile contradictions |
 | Defects look decorative or physically impossible | Double-check all defects; reject implausible examples |
@@ -855,14 +1083,16 @@ new metric only when the current schema cannot express the decision.
 ## Definition of done
 
 - [x] 25 matched four-view specifications and immutable packet splits implemented.
-- [ ] Exactly 100 accepted Antigravity and 100 accepted GPT Image 2 images, or
-  an explicit terms/tooling decision explaining why the design changed.
+- [ ] Exactly 100 accepted GPT Image 2 images (single-provider design,
+  3 Aug 2026). Retained Google images are a reported secondary slice and are
+  not required by this gate.
 - [ ] Every accepted image has exact prompt, provenance, AI-observed labels
   and any required human adjudication.
 - [ ] Defects and negatives are all double-checked by an independent AI, with
   disagreements and ambiguity resolved by the project owner.
-- [ ] Baseline and candidate results are reported by provider and on matched
-  pairs.
+- [ ] Baseline and candidate results are reported, with the retained Google
+  slice broken out separately where it exists.
+- [ ] Phase 3.5 has either a scored delta set or a recorded negative result.
 - [ ] A sealed synthetic comparison is complete.
 - [ ] The winning change passes held-out real-property regression gates.
 - [ ] Public dataset card and customer-facing synthetic disclosure are ready.
@@ -873,5 +1103,6 @@ new metric only when the current schema cannot express the decision.
 - `docs/04-backend-comparison.md` — backend benchmark evidence.
 - `docs/19-ml-dl-exploration-plan.md` — weight-training and classical ML work.
 - `docs/21-ml-dl-experiment-log.md` — ML experiment results.
+- `docs/08-compare.md` — check-in/check-out comparison product surface.
 - `docs/26-capture-strategy-experiment.md` — real photo/video capture evidence.
 - `evals/README.md` — current fixture schema and scoring commands.
