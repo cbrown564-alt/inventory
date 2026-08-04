@@ -1,0 +1,159 @@
+{
+  "clip_id": "VU-4.RP-022-ordinary",
+  "task_id": "VU-4.RP-022-ordinary.gemini-omni-video",
+  "clip_sha256": "e357a00e28353c7e4a48169914be48ef22414d959f32126d3735357d864eff66",
+  "strip_sha256": "f4101381b4ad0bf8b4495f53e2367491bc143ce2792e7c8c6e25bbedc9460340",
+  "sampler": {
+    "version": 2,
+    "cadence_fps": 1.0,
+    "rule": "every whole second, the final frame, and every declared gold timestamp",
+    "hashed": "decoded RGB24 pixels, not the rendered JPEG files",
+    "ffmpeg": "ffmpeg version 8.1.1 Copyright (c) 2000-2026 the FFmpeg developers"
+  },
+  "container": {
+    "duration_s": 10.005,
+    "width": 1280,
+    "height": 720,
+    "fps": 24.0,
+    "frame_count": 240,
+    "video_codec": "h264",
+    "audio_streams": 1,
+    "audio_codec": "aac"
+  },
+  "contact_sheet": {
+    "file": "contact-sheet.jpg",
+    "columns": 4,
+    "rows": 3,
+    "order": "left to right, then top to bottom; frame 0 is top left",
+    "tile_width": 640
+  },
+  "audio": {
+    "stream_present": true,
+    "max_dbfs": -37.1,
+    "mean_dbfs": -61.2,
+    "sound_runs": [
+      {
+        "start_s": 1.601,
+        "end_s": 1.652
+      },
+      {
+        "start_s": 4.922,
+        "end_s": 5.041
+      },
+      {
+        "start_s": 5.394,
+        "end_s": 5.476
+      },
+      {
+        "start_s": 5.746,
+        "end_s": 5.856
+      },
+      {
+        "start_s": 6.937,
+        "end_s": 6.972
+      },
+      {
+        "start_s": 7.495,
+        "end_s": 7.605
+      }
+    ],
+    "first_sound_at_s": 1.601
+  },
+  "scene_cuts": [],
+  "mechanical_checks": [
+    {
+      "criterion": "one_unbroken_take",
+      "status": "pass",
+      "detail": "no frame scores above 0.35 on scene change"
+    },
+    {
+      "criterion": "audio_mode_silent",
+      "status": "fail",
+      "detail": "declared silent, but the track peaks at -37.1 dBFS in 6 audible run(s). The generation prompt asked for no speech, no music, no sound effects and no room tone."
+    },
+    {
+      "criterion": "container_facts",
+      "status": "pass",
+      "detail": "1280x720 24 fps, 10.005 s, 240 frames"
+    }
+  ],
+  "frames": [
+    {
+      "index": 0,
+      "timestamp_s": 0.0,
+      "source": "cadence",
+      "pixel_sha256": "a236993de503fede51538843a04d7f3423116d41f19b62123e42a0a71bffe1e4",
+      "file": "frame-00-t00.000.jpg"
+    },
+    {
+      "index": 24,
+      "timestamp_s": 1.0,
+      "source": "cadence",
+      "pixel_sha256": "60a5d351415d87597d69b5da2dedcf32d38e122cd59655b23da78238ef033afb",
+      "file": "frame-01-t01.000.jpg"
+    },
+    {
+      "index": 48,
+      "timestamp_s": 2.0,
+      "source": "cadence",
+      "pixel_sha256": "d6140ca74263c78a81d170a0fb621e1900710e382509558eaa0e3c5b0726c0da",
+      "file": "frame-02-t02.000.jpg"
+    },
+    {
+      "index": 72,
+      "timestamp_s": 3.0,
+      "source": "cadence",
+      "pixel_sha256": "56a324551bdb2cc34181dbabf6f005dafb3109f86ae6ef48287794c2b4192bc2",
+      "file": "frame-03-t03.000.jpg"
+    },
+    {
+      "index": 96,
+      "timestamp_s": 4.0,
+      "source": "cadence",
+      "pixel_sha256": "0c533527fd07aaeb661a23dc40037b4c4ff6c3e9b277e04dbeae99a45ca6b29f",
+      "file": "frame-04-t04.000.jpg"
+    },
+    {
+      "index": 120,
+      "timestamp_s": 5.0,
+      "source": "cadence",
+      "pixel_sha256": "104609af796818802409551a86577a061fa81ab06ff017f99f34f67cdbe48f59",
+      "file": "frame-05-t05.000.jpg"
+    },
+    {
+      "index": 144,
+      "timestamp_s": 6.0,
+      "source": "cadence",
+      "pixel_sha256": "c38a85ba9fb5227c6c61f9055480476442c7b45ba624c8fce480a77117f661d5",
+      "file": "frame-06-t06.000.jpg"
+    },
+    {
+      "index": 168,
+      "timestamp_s": 7.0,
+      "source": "cadence",
+      "pixel_sha256": "d16a49a7b9b0f78bdd2c83f41dcba6b582ff4d88f069db38aed9f83745b5719c",
+      "file": "frame-07-t07.000.jpg"
+    },
+    {
+      "index": 192,
+      "timestamp_s": 8.0,
+      "source": "cadence",
+      "pixel_sha256": "450959cc3dbd7f301526a9d5a9a4f5308097e605ed9146790b474bd69fa48b20",
+      "file": "frame-08-t08.000.jpg"
+    },
+    {
+      "index": 216,
+      "timestamp_s": 9.0,
+      "source": "cadence",
+      "pixel_sha256": "9ef052ca3cf91d9a6b2b98e7d5dc722d9be2e67314333dce885edb290d703472",
+      "file": "frame-09-t09.000.jpg"
+    },
+    {
+      "index": 239,
+      "timestamp_s": 9.958,
+      "source": "final_frame",
+      "pixel_sha256": "0eabbe499f97d3473bc44152c1d0f9bb95f364e73470f17ad81274b901475049",
+      "file": "frame-10-t09.958.jpg"
+    }
+  ]
+}

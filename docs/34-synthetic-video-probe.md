@@ -202,6 +202,115 @@ only metric those two clips have.
 - It does not unblock Phase 4 or Phase 5. Those remain dependency-blocked on a
   validation winner in the image arm.
 
+## Day 1 result — 4 Aug 2026
+
+*The batch was generated on the owner's Omni subscription surface, staged,
+hashed, sampled and reviewed. Machine-readable record:
+`video/reports/phase36-video-pass-a-review-2026-08-04.json`. Nothing below
+promotes a capture-strategy claim; the wall above is unchanged.*
+
+Nine clips were queued and eight delivered. `VU-4.RP-022-hurried` was rejected
+on sight for unstable scene physics and hallucinated content and was never
+downloaded. **All eight delivered clips were rejected at Pass A**, by two
+independent reviewers.
+
+### The batch is void, and not because of the generator
+
+Every clip is conditioned on the still named `<scenario>-A-wide.jpeg`, which
+the scene specifications define as a *wide establishing view*. None of them is
+one. `RP-003-A-wide.jpeg` is a close shot of a worktop and splashback,
+`RP-024-A-wide.jpeg` a desk corner, `RP-014-A-wide.jpeg` the foot of a front
+door, `RP-022-A-wide.jpeg` the base of a WC.
+
+The cause is `stage_gemini_omni_prior_batches.py`, which assigns
+`A-wide, B-reverse, C-inventory, D-condition` **positionally**, in whatever
+order the operator supplied four files, and never checks that position 0 holds
+a wide view. The supplied order was the reverse. Gemini names its downloads
+from the prompt, so the files state their own contents:
+
+- Four filenames name a view id outright. All four contradict the id they were
+  filed under, all four fit an exactly reversed order, none contradicts it.
+  Two of them literally read `View_D-condition…` and are filed as `A-wide`.
+- Across all nine packets, the file filed as `A-wide` describes a condition
+  detail — a splashback edge, a door's lower panel, a stair tread edge, a WC
+  base, a desk surface, a floor. Five say "condition" in the filename.
+
+`evals/synthetic/audit_gemini_omni_views.py` reports this mechanically and
+scopes it: the 36 stills staged through the positional route are suspect; the
+21 staged through `import_gemini_omni_batch.py`, which names a view per file,
+show no contradiction. Every Phase 3.6 reference frame comes from the affected
+route.
+
+So each prompt carried an instruction pair it could not satisfy — *"the
+supplied reference image is the opening frame: match it exactly, then move
+from it"* alongside *"start on the reference framing at the doorway and pivot
+across the whole cloakroom"*. Given a floor-level close-up and told to open at
+a doorway, the generator invented a wide opening, and both reviewers recorded
+that the opening frame does not match the reference. That is the most common
+hard failure in the run, and it is an artefact of the fixture, not a
+measurement of the model.
+
+**Day 1 therefore does not answer "can Omni hold a room through motion".** It
+is not a negative result about the generator and must not be recorded as one.
+
+**This is exactly the harm the provenance gate named in advance.** The gate is
+open because the Omni stills have no recorded Pass A — and Pass A is precisely
+where "is this the view it claims to be" is caught. docs/31 Amendment B lists
+that import as work order item 6, "named there in advance as the droppable
+item". It is not droppable. It is the prerequisite, and the recommendation in
+this document's gate 1 — "day 1 ungated, everything after it gated" — was
+wrong: ungated day-1 generation bought nothing and cost nine clips.
+
+### What the run found anyway
+
+These do not depend on which frame was the reference:
+
+- **Readable brands in 6 of 8 clips** — Apple, Samsung, Beko, Fairy, and
+  legible cleaning-product labels — against an avoid list that names logos and
+  readable text explicitly. On the product's own evidence rules a readable
+  brand in a walkthrough frame is a problem in its own right.
+- **Geometry breaks mid-take with no cut.** `VU-1.RP-003`'s floor changes from
+  wood-plank LVT to stone-look tile between sampled frames 4 and 7 and its
+  cabinetry morphs between frames 3 and 4; `VU-1.RP-024`'s desk moves from the
+  left wall to the window wall between frames 7 and 8; `VU-2`'s closed door
+  becomes an open doorway between frames 4 and 5. The unbroken-take check
+  passes mechanically on every clip, so these are drift, not edits. This is the
+  failure mode a still-image dataset cannot see, and it is the one thing here
+  worth carrying forward — though a contradictory prompt is itself a plausible
+  cause of instability, so it is a lead, not a measurement.
+- **`VU-5.RP-019-hold` breaches its own must-never-be-visible list.** The
+  primary reviewer places the rear floor and lower rear wall in frames 7, 9 and
+  10; the second recorded no breach; independent inspection agrees with the
+  primary, since the camera plainly advances past the doorway it was told to
+  hold. The counterfactual pair has no valid control arm, which is day 1's
+  slot-5 failure as written.
+- **6 of 7 silent clips carry audible audio**, peaking between −41 and
+  −22 dBFS in discrete bursts rather than stationary room tone, against a
+  prompt asking for no speech, music, sound effects or room tone.
+- **`VU-4.RP-022-slow` ends on an almost entirely black frame.**
+
+One partial positive: `VU-2` room naming worked — both reviewers named
+Entrance hall then Kitchen. Their boundary brackets disagree by two seconds
+(frame 7 versus 9), which is the resolution limit of a 1 fps strip rather than
+a segmentation result.
+
+### What has to happen next
+
+1. **Correct the Omni view assignment and run the Pass A import** (docs/31
+   Amendment B item 6). Re-filing 57 evidence images is an owner decision and
+   has not been done here; the auditor exists to drive it. Until it lands, no
+   further video generation should be spent.
+2. **Do not retry the VU-4 rungs.** Both delivered rungs failed Pass A and the
+   third was never delivered, so the ladder has no usable rung; and docs/34
+   already puts VU-4 behind Amendment B's free degradation ladder.
+   `VU-4.RP-022-hurried` stays `retry_pending` in the ledger because that is
+   the owner's recorded decision, but it is deferred, not queued.
+3. **Regenerate day 1 only after step 1**, against corrected references, and
+   keep it to the five specified clips.
+4. **Strip audio from silent-mode clips at staging**, or accept the deviation
+   explicitly. It is free to fix with `ffmpeg -an` and it is currently an
+   automatic escalation on every silent clip.
+
 ## Related
 
 - `docs/31-synthetic-evaluation-dataset-plan.md` — parent dataset, Phase 3.5

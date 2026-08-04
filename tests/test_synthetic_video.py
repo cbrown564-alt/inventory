@@ -16,6 +16,7 @@ from evals.synthetic.build_video_strip import (
 from evals.synthetic.build_video_tasks import FIELDNAMES
 from evals.synthetic.review_video_pass_a import (
     _criteria_for,
+    _extract_json,
     reconcile,
     validate_review,
 )
@@ -166,6 +167,25 @@ def test_reconcile_agrees_disagrees_and_accepts():
                      {"decision": "reject", "reason": "bad"}, failed)[0] == "reject"
 
 
+def test_review_json_survives_prose_and_braces_around_it():
+    """Slicing first-brace-to-last-brace parses as nothing once prose has one.
+
+    This cost a run: a reviewer wrote a sentence after its JSON and the whole
+    batch died six clips in.
+    """
+    assert _extract_json(
+        'Here is my review:\n{"decision": "accept", "criteria": []}\n'
+        "Hope that helps {not json}."
+    ) == {"decision": "accept", "criteria": []}
+    assert _extract_json(
+        '{"decision": "escalate", "reason": "a brace { in a note", "criteria": []}'
+    )["reason"] == "a brace { in a note"
+    assert _extract_json('```json\n{"decision": "reject", "criteria": []}\n```')[
+        "decision"] == "reject"
+    with pytest.raises(ValueError, match="no JSON object found"):
+        _extract_json("I could not complete the review.")
+
+
 def test_a_review_that_skips_a_criterion_is_rejected():
     """A silently short answer would read as a pass on the missing criterion."""
     payload = {"clip_id": "VU-9.RP-000"}
@@ -240,6 +260,48 @@ def test_a_rejected_clip_is_not_archived_by_the_apply_step(tmp_path):
 def test_the_video_ledger_carries_a_strip_hash_column():
     with (DATASET / "video" / "tasks.csv").open(newline="", encoding="utf-8") as h:
         assert "strip_sha256" in (csv.DictReader(h).fieldnames or [])
+
+
+def test_the_omni_view_audit_finds_the_positional_import_contradicting_itself():
+    """The prior-batch import assigns views positionally and gets them reversed.
+
+    Gemini names downloads after the prompt, so some filenames state their own
+    view. Every one of those contradicts the id it was filed under, and every
+    one fits an exactly reversed supplied order. That is provable without
+    looking at a pixel, and it is what conditions the Phase 3.6 clips.
+
+    This test asserts the *known-bad* state deliberately. When the Omni Pass A
+    import lands and the assignment is corrected, it should be flipped to
+    assert zero contradictions.
+    """
+    from evals.synthetic.audit_gemini_omni_views import audit
+
+    result = audit()
+    positional = result["routes"][0]
+    named = result["routes"][1]
+    assert len(positional["contradictions"]) == 4
+    assert positional["reversal_hypothesis"]["fits"] == 4
+    assert positional["reversal_hypothesis"]["contradicts"] == 0
+    assert all(entry["fits_exact_reversal"]
+               for entry in positional["contradictions"])
+    # The explicitly-named route names a view per file and is not affected.
+    assert named["contradictions"] == []
+    # Every packet's A-wide slot holds a condition detail, not a wide view.
+    slot = result["a_wide_slot"]
+    assert len(slot["packets"]) == 9
+    assert slot["naming_a_condition_view"] == 5
+    assert all(entry["filed_as"] == "A-wide" for entry in slot["packets"])
+
+
+def test_every_video_reference_frame_comes_from_the_affected_import():
+    """Scope the damage: which clips rest on a suspect reference frame."""
+    from evals.synthetic.stage_gemini_omni_prior_batches import BATCHES
+
+    with (DATASET / "video" / "tasks.csv").open(newline="", encoding="utf-8") as h:
+        rows = list(csv.DictReader(h))
+    assert rows
+    assert all(row["reference_path"].endswith("-A-wide.jpeg") for row in rows)
+    assert {row["scenario_id"] for row in rows} <= set(BATCHES)
 
 
 @pytest.mark.skipif(not shutil.which("ffmpeg"), reason="needs ffmpeg")

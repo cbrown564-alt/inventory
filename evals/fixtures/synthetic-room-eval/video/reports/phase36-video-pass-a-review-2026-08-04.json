@@ -1,0 +1,2048 @@
+{
+  "review_type": "phase3.6_video_pass_a_visual_screen",
+  "status": "complete",
+  "reviewed_at": "2026-08-04T06:31:56.503472+00:00",
+  "completed_at": "2026-08-04T06:53:39.498141+00:00",
+  "generation_path": "Antigravity CLI independent local-image review",
+  "metered_api_call": false,
+  "reviewer_primary_model": "claude-sonnet-4-6",
+  "reviewer_second_model": "gemini-3.5-flash-low",
+  "reviewer_family_independence": "Primary is not the generator's model family. The second check is the parent dataset's Pass A reviewer and IS the generator's family; it is retained for comparability with the image arm and is not treated as an independent-family confirmation.",
+  "counts": {
+    "reject": 8
+  },
+  "clips": [
+    {
+      "clip_id": "VU-1.RP-003",
+      "task_id": "VU-1.RP-003.gemini-omni-video",
+      "use_case": "VU-1 — extraction-fidelity",
+      "clip_sha256": "785291e2de9a4b8dfb9fc6ae6fb7165d143ce557378ec066511467b3153ed90f",
+      "strip_sha256": "8d282cfaaaf797e515fc366cc71ed7ba570962ce6d303b197253baa73daa3dc8",
+      "mechanical_checks": [
+        {
+          "criterion": "one_unbroken_take",
+          "status": "pass",
+          "detail": "no frame scores above 0.35 on scene change"
+        },
+        {
+          "criterion": "audio_mode_silent",
+          "status": "fail",
+          "detail": "declared silent, but the track peaks at -34.6 dBFS in 6 audible run(s). The generation prompt asked for no speech, no music, no sound effects and no room tone."
+        },
+        {
+          "criterion": "container_facts",
+          "status": "pass",
+          "detail": "1280x720 24 fps, 10.005 s, 240 frames"
+        }
+      ],
+      "primary_review": {
+        "clip_id": "VU-1.RP-003",
+        "decision": "reject",
+        "reason": "Three hard failures: (1) The opening frame (frame 0) does not match the reference image — frame 0 is a wide-angle corner view showing a door with lever handle, a large bare wall section, and no visible splashback tiles, whereas the reference is a close angled shot of the sink-to-hob worktop run with square ceramic tiles prominent and no door in view; the framing, perspective and visible fittings differ materially. (2) The floor covering changes mid-take without a scene cut: frames 0–4 show a light wood-plank LVT/vinyl floor; frames 7–10 show a large-format stone-look grey tile floor — a geometry and continuity breach during a single-room pivot. (3) The splashback tile format throughout the strip is metro/subway brick-bond tile, not the square ceramic grid tile shown in the reference, constituting an unenumerated material difference in a principal finish. Audio also measured as failing (pre-decided, not visual).",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "Frame 0 is a wide doorway-corner view showing a panelled door with lever handle, large bare plasterboard wall section, and no splashback tiles above the worktop. The reference image is a close angled shot of the sink-to-hob run with square ceramic tiles prominently filling the splashback, no door, and a tight perspective emphasising the worktop and units. The layout, framing, visible fittings and overall composition differ materially."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "fail",
+            "note": "White shaker units, oak-effect worktop, black appliances and rear window are consistent within their respective portions of the strip. However the floor covering changes mid-take (wood-plank LVT in frames 0–4, large-format stone/grey tile in frames 7–10) without any scene transition. This is a material continuity break in the room fabric."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "pass",
+            "note": "All required items are legible in at least one frame: white kitchen units (frames 0+), oak-effect worktop (frames 0+), sink (frames 0–5), oven (frames 4–10), ceramic hob (frames 4–10), extractor hood (frames 4–10), splashback tiles (frames 4–10, metro format), grout (frames 4–10), sockets (frames 4–10), vinyl/LVT floor (frames 0–4), skirting boards (frames 0–10)."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "No timber grain reads as mould, no hob reflection reads as a stain, dark grout lines are not rendered as cracks, and ordinary shadows are not rendered as damp marks across any frame."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "Two unenumerated material differences observed: (a) splashback tile format is metro/subway brick-bond throughout the strip versus the square ceramic grid tile in the reference — a distinct and prominent finish change; (b) floor covering changes mid-strip from wood-plank LVT to large-format stone tile. Additionally, a door with lever handle is prominently visible in frames 0–2, absent from the reference."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "pass",
+            "note": "No people, readable text, or logos visible. A faint manufacturer mark is present on the oven front but is not legible as a readable brand at normal viewing scale and is consistent with a standard appliance label."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "fail",
+            "note": "The floor surface material changes from a warm wood-plank LVT (frames 0–4) to a large-format stone-look grey tile (frames 7–10) during a continuous single-room pivot with no scene cut (confirmed by the already-measured one_unbroken_take pass). This constitutes geometry incoherence — the room's floor changes composition mid-take. The worktop height, unit positions and room shape are otherwise stable."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "white kitchen units",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "oak-effect worktop",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "sink",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "oven",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "ceramic hob",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "extractor hood",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "splashback tiles",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "grout",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "sockets",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "skirting boards",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          }
+        ],
+        "hard_failures": [
+          "opening_frame_does_not_match_reference: Frame 0 is a wide doorway-corner view with a panelled door, large bare wall section and no visible splashback tiles; the reference is a close angled sink-run shot with square ceramic tiles prominent and no door; the framing, perspective and visible fittings differ materially.",
+          "geometry_incoherent_floor_change: Floor covering changes from warm wood-plank LVT (frames 0–4) to large-format stone-look grey tile (frames 7–10) during a single continuous take with no scene cut — a hard geometry/continuity breach.",
+          "unenumerated_material_difference_splashback_tile_format: Splashback tiles throughout the strip are metro/subway brick-bond format; the reference shows square ceramic grid tiles — a distinct and prominent finish not matching the reference."
+        ],
+        "continuity_notes": [
+          "White shaker units: consistent identity and finish throughout all frames.",
+          "Oak-effect worktop: consistent colour, grain and height throughout all frames.",
+          "Black appliances (oven, hob, extractor): consistent once in view from frame 4 onward.",
+          "Rear window: visible and consistent in frames 0–4; exits frame as pan progresses rightward, as expected.",
+          "Floor covering: BREAKS — wood-plank LVT frames 0–4 becomes large-format stone tile frames 7–10; mid-strip material change with no scene transition.",
+          "Splashback tile format: metro/subway brick-bond throughout the strip; reference shows square ceramic grid — different tile type used in generation."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": 4,
+        "observed_rooms": [
+          "Kitchen — UK terraced house style, white shaker units, oak worktop, L-shaped layout with sink wall and cooking wall"
+        ]
+      },
+      "second_review": {
+        "clip_id": "VU-1.RP-003",
+        "decision": "reject",
+        "reason": "The opening frame does not match the reference image in layout, framing, fittings, or room design (L-shaped kitchen run vs. straight run, straight bar handles vs. curved bow handles, brick bond metro tiles vs. stack bond square tiles). Additionally, there is a severe continuity and geometry failure between Frame 3 and Frame 4 where the base cabinetry and appliances morph and swap positions (the 3-drawer unit and the appliance space swap places, and a wall cabinet is replaced by an extractor hood).",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "Frame 0 does not match the reference image: it has a wide-angle framing from the door, a different sink layout (drainer on the right instead of the left), straight T-bar handles instead of curved bow handles, no splashback tiles behind the sink, and represents a completely different L-shaped kitchen layout."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "fail",
+            "note": "The cabinetry layout morphs between Frame 3 and Frame 4. In Frame 3, the 3-drawer unit is to the left of the appliance space, and a white cabinet is above it. In Frame 4, the 3-drawer unit is gone from that spot, replaced by an oven, and the upper white cabinet is replaced by a black extractor hood."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "pass",
+            "note": "All required evidence items are visible and legible in the strip."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "No negative controls are rendered as real defects."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "The generated clip uses straight bar handles instead of the curved handles in the reference, uses rectangular brick bond tiles instead of square grid tiles, and has an L-shaped layout instead of a straight run."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "pass",
+            "note": "No people, logos, watermarks, or readable text are present."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "fail",
+            "note": "The geometry breaks during camera motion as the cabinet layout and appliances morph and change positions between Frame 3 and Frame 4."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "white kitchen units",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "oak-effect worktop",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "sink",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "oven",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "ceramic hob",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "extractor hood",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "splashback tiles",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "grout",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "sockets",
+            "visibility": "clear",
+            "first_seen_frame": 5
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "skirting boards",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          }
+        ],
+        "hard_failures": [
+          "The opening frame is not the reference room's layout/framing.",
+          "Geometry breaks under motion: cabinet units and appliances morph and swap positions between Frame 3 and Frame 4."
+        ],
+        "continuity_notes": [
+          "The cabinet handles are straight T-bar style rather than the curved bow handles shown in the reference image.",
+          "The splashback uses rectangular brick-bond metro tiles instead of the square grid-bond tiles in the reference.",
+          "The sink's drainer is on the right side in the clip but on the left side in the reference image.",
+          "The kitchen layout is an L-shape corner layout instead of a straight run.",
+          "The 3-drawer base unit and the oven/hob space swap positions during the pan (between Frame 3 and Frame 4/5)."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": null,
+        "observed_rooms": [
+          "Kitchen"
+        ]
+      },
+      "pass_a_decision": "reject",
+      "pass_a_reason": "Three hard failures: (1) The opening frame (frame 0) does not match the reference image — frame 0 is a wide-angle corner view showing a door with lever handle, a large bare wall section, and no visible splashback tiles, whereas the reference is a close angled shot of the sink-to-hob worktop run with square ceramic tiles prominent and no door in view; the framing, perspective and visible fittings differ materially. (2) The floor covering changes mid-take without a scene cut: frames 0–4 show a light wood-plank LVT/vinyl floor; frames 7–10 show a large-format stone-look grey tile floor — a geometry and continuity breach during a single-room pivot. (3) The splashback tile format throughout the strip is metro/subway brick-bond tile, not the square ceramic grid tile shown in the reference, constituting an unenumerated material difference in a principal finish. Audio also measured as failing (pre-decided, not visual)."
+    },
+    {
+      "clip_id": "VU-1.RP-024",
+      "task_id": "VU-1.RP-024.gemini-omni-video",
+      "use_case": "VU-1 — extraction-fidelity",
+      "clip_sha256": "523eb10f3326c557ceea498983c186d5b6c53f0348dd48d8b686b9bf6487115b",
+      "strip_sha256": "22b8c20b420ddcaafc45869d9cc495d49849d1e9a8eb113ff3a3e6425bae2db9",
+      "mechanical_checks": [
+        {
+          "criterion": "one_unbroken_take",
+          "status": "pass",
+          "detail": "no frame scores above 0.35 on scene change"
+        },
+        {
+          "criterion": "audio_mode_silent",
+          "status": "fail",
+          "detail": "declared silent, but the track peaks at -38.2 dBFS in 9 audible run(s). The generation prompt asked for no speech, no music, no sound effects and no room tone."
+        },
+        {
+          "criterion": "container_facts",
+          "status": "pass",
+          "detail": "1280x720 24 fps, 10.005 s, 240 frames"
+        }
+      ],
+      "primary_review": {
+        "clip_id": "VU-1.RP-024",
+        "decision": "reject",
+        "reason": "The required evidence item 'filing cabinet' is absent from every frame of the strip. No freestanding or pedestal filing cabinet is visible at any point across the full 10-second walk-in sequence. The bookcase base contains dark fabric storage cubes, which are not a filing cabinet. All other criteria pass, but the absence of a mandatory evidence item constitutes a hard failure under required_evidence_legible.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "pass",
+            "note": "Frame 0 shows the same home office room: white desk against the far wall, black mesh chair, dark charcoal roller blind, tall white bookcase on the right, pale beige loop-pile carpet, grey-white painted walls — all matching the finishes and fittings in the reference close-up. Lighting quality (bright, natural daylight) is consistent."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "pass",
+            "note": "White desk, black mesh chair, white bookcase, dark charcoal roller blind, and pale carpet are identifiably the same objects throughout all 11 frames. No element morphs, gains or loses identity as the camera advances from the doorway to the desk wall."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "fail",
+            "note": "Filing cabinet is absent from all 11 frames. All other required items (desk, office chair, bookcase, roller blind, pale carpet, monitor with blank screen, task lamp, sockets, thermostat, radiator) are legibly visible in at least one frame."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "Carpet shading variation is natural lighting, not a stain. Ordinary cast shadows under the desk and chair are not rendered as damp patches. The clean wall area left of the desk is not marked as a missing-item defect. No distressed paint detected."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "pass",
+            "note": "The monitor, laptop and plant that appear in the strip are expected desk accessories consistent with the same room. The mouse and mousepad visible in the reference close-up are not conspicuously absent — they are simply outside the field of view in the wider strip frames. No structural or finish change to walls, floor or fittings is observed."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "pass",
+            "note": "No people detected across any frame. No readable text, brand logos or watermarks visible. The Apple logo on the closed laptop lid is faintly visible in several frames but is not a brand advertisement rendered as signage; it is a physical property of the device."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "Single window with roller blind remains at the same wall position throughout. Bookcase consistently occupies the right-hand wall. Desk consistently occupies the far wall. Door frame appears at frame edges in frames 0–3 and again at left in frame 8 consistently with the camera path from doorway to desk wall. No furniture slides independently of camera motion. Room proportions are stable throughout the advance."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "desk",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "office chair",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "bookcase",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "roller blind",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "pale carpet",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "monitor with blank screen",
+            "visibility": "clear",
+            "first_seen_frame": 8
+          },
+          {
+            "name": "task lamp",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "sockets",
+            "visibility": "clear",
+            "first_seen_frame": 7
+          },
+          {
+            "name": "thermostat",
+            "visibility": "clear",
+            "first_seen_frame": 7
+          },
+          {
+            "name": "radiator",
+            "visibility": "clear",
+            "first_seen_frame": 7
+          },
+          {
+            "name": "filing cabinet",
+            "visibility": "absent",
+            "first_seen_frame": null
+          }
+        ],
+        "hard_failures": [
+          "Filing cabinet (required evidence) is absent from all 11 strip frames across the full 10-second clip."
+        ],
+        "continuity_notes": [
+          "White desk identity is stable throughout all frames; finish and form consistent.",
+          "Black mesh office chair is present and unchanged in frames 0–8; exits frame as camera arrives at desk wall, which is geometrically expected.",
+          "White bookcase is present and unchanged in frames 0–5; exits frame as camera pans fully to desk-wall side, geometrically expected.",
+          "Dark charcoal roller blind is consistently the same blind on the same window in every frame.",
+          "Pale beige loop-pile carpet texture and colour are consistent in all frames where the floor is visible."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": 3,
+        "observed_rooms": [
+          "Home office: white desk against far wall, single sash window with dark charcoal roller blind, tall white bookcase right wall, black mesh office chair, pale beige carpet, white panel radiator left wall, UK double wall sockets left wall, wall-mounted thermostat left wall"
+        ]
+      },
+      "second_review": {
+        "clip_id": "VU-1.RP-024",
+        "decision": "reject",
+        "reason": "The opening frame does not match the pinned reference image, the room geometry/layout breaks catastrophically between frames 7 and 8 (the desk shifts from the left wall to being directly underneath the window, a door briefly appears/disappears on the left wall, and wall sockets configuration changes), a computer monitor suddenly appears on the desk, the required filing cabinet is missing, and an Apple logo is visible on the laptop lid.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "The first frame is a wide doorway view of the office, whereas the reference image is a close-up of a desk containing a mouse pad, mouse, keyboard, and book."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "fail",
+            "note": "Between frames 7 and 8, a computer monitor suddenly appears on the desk, wall sockets change from single+double to two doubles, and a door briefly appears on the left wall."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "fail",
+            "note": "The filing cabinet is not present in any frame."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "Carpet shading and wall markings are not rendered as real defects."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "The desk contents in the video (laptop, plant, monitor) completely differ from the reference image (keyboard, mouse pad, mouse, coaster, book)."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "fail",
+            "note": "An Apple logo is clearly visible on the laptop lid in frames 6 through 10."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "fail",
+            "note": "Catastrophic layout change between frames 7 and 8: the desk moves from the left wall to the window wall, and a door briefly appears on the left wall before disappearing in frame 9."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "desk",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "office chair",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "bookcase",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "roller blind",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "pale carpet",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "monitor with blank screen",
+            "visibility": "clear",
+            "first_seen_frame": 8
+          },
+          {
+            "name": "task lamp",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "sockets",
+            "visibility": "clear",
+            "first_seen_frame": 7
+          },
+          {
+            "name": "thermostat",
+            "visibility": "clear",
+            "first_seen_frame": 7
+          },
+          {
+            "name": "radiator",
+            "visibility": "clear",
+            "first_seen_frame": 7
+          },
+          {
+            "name": "filing cabinet",
+            "visibility": "absent",
+            "first_seen_frame": null
+          }
+        ],
+        "hard_failures": [
+          "The opening frame does not match the reference image in layout, fittings, or contents.",
+          "Catastrophic geometry break between frames 7 and 8: the desk moves from the left wall to the window wall.",
+          "A brand logo (Apple) is clearly visible on the laptop lid.",
+          "The required filing cabinet is missing from the room."
+        ],
+        "continuity_notes": [
+          "The desk shifts from the left wall to being centered under the window between frames 7 and 8.",
+          "A computer monitor appears on the desk in frame 8.",
+          "A door appears on the left wall in frame 8 and disappears in frame 9.",
+          "The wall sockets configuration changes between frames 7 and 8."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": 1,
+        "observed_rooms": [
+          "Home office"
+        ]
+      },
+      "pass_a_decision": "reject",
+      "pass_a_reason": "The required evidence item 'filing cabinet' is absent from every frame of the strip. No freestanding or pedestal filing cabinet is visible at any point across the full 10-second walk-in sequence. The bookcase base contains dark fabric storage cubes, which are not a filing cabinet. All other criteria pass, but the absence of a mandatory evidence item constitutes a hard failure under required_evidence_legible."
+    },
+    {
+      "clip_id": "VU-2.RP-014-transit",
+      "task_id": "VU-2.RP-014-transit.gemini-omni-video",
+      "use_case": "VU-2 — room-boundary",
+      "clip_sha256": "85c62f8a705acb903ded382e7dd737117490f99cfab7debee291926f5bd208b7",
+      "strip_sha256": "0dfaa1966f0496fc9dc486477f5a78e18fd23ce6618f36f8e0918beb958769d4",
+      "mechanical_checks": [
+        {
+          "criterion": "one_unbroken_take",
+          "status": "pass",
+          "detail": "no frame scores above 0.35 on scene change"
+        },
+        {
+          "criterion": "audio_mode_silent",
+          "status": "pass",
+          "detail": "peak -84.3 dBFS is below the -50.0 dBFS floor"
+        },
+        {
+          "criterion": "container_facts",
+          "status": "pass",
+          "detail": "1280x720 24 fps, 10.005 s, 240 frames"
+        }
+      ],
+      "primary_review": {
+        "clip_id": "VU-2.RP-014-transit",
+        "decision": "reject",
+        "reason": "Two hard failures: (1) The front door in the clip (smooth dark-brown flush door, espresso-coloured) does not match the reference door (matte black, traditionally panelled, heavily chipped). This is a material fitting difference that fails opening_frame_matches_reference and no_unenumerated_material_difference. (2) A Fairy washing-up liquid bottle with a clearly legible branded label/logo is visible on the kitchen worktop in frames 9 and 10, violating the no_people_text_logos criterion.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "Frame 0 layout, cream walls, striped runner, entryphone and coat hooks all match the reference room. However the front door visible at the far end of the hall is a smooth dark-brown flush door throughout the clip, whereas the reference shows a matte-black traditionally panelled door with visible paint chips and wear. The colour and construction type differ materially."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "pass",
+            "note": "Within the clip, cream walls, striped runner, entryphone and coat hooks are stable and consistent across all hall frames. The dark-brown door at the front remains consistent across frames 0–4 as it recedes from view. Kitchen fittings are stable across frames 8–10. No element morphs, gains or loses identity."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "pass",
+            "note": "All six items legible: hall walls (frames 0–7), striped runner (frames 0–8), coat hooks (frames 0–4), entryphone (frames 0–3), ceiling light pendant (frames 1 and 3 at full resolution), skirting (frames 0–8)."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "Stripes on runner are clearly textile stripes with no stain appearance. No damp shadow is rendered around the door area."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "The front door in the clip is a smooth dark-brown flush door; the reference shows a matte-black panelled door. This is a material unenumerated difference in a key fitting. Additionally a branded consumer product (Fairy washing-up liquid, green labelled bottle) appears on the kitchen worktop in frames 9 and 10."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "fail",
+            "note": "A Fairy washing-up liquid bottle with a clearly readable green branded label is visible on the kitchen worktop in frames 9 and 10. This constitutes a legible logo/brand. No people present. No watermarks or other text detected."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "Hall maintains consistent rectangular geometry throughout the forward walk. Runner and skirting remain spatially fixed. Inner doorway position is stable in frames 4–7. Room proportions do not change implausibly under motion. Kitchen geometry is stable in frames 8–10."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "hall walls",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "striped runner",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "coat hooks",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "entryphone",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "ceiling light",
+            "visibility": "clear",
+            "first_seen_frame": 1
+          },
+          {
+            "name": "skirting",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          }
+        ],
+        "hard_failures": [
+          "Front door in clip is a smooth dark-brown flush door; reference shows a matte-black traditionally panelled door — material fitting mismatch on a continuity-pinned element",
+          "Fairy washing-up liquid bottle with legible branded label visible on kitchen worktop in frames 9 and 10 — violates no_people_text_logos (logos)"
+        ],
+        "continuity_notes": [
+          "Cream walls stable throughout hall traverse (frames 0–7)",
+          "Striped runner (blue/red/cream/tan stripes) present and spatially fixed through all hall frames and visible at kitchen threshold",
+          "Entryphone present on right wall and consistent in frames 0–3 before passing out of frame",
+          "Coat hooks with hanging coats on left wall consistent in frames 0–4",
+          "Within-clip door colour is consistent (dark brown flush) but mismatches the reference black panelled door",
+          "Kitchen fittings (pale units, wood-edge worktops, sink, oven, fridge, kettle, toaster) consistent across frames 8–10"
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": 7,
+        "observed_rooms": [
+          "Entrance hall",
+          "Kitchen"
+        ]
+      },
+      "second_review": {
+        "clip_id": "VU-2.RP-014-transit",
+        "decision": "reject",
+        "reason": "The opening frame (Frame 0) does not match the reference image in layout, framing, or door style. Additionally, there are severe continuity and geometry breaks: the closed dark door at the end of the hallway in Frame 4 morphs into an open kitchen doorway in Frame 5, the coats and entryphone disappear, and a doorway next to the refrigerator in Frame 8 disappears in Frame 9.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "Frame 0 is a wide shot looking down the hallway towards a closed door, whereas the reference image is a close-up of a door bottom. The door in Frame 0 is flat/flush brown, while the reference door is panelled with white scrapes."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "fail",
+            "note": "Coats and entryphone present in Frame 0-4 are missing in Frame 5. A room next to the refrigerator is visible through a doorway in Frame 8 but is gone in Frame 9."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "pass",
+            "note": "All required evidence items (hall walls, striped runner, coat hooks, entryphone, ceiling light, skirting) are clearly legible."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "The runner stripes are not rendered as stains and the door shadow is not rendered as damp."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "The dark front door in the video lacks the three white scrapes and panel details shown in the reference image."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "pass",
+            "note": "No people, readable text, logos, or watermarks are visible."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "fail",
+            "note": "Geometry breaks under motion: the hallway layout changes completely between Frame 4 and 5, and a doorway/room next to the refrigerator in Frame 8 disappears in Frame 9."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "hall walls",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "striped runner",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "coat hooks",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "entryphone",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "ceiling light",
+            "visibility": "clear",
+            "first_seen_frame": 1
+          },
+          {
+            "name": "skirting",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          }
+        ],
+        "hard_failures": [
+          "The opening frame does not match the reference room/image framing or door style.",
+          "Geometry breaks under motion: closed door in Frame 4 morphs into open doorway in Frame 5, and a doorway/room next to the refrigerator in Frame 8 disappears in Frame 9."
+        ],
+        "continuity_notes": [
+          "Coats and entryphone present in Frame 0-4 are missing in Frame 5.",
+          "A doorway/room visible next to the refrigerator in Frame 8 disappears in Frame 9."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": 9,
+        "observed_rooms": [
+          "Entrance hall",
+          "Kitchen"
+        ]
+      },
+      "pass_a_decision": "reject",
+      "pass_a_reason": "Two hard failures: (1) The front door in the clip (smooth dark-brown flush door, espresso-coloured) does not match the reference door (matte black, traditionally panelled, heavily chipped). This is a material fitting difference that fails opening_frame_matches_reference and no_unenumerated_material_difference. (2) A Fairy washing-up liquid bottle with a clearly legible branded label/logo is visible on the kitchen worktop in frames 9 and 10, violating the no_people_text_logos criterion."
+    },
+    {
+      "clip_id": "VU-3.RP-021-narrated",
+      "task_id": "VU-3.RP-021-narrated.gemini-omni-video",
+      "use_case": "VU-3 — narrated-cue",
+      "clip_sha256": "f96a7f2982b611efaaf8611d0a5253ffe9187f8cfbabf8d89ef808d3be9e190c",
+      "strip_sha256": "cc7260c1e69fab54868c762a60666f6d84676b13da411002f04305ccd5bdb041",
+      "mechanical_checks": [
+        {
+          "criterion": "one_unbroken_take",
+          "status": "pass",
+          "detail": "no frame scores above 0.35 on scene change"
+        },
+        {
+          "criterion": "audio_mode_narrated",
+          "status": "indeterminate",
+          "detail": "10 audible run(s); first begins at 0.0 s. Whether the words match the declared cue is not decidable by measurement and is not claimed here."
+        },
+        {
+          "criterion": "container_facts",
+          "status": "pass",
+          "detail": "1280x720 24 fps, 10.005 s, 240 frames"
+        }
+      ],
+      "primary_review": {
+        "clip_id": "VU-3.RP-021-narrated",
+        "decision": "reject",
+        "reason": "The clip fails on multiple hard criteria. (1) The opening frame does not match the reference: the reference shows a low-angle view with a patterned dark-and-cream oriental runner, a dark stained timber balustrade with turned spindles and a prominent newel post, and warm overhead lighting; frame 0 of the strip shows a standing-height view with a plain charcoal tweed runner, a wall-mounted bracket handrail with no balustrade or newel post, and no ceiling light. (2) The runner throughout the entire strip is a plain charcoal/grey tweed weave — not the patterned oriental carpet of the reference — violating the continuity requirement for the 'same dark runner'. (3) The newel post from the reference is absent in frame 0. (4) The intended defect (frayed tread edge) is not legibly present in any frame. (5) Frame 10 (t=9.958 s) is a near-black frame with no room content visible. (6) No ceiling light fitting is visible in any frame.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "Frame 0 shows a standing-height perspective with a plain charcoal tweed runner, wall-mounted bracket handrail, no balustrade spindles, and no newel post. The reference is a low-angle shot with a patterned oriental runner, dark stained timber balustrade with turned spindles, prominent newel post, and warm ceiling light. Layout, fittings, finishes and lighting all differ materially."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "fail",
+            "note": "The runner is consistently the wrong material (plain charcoal tweed rather than patterned oriental) throughout all frames, so the continuity requirement for 'same dark runner' cannot be assessed against the reference. Additionally, the box stack changes configuration between frames 0–1 and frames 2–4, and frame 10 collapses to near-black, breaking any continuity to the end. The handrail transitions from a wall-bracket handrail (frames 0–7) to revealing a white spindle balustrade (frames 8–10), but no equivalent transition exists in the reference room."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "fail",
+            "note": "Stair runner: present but wrong material. Timber handrail: present (frames 0–10). Painted walls: present (cream/off-white, frames 0–10). Boxes: present (frames 0–4). Ceiling light: absent across all frames. Smoke alarm: clearly present (frames 9–10). Light switch: present (frames 9–10). Newel post: absent in frame 0; white-painted balustrade newel visible in frames 9–10 but not consistent with reference. Tread edge: visible throughout. Riser: visible throughout. Two required evidence items (ceiling light, correct newel post) absent or mismatched; ceiling light entirely absent."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "No shadow behind boxes rendered as damp; no hidden treads shown as damaged; runner weave not shown as tearing; light shadow not rendered as staining. All four intended negatives are clean."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "The plain charcoal tweed runner (vs. patterned oriental), the wall-bracket handrail in place of a balustrade-and-spindle assembly, the absence of the newel post from the opening frame, the absence of ceiling light fitting, and the near-black final frame are all unenumerated material differences from the reference."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "pass",
+            "note": "No people present. Box markings in frames 2–4 are generic shipping arrows (pictograms), not readable brand text or logos. No watermarks visible."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "Within the strip itself, the staircase geometry is stable — treads do not slide, wall count does not change, and the room does not grow or shrink between frames. The geometry is internally consistent even though it is the wrong room relative to the reference."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "stair runner",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "timber handrail",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "painted walls",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "boxes",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "ceiling light",
+            "visibility": "absent",
+            "first_seen_frame": null
+          },
+          {
+            "name": "smoke alarm",
+            "visibility": "clear",
+            "first_seen_frame": 9
+          },
+          {
+            "name": "light switch",
+            "visibility": "clear",
+            "first_seen_frame": 9
+          },
+          {
+            "name": "newel post",
+            "visibility": "ambiguous",
+            "first_seen_frame": 9
+          },
+          {
+            "name": "tread edge",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "riser",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          }
+        ],
+        "hard_failures": [
+          "Opening frame does not match reference: wrong runner material (plain charcoal tweed vs. patterned oriental), wrong handrail configuration (wall bracket vs. dark balustrade with spindles), no newel post, different camera height and angle",
+          "Runner throughout entire strip is a plain charcoal tweed weave — not the patterned dark oriental runner of the reference — violating continuity requirement",
+          "Newel post from reference absent in frame 0; white-painted balustrade appearing at landing (frames 9–10) does not match reference dark timber newel",
+          "Intended defect (frayed strip along front tread edge) not legibly rendered in any frame",
+          "Ceiling light fitting absent from all frames",
+          "Frame 10 (t=9.958 s) is a near-black frame with no room content visible"
+        ],
+        "continuity_notes": [
+          "Runner identity consistent across frames 0–9 (same plain charcoal tweed), but this is the wrong runner relative to the reference",
+          "Box stack present frames 0–4; configuration shifts between frames suggest boxes are not a fixed element",
+          "Handrail transitions from wall-mounted bracket rail (frames 0–7) to landing configuration (frames 8–10) as expected from climb, but no matching balustrade/spindle assembly ever appears as in reference",
+          "Frame 10 collapses to near-black — continuity break at clip end"
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": null,
+        "observed_rooms": [
+          "Stairs and landing — plain charcoal runner, cream walls, white-painted stringers, wall-mounted timber bracket handrail, white spindle balustrade at landing, cardboard boxes at foot of stairs"
+        ]
+      },
+      "second_review": {
+        "clip_id": "VU-3.RP-021-narrated",
+        "decision": "reject",
+        "reason": "The opening frame does not match the reference image in layout, fittings, finishes, or lighting. The video shows a dark grey textured runner and a left-wall-mounted handrail, whereas the reference image shows an oriental-style patterned runner and a wood spindle balustrade on the right. Additionally, the required ceiling light is absent from all frames.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "The opening frame layout, carpet pattern, handrail position, and wall finishes do not match the reference image."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "pass",
+            "note": "The elements shown in the video maintain consistent styling, materials, and positions throughout the camera movement."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "fail",
+            "note": "The ceiling light is completely absent from all video frames."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "No negative controls are rendered as actual defects."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "The styling of the staircase (grey textured runner, left-wall handrail) represents a material difference from the reference image."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "pass",
+            "note": "No people, readable text, logos, or watermarks are visible."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "The structure of the stairs, walls, and landing remains stable and coherent throughout the climb."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "stair runner",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "timber handrail",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "painted walls",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "boxes",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "ceiling light",
+            "visibility": "absent",
+            "first_seen_frame": null
+          },
+          {
+            "name": "smoke alarm",
+            "visibility": "clear",
+            "first_seen_frame": 9
+          },
+          {
+            "name": "light switch",
+            "visibility": "clear",
+            "first_seen_frame": 9
+          },
+          {
+            "name": "newel post",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "tread edge",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "riser",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          }
+        ],
+        "hard_failures": [
+          "The opening frame does not match the reference image (incorrect layout, carpet runner pattern, wall finish, and handrail placement).",
+          "The required ceiling light is absent from all frames."
+        ],
+        "continuity_notes": [
+          "The grey textured carpet runner is consistent across all frames.",
+          "The wall-mounted timber handrail on the left maintains its geometry and appearance.",
+          "The boxes on the right are stably placed and exit the frame naturally as the camera ascends."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": null,
+        "observed_rooms": [
+          "Stairs and landing"
+        ]
+      },
+      "pass_a_decision": "reject",
+      "pass_a_reason": "The clip fails on multiple hard criteria. (1) The opening frame does not match the reference: the reference shows a low-angle view with a patterned dark-and-cream oriental runner, a dark stained timber balustrade with turned spindles and a prominent newel post, and warm overhead lighting; frame 0 of the strip shows a standing-height view with a plain charcoal tweed runner, a wall-mounted bracket handrail with no balustrade or newel post, and no ceiling light. (2) The runner throughout the entire strip is a plain charcoal/grey tweed weave — not the patterned oriental carpet of the reference — violating the continuity requirement for the 'same dark runner'. (3) The newel post from the reference is absent in frame 0. (4) The intended defect (frayed tread edge) is not legibly present in any frame. (5) Frame 10 (t=9.958 s) is a near-black frame with no room content visible. (6) No ceiling light fitting is visible in any frame."
+    },
+    {
+      "clip_id": "VU-4.RP-022-slow",
+      "task_id": "VU-4.RP-022-slow.gemini-omni-video",
+      "use_case": "VU-4 — motion-quality-ladder",
+      "clip_sha256": "48b96742c4c15acaa4cf9bcd6d76e662f556dad49983dab71383c7cd7d33efcb",
+      "strip_sha256": "36e1fcbd849f9bae39fd5c061d86df2f8fd59ac4ad55e0f515cdf2704d41a99a",
+      "mechanical_checks": [
+        {
+          "criterion": "one_unbroken_take",
+          "status": "pass",
+          "detail": "no frame scores above 0.35 on scene change"
+        },
+        {
+          "criterion": "audio_mode_silent",
+          "status": "fail",
+          "detail": "declared silent, but the track peaks at -41.1 dBFS in 1 audible run(s). The generation prompt asked for no speech, no music, no sound effects and no room tone."
+        },
+        {
+          "criterion": "container_facts",
+          "status": "pass",
+          "detail": "1280x720 24 fps, 10.005 s, 240 frames"
+        }
+      ],
+      "primary_review": {
+        "clip_id": "VU-4.RP-022-slow",
+        "decision": "reject",
+        "reason": "Four hard failures: (1) Frame 0 does not match the reference image — the reference is a floor-level close-up of the WC side/corner showing dark wood-grain plank vinyl and skirting, whereas frame 0 is an eye-level doorway framing; layout, viewpoint and composition differ materially. (2) Readable text appears on cleaning product labels throughout the strip: partially to clearly legible brand-style text is visible on bottles in frames 3, 4, 5, 7 and 8 (e.g. 'HIA' on yellow bottle frame 4, brand text on blue bottle frame 7). (3) The floor finish in the strip is a dark grey stone/tile pattern with visible grout lines, not the dark wood-grain plank vinyl shown in the reference — an unenumerated material difference that also constitutes a continuity failure against the reference. (4) Frame 10 (t=9.958s) is an almost entirely black/blank frame, indicating a hard dropout at clip end.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "Reference is a ground-level close-up of the WC flank and skirting with dark wood-plank vinyl visible at close range; frame 0 is an eye-level doorway shot of the full room interior. Viewpoint, composition and layout are wholly different. The reference does not show the doorway aperture, mirror, basin or extractor in the same framing."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "fail",
+            "note": "Floor finish transitions: reference and frames 0–1 show a dark vinyl that in the reference reads as wood-grain planks; from frame 2 onward the floor shifts to a clearly tile-look dark grey surface with rectangular grout lines. Additionally, frame 10 collapses to a near-black blank — the room disappears."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "pass",
+            "note": "WC clear from frame 0; corner basin clear from frame 0; mirror (octagonal gold frame) clear from frame 0; wallpaper (floral) clear throughout; dark floor visible throughout (though different finish from reference); mixer tap clear from frame 0; extractor vent clear in frames 0–1; light switch clear in frames 0 and 7–9; toilet roll holder clear in frames 3–5; towel ring/rail with sage towel clear from frame 2 onward; skirting clear throughout. Pipe boxing not clearly identified — no distinct boxing panel seen, though basin standpipe and pedestal are present."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "Floral wallpaper pattern reads as floral decoration, not mould. The mirror reflection does not read as a stain. The vinyl/floor pattern does not read as staining. No door shadow reads as damp."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "(1) A white panel radiator appears on the basin/right wall from frame 1 onward — not visible in or described by the reference image. (2) Floor finish is dark tile, not the dark wood-plank vinyl of the reference. (3) A toilet brush (white, freestanding) appears beside the WC pan in frames 3–5. (4) Frame 10 is a black blank frame — room disappears."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "fail",
+            "note": "Legible text on cleaning product labels visible in multiple frames. Frame 4: 'HIA' clearly readable on a yellow bottle; additional brand-style text on blue bottle. Frame 7: blue bottle carries what reads as a product name. Frames 3 and 8 show partially legible label text. These are rendered as real on-camera labels, not blurred props."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "Room shape is stable through the pivot — walls, ceiling and floor plane remain consistent in position. No furniture slides, no doorway changes count or position, no room grows. The radiator is a consistent fixture present from frame 1 onward (not an object that appears/disappears mid-take). Minor concern: frame 10 black dropout means the final geometry cannot be confirmed."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "WC",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "corner basin",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "mirror",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "wallpaper",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "ambiguous",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "mixer tap",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "light switch",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "toilet roll holder",
+            "visibility": "clear",
+            "first_seen_frame": 3
+          },
+          {
+            "name": "towel ring",
+            "visibility": "clear",
+            "first_seen_frame": 2
+          },
+          {
+            "name": "skirting",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "pipe boxing",
+            "visibility": "absent",
+            "first_seen_frame": null
+          }
+        ],
+        "hard_failures": [
+          "opening_frame_does_not_match_reference: frame 0 is an eye-level doorway shot; reference is a floor-level close-up of the WC side — entirely different viewpoint, layout and composition",
+          "readable_text_on_product_labels: legible brand-style text on cleaning bottles in frames 3, 4, 5, 7, 8 (e.g. 'HIA' on yellow bottle frame 4; product text on blue bottle frame 7)",
+          "clip_ends_black: frame 10 (t=9.958s) is an almost entirely black blank frame — hard dropout at end of clip",
+          "floor_finish_mismatch: reference shows dark wood-grain plank vinyl; strip shows dark grey tile-look surface with grout lines — unenumerated material change from reference finish"
+        ],
+        "continuity_notes": [
+          "Floor finish changes character between reference (dark wood-grain plank vinyl) and the strip (dark stone/tile look with grout), and the shift is perceptible comparing reference to frames 2 onward",
+          "Radiator appears consistently from frame 1 onward — stable fixture, not a mid-take intrusion, but absent from reference framing",
+          "Toilet brush (white, freestanding) present beside WC in frames 3–5, not identifiable in reference",
+          "Frame 10 drops to near-black — the room vanishes at clip end"
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": null,
+        "observed_rooms": [
+          "WC/cloakroom — single room, consistent identity throughout frames 0–9; room is a narrow cloakroom with floral wallpaper, white WC, corner pedestal basin with mixer tap, octagonal gold-framed mirror, white radiator, dark floor, white skirting, extractor vent on back wall, light switch on basin wall"
+        ]
+      },
+      "second_review": {
+        "clip_id": "VU-4.RP-022-slow",
+        "decision": "reject",
+        "reason": "The first strip frame does not match the reference image in layout (eye-level wide shot of the room through the doorway vs. floor-level close-up of the toilet base). Additionally, the specific cleaning bottles (green CLEANER and white SPRAY) shown on the floor in the reference image are missing in the video frames, replaced by a gray basket containing different bottles.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "The reference image is a floor-level close-up of the toilet base and floor, whereas the first frame of the strip is an eye-level wide shot looking through the doorway."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "pass",
+            "note": "Fittings, wallpaper, flooring, and layout remain consistent across all frames of the video."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "fail",
+            "note": "The towel ring is not visible in any frame (only the hanging towel is visible, with its attachment point cut off or occluded)."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "No intended negatives (wallpaper pattern, mirror reflection, vinyl pattern, door shadow) are rendered as actual defects."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "The green 'CLEANER' bottle and white 'SPRAY' bottle from the reference image are absent; a gray plastic basket containing other bottles is present on the floor instead."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "pass",
+            "note": "No people, readable text, logos, or watermarks are visible."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "The spatial geometry of the room, door frame, toilet, basin, and walls remains stable and coherent throughout the camera movement."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "WC",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "corner basin",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "mirror",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "wallpaper",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "mixer tap",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "light switch",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "toilet roll holder",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "towel ring",
+            "visibility": "absent",
+            "first_seen_frame": null
+          },
+          {
+            "name": "skirting",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "pipe boxing",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          }
+        ],
+        "hard_failures": [
+          "The first strip frame does not match the pinned reference image in layout.",
+          "Unenumerated material difference: The green 'CLEANER' bottle and white 'SPRAY' bottle are missing from the floor, replaced by a gray basket of different bottles."
+        ],
+        "continuity_notes": [
+          "The items in the room remain consistent throughout the camera sweep.",
+          "The camera pivots left-to-right from frame 0 to frame 8, then pivots back to the left in frames 9 and 10."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": null,
+        "observed_rooms": [
+          "WC"
+        ]
+      },
+      "pass_a_decision": "reject",
+      "pass_a_reason": "Four hard failures: (1) Frame 0 does not match the reference image — the reference is a floor-level close-up of the WC side/corner showing dark wood-grain plank vinyl and skirting, whereas frame 0 is an eye-level doorway framing; layout, viewpoint and composition differ materially. (2) Readable text appears on cleaning product labels throughout the strip: partially to clearly legible brand-style text is visible on bottles in frames 3, 4, 5, 7 and 8 (e.g. 'HIA' on yellow bottle frame 4, brand text on blue bottle frame 7). (3) The floor finish in the strip is a dark grey stone/tile pattern with visible grout lines, not the dark wood-grain plank vinyl shown in the reference — an unenumerated material difference that also constitutes a continuity failure against the reference. (4) Frame 10 (t=9.958s) is an almost entirely black/blank frame, indicating a hard dropout at clip end."
+    },
+    {
+      "clip_id": "VU-4.RP-022-ordinary",
+      "task_id": "VU-4.RP-022-ordinary.gemini-omni-video",
+      "use_case": "VU-4 — motion-quality-ladder",
+      "clip_sha256": "e357a00e28353c7e4a48169914be48ef22414d959f32126d3735357d864eff66",
+      "strip_sha256": "f4101381b4ad0bf8b4495f53e2367491bc143ce2792e7c8c6e25bbedc9460340",
+      "mechanical_checks": [
+        {
+          "criterion": "one_unbroken_take",
+          "status": "pass",
+          "detail": "no frame scores above 0.35 on scene change"
+        },
+        {
+          "criterion": "audio_mode_silent",
+          "status": "fail",
+          "detail": "declared silent, but the track peaks at -37.1 dBFS in 6 audible run(s). The generation prompt asked for no speech, no music, no sound effects and no room tone."
+        },
+        {
+          "criterion": "container_facts",
+          "status": "pass",
+          "detail": "1280x720 24 fps, 10.005 s, 240 frames"
+        }
+      ],
+      "primary_review": {
+        "clip_id": "VU-4.RP-022-ordinary",
+        "decision": "reject",
+        "reason": "Two hard failures: (1) The opening frame does not match the reference pinned image in framing or layout — the reference is an extreme low-angle floor-level shot showing the side of the WC pan, cleaning products on the floor, and skirting at close range; frame 0 is a standing-height wide doorway shot of the same room. Same room identity but the framing, perspective, and composition do not match as required. (2) Readable brand-style text ('Doleja') is clearly legible on the blue washing-up liquid bottle at the basin in frames 9 and 10, breaching the no-readable-text criterion.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "The reference image is a floor-level extreme low-angle shot showing the WC pan side, cleaning products on the floor, white skirting, and wallpaper at close range. Frame 0 is a standing-height wide-angle doorway shot of the same room. Room identity is consistent (same wallpaper, same WC, same floor) but the framing, perspective, composition and field of view do not match the pinned reference."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "pass",
+            "note": "White WC, corner/pedestal basin, floral cream wallpaper with pink-green motif, and dark slate-pattern vinyl floor are all present and consistent across all 11 frames. No fitting changes identity, no element appears or disappears unexpectedly during the pivot."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "pass",
+            "note": "All required items are legible in at least one frame. WC pan (frames 0–5), corner basin (frames 0–10), mirror (frames 0–7, 9–10), wallpaper (all frames), vinyl floor (all frames), mixer tap (frames 5–10), extractor vent (frame 3 upper wall), light switch (frames 0, 7, 9, 10), toilet roll holder (frames 2–3), towel ring (frames 8–10), skirting (all frames), pipe boxing / basin pipe-work (frames 5–10 under basin)."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "Floral wallpaper pattern reads as decorative, not mould. Mirror reflection shows a plausible door/room reflection, not a stain. Vinyl floor pattern reads as dark wood-effect/slate tile, not staining. No door shadow reads as damp. All four enumerated negatives are clear."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "pass",
+            "note": "The room dressing (cleaning products, reed diffuser, grey towel, radiator) is consistent throughout. The radiator appearing in mid-late frames is a consequence of the rightward pan revealing more of the room and is geometrically expected."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "fail",
+            "note": "Readable text is present. 'Doleja' is clearly legible on a blue washing-up liquid bottle placed on the basin in frames 9 and 10. Product label text ('Dyna', 'Ava'-style labels) is also partially legible in frame 3. This breaches the no-readable-text rule."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "The room geometry is stable throughout the pan. The back wall, corner angle, doorway (partially visible at left in early frames), and ceiling all remain geometrically consistent. No furniture slides. The single doorway does not change position. The room does not grow or contract."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "WC",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "corner basin",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "mirror",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "wallpaper",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "mixer tap",
+            "visibility": "clear",
+            "first_seen_frame": 5
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "clear",
+            "first_seen_frame": 3
+          },
+          {
+            "name": "light switch",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "toilet roll holder",
+            "visibility": "clear",
+            "first_seen_frame": 2
+          },
+          {
+            "name": "towel ring",
+            "visibility": "clear",
+            "first_seen_frame": 8
+          },
+          {
+            "name": "skirting",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "pipe boxing",
+            "visibility": "ambiguous",
+            "first_seen_frame": 5
+          }
+        ],
+        "hard_failures": [
+          "opening_frame_does_not_match_reference: Frame 0 is a standing-height wide doorway shot; the reference is an extreme low-angle floor-level close-up of the same room. Framing, perspective and composition do not match.",
+          "no_people_text_logos: Readable text ('Doleja') clearly legible on blue bottle at basin in frames 9 and 10; partial product label text legible in frame 3."
+        ],
+        "continuity_notes": [
+          "White WC present and consistent frames 0–5 before pivoting out of frame, consistent with camera move.",
+          "Floral cream wallpaper with pink-green floral motif persists across all 11 frames.",
+          "Dark slate-pattern vinyl floor visible in all frames where the floor is in view.",
+          "Basin and mixer tap consistent from first appearance (frame 0) through final frame (10).",
+          "Gold octagonal mirror consistent in position across frames where visible (0–7, 9–10).",
+          "Radiator first appears in frame 5 and persists through frame 10 — consistent with rightward pan revealing the basin wall."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": null,
+        "observed_rooms": [
+          "WC / cloakroom"
+        ]
+      },
+      "second_review": {
+        "clip_id": "VU-4.RP-022-ordinary",
+        "decision": "reject",
+        "reason": "The opening frame does not match the reference image in layout or fittings. The reference image shows a low-angle floor-level close-up of a toilet with a wall-mounted cistern and a vertical chrome flush pipe, whereas the video starts with a standing-height wide shot of a close-coupled toilet with no flush pipe. Additionally, the required corner basin is absent, as a standard flat wall-hung basin is present instead.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "The first frame does not match the reference image. The reference image is a floor-level close-up of a toilet with a chrome flush pipe, while the video's opening frame is a wide shot from the doorway of a close-coupled toilet."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "pass",
+            "note": "Continuity is maintained across the strip. The toilet, basin, mirror, towel ring, radiator, and light switch remain consistent in style, finish, and position."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "fail",
+            "note": "The required corner basin is absent (a flat wall-hung basin is rendered instead). All other required evidence items are legible."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "No negative controls (such as wallpaper mould, mirror reflection stains, vinyl staining, or door shadow damp) are rendered as actual defects."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "There is a material difference in toilet fittings between the reference image (flush-pipe model) and the video (close-coupled model)."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "pass",
+            "note": "No people, watermarks, or readable commercial brand logos are present."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "The room geometry remains stable and coherent throughout the camera motion; no drifting of fixtures or wall distortion."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "WC",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "corner basin",
+            "visibility": "absent",
+            "first_seen_frame": null
+          },
+          {
+            "name": "mirror",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "wallpaper",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "mixer tap",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "clear",
+            "first_seen_frame": 3
+          },
+          {
+            "name": "light switch",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "toilet roll holder",
+            "visibility": "clear",
+            "first_seen_frame": 3
+          },
+          {
+            "name": "towel ring",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "skirting",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "pipe boxing",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          }
+        ],
+        "hard_failures": [
+          "The opening frame does not match the reference image in layout or fittings (close-coupled toilet in video vs. wall-cistern toilet with chrome flush pipe in reference).",
+          "The requested corner basin is absent; a standard flat wall-hung basin is present instead."
+        ],
+        "continuity_notes": [
+          "The room layout and furniture stay fixed without warping or sliding.",
+          "The floral wallpaper pattern and dark vinyl flooring are continuous across all frames."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": null,
+        "observed_rooms": [
+          "WC"
+        ]
+      },
+      "pass_a_decision": "reject",
+      "pass_a_reason": "Two hard failures: (1) The opening frame does not match the reference pinned image in framing or layout — the reference is an extreme low-angle floor-level shot showing the side of the WC pan, cleaning products on the floor, and skirting at close range; frame 0 is a standing-height wide doorway shot of the same room. Same room identity but the framing, perspective, and composition do not match as required. (2) Readable brand-style text ('Doleja') is clearly legible on the blue washing-up liquid bottle at the basin in frames 9 and 10, breaching the no-readable-text criterion."
+    },
+    {
+      "clip_id": "VU-5.RP-019-push",
+      "task_id": "VU-5.RP-019-push.gemini-omni-video",
+      "use_case": "VU-5 — occlusion-counterfactual",
+      "clip_sha256": "a0640c0bec81fa8e16e324e0383a5524a36b8910db8600bc01a7a63441c87146",
+      "strip_sha256": "acc837d234dded1d58dbe16f66dc33db1f6048f7036699fbdd2c9ddee7f35cb4",
+      "mechanical_checks": [
+        {
+          "criterion": "one_unbroken_take",
+          "status": "pass",
+          "detail": "no frame scores above 0.35 on scene change"
+        },
+        {
+          "criterion": "audio_mode_silent",
+          "status": "fail",
+          "detail": "declared silent, but the track peaks at -22.6 dBFS in 6 audible run(s). The generation prompt asked for no speech, no music, no sound effects and no room tone."
+        },
+        {
+          "criterion": "container_facts",
+          "status": "pass",
+          "detail": "1280x720 24 fps, 10.005 s, 240 frames"
+        }
+      ],
+      "primary_review": {
+        "clip_id": "VU-5.RP-019-push",
+        "decision": "reject",
+        "reason": "Hard failure on opening_frame_matches_reference: frame 0 depicts an entirely different room from the reference. The reference shows a dark, cluttered utility space with raw brick/plaster walls, parquet-pattern vinyl tile flooring, a freestanding wooden shelving unit, a grey laundry basket in the foreground and low ambient lighting. Frame 0 shows a clean, bright utility cupboard with smooth painted walls, light wood-plank laminate flooring, a built-in shelving unit, panelled white doors and a recessed ceiling downlight — a fundamentally different finish, geometry and aesthetic. This mismatch persists across the entire strip. Additionally, the required evidence item 'vinyl floor' is absent throughout: the floor visible in all frames is wood-plank laminate, not vinyl. Readable brand text (Samsung) is legible on the washing machine in multiple frames.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "Frame 0 is a different room entirely. Reference: dark brick/plaster walls, parquet vinyl tile floor, low-angle camera, wooden freestanding shelves, grey laundry basket in foreground. Frame 0: smooth painted walls, plank laminate floor, white panelled door surround, recessed downlight, built-in shelving. Wall finish, floor finish, lighting character and spatial arrangement all diverge materially."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "pass",
+            "note": "Within the generated clip the stacked washer-dryer, boiler/flue, the small red-LED electrical controller box (standing in for fuse box), and loaded shelving all persist through frames 0–10 without morphing or swapping identity. The push-in camera move is smooth and internally consistent."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "fail",
+            "note": "Vinyl floor is absent — all frames show wood-plank laminate, not vinyl. All other required evidence items are legible in at least one frame."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "Deep shadow areas in later frames are not rendered as mould. Pipe joints in frames 7–10 are clean and not rendered as cracks. The revealed rear floor in frames 8–10 is ordinary, undamaged laminate with no defect rendering."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "Beyond the floor type, the entire room aesthetic diverges from the reference in wall material (brick/plaster vs. painted plaster), lighting (dark ambient vs. ceiling downlight), storage geometry, and the presence/absence of the laundry basket and wooden cabinet. These are not enumerated as intended defects or negatives."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "fail",
+            "note": "The brand name 'Samsung' is legible on the washing machine front panel in frames 5, 6, 7 and 8. A '10' rating sticker with blue label is also legible. Partial text is visible on a green plastic bag in frame 4. These constitute readable brand text."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "Room geometry is stable through the full push-in. The rear wall, side walls, doorframe and all fittings remain in consistent spatial positions. No furniture slides. No wall or doorway count changes."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "stacked washer dryer",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "boiler",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "shelves",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "cleaning tools",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "absent",
+            "first_seen_frame": null
+          },
+          {
+            "name": "storage baskets",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "pipework",
+            "visibility": "clear",
+            "first_seen_frame": 4
+          },
+          {
+            "name": "rear floor behind the storage",
+            "visibility": "clear",
+            "first_seen_frame": 8
+          },
+          {
+            "name": "lower rear wall behind the storage",
+            "visibility": "clear",
+            "first_seen_frame": 8
+          }
+        ],
+        "hard_failures": [
+          "opening_frame_matches_reference: frame 0 depicts a materially different room from the reference image — different wall finish (painted plaster vs. raw brick/plaster), different floor (plank laminate vs. parquet vinyl tile), different lighting (recessed downlight vs. dark ambient), different shelf type (built-in vs. freestanding wooden unit), different foreground composition (no laundry basket)",
+          "no_people_text_logos: Samsung brand name and numeric rating label legible on washing machine in frames 5–8; partial text legible on bag in frame 4",
+          "required_evidence 'vinyl floor' absent throughout: floor is wood-plank laminate in all frames"
+        ],
+        "continuity_notes": [
+          "Stacked washer-dryer maintains consistent identity and position through all 11 frames",
+          "Boiler/flue unit on rear wall persists and does not change",
+          "Shelves with products remain loaded and stable throughout",
+          "Small red-LED electrical controller box (on pipe wall) appears in frames 4–10 and is the only candidate for the referenced fuse box — it is not a consumer unit/fuse panel but holds consistent identity through the strip",
+          "The push-in camera move is smooth; no jump cuts or discontinuities visible"
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": 8,
+        "observed_rooms": [
+          "Synthetic utility/laundry cupboard — smooth painted walls, wood-plank laminate floor, recessed ceiling downlight, stacked washer-dryer, wall-mounted boiler with flue, copper pipework, built-in shelving with wicker baskets and cleaning products, pressure vessel, vacuum cleaner, mop bucket"
+        ]
+      },
+      "second_review": {
+        "clip_id": "VU-5.RP-019-push",
+        "decision": "reject",
+        "reason": "The opening frame (Frame 0) fails to match the pinned reference image in layout, camera framing, flooring style, shelving material, wall texture, washer-dryer model, and key foreground fittings. Additionally, a brand logo (SAMSUG/SAMSUNG) and text appear on the washing machine, which constitutes a hard failure.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "The opening frame starts in a hallway looking through an open door, whereas the reference image is a low-angle shot taken from inside the cupboard. The finishes (wood plank vinyl vs geometric tile linoleum, smooth beige walls vs brick block walls, white shelving vs dark wooden shelving) and fittings (different washer/dryer models, missing foreground black laundry basket and wooden stair-like partition) do not match."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "pass",
+            "note": "All elements in the room, including the washer-dryer, boiler, shelves, baskets, and floor, maintain their shape, position, and identity consistently across the entire 10-second sequence."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "pass",
+            "note": "All requested evidence items are clearly visible and legible in the sequence."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "No negative controls are rendered as real defects (shadows are not mold, pipe joints are not cracks, and the revealed rear floor is undamaged)."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "There are extensive unenumerated material differences compared to the reference image, including completely different flooring, walls, shelves, appliances, and layout."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "fail",
+            "note": "A brand logo ('SAMSUG' or 'SAMSUNG') and numerical text ('10') are clearly readable on the front of the washing machine."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "The geometry remains fully coherent as the camera pushes forward; there is no drifting or distortion of the spatial layout."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "stacked washer dryer",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "boiler",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "shelves",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "cleaning tools",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "storage baskets",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "pipework",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "rear floor behind the storage",
+            "visibility": "clear",
+            "first_seen_frame": 8
+          },
+          {
+            "name": "lower rear wall behind the storage",
+            "visibility": "clear",
+            "first_seen_frame": 8
+          }
+        ],
+        "hard_failures": [
+          "The opening frame does not match the reference image (different camera placement, wood plank floor instead of geometric tile, smooth wall instead of brick block wall, white shelves instead of dark wooden shelves, missing foreground black basket and wooden partition).",
+          "A readable brand logo (SAMSUNG/SAMSUG) and label (10) appear on the washing machine."
+        ],
+        "continuity_notes": [
+          "The stacked washer-dryer, boiler, expansion tank, shelves, baskets, and cleaning tools all maintain consistent geometry and appearance throughout the camera movement."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": null,
+        "observed_rooms": [
+          "Utility cupboard",
+          "Hallway"
+        ]
+      },
+      "pass_a_decision": "reject",
+      "pass_a_reason": "Hard failure on opening_frame_matches_reference: frame 0 depicts an entirely different room from the reference. The reference shows a dark, cluttered utility space with raw brick/plaster walls, parquet-pattern vinyl tile flooring, a freestanding wooden shelving unit, a grey laundry basket in the foreground and low ambient lighting. Frame 0 shows a clean, bright utility cupboard with smooth painted walls, light wood-plank laminate flooring, a built-in shelving unit, panelled white doors and a recessed ceiling downlight — a fundamentally different finish, geometry and aesthetic. This mismatch persists across the entire strip. Additionally, the required evidence item 'vinyl floor' is absent throughout: the floor visible in all frames is wood-plank laminate, not vinyl. Readable brand text (Samsung) is legible on the washing machine in multiple frames."
+    },
+    {
+      "clip_id": "VU-5.RP-019-hold",
+      "task_id": "VU-5.RP-019-hold.gemini-omni-video",
+      "use_case": "VU-5 — occlusion-counterfactual",
+      "clip_sha256": "f9b92ad84e87b6d59f0bcb7f88fdd030155d2b0a90f9c79f35276fd612277819",
+      "strip_sha256": "c000fd915178365a0444c94b9360388e4e220506a3e34efecad0e7c1ca159b7f",
+      "mechanical_checks": [
+        {
+          "criterion": "one_unbroken_take",
+          "status": "pass",
+          "detail": "no frame scores above 0.35 on scene change"
+        },
+        {
+          "criterion": "audio_mode_silent",
+          "status": "fail",
+          "detail": "declared silent, but the track peaks at -30.8 dBFS in 5 audible run(s). The generation prompt asked for no speech, no music, no sound effects and no room tone."
+        },
+        {
+          "criterion": "container_facts",
+          "status": "pass",
+          "detail": "1280x720 24 fps, 10.005 s, 240 frames"
+        }
+      ],
+      "primary_review": {
+        "clip_id": "VU-5.RP-019-hold",
+        "decision": "reject",
+        "reason": "Hard failure on opening_frame_matches_reference: the generated clip opens on a completely different scene from the reference image — different camera angle (doorway standing viewpoint vs. ground-level wide interior), different wall finishes (white painted plaster vs. exposed brick), different appliance configuration (stacked washer-dryer vs. single washing machine), different shelving (white-painted vs. bare wood), and different overall layout. Additionally, readable text/graphic lettering on a black bag is legible across all frames (frames 0–10), constituting a no_people_text_logos failure. The rear floor and lower rear wall behind/below the boiler and at the base of the stacked machines are partially exposed in lower-pan frames (7, 9, 10), breaching the must-never-be-visible constraint.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "Frame 0 does not match the reference in any material dimension: the reference is a low wide-angle interior shot with exposed brick, wooden shelving, a single front-loader at floor level, and a black laundry basket in the foreground; the generated clip opens from a standing doorway viewpoint with white painted walls, a stacked washer-dryer, cream shelving, and a white laundry basket on top of the appliances."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "pass",
+            "note": "The stacked washer-dryer, boiler, shelving and cleaning tools remain present and stable in position across all 11 frames. No morphing or identity change observed. The camera pans gently up and down as intended."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "pass",
+            "note": "Stacked washer-dryer visible from frame 0; boiler visible from frame 0; shelving visible from frame 0; cleaning tools (mop, bucket, spray bottles) visible from frames 0–7; storage baskets (white laundry basket on dryer top) visible from frame 0; pipework behind boiler visible from frame 0."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "No shadows are rendered as mould; no hidden areas are annotated as damaged; the unseen floor area is not labelled. Negative controls are not rendered as defects."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "The entire scene is an unenumerated material difference from the reference: white-painted plaster walls instead of exposed brick; stacked appliance stack instead of single floor-level washing machine; cream shelving instead of bare wood; standing doorway viewpoint instead of ground-level wide interior shot."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "fail",
+            "note": "A dark/black bag hanging on the right-hand shelving unit bears large, legible stylised text characters (appears to read '59' with additional graphic lettering) visible in all frames from 0 through 10. This constitutes readable text."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "Room geometry is stable throughout the strip. The doorframe, cupboard walls, shelving, and appliances do not shift position or change proportion as the camera pans. No furniture sliding or doorway count change observed."
+          },
+          {
+            "criterion": "occlusion_respected",
+            "verdict": "fail",
+            "note": "In frames 7, 9 and 10 (lower-pan positions), the floor at the base of the stacked appliances and the lower section of the rear wall behind and beside the boiler pipework are visible. The storage basket (white laundry basket) sits on top of the dryer and does not occlude the lower rear zone; the rear floor and lower rear wall behind the storage are exposed in these frames."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "stacked washer dryer",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "boiler",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "shelves",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "cleaning tools",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "storage baskets",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "pipework",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          }
+        ],
+        "hard_failures": [
+          "opening_frame_matches_reference: Frame 0 is not the reference room. Layout, wall finishes, appliance configuration, camera angle and lighting all differ materially from the reference image.",
+          "no_people_text_logos: Readable stylised text on a dark bag is legible in all frames 0–10.",
+          "occlusion_respected: Rear floor and lower rear wall behind/beside the storage are exposed in frames 7, 9 and 10 during lower-pan camera positions."
+        ],
+        "continuity_notes": [
+          "Stacked washer-dryer (dryer on top, washing machine below) remains in the same position and orientation across all 11 frames — pass.",
+          "Boiler/combi unit remains centred at rear wall across all frames — pass.",
+          "Fuse box/electrical panel (small box with red indicator light, visible below boiler) present across all frames — pass.",
+          "Crowded shelving on right side remains consistently stocked with the same items across all frames — pass.",
+          "White laundry basket on top of dryer present in frames 0–9; cropped out of top of frame in frames where camera pans lowest (frame 10) but not inconsistent with camera tilt — marginal pass.",
+          "The expansion vessel (grey/cream cylinder at floor of pipework alcove) appears in frames 0 and 3 at top-pan positions (partially off-frame) and becomes fully visible in frames 7–10 at lower-pan positions — this is consistent with the camera movement rather than a continuity failure."
+        ],
+        "occlusion_breaches": [
+          {
+            "surface": "lower rear wall behind the storage",
+            "frame": 7,
+            "note": "Camera panned to lowest position; the lower rear wall section behind and beside the boiler pipework alcove is clearly visible, with the expansion vessel and copper pipework connections exposed down to the floor level of the alcove."
+          },
+          {
+            "surface": "rear floor behind the storage",
+            "frame": 7,
+            "note": "The floor of the pipework alcove at the base of the stacked appliances is visible at this lower-pan position."
+          },
+          {
+            "surface": "lower rear wall behind the storage",
+            "frame": 9,
+            "note": "Lower rear wall behind and beside the boiler alcove remains exposed at this lower-pan camera position."
+          },
+          {
+            "surface": "rear floor behind the storage",
+            "frame": 9,
+            "note": "Cupboard floor at base of stacked appliances and pipework alcove visible."
+          },
+          {
+            "surface": "lower rear wall behind the storage",
+            "frame": 10,
+            "note": "Lower rear wall in the boiler alcove visible in final frame at lowest pan position."
+          },
+          {
+            "surface": "rear floor behind the storage",
+            "frame": 10,
+            "note": "Floor at base of machines and pipework alcove visible in final frame."
+          }
+        ],
+        "observed_boundary_frame": null,
+        "observed_rooms": [
+          "utility cupboard — white painted walls, stacked washer-dryer, wall-mounted boiler, cream painted wooden shelving, doorway viewpoint"
+        ]
+      },
+      "second_review": {
+        "clip_id": "VU-5.RP-019-hold",
+        "decision": "reject",
+        "reason": "The clip fails because the opening frame does not match the reference image in layout, finishes, or fittings (drywall vs brick walls, laminate vs diamond linoleum flooring, and white shelves on the right vs wooden shelves on the left). Additionally, a legible brand logo ('beko') is visible on the dryer unit.",
+        "criteria": [
+          {
+            "criterion": "opening_frame_matches_reference",
+            "verdict": "fail",
+            "note": "The first frame does not match the reference image. The reference shows a low-angle shot inside a cupboard with brick walls, wood shelves on the left, and diamond patterned linoleum. The strip shows a view from a white doorway looking at a stacked washer/dryer on the left, white shelves on the right, light wood laminate flooring, and an expansion vessel under the boiler."
+          },
+          {
+            "criterion": "continuity_holds_through_take",
+            "verdict": "pass",
+            "note": "All elements like the washer/dryer stack, boiler, shelves, and tools maintain identity and position across all frames."
+          },
+          {
+            "criterion": "required_evidence_legible",
+            "verdict": "pass",
+            "note": "All required evidence items are clearly visible and legible."
+          },
+          {
+            "criterion": "negative_controls_not_rendered_as_defects",
+            "verdict": "pass",
+            "note": "No deep shadow is rendered as mould, and hidden areas are not assumed damaged."
+          },
+          {
+            "criterion": "no_unenumerated_material_difference",
+            "verdict": "fail",
+            "note": "The entire room setup is materially different from the reference image, including layout, wall finish, flooring type, and shelving."
+          },
+          {
+            "criterion": "no_people_text_logos",
+            "verdict": "fail",
+            "note": "A readable brand logo ('beko') is visible on the upper dryer unit in all frames."
+          },
+          {
+            "criterion": "geometry_coherent_through_motion",
+            "verdict": "pass",
+            "note": "Geometry is coherent and stable throughout the camera's panning motion."
+          },
+          {
+            "criterion": "occlusion_respected",
+            "verdict": "pass",
+            "note": "The rear floor and lower rear wall behind the storage are never exposed."
+          }
+        ],
+        "required_evidence": [
+          {
+            "name": "stacked washer dryer",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "boiler",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "shelves",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "cleaning tools",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "storage baskets",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          },
+          {
+            "name": "pipework",
+            "visibility": "clear",
+            "first_seen_frame": 0
+          }
+        ],
+        "hard_failures": [
+          "The opening frame does not match the reference room in finishes, fittings, and layout.",
+          "A legible brand logo ('beko') is visible on the dryer unit."
+        ],
+        "continuity_notes": [
+          "The appliances, shelving unit, and boiler remain completely stable throughout the take."
+        ],
+        "occlusion_breaches": [],
+        "observed_boundary_frame": null,
+        "observed_rooms": [
+          "Utility cupboard"
+        ]
+      },
+      "pass_a_decision": "reject",
+      "pass_a_reason": "Hard failure on opening_frame_matches_reference: the generated clip opens on a completely different scene from the reference image — different camera angle (doorway standing viewpoint vs. ground-level wide interior), different wall finishes (white painted plaster vs. exposed brick), different appliance configuration (stacked washer-dryer vs. single washing machine), different shelving (white-painted vs. bare wood), and different overall layout. Additionally, readable text/graphic lettering on a black bag is legible across all frames (frames 0–10), constituting a no_people_text_logos failure. The rear floor and lower rear wall behind/below the boiler and at the base of the stacked machines are partially exposed in lower-pan frames (7, 9, 10), breaching the must-never-be-visible constraint."
+    }
+  ],
+  "calls": [
+    {
+      "clip_id": "VU-1.RP-003",
+      "primary_prompt_sha256": "cee53c0a262d9ad9d8666f20c076d19787b53be105404f6bb48702acc3b1f1c5",
+      "second_prompt_sha256": "b49fb8bdc071105795b1e9f040a42a9855238182e60d1a09f32d7c14226f9468",
+      "primary_latency_seconds": 103.302,
+      "second_latency_seconds": 36.02
+    },
+    {
+      "clip_id": "VU-1.RP-024",
+      "primary_prompt_sha256": "c564a1183bb4bad456f533fe7c87c1110d3b72e90a2a1969783baea31dc98079",
+      "second_prompt_sha256": "44300b6986cf01307819cf88a884d521ecd2bdd77dbfb58bd52ae95ed2f1adf0",
+      "primary_latency_seconds": 113.845,
+      "second_latency_seconds": 44.362
+    },
+    {
+      "clip_id": "VU-2.RP-014-transit",
+      "primary_prompt_sha256": "f56d2c4e84d7c46a4c7351d80446d74390c544e89055d6647007096fcd601ded",
+      "second_prompt_sha256": "3b054897c920938c43de8b9d551e1dacb09e1703baeefef032a4ed7c89989db7",
+      "primary_latency_seconds": 106.409,
+      "second_latency_seconds": 60.311
+    },
+    {
+      "clip_id": "VU-3.RP-021-narrated",
+      "primary_prompt_sha256": "b5434e07574c95e51701939cf83f8afe5ad082d6f95d0280c98551dadb8035f4",
+      "second_prompt_sha256": "24b8deb88326b0194e6d1a7c705fdb6cb10d064d9bd2e48c290ad6fcfb7c06d1",
+      "primary_latency_seconds": 101.524,
+      "second_latency_seconds": 29.785
+    },
+    {
+      "clip_id": "VU-4.RP-022-slow",
+      "primary_prompt_sha256": "7161eb679dcd437a5b10c873edbd2a9da0e9aece261f53aa01cb81a30e8db704",
+      "second_prompt_sha256": "007dc22476307df77a02283d350153f200d599aed9ec799d32edf12dc0917594",
+      "primary_latency_seconds": 98.669,
+      "second_latency_seconds": 37.737
+    },
+    {
+      "clip_id": "VU-4.RP-022-ordinary",
+      "primary_prompt_sha256": "86a333eeec5d7e5544ea554c6ccf655ece02fdd00887a16d1cbc6fba4f4dd09e",
+      "second_prompt_sha256": "a691443d1128561be26310011de720fb73725665a24406b52005e05df27bebdc",
+      "primary_latency_seconds": 81.151,
+      "second_latency_seconds": 43.11
+    },
+    {
+      "clip_id": "VU-5.RP-019-push",
+      "primary_prompt_sha256": "d2bcc9618236b259afad4709c4be99ce40059405664ce5e16dc59168ad4cf36e",
+      "second_prompt_sha256": "ed402b209429bf60ea36397086deb8501e748aee9683711989a855506d6cdf60",
+      "primary_latency_seconds": 95.961,
+      "second_latency_seconds": 26.451
+    },
+    {
+      "clip_id": "VU-5.RP-019-hold",
+      "primary_prompt_sha256": "c0d61b29fb1a55f19a02af4fa55c848d0fc909939ba58e2b2b5b50437bbb10ed",
+      "second_prompt_sha256": "37ec19ca9c3fdad9458e1d24523a608ba1861ac409ff0ec4a87204b0c0c9bd1f",
+      "primary_latency_seconds": 102.107,
+      "second_latency_seconds": 28.582
+    }
+  ]
+}

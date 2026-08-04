@@ -100,21 +100,38 @@ def _resolve_cli(cli: Path | None = None) -> Path:
 
 
 def _extract_json(text: str) -> Any:
-    """Pull the review object out of whatever prose the CLI wrapped it in."""
+    """Pull the review object out of whatever prose the CLI wrapped it in.
+
+    Slicing from the first brace to the last one looks equivalent and is not:
+    a reviewer that writes a sentence after its JSON, or uses a brace in a
+    note, produces a slice that spans both and parses as nothing. Each opening
+    brace is tried as a start instead, and the first value that decodes *and*
+    looks like a review wins — so prose on either side is simply skipped
+    rather than corrupting the parse.
+    """
     stripped = text.strip()
     if stripped.startswith("```"):
         stripped = stripped.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-    try:
-        return json.loads(stripped)
-    except json.JSONDecodeError:
-        pass
-    starts = [index for index in (stripped.find("{"), stripped.find("["))
-              if index >= 0]
-    if not starts:
-        raise ValueError("no JSON found in reviewer output")
-    start = min(starts)
-    closing = "}" if stripped[start] == "{" else "]"
-    return json.loads(stripped[start:stripped.rfind(closing) + 1])
+    decoder = json.JSONDecoder()
+    candidates: list[Any] = []
+    for index, character in enumerate(stripped):
+        if character not in "{[":
+            continue
+        try:
+            value, _ = decoder.raw_decode(stripped, index)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(value, dict) and "decision" in value:
+            return value
+        if isinstance(value, list) and value:
+            return value
+        candidates.append(value)
+    if candidates:
+        return candidates[0]
+    raise ValueError(
+        "no JSON object found in reviewer output; first 400 characters: "
+        + stripped[:400]
+    )
 
 
 def review_input(dataset_dir: Path, row: dict[str, str],

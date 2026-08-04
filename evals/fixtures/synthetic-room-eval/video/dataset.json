@@ -1,7 +1,8 @@
 {
   "dataset_id": "synthetic-room-video-probe",
   "phase": "phase-3.6-video-feasibility-probe",
-  "status": "specified_not_started",
+  "status": "day_1_reviewed_blocked_on_reference_frames",
+  "status_note": "Nine clips queued, eight delivered and staged, all eight rejected at Pass A on 4 Aug 2026. The batch cannot answer the probe's question: every clip is conditioned on a reference still whose view id is wrong, so each prompt asked for an opening frame and a camera start that cannot both be satisfied. See day_1_result. No clip is marked terminally failed; the remedy is upstream.",
   "parent_dataset": "synthetic-room-eval",
   "observed_truth_rule": "Only independently AI-reviewed Pass B claims, with required owner adjudication resolved, may be scored as gold. Unchanged from the parent dataset.",
   "wall": "Synthetic video is development evidence. No result from this dataset promotes a capture-strategy claim, a compare claim, or a product accuracy claim. docs/26 still resolves photo-vs-video on real capture.",
@@ -31,7 +32,14 @@
       "fact": "The 57 Gemini Omni stills are not in the parent tasks.csv at all. They have owner review and no recorded Pass A.",
       "required": "docs/31 Amendment B work order item 6 — the Gemini Omni Pass A import — which that work order names in advance as the droppable item if the schedule slips.",
       "effect": "Until the import lands, every clip here is conditioned on an artefact with no recorded provenance. build_video_tasks.py refuses to write the queue unless --allow-unimported-reference is passed, and stamps reference_provenance on every row.",
-      "inherited_risk": "If item 6 is dropped, this probe's reference frames never acquire recorded provenance and the probe cannot produce gold. It is gated on the one item most likely to be cut."
+      "inherited_risk": "If item 6 is dropped, this probe's reference frames never acquire recorded provenance and the probe cannot produce gold. It is gated on the one item most likely to be cut.",
+      "realised_harm": {
+        "found_on": "2026-08-04",
+        "fact": "The risk landed. The stills are not merely unreviewed, they are mislabelled: stage_gemini_omni_prior_batches.py assigns A-wide, B-reverse, C-inventory, D-condition positionally in the operator's supplied order, and that order was reversed. The file named <scenario>-A-wide.jpeg is the packet's condition detail.",
+        "evidence": "evals/synthetic/audit_gemini_omni_views.py. Four source filenames state their own view id; all four contradict the id they were filed under and all four fit an exactly reversed order, with none contradicting it. Across all nine packets, the file filed as A-wide names a condition view: five say 'condition' outright, two of those say 'D-condition'.",
+        "scope": "The 36 stills staged through the positional route are suspect. The 21 staged through import_gemini_omni_batch.py name a view per file and show no contradiction. Every Phase 3.6 reference frame comes from the affected route.",
+        "consequence": "Pass A is where 'is this the view it claims to be' is caught. Work order item 6 is not the droppable item; it is the prerequisite for this probe."
+      }
     }
   },
   "terms_and_publication": {
@@ -53,6 +61,25 @@
   ],
   "review_policy": {
     "inherits": "parent dataset review_policy",
-    "video_addendum": "Pass A samples frames at a fixed cadence (1 fps) plus every declared gold timestamp. Continuity is judged across the sampled strip, not on a single frame. Any accepted clip records the sampled strip's hash alongside the clip hash."
+    "video_addendum": "Pass A samples frames at a fixed cadence (1 fps) plus every declared gold timestamp. Continuity is judged across the sampled strip, not on a single frame. Any accepted clip records the sampled strip's hash alongside the clip hash.",
+    "reviewers": "Primary claude-sonnet-4-6, second gemini-3.5-flash-low, both through the Antigravity CLI on local frames, no metered endpoint. The primary is deliberately not the generator's model family. The second is the parent dataset's Pass A reviewer and IS the generator's family; it is kept for comparability with the image arm and is not counted as independent-family confirmation.",
+    "measured_not_reviewed": "one_unbroken_take, audio mode and container facts are decided by ffmpeg in build_video_strip.py and handed to the reviewers as findings they are told not to re-litigate. A measured failure escalates to the owner rather than being reconciled by two reviewers who could not observe it."
+  },
+  "day_1_result": {
+    "date": "2026-08-04",
+    "review": "reports/phase36-video-pass-a-review-2026-08-04.json",
+    "queued": 9,
+    "delivered": 8,
+    "pass_a": {"accept": 0, "escalate": 0, "reject": 8},
+    "verdict": "Void for its stated question, not a negative result about the generator. The dominant hard failure is 'opening frame does not match reference', which the mislabelled reference frames caused by construction: a prompt that pins a floor-level close-up as the opening frame and also says 'start at the doorway and pivot across the room' cannot be satisfied. Do not record this as evidence that Gemini Omni cannot hold a room through motion.",
+    "findings_independent_of_the_reference_defect": [
+      "Readable brands or product text appear in 6 of 8 clips (Apple, Samsung, Beko, Fairy, and legible cleaning-product labels) despite an explicit avoid list covering logos and readable text. This is acceptance criterion 7 and does not depend on which frame was the reference.",
+      "Geometry breaks mid-take with no scene cut: VU-1.RP-003's floor covering changes from wood-plank LVT to stone-look tile between sampled frames 4 and 7 and its cabinetry morphs between frames 3 and 4; VU-1.RP-024's desk moves from the left wall to the window wall between frames 7 and 8; VU-2's closed door becomes an open doorway between frames 4 and 5.",
+      "VU-5.RP-019-hold breaches its own must-never-be-visible list: the primary reviewer places the rear floor and lower rear wall in frames 7, 9 and 10. The second reviewer recorded no breach. Independent visual inspection agrees with the primary: the camera advances well past the doorway it was told to hold. The counterfactual pair therefore has no valid control arm.",
+      "6 of 7 clips declared silent carry an audible track, peaking between -41 and -22 dBFS in discrete bursts rather than stationary room tone. The generation prompt asked for no speech, no music, no sound effects and no room tone.",
+      "VU-4.RP-022-slow ends on an almost entirely black frame at t=9.958."
+    ],
+    "partial_positive": "VU-2 room naming worked: both reviewers named Entrance hall then Kitchen. Their boundary brackets disagree by two seconds (sampled frame 7 versus 9), which is the resolution limit of a 1 fps strip, not a segmentation result.",
+    "budget": "Nine of ten day-1 clips were spent. Two of them (VU-1.RP-024 and the VU-4 rungs) are day-2-or-later work under docs/34 and should not have been generated on day 1."
   }
 }
