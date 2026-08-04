@@ -13,6 +13,7 @@ from evals.synthetic.build_delta_tasks import (
     validate_spec,
     write_tasks,
 )
+from evals.synthetic.record_delta_outputs import MAX_PROBE_ATTEMPTS, record
 from evals.synthetic.review_delta_pair import (
     combine,
     probe_verdict,
@@ -306,6 +307,119 @@ def test_probe_gate_needs_two_clean_accepted_pairs():
     failing = {"pairs": [pair("a", "accept"), pair("b", "reject")]}
     assert probe_verdict(failing)["probe_passed"] is False
     assert "Do not retry at a looser bar" in probe_verdict(failing)["verdict"]
+
+
+# --------------------------------------------------------------------------
+# record_delta_outputs
+# --------------------------------------------------------------------------
+
+
+def _render(dataset: Path, contents: dict[str, bytes] | None = None) -> list[dict]:
+    """Write a T1 frame for every queued view and return the queue rows."""
+    rows = write_tasks(dataset)
+    for row in rows:
+        path = dataset / row["output_path"]
+        path.parent.mkdir(parents=True, exist_ok=True)
+        default = b"t1-" + row["view_id"].encode()
+        path.write_bytes((contents or {}).get(row["view_id"], default))
+    return rows
+
+
+def _queue(dataset: Path) -> dict[str, dict[str, str]]:
+    with (dataset / "delta_tasks.csv").open(newline="", encoding="utf-8") as handle:
+        return {row["task_id"]: row for row in csv.DictReader(handle)}
+
+
+def test_recording_moves_rendered_frames_into_the_review_queue(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    _render(dataset)
+    report = record(dataset, "operator", "Codex built-in imagegen / GPT Image 2")
+
+    assert report["generation_count"] == 2
+    assert report["generation_policy"]["image_api_used"] is False
+    for row in _queue(dataset).values():
+        assert row["status"] == "review_pending"
+        assert row["attempts"] == "1"
+        assert row["output_sha256"]
+    assert len(review_inputs(dataset)) == 1
+
+
+def test_a_t1_that_copies_its_t0_reference_is_refused(tmp_path):
+    """The delta-specific failure: a copy looks like the perfect result.
+
+    Identity holds and nothing drifts, so a copied reference fails only on its
+    enumerated changes being absent — indistinguishable by eye from an ordinary
+    generator miss, and it would enter the ledger as one.
+    """
+    dataset = _write_dataset(tmp_path)
+    _render(dataset, contents={"A-wide": b"t0-A-wide"})
+    with pytest.raises(ValueError, match="byte-identical to its T0 reference"):
+        record(dataset, "operator", "cli")
+
+
+def test_one_render_saved_to_both_views_is_refused(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    _render(dataset, contents={"A-wide": b"same", "D-condition": b"same"})
+    with pytest.raises(ValueError, match="one render was saved to both paths"):
+        record(dataset, "operator", "cli")
+
+
+def test_an_output_duplicating_another_dataset_image_is_refused(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    other = dataset / "images/openai/gpt-image-2/RP-902-A-wide.png"
+    other.write_bytes(b"some-other-accepted-frame")
+    _render(dataset, contents={"A-wide": b"some-other-accepted-frame"})
+    with pytest.raises(ValueError, match="duplicates an existing dataset image"):
+        record(dataset, "operator", "cli")
+
+
+def test_a_moved_t0_reference_refuses_the_pair(tmp_path):
+    """Gold describes the pinned frame, not whatever now sits at that path."""
+    dataset = _write_dataset(tmp_path)
+    _render(dataset)
+    (dataset / "images/openai/gpt-image-2/RP-901-A-wide.png").write_bytes(b"redone")
+    with pytest.raises(ValueError, match="T0 reference has changed"):
+        record(dataset, "operator", "cli")
+
+
+def test_recorded_provenance_is_immutable(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    rows = _render(dataset)
+    record(dataset, "operator", "cli")
+    (dataset / rows[0]["output_path"]).write_bytes(b"quietly-swapped")
+    with pytest.raises(ValueError, match="changed after provenance was recorded"):
+        record(dataset, "operator", "cli")
+
+
+def test_the_probe_cannot_be_retried_past_its_gate(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    _render(dataset)
+    record(dataset, "operator", "cli")
+
+    path = dataset / "delta_tasks.csv"
+    rows = list(_queue(dataset).values())
+    for index, row in enumerate(rows):
+        row["status"] = "retry_pending"
+        row["output_sha256"] = ""
+        (dataset / row["output_path"]).write_bytes(b"attempt-2-" + str(index).encode())
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+    record(dataset, "operator", "cli")
+    assert {row["attempts"] for row in _queue(dataset).values()} == {"2"}
+
+    rows = list(_queue(dataset).values())
+    for index, row in enumerate(rows):
+        row["status"] = "retry_pending"
+        row["output_sha256"] = ""
+        (dataset / row["output_path"]).write_bytes(b"attempt-3-" + str(index).encode())
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
+        writer.writeheader()
+        writer.writerows(rows)
+    with pytest.raises(ValueError, match=f"exceeds the {MAX_PROBE_ATTEMPTS}-attempt"):
+        record(dataset, "operator", "cli")
 
 
 # --------------------------------------------------------------------------
