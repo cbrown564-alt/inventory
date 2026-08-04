@@ -1,0 +1,43 @@
+{
+  "review_type": "owner_pass_a_adjudication",
+  "source_review": "gemini-omni-pass-a-review-2026-08-04.json",
+  "adjudicator": "project owner",
+  "adjudicated_at": "2026-08-04T20:42:31.528510+00:00",
+  "channel": "Stated directly in session on 4 Aug 2026, not exported from reports/omni-reference-frame-gallery.html. The gallery presented the evidence; the decision was given in conversation. Recorded this way because a browser-export timestamp would imply a click that did not happen.",
+  "scope": "The three escalated A-wide stills that condition Phase 3.6 clips. The other 25 escalations in this review are deliberately unadjudicated: the arm is a bias-check slice that cannot carry a conclusion alone.",
+  "decisions": [
+    {
+      "task_id": "RP-003.gemini-omni.A-wide",
+      "scenario_id": "RP-003",
+      "view_id": "A-wide",
+      "provider": "Google",
+      "ai_decision": "escalate",
+      "first_review": "reject",
+      "second_review": "accept",
+      "owner_decision": "accept",
+      "owner_reason": "Accepted as a video reference frame. The frame is used alone to pin room identity for one clip, not as part of a scored four-view packet, so the packet-continuity objection that split the reviewers does not bear on this use."
+    },
+    {
+      "task_id": "RP-019.gemini-omni.A-wide",
+      "scenario_id": "RP-019",
+      "view_id": "A-wide",
+      "provider": "Google",
+      "ai_decision": "escalate",
+      "first_review": "accept",
+      "second_review": "reject",
+      "owner_decision": "accept",
+      "owner_reason": "Accepted as a video reference frame. The frame is used alone to pin room identity for one clip, not as part of a scored four-view packet, so the packet-continuity objection that split the reviewers does not bear on this use."
+    },
+    {
+      "task_id": "RP-024.gemini-omni.A-wide",
+      "scenario_id": "RP-024",
+      "view_id": "A-wide",
+      "provider": "Google",
+      "ai_decision": "escalate",
+      "first_review": "accept",
+      "second_review": "reject",
+      "owner_decision": "accept",
+      "owner_reason": "Accepted as a video reference frame. The frame is used alone to pin room identity for one clip, not as part of a scored four-view packet, so the packet-continuity objection that split the reviewers does not bear on this use."
+    }
+  ]
+}

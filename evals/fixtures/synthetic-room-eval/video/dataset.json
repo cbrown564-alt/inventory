@@ -1,8 +1,8 @@
 {
   "dataset_id": "synthetic-room-video-probe",
   "phase": "phase-3.6-video-feasibility-probe",
-  "status": "day_1_reviewed_blocked_on_reference_frames",
-  "status_note": "Nine clips queued, eight delivered and staged, all eight rejected at Pass A on 4 Aug 2026. The batch cannot answer the probe's question: every clip is conditioned on a reference still whose view id is wrong, so each prompt asked for an opening frame and a camera start that cannot both be satisfied. See day_1_result. No clip is marked terminally failed; the remedy is upstream.",
+  "status": "day_1_void_six_clips_clear_to_regenerate",
+  "status_note": "Nine clips queued, eight delivered, all eight rejected at Pass A on 4 Aug 2026 and archived to video/rejected/ with their reasons. That batch is void rather than a negative result: every clip was conditioned on a reference still whose view id was wrong, so each prompt asked for an opening frame and a camera start that could not both be satisfied. The upstream defect is now repaired and the stills are through Pass A, so six of nine clips hold an accepted reference and are clear to regenerate. The three VU-4 rungs are not and cannot be on RP-022: that reference was rejected by both reviewers, and no regeneration repairs a reference. Nothing in this dataset has produced a result; it has produced a corrected starting position.",
   "parent_dataset": "synthetic-room-eval",
   "observed_truth_rule": "Only independently AI-reviewed Pass B claims, with required owner adjudication resolved, may be scored as gold. Unchanged from the parent dataset.",
   "wall": "Synthetic video is development evidence. No result from this dataset promotes a capture-strategy claim, a compare claim, or a product accuracy claim. docs/26 still resolves photo-vs-video on real capture.",
@@ -44,14 +44,20 @@
       "effect_on_this_probe": {
         "rule": "A clip may only be conditioned on a still whose ledger row is pass_a_accepted.",
         "reference_frames": {
+          "RP-003": "pass_a_accepted (owner adjudication, 4 Aug) — VU-1.RP-003 may regenerate",
           "RP-014": "pass_a_accepted — VU-2 may regenerate",
+          "RP-019": "pass_a_accepted (owner adjudication, 4 Aug) — the VU-5 pair may regenerate",
           "RP-021": "pass_a_accepted — VU-3 may regenerate",
-          "RP-003": "owner_review_pending — VU-1.RP-003 blocked on adjudication",
-          "RP-019": "owner_review_pending — the whole VU-5 pair blocked on adjudication",
-          "RP-024": "owner_review_pending — VU-1.RP-024 blocked on adjudication",
+          "RP-024": "pass_a_accepted (owner adjudication, 4 Aug) — VU-1.RP-024 may regenerate",
           "RP-022": "pass_a_rejected by both reviewers — the required 'corner basin' is a flat wall-hung basin, a fixture mismatch against the scenario. VU-4 has no usable reference frame and cannot run on RP-022 at all."
         },
-        "note": "Two of six clear immediately, three need owner adjudication, one is dead. The probe is no longer blocked on provenance; it is blocked on adjudication and, for VU-4, on a scenario whose candidate does not match its own specification."
+        "note": "Six of nine clips now hold an accepted reference frame and are clear to regenerate. The three VU-4 rungs do not and never will on RP-022: the reference itself failed review, and no regeneration repairs a reference. VU-4 needs re-specifying onto another WC scenario or dropping, and Amendment B's free degradation ladder already answers the same question more cheaply.",
+        "owner_adjudication": {
+          "record": "reports/omni-reference-frame-adjudications-2026-08-04.json",
+          "decided": "RP-003, RP-019 and RP-024 A-wide accepted",
+          "channel": "stated directly in session, not exported from the gallery",
+          "reason": "Each frame is used alone to pin room identity for one clip, not as part of a scored four-view packet, so the packet-continuity objection that split the reviewers does not bear on this use."
+        }
       },
       "original_status": "OPEN",
       "fact": "The 57 Gemini Omni stills are not in the parent tasks.csv at all. They have owner review and no recorded Pass A.",
@@ -95,7 +101,11 @@
     "review": "reports/phase36-video-pass-a-review-2026-08-04.json",
     "queued": 9,
     "delivered": 8,
-    "pass_a": {"accept": 0, "escalate": 0, "reject": 8},
+    "pass_a": {
+      "accept": 0,
+      "escalate": 0,
+      "reject": 8
+    },
     "verdict": "Void for its stated question, not a negative result about the generator. The dominant hard failure is 'opening frame does not match reference', which the mislabelled reference frames caused by construction: a prompt that pins a floor-level close-up as the opening frame and also says 'start at the doorway and pivot across the room' cannot be satisfied. Do not record this as evidence that Gemini Omni cannot hold a room through motion.",
     "findings_independent_of_the_reference_defect": [
       "Readable brands or product text appear in 6 of 8 clips (Apple, Samsung, Beko, Fairy, and legible cleaning-product labels) despite an explicit avoid list covering logos and readable text. This is acceptance criterion 7 and does not depend on which frame was the reference.",

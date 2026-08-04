@@ -210,9 +210,17 @@ def build_rows(dataset_dir: Path) -> list[dict[str, str]]:
     return rows
 
 
-def check_reference_provenance(rows: list[dict[str, str]]) -> list[str]:
-    """Return the clips whose reference still is not ``pass_a_accepted``."""
-    return [row["clip_id"] for row in rows
+def check_reference_provenance(rows: list[dict[str, str]]) -> list[tuple[str, str]]:
+    """Return ``(clip_id, reference status)`` for clips not cleared to generate.
+
+    The status is reported rather than just the clip id because the reasons are
+    no longer interchangeable. Before the Omni Pass A import every reference was
+    ``unimported`` — absent from the ledger entirely. Now a reference can be
+    ``pass_a_rejected``, which is a different and worse thing: an unimported
+    still might turn out fine, whereas a rejected one has been looked at twice
+    and found wanting, and no amount of regenerating the clip changes it.
+    """
+    return [(row["clip_id"], row["reference_provenance"]) for row in rows
             if row["reference_provenance"] != "pass_a_accepted"]
 
 
@@ -220,15 +228,17 @@ def write_tasks(dataset_dir: Path, allow_unimported: bool = False) -> list[dict[
     rows = build_rows(dataset_dir)
     ungated = check_reference_provenance(rows)
     if ungated and not allow_unimported:
+        listing = "\n  ".join(f"{clip_id:24} reference is {status}"
+                              for clip_id, status in ungated)
         raise SystemExit(
-            f"{len(ungated)} of {len(rows)} clips are conditioned on a still with no "
-            "pass_a_accepted ledger row:\n  " + "\n  ".join(ungated) + "\n\n"
-            "The Gemini Omni stills have owner review but no recorded Pass A "
-            "(docs/31 Amendment B, work order item 6). Generating against them "
-            "produces clips whose ground truth rests on an unrecorded protocol.\n"
-            "Either complete the Omni Pass A import first, or pass "
-            "--allow-unimported-reference to write the queue as an explicitly "
-            "ungated probe."
+            f"{len(ungated)} of {len(rows)} clips are conditioned on a still that "
+            f"is not pass_a_accepted:\n  {listing}\n\n"
+            "A clip may only be conditioned on a still the ledger records as "
+            "accepted. 'pass_a_rejected' is terminal for that clip: the "
+            "reference itself failed review, and regenerating the clip cannot "
+            "repair it — the use case needs a different scenario or dropping.\n"
+            "Pass --allow-unimported-reference to write the queue anyway as an "
+            "explicitly ungated probe."
         )
     path = dataset_dir / "video" / "tasks.csv"
     previous: dict[str, dict[str, str]] = {}
@@ -289,9 +299,11 @@ def main() -> int:
     print(f"wrote {len(rows)} video tasks to "
           f"{args.dataset_dir / 'video' / 'tasks.csv'}")
     ungated = check_reference_provenance(rows)
-    if ungated:
-        print(f"WARNING: {len(ungated)} clips are conditioned on stills with no "
-              "recorded Pass A. This queue is an ungated probe.")
+    for clip_id, status in ungated:
+        print(f"WARNING: {clip_id} is conditioned on a {status} still and "
+              "cannot produce gold")
+    print(f"{len(rows) - len(ungated)} of {len(rows)} clips have an accepted "
+          "reference frame")
     return 0
 
 

@@ -206,9 +206,12 @@ def test_the_omni_slice_has_been_through_pass_a():
         ledger = [row for row in csv.DictReader(handle)
                   if row["task_id"].split(".")[1] == "gemini-omni"]
     statuses = Counter(row["status"] for row in ledger)
-    assert statuses["pass_a_accepted"] == 14
+    # 14 accepted by the reviewers, plus the three reference frames the owner
+    # adjudicated on 4 Aug. The other 25 escalations stay open on purpose:
+    # this arm cannot carry a conclusion alone, so resolving them buys nothing.
+    assert statuses["pass_a_accepted"] == 17
     assert statuses["pass_a_rejected"] == 15
-    assert statuses["owner_review_pending"] == 28
+    assert statuses["owner_review_pending"] == 25
     assert statuses["not_generated"] == 43
     assert "review_pending" not in statuses
 
@@ -230,11 +233,15 @@ def test_no_video_clip_may_rest_on_an_unaccepted_reference_frame():
         clips = list(csv.DictReader(handle))
     usable = {clip["clip_id"]: status.get(clip["reference_path"])
               for clip in clips}
-    assert usable["VU-2.RP-014-transit"] == "pass_a_accepted"
-    assert usable["VU-3.RP-021-narrated"] == "pass_a_accepted"
-    assert usable["VU-1.RP-003"] == "owner_review_pending"
-    assert usable["VU-5.RP-019-push"] == "owner_review_pending"
+    cleared = [clip_id for clip_id, s in usable.items() if s == "pass_a_accepted"]
+    assert len(cleared) == 6
+    assert usable["VU-1.RP-003"] == "pass_a_accepted"
+    assert usable["VU-5.RP-019-push"] == "pass_a_accepted"
+    assert usable["VU-5.RP-019-hold"] == "pass_a_accepted"
+    # RP-022's reference failed review outright, so VU-4 has nothing to sit on.
     assert usable["VU-4.RP-022-slow"] == "pass_a_rejected"
+    assert [clip["reference_provenance"] for clip in clips
+            if clip["clip_id"] == "VU-4.RP-022-slow"] == ["pass_a_rejected"]
     # Nothing may be sitting on a rejected reference in a generated state.
     for clip in clips:
         if status.get(clip["reference_path"]) == "pass_a_rejected":

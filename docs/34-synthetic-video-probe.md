@@ -307,12 +307,15 @@ a segmentation result.
    `reject_video_clip.py` with their Pass A reasons, so the queue is
    `retry_pending` against corrected references and the artefacts and verdicts
    both survive.
-2. **Adjudicate three reference frames.** With the repair and the import done,
-   the probe is no longer blocked on provenance — it is blocked on which
-   stills Pass A actually accepted. `RP-014` and `RP-021` are
-   `pass_a_accepted`, so `VU-2` and `VU-3` may regenerate now. `RP-003`,
-   `RP-019` and `RP-024` are `owner_review_pending`, which blocks `VU-1` and
-   the whole `VU-5` pair until you rule on them.
+2. ~~**Adjudicate three reference frames.**~~ **Done, 4 Aug 2026.** `RP-003`,
+   `RP-019` and `RP-024` `A-wide` are accepted by owner adjudication
+   (`reports/omni-reference-frame-adjudications-2026-08-04.json`), joining
+   `RP-014` and `RP-021`. The reasoning: each frame is used *alone* to pin room
+   identity for one clip, not as part of a scored four-view packet, so the
+   packet-continuity objection that split the reviewers does not bear on this
+   use. **Six of nine clips now hold an accepted reference and are clear to
+   regenerate**; `build_video_tasks` reports which, and refuses the rest by
+   name.
 3. **`VU-4` is dead on `RP-022`.** Both reviewers rejected that `A-wide`: the
    scenario requires a *corner* basin and the candidate has a flat wall-hung
    one, so the still contradicts the specification it was generated from. There
