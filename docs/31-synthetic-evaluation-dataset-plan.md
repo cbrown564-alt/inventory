@@ -138,6 +138,19 @@ or version, which does not meet this document's own requirement.
   re-runnable. Development Pass B may remain in-session and is recorded as
   **attested**, never described as reproducible.
 
+> **Evidence for B6, 4 Aug 2026.** The Gemini Omni Pass A import was the first
+> review here run with two *different* model families — `claude-sonnet-4-6`
+> primary against `gemini-3.5-flash-low`. **They agreed on 29 of 57 frames
+> (51%).** Every earlier Pass A ran one model twice, which buys independence of
+> conclusion but not of blind spot, and could not have produced that number at
+> all. The disagreements are substantive rather than noise: on `RP-003` the
+> primary accepted the frame and rejected the *packet* on a glazed external
+> door present in one view and no other, while the second called packet
+> continuity strong. Treat single-family agreement rates from earlier runs as
+> uninformative about label reliability — they measure one model's consistency
+> with itself. This is a Pass A result and B6 governs Pass B, but the same
+> reasoning applies with more force to labels than to a visual screen.
+
 **B7. Delta pairs are the ambition; the prompt winner is a by-product.**
 Phase 3.5 is promoted from optional extension to the programme's centre.
 Comparison is the decisive artefact in docs/00; that surface has no ground
@@ -219,9 +232,24 @@ which the degradation ladder does not address.
   `provenance: candidate_only_prompt_not_recorded`, because these images came
   off the owner's subscription surface and the prompt actually used was never
   recorded — so `exact_prompt` is the specification a row is judged against,
-  not a transcript of what made the image. 57 rows are `review_pending`; the
-  43 views with no candidate are `not_generated`, terminal rather than queued,
-  since generation is retired and this arm owes no completeness.*
+  not a transcript of what made the image. The 43 views with no candidate are
+  `not_generated`, terminal rather than queued, since generation is retired and
+  this arm owes no completeness.*
+
+  *Pass A outcome on the 57 candidates
+  (`reports/gemini-omni-pass-a-review-2026-08-04.json`): **14 accept, 15
+  reject, 28 escalate**. Three escalations — the `A-wide` stills for RP-003,
+  RP-019 and RP-024 — were accepted by owner adjudication on 4 Aug
+  (`reports/omni-reference-frame-adjudications-2026-08-04.json`) because
+  Phase 3.6 conditions clips on them. **The remaining 25 are deliberately left
+  open**: resolving them would enlarge a slice that is barred from publication,
+  barred from training, and cannot carry a conclusion alone. The arm stands at
+  17 accepted, 15 rejected, 25 unadjudicated, 43 never generated. What the
+  rejections are about is not the view mix-up but absent or malformed required
+  anchors (37 mentions) and packet continuity (36) — a generation-quality
+  finding about the candidates themselves, and the first thing owner review
+  alone had never produced. The reviewer-agreement result is the more
+  transferable finding; see the B6 evidence note above.*
 - The entire Google arm is **excluded from publication and from any future
   training corpus**, on terms grounds.
 - The **real-transfer gate remains the primary house-style control**. The
