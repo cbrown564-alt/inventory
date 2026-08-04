@@ -15,6 +15,7 @@ from evals.synthetic.build_delta_tasks import (
     write_tasks,
 )
 from evals.synthetic.generate_delta_codex import (
+    build_command,
     build_instruction,
     generate_one,
     pending_rows,
@@ -329,6 +330,23 @@ def test_the_instruction_carries_the_frozen_prompt_unaltered(tmp_path):
     assert row["output_path"] in instruction
 
 
+def test_the_prompt_never_follows_the_variadic_image_flag(tmp_path):
+    """`-i/--image` is variadic and will eat the prompt as a second filename.
+
+    When it does, Codex finds no prompt argument, falls back to stdin, gets
+    nothing and exits having generated no image. The whole batch failed this
+    way once; the argument order is the fix, so it is asserted rather than
+    remembered.
+    """
+    dataset = _write_dataset(tmp_path)
+    row = write_tasks(dataset)[0]
+    command = build_command(dataset, row, Path("codex"), tmp_path / "last.txt")
+
+    assert command[-1] == build_instruction(row)
+    assert command[-2] != "-i"
+    assert command[command.index("-i") + 2].startswith("-")
+
+
 def test_reported_prompt_reads_the_last_fenced_block():
     assert reported_prompt("done\n```text\nthe prompt\n```") == "the prompt"
     assert reported_prompt("```\nfirst\n```\nthen\n```text\nsecond\n```") == "second"
@@ -349,9 +367,10 @@ def _fake_codex(dataset, monkeypatch, *, writes=True, prompt=None):
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(b"generated-" + target.name.encode())
         reported = row_prompt if prompt is None else prompt
-        return subprocess.CompletedProcess(
-            command, 0, stdout=f"codex\n```text\n{reported}\n```\n", stderr=""
+        Path(command[command.index("-o") + 1]).write_text(
+            f"```text\n{reported}\n```\n", encoding="utf-8"
         )
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
 
     monkeypatch.setattr(subprocess, "run", fake_run)
     return calls

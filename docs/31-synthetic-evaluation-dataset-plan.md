@@ -1298,6 +1298,8 @@ claim.
 | `evals/synthetic/build_review.py` | Static AI-review and human-escalation/contact-sheet artifact |
 | `evals/synthetic/generate_antigravity.py` | Retired for generation on 3 Aug 2026; retained to read existing Google run records |
 | `evals/synthetic/build_delta_tasks.py` | Turn `delta_of` specs into T1/counterfactual generation tasks with reference frames |
+| `evals/synthetic/generate_delta_codex.py` | Drive Codex built-in `imagegen` per delta view with the T0 frame attached; verifies the prompt that reached the image tool matches the queue verbatim |
+| `evals/synthetic/record_delta_outputs.py` | Delta provenance into `review_pending`; refuses a T1 that copies its T0 reference, a duplicate frame, a moved reference pin or a third attempt |
 | `evals/synthetic/review_delta_pair.py` | Pair review: same-room identity, enumerated-change visibility, unenumerated-change detection |
 | `evals/synthetic/score_delta.py` | Delta recall, false-change rate, unchanged stability, severity direction |
 | `evals/synthetic/degrade.py` | Deterministic degradation ladder over accepted images; labels inherited unchanged |

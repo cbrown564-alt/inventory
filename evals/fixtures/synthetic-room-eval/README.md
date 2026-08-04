@@ -111,6 +111,29 @@ $fixture = "evals/fixtures/synthetic-room-eval"
 .\.venv\Scripts\python.exe -m evals.synthetic.score
 ```
 
+## Phase 3.5 delta pairs
+
+The probe is gated: it must pass before any pilot pair is authored. Generation
+is Codex built-in `imagegen` only, as everywhere else in this dataset, and the
+T0 side is always an already-accepted frame reused as the visual reference.
+
+```powershell
+.\.venv\Scripts\python.exe -m evals.synthetic.build_delta_tasks --print-prompts
+.\.venv\Scripts\python.exe -m evals.synthetic.generate_delta_codex --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.generate_delta_codex --log-dir <dir>
+.\.venv\Scripts\python.exe -m evals.synthetic.record_delta_outputs --operator "Codex GPT Image 2 built-in imagegen" --cli-version "Codex built-in imagegen / GPT Image 2" --report "$fixture/reports/phase35-delta-generation-2026-08-04.json"
+.\.venv\Scripts\python.exe -m evals.synthetic.review_delta_pair --output "$fixture/reports/phase35-delta-review-2026-08-04.json" --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.review_delta_pair --output "$fixture/reports/phase35-delta-review-2026-08-04.json"
+.\.venv\Scripts\python.exe -m evals.synthetic.review_delta_pair --output "$fixture/reports/phase35-delta-review-2026-08-04.json" --probe
+```
+
+`record_delta_outputs` refuses a T1 frame that is byte-identical to its own T0
+reference. That is the delta-specific failure mode: it presents as the perfect
+result — identity intact, nothing drifted — and fails only on the enumerated
+changes being absent, which reads as an ordinary generator miss. It also
+refuses a third attempt, because docs/31 caps the probe at two per scenario
+and forbids retrying at a looser bar.
+
 `build_pass_a_gallery` writes `reports/pass-a-owner-gallery.html` from the latest
 initial or retry Pass A report. Serve the dataset root so image paths resolve:
 

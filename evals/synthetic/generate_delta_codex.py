@@ -24,6 +24,7 @@ import csv
 import re
 import shutil
 import subprocess
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -88,6 +89,30 @@ def reported_prompt(message: str) -> str | None:
     return blocks[-1].strip() if blocks else None
 
 
+def build_command(
+    dataset_dir: Path,
+    row: dict[str, str],
+    cli: Path,
+    last_message: Path,
+) -> list[str]:
+    """Argument order matters here, so it is built in one place and tested.
+
+    ``-i/--image`` is variadic. With the prompt placed directly after it, the
+    prompt is parsed as a second image filename, Codex finds no prompt
+    argument and falls back to reading one from stdin — which is closed — and
+    the run ends having generated nothing. Keeping a flag between ``-i`` and
+    the prompt is what makes the prompt a positional argument.
+    """
+    return [
+        str(cli), "exec",
+        "-C", str(dataset_dir.resolve()),
+        "-i", row["reference_path"],
+        "-s", "workspace-write",
+        "-o", str(last_message),
+        build_instruction(row),
+    ]
+
+
 def pending_rows(
     dataset_dir: Path,
     delta_ids: set[str] | None = None,
@@ -119,18 +144,15 @@ def generate_one(
     output = dataset_dir / row["output_path"]
     output.parent.mkdir(parents=True, exist_ok=True)
     started = _utc_now()
-    result = subprocess.run(
-        [
-            str(cli), "exec",
-            "-C", str(dataset_dir.resolve()),
-            "-s", "workspace-write",
-            "-i", row["reference_path"],
-            build_instruction(row),
-        ],
-        capture_output=True, text=True, timeout=timeout, stdin=STDIN,
-        cwd=str(dataset_dir.resolve()),
-    )
-    message = result.stdout or ""
+    with tempfile.TemporaryDirectory() as workspace:
+        final = Path(workspace) / "last-message.txt"
+        result = subprocess.run(
+            build_command(dataset_dir, row, cli, final),
+            capture_output=True, text=True, timeout=timeout, stdin=STDIN,
+            cwd=str(dataset_dir.resolve()),
+        )
+        message = final.read_text(encoding="utf-8") if final.is_file() else result.stdout
+    message = message or ""
     if log_dir:
         log_dir.mkdir(parents=True, exist_ok=True)
         (log_dir / f"{row['task_id']}.log").write_text(
