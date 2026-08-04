@@ -84,6 +84,100 @@ def test_the_bias_check_slice_is_present_but_outside_the_matched_design():
         assert bool(row["output_sha256"]) == exists
 
 
+def _omni_ledger(tmp_path, sha="abc"):
+    dataset = tmp_path / "ds"
+    dataset.mkdir()
+    row = {name: "" for name in build_tasks_fieldnames()}
+    row.update({"task_id": "RP-003.gemini-omni.A-wide", "scenario_id": "RP-003",
+                "view_id": "A-wide", "status": "review_pending",
+                "output_sha256": sha,
+                "provenance": "candidate_only_prompt_not_recorded"})
+    with (dataset / "tasks.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=build_tasks_fieldnames())
+        writer.writeheader()
+        writer.writerow(row)
+    return dataset
+
+
+def build_tasks_fieldnames():
+    from evals.synthetic.build_tasks import FIELDNAMES
+
+    return FIELDNAMES
+
+
+def _omni_review(tmp_path, decision="accept", sha="abc", **overrides):
+    payload = {
+        "status": "complete",
+        "frames": [{"task_id": "RP-003.gemini-omni.A-wide",
+                    "image_sha256": sha, "pass_a_decision": decision}],
+    }
+    payload.update(overrides)
+    path = tmp_path / "omni-review.json"
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    return path
+
+
+def test_a_rejected_omni_candidate_is_excluded_not_failed(tmp_path):
+    """A rejected candidate is not a generation that failed twice.
+
+    apply_retry_pass_a writes terminal generator_failed and archives the file,
+    which is right for a retry and wrong here: Google generation is retired, so
+    there is no attempt to fail. The candidate is excluded and its file stays
+    where the staging reports say it is.
+    """
+    from evals.synthetic.apply_gemini_omni_pass_a import apply as apply_omni
+
+    dataset = _omni_ledger(tmp_path)
+    result = apply_omni(dataset, _omni_review(tmp_path, "reject"))
+    assert result["counts"] == {"pass_a_rejected": 1}
+    with (dataset / "tasks.csv").open(newline="", encoding="utf-8") as handle:
+        assert next(iter(csv.DictReader(handle)))["status"] == "pass_a_rejected"
+    assert not (dataset / "rejected").exists()
+
+
+def test_omni_escalations_go_to_the_owner_and_partials_cannot_apply(tmp_path):
+    from evals.synthetic.apply_gemini_omni_pass_a import apply as apply_omni
+
+    dataset = _omni_ledger(tmp_path)
+    apply_omni(dataset, _omni_review(tmp_path, "escalate"))
+    with (dataset / "tasks.csv").open(newline="", encoding="utf-8") as handle:
+        assert next(iter(csv.DictReader(handle)))["status"] == "owner_review_pending"
+    with pytest.raises(ValueError, match="partial review"):
+        apply_omni(dataset, _omni_review(tmp_path, status="partial"))
+
+
+def test_omni_apply_refuses_when_the_image_changed_after_review(tmp_path):
+    from evals.synthetic.apply_gemini_omni_pass_a import apply as apply_omni
+
+    dataset = _omni_ledger(tmp_path, sha="the-image-in-the-ledger")
+    with pytest.raises(ValueError, match="changed after it was reviewed"):
+        apply_omni(dataset, _omni_review(tmp_path, sha="a-different-image"))
+
+
+def test_pass_a_review_selects_a_whole_arm_by_provider():
+    """The unfiltered default is one run's retry cohort, not a general queue.
+
+    Selecting the Omni arm with it would have silently reviewed nothing.
+    """
+    from evals.synthetic.review_pass_a import _review_inputs
+
+    omni = _review_inputs(DATASET, None, "gemini-omni")
+    assert len(omni) == 57
+    assert all(item["task_id"].split(".")[1] == "gemini-omni" for item in omni)
+    assert _review_inputs(DATASET, None, "gpt-image-2") == []
+
+
+def test_effort_is_only_sent_to_models_that_accept_it():
+    """The CLI errors outright when a thinking model is given --effort."""
+    import inspect
+
+    from evals.synthetic import review_pass_a
+
+    source = inspect.getsource(review_pass_a._invoke)
+    assert 'model.startswith("gemini-")' in source
+    assert '"--effort"' in source
+
+
 def test_antigravity_resume_skips_terminal_packets_and_preserves_partial_files():
     assert _load_packets(DATASET, {"RP-003"}) == {}
     packet = _load_packets(DATASET, {"RP-016"})["RP-016"]
