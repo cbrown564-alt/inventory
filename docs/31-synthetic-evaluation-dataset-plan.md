@@ -187,6 +187,19 @@ review:
    item** if the schedule slips.
 7. CI regression harness.
 
+> **Correction, 4 Aug 2026 — item 6 was not droppable.** Phase 3.6 conditioned
+> its clips on these stills and found that within every prior-batch packet the
+> four view ids were exactly inverted: the file named `A-wide` was the packet's
+> condition detail. Nine packets, 36 stills. Nothing caught it because the
+> images had **zero rows in `tasks.csv`**, and Pass A is where "is this the view
+> it claims to be" is caught. The item that was named in advance as expendable
+> was the only control that would have found the defect, and skipping it cost a
+> nine-clip video batch. Both are now done: `repair_gemini_omni_views.py`
+> re-filed the stills and `import_gemini_omni_pass_a.py` gave all 57 ledger
+> rows. Ordering rule to carry forward: **an arm with no ledger rows has no
+> provenance, whatever else has been done to it** — so importing it is not the
+> last step of the work, it is the first.
+
 **B9. The Google arm is demoted, not deleted.** It has 27 terminal failures,
 5 complete packets, `backend_model: unknown` throughout, three packets with no
 proved generation origin, and UK terms that prohibit using output to develop
@@ -199,7 +212,16 @@ which the degradation ladder does not address.
   gate that cannot be passed is not a gate.
 - The 57 Gemini Omni candidates are imported through the **normal Pass A
   path** — owner review alone is not the recorded protocol — but as a
-  bias-check slice with **no completeness obligation**.
+  bias-check slice with **no completeness obligation**. *Done 4 Aug 2026. The
+  slice is declared in `dataset.json` with `role: bias_check_slice`, which
+  `validate_dataset` excludes from the matched-design counts; the matched
+  design is still 200 tasks. Its 100 rows carry
+  `provenance: candidate_only_prompt_not_recorded`, because these images came
+  off the owner's subscription surface and the prompt actually used was never
+  recorded — so `exact_prompt` is the specification a row is judged against,
+  not a transcript of what made the image. 57 rows are `review_pending`; the
+  43 views with no candidate are `not_generated`, terminal rather than queued,
+  since generation is retired and this arm owes no completeness.*
 - The entire Google arm is **excluded from publication and from any future
   training corpus**, on terms grounds.
 - The **real-transfer gate remains the primary house-style control**. The

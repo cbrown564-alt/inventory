@@ -296,10 +296,17 @@ a segmentation result.
 
 ### What has to happen next
 
-1. **Correct the Omni view assignment and run the Pass A import** (docs/31
-   Amendment B item 6). Re-filing 57 evidence images is an owner decision and
-   has not been done here; the auditor exists to drive it. Until it lands, no
-   further video generation should be spent.
+1. ~~**Correct the Omni view assignment and run the Pass A import**~~ —
+   **done, 4 Aug 2026.** `repair_gemini_omni_views.py` re-filed the 36
+   prior-batch stills under their true view ids (a rename; the manifest carries
+   the same digest on both sides), and `import_gemini_omni_pass_a.py` gave all
+   57 candidates ledger rows. The audit now reports zero contradictions where
+   it reported four, and the `A-wide` slot reads
+   `Kitchen_photograph_refurbished`, `WC_in_small_cloakroom`,
+   `Home_office_in_UK_flat`. The eight rejected clips are archived through
+   `reject_video_clip.py` with their Pass A reasons, so the queue is
+   `retry_pending` against corrected references and the artefacts and verdicts
+   both survive.
 2. **Do not retry the VU-4 rungs.** Both delivered rungs failed Pass A and the
    third was never delivered, so the ladder has no usable rung; and docs/34
    already puts VU-4 behind Amendment B's free degradation ladder.

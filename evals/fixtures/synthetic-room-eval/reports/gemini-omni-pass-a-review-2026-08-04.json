@@ -1,0 +1,321 @@
+{
+  "review_type": "gemini_omni_pass_a_import_visual_screen",
+  "status": "partial",
+  "reviewed_at": "2026-08-04T08:08:35.190663+00:00",
+  "completed_at": null,
+  "generation_path": "Antigravity CLI independent local-image review",
+  "metered_api_call": false,
+  "cli_version": "1.1.10",
+  "reviewer_model_mode": "claude-sonnet-4-6",
+  "reviewer_second_model_mode": "gemini-3.5-flash-low",
+  "counts": {
+    "escalate": 1,
+    "reject": 2
+  },
+  "frames": [
+    {
+      "task_id": "RP-001.gemini-omni.B-reverse",
+      "scenario_id": "RP-001",
+      "provider": "Google",
+      "room_type": "Kitchen",
+      "view_id": "B-reverse",
+      "image_path": "/Users/cobro/code/inventory/evals/fixtures/synthetic-room-eval/images/google/gemini-omni/RP-001-B-reverse.jpeg",
+      "image_sha256": "dc6a8631004f0c924edfd12bc62de335962fcc6751d07deb56b152d8e8464435",
+      "frozen_generation_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a modest 1990s UK flat with dated but maintained fittings. This is view B-reverse: opposite corner looking back toward the doorway; wide establishing view. Visible evidence required in this view: kitchen units, window blind, radiator, door furniture, skirting boards. Intended visible defects: none. Negative controls: ordinary corner shadow is not damp. The room is mildly cluttered but clean under overcast daylight mixed with warm ceiling lights. Across views preserve: same pale units, dark worktop, appliance positions and window across all four views. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors or windows. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "packet_images": [
+        {
+          "view_id": "B-reverse",
+          "path": "/Users/cobro/code/inventory/evals/fixtures/synthetic-room-eval/images/google/gemini-omni/RP-001-B-reverse.jpeg"
+        }
+      ],
+      "first_review": {
+        "task_id": "RP-001.gemini-omni.B-reverse",
+        "decision": "reject",
+        "reason": "The image is a well-lit, photorealistic kitchen but the view is not B-reverse (opposite corner looking back toward the doorway). The camera is positioned mid-room looking toward the sink wall and window, not back toward the doorway. While a door is visible on the right edge, the composition reads as a forward-facing wide establishing shot, not a reverse corner view. More critically, the scenario requires a 1990s UK flat with 'dated but maintained fittings'; the image shows pale cream shaker-style units with a dark granite-effect worktop and modern recessed ceiling spotlights — this reads as late-2000s to 2010s rather than 1990s, weakening the scenario identity. The required anchor 'skirting boards' is only marginally visible and the 'window blind' is present as a roller blind. The 'door furniture' (hinges and handle) are visible on the right-side door. However, the framing failure on view orientation (B-reverse must look back to doorway as primary subject; here the doorway is peripheral at far right) is a hard framing failure that misrepresents the view_id contract.",
+        "requested_evidence": [
+          {
+            "name": "kitchen units",
+            "visibility": "clear"
+          },
+          {
+            "name": "window blind",
+            "visibility": "clear"
+          },
+          {
+            "name": "radiator",
+            "visibility": "clear"
+          },
+          {
+            "name": "door furniture",
+            "visibility": "ambiguous"
+          },
+          {
+            "name": "skirting boards",
+            "visibility": "ambiguous"
+          }
+        ],
+        "hard_failures": [
+          "View orientation mismatch: B-reverse requires doorway as the primary facing subject; the doorway appears only at far right periphery — the dominant view faces the sink/window wall, consistent with an A-wide or forward view rather than a reverse.",
+          "Scenario era mismatch: 1990s UK flat with dated fittings not credibly depicted; units, worktop finish, and recessed spotlights are post-2005 in character."
+        ],
+        "continuity_notes": [
+          "Single-image packet; no cross-view continuity applicable for this task."
+        ]
+      },
+      "second_review": {
+        "task_id": "RP-001.gemini-omni.B-reverse",
+        "decision": "reject",
+        "reason": "A recognizable manufacturer brand logo ('beko') is visible on the upper corner of the refrigerator door on the right, which violates the requirement to avoid logos and readable brands.",
+        "requested_evidence": [
+          {
+            "name": "kitchen units",
+            "visibility": "clear"
+          },
+          {
+            "name": "window blind",
+            "visibility": "clear"
+          },
+          {
+            "name": "radiator",
+            "visibility": "clear"
+          },
+          {
+            "name": "door furniture",
+            "visibility": "clear"
+          },
+          {
+            "name": "skirting boards",
+            "visibility": "clear"
+          }
+        ],
+        "hard_failures": [
+          "A recognizable brand logo ('beko') appears on the refrigerator."
+        ],
+        "continuity_notes": "Single-image evaluation packet. Cross-view continuity could not be verified."
+      },
+      "pass_a_decision": "reject",
+      "pass_a_reason": "The image is a well-lit, photorealistic kitchen but the view is not B-reverse (opposite corner looking back toward the doorway). The camera is positioned mid-room looking toward the sink wall and window, not back toward the doorway. While a door is visible on the right edge, the composition reads as a forward-facing wide establishing shot, not a reverse corner view. More critically, the scenario requires a 1990s UK flat with 'dated but maintained fittings'; the image shows pale cream shaker-style units with a dark granite-effect worktop and modern recessed ceiling spotlights — this reads as late-2000s to 2010s rather than 1990s, weakening the scenario identity. The required anchor 'skirting boards' is only marginally visible and the 'window blind' is present as a roller blind. The 'door furniture' (hinges and handle) are visible on the right-side door. However, the framing failure on view orientation (B-reverse must look back to doorway as primary subject; here the doorway is peripheral at far right) is a hard framing failure that misrepresents the view_id contract."
+    },
+    {
+      "task_id": "RP-002.gemini-omni.C-inventory",
+      "scenario_id": "RP-002",
+      "provider": "Google",
+      "room_type": "Bathroom",
+      "view_id": "C-inventory",
+      "image_path": "/Users/cobro/code/inventory/evals/fixtures/synthetic-room-eval/images/google/gemini-omni/RP-002-C-inventory.jpeg",
+      "image_sha256": "35e90c01e02405d2d088b0a6ff56b9ade144e776b10ec6d2505684302493c539",
+      "frozen_generation_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a bathroom in a compact recently refurbished UK rental flat. This is view C-inventory: facing the bath and shower end; medium fixtures and safety view. Visible evidence required in this view: glass shower screen, mixer taps, shower handset, extractor vent, heated towel rail. Intended visible defects: none. Negative controls: light condensation on glass does not prove damp. The room is tidy with ordinary toiletries and dry surfaces under window backlight plus neutral ceiling light. Across views preserve: same white suite, grey tiles, glass screen, towel rail and window positions across all four views. Avoid: people, logos, readable text, watermark, impossible geometry, extra sanitary fixtures. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "packet_images": [
+        {
+          "view_id": "C-inventory",
+          "path": "/Users/cobro/code/inventory/evals/fixtures/synthetic-room-eval/images/google/gemini-omni/RP-002-C-inventory.jpeg"
+        }
+      ],
+      "first_review": {
+        "task_id": "RP-002.gemini-omni.C-inventory",
+        "decision": "reject",
+        "reason": "The room is identifiable as a bathroom and photographic quality is good. Glass shower screen, shower handset (rainfall head over bath), heated towel rail, and extractor vent (ceiling grille visible top-right) are present. However, the required anchor 'mixer taps' is the critical failure: the image shows thermostatic wall-mounted shower valves (chrome square controls on the left tiled wall) but the bath tap set is not visible — the bath rim is shown but no mixer tap unit over the bath deck or bath edge is confirmed within the frame. The 'shower handset' is present as an overhead rain head; a separate handheld shower handset is not clearly distinguishable. Additionally, the prompt specifies a 'compact recently refurbished UK rental flat' with a tidy appearance; an extra fixture is present — a pedestal basin and separate WC are visible, which are consistent with the scenario, but the frame also shows what appears to be a half-glazed door panel at far right that is not explained by the scenario (not listed as a required anchor or permitted element). This door element introduces an unverifiable fixture. The mixer tap absence is the primary hard failure.",
+        "requested_evidence": [
+          {
+            "name": "glass shower screen",
+            "visibility": "clear"
+          },
+          {
+            "name": "mixer taps",
+            "visibility": "absent"
+          },
+          {
+            "name": "shower handset",
+            "visibility": "ambiguous"
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "clear"
+          },
+          {
+            "name": "heated towel rail",
+            "visibility": "clear"
+          }
+        ],
+        "hard_failures": [
+          "Required anchor 'mixer taps' is absent from the frame: bath tap deck is not visible; wall-mounted thermostatic valves are present but these are shower controls, not bath mixer taps.",
+          "Separate handheld shower handset not distinguishable from the overhead rain head; the 'shower handset' anchor is therefore ambiguous rather than confirmed."
+        ],
+        "continuity_notes": [
+          "Single-image packet; no cross-view continuity applicable for this task."
+        ]
+      },
+      "second_review": {
+        "task_id": "RP-002.gemini-omni.C-inventory",
+        "decision": "reject",
+        "reason": "Impossible and unreliable room geometry: the glass shower screen is mounted perpendicular to the bathtub length (partitioning it width-wise into two small sections), and the screen's vertical profile cuts directly through the center of the deck-mounted bath mixer tap, separating its spout and controls.",
+        "requested_evidence": [
+          {
+            "name": "glass shower screen",
+            "visibility": "malformed"
+          },
+          {
+            "name": "mixer taps",
+            "visibility": "malformed"
+          },
+          {
+            "name": "shower handset",
+            "visibility": "clear"
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "clear"
+          },
+          {
+            "name": "heated towel rail",
+            "visibility": "clear"
+          }
+        ],
+        "hard_failures": [
+          "Impossible geometry where the shower screen cuts through the bath mixer tap.",
+          "Nonsensical layout with the shower screen partitioning the bathtub width-wise."
+        ],
+        "continuity_notes": "Single-image evaluation packet. Cross-view continuity could not be verified."
+      },
+      "pass_a_decision": "reject",
+      "pass_a_reason": "The room is identifiable as a bathroom and photographic quality is good. Glass shower screen, shower handset (rainfall head over bath), heated towel rail, and extractor vent (ceiling grille visible top-right) are present. However, the required anchor 'mixer taps' is the critical failure: the image shows thermostatic wall-mounted shower valves (chrome square controls on the left tiled wall) but the bath tap set is not visible — the bath rim is shown but no mixer tap unit over the bath deck or bath edge is confirmed within the frame. The 'shower handset' is present as an overhead rain head; a separate handheld shower handset is not clearly distinguishable. Additionally, the prompt specifies a 'compact recently refurbished UK rental flat' with a tidy appearance; an extra fixture is present — a pedestal basin and separate WC are visible, which are consistent with the scenario, but the frame also shows what appears to be a half-glazed door panel at far right that is not explained by the scenario (not listed as a required anchor or permitted element). This door element introduces an unverifiable fixture. The mixer tap absence is the primary hard failure."
+    },
+    {
+      "task_id": "RP-003.gemini-omni.A-wide",
+      "scenario_id": "RP-003",
+      "provider": "Google",
+      "room_type": "Kitchen",
+      "view_id": "A-wide",
+      "image_path": "/Users/cobro/code/inventory/evals/fixtures/synthetic-room-eval/images/google/gemini-omni/RP-003-A-wide.jpeg",
+      "image_sha256": "3e4113c8d5d96546f0f1f7581055597d54b3b00e4f492b4dfa2998842ff5cfb7",
+      "frozen_generation_prompt": "Create one photorealistic landscape photograph that looks like an ordinary smartphone capture of a kitchen in a recently refurbished compact UK terrace with inexpensive white fittings. This is view A-wide: standing in the doorway; wide establishing view. Visible evidence required in this view: white kitchen units, oak-effect worktop, sink, oven, ceramic hob. Intended visible defects: none. Negative controls: clean timber grain is not mould. The room is clean and tidy with clear worktops under bright overcast daylight. Across views preserve: same white shaker units, oak-effect worktop, black appliances and rear window. Avoid: people, logos, readable text, watermark, impossible geometry. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "packet_images": [
+        {
+          "view_id": "A-wide",
+          "path": "/Users/cobro/code/inventory/evals/fixtures/synthetic-room-eval/images/google/gemini-omni/RP-003-A-wide.jpeg"
+        },
+        {
+          "view_id": "B-reverse",
+          "path": "/Users/cobro/code/inventory/evals/fixtures/synthetic-room-eval/images/google/gemini-omni/RP-003-B-reverse.jpeg"
+        },
+        {
+          "view_id": "C-inventory",
+          "path": "/Users/cobro/code/inventory/evals/fixtures/synthetic-room-eval/images/google/gemini-omni/RP-003-C-inventory.jpeg"
+        },
+        {
+          "view_id": "D-condition",
+          "path": "/Users/cobro/code/inventory/evals/fixtures/synthetic-room-eval/images/google/gemini-omni/RP-003-D-condition.jpeg"
+        }
+      ],
+      "first_review": {
+        "task_id": "RP-003.gemini-omni.A-wide",
+        "decision": "reject",
+        "reason": "The A-wide image itself is a credible photorealistic kitchen standing-in-doorway wide view with white shaker units, an oak-effect worktop, sink, ceramic hob, and oven all present and clear — the primary view passes on anchor evidence. However, cross-packet continuity across the four provided views fails at a level that disqualifies the packet for multi-image evaluation. Specifically: (1) The worktop in A-wide, C-inventory, and D-condition is consistently oak-effect and white units match; (2) B-reverse introduces a fully glazed external door on the left wall occupying approximately one-third of the frame — this door/glazed element is entirely absent in A-wide, C-inventory, and D-condition, which show an internal door or no door in that position; (3) the appliance set visible in B-reverse (sink relocated to right wall, hob moved) does not map spatially to A-wide; (4) D-condition is a tight close-up of the worktop/sink/hob area and is geometrically consistent with A-wide and C-inventory but the cabinet door handles in D-condition are ring-pull style whereas A-wide and C-inventory show bar handles — a fixture inconsistency across the packet. The B-reverse glazed external door is a structural continuity break (an extra door/window equivalent) that the prompt explicitly prohibits. The packet cannot be treated as representing the same room.",
+        "requested_evidence": [
+          {
+            "name": "white kitchen units",
+            "visibility": "clear"
+          },
+          {
+            "name": "oak-effect worktop",
+            "visibility": "clear"
+          },
+          {
+            "name": "sink",
+            "visibility": "clear"
+          },
+          {
+            "name": "oven",
+            "visibility": "clear"
+          },
+          {
+            "name": "ceramic hob",
+            "visibility": "clear"
+          }
+        ],
+        "hard_failures": [
+          "Packet continuity failure — B-reverse contains a large glazed external door occupying the left wall that is entirely absent in A-wide, C-inventory, and D-condition; this constitutes an extra door/window prohibited by the generation prompt and breaks room identity across views.",
+          "Cabinet door handle style inconsistency: ring-pull handles in D-condition vs. bar handles in A-wide and C-inventory — fixture mismatch across the packet.",
+          "Spatial layout of appliances in B-reverse (sink and hob positions) does not reconcile with A-wide camera perspective, indicating the packet does not depict the same room."
+        ],
+        "continuity_notes": [
+          "A-wide, C-inventory, D-condition share consistent white shaker units and oak worktop — partial continuity confirmed on those three views.",
+          "B-reverse breaks continuity: glazed external door on left wall is a disqualifying structural inconsistency not present in any other packet view.",
+          "D-condition close-up is geometrically coherent with A-wide worktop position but handle style differs from A-wide and C-inventory — minor secondary inconsistency compounding the B-reverse failure.",
+          "Packet is too fragmented to support reliable multi-image evaluation; recommend regenerating B-reverse to match the established room layout."
+        ]
+      },
+      "second_review": {
+        "task_id": "RP-003.gemini-omni.A-wide",
+        "decision": "accept",
+        "reason": "The kitchen is fully recognizable and matches the description. All required anchors are clearly visible without defects. There are no logos, brands, or geometric issues. The packet demonstrates strong continuity across all four views (A, B, C, D) with consistent layout, materials, and appliance placement.",
+        "requested_evidence": [
+          {
+            "name": "white kitchen units",
+            "visibility": "clear"
+          },
+          {
+            "name": "oak-effect worktop",
+            "visibility": "clear"
+          },
+          {
+            "name": "sink",
+            "visibility": "clear"
+          },
+          {
+            "name": "oven",
+            "visibility": "clear"
+          },
+          {
+            "name": "ceramic hob",
+            "visibility": "clear"
+          }
+        ],
+        "hard_failures": [],
+        "continuity_notes": "Excellent continuity across all four views. The placement of the sink, hob/oven, window, glazed door, radiator, light fixture, and flooring remains fully consistent and aligned with the physical layout of the room."
+      },
+      "pass_a_decision": "escalate",
+      "pass_a_reason": "Independent reviewer disagreement or escalation"
+    }
+  ],
+  "calls": [
+    {
+      "batch": 1,
+      "task_ids": [
+        "RP-001.gemini-omni.B-reverse",
+        "RP-002.gemini-omni.C-inventory",
+        "RP-003.gemini-omni.A-wide"
+      ],
+      "first_prompt_sha256": "6044ecfb05d36116f4b312d9ce54f0ffd605175fafbbeeeaa1fc1cb4fbe515c6",
+      "second_prompt_sha256": "ec0993cb873cd32c1f3fa633734bd8d962827c4841825740715af4d439188905",
+      "first_latency_seconds": 65.419,
+      "second_latency_seconds": 95.853,
+      "first_wrapper": {
+        "status": "SUCCESS",
+        "response": "Now loading the remaining RP-003 packet images for continuity assessment:\nAll images inspected. Delivering findings:\n\n[\n  {\n    \"task_id\": \"RP-001.gemini-omni.B-reverse\",\n    \"decision\": \"reject\",\n    \"reason\": \"The image is a well-lit, photorealistic kitchen but the view is not B-reverse (opposite corner looking back toward the doorway). The camera is positioned mid-room looking toward the sink wall and window, not back toward the doorway. While a door is visible on the right edge, the composition reads as a forward-facing wide establishing shot, not a reverse corner view. More critically, the scenario requires a 1990s UK flat with 'dated but maintained fittings'; the image shows pale cream shaker-style units with a dark granite-effect worktop and modern recessed ceiling spotlights — this reads as late-2000s to 2010s rather than 1990s, weakening the scenario identity. The required anchor 'skirting boards' is only marginally visible and the 'window blind' is present as a roller blind. The 'door furniture' (hinges and handle) are visible on the right-side door. However, the framing failure on view orientation (B-reverse must look back to doorway as primary subject; here the doorway is peripheral at far right) is a hard framing failure that misrepresents the view_id contract.\",\n    \"requested_evidence\": [\n      {\"name\": \"kitchen units\", \"visibility\": \"clear\"},\n      {\"name\": \"window blind\", \"visibility\": \"clear\"},\n      {\"name\": \"radiator\", \"visibility\": \"clear\"},\n      {\"name\": \"door furniture\", \"visibility\": \"ambiguous\"},\n      {\"name\": \"skirting boards\", \"visibility\": \"ambiguous\"}\n    ],\n    \"hard_failures\": [\n      \"View orientation mismatch: B-reverse requires doorway as the primary facing subject; the doorway appears only at far right periphery — the dominant view faces the sink/window wall, consistent with an A-wide or forward view rather than a reverse.\",\n      \"Scenario era mismatch: 1990s UK flat with dated fittings not credibly depicted; units, worktop finish, and recessed spotlights are post-2005 in character.\"\n    ],\n    \"continuity_notes\": [\n      \"Single-image packet; no cross-view continuity applicable for this task.\"\n    ]\n  },\n  {\n    \"task_id\": \"RP-002.gemini-omni.C-inventory\",\n    \"decision\": \"reject\",\n    \"reason\": \"The room is identifiable as a bathroom and photographic quality is good. Glass shower screen, shower handset (rainfall head over bath), heated towel rail, and extractor vent (ceiling grille visible top-right) are present. However, the required anchor 'mixer taps' is the critical failure: the image shows thermostatic wall-mounted shower valves (chrome square controls on the left tiled wall) but the bath tap set is not visible — the bath rim is shown but no mixer tap unit over the bath deck or bath edge is confirmed within the frame. The 'shower handset' is present as an overhead rain head; a separate handheld shower handset is not clearly distinguishable. Additionally, the prompt specifies a 'compact recently refurbished UK rental flat' with a tidy appearance; an extra fixture is present — a pedestal basin and separate WC are visible, which are consistent with the scenario, but the frame also shows what appears to be a half-glazed door panel at far right that is not explained by the scenario (not listed as a required anchor or permitted element). This door element introduces an unverifiable fixture. The mixer tap absence is the primary hard failure.\",\n    \"requested_evidence\": [\n      {\"name\": \"glass shower screen\", \"visibility\": \"clear\"},\n      {\"name\": \"mixer taps\", \"visibility\": \"absent\"},\n      {\"name\": \"shower handset\", \"visibility\": \"ambiguous\"},\n      {\"name\": \"extractor vent\", \"visibility\": \"clear\"},\n      {\"name\": \"heated towel rail\", \"visibility\": \"clear\"}\n    ],\n    \"hard_failures\": [\n      \"Required anchor 'mixer taps' is absent from the frame: bath tap deck is not visible; wall-mounted thermostatic valves are present but these are shower controls, not bath mixer taps.\",\n      \"Separate handheld shower handset not distinguishable from the overhead rain head; the 'shower handset' anchor is therefore ambiguous rather than confirmed.\"\n    ],\n    \"continuity_notes\": [\n      \"Single-image packet; no cross-view continuity applicable for this task.\"\n    ]\n  },\n  {\n    \"task_id\": \"RP-003.gemini-omni.A-wide\",\n    \"decision\": \"reject\",\n    \"reason\": \"The A-wide image itself is a credible photorealistic kitchen standing-in-doorway wide view with white shaker units, an oak-effect worktop, sink, ceramic hob, and oven all present and clear — the primary view passes on anchor evidence. However, cross-packet continuity across the four provided views fails at a level that disqualifies the packet for multi-image evaluation. Specifically: (1) The worktop in A-wide, C-inventory, and D-condition is consistently oak-effect and white units match; (2) B-reverse introduces a fully glazed external door on the left wall occupying approximately one-third of the frame — this door/glazed element is entirely absent in A-wide, C-inventory, and D-condition, which show an internal door or no door in that position; (3) the appliance set visible in B-reverse (sink relocated to right wall, hob moved) does not map spatially to A-wide; (4) D-condition is a tight close-up of the worktop/sink/hob area and is geometrically consistent with A-wide and C-inventory but the cabinet door handles in D-condition are ring-pull style whereas A-wide and C-inventory show bar handles — a fixture inconsistency across the packet. The B-reverse glazed external door is a structural continuity break (an extra door/window equivalent) that the prompt explicitly prohibits. The packet cannot be treated as representing the same room.\",\n    \"requested_evidence\": [\n      {\"name\": \"white kitchen units\", \"visibility\": \"clear\"},\n      {\"name\": \"oak-effect worktop\", \"visibility\": \"clear\"},\n      {\"name\": \"sink\", \"visibility\": \"clear\"},\n      {\"name\": \"oven\", \"visibility\": \"clear\"},\n      {\"name\": \"ceramic hob\", \"visibility\": \"clear\"}\n    ],\n    \"hard_failures\": [\n      \"Packet continuity failure — B-reverse contains a large glazed external door occupying the left wall that is entirely absent in A-wide, C-inventory, and D-condition; this constitutes an extra door/window prohibited by the generation prompt and breaks room identity across views.\",\n      \"Cabinet door handle style inconsistency: ring-pull handles in D-condition vs. bar handles in A-wide and C-inventory — fixture mismatch across the packet.\",\n      \"Spatial layout of appliances in B-reverse (sink and hob positions) does not reconcile with A-wide camera perspective, indicating the packet does not depict the same room.\"\n    ],\n    \"continuity_notes\": [\n      \"A-wide, C-inventory, D-condition share consistent white shaker units and oak worktop — partial continuity confirmed on those three views.\",\n      \"B-reverse breaks continuity: glazed external door on left wall is a disqualifying structural inconsistency not present in any other packet view.\",\n      \"D-condition close-up is geometrically coherent with A-wide worktop position but handle style differs from A-wide and C-inventory — minor secondary inconsistency compounding the B-reverse failure.\",\n      \"Packet is too fragmented to support reliable multi-image evaluation; recommend regenerating B-reverse to match the established room layout.\"\n    ]\n  }\n]\n",
+        "duration_seconds": 59.980662,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 47338,
+          "output_tokens": 2737,
+          "thinking_tokens": 0,
+          "cache_read_tokens": 64839,
+          "total_tokens": 50075
+        }
+      },
+      "second_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"task_id\": \"RP-001.gemini-omni.B-reverse\",\n    \"decision\": \"reject\",\n    \"reason\": \"A recognizable manufacturer brand logo ('beko') is visible on the upper corner of the refrigerator door on the right, which violates the requirement to avoid logos and readable brands.\",\n    \"requested_evidence\": [\n      {\n        \"name\": \"kitchen units\",\n        \"visibility\": \"clear\"\n      },\n      {\n        \"name\": \"window blind\",\n        \"visibility\": \"clear\"\n      },\n      {\n        \"name\": \"radiator\",\n        \"visibility\": \"clear\"\n      },\n      {\n        \"name\": \"door furniture\",\n        \"visibility\": \"clear\"\n      },\n      {\n        \"name\": \"skirting boards\",\n        \"visibility\": \"clear\"\n      }\n    ],\n    \"hard_failures\": [\n      \"A recognizable brand logo ('beko') appears on the refrigerator.\"\n    ],\n    \"continuity_notes\": \"Single-image evaluation packet. Cross-view continuity could not be verified.\"\n  },\n  {\n    \"task_id\": \"RP-002.gemini-omni.C-inventory\",\n    \"decision\": \"reject\",\n    \"reason\": \"Impossible and unreliable room geometry: the glass shower screen is mounted perpendicular to the bathtub length (partitioning it width-wise into two small sections), and the screen's vertical profile cuts directly through the center of the deck-mounted bath mixer tap, separating its spout and controls.\",\n    \"requested_evidence\": [\n      {\n        \"name\": \"glass shower screen\",\n        \"visibility\": \"malformed\"\n      },\n      {\n        \"name\": \"mixer taps\",\n        \"visibility\": \"malformed\"\n      },\n      {\n        \"name\": \"shower handset\",\n        \"visibility\": \"clear\"\n      },\n      {\n        \"name\": \"extractor vent\",\n        \"visibility\": \"clear\"\n      },\n      {\n        \"name\": \"heated towel rail\",\n        \"visibility\": \"clear\"\n      }\n    ],\n    \"hard_failures\": [\n      \"Impossible geometry where the shower screen cuts through the bath mixer tap.\",\n      \"Nonsensical layout with the shower screen partitioning the bathtub width-wise.\"\n    ],\n    \"continuity_notes\": \"Single-image evaluation packet. Cross-view continuity could not be verified.\"\n  },\n  {\n    \"task_id\": \"RP-003.gemini-omni.A-wide\",\n    \"decision\": \"accept\",\n    \"reason\": \"The kitchen is fully recognizable and matches the description. All required anchors are clearly visible without defects. There are no logos, brands, or geometric issues. The packet demonstrates strong continuity across all four views (A, B, C, D) with consistent layout, materials, and appliance placement.\",\n    \"requested_evidence\": [\n      {\n        \"name\": \"white kitchen units\",\n        \"visibility\": \"clear\"\n      },\n      {\n        \"name\": \"oak-effect worktop\",\n        \"visibility\": \"clear\"\n      },\n      {\n        \"name\": \"sink\",\n        \"visibility\": \"clear\"\n      },\n      {\n        \"name\": \"oven\",\n        \"visibility\": \"clear\"\n      },\n      {\n        \"name\": \"ceramic hob\",\n        \"visibility\": \"clear\"\n      }\n    ],\n    \"hard_failures\": [],\n    \"continuity_notes\": \"Excellent continuity across all four views. The placement of the sink, hob/oven, window, glazed door, radiator, light fixture, and flooring remains fully consistent and aligned with the physical layout of the room.\"\n  }\n]\n",
+        "duration_seconds": 91.824103,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 187763,
+          "output_tokens": 23532,
+          "thinking_tokens": 20617,
+          "cache_read_tokens": 562738,
+          "total_tokens": 211295
+        }
+      }
+    }
+  ]
+}

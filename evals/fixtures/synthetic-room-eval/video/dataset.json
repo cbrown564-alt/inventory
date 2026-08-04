@@ -28,7 +28,10 @@
     "reason": "Room identity is the thing that drifts. The parent pilot's 36% first-attempt rejection rate was overwhelmingly continuity failure across four static views; a moving camera has strictly more drift surface, so identity is pinned to an artefact rather than to prose.",
     "eligible_source": "images/google/gemini-omni/*, restricted to the nine scenarios holding a complete four-view Omni packet",
     "provenance_gate": {
-      "status": "OPEN",
+      "status": "REPAIRED_AND_IMPORTED",
+      "closed_on": "2026-08-04",
+      "closure": "repair_gemini_omni_views.py re-filed the 36 mislabelled prior-batch stills under their true view ids, and import_gemini_omni_pass_a.py gave all 57 candidates rows in the parent tasks.csv. Reference frames now resolve to the view they claim. Whether an individual reference frame is accepted is a separate question, answered by the Pass A run in reports/gemini-omni-pass-a-review-2026-08-04.json; a clip conditioned on a still that Pass A rejects still cannot produce gold.",
+      "original_status": "OPEN",
       "fact": "The 57 Gemini Omni stills are not in the parent tasks.csv at all. They have owner review and no recorded Pass A.",
       "required": "docs/31 Amendment B work order item 6 — the Gemini Omni Pass A import — which that work order names in advance as the droppable item if the schedule slips.",
       "effect": "Until the import lands, every clip here is conditioned on an artefact with no recorded provenance. build_video_tasks.py refuses to write the queue unless --allow-unimported-reference is passed, and stamps reference_provenance on every row.",
