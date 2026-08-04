@@ -1,14 +1,15 @@
 {
   "review_type": "phase35_delta_pair_review",
-  "status": "partial",
+  "status": "complete",
   "reviewed_at": "2026-08-04T22:09:27.828463+00:00",
-  "completed_at": null,
+  "completed_at": "2026-08-04T22:15:08.994832+00:00",
   "generation_path": "Antigravity CLI independent local-image review",
   "metered_api_call": false,
   "cli_version": "1.1.10",
   "reviewer_model_mode": "gemini-3.5-flash-low",
   "counts": {
-    "accept": 2
+    "accept": 2,
+    "reject": 1
   },
   "pairs": [
     {
@@ -128,6 +129,108 @@
         "unenumerated_changes": [],
         "reason": "The room identity is identical, all listed material changes are clearly visible as described, and there are no unenumerated differences."
       }
+    },
+    {
+      "delta_id": "RP-011-T1",
+      "delta_class": "temporal",
+      "decision": "reject",
+      "decision_basis": "unenumerated material change observed",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [
+        {
+          "target": "potted plant on the balcony",
+          "description": "The brown potted plant on the balcony floor outside the double glass doors in T0 is completely missing in T1.",
+          "material": true
+        },
+        {
+          "target": "sofa cushions",
+          "description": "An extra dark blue cushion is present on the middle seat of the sofa in T1 (six cushions total in T1 vs five in T0). Additionally, the textured beige cushion on the left side of the sofa in T0 has been replaced by a smooth beige cushion in T1.",
+          "material": true
+        },
+        {
+          "target": "sofa cushions",
+          "description": "An extra dark blue scatter cushion is present on the sofa in T1 (5 cushions total) compared to T0 (4 cushions total).",
+          "material": true
+        }
+      ],
+      "missing_material_changes": [],
+      "first_review": {
+        "delta_id": "RP-011-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The structural layout, wall and flooring finishes, baseboards, window frames, balcony door, TV unit, television, coffee table, and armchair remain identical, with the camera viewpoint matching T0 perfectly.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "The armchair's outer arm shows a small worn spot in T0 that has deteriorated into a palm-sized frayed patch with loose threads in T1."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "clear",
+            "notes": "A dark irregular stain (approx. 20 cm wide) is clearly visible on the carpet in T1 and is absent in T0."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "The potted plant next to the sofa on the side table in T0 is gone in T1, leaving the table surface bare where it stood."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "The cushions on the main sofa have been rearranged in T1 compared to T0."
+          }
+        ],
+        "unenumerated_changes": [
+          {
+            "target": "potted plant on the balcony",
+            "description": "The brown potted plant on the balcony floor outside the double glass doors in T0 is completely missing in T1.",
+            "material": true
+          },
+          {
+            "target": "sofa cushions",
+            "description": "An extra dark blue cushion is present on the middle seat of the sofa in T1 (six cushions total in T1 vs five in T0). Additionally, the textured beige cushion on the left side of the sofa in T0 has been replaced by a smooth beige cushion in T1.",
+            "material": true
+          }
+        ],
+        "reason": "Rejected due to unenumerated material differences: the potted plant on the balcony is missing in T1, and the cushion inventory has changed (an extra dark blue cushion is on the sofa, and a textured beige cushion has been replaced by a smooth one)."
+      },
+      "second_review": {
+        "delta_id": "RP-011-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The room is identical in layout, fittings, finishes, and camera viewpoint between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "The frayed patch on the outer arm of the armchair has worsened and expanded significantly, showing open weave and loose threads in T1 D-condition."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "clear",
+            "notes": "A dark irregular stain on the carpet is clearly visible in the open floor area in T1."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "ambiguous",
+            "notes": "The potted plant is gone, but the side table top is not completely bare as described; the two photo frames from T0 remain."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "The cushions on the sofa have been rearranged, but their count has also changed."
+          }
+        ],
+        "unenumerated_changes": [
+          {
+            "target": "sofa cushions",
+            "description": "An extra dark blue scatter cushion is present on the sofa in T1 (5 cushions total) compared to T0 (4 cushions total).",
+            "material": true
+          }
+        ],
+        "reason": "Rejected due to the presence of an unenumerated material change (an extra dark blue scatter cushion added to the sofa) and because the side table top is not completely bare as described in D3."
+      }
     }
   ],
   "calls": [
@@ -200,6 +303,42 @@
           "thinking_tokens": 3455,
           "cache_read_tokens": 0,
           "total_tokens": 66680
+        }
+      }
+    },
+    {
+      "batch": 3,
+      "delta_ids": [
+        "RP-011-T1"
+      ],
+      "first_prompt_sha256": "cce8bce18eb5cc09d71a831f20301b0f351b63fe3835d7cf35bf9da7375e5f1f",
+      "second_prompt_sha256": "4c817cc754932b7975f2cfc7f8a194ba78d6bc4138f07845593c47df54685c96",
+      "first_latency_seconds": 230.237,
+      "second_latency_seconds": 30.384,
+      "first_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"RP-011-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The structural layout, wall and flooring finishes, baseboards, window frames, balcony door, TV unit, television, coffee table, and armchair remain identical, with the camera viewpoint matching T0 perfectly.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The armchair's outer arm shows a small worn spot in T0 that has deteriorated into a palm-sized frayed patch with loose threads in T1.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A dark irregular stain (approx. 20 cm wide) is clearly visible on the carpet in T1 and is absent in T0.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The potted plant next to the sofa on the side table in T0 is gone in T1, leaving the table surface bare where it stood.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The cushions on the main sofa have been rearranged in T1 compared to T0.\"\n      }\n    ],\n    \"unenumerated_changes\": [\n      {\n        \"target\": \"potted plant on the balcony\",\n        \"description\": \"The brown potted plant on the balcony floor outside the double glass doors in T0 is completely missing in T1.\",\n        \"material\": true\n      },\n      {\n        \"target\": \"sofa cushions\",\n        \"description\": \"An extra dark blue cushion is present on the middle seat of the sofa in T1 (six cushions total in T1 vs five in T0). Additionally, the textured beige cushion on the left side of the sofa in T0 has been replaced by a smooth beige cushion in T1.\",\n        \"material\": true\n      }\n    ],\n    \"reason\": \"Rejected due to unenumerated material differences: the potted plant on the balcony is missing in T1, and the cushion inventory has changed (an extra dark blue cushion is on the sofa, and a textured beige cushion has been replaced by a smooth one).\"\n  }\n]\n",
+        "duration_seconds": 227.181568,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 223538,
+          "output_tokens": 30849,
+          "thinking_tokens": 23534,
+          "cache_read_tokens": 1951580,
+          "total_tokens": 254387
+        }
+      },
+      "second_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"RP-011-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The room is identical in layout, fittings, finishes, and camera viewpoint between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The frayed patch on the outer arm of the armchair has worsened and expanded significantly, showing open weave and loose threads in T1 D-condition.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A dark irregular stain on the carpet is clearly visible in the open floor area in T1.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"ambiguous\",\n        \"notes\": \"The potted plant is gone, but the side table top is not completely bare as described; the two photo frames from T0 remain.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The cushions on the sofa have been rearranged, but their count has also changed.\"\n      }\n    ],\n    \"unenumerated_changes\": [\n      {\n        \"target\": \"sofa cushions\",\n        \"description\": \"An extra dark blue scatter cushion is present on the sofa in T1 (5 cushions total) compared to T0 (4 cushions total).\",\n        \"material\": true\n      }\n    ],\n    \"reason\": \"Rejected due to the presence of an unenumerated material change (an extra dark blue scatter cushion added to the sofa) and because the side table top is not completely bare as described in D3.\"\n  }\n]\n",
+        "duration_seconds": 26.816566,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 131057,
+          "output_tokens": 9771,
+          "thinking_tokens": 9051,
+          "cache_read_tokens": 61140,
+          "total_tokens": 140828
         }
       }
     }

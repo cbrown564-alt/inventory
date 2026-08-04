@@ -314,7 +314,7 @@ Complete four-view packets, which is the number room-level scoring depends on:
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
 | 3 — development and validation | **In progress; blocked on Pass B, not on generation** | 46 of 50 packet review records are `provisional`. Only the four Phase-1 records are `verified_synthetic_gold`. Every remaining generation task could complete tomorrow and Phase 4 would still be blocked. Amendment B repairs generation (B2–B4) and tiers Pass B (B5–B6). |
-| 3.5 — delta pairs | **Next; runs first** | Promoted to the programme's centre by B7. Three-scenario feasibility probe gates an 8-pair temporal and 4-pair counterfactual set. |
+| 3.5 — delta pairs | **Probe passed 4 Aug 2026 (2 of 3); pilot pending owner adjudication** | Promoted to the programme's centre by B7. RP-002 and RP-004 accepted, RP-011 rejected on unenumerated drift in its *immaterial* change. Gates an 8-pair temporal and 4-pair counterfactual set. |
 | 4 — sealed comparison | **Not started** | Downstream of a validation prompt decision that has not been made. Validation holds two complete GPT packets, so no decision is currently possible on it; B4 addresses that. The amended order admits a per-task prompt assignment as a winner. |
 | 5 — real transfer | **Not started** | Downstream of Phase 4. The separate native-resolution evidence gate also remains open. |
 
@@ -1217,11 +1217,47 @@ already-accepted T0 packets as the reference so the probe pays only for T1:
       one `codex exec` call per view with the accepted T0 frame attached.
       Every frame's reported prompt matched the queue verbatim by hash;
       provenance in `reports/phase35-delta-generation-2026-08-04.json`.*
-- [ ] Independent AI review of each pair records, per pair: (a) is this the
+- [x] Independent AI review of each pair records, per pair: (a) is this the
       same room, (b) is each enumerated change visible, (c) list every
-      *unenumerated* material difference observed.
+      *unenumerated* material difference observed. *Two independent reviews
+      per pair, Antigravity CLI 1.1.10 / `gemini-3.5-flash-low`, in
+      `reports/phase35-delta-review-2026-08-04.json`.*
 - [ ] Owner adjudicates all three pairs. Probe images are calibration
-      evidence, not scored data.
+      evidence, not scored data. *Gallery:
+      `reports/delta-owner-gallery.html`.*
+
+#### Probe result, 4 Aug 2026 — passed, 2 of 3
+
+**RP-002 (bathroom) and RP-004 (kitchen) accepted**, both reviewers agreeing,
+every enumerated change clear and no unenumerated difference reported.
+**RP-011 (living room) rejected**, both reviewers agreeing, on unenumerated
+material drift. That satisfies the gate — two accepted pairs, zero
+unenumerated material changes within them — so the pilot is unblocked subject
+to owner adjudication.
+
+The interesting result is *where* RP-011 drifted. Its immaterial change asked
+for the same scatter cushions rearranged along the sofa. The generator
+instead **added a cushion** and swapped a textured one for a smooth one:
+`item_added`, material, unenumerated. The one change written to be beneath
+notice is the one the generator treated as licence to redecorate, and the
+reviewers caught a cushion *count* that a reader of the spec would not think
+to check. Both also flagged a potted plant on the balcony — outside the room,
+visible through the glass — vanishing between timepoints.
+
+Two consequences for the pilot, neither requiring the gate to be re-run:
+
+1. **Immaterial changes need their own containment.** The pilot's "at least 2
+   pairs whose only changes are immaterial" is the most drift-prone stratum,
+   not the safest. Immaterial prompts must name what may not change about the
+   object — count, material, position — because "rearranged" reads as
+   permission.
+2. **`unchanged_assertions` must cover what is visible, not what is in the
+   room.** RP-011's assertions never mentioned the balcony, so a change
+   outside the room was unenumerated by construction. Anything the frame can
+   resolve is in scope.
+
+RP-011 keeps `attempts=1` and is not retried. The gate is met without it, and
+docs/31 forbids buying a pass by re-rolling until the drift stops.
 
 **Pass:** ≥2 of 3 scenarios yield an acceptable pair within 2 attempts each,
 with zero unenumerated material changes in an accepted pair, and median
