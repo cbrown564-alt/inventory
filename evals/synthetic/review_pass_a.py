@@ -151,8 +151,14 @@ def _invoke(
         "--dangerously-skip-permissions",
         "--model",
         model,
-        "--effort",
-        "low",
+    ]
+    # The CLI rejects --effort outright for models that carry their own
+    # reasoning budget. Gemini modes take it and every earlier Pass A record was
+    # produced with it, so it stays for them: dropping it would change the
+    # recorded protocol of runs this one is meant to be comparable with.
+    if model.startswith("gemini-"):
+        command += ["--effort", "low"]
+    command += [
         "--print-timeout",
         f"{max(1, timeout // 60)}m",
         "--output-format",
