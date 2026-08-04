@@ -1,0 +1,372 @@
+{
+  "repair": "gemini_omni_view_assignment",
+  "repaired_at": "2026-08-04T07:56:32.089993+00:00",
+  "dry_run": false,
+  "staging_report": "gemini-omni-prior-batches-2026-08-03.json",
+  "rule": "within each packet the four view ids were assigned in reverse order; each file is re-filed under its mirrored label",
+  "basis": "docs/34 'Day 1 result'; evals/synthetic/audit_gemini_omni_views.py",
+  "untouched": "the 21 stills staged by import_gemini_omni_batch.py, which names a view per file and shows no contradiction",
+  "count": 36,
+  "moves": [
+    {
+      "scenario_id": "RP-003",
+      "source_filename": "Splashback_tiles_grout_worktop_edge_202608032123.jpeg",
+      "filed_as": "A-wide",
+      "true_view": "D-condition",
+      "from": "RP-003-A-wide.jpeg",
+      "to": "RP-003-D-condition.jpeg",
+      "sha256": "60be50d69b9c5ba04f2363d062bfbb2ceead9d1ce9443e878702e64a0f86fe07",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-003",
+      "source_filename": "Cooking_wall_inventory_view_202608032122.jpeg",
+      "filed_as": "B-reverse",
+      "true_view": "C-inventory",
+      "from": "RP-003-B-reverse.jpeg",
+      "to": "RP-003-C-inventory.jpeg",
+      "sha256": "bcb5d7b55bb06ff7db65b669d7acbc8d98f2e9447716dd2b937529cc4961a48b",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-003",
+      "source_filename": "Rear_corner_view_entrance_fridge_202608032122.jpeg",
+      "filed_as": "C-inventory",
+      "true_view": "B-reverse",
+      "from": "RP-003-C-inventory.jpeg",
+      "to": "RP-003-B-reverse.jpeg",
+      "sha256": "d79b84fa355e3faa5ec631264fa4c1e194c322128ad547c33cd1a3312798db89",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-003",
+      "source_filename": "Kitchen_photograph_refurbished_c…_202608032122.jpeg",
+      "filed_as": "D-condition",
+      "true_view": "A-wide",
+      "from": "RP-003-D-condition.jpeg",
+      "to": "RP-003-A-wide.jpeg",
+      "sha256": "3e4113c8d5d96546f0f1f7581055597d54b3b00e4f492b4dfa2998842ff5cfb7",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-014",
+      "source_filename": "Front_door_lower_panel_condition_202608032123.jpeg",
+      "filed_as": "A-wide",
+      "true_view": "D-condition",
+      "from": "RP-014-A-wide.jpeg",
+      "to": "RP-014-D-condition.jpeg",
+      "sha256": "37cd766d598fb7a1a86c4e0052bd89d4c3d519acef206d273d52078e91b23c40",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-014",
+      "source_filename": "Entry_controls_medium_fixtures_view_202608032123.jpeg",
+      "filed_as": "B-reverse",
+      "true_view": "C-inventory",
+      "from": "RP-014-B-reverse.jpeg",
+      "to": "RP-014-C-inventory.jpeg",
+      "sha256": "eb9b6b4fe681e88d516d66f880f6ef18b934e368d4988336efeaedeb34b30757",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-014",
+      "source_filename": "View_B-reverse_front_door_202608032123.jpeg",
+      "filed_as": "C-inventory",
+      "true_view": "B-reverse",
+      "from": "RP-014-C-inventory.jpeg",
+      "to": "RP-014-B-reverse.jpeg",
+      "sha256": "cb11831f6d0dd6717d0ff83987c1a458c3f1d7eddfc639c509bf120dd1c670a5",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-014",
+      "source_filename": "Hallway_with_striped_runner_202608032123.jpeg",
+      "filed_as": "D-condition",
+      "true_view": "A-wide",
+      "from": "RP-014-D-condition.jpeg",
+      "to": "RP-014-A-wide.jpeg",
+      "sha256": "91d7e183957576c98585aa33658c79db585e1d258dbd266bf7db1c99490f068f",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-015",
+      "source_filename": "View_D-condition__low_view_202608032122.jpeg",
+      "filed_as": "A-wide",
+      "true_view": "D-condition",
+      "from": "RP-015-A-wide.jpeg",
+      "to": "RP-015-D-condition.jpeg",
+      "sha256": "c2c9a2f5839e26280e10e896e04f09e815b1bb2a6c5a5d5ea703b6cb4e7b95c9",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-015",
+      "source_filename": "Inventory_view_medium_fixtures_202608032122.jpeg",
+      "filed_as": "B-reverse",
+      "true_view": "C-inventory",
+      "from": "RP-015-B-reverse.jpeg",
+      "to": "RP-015-C-inventory.jpeg",
+      "sha256": "fad106467eaadfabf7c657672834369177c9cd7f5b6c32bf7d86d9405f0d8266",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-015",
+      "source_filename": "Stair_foot_facing_door_view_202608032122.jpeg",
+      "filed_as": "C-inventory",
+      "true_view": "B-reverse",
+      "from": "RP-015-C-inventory.jpeg",
+      "to": "RP-015-B-reverse.jpeg",
+      "sha256": "0aa3b6188984a4faf62068c6e6bf9c4825b9db5fb1ac2608c741576e8850c192",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-015",
+      "source_filename": "Entrance_hall_with_open_coat_202608032122.jpeg",
+      "filed_as": "D-condition",
+      "true_view": "A-wide",
+      "from": "RP-015-D-condition.jpeg",
+      "to": "RP-015-A-wide.jpeg",
+      "sha256": "1b649f54a6a878fb932af6c893f0576e213bcb68a421b66b8225dc669dc044e8",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-019",
+      "source_filename": "View_D-condition_low_view_202608032141.jpeg",
+      "filed_as": "A-wide",
+      "true_view": "D-condition",
+      "from": "RP-019-A-wide.jpeg",
+      "to": "RP-019-D-condition.jpeg",
+      "sha256": "ce9af112dbe8ca8ff396140fc126bd8b267f52ec6d9724751a3d063de31db33b",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-019",
+      "source_filename": "Inventory_view_upper_services_fi…_202608032141.jpeg",
+      "filed_as": "B-reverse",
+      "true_view": "C-inventory",
+      "from": "RP-019-B-reverse.jpeg",
+      "to": "RP-019-C-inventory.jpeg",
+      "sha256": "1249c3d5ad0e8043c50c1b9793036f43a8652dc3ef869f8368ce41b86268236c",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-019",
+      "source_filename": "Utility_cupboard_with_storage_202608032140.jpeg",
+      "filed_as": "C-inventory",
+      "true_view": "B-reverse",
+      "from": "RP-019-C-inventory.jpeg",
+      "to": "RP-019-B-reverse.jpeg",
+      "sha256": "56704ad52b1708f6bd7df1326c3d6940db1c5e496cc645516c0d4d4e08fd164c",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-019",
+      "source_filename": "Inside_view_facing_door_202608032141.jpeg",
+      "filed_as": "D-condition",
+      "true_view": "A-wide",
+      "from": "RP-019-D-condition.jpeg",
+      "to": "RP-019-A-wide.jpeg",
+      "sha256": "a74405ca9c39d128ba7af23a3d69086c5be78243c87dd40fd1b1775d40ac3155",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-021",
+      "source_filename": "Stair_runner_tread_edge_condition_202608032141.jpeg",
+      "filed_as": "A-wide",
+      "true_view": "D-condition",
+      "from": "RP-021-A-wide.jpeg",
+      "to": "RP-021-D-condition.jpeg",
+      "sha256": "3c45010aba5964fba4ec546bb9332941b061ef71899e5ef2cd794a1ea1e09701",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-021",
+      "source_filename": "Inventory_view_C-stair_landing_202608032141.jpeg",
+      "filed_as": "B-reverse",
+      "true_view": "C-inventory",
+      "from": "RP-021-B-reverse.jpeg",
+      "to": "RP-021-C-inventory.jpeg",
+      "sha256": "15e8bcf5a3309312ee4d6be4e1296a46d51a983ce61f379394332b08706ecfe6",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-021",
+      "source_filename": "Boxes_under_dim_warm_light_202608032141.jpeg",
+      "filed_as": "C-inventory",
+      "true_view": "B-reverse",
+      "from": "RP-021-C-inventory.jpeg",
+      "to": "RP-021-B-reverse.jpeg",
+      "sha256": "925f99fb063ce07a113a20b020457ce5de6aebad070ee10d3aed29e0f9715338",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-021",
+      "source_filename": "Stairs_and_landing_with_boxes_202608032141.jpeg",
+      "filed_as": "D-condition",
+      "true_view": "A-wide",
+      "from": "RP-021-D-condition.jpeg",
+      "to": "RP-021-A-wide.jpeg",
+      "sha256": "b18cd512c731f1f31b49bbeac4d4468480d57b9ca3f982e4e01b305af4c98049",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-022",
+      "source_filename": "WC_base_vinyl_floor_skirting_202608032141.jpeg",
+      "filed_as": "A-wide",
+      "true_view": "D-condition",
+      "from": "RP-022-A-wide.jpeg",
+      "to": "RP-022-D-condition.jpeg",
+      "sha256": "31a3c73e8ca8a87e1ab1aece11e2ac7f0c1f8e7fde286080d73a01e9b9419a4e",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-022",
+      "source_filename": "Basin_wall_medium_fixtures_view_202608032141.jpeg",
+      "filed_as": "B-reverse",
+      "true_view": "C-inventory",
+      "from": "RP-022-B-reverse.jpeg",
+      "to": "RP-022-C-inventory.jpeg",
+      "sha256": "d8a404d4bfe20813ed26f600686d21f4bf4587797e12b6e134e07f6be7abdf80",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-022",
+      "source_filename": "View_B-reverse_looking_back_202608032141.jpeg",
+      "filed_as": "C-inventory",
+      "true_view": "B-reverse",
+      "from": "RP-022-C-inventory.jpeg",
+      "to": "RP-022-B-reverse.jpeg",
+      "sha256": "bb38144b9420b63a3cbb58d8e887f3f22ba2df8894660acb3892cbb96ad5a1ce",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-022",
+      "source_filename": "WC_in_small_cloakroom_202608032141.jpeg",
+      "filed_as": "D-condition",
+      "true_view": "A-wide",
+      "from": "RP-022-D-condition.jpeg",
+      "to": "RP-022-A-wide.jpeg",
+      "sha256": "3f0bcd2193ad47173f46cce04453bd1309e12720d2364149486b58d1e11c07a5",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-023",
+      "source_filename": "Clear_floor_area_view_condition_202608032141.jpeg",
+      "filed_as": "A-wide",
+      "true_view": "D-condition",
+      "from": "RP-023-A-wide.jpeg",
+      "to": "RP-023-D-condition.jpeg",
+      "sha256": "3ead731ae6c9689334ccfc7406496ede94a7f6f99645f3d2d6bdee12804ab46c",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-023",
+      "source_filename": "Service_wall_medium_fixtures_view_202608032141.jpeg",
+      "filed_as": "B-reverse",
+      "true_view": "C-inventory",
+      "from": "RP-023-B-reverse.jpeg",
+      "to": "RP-023-C-inventory.jpeg",
+      "sha256": "ca11cb5e891c09d77a382f4c33b9e6966b162ea1e7bc0e9c3a496a39d5d3f0c2",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-023",
+      "source_filename": "Cluttered_room_with_boxes_storage_202608032141.jpeg",
+      "filed_as": "C-inventory",
+      "true_view": "B-reverse",
+      "from": "RP-023-C-inventory.jpeg",
+      "to": "RP-023-B-reverse.jpeg",
+      "sha256": "1942e49a503c06233d383858fa423a3841f7706b01ee3efd1fcb3adb9cfeefff",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-023",
+      "source_filename": "Storage_cupboard_in_UK_rental_202608032141.jpeg",
+      "filed_as": "D-condition",
+      "true_view": "A-wide",
+      "from": "RP-023-D-condition.jpeg",
+      "to": "RP-023-A-wide.jpeg",
+      "sha256": "6e938664957c42dfe0a9ba0452b68a6197e40e23b7ac2cb87f111acfd853ca1f",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-024",
+      "source_filename": "Desk_surface_drawer_chair_carpet_202608032141.jpeg",
+      "filed_as": "A-wide",
+      "true_view": "D-condition",
+      "from": "RP-024-A-wide.jpeg",
+      "to": "RP-024-D-condition.jpeg",
+      "sha256": "adbf4686a1b0d13ce2d3c6ea23cef72cbe21caede48a1de9a03db870a1a96e85",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-024",
+      "source_filename": "Desk_wall_view_medium_fixtures_202608032141.jpeg",
+      "filed_as": "B-reverse",
+      "true_view": "C-inventory",
+      "from": "RP-024-B-reverse.jpeg",
+      "to": "RP-024-C-inventory.jpeg",
+      "sha256": "22c8227f1a3b5173464ff13d19cc6b69612a6c2099d6a1826504b8df5451cdb2",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-024",
+      "source_filename": "Room_view_with_evidence_202608032141.jpeg",
+      "filed_as": "C-inventory",
+      "true_view": "B-reverse",
+      "from": "RP-024-C-inventory.jpeg",
+      "to": "RP-024-B-reverse.jpeg",
+      "sha256": "5a844d01fe68a253ef259c07774efff2a7d3ef561b38ec4b0afdcbe6a7bcba92",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-024",
+      "source_filename": "Home_office_in_UK_flat_202608032141.jpeg",
+      "filed_as": "D-condition",
+      "true_view": "A-wide",
+      "from": "RP-024-D-condition.jpeg",
+      "to": "RP-024-A-wide.jpeg",
+      "sha256": "d128ceb8ea3946be13ae23cbd7ffca362ab0abfcec811208976c504f04719531",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-025",
+      "source_filename": "View_of_floor_tiles_and_202608032143.jpeg",
+      "filed_as": "A-wide",
+      "true_view": "D-condition",
+      "from": "RP-025-A-wide.jpeg",
+      "to": "RP-025-D-condition.jpeg",
+      "sha256": "75cd2e5bc3a86faef17b7578d023ef34c84b92b5a33740aac35ee35469c45135",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-025",
+      "source_filename": "Balustrade_corner_medium_fixture…_202608032143.jpeg",
+      "filed_as": "B-reverse",
+      "true_view": "C-inventory",
+      "from": "RP-025-B-reverse.jpeg",
+      "to": "RP-025-C-inventory.jpeg",
+      "sha256": "31e22083e4354a1a44fa78aeee479784fe87400dff691466516b5edbdda1428c",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-025",
+      "source_filename": "Patio_door_external_light_chairs_202608032142.jpeg",
+      "filed_as": "C-inventory",
+      "true_view": "B-reverse",
+      "from": "RP-025-C-inventory.jpeg",
+      "to": "RP-025-B-reverse.jpeg",
+      "sha256": "f21301ef10afa9f44f9cfc1583534665d7e4e48ecbfe57d883d23b6a3cf3b407",
+      "bytes_changed": false
+    },
+    {
+      "scenario_id": "RP-025",
+      "source_filename": "Balcony_in_modern_UK_apartment_202608032142.jpeg",
+      "filed_as": "D-condition",
+      "true_view": "A-wide",
+      "from": "RP-025-D-condition.jpeg",
+      "to": "RP-025-A-wide.jpeg",
+      "sha256": "c3e1105af8e75424211c671ffec6f03919e697d538fff902efd37169369b4232",
+      "bytes_changed": false
+    }
+  ]
+}

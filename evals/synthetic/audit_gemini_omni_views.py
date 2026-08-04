@@ -27,7 +27,11 @@ import json
 from typing import Any
 
 from evals.synthetic.import_gemini_omni_batch import BATCH
-from evals.synthetic.stage_gemini_omni_prior_batches import BATCHES, VIEWS
+from evals.synthetic.stage_gemini_omni_prior_batches import (
+    BATCHES,
+    SUPPLIED_ORDER,
+    VIEWS,
+)
 
 
 def _declared_view(filename: str) -> str | None:
@@ -38,44 +42,43 @@ def _declared_view(filename: str) -> str | None:
 
 
 def audit_positional_batches() -> dict[str, Any]:
-    """Contradictions in the positionally-assigned prior batches."""
+    """Contradictions in the positionally-assigned prior batches.
+
+    Checked against ``SUPPLIED_ORDER``, which is what the operator actually
+    handed over. The original code zipped against ``VIEWS`` — the same list
+    reversed — which is the bug this audit found; it is kept here as the
+    ``superseded_rule`` so the check reports what the mistake would have cost
+    rather than quietly agreeing with whatever the script says today.
+    """
     contradictions: list[dict[str, Any]] = []
-    reversal_fits = reversal_misses = 0
+    under_old_rule = 0
     for scenario_id, filenames in BATCHES.items():
         for position, filename in enumerate(filenames):
             declared = _declared_view(filename)
             if declared is None:
                 continue
-            assigned = VIEWS[position]
+            if declared != VIEWS[position]:
+                under_old_rule += 1
+            assigned = SUPPLIED_ORDER[position]
             if declared == assigned:
                 continue
-            reversed_view = VIEWS[len(VIEWS) - 1 - position]
-            fits = declared == reversed_view
-            reversal_fits += fits
-            reversal_misses += not fits
             contradictions.append({
                 "scenario_id": scenario_id,
                 "position": position,
                 "source_filename": filename,
                 "assigned_view": assigned,
                 "filename_says": declared,
-                "reversed_order_would_give": reversed_view,
-                "fits_exact_reversal": fits,
             })
     return {
         "route": "stage_gemini_omni_prior_batches (positional assignment)",
         "packets": len(BATCHES),
-        "contradictions": contradictions,
-        "reversal_hypothesis": {
-            "fits": reversal_fits,
-            "contradicts": reversal_misses,
-            "verdict": (
-                "every self-identifying filename fits an exactly reversed "
-                "supplied order"
-                if reversal_fits and not reversal_misses
-                else "no single reordering explains the contradictions"
-            ) if contradictions else "no contradiction found",
+        "rule": "SUPPLIED_ORDER: condition detail first, wide view last",
+        "superseded_rule": {
+            "was": "zip(VIEWS, prefixes) — wide view first",
+            "contradictions_it_produced": under_old_rule,
+            "repaired_by": "repair_gemini_omni_views.py, 4 Aug 2026",
         },
+        "contradictions": contradictions,
     }
 
 
@@ -90,7 +93,7 @@ def audit_a_wide_slot() -> dict[str, Any]:
     """
     slots = []
     for scenario_id, filenames in BATCHES.items():
-        name = filenames[0]
+        name = filenames[SUPPLIED_ORDER.index(VIEWS[0])]
         slots.append({
             "scenario_id": scenario_id,
             "filed_as": VIEWS[0],

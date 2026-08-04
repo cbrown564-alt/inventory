@@ -240,6 +240,23 @@ def write_tasks(dataset_dir: Path, allow_unimported: bool = False) -> list[dict[
         # Carry execution state forward only when the prompt is byte-identical.
         # A changed prompt is a different task, not a retry of this one.
         if old and old.get("prompt_sha256") == row["prompt_sha256"]:
+            # A delivered clip was conditioned on the reference frame as it was
+            # at generation time. Silently restamping the row with a new
+            # reference digest would rewrite that history into something that
+            # never happened — which is exactly how the Omni view mix-up stayed
+            # invisible. Reject the clip first; the reject clears the output and
+            # the row then legitimately describes the next attempt.
+            if (old.get("output_sha256")
+                    and old.get("reference_sha256")
+                    and old["reference_sha256"] != row["reference_sha256"]):
+                raise SystemExit(
+                    f"{row['task_id']}: the reference frame changed but this row "
+                    "still holds a delivered clip generated against the old one. "
+                    "Recording the new digest here would claim a conditioning "
+                    "that never happened.\nArchive the clip first:\n  python -m "
+                    f"evals.synthetic.reject_video_clip {row['task_id']} "
+                    "'reference frame corrected'"
+                )
             for field in ("status", "attempts", "operator", "generated_at",
                           "duration_s", "output_sha256", "strip_sha256"):
                 row[field] = old.get(field, row[field])

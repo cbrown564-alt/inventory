@@ -1,4 +1,5 @@
 import csv
+import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -262,35 +263,74 @@ def test_the_video_ledger_carries_a_strip_hash_column():
         assert "strip_sha256" in (csv.DictReader(h).fieldnames or [])
 
 
-def test_the_omni_view_audit_finds_the_positional_import_contradicting_itself():
-    """The prior-batch import assigns views positionally and gets them reversed.
+def test_no_omni_view_assignment_contradicts_its_own_source_filename():
+    """After the repair, no filename that names a view disagrees with its id.
 
-    Gemini names downloads after the prompt, so some filenames state their own
-    view. Every one of those contradicts the id it was filed under, and every
-    one fits an exactly reversed supplied order. That is provable without
-    looking at a pixel, and it is what conditions the Phase 3.6 clips.
-
-    This test asserts the *known-bad* state deliberately. When the Omni Pass A
-    import lands and the assignment is corrected, it should be flipped to
-    assert zero contradictions.
+    Gemini names downloads after the prompt, so a good fraction of these files
+    state their own view. Before the repair four of them contradicted the id
+    they were filed under and every packet's A-wide slot held a condition
+    detail; both are now zero.
     """
     from evals.synthetic.audit_gemini_omni_views import audit
 
     result = audit()
-    positional = result["routes"][0]
-    named = result["routes"][1]
-    assert len(positional["contradictions"]) == 4
-    assert positional["reversal_hypothesis"]["fits"] == 4
-    assert positional["reversal_hypothesis"]["contradicts"] == 0
-    assert all(entry["fits_exact_reversal"]
-               for entry in positional["contradictions"])
-    # The explicitly-named route names a view per file and is not affected.
+    assert result["total_contradictions"] == 0
+    positional, named = result["routes"]
+    assert positional["contradictions"] == []
     assert named["contradictions"] == []
-    # Every packet's A-wide slot holds a condition detail, not a wide view.
+    # The bug is still described, so the repair cannot be quietly undone.
+    assert positional["superseded_rule"]["contradictions_it_produced"] == 4
     slot = result["a_wide_slot"]
     assert len(slot["packets"]) == 9
-    assert slot["naming_a_condition_view"] == 5
-    assert all(entry["filed_as"] == "A-wide" for entry in slot["packets"])
+    assert slot["naming_a_condition_view"] == 0
+
+
+def test_rebuilding_refuses_to_restamp_a_delivered_clips_reference(tmp_path,
+                                                                  monkeypatch):
+    """A delivered clip's reference digest is history, not a derived field.
+
+    Recomputing it after the reference frame changed would record a
+    conditioning that never happened — which is precisely how the Omni view
+    mix-up survived: nothing ever compared what a clip was made from against
+    what the ledger said it was made from.
+    """
+    import evals.synthetic.build_video_tasks as build
+
+    rows = [{name: "" for name in FIELDNAMES}]
+    rows[0].update({"task_id": "VU-9.RP-000.gemini-omni-video",
+                    "clip_id": "VU-9.RP-000", "prompt_sha256": "p",
+                    "reference_sha256": "new-reference", "status": "pending"})
+    monkeypatch.setattr(build, "build_rows", lambda _dir: rows)
+    dataset = tmp_path / "ds"
+    (dataset / "video").mkdir(parents=True)
+    stale = dict(rows[0], reference_sha256="old-reference",
+                 output_sha256="a-delivered-clip", status="pass_a_accepted")
+    with (dataset / "video" / "tasks.csv").open("w", newline="",
+                                                encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=FIELDNAMES)
+        writer.writeheader()
+        writer.writerow(stale)
+    with pytest.raises(SystemExit, match="reference frame changed"):
+        build.write_tasks(dataset, allow_unimported=True)
+
+
+def test_the_repair_is_a_rename_and_nothing_else():
+    """Bytes are evidence. Re-filing may move a name, never a pixel."""
+    from evals.synthetic.repair_gemini_omni_views import TRUE_VIEW
+
+    report = json.loads(
+        (DATASET / "reports" / "gemini-omni-view-repair-2026-08-04.json")
+        .read_text(encoding="utf-8")
+    )
+    assert report["count"] == 36
+    assert all(move["bytes_changed"] is False for move in report["moves"])
+    images = DATASET / "images/google/gemini-omni"
+    for move in report["moves"]:
+        target = images / move["to"]
+        assert target.is_file(), move["to"]
+        assert hashlib.sha256(target.read_bytes()).hexdigest() == move["sha256"]
+    # The correction is its own inverse, which is what "reversed" means.
+    assert all(TRUE_VIEW[TRUE_VIEW[view]] == view for view in TRUE_VIEW)
 
 
 def test_every_video_reference_frame_comes_from_the_affected_import():
@@ -315,8 +355,11 @@ def test_the_strip_hash_is_stable_across_rebuilds():
     manifest_path = DATASET / "video" / "strips" / clip_id / "strip.json"
     if not manifest_path.is_file():
         pytest.skip("strip not built")
+    rebuilt = build_all(DATASET, {clip_id})
+    if not rebuilt:
+        pytest.skip("clip is no longer staged; its strip is a historical record")
     before = json.loads(manifest_path.read_text(encoding="utf-8"))
-    after = build_all(DATASET, {clip_id})[0]
+    after = rebuilt[0]
     assert after["strip_sha256"] == before["strip_sha256"]
     assert [f["pixel_sha256"] for f in after["frames"]] == \
            [f["pixel_sha256"] for f in before["frames"]]

@@ -73,6 +73,19 @@ BATCHES = {
 }
 VIEWS = ["A-wide", "B-reverse", "C-inventory", "D-condition"]
 
+# The order the operator actually supplied the four files in: condition detail
+# first, wide establishing view last. This ran originally as `zip(VIEWS, ...)`,
+# which assigned the labels the other way round and mislabelled all 36 stills —
+# every packet's wide view was filed as its condition detail and vice versa.
+# Nothing caught it because these files were never in tasks.csv and so never saw
+# Pass A. Repaired on 4 Aug 2026 by repair_gemini_omni_views.py; see docs/34
+# "Day 1 result" for the evidence and what it cost.
+#
+# Positional assignment is the underlying hazard and it is still here, because
+# this is the record of one batch that has already been staged. Any future
+# import must name a view per file, the way import_gemini_omni_batch.py does.
+SUPPLIED_ORDER = ["D-condition", "C-inventory", "B-reverse", "A-wide"]
+
 
 def source_for(prefix: str) -> Path:
     matches = sorted(DOWNLOADS.glob(prefix + "*.jpeg"))
@@ -97,7 +110,7 @@ def main() -> None:
     for scenario_id, prefixes in BATCHES.items():
         if len(prefixes) != 4:
             raise SystemExit(f"{scenario_id} does not contain four sources")
-        for view_id, prefix in zip(VIEWS, prefixes):
+        for view_id, prefix in zip(SUPPLIED_ORDER, prefixes):
             ordinal += 1
             source = source_for(prefix)
             target = OUT / f"{scenario_id}-{view_id}.jpeg"
