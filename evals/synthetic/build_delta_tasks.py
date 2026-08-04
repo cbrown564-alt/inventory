@@ -114,6 +114,42 @@ def validate_spec(spec: dict[str, Any], parent: dict[str, Any]) -> None:
             "pair carries no delta signal"
         )
 
+    for change in changes:
+        views = change.get("views")
+        if views is None:
+            continue
+        if not isinstance(views, list) or not views:
+            raise ValueError(f"{delta_id}.{change['id']}: views must be a "
+                             "non-empty list when present")
+        unknown = set(views) - set(DELTA_VIEWS)
+        if unknown:
+            raise ValueError(
+                f"{delta_id}.{change['id']}: unknown view(s) {sorted(unknown)}; "
+                f"delta pairs render only {list(DELTA_VIEWS)}"
+            )
+    for view_id in DELTA_VIEWS:
+        if not any(change["material"] for change in changes_for(changes, view_id)):
+            raise ValueError(
+                f"{delta_id}: view {view_id} receives no material change. A "
+                "render with nothing to show carries no delta signal and its "
+                "half of the pair cannot be scored."
+            )
+
+
+def changes_for(changes: list[dict[str, Any]], view_id: str) -> list[dict[str, Any]]:
+    """The changes a given view is asked to render.
+
+    A change is scoped to the views that can actually show it. Without this
+    every view is asked for every change, so a close condition detail is
+    requested in a wide establishing shot that cannot resolve it — and the
+    render comes back "missing" a change it was never able to display. That
+    reads as a generator failure and would be recorded as one, which is the
+    confidently-wrong gold this phase exists to avoid. Unscoped changes apply
+    to every view, which is right for anything visible at both scales.
+    """
+    return [change for change in changes
+            if change.get("views") is None or view_id in change["views"]]
+
 
 def _change_lines(changes: list[dict[str, Any]]) -> str:
     return " ".join(
@@ -135,7 +171,7 @@ def build_prompt(
     sentence, and holding everything else identical gets the rest. Drift is
     the failure mode that silently poisons the gold.
     """
-    changes = _change_lines(spec["changes"])
+    changes = _change_lines(changes_for(spec["changes"], view["id"]))
     unchanged = "; ".join(spec["unchanged_assertions"])
     avoid = ", ".join(parent["avoid"])
     horizon = spec.get("elapsed_description", "a single tenancy period")
@@ -248,8 +284,14 @@ def write_tasks(
     dataset_dir: Path,
     delta_ids: set[str] | None = None,
 ) -> list[dict[str, str]]:
-    """Write ``delta_tasks.csv``, preserving operator progress on stable prompts."""
-    rows = build_rows(dataset_dir, delta_ids)
+    """Write ``delta_tasks.csv``, preserving operator progress on stable prompts.
+
+    ``delta_ids`` narrows what is *returned*, never what is written. The queue
+    is one file: building it from a subset would drop every task the operator
+    did not happen to name, so printing one prompt would silently shorten the
+    queue it was printed from.
+    """
+    rows = build_rows(dataset_dir)
     path = dataset_dir / "delta_tasks.csv"
     previous: dict[str, dict[str, str]] = {}
     if path.exists():
@@ -265,7 +307,9 @@ def write_tasks(
         writer = csv.DictWriter(handle, fieldnames=FIELDNAMES)
         writer.writeheader()
         writer.writerows(rows)
-    return rows
+    if delta_ids is None:
+        return rows
+    return [row for row in rows if row["delta_id"] in delta_ids]
 
 
 def main() -> int:

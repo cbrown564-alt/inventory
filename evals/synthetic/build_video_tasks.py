@@ -53,7 +53,7 @@ FIELDNAMES = [
     "arm", "speed_rung", "provider", "product", "model_display_name",
     "reference_path", "reference_sha256", "reference_provenance", "output_path",
     "prompt_sha256", "exact_prompt", "audio_mode", "status", "attempts",
-    "operator", "generated_at", "duration_s", "output_sha256",
+    "operator", "generated_at", "duration_s", "output_sha256", "strip_sha256",
 ]
 
 
@@ -205,6 +205,7 @@ def build_rows(dataset_dir: Path) -> list[dict[str, str]]:
                 "generated_at": "",
                 "duration_s": "",
                 "output_sha256": "",
+                "strip_sha256": "",
             })
     return rows
 
@@ -240,7 +241,7 @@ def write_tasks(dataset_dir: Path, allow_unimported: bool = False) -> list[dict[
         # A changed prompt is a different task, not a retry of this one.
         if old and old.get("prompt_sha256") == row["prompt_sha256"]:
             for field in ("status", "attempts", "operator", "generated_at",
-                          "duration_s", "output_sha256"):
+                          "duration_s", "output_sha256", "strip_sha256"):
                 row[field] = old.get(field, row[field])
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:

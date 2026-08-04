@@ -81,3 +81,8 @@ benchmarks/local-tuning/*/inventory-issue.html
 
 # agent worktree summaries (do not commit)
 AGENT_SUMMARY.md
+
+# Pass A strip renders are viewing copies. The evidence is strip.json, whose
+# frame hashes are over decoded pixels and so regenerate byte-identically from
+# the clip on any ffmpeg build.
+evals/fixtures/synthetic-room-eval/video/strips/**/*.jpg

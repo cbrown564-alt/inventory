@@ -66,7 +66,9 @@ def reject(dataset_dir: Path, task_id: str, reasons: list[str],
 
     row["status"] = "generator_failed" if terminal else "retry_pending"
     row["attempts"] = str(attempt)
-    for field in ("generated_at", "duration_s", "output_sha256"):
+    # The strip is a sampling of one specific file; it does not survive the
+    # clip it was cut from.
+    for field in ("generated_at", "duration_s", "output_sha256", "strip_sha256"):
         row[field] = ""
     with task_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=FIELDNAMES)
