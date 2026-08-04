@@ -81,12 +81,77 @@ def apply(dataset_dir: Path, review_path: Path) -> dict[str, Any]:
     }
 
 
+def apply_adjudications(dataset_dir: Path, adjudication_path: Path) -> dict[str, Any]:
+    """Resolve ``owner_review_pending`` rows from a gallery export.
+
+    ``apply_owner_adjudications.py`` cannot do this: it writes the owner's
+    decision into the packet's Pass B review record at
+    ``reviews/<scenario>.<provider>.json``, and this arm has none — it is a
+    Pass A bias-check slice, not a labelled packet set. So the decision lands
+    on the ledger row and nowhere else.
+
+    Only escalated rows may be resolved. An adjudication that reaches a row the
+    reviewers agreed on would be overturning a decision this file never saw
+    the evidence for.
+    """
+    payload = json.loads(adjudication_path.read_text(encoding="utf-8"))
+    entries = payload.get("decisions") or []
+    if isinstance(entries, dict):
+        entries = list(entries.values())
+
+    task_path = dataset_dir / "tasks.csv"
+    with task_path.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    by_id = {row["task_id"]: row for row in rows}
+
+    applied: list[dict[str, str]] = []
+    for entry in entries:
+        task_id = entry["task_id"]
+        decision = entry.get("owner_decision")
+        if decision not in ("accept", "reject"):
+            raise ValueError(f"{task_id}: unsupported owner decision {decision!r}")
+        row = by_id.get(task_id)
+        if row is None:
+            raise ValueError(f"unknown task: {task_id}")
+        if task_id.split(".")[1] != PROVIDER_ID:
+            raise ValueError(f"{task_id}: not a {PROVIDER_ID} task")
+        if row["status"] != "owner_review_pending":
+            raise ValueError(
+                f"{task_id}: status is {row['status']!r}, not owner_review_pending; "
+                "only an escalated row may be resolved by adjudication"
+            )
+        row["status"] = STATUS[decision]
+        applied.append({"task_id": task_id, "status": row["status"]})
+
+    with task_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=FIELDNAMES)
+        writer.writeheader()
+        writer.writerows(rows)
+    remaining = sum(1 for row in rows
+                    if row["task_id"].split(".")[1] == PROVIDER_ID
+                    and row["status"] == "owner_review_pending")
+    return {
+        "adjudicated": len(applied),
+        "counts": dict(sorted(Counter(e["status"] for e in applied).items())),
+        "still_escalated": remaining,
+        "source": adjudication_path.name,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("review", type=Path)
+    parser.add_argument("review", type=Path,
+                        help="the Pass A review, or an owner adjudication "
+                             "export when --adjudications is passed")
     parser.add_argument("--dataset-dir", type=Path, default=DEFAULT_DATASET)
+    parser.add_argument("--adjudications", action="store_true",
+                        help="treat the file as a gallery export and resolve "
+                             "owner_review_pending rows")
     args = parser.parse_args()
-    print(json.dumps(apply(args.dataset_dir, args.review), indent=2))
+    result = (apply_adjudications(args.dataset_dir, args.review)
+              if args.adjudications
+              else apply(args.dataset_dir, args.review))
+    print(json.dumps(result, indent=2))
     return 0
 
 

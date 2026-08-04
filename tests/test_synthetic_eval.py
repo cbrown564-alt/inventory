@@ -147,6 +147,37 @@ def test_omni_escalations_go_to_the_owner_and_partials_cannot_apply(tmp_path):
         apply_omni(dataset, _omni_review(tmp_path, status="partial"))
 
 
+def test_owner_adjudication_resolves_only_escalated_omni_rows(tmp_path):
+    """An adjudication may settle an escalation, not overturn an agreement.
+
+    The gallery exports whatever the owner clicked; reaching a row both
+    reviewers agreed on would overturn a decision this path never saw the
+    evidence for.
+    """
+    from evals.synthetic.apply_gemini_omni_pass_a import apply_adjudications
+
+    dataset = _omni_ledger(tmp_path)
+    with (dataset / "tasks.csv").open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    rows[0]["status"] = "owner_review_pending"
+    with (dataset / "tasks.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=build_tasks_fieldnames())
+        writer.writeheader()
+        writer.writerows(rows)
+
+    export = tmp_path / "owner-adjudications.json"
+    export.write_text(json.dumps({"decisions": [
+        {"task_id": "RP-003.gemini-omni.A-wide", "owner_decision": "accept"}
+    ]}), encoding="utf-8")
+    result = apply_adjudications(dataset, export)
+    assert result["counts"] == {"pass_a_accepted": 1}
+    assert result["still_escalated"] == 0
+
+    # The row is settled now, so the same export must not re-apply.
+    with pytest.raises(ValueError, match="only an escalated row"):
+        apply_adjudications(dataset, export)
+
+
 def test_omni_apply_refuses_when_the_image_changed_after_review(tmp_path):
     from evals.synthetic.apply_gemini_omni_pass_a import apply as apply_omni
 

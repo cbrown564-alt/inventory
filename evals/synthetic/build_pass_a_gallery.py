@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from collections import Counter
 from pathlib import Path
 
 from evals.synthetic.build_tasks import DEFAULT_DATASET
@@ -902,10 +903,31 @@ def _image_src(dataset_dir: Path, output: Path, path_value: str) -> str:
     return Path(os.path.relpath(image.resolve(), output.parent.resolve())).as_posix()
 
 
-def build(dataset_dir: Path, review_path: Path, output: Path) -> None:
+def build(dataset_dir: Path, review_path: Path, output: Path,
+          task_ids: set[str] | None = None,
+          priority: list[str] | None = None) -> None:
+    """Render an adjudication gallery, optionally for a named subset of tasks.
+
+    ``task_ids`` exists because a queue of everything the reviewers escalated
+    is not always the queue worth working. The Gemini Omni import escalated 28
+    frames, of which exactly three block anything downstream; presenting all 28
+    invites 25 decisions nobody needs and buries the three that matter. When a
+    subset is given the header counts are recomputed over it, so the page never
+    reports totals for frames it is not showing.
+    """
     review = json.loads(review_path.read_text(encoding="utf-8"))
     if review.get("status") == "partial":
         raise ValueError("Pass A review is partial and cannot populate the gallery")
+    if task_ids is not None:
+        selected = [f for f in review["frames"] if f["task_id"] in task_ids]
+        missing = task_ids - {f["task_id"] for f in selected}
+        if missing:
+            raise ValueError(f"review does not contain: {sorted(missing)}")
+        review = dict(review, frames=selected, counts=dict(Counter(
+            frame["pass_a_decision"] for frame in selected
+        )))
+    if priority is not None:
+        review = dict(review, owner_escalations_priority=priority)
     scenario_views: dict[tuple[str, str], dict[str, object]] = {}
     for scenario_path in (dataset_dir / "scenarios").glob("*.json"):
         scenario = json.loads(scenario_path.read_text(encoding="utf-8"))
@@ -1104,6 +1126,17 @@ def main() -> int:
         type=Path,
         help="Gallery HTML path",
     )
+    parser.add_argument(
+        "--task",
+        action="append",
+        dest="tasks",
+        help="restrict the queue to these task IDs (repeatable)",
+    )
+    parser.add_argument(
+        "--priority",
+        action="append",
+        help="line shown in the gallery's priority list (repeatable)",
+    )
     args = parser.parse_args()
     dataset_dir = args.dataset_dir
     review = args.review
@@ -1123,7 +1156,8 @@ def main() -> int:
             raise SystemExit("No phase3-pass-a-review-*.json found; pass --review")
         review = candidates[-1]
     output = args.output or dataset_dir / "reports" / "pass-a-owner-gallery.html"
-    build(dataset_dir, review, output)
+    build(dataset_dir, review, output,
+          set(args.tasks) if args.tasks else None, args.priority)
     print(f"Wrote {output} from {review}")
     return 0
 
