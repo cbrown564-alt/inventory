@@ -424,6 +424,36 @@ def test_build_report_refuses_an_incomplete_review(tmp_path):
         build_report(dataset, comparison_path, review_path)
 
 
-def test_the_shipped_dataset_has_no_delta_specs_yet():
-    """Phase 3.5 is gated on the probe; nothing should be scoreable yet."""
-    assert load_specs(DATASET) == []
+def test_the_shipped_dataset_holds_only_the_feasibility_probe():
+    """Phase 3.5 is gated on the probe, so only probe specs may exist.
+
+    The pilot's 8 temporal and 4 counterfactual pairs are downstream of a gate
+    that has not been run. A spec that is not marked as probe work would be
+    pilot work authored before its gate, which is the sequencing failure the
+    phase is built to prevent.
+    """
+    specs = [spec for spec, _ in load_specs(DATASET)]
+    assert sorted(spec["id"] for spec in specs) == [
+        "RP-002-T1", "RP-004-T1", "RP-011-T1"
+    ]
+    assert {spec["probe"] for spec in specs} == {"phase-3.5-feasibility"}
+
+
+def test_the_probe_spans_the_three_required_room_classes():
+    """The gate asks for a kitchen, a soft-furnished room and a bathroom.
+
+    One room class is one drift surface. Three kitchens would pass a gate that
+    says nothing about carpet, fabric or sealant, which is where the pilot's
+    change kinds actually live.
+    """
+    rooms = {parent["room_type"] for _, parent in load_specs(DATASET)}
+    assert rooms == {"Kitchen", "Living room", "Bathroom"}
+
+
+def test_no_probe_output_is_scoreable_yet():
+    """Every probe task is unrendered, so no delta result can exist."""
+    with (DATASET / "delta_tasks.csv").open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) == 6
+    assert {row["status"] for row in rows} == {"pending"}
+    assert not any((DATASET / row["output_path"]).exists() for row in rows)

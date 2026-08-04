@@ -1141,14 +1141,27 @@ establishing view compare works from) and `D-condition` (where defects live).
 Four views per timepoint doubles the drift surface for no extra signal at
 probe scale.
 
+Each `change` may carry an optional `views` list naming the views that can
+actually show it; unscoped changes apply to both. Without this, a close
+condition detail is requested in a wide establishing shot that cannot resolve
+it, and the render comes back "missing" a change it was never able to
+display — recorded as a generator failure that did not happen. Tooling
+enforces the other side of the same rule: every rendered view must receive at
+least one *material* change, because a render with nothing to show carries no
+delta signal and its half of the pair cannot be scored.
+
 #### Feasibility probe (gate)
 
 Three scenarios only, one provider (GPT Image 2 via Codex `imagegen`), reusing
 already-accepted T0 packets as the reference so the probe pays only for T1:
 
-- [ ] Pick 3 accepted development-split specifications spanning a kitchen, a
-      soft-furnished room and a bathroom.
-- [ ] Author a T1 delta spec for each with 2–3 enumerated material changes.
+- [x] Pick 3 accepted development-split specifications spanning a kitchen, a
+      soft-furnished room and a bathroom. *RP-004 (kitchen), RP-011 (living
+      room), RP-002 (bathroom) — all four GPT Image 2 views `pass_a_accepted`,
+      all in the development split, so no pair crosses a split boundary.*
+- [x] Author a T1 delta spec for each with 2–3 enumerated material changes.
+      *`deltas/RP-004-T1.json`, `deltas/RP-011-T1.json`,
+      `deltas/RP-002-T1.json`; the 6-generation queue is `delta_tasks.csv`.*
 - [ ] Render `A-wide` and `D-condition` at T1 with the T0 frame as reference.
 - [ ] Independent AI review of each pair records, per pair: (a) is this the
       same room, (b) is each enumerated change visible, (c) list every

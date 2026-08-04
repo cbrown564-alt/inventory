@@ -1,0 +1,44 @@
+{
+  "id": "RP-004-T1",
+  "delta_of": "RP-004",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "a twelve-month assured shorthold tenancy",
+  "probe": "phase-3.5-feasibility",
+  "changes": [
+    {
+      "id": "D1",
+      "kind": "worsened",
+      "target": "triangular tear in the vinyl floor beside the cooker",
+      "description": "the tear has opened to roughly twice its length and the cut edges have lifted and curled back off the floor",
+      "material": true,
+      "views": ["D-condition"]
+    },
+    {
+      "id": "D2",
+      "kind": "new_defect",
+      "target": "tiled splashback above the cooker",
+      "description": "a band of brown grease staining across the tiles and grout directly above the hob",
+      "material": true,
+      "views": ["A-wide"]
+    },
+    {
+      "id": "D3",
+      "kind": "item_removed",
+      "target": "kettle on the worktop left of the cooker",
+      "description": "the kettle present at T0 is gone and that stretch of worktop is empty",
+      "material": true,
+      "views": ["A-wide"]
+    }
+  ],
+  "unchanged_assertions": [
+    "same wood-effect wall and base units, same door and drawer fronts, same handles",
+    "same cream laminate worktop, sink, mixer tap and dish rack",
+    "same freestanding white cooker in the same position, same ceramic hob",
+    "same patterned vinyl floor pattern, colour and layout away from the tear",
+    "same window, floral curtains, pendant light, extractor vent and light switch",
+    "same toaster, kitchen roll and jars on the worktop right of the cooker",
+    "no change to the room's shape, unit run, or camera viewpoint"
+  ],
+  "design_note": "The kitchen arm of the probe. D1 is a worsened defect the T0 D-condition frame already carries, which is the change kind most likely to be confused with drift: the generator must alter one existing feature and nothing around it. D2 and D3 are scoped to A-wide because neither the splashback nor the worktop is inside the low floor framing of D-condition, and asking a view for a change it cannot show would record a generator failure that never happened."
+}

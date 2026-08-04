@@ -1,0 +1,50 @@
+{
+  "id": "RP-011-T1",
+  "delta_of": "RP-011",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "a twelve-month assured shorthold tenancy",
+  "probe": "phase-3.5-feasibility",
+  "changes": [
+    {
+      "id": "D1",
+      "kind": "worsened",
+      "target": "frayed patch on the outer arm of the armchair",
+      "description": "the frayed patch has spread to roughly the size of a palm, the weave is pulled open and loose threads stand proud of the fabric",
+      "material": true,
+      "views": ["D-condition"]
+    },
+    {
+      "id": "D2",
+      "kind": "new_defect",
+      "target": "beige carpet in the open floor area between the coffee table and the balcony door",
+      "description": "a dark irregular stain roughly 20 cm across, soaked into the pile rather than sitting on it",
+      "material": true
+    },
+    {
+      "id": "D3",
+      "kind": "item_removed",
+      "target": "potted plant on the side table beside the sofa",
+      "description": "the plant present at T0 is gone and the side table top is bare",
+      "material": true,
+      "views": ["A-wide"]
+    },
+    {
+      "id": "D4",
+      "kind": "immaterial",
+      "target": "scatter cushions on the sofa",
+      "description": "the same cushions are rearranged along the sofa seat in a different order",
+      "material": false,
+      "views": ["A-wide"]
+    }
+  ],
+  "unchanged_assertions": [
+    "same grey sofa and armchair in the same positions, same upholstery and same cushion covers",
+    "same oak coffee table, timber television unit and television",
+    "same beige carpet colour, pile and extent away from the stain",
+    "same balcony doors, sheer and patterned curtains, framed picture and floor lamp",
+    "same cream throw over the arm of the armchair",
+    "no change to the room's shape, furniture layout, or camera viewpoint"
+  ],
+  "design_note": "The soft-furnished arm of the probe, and the only spec carrying an immaterial change. D4 exists because the false-change metric's hardest case is a real but immaterial difference: a scorer that reports rearranged cushions as a change would convert an ordinary tenancy into a deposit dispute, and a spec with only material changes never tests that. D2 is deliberately unscoped — the carpet is prominent in both views, so it is the one change this probe renders twice, which is the only place the pair can show whether one enumerated change survives two independent renders."
+}
