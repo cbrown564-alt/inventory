@@ -307,14 +307,23 @@ a segmentation result.
    `reject_video_clip.py` with their Pass A reasons, so the queue is
    `retry_pending` against corrected references and the artefacts and verdicts
    both survive.
-2. **Do not retry the VU-4 rungs.** Both delivered rungs failed Pass A and the
-   third was never delivered, so the ladder has no usable rung; and docs/34
-   already puts VU-4 behind Amendment B's free degradation ladder.
-   `VU-4.RP-022-hurried` stays `retry_pending` in the ledger because that is
-   the owner's recorded decision, but it is deferred, not queued.
-3. **Regenerate day 1 only after step 1**, against corrected references, and
-   keep it to the five specified clips.
-4. **Strip audio from silent-mode clips at staging**, or accept the deviation
+2. **Adjudicate three reference frames.** With the repair and the import done,
+   the probe is no longer blocked on provenance — it is blocked on which
+   stills Pass A actually accepted. `RP-014` and `RP-021` are
+   `pass_a_accepted`, so `VU-2` and `VU-3` may regenerate now. `RP-003`,
+   `RP-019` and `RP-024` are `owner_review_pending`, which blocks `VU-1` and
+   the whole `VU-5` pair until you rule on them.
+3. **`VU-4` is dead on `RP-022`.** Both reviewers rejected that `A-wide`: the
+   scenario requires a *corner* basin and the candidate has a flat wall-hung
+   one, so the still contradicts the specification it was generated from. There
+   is no usable reference frame, and no amount of regeneration fixes a
+   reference. Either re-specify the use case onto another WC scenario or drop
+   it — and it was already behind Amendment B's free degradation ladder, which
+   remains the cheaper answer to the same question.
+4. **Regenerate day 1 against accepted references only**, and keep it to the
+   five specified clips. The rule is now enforceable: a clip may only be
+   conditioned on a still whose ledger row is `pass_a_accepted`.
+5. **Strip audio from silent-mode clips at staging**, or accept the deviation
    explicitly. It is free to fix with `ffmpeg -an` and it is currently an
    automatic escalation on every silent clip.
 

@@ -140,9 +140,19 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
         elif is_accepted:
             errors.append(f"{row['task_id']}: accepted image is missing")
         if is_accepted:
-            if not all(row.get(field) for field in (
-                "operator", "generated_at", "generator_cli_version", "output_sha256"
-            )):
+            required = ["operator", "generated_at", "output_sha256"]
+            # generator_cli_version is only meaningful where a CLI generated the
+            # image. The bias-check slice came off a subscription surface, so
+            # demanding one would force a value to be invented — the precise
+            # falsification the provenance field exists to prevent. What that
+            # slice must carry instead is the admission itself.
+            if row.get("provenance", "recorded") == "recorded":
+                required.append("generator_cli_version")
+            elif not row.get("provenance"):
+                errors.append(
+                    f"{row['task_id']}: accepted task has no provenance declared"
+                )
+            if not all(row.get(field) for field in required):
                 errors.append(f"{row['task_id']}: accepted task lacks required provenance")
         elif require_complete:
             errors.append(f"{row['task_id']}: status is {row.get('status') or 'blank'}, not accepted")

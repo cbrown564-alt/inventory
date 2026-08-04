@@ -31,6 +31,28 @@
       "status": "REPAIRED_AND_IMPORTED",
       "closed_on": "2026-08-04",
       "closure": "repair_gemini_omni_views.py re-filed the 36 mislabelled prior-batch stills under their true view ids, and import_gemini_omni_pass_a.py gave all 57 candidates rows in the parent tasks.csv. Reference frames now resolve to the view they claim. Whether an individual reference frame is accepted is a separate question, answered by the Pass A run in reports/gemini-omni-pass-a-review-2026-08-04.json; a clip conditioned on a still that Pass A rejects still cannot produce gold.",
+      "pass_a_outcome": {
+        "review": "reports/gemini-omni-pass-a-review-2026-08-04.json",
+        "reviewed": 57,
+        "accept": 14,
+        "reject": 15,
+        "escalate": 28,
+        "reviewer_agreement": "29 of 57 (51%). The primary is claude-sonnet-4-6 and the second check gemini-3.5-flash-low, so this is a cross-family rate. The parent Pass A ran one model twice and could not have produced it.",
+        "repair_confirmed": "'view orientation' appears as a hard failure once in 114 individual reviews. Before the repair it was the systemic failure mode.",
+        "dominant_findings": "Absent or malformed required anchors (37 mentions) and packet continuity (36) — for example an RP-003 B-reverse carrying a large glazed external door that appears in none of the packet's other three views. These are generation-quality findings about the candidates themselves, which is what a Pass A is for and what owner review alone never produced."
+      },
+      "effect_on_this_probe": {
+        "rule": "A clip may only be conditioned on a still whose ledger row is pass_a_accepted.",
+        "reference_frames": {
+          "RP-014": "pass_a_accepted — VU-2 may regenerate",
+          "RP-021": "pass_a_accepted — VU-3 may regenerate",
+          "RP-003": "owner_review_pending — VU-1.RP-003 blocked on adjudication",
+          "RP-019": "owner_review_pending — the whole VU-5 pair blocked on adjudication",
+          "RP-024": "owner_review_pending — VU-1.RP-024 blocked on adjudication",
+          "RP-022": "pass_a_rejected by both reviewers — the required 'corner basin' is a flat wall-hung basin, a fixture mismatch against the scenario. VU-4 has no usable reference frame and cannot run on RP-022 at all."
+        },
+        "note": "Two of six clear immediately, three need owner adjudication, one is dead. The probe is no longer blocked on provenance; it is blocked on adjudication and, for VU-4, on a scenario whose candidate does not match its own specification."
+      },
       "original_status": "OPEN",
       "fact": "The 57 Gemini Omni stills are not in the parent tasks.csv at all. They have owner review and no recorded Pass A.",
       "required": "docs/31 Amendment B work order item 6 — the Gemini Omni Pass A import — which that work order names in advance as the droppable item if the schedule slips.",

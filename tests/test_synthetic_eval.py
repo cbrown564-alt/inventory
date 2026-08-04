@@ -75,12 +75,13 @@ def test_the_bias_check_slice_is_present_but_outside_the_matched_design():
         ledger = [row for row in csv.DictReader(handle)
                   if row["task_id"].split(".")[1] == "gemini-omni"]
     statuses = Counter(row["status"] for row in ledger)
-    assert statuses["review_pending"] == 57
     assert statuses["not_generated"] == 43
-    # Every review_pending row must actually have the image it claims.
+    assert sum(statuses.values()) - statuses["not_generated"] == 57
+    # A row has an image exactly when it is not not_generated, and only a row
+    # with an image may carry a digest.
     for row in ledger:
         exists = (DATASET / row["output_path"]).is_file()
-        assert exists == (row["status"] == "review_pending"), row["task_id"]
+        assert exists == (row["status"] != "not_generated"), row["task_id"]
         assert bool(row["output_sha256"]) == exists
 
 
@@ -154,17 +155,84 @@ def test_omni_apply_refuses_when_the_image_changed_after_review(tmp_path):
         apply_omni(dataset, _omni_review(tmp_path, sha="a-different-image"))
 
 
-def test_pass_a_review_selects_a_whole_arm_by_provider():
+def test_the_omni_slice_has_been_through_pass_a():
+    """The import's whole point: these rows now hold a recorded decision.
+
+    Before 4 Aug 2026 all 57 had owner review and no Pass A, which is why the
+    view mix-up was invisible. Escalations stay owner_review_pending — that is
+    a decision the owner still owes, not a decision already taken.
+    """
+    review = json.loads(
+        (DATASET / "reports" / "gemini-omni-pass-a-review-2026-08-04.json")
+        .read_text(encoding="utf-8")
+    )
+    assert review["status"] == "complete"
+    assert len(review["frames"]) == 57
+    assert review["reviewer_model_mode"] == "claude-sonnet-4-6"
+    assert review["reviewer_second_model_mode"] == "gemini-3.5-flash-low"
+
+    with (DATASET / "tasks.csv").open(newline="", encoding="utf-8") as handle:
+        ledger = [row for row in csv.DictReader(handle)
+                  if row["task_id"].split(".")[1] == "gemini-omni"]
+    statuses = Counter(row["status"] for row in ledger)
+    assert statuses["pass_a_accepted"] == 14
+    assert statuses["pass_a_rejected"] == 15
+    assert statuses["owner_review_pending"] == 28
+    assert statuses["not_generated"] == 43
+    assert "review_pending" not in statuses
+
+
+def test_no_video_clip_may_rest_on_an_unaccepted_reference_frame():
+    """The rule the probe now enforces, stated as a check over real state.
+
+    RP-022's A-wide was rejected by both reviewers — the scenario requires a
+    corner basin and the candidate has a flat wall-hung one — so VU-4 has no
+    reference frame at all, and that is a fact about the fixture no
+    regeneration can change.
+    """
+    with (DATASET / "tasks.csv").open(newline="", encoding="utf-8") as handle:
+        status = {row["output_path"]: row["status"]
+                  for row in csv.DictReader(handle)}
+    with (DATASET / "video" / "tasks.csv").open(
+        newline="", encoding="utf-8"
+    ) as handle:
+        clips = list(csv.DictReader(handle))
+    usable = {clip["clip_id"]: status.get(clip["reference_path"])
+              for clip in clips}
+    assert usable["VU-2.RP-014-transit"] == "pass_a_accepted"
+    assert usable["VU-3.RP-021-narrated"] == "pass_a_accepted"
+    assert usable["VU-1.RP-003"] == "owner_review_pending"
+    assert usable["VU-5.RP-019-push"] == "owner_review_pending"
+    assert usable["VU-4.RP-022-slow"] == "pass_a_rejected"
+    # Nothing may be sitting on a rejected reference in a generated state.
+    for clip in clips:
+        if status.get(clip["reference_path"]) == "pass_a_rejected":
+            assert not clip["output_sha256"], clip["clip_id"]
+
+
+def test_pass_a_review_selects_only_unreviewed_rows_in_an_arm(tmp_path):
     """The unfiltered default is one run's retry cohort, not a general queue.
 
-    Selecting the Omni arm with it would have silently reviewed nothing.
+    Selecting the Omni arm with it would have silently reviewed nothing. The
+    provider selector takes review_pending rows only, so a completed arm
+    presents an empty queue rather than re-reviewing itself.
     """
     from evals.synthetic.review_pass_a import _review_inputs
 
-    omni = _review_inputs(DATASET, None, "gemini-omni")
-    assert len(omni) == 57
-    assert all(item["task_id"].split(".")[1] == "gemini-omni" for item in omni)
+    assert _review_inputs(DATASET, None, "gemini-omni") == []
     assert _review_inputs(DATASET, None, "gpt-image-2") == []
+
+    dataset = _omni_ledger(tmp_path)
+    (dataset / "images/google/gemini-omni").mkdir(parents=True)
+    (dataset / "images/google/gemini-omni/RP-003-A-wide.jpeg").write_bytes(b"x")
+    with (dataset / "tasks.csv").open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    rows[0]["output_path"] = "images/google/gemini-omni/RP-003-A-wide.jpeg"
+    with (dataset / "tasks.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=build_tasks_fieldnames())
+        writer.writeheader()
+        writer.writerows(rows)
+    assert len(_review_inputs(dataset, None, "gemini-omni")) == 1
 
 
 def test_effort_is_only_sent_to_models_that_accept_it():
@@ -258,6 +326,9 @@ def test_fixture_validates_accepted_images_and_reports_pending_tasks(tmp_path):
             "retry_pending",
             "generator_failed",
             "not_generated",
+            # A screened-out candidate is a resolved state, not an open task.
+            "pass_a_rejected",
+            "owner_review_pending",
         ))
         for warning in warnings
     )
