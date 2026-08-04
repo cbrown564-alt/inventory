@@ -1,0 +1,207 @@
+{
+  "review_type": "phase35_delta_pair_review",
+  "status": "partial",
+  "reviewed_at": "2026-08-04T22:09:27.828463+00:00",
+  "completed_at": null,
+  "generation_path": "Antigravity CLI independent local-image review",
+  "metered_api_call": false,
+  "cli_version": "1.1.10",
+  "reviewer_model_mode": "gemini-3.5-flash-low",
+  "counts": {
+    "accept": 2
+  },
+  "pairs": [
+    {
+      "delta_id": "RP-002-T1",
+      "delta_class": "temporal",
+      "decision": "accept",
+      "decision_basis": "both reviewers accepted",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [],
+      "missing_material_changes": [],
+      "first_review": {
+        "delta_id": "RP-002-T1",
+        "decision": "accept",
+        "same_room": true,
+        "same_room_notes": "The room layout, camera viewpoint, wall and floor tiles, door, window, toilet, basin, and toiletries are identical between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "The scuff on the lower bath panel has lengthened significantly and has a scored line with a lighter core in T1."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "clear",
+            "notes": "Black mould spotting is clearly visible along the base sealant of the bath panel in T1, heaviest at the corner."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "Limescale and dried water spotting are clearly visible on the lower half of the glass shower screen and around the tap base in T1."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "The room identity is preserved across all views, all three enumerated changes are clearly visible as described, and no unenumerated differences are present."
+      },
+      "second_review": {
+        "delta_id": "RP-002-T1",
+        "decision": "accept",
+        "same_room": true,
+        "same_room_notes": "The room layout, camera viewpoint, fixtures, tile patterns, flooring, window items, and towel are identical between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "The scuff on the lower bath panel in T1 is longer and has a distinct white/scored core compared to the shorter, lighter scuff in T0."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "clear",
+            "notes": "Black mould spotting is clearly visible along the bottom silicone seal of the bath panel in T1, which is completely clean in T0."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "Water spotting and limescale are clearly visible on the lower half of the glass shower screen in T1, which is clear in T0."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "The room is identical, all three enumerated changes are clearly visible as described and absent in T0, and there are no unenumerated material changes."
+      }
+    },
+    {
+      "delta_id": "RP-004-T1",
+      "delta_class": "temporal",
+      "decision": "accept",
+      "decision_basis": "both reviewers accepted",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [],
+      "missing_material_changes": [],
+      "first_review": {
+        "delta_id": "RP-004-T1",
+        "decision": "accept",
+        "same_room": true,
+        "same_room_notes": "The T1 images depict the exact same physical kitchen room as T0, with identical layout, cabinetry wood grain, fittings, finishes, and camera viewpoints.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "The triangular tear on the floor beside the cooker has opened up to twice its length and the edges have curled upward, clearly visible in the D-condition close-up."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "clear",
+            "notes": "A prominent band of brown grease staining has appeared on the splashback tiles and grout above the cooker in T1, which is clean in T0."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "The black kettle on the worktop left of the cooker in T0 is completely gone in T1, and its power cord is unplugged and removed."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "The room identity is perfectly preserved, all three enumerated material changes are clearly visible as described, and no unenumerated material changes or other discrepancies were found."
+      },
+      "second_review": {
+        "delta_id": "RP-004-T1",
+        "decision": "accept",
+        "same_room": true,
+        "same_room_notes": "The physical room layout, wood-effect cabinetry, countertop, sink, window, door, and camera viewpoint are identical between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "The tear in the vinyl floor next to the cooker is clearly shown to have expanded with lifted, curled edges in the T1 condition view."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "clear",
+            "notes": "A band of brown grease staining is clearly visible on the tiles above the cooker hob in T1, which was clean in T0."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "The black kettle and its power cable are completely removed from the worktop area to the left of the cooker in T1."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "The room identity is identical, all listed material changes are clearly visible as described, and there are no unenumerated differences."
+      }
+    }
+  ],
+  "calls": [
+    {
+      "batch": 1,
+      "delta_ids": [
+        "RP-002-T1"
+      ],
+      "first_prompt_sha256": "7a4828988086cb754c7c75ca8d878495c56fd78a586f3395e17cd4ec109e5ef4",
+      "second_prompt_sha256": "639700fe2a4a9d051f6670639e9c107b0433f64b39a5857fa5e6bdcd01701ec9",
+      "first_latency_seconds": 23.911,
+      "second_latency_seconds": 22.388,
+      "first_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"RP-002-T1\",\n    \"decision\": \"accept\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The room layout, camera viewpoint, wall and floor tiles, door, window, toilet, basin, and toiletries are identical between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The scuff on the lower bath panel has lengthened significantly and has a scored line with a lighter core in T1.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"clear\",\n        \"notes\": \"Black mould spotting is clearly visible along the base sealant of the bath panel in T1, heaviest at the corner.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"Limescale and dried water spotting are clearly visible on the lower half of the glass shower screen and around the tap base in T1.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"The room identity is preserved across all views, all three enumerated changes are clearly visible as described, and no unenumerated differences are present.\"\n  }\n]\n",
+        "duration_seconds": 19.583445,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 73452,
+          "output_tokens": 5022,
+          "thinking_tokens": 4461,
+          "cache_read_tokens": 81534,
+          "total_tokens": 78474
+        }
+      },
+      "second_wrapper": {
+        "status": "SUCCESS",
+        "response": "I will inspect the before/after images using the local image-viewing tool to perform the room evaluation.\nI will now view the other three images.\nI will view the first T1 image.\nI will view the second T1 image.\n[\n  {\n    \"delta_id\": \"RP-002-T1\",\n    \"decision\": \"accept\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The room layout, camera viewpoint, fixtures, tile patterns, flooring, window items, and towel are identical between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The scuff on the lower bath panel in T1 is longer and has a distinct white/scored core compared to the shorter, lighter scuff in T0.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"clear\",\n        \"notes\": \"Black mould spotting is clearly visible along the bottom silicone seal of the bath panel in T1, which is completely clean in T0.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"Water spotting and limescale are clearly visible on the lower half of the glass shower screen in T1, which is clear in T0.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"The room is identical, all three enumerated changes are clearly visible as described and absent in T0, and there are no unenumerated material changes.\"\n  }\n]\n",
+        "duration_seconds": 17.85716,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 102096,
+          "output_tokens": 5051,
+          "thinking_tokens": 4431,
+          "cache_read_tokens": 53002,
+          "total_tokens": 107147
+        }
+      }
+    },
+    {
+      "batch": 2,
+      "delta_ids": [
+        "RP-004-T1"
+      ],
+      "first_prompt_sha256": "71b7bee887d9b82e9f4d8c8febcc37eab6937ec6812beaaa5afe02fb00e4fde0",
+      "second_prompt_sha256": "8f94ed9b58803bbed4f680c1c9c431b7bd9e3d55c02cd642d2e85221119b0c3e",
+      "first_latency_seconds": 21.434,
+      "second_latency_seconds": 12.801,
+      "first_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"RP-004-T1\",\n    \"decision\": \"accept\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The T1 images depict the exact same physical kitchen room as T0, with identical layout, cabinetry wood grain, fittings, finishes, and camera viewpoints.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The triangular tear on the floor beside the cooker has opened up to twice its length and the edges have curled upward, clearly visible in the D-condition close-up.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A prominent band of brown grease staining has appeared on the splashback tiles and grout above the cooker in T1, which is clean in T0.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The black kettle on the worktop left of the cooker in T0 is completely gone in T1, and its power cord is unplugged and removed.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"The room identity is perfectly preserved, all three enumerated material changes are clearly visible as described, and no unenumerated material changes or other discrepancies were found.\"\n  }\n]\n",
+        "duration_seconds": 18.020473,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 73324,
+          "output_tokens": 4035,
+          "thinking_tokens": 3454,
+          "cache_read_tokens": 81534,
+          "total_tokens": 77359
+        }
+      },
+      "second_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"RP-004-T1\",\n    \"decision\": \"accept\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The physical room layout, wood-effect cabinetry, countertop, sink, window, door, and camera viewpoint are identical between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The tear in the vinyl floor next to the cooker is clearly shown to have expanded with lifted, curled edges in the T1 condition view.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A band of brown grease staining is clearly visible on the tiles above the cooker hob in T1, which was clean in T0.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The black kettle and its power cable are completely removed from the worktop area to the left of the cooker in T1.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"The room identity is identical, all listed material changes are clearly visible as described, and there are no unenumerated differences.\"\n  }\n]\n",
+        "duration_seconds": 9.364967,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 62687,
+          "output_tokens": 3993,
+          "thinking_tokens": 3455,
+          "cache_read_tokens": 0,
+          "total_tokens": 66680
+        }
+      }
+    }
+  ]
+}

@@ -1212,7 +1212,11 @@ already-accepted T0 packets as the reference so the probe pays only for T1:
 - [x] Author a T1 delta spec for each with 2–3 enumerated material changes.
       *`deltas/RP-004-T1.json`, `deltas/RP-011-T1.json`,
       `deltas/RP-002-T1.json`; the 6-generation queue is `delta_tasks.csv`.*
-- [ ] Render `A-wide` and `D-condition` at T1 with the T0 frame as reference.
+- [x] Render `A-wide` and `D-condition` at T1 with the T0 frame as reference.
+      *All six frames generated 4 Aug 2026 through `generate_delta_codex`,
+      one `codex exec` call per view with the accepted T0 frame attached.
+      Every frame's reported prompt matched the queue verbatim by hash;
+      provenance in `reports/phase35-delta-generation-2026-08-04.json`.*
 - [ ] Independent AI review of each pair records, per pair: (a) is this the
       same room, (b) is each enumerated change visible, (c) list every
       *unenumerated* material difference observed.

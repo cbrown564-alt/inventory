@@ -14,6 +14,7 @@ from evals.synthetic.build_delta_tasks import (
     validate_spec,
     write_tasks,
 )
+from evals.synthetic.build_delta_gallery import build as build_gallery
 from evals.synthetic.generate_delta_codex import (
     build_command,
     build_instruction,
@@ -538,6 +539,64 @@ def test_the_probe_cannot_be_retried_past_its_gate(tmp_path):
         writer.writerows(rows)
     with pytest.raises(ValueError, match=f"exceeds the {MAX_PROBE_ATTEMPTS}-attempt"):
         record(dataset, "operator", "cli")
+
+
+# --------------------------------------------------------------------------
+# build_delta_gallery
+# --------------------------------------------------------------------------
+
+
+def test_the_gallery_pairs_each_t0_with_its_t1(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    _render(dataset)
+    record(dataset, "operator", "cli")
+
+    output = build_gallery(dataset, tmp_path / "gallery.html")
+    html = output.read_text(encoding="utf-8")
+    assert html.count("RP-901-A-wide.png") == 1
+    assert html.count("RP-901-T1-A-wide.png") == 1
+    assert "T0 — check-in (accepted)" in html
+    assert "unreviewed" in html
+
+
+def test_the_gallery_names_the_immaterial_change_as_a_false_change(tmp_path):
+    """The owner has to see which difference is a trap, not just which exist.
+
+    A rearranged cushion is a real difference and reporting it is a false
+    change. Shown in an undifferentiated list, it reads as one more thing to
+    tick off, and the pair gets adjudicated against the wrong standard.
+    """
+    dataset = _write_dataset(tmp_path)
+    spec = copy.deepcopy(SPEC)
+    spec["changes"].append({
+        "id": "D9", "kind": "immaterial", "target": "cushions",
+        "description": "rearranged along the sofa", "material": False,
+    })
+    (dataset / "deltas/RP-901-T1.json").write_text(json.dumps(spec), encoding="utf-8")
+    _render(dataset)
+
+    html = build_gallery(dataset, tmp_path / "gallery.html").read_text(encoding="utf-8")
+    assert "rearranged along the sofa" in html
+    assert "false change" in html
+
+
+def test_the_gallery_surfaces_reported_drift(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    _render(dataset)
+    review = tmp_path / "review.json"
+    review.write_text(json.dumps({"status": "complete", "pairs": [{
+        "delta_id": "RP-901-T1", "decision": "reject",
+        "decision_basis": "unenumerated material change observed",
+        "unenumerated_material_changes": [
+            {"target": "curtains", "description": "now patterned", "material": True}
+        ],
+    }]}), encoding="utf-8")
+
+    html = build_gallery(
+        dataset, tmp_path / "gallery.html", review
+    ).read_text(encoding="utf-8")
+    assert "curtains" in html and "now patterned" in html
+    assert 'class="verdict reject"' in html
 
 
 # --------------------------------------------------------------------------
