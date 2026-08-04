@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-022",
+  "provider": "Google",
+  "product": "Gemini Omni (owner subscription surface)",
+  "model_display_name": "Gemini Omni",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "WC",
+            "visibility": "pending"
+          },
+          {
+            "name": "corner basin",
+            "visibility": "pending"
+          },
+          {
+            "name": "mirror",
+            "visibility": "pending"
+          },
+          {
+            "name": "wallpaper",
+            "visibility": "pending"
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "door",
+            "visibility": "pending"
+          },
+          {
+            "name": "toilet roll holder",
+            "visibility": "pending"
+          },
+          {
+            "name": "towel ring",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting",
+            "visibility": "pending"
+          },
+          {
+            "name": "cleaning basket",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "corner basin",
+            "visibility": "pending"
+          },
+          {
+            "name": "mixer tap",
+            "visibility": "pending"
+          },
+          {
+            "name": "mirror",
+            "visibility": "pending"
+          },
+          {
+            "name": "extractor vent",
+            "visibility": "pending"
+          },
+          {
+            "name": "light switch",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "WC base",
+            "visibility": "pending"
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting",
+            "visibility": "pending"
+          },
+          {
+            "name": "pipe boxing",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

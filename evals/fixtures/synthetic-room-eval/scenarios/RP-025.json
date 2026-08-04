@@ -4,13 +4,87 @@
   "property_profile": "covered balcony of a modern UK apartment",
   "cleanliness": "ordinarily occupied with planters and two chairs",
   "lighting": "bright cloudy daylight",
-  "continuity_requirements": ["same glass balustrade, two metal chairs, planters and tiled floor"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "unsafe missing balustrade"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same glass balustrade, two metal chairs, planters and tiled floor"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry",
+    "unsafe missing balustrade"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "at the patio door", "shot_scale": "wide establishing view", "intended_visible_items": ["glass balustrade", "two metal chairs", "small table", "planters", "floor tiles"], "intended_defects": [], "intended_negatives": ["tile joints are not cracks"]},
-    {"id": "B-reverse", "viewpoint": "outer corner facing the flat", "shot_scale": "wide establishing view", "intended_visible_items": ["patio door", "external light", "wall vent", "chairs", "threshold"], "intended_defects": [], "intended_negatives": ["glass reflection is not a stain"]},
-    {"id": "C-inventory", "viewpoint": "facing the balustrade corner", "shot_scale": "medium fixtures view", "intended_visible_items": ["balustrade glass", "metal posts", "drain outlet", "planters", "external socket"], "intended_defects": [], "intended_negatives": ["rain droplets do not prove a leak"]},
-    {"id": "D-condition", "viewpoint": "low view across two floor tiles", "shot_scale": "condition detail", "intended_visible_items": ["floor tiles", "grout", "drain channel", "chair leg"], "intended_defects": ["short hairline crack confined to one floor tile"], "intended_negatives": ["grout line is not a crack"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "at the patio door",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "glass balustrade",
+        "two metal chairs",
+        "small table",
+        "planters",
+        "floor tiles"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "tile joints are not cracks"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "outer corner facing the flat",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "patio door",
+        "external light",
+        "wall vent",
+        "chairs",
+        "threshold"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "glass reflection is not a stain"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "facing the balustrade corner",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "balustrade glass",
+        "metal posts",
+        "drain outlet",
+        "planters",
+        "external socket"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "rain droplets do not prove a leak"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "low view across two floor tiles",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "floor tiles",
+        "grout",
+        "drain channel",
+        "chair leg"
+      ],
+      "intended_defects": [
+        "short hairline crack confined to one floor tile"
+      ],
+      "intended_negatives": [
+        "grout line is not a crack"
+      ]
+    }
   ]
 }

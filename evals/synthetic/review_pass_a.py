@@ -60,17 +60,27 @@ def _load_rows(dataset_dir: Path) -> list[dict[str, str]]:
 def _review_inputs(
     dataset_dir: Path,
     task_ids: set[str] | None,
+    provider_id: str | None = None,
 ) -> list[dict[str, Any]]:
     rows = _load_rows(dataset_dir)
     by_packet: dict[tuple[str, str], list[dict[str, str]]] = {}
     for row in rows:
-        provider_id = row["task_id"].split(".")[1]
-        by_packet.setdefault((row["scenario_id"], provider_id), []).append(row)
+        row_provider = row["task_id"].split(".")[1]
+        by_packet.setdefault((row["scenario_id"], row_provider), []).append(row)
     inputs = []
     for row in rows:
         if task_ids is not None and row["task_id"] not in task_ids:
             continue
-        if task_ids is None and not (
+        # A provider selector takes every review_pending row in that arm. The
+        # unfiltered default below is not a general queue: it encodes the
+        # attempts==2, scenario<=20 retry cohort of one earlier run, and would
+        # silently select nothing for any other arm.
+        if provider_id is not None and (
+            row["task_id"].split(".")[1] != provider_id
+            or row["status"] != "review_pending"
+        ):
+            continue
+        if task_ids is None and provider_id is None and not (
             row["status"] == "review_pending"
             and int(row.get("attempts") or 0) == 2
             and int(row["scenario_id"].split("-")[1]) <= 20
@@ -202,12 +212,20 @@ def review(
     model: str = MODEL_MODE,
     batch_size: int = 2,
     timeout: int = 480,
+    provider_id: str | None = None,
+    second_model: str | None = None,
+    review_type: str = "phase3_retry_pass_a_visual_screen",
 ) -> dict[str, Any]:
     if batch_size < 1:
         raise ValueError("batch_size must be at least 1")
     cli = _resolve_cli(cli_path)
     cli_version = _cli_version(cli)
-    inputs = _review_inputs(dataset_dir, task_ids)
+    # Defaulting to the same model twice preserves the recorded protocol of the
+    # earlier runs exactly. Passing a different second model buys independence
+    # of blind spot as well as of conclusion, which matters most when the
+    # reviewer would otherwise share a family with whatever made the images.
+    second = second_model or model
+    inputs = _review_inputs(dataset_dir, task_ids, provider_id)
     if not inputs:
         raise ValueError("no retry outputs are ready for Pass A")
     frames: list[dict[str, Any]] = []
@@ -236,7 +254,7 @@ def review(
     def write_report(status: str) -> dict[str, Any]:
         counts = Counter(frame["pass_a_decision"] for frame in frames)
         report = {
-            "review_type": "phase3_retry_pass_a_visual_screen",
+            "review_type": review_type,
             "status": status,
             "reviewed_at": started_at,
             "completed_at": _utc_now() if status == "complete" else None,
@@ -244,6 +262,7 @@ def review(
             "metered_api_call": False,
             "cli_version": cli_version,
             "reviewer_model_mode": model,
+            "reviewer_second_model_mode": second,
             "counts": dict(sorted(counts.items())),
             "frames": frames,
             "calls": calls,
@@ -271,11 +290,11 @@ def review(
             cli, model, first_prompt, timeout, dataset_dir
         )
         print(f"Pass A batch {batch_number}: second review", flush=True)
-        second, second_wrapper, second_elapsed = _invoke(
-            cli, model, second_prompt, timeout, dataset_dir
+        second_review, second_wrapper, second_elapsed = _invoke(
+            cli, second, second_prompt, timeout, dataset_dir
         )
         first_by_id = _validate_review(batch, first)
-        second_by_id = _validate_review(batch, second)
+        second_by_id = _validate_review(batch, second_review)
         calls.append(
             {
                 "batch": batch_number,
@@ -333,10 +352,18 @@ def main() -> int:
     parser.add_argument("--model", default=MODEL_MODE)
     parser.add_argument("--batch-size", type=int, default=2)
     parser.add_argument("--timeout", type=int, default=480)
+    parser.add_argument("--provider", dest="provider_id",
+                        help="review every review_pending row in one arm, "
+                             "e.g. gemini-omni")
+    parser.add_argument("--second-model",
+                        help="model for the blind second check (default: same "
+                             "as --model, which is the earlier runs' protocol)")
+    parser.add_argument("--review-type",
+                        default="phase3_retry_pass_a_visual_screen")
     args = parser.parse_args()
     task_ids = set(args.tasks) if args.tasks else None
     if args.dry_run:
-        inputs = _review_inputs(args.dataset_dir, task_ids)
+        inputs = _review_inputs(args.dataset_dir, task_ids, args.provider_id)
         print(
             json.dumps(
                 {
@@ -364,6 +391,9 @@ def main() -> int:
         args.model,
         args.batch_size,
         args.timeout,
+        args.provider_id,
+        args.second_model,
+        args.review_type,
     )
     print(json.dumps(report["counts"], indent=2))
     return 0

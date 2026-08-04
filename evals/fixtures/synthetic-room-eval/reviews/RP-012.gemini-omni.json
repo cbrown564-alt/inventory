@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-012",
+  "provider": "Google",
+  "product": "Gemini Omni (owner subscription surface)",
+  "model_display_name": "Gemini Omni",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "leather sofa",
+            "visibility": "pending"
+          },
+          {
+            "name": "patterned rug",
+            "visibility": "pending"
+          },
+          {
+            "name": "fireplace",
+            "visibility": "pending"
+          },
+          {
+            "name": "bookshelves",
+            "visibility": "pending"
+          },
+          {
+            "name": "coffee table",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "door",
+            "visibility": "pending"
+          },
+          {
+            "name": "armchair",
+            "visibility": "pending"
+          },
+          {
+            "name": "bay window",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "floorboards",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "fireplace surround",
+            "visibility": "pending"
+          },
+          {
+            "name": "mantel",
+            "visibility": "pending"
+          },
+          {
+            "name": "wall lights",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "timber floorboards",
+            "visibility": "pending"
+          },
+          {
+            "name": "rug edge",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting board",
+            "visibility": "pending"
+          },
+          {
+            "name": "hearth",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

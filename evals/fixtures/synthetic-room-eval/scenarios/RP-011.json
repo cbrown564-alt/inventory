@@ -4,13 +4,86 @@
   "property_profile": "furnished 1980s UK flat with neutral decor",
   "cleanliness": "ordinarily occupied with cushions and a few objects",
   "lighting": "mixed window backlight and floor lamp",
-  "continuity_requirements": ["same grey sofa, timber television unit, beige carpet and balcony door"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same grey sofa, timber television unit, beige carpet and balcony door"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "at the hall doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["grey sofa", "armchair", "coffee table", "television unit", "beige carpet"], "intended_defects": [], "intended_negatives": ["no carpet stains"]},
-    {"id": "B-reverse", "viewpoint": "balcony door looking back", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "bookcase", "radiator", "floor lamp", "ceiling shade"], "intended_defects": [], "intended_negatives": ["lamp shadow is not damp"]},
-    {"id": "C-inventory", "viewpoint": "beside the sofa facing outside", "shot_scale": "medium fixtures view", "intended_visible_items": ["balcony door", "vertical blinds", "radiator", "thermostat", "sockets"], "intended_defects": [], "intended_negatives": ["glass reflection is not a stain"]},
-    {"id": "D-condition", "viewpoint": "close view of sofa arm with seat visible", "shot_scale": "condition detail", "intended_visible_items": ["sofa arm", "seat cushion", "fabric seam", "carpet"], "intended_defects": ["small frayed patch on the outer sofa arm"], "intended_negatives": ["fabric nap is not staining"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "at the hall doorway",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "grey sofa",
+        "armchair",
+        "coffee table",
+        "television unit",
+        "beige carpet"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "no carpet stains"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "balcony door looking back",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "door",
+        "bookcase",
+        "radiator",
+        "floor lamp",
+        "ceiling shade"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "lamp shadow is not damp"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "beside the sofa facing outside",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "balcony door",
+        "vertical blinds",
+        "radiator",
+        "thermostat",
+        "sockets"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "glass reflection is not a stain"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "close view of sofa arm with seat visible",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "sofa arm",
+        "seat cushion",
+        "fabric seam",
+        "carpet"
+      ],
+      "intended_defects": [
+        "small frayed patch on the outer sofa arm"
+      ],
+      "intended_negatives": [
+        "fabric nap is not staining"
+      ]
+    }
   ]
 }

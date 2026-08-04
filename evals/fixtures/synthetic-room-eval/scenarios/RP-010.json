@@ -4,13 +4,85 @@
   "property_profile": "compact child's bedroom in a UK family flat",
   "cleanliness": "noticeably cluttered but inspectable with toys and books",
   "lighting": "flash-like phone illumination at dusk",
-  "continuity_requirements": ["same single bed, white wardrobe, blue rug and small window"],
-  "avoid": ["people", "faces", "logos", "readable text", "watermark", "impossible geometry"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same single bed, white wardrobe, blue rug and small window"
+  ],
+  "avoid": [
+    "people",
+    "faces",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "at the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["single bed", "wardrobe", "desk", "blue rug", "toy storage"], "intended_defects": [], "intended_negatives": ["no wall damage"]},
-    {"id": "B-reverse", "viewpoint": "beside the window", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "bookcase", "radiator", "ceiling shade", "carpet"], "intended_defects": [], "intended_negatives": ["flash shadow is not damp"]},
-    {"id": "C-inventory", "viewpoint": "facing the desk wall", "shot_scale": "medium fixtures view", "intended_visible_items": ["desk", "chair", "sockets", "radiator", "window blind"], "intended_defects": [], "intended_negatives": ["no cracked socket"]},
-    {"id": "D-condition", "viewpoint": "low view beside the bed", "shot_scale": "condition detail", "intended_visible_items": ["bed frame", "carpet", "skirting board", "blue rug"], "intended_defects": [], "intended_negatives": ["rug pattern is not a stain"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "at the doorway",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "single bed",
+        "wardrobe",
+        "desk",
+        "blue rug",
+        "toy storage"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "no wall damage"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "beside the window",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "door",
+        "bookcase",
+        "radiator",
+        "ceiling shade",
+        "carpet"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "flash shadow is not damp"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "facing the desk wall",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "desk",
+        "chair",
+        "sockets",
+        "radiator",
+        "window blind"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "no cracked socket"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "low view beside the bed",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "bed frame",
+        "carpet",
+        "skirting board",
+        "blue rug"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "rug pattern is not a stain"
+      ]
+    }
   ]
 }

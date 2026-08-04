@@ -14,9 +14,17 @@ DEFAULT_DATASET = ROOT / "evals/fixtures/synthetic-room-eval"
 FIELDNAMES = [
     "task_id", "scenario_id", "room_type", "provider", "product",
     "model_display_name", "view_id", "output_path", "prompt_sha256",
-    "exact_prompt", "status", "attempts", "operator", "generated_at",
-    "generator_cli_version", "output_sha256",
+    "exact_prompt", "provenance", "status", "attempts", "operator",
+    "generated_at", "generator_cli_version", "output_sha256",
 ]
+
+#: What a row's ``exact_prompt`` is entitled to claim. Rows generated through a
+#: recorded path were produced *from* that prompt. The Gemini Omni slice was
+#: not: those images came off the owner's subscription surface and the prompt
+#: actually used was never written down, so for them exact_prompt is the
+#: specification the image is judged against and nothing more. Declared per
+#: provider in dataset.json so it cannot drift row by row.
+DEFAULT_PROVENANCE = "recorded"
 
 
 def _load(path: Path) -> dict:
@@ -66,6 +74,7 @@ def build_rows(dataset_dir: Path) -> list[dict[str, str]]:
                     "output_path": output.as_posix(),
                     "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
                     "exact_prompt": prompt,
+                    "provenance": provider.get("provenance", DEFAULT_PROVENANCE),
                     "status": "pending",
                     "attempts": "0",
                     "operator": "",

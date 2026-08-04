@@ -1,4 +1,5 @@
 import csv
+from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -29,8 +30,18 @@ from homeinventory.usecases.tenancy import SYSTEM_PROMPT
 DATASET = Path(__file__).resolve().parents[1] / "evals/fixtures/synthetic-room-eval"
 
 
+def _matched(rows):
+    """Rows belonging to the matched two-provider design.
+
+    The Gemini Omni slice shares the provider *name* "Google" with the
+    Antigravity arm, so it has to be excluded by provider key.
+    """
+    return [row for row in rows
+            if row["task_id"].split(".")[1] != "gemini-omni"]
+
+
 def test_pilot_has_twenty_five_matched_four_view_packets():
-    rows = build_rows(DATASET)
+    rows = _matched(build_rows(DATASET))
     assert len(rows) == 200
     assert len({row["scenario_id"] for row in rows}) == 25
     for scenario in {row["scenario_id"] for row in rows}:
@@ -42,6 +53,35 @@ def test_pilot_has_twenty_five_matched_four_view_packets():
             "Codex built-in image generation",
         }
         assert {row["view_id"] for row in subset} == {"A-wide", "B-reverse", "C-inventory", "D-condition"}
+
+
+def test_the_bias_check_slice_is_present_but_outside_the_matched_design():
+    """The Omni slice is imported, and is not counted as matched-design work.
+
+    docs/31 Amendment B B9: opportunistic, unbalanced, no completeness
+    obligation. Views with no candidate are terminal rather than queued,
+    because Google generation is retired and they will never be filled.
+    """
+    rows = [row for row in build_rows(DATASET)
+            if row["task_id"].split(".")[1] == "gemini-omni"]
+    assert len(rows) == 100
+    assert {row["provenance"] for row in rows} == {
+        "candidate_only_prompt_not_recorded"
+    }
+    assert {row["provenance"] for row in _matched(build_rows(DATASET))} == {
+        "recorded"
+    }
+    with (DATASET / "tasks.csv").open(newline="", encoding="utf-8") as handle:
+        ledger = [row for row in csv.DictReader(handle)
+                  if row["task_id"].split(".")[1] == "gemini-omni"]
+    statuses = Counter(row["status"] for row in ledger)
+    assert statuses["review_pending"] == 57
+    assert statuses["not_generated"] == 43
+    # Every review_pending row must actually have the image it claims.
+    for row in ledger:
+        exists = (DATASET / row["output_path"]).is_file()
+        assert exists == (row["status"] == "review_pending"), row["task_id"]
+        assert bool(row["output_sha256"]) == exists
 
 
 def test_antigravity_resume_skips_terminal_packets_and_preserves_partial_files():
@@ -123,6 +163,7 @@ def test_fixture_validates_accepted_images_and_reports_pending_tasks(tmp_path):
             "review_pending",
             "retry_pending",
             "generator_failed",
+            "not_generated",
         ))
         for warning in warnings
     )
@@ -134,7 +175,8 @@ def test_fixture_validates_accepted_images_and_reports_pending_tasks(tmp_path):
     build(DATASET, output)
     page = output.read_text()
     assert "<strong>Status:</strong>" in page
-    assert page.count("<article ") == 200
+    # 200 matched-design tasks plus the 100-row Gemini Omni bias-check slice.
+    assert page.count("<article ") == 300
     assert "Requested content is not gold" in page
     for filter_name in (
         "development",

@@ -4,13 +4,86 @@
   "property_profile": "dated 1970s UK maisonette with wood-effect cabinets",
   "cleanliness": "ordinarily occupied with a few dishes and small appliances",
   "lighting": "warm artificial ceiling light",
-  "continuity_requirements": ["same wood-effect units, cream laminate worktop, freestanding cooker and patterned floor"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same wood-effect units, cream laminate worktop, freestanding cooker and patterned floor"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "at the entrance", "shot_scale": "wide establishing view", "intended_visible_items": ["wood-effect units", "laminate worktop", "freestanding cooker", "sink", "patterned vinyl floor"], "intended_defects": [], "intended_negatives": ["wood grain is not mould"]},
-    {"id": "B-reverse", "viewpoint": "beside the cooker looking back", "shot_scale": "wide establishing view", "intended_visible_items": ["entrance door", "radiator", "window blind", "wall clock", "skirting"], "intended_defects": [], "intended_negatives": ["corner shadow is not damp"]},
-    {"id": "C-inventory", "viewpoint": "facing the sink run", "shot_scale": "medium fixtures view", "intended_visible_items": ["sink", "draining board", "mixer tap", "sockets", "under-counter fridge"], "intended_defects": [], "intended_negatives": ["water reflection is not a stain"]},
-    {"id": "D-condition", "viewpoint": "low view of the floor beside the cooker", "shot_scale": "condition detail", "intended_visible_items": ["vinyl floor", "plinth", "base unit", "cooker side"], "intended_defects": ["small triangular tear in the vinyl floor beside the cooker"], "intended_negatives": ["printed floor seam is not a crack"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "at the entrance",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "wood-effect units",
+        "laminate worktop",
+        "freestanding cooker",
+        "sink",
+        "patterned vinyl floor"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "wood grain is not mould"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "beside the cooker looking back",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "entrance door",
+        "radiator",
+        "window blind",
+        "wall clock",
+        "skirting"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "corner shadow is not damp"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "facing the sink run",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "sink",
+        "draining board",
+        "mixer tap",
+        "sockets",
+        "under-counter fridge"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "water reflection is not a stain"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "low view of the floor beside the cooker",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "vinyl floor",
+        "plinth",
+        "base unit",
+        "cooker side"
+      ],
+      "intended_defects": [
+        "small triangular tear in the vinyl floor beside the cooker"
+      ],
+      "intended_negatives": [
+        "printed floor seam is not a crack"
+      ]
+    }
   ]
 }

@@ -4,13 +4,86 @@
   "property_profile": "recently decorated unfurnished bedroom in a UK flat",
   "cleanliness": "clean, empty and tidy",
   "lighting": "even overcast daylight",
-  "continuity_requirements": ["same pale blue walls, grey carpet, white radiator and sash window"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "extra windows"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same pale blue walls, grey carpet, white radiator and sash window"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry",
+    "extra windows"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "at the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["painted walls", "grey carpet", "sash window", "radiator", "ceiling pendant"], "intended_defects": [], "intended_negatives": ["no damp", "no carpet stains"]},
-    {"id": "B-reverse", "viewpoint": "window corner looking back", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "door furniture", "built-in wardrobe", "sockets", "skirting boards"], "intended_defects": [], "intended_negatives": ["ordinary corner shadow is not damp"]},
-    {"id": "C-inventory", "viewpoint": "facing the window wall", "shot_scale": "medium fixtures view", "intended_visible_items": ["window", "curtain pole", "radiator", "thermostatic valve", "sockets"], "intended_defects": [], "intended_negatives": ["window reflection is not condensation"]},
-    {"id": "D-condition", "viewpoint": "low view across carpet and skirting", "shot_scale": "condition detail", "intended_visible_items": ["grey carpet", "skirting board", "doorstop", "threshold strip"], "intended_defects": [], "intended_negatives": ["carpet pile shading is not a stain"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "at the doorway",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "painted walls",
+        "grey carpet",
+        "sash window",
+        "radiator",
+        "ceiling pendant"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "no damp",
+        "no carpet stains"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "window corner looking back",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "door",
+        "door furniture",
+        "built-in wardrobe",
+        "sockets",
+        "skirting boards"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "ordinary corner shadow is not damp"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "facing the window wall",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "window",
+        "curtain pole",
+        "radiator",
+        "thermostatic valve",
+        "sockets"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "window reflection is not condensation"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "low view across carpet and skirting",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "grey carpet",
+        "skirting board",
+        "doorstop",
+        "threshold strip"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "carpet pile shading is not a stain"
+      ]
+    }
   ]
 }

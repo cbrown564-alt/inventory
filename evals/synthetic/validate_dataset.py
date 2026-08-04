@@ -40,6 +40,16 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
     providers_per_scenario = int(
         design.get("provider_packets_per_scenario", 2)
     )
+    # A bias-check slice is not part of the matched design: it is opportunistic,
+    # unbalanced, and carries no completeness obligation (docs/31 Amendment B
+    # B9). Counting it against the matched targets would make every scenario
+    # look short by however many candidates happen to exist.
+    slice_providers = {
+        provider_id
+        for provider_id, provider in config.get("providers", {}).items()
+        if provider.get("role") == "bias_check_slice"
+    }
+    slice_tasks_per_scenario = views_per_packet * len(slice_providers)
 
     scene_paths = sorted((dataset_dir / "scenarios").glob("RP-*.json"))
     if len(scene_paths) != expected_scenarios:
@@ -60,10 +70,11 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
                 f"found {len(views)}"
             )
         assignments = scene.get("provider_assignments", [])
-        if len(assignments) != providers_per_scenario:
+        matched_assignments = [a for a in assignments if a not in slice_providers]
+        if len(matched_assignments) != providers_per_scenario:
             errors.append(
-                f"{path.name}: expected {providers_per_scenario} providers; "
-                f"found {len(assignments)}"
+                f"{path.name}: expected {providers_per_scenario} matched "
+                f"providers; found {len(matched_assignments)}"
             )
         for provider_id in assignments:
             if provider_id not in config.get("providers", {}):
@@ -85,13 +96,18 @@ def validate(dataset_dir: Path, require_complete: bool = False) -> tuple[list[st
     else:
         with task_path.open(newline="", encoding="utf-8") as handle:
             actual = list(csv.DictReader(handle))
-    if len(actual) != expected_tasks:
+    expected_total = expected_tasks + expected_scenarios * slice_tasks_per_scenario
+    if len(actual) != expected_total:
         errors.append(
-            f"pilot requires {expected_tasks} tasks; found {len(actual)}"
+            f"pilot requires {expected_tasks} matched tasks plus "
+            f"{expected_scenarios * slice_tasks_per_scenario} bias-check tasks; "
+            f"found {len(actual)}"
         )
     counts = Counter(row.get("scenario_id") for row in actual)
     for scenario_id in scenario_ids:
-        expected_per_scenario = views_per_packet * providers_per_scenario
+        expected_per_scenario = (
+            views_per_packet * providers_per_scenario + slice_tasks_per_scenario
+        )
         if counts[scenario_id] != expected_per_scenario:
             errors.append(
                 f"{scenario_id}: expected {expected_per_scenario} "

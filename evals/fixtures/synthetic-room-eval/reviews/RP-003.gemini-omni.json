@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-003",
+  "provider": "Google",
+  "product": "Gemini Omni (owner subscription surface)",
+  "model_display_name": "Gemini Omni",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "white kitchen units",
+            "visibility": "pending"
+          },
+          {
+            "name": "oak-effect worktop",
+            "visibility": "pending"
+          },
+          {
+            "name": "sink",
+            "visibility": "pending"
+          },
+          {
+            "name": "oven",
+            "visibility": "pending"
+          },
+          {
+            "name": "ceramic hob",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "fridge freezer",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "door",
+            "visibility": "pending"
+          },
+          {
+            "name": "vinyl floor",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting boards",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "extractor hood",
+            "visibility": "pending"
+          },
+          {
+            "name": "ceramic hob",
+            "visibility": "pending"
+          },
+          {
+            "name": "oven",
+            "visibility": "pending"
+          },
+          {
+            "name": "heat alarm",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "splashback tiles",
+            "visibility": "pending"
+          },
+          {
+            "name": "grout",
+            "visibility": "pending"
+          },
+          {
+            "name": "worktop edge",
+            "visibility": "pending"
+          },
+          {
+            "name": "socket",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

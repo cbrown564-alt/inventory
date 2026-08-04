@@ -4,13 +4,84 @@
   "property_profile": "under-stairs storage cupboard in a UK rental house",
   "cleanliness": "noticeably cluttered but inspectable with boxes and cleaning tools",
   "lighting": "single cool LED bulb",
-  "continuity_requirements": ["same sloped ceiling, white shelves, vacuum and boxed storage"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same sloped ceiling, white shelves, vacuum and boxed storage"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "at the open cupboard door", "shot_scale": "wide establishing view", "intended_visible_items": ["sloped ceiling", "shelves", "vacuum cleaner", "storage boxes", "vinyl floor"], "intended_defects": [], "intended_negatives": ["no proven damage behind boxes"]},
-    {"id": "B-reverse", "viewpoint": "inside facing the door", "shot_scale": "wide establishing view", "intended_visible_items": ["cupboard door", "hinges", "coat hooks", "shelf ends", "skirting"], "intended_defects": [], "intended_negatives": ["dark corner is not damp"]},
-    {"id": "C-inventory", "viewpoint": "facing the service wall", "shot_scale": "medium fixtures view", "intended_visible_items": ["electric meter", "consumer unit", "sockets", "shelf brackets", "light fitting"], "intended_defects": [], "intended_negatives": ["empty bracket is not a missing identified item"]},
-    {"id": "D-condition", "viewpoint": "low view of clear floor area", "shot_scale": "condition detail", "intended_visible_items": ["vinyl floor", "skirting", "door threshold", "vacuum wheel"], "intended_defects": [], "intended_negatives": ["floor seam is not a crack"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "at the open cupboard door",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "sloped ceiling",
+        "shelves",
+        "vacuum cleaner",
+        "storage boxes",
+        "vinyl floor"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "no proven damage behind boxes"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "inside facing the door",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "cupboard door",
+        "hinges",
+        "coat hooks",
+        "shelf ends",
+        "skirting"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "dark corner is not damp"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "facing the service wall",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "electric meter",
+        "consumer unit",
+        "sockets",
+        "shelf brackets",
+        "light fitting"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "empty bracket is not a missing identified item"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "low view of clear floor area",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "vinyl floor",
+        "skirting",
+        "door threshold",
+        "vacuum wheel"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "floor seam is not a crack"
+      ]
+    }
   ]
 }

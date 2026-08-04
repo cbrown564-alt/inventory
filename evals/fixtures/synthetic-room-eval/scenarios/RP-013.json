@@ -4,13 +4,84 @@
   "property_profile": "small studio lounge partly hidden by moving boxes",
   "cleanliness": "partially obscured and deliberately difficult but walkable",
   "lighting": "underexposed daylight through one small window",
-  "continuity_requirements": ["same charcoal sofa, nested tables, boxed belongings and laminate floor"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same charcoal sofa, nested tables, boxed belongings and laminate floor"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "at the studio entrance", "shot_scale": "wide establishing view", "intended_visible_items": ["charcoal sofa", "nested tables", "television stand", "moving boxes", "laminate floor"], "intended_defects": [], "intended_negatives": ["no proven damage behind boxes"]},
-    {"id": "B-reverse", "viewpoint": "near the window looking back", "shot_scale": "wide establishing view", "intended_visible_items": ["entrance door", "radiator", "coat hooks", "floor lamp", "boxes"], "intended_defects": [], "intended_negatives": ["shadow behind boxes is not damp"]},
-    {"id": "C-inventory", "viewpoint": "between boxes facing the window", "shot_scale": "medium fixtures view", "intended_visible_items": ["window", "roller blind", "radiator", "sockets", "skirting"], "intended_defects": [], "intended_negatives": ["partially hidden socket is not assumed damaged"]},
-    {"id": "D-condition", "viewpoint": "low view under the table", "shot_scale": "condition detail", "intended_visible_items": ["laminate floor", "table leg", "rug edge", "skirting"], "intended_defects": [], "intended_negatives": ["laminate joint is not a crack"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "at the studio entrance",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "charcoal sofa",
+        "nested tables",
+        "television stand",
+        "moving boxes",
+        "laminate floor"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "no proven damage behind boxes"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "near the window looking back",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "entrance door",
+        "radiator",
+        "coat hooks",
+        "floor lamp",
+        "boxes"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "shadow behind boxes is not damp"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "between boxes facing the window",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "window",
+        "roller blind",
+        "radiator",
+        "sockets",
+        "skirting"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "partially hidden socket is not assumed damaged"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "low view under the table",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "laminate floor",
+        "table leg",
+        "rug edge",
+        "skirting"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "laminate joint is not a crack"
+      ]
+    }
   ]
 }

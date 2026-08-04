@@ -4,13 +4,85 @@
   "property_profile": "small converted loft shower room in an older UK terrace",
   "cleanliness": "ordinarily occupied but clean",
   "lighting": "underexposed warm ceiling light",
-  "continuity_requirements": ["same sloped ceiling, compact shower, mosaic tiles and pedestal basin"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "extra sanitary fixtures"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same sloped ceiling, compact shower, mosaic tiles and pedestal basin"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry",
+    "extra sanitary fixtures"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "at the narrow doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["shower enclosure", "pedestal basin", "WC", "mosaic tiles", "sloped ceiling"], "intended_defects": [], "intended_negatives": ["mosaic joints are not cracks"]},
-    {"id": "B-reverse", "viewpoint": "beside the basin", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "mirror", "towel ring", "extractor vent", "vinyl floor"], "intended_defects": [], "intended_negatives": ["dark eaves shadow is not damp"]},
-    {"id": "C-inventory", "viewpoint": "facing the shower", "shot_scale": "medium fixtures view", "intended_visible_items": ["shower handset", "mixer controls", "glass door", "soap tray", "extractor vent"], "intended_defects": [], "intended_negatives": ["condensation on glass does not prove damp"]},
-    {"id": "D-condition", "viewpoint": "close to the mosaic wall", "shot_scale": "condition detail", "intended_visible_items": ["mosaic tiles", "grout", "silicone seal", "shower tray"], "intended_defects": [], "intended_negatives": ["one darker grout patch is ordinary colour variation, not mould"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "at the narrow doorway",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "shower enclosure",
+        "pedestal basin",
+        "WC",
+        "mosaic tiles",
+        "sloped ceiling"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "mosaic joints are not cracks"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "beside the basin",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "door",
+        "mirror",
+        "towel ring",
+        "extractor vent",
+        "vinyl floor"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "dark eaves shadow is not damp"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "facing the shower",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "shower handset",
+        "mixer controls",
+        "glass door",
+        "soap tray",
+        "extractor vent"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "condensation on glass does not prove damp"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "close to the mosaic wall",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "mosaic tiles",
+        "grout",
+        "silicone seal",
+        "shower tray"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "one darker grout patch is ordinary colour variation, not mould"
+      ]
+    }
   ]
 }

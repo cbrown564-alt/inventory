@@ -46,10 +46,15 @@ def audit(
         rows = list(csv.DictReader(handle))
     packets = []
     for scenario_id in sorted(scenario_ids):
+        # Selected by provider key, not by the provider *name*: "Google" now
+        # names two arms — the Antigravity generation this audit is about, and
+        # the Gemini Omni bias-check slice, which has no generation run records
+        # to audit and would silently double every packet.
         packet_rows = [
             row
             for row in rows
-            if row["scenario_id"] == scenario_id and row["provider"] == "Google"
+            if row["scenario_id"] == scenario_id
+            and row["task_id"].split(".")[1] == "antigravity-builtin"
         ]
         if len(packet_rows) != 4:
             raise ValueError(f"{scenario_id}: expected four Google tasks")

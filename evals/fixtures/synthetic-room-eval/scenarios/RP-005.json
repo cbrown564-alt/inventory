@@ -4,13 +4,85 @@
   "property_profile": "busy family kitchen in a modest UK semi-detached house",
   "cleanliness": "noticeably cluttered but inspectable with groceries and cookware",
   "lighting": "mixed daylight and warm pendant light",
-  "continuity_requirements": ["same blue units, pale quartz worktop, range cooker and island positions"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same blue units, pale quartz worktop, range cooker and island positions"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "from the hall doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["blue kitchen units", "island", "range cooker", "sink", "pendant lights"], "intended_defects": [], "intended_negatives": ["no mould", "no cracked worktop"]},
-    {"id": "B-reverse", "viewpoint": "far side of the island", "shot_scale": "wide establishing view", "intended_visible_items": ["patio doors", "radiator", "entrance door", "bar stools", "floor tiles"], "intended_defects": [], "intended_negatives": ["window reflection is not a stain"]},
-    {"id": "C-inventory", "viewpoint": "facing the range cooker", "shot_scale": "medium fixtures view", "intended_visible_items": ["range cooker", "extractor canopy", "splashback", "sockets", "heat alarm"], "intended_defects": [], "intended_negatives": ["grease sheen does not prove poor cleaning"]},
-    {"id": "D-condition", "viewpoint": "close view along the island edge", "shot_scale": "condition detail", "intended_visible_items": ["quartz worktop", "island cabinet", "bar stool", "floor tile"], "intended_defects": [], "intended_negatives": ["natural quartz vein is not a crack"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "from the hall doorway",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "blue kitchen units",
+        "island",
+        "range cooker",
+        "sink",
+        "pendant lights"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "no mould",
+        "no cracked worktop"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "far side of the island",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "patio doors",
+        "radiator",
+        "entrance door",
+        "bar stools",
+        "floor tiles"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "window reflection is not a stain"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "facing the range cooker",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "range cooker",
+        "extractor canopy",
+        "splashback",
+        "sockets",
+        "heat alarm"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "grease sheen does not prove poor cleaning"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "close view along the island edge",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "quartz worktop",
+        "island cabinet",
+        "bar stool",
+        "floor tile"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "natural quartz vein is not a crack"
+      ]
+    }
   ]
 }

@@ -1,0 +1,124 @@
+{
+  "scenario_id": "RP-020",
+  "provider": "Google",
+  "product": "Gemini Omni (owner subscription surface)",
+  "model_display_name": "Gemini Omni",
+  "review_status": "provisional",
+  "pass_a": {
+    "reviewer": "",
+    "completed_at": null,
+    "frames": [
+      {
+        "frame_id": "A-wide",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "stair carpet",
+            "visibility": "pending"
+          },
+          {
+            "name": "handrail",
+            "visibility": "pending"
+          },
+          {
+            "name": "balustrade",
+            "visibility": "pending"
+          },
+          {
+            "name": "painted walls",
+            "visibility": "pending"
+          },
+          {
+            "name": "landing window",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "B-reverse",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "stairs",
+            "visibility": "pending"
+          },
+          {
+            "name": "front hall",
+            "visibility": "pending"
+          },
+          {
+            "name": "handrail",
+            "visibility": "pending"
+          },
+          {
+            "name": "newel post",
+            "visibility": "pending"
+          },
+          {
+            "name": "ceiling pendant",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "C-inventory",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "landing window",
+            "visibility": "pending"
+          },
+          {
+            "name": "radiator",
+            "visibility": "pending"
+          },
+          {
+            "name": "smoke alarm",
+            "visibility": "pending"
+          },
+          {
+            "name": "light switch",
+            "visibility": "pending"
+          },
+          {
+            "name": "sockets",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      },
+      {
+        "frame_id": "D-condition",
+        "decision": "pending",
+        "requested_evidence": [
+          {
+            "name": "stair carpet",
+            "visibility": "pending"
+          },
+          {
+            "name": "carpet rods",
+            "visibility": "pending"
+          },
+          {
+            "name": "skirting string",
+            "visibility": "pending"
+          },
+          {
+            "name": "newel post",
+            "visibility": "pending"
+          }
+        ],
+        "rejection_reasons": []
+      }
+    ]
+  },
+  "pass_b": {
+    "reviewer": "",
+    "completed_at": null,
+    "claims": [],
+    "negative_controls": [],
+    "generator_deviations": []
+  }
+}

@@ -4,13 +4,84 @@
   "property_profile": "traditional dining room in a 1930s UK semi",
   "cleanliness": "ordinarily occupied with a tablecloth and serving pieces",
   "lighting": "mixed chandelier light and window backlight",
-  "continuity_requirements": ["same dark table, four upholstered chairs, display cabinet and patterned wallpaper"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same dark table, four upholstered chairs, display cabinet and patterned wallpaper"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "from the hall", "shot_scale": "wide establishing view", "intended_visible_items": ["dark dining table", "four chairs", "display cabinet", "chandelier", "carpet"], "intended_defects": [], "intended_negatives": ["distressed tabletop finish is not fresh damage"]},
-    {"id": "B-reverse", "viewpoint": "window corner", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "fireplace", "radiator", "curtains", "wallpaper"], "intended_defects": [], "intended_negatives": ["wallpaper pattern is not staining"]},
-    {"id": "C-inventory", "viewpoint": "facing the display cabinet", "shot_scale": "medium fixtures view", "intended_visible_items": ["glass cabinet", "wall sockets", "radiator", "thermostat", "skirting"], "intended_defects": [], "intended_negatives": ["cabinet reflection is not a crack"]},
-    {"id": "D-condition", "viewpoint": "close view of table corner", "shot_scale": "condition detail", "intended_visible_items": ["tabletop", "table edge", "tablecloth", "chair back"], "intended_defects": [], "intended_negatives": ["deliberate distressed finish is not a new scratch"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "from the hall",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "dark dining table",
+        "four chairs",
+        "display cabinet",
+        "chandelier",
+        "carpet"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "distressed tabletop finish is not fresh damage"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "window corner",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "door",
+        "fireplace",
+        "radiator",
+        "curtains",
+        "wallpaper"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "wallpaper pattern is not staining"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "facing the display cabinet",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "glass cabinet",
+        "wall sockets",
+        "radiator",
+        "thermostat",
+        "skirting"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "cabinet reflection is not a crack"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "close view of table corner",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "tabletop",
+        "table edge",
+        "tablecloth",
+        "chair back"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "deliberate distressed finish is not a new scratch"
+      ]
+    }
   ]
 }

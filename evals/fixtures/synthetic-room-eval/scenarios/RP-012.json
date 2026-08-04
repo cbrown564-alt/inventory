@@ -4,13 +4,84 @@
   "property_profile": "colourful rented lounge in a Victorian UK terrace",
   "cleanliness": "noticeably cluttered but inspectable with books and throws",
   "lighting": "warm artificial light with deep corner shadows",
-  "continuity_requirements": ["same green walls, patterned rug, brown leather sofa and fireplace"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same green walls, patterned rug, brown leather sofa and fireplace"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "from the entrance", "shot_scale": "wide establishing view", "intended_visible_items": ["leather sofa", "patterned rug", "fireplace", "bookshelves", "coffee table"], "intended_defects": [], "intended_negatives": ["distressed leather is not fresh damage"]},
-    {"id": "B-reverse", "viewpoint": "beside the fireplace looking back", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "armchair", "bay window", "radiator", "floorboards"], "intended_defects": [], "intended_negatives": ["deep corner shadow is not damp"]},
-    {"id": "C-inventory", "viewpoint": "facing the fireplace wall", "shot_scale": "medium fixtures view", "intended_visible_items": ["fireplace surround", "mantel", "wall lights", "sockets", "skirting"], "intended_defects": [], "intended_negatives": ["deliberately distressed paint is not peeling damage"]},
-    {"id": "D-condition", "viewpoint": "close view of floorboards beside rug", "shot_scale": "condition detail", "intended_visible_items": ["timber floorboards", "rug edge", "skirting board", "hearth"], "intended_defects": [], "intended_negatives": ["dark timber grain is not a stain"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "from the entrance",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "leather sofa",
+        "patterned rug",
+        "fireplace",
+        "bookshelves",
+        "coffee table"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "distressed leather is not fresh damage"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "beside the fireplace looking back",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "door",
+        "armchair",
+        "bay window",
+        "radiator",
+        "floorboards"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "deep corner shadow is not damp"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "facing the fireplace wall",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "fireplace surround",
+        "mantel",
+        "wall lights",
+        "sockets",
+        "skirting"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "deliberately distressed paint is not peeling damage"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "close view of floorboards beside rug",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "timber floorboards",
+        "rug edge",
+        "skirting board",
+        "hearth"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "dark timber grain is not a stain"
+      ]
+    }
   ]
 }

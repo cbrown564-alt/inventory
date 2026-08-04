@@ -4,13 +4,85 @@
   "property_profile": "recently refurbished small office in a UK flat",
   "cleanliness": "clean and tidy with minimal desk equipment",
   "lighting": "balanced daylight and neutral task light",
-  "continuity_requirements": ["same white desk, black chair, bookcase, roller blind and pale carpet"],
-  "avoid": ["people", "logos", "readable text", "watermark", "impossible geometry", "visible screen content"],
-  "provider_assignments": ["antigravity-builtin", "gpt-image-2"],
+  "continuity_requirements": [
+    "same white desk, black chair, bookcase, roller blind and pale carpet"
+  ],
+  "avoid": [
+    "people",
+    "logos",
+    "readable text",
+    "watermark",
+    "impossible geometry",
+    "visible screen content"
+  ],
+  "provider_assignments": [
+    "antigravity-builtin",
+    "gpt-image-2",
+    "gemini-omni"
+  ],
   "views": [
-    {"id": "A-wide", "viewpoint": "at the doorway", "shot_scale": "wide establishing view", "intended_visible_items": ["desk", "office chair", "bookcase", "roller blind", "pale carpet"], "intended_defects": [], "intended_negatives": ["carpet shading is not a stain"]},
-    {"id": "B-reverse", "viewpoint": "window corner looking back", "shot_scale": "wide establishing view", "intended_visible_items": ["door", "radiator", "filing cabinet", "ceiling light", "sockets"], "intended_defects": [], "intended_negatives": ["ordinary shadow is not damp"]},
-    {"id": "C-inventory", "viewpoint": "facing the desk wall", "shot_scale": "medium fixtures view", "intended_visible_items": ["desk", "monitor with blank screen", "task lamp", "sockets", "thermostat"], "intended_defects": [], "intended_negatives": ["blank wall mount does not identify a missing item"]},
-    {"id": "D-condition", "viewpoint": "close view of painted desk surface", "shot_scale": "condition detail", "intended_visible_items": ["desk surface", "drawer", "chair arm", "carpet"], "intended_defects": [], "intended_negatives": ["deliberate distressed paint is not fresh damage"]}
+    {
+      "id": "A-wide",
+      "viewpoint": "at the doorway",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "desk",
+        "office chair",
+        "bookcase",
+        "roller blind",
+        "pale carpet"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "carpet shading is not a stain"
+      ]
+    },
+    {
+      "id": "B-reverse",
+      "viewpoint": "window corner looking back",
+      "shot_scale": "wide establishing view",
+      "intended_visible_items": [
+        "door",
+        "radiator",
+        "filing cabinet",
+        "ceiling light",
+        "sockets"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "ordinary shadow is not damp"
+      ]
+    },
+    {
+      "id": "C-inventory",
+      "viewpoint": "facing the desk wall",
+      "shot_scale": "medium fixtures view",
+      "intended_visible_items": [
+        "desk",
+        "monitor with blank screen",
+        "task lamp",
+        "sockets",
+        "thermostat"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "blank wall mount does not identify a missing item"
+      ]
+    },
+    {
+      "id": "D-condition",
+      "viewpoint": "close view of painted desk surface",
+      "shot_scale": "condition detail",
+      "intended_visible_items": [
+        "desk surface",
+        "drawer",
+        "chair arm",
+        "carpet"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "deliberate distressed paint is not fresh damage"
+      ]
+    }
   ]
 }
