@@ -1,6 +1,7 @@
 import copy
 import csv
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -12,6 +13,12 @@ from evals.synthetic.build_delta_tasks import (
     load_specs,
     validate_spec,
     write_tasks,
+)
+from evals.synthetic.generate_delta_codex import (
+    build_instruction,
+    generate_one,
+    pending_rows,
+    reported_prompt,
 )
 from evals.synthetic.record_delta_outputs import MAX_PROBE_ATTEMPTS, record
 from evals.synthetic.review_delta_pair import (
@@ -310,6 +317,98 @@ def test_probe_gate_needs_two_clean_accepted_pairs():
 
 
 # --------------------------------------------------------------------------
+# generate_delta_codex
+# --------------------------------------------------------------------------
+
+
+def test_the_instruction_carries_the_frozen_prompt_unaltered(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    row = write_tasks(dataset)[0]
+    instruction = build_instruction(row)
+    assert f"<prompt>\n{row['exact_prompt']}\n</prompt>" in instruction
+    assert row["output_path"] in instruction
+
+
+def test_reported_prompt_reads_the_last_fenced_block():
+    assert reported_prompt("done\n```text\nthe prompt\n```") == "the prompt"
+    assert reported_prompt("```\nfirst\n```\nthen\n```text\nsecond\n```") == "second"
+    assert reported_prompt("no block here") is None
+
+
+def _fake_codex(dataset, monkeypatch, *, writes=True, prompt=None):
+    """Stand in for `codex exec`, writing what a real run would write."""
+    calls = []
+
+    def fake_run(command, **kwargs):
+        calls.append(command)
+        instruction = command[-1]
+        row_prompt = instruction.split("<prompt>\n", 1)[1].split("\n</prompt>")[0]
+        if writes:
+            relative = instruction.split("unedited to ", 1)[1].split(" (relative")[0]
+            target = dataset / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(b"generated-" + target.name.encode())
+        reported = row_prompt if prompt is None else prompt
+        return subprocess.CompletedProcess(
+            command, 0, stdout=f"codex\n```text\n{reported}\n```\n", stderr=""
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    return calls
+
+
+def test_a_generated_frame_reports_a_verbatim_prompt(tmp_path, monkeypatch):
+    dataset = _write_dataset(tmp_path)
+    rows = write_tasks(dataset)
+    calls = _fake_codex(dataset, monkeypatch)
+
+    outcome = generate_one(dataset, rows[0], Path("codex"), timeout=60)
+    assert outcome["output_written"] is True
+    assert outcome["prompt_verbatim"] is True
+    assert outcome["metered_api_call"] is False
+    assert (dataset / rows[0]["output_path"]).is_file()
+    assert "-i" in calls[0] and rows[0]["reference_path"] in calls[0]
+
+
+def test_a_paraphrased_prompt_discards_the_frame(tmp_path, monkeypatch):
+    """A frame whose generating prompt is unknown is not evidence.
+
+    Left on disk it would be picked up by the next record run and enter the
+    ledger under the queue's exact_prompt — a provenance record that reads as
+    exact while describing a prompt that generated nothing.
+    """
+    dataset = _write_dataset(tmp_path)
+    rows = write_tasks(dataset)
+    _fake_codex(dataset, monkeypatch, prompt="make the kitchen look a bit worse")
+
+    outcome = generate_one(dataset, rows[0], Path("codex"), timeout=60)
+    assert outcome["prompt_verbatim"] is False
+    assert outcome["output_written"] is False
+    assert not (dataset / rows[0]["output_path"]).exists()
+    assert "discarded" in outcome["error"]
+
+
+def test_a_run_that_saves_nothing_is_reported_as_an_error(tmp_path, monkeypatch):
+    dataset = _write_dataset(tmp_path)
+    rows = write_tasks(dataset)
+    _fake_codex(dataset, monkeypatch, writes=False)
+
+    outcome = generate_one(dataset, rows[0], Path("codex"), timeout=60)
+    assert outcome["output_written"] is False
+    assert "no image was saved" in outcome["error"]
+
+
+def test_pending_rows_skips_frames_that_already_exist(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    rows = write_tasks(dataset)
+    assert len(pending_rows(dataset)) == 2
+    path = dataset / rows[0]["output_path"]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(b"already-generated")
+    assert [row["task_id"] for row in pending_rows(dataset)] == [rows[1]["task_id"]]
+
+
+# --------------------------------------------------------------------------
 # record_delta_outputs
 # --------------------------------------------------------------------------
 
@@ -564,10 +663,31 @@ def test_the_probe_spans_the_three_required_room_classes():
     assert rooms == {"Kitchen", "Living room", "Bathroom"}
 
 
-def test_no_probe_output_is_scoreable_yet():
-    """Every probe task is unrendered, so no delta result can exist."""
+def test_the_probe_queue_stays_within_its_gate():
+    """The probe is six frames at no more than two attempts each.
+
+    Generation began on 4 Aug 2026, so the queue is no longer uniformly
+    pending. What must stay true is the shape of the gate itself: docs/31
+    caps the probe at two attempts per scenario and forbids a looser retry,
+    and a seventh row would be pilot work authored before its gate.
+    """
     with (DATASET / "delta_tasks.csv").open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     assert len(rows) == 6
-    assert {row["status"] for row in rows} == {"pending"}
-    assert not any((DATASET / row["output_path"]).exists() for row in rows)
+    assert all(int(row["attempts"] or 0) <= MAX_PROBE_ATTEMPTS for row in rows)
+
+
+def test_no_recorded_probe_frame_is_a_copy_of_its_reference():
+    """A T1 that echoes its T0 is the failure this phase cannot afford.
+
+    It presents as flawless — identity intact, nothing drifted — and fails
+    only on the enumerated changes being absent. Checked against the shipped
+    fixture, not just in the recorder's unit tests, because this is the one
+    defect that would look like clean gold in the ledger.
+    """
+    with (DATASET / "delta_tasks.csv").open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    for row in rows:
+        if not row["output_sha256"]:
+            continue
+        assert row["output_sha256"] != row["reference_sha256"], row["task_id"]
