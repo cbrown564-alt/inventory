@@ -33,6 +33,7 @@ from evals.synthetic.prompts import PROMPTS, prompt_sha256
 from evals.synthetic.run_eval import _rendered_request, _sha256_file
 from evals.synthetic.run_delta_eval import build_delta_run_plan, compare_pair
 from evals.synthetic.aggregate_delta_scores import (
+    attribute_missed_conditions,
     _decomposition_summary,
     _metrics,
     decompose_false_changes,
@@ -1285,3 +1286,37 @@ def test_pooled_rates_come_from_summed_counts_not_averaged_pairs():
     averaged = (0.0 + 100.0) / 2
     assert pooled == 90.0
     assert pooled != averaged
+
+
+def test_a_condition_change_on_a_split_object_is_attributed_to_the_aligner():
+    """The three fates of a missed condition change call for different fixes.
+
+    ``_satisfies`` can only credit a cleanliness, defect or severity change on
+    an item that reached the ``changed`` bucket. When the aligner splits the
+    object across ``removed`` and ``added``, its delta is never compared at
+    all — which is a different failure from the model looking and staying
+    silent, and different again from neither run naming the object.
+    """
+    comparison = {
+        "rooms": [{
+            "name": "Kitchen",
+            "changed": [{"name": "Worktop"}],
+            "unchanged": [{"name": "Sink"}],
+            "removed": [{"name": "Ceramic hob"}],
+            "added": [{"name": "Induction hob"}],
+        }]
+    }
+    report = {
+        "missed_material_changes": [
+            {"kind": "cleanliness", "target": "ceramic hob"},
+            {"kind": "new_defect", "target": "worktop"},
+            {"kind": "worsened", "target": "extractor hood"},
+            {"kind": "item_added", "target": "fruit bowl"},
+        ]
+    }
+    counts = attribute_missed_conditions(comparison, report)
+    assert counts == {
+        "split_by_aligner": 1,
+        "tracked_but_silent": 1,
+        "never_named": 1,
+    }

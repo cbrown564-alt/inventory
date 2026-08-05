@@ -36,7 +36,7 @@ from homeinventory.merge import _head_nouns
 
 from evals.synthetic.build_delta_tasks import load_specs
 from evals.synthetic.build_tasks import DEFAULT_DATASET
-from evals.synthetic.score_delta import score_delta
+from evals.synthetic.score_delta import _targets_match, score_delta
 
 SCHEMA_VERSION = 1
 METRIC_KEYS = (
@@ -192,6 +192,50 @@ def decompose_false_changes(report: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+#: Kinds whose gold is a change of state rather than of presence. These are
+#: what a deposit adjudication actually turns on, and they are the only kinds
+#: ``score_delta`` can credit solely from the ``changed`` bucket.
+CONDITION_KINDS = frozenset({"cleanliness", "new_defect", "worsened"})
+
+
+def attribute_missed_conditions(
+    comparison: dict[str, Any], report: dict[str, Any]
+) -> dict[str, int]:
+    """Why a condition change went unreported, in the pipeline's own terms.
+
+    ``_satisfies`` can only credit a cleanliness, defect or severity change on
+    an item that reached the ``changed`` bucket, so a missed one has exactly
+    three fates, and they call for different fixes:
+
+    * **split** — the two runs named the object differently, the aligner filed
+      it as a removal plus an addition, and its condition delta was never
+      compared at all;
+    * **tracked but silent** — the object aligned and the change simply was not
+      reported. A genuine detection miss;
+    * **never named** — neither run put the object in the schedule, so no delta
+      was possible. That is a description-coverage gap, not a compare failure,
+      and no aligner change would recover it.
+    """
+    room = comparison["rooms"][0]
+    split_names = [item.get("name", "") for item in room["removed"] + room["added"]]
+    tracked_names = [
+        change.get("name") or change.get("checkin_name", "")
+        for change in room["changed"]
+    ] + [entry.get("name", "") for entry in room["unchanged"]]
+    counts = {"split_by_aligner": 0, "tracked_but_silent": 0, "never_named": 0}
+    for row in report["missed_material_changes"]:
+        if row["kind"] not in CONDITION_KINDS:
+            continue
+        target = row["target"]
+        if any(_targets_match(target, name) for name in split_names):
+            counts["split_by_aligner"] += 1
+        elif any(_targets_match(target, name) for name in tracked_names):
+            counts["tracked_but_silent"] += 1
+        else:
+            counts["never_named"] += 1
+    return counts
+
+
 def _decomposition_summary(
     decompositions: list[dict[str, Any]], totals: dict[str, int]
 ) -> dict[str, Any]:
@@ -271,6 +315,7 @@ def build_report(
                 "parent_split": meta["parent_split"],
                 "report": report,
                 "decomposition": decompose_false_changes(report),
+                "missed_conditions": attribute_missed_conditions(comparison, report),
             }
         )
 
@@ -330,6 +375,10 @@ def build_report(
         "false_change_decomposition": _decomposition_summary(
             [pair["decomposition"] for pair in pairs], all_totals
         ),
+        "missed_condition_attribution": {
+            key: sum(pair["missed_conditions"][key] for pair in pairs)
+            for key in ("split_by_aligner", "tracked_but_silent", "never_named")
+        },
         "by_change_kind": _by_change_kind(pairs),
         "by_delta_class": _grouped(pairs, "delta_class"),
         "by_room_type": _grouped(pairs, "room_type"),
@@ -396,6 +445,7 @@ def _markdown(report: dict[str, Any]) -> str:
         )
     decomposition = report["false_change_decomposition"]
     counts = decomposition["counts"]
+    attribution = report["missed_condition_attribution"]
     lines += [
         "",
         "## What the false changes are",
@@ -413,6 +463,17 @@ def _markdown(report: dict[str, Any]) -> str:
         f"Diagnostic: with renames aligned the rate would be "
         f"{decomposition['false_change_rate_if_renames_aligned']}%. "
         + decomposition["diagnostic_note"],
+        "",
+        "## Why a condition change went unreported",
+        "",
+        "| Fate | Count | Fix |",
+        "|---|---:|---|",
+        f"| Object split by the aligner | {attribution['split_by_aligner']} | "
+        "`match_score` — the delta was never compared |",
+        f"| Tracked but silent | {attribution['tracked_but_silent']} | "
+        "a genuine detection miss |",
+        f"| Never named by either run | {attribution['never_named']} | "
+        "description coverage; no aligner change recovers it |",
         "",
         "## Recall by change kind",
         "",
