@@ -161,22 +161,17 @@
           "checkin_id": "KIT-018",
           "checkout_id": "KIT-015",
           "name": "Kettle"
+        },
+        {
+          "checkin_id": "KIT-010",
+          "checkout_id": "KIT-008",
+          "name": "Worktops"
         }
       ],
       "removed": [
         {
           "id": "KIT-009",
           "name": "Kitchen cabinet plinths",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "RP-004-A-wide",
-            "RP-004-D-condition"
-          ]
-        },
-        {
-          "id": "KIT-010",
-          "name": "Worktop",
           "condition": "good",
           "defects": [],
           "photo_ids": [
@@ -251,16 +246,6 @@
         }
       ],
       "added": [
-        {
-          "id": "KIT-008",
-          "name": "Worktops",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "P35-004-T1-A-wide",
-            "P35-004-T1-D-condition"
-          ]
-        },
         {
           "id": "KIT-009",
           "name": "Double oven cooker",
@@ -345,11 +330,11 @@
     }
   ],
   "totals": {
-    "matched": 15,
+    "matched": 16,
     "changed": 1,
-    "unchanged": 14,
-    "removed": 9,
-    "added": 9,
+    "unchanged": 15,
+    "removed": 8,
+    "added": 8,
     "classified": 0
   },
   "usage": {

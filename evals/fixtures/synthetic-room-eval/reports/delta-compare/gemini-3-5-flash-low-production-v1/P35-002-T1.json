@@ -166,6 +166,11 @@
           "checkin_id": "BAT-021",
           "checkout_id": "BAT-020",
           "name": "Soap dispenser"
+        },
+        {
+          "checkin_id": "BAT-017",
+          "checkout_id": "BAT-009",
+          "name": "Ceiling spotlight"
         }
       ],
       "removed": [
@@ -196,15 +201,6 @@
           "photo_ids": [
             "RP-002-A-wide",
             "RP-002-D-condition"
-          ]
-        },
-        {
-          "id": "BAT-017",
-          "name": "Recessed spotlight",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "RP-002-A-wide"
           ]
         },
         {
@@ -246,15 +242,6 @@
           ]
         },
         {
-          "id": "BAT-009",
-          "name": "Ceiling spotlight",
-          "condition": "excellent",
-          "defects": [],
-          "photo_ids": [
-            "P35-002-T1-A-wide"
-          ]
-        },
-        {
           "id": "BAT-018",
           "name": "Waste bin",
           "condition": "good",
@@ -286,11 +273,11 @@
     }
   ],
   "totals": {
-    "matched": 16,
+    "matched": 17,
     "changed": 1,
-    "unchanged": 15,
-    "removed": 7,
-    "added": 5,
+    "unchanged": 16,
+    "removed": 6,
+    "added": 4,
     "classified": 0
   },
   "usage": {

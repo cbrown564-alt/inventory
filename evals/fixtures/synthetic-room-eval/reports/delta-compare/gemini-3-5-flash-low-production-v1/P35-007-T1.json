@@ -345,20 +345,39 @@
           "classification": "unclassified",
           "rationale": "offline backend: no classification performed",
           "match_score": 2
+        },
+        {
+          "checkin_id": "BED-007",
+          "checkout_id": "BED-006",
+          "name": "Door frame",
+          "checkin_name": "Door Frames",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-007-T1-A-wide",
+            "P35-007-T1-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 1
         }
       ],
       "unchanged": [],
       "removed": [
-        {
-          "id": "BED-007",
-          "name": "Door Frames",
-          "condition": "excellent",
-          "defects": [],
-          "photo_ids": [
-            "RP-008-A-wide",
-            "RP-008-D-condition"
-          ]
-        },
         {
           "id": "BED-008",
           "name": "Pendant Light Fitting",
@@ -379,16 +398,6 @@
         }
       ],
       "added": [
-        {
-          "id": "BED-006",
-          "name": "Door frame",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "P35-007-T1-A-wide",
-            "P35-007-T1-D-condition"
-          ]
-        },
         {
           "id": "BED-009",
           "name": "Ceiling light fitting",
@@ -423,11 +432,11 @@
     }
   ],
   "totals": {
-    "matched": 10,
-    "changed": 10,
+    "matched": 11,
+    "changed": 11,
     "unchanged": 0,
-    "removed": 3,
-    "added": 4,
+    "removed": 2,
+    "added": 3,
     "classified": 0
   },
   "usage": {

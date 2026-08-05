@@ -18,7 +18,8 @@ The plan's original wording was "room + name **embedding** match". What
 shipped is room match (normalised name) plus the lexical head-noun matcher
 already proven by the within-room merge pass: `merge._head_nouns` +
 containment (`compare.match_score`: 4 = names equal, 3 = head-noun sets
-equal, 2 = one set contains the other). Greedy one-to-one assignment, best
+equal, 2 = one set contains the other, 1 = head nouns agree and every
+differing modifier is positional). Greedy one-to-one assignment, best
 score first; every item lands in exactly one bucket — matched, removed
 (check-in only) or added (check-out only) — nothing silently dropped.
 
@@ -28,6 +29,39 @@ while the failure mode we *observed* (descriptor renames — "Walls" vs
 "Walls (Cream Emulsion)") is exactly what head-noun matching already
 handles at £0 and zero API calls. Deviation annotated in docs/03; an
 embedding backend stays an M4 non-goal.
+
+### Update, 5 Aug 2026 — tier 1, and the synonym premise is now falsified
+
+Scoring the Phase 3.5 delta pairs (docs/31) put two independent describe runs
+of the same room against each other for the first time, and both halves of the
+paragraph above moved.
+
+**Tier 1 added.** `_DESCRIPTOR_TOKENS` is a fixed list of colours and
+materials, so a mounting word outside it survives as a false head noun:
+"Recessed spotlight" and "Ceiling spotlight" produce sets that are neither
+equal nor nested, and compare reported a removal *and* an addition for a lamp
+nobody touched. Tier 1 aligns two names whose head noun agrees — rightmost
+discriminating token, singularised — when every differing modifier is
+positional. The restriction carries the design: head-noun agreement alone was
+implemented first and measured, and it aligned "Waste bin" with "Bread bin"
+and "Bedside lamp" with "Table lamp", turning four real changes into silence.
+Where a fitting is mounted does not identify it; what it is for does. Worth 17
+fewer false changes across the 27 pairs at no cost to recall.
+
+**The synonym premise no longer holds.** "Did not appear in any fixture we
+have" was true when written and is not true now. The delta pairs produce them
+in quantity, because two independent describe runs of one room disagree about
+wording in a way a single run never reveals: `Heated towel rail` against
+`Towel radiator`, `Framed picture` against `Framed artwork`, `Decorative dish`
+against `Decorative bowl`, `TV stand` against `TV cabinet`. Roughly 41 such
+pairs survived the tier-1 fix, and no token rule reaches any of them.
+
+That removes the stated reason for the M4 non-goal; it does not by itself
+promote embeddings. Synonym churn is a minority of the false-change rate on
+these pairs — the dominant term is description non-determinism, items one run
+names and the other does not — so an embedding matcher would buy less here
+than the paragraph above implies its absence costs. The decision should be
+retaken on evidence, and the evidence now exists.
 
 Reviewer-`rejected` items are excluded from alignment on both sides — same
 rule as report rendering (struck items are not part of the attested

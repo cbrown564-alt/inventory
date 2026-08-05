@@ -19,7 +19,8 @@ from homeinventory.cli import main as cli_main
 from homeinventory.compare import (CLASSIFICATION_CLASSES, OfflineRubric,
                                    OpenAIRubric, align_items, change_prompt,
                                    compare_inventories, diff_pair,
-                                   match_score, needs_classification)
+                                   match_score, needs_classification,
+                                   _singular)
 from homeinventory.schema import Inventory, Item, Photo, Room
 from homeinventory.usecases.tenancy import TENANCY
 
@@ -80,6 +81,79 @@ def test_match_score_exact_and_descriptor_rename():
     assert match_score("Sofa", "Fabric upholstered sofa") == 3
     assert match_score("Door", "Door handle and lockset") == 2  # containment
     assert match_score("Sofa", "Radiator") == 0
+
+
+def test_a_modifier_outside_the_descriptor_list_still_aligns():
+    """The defect the Phase 3.5 delta scoring found (docs/31).
+
+    ``_DESCRIPTOR_TOKENS`` is a fixed list of colours and materials, so
+    positional and mounting words survive as false head nouns and defeat the
+    set tiers outright. Two runs describing one lamp then produce a removal
+    and an addition — compare inventing a change, which docs/31 calls the
+    failure that matters most because it converts the landlord's evidence
+    into the tenant's.
+    """
+    assert match_score("Recessed spotlight", "Ceiling spotlight") == 1
+    assert match_score("Wall tile", "Wall tiles") == 1
+    assert match_score("Freestanding mirror", "Hanging mirror") == 1
+
+
+def test_a_surface_modifier_is_identity_and_never_aligns():
+    """Where a thing is fixed does not identify it; what it is for does.
+
+    Head-noun agreement alone was tried and measured against the Phase 3.5
+    pairs: it aligned "Waste bin" with "Bread bin" and "Bedside lamp" with
+    "Table lamp", converting four real changes into silence. Naming the
+    surface something sits on discriminates identity as firmly as a function
+    word, so those modifiers stay out of the positional set however positional
+    they sound.
+    """
+    assert match_score("Waste bin", "Bread bin") == 0
+    assert match_score("Bedside lamp", "Table lamp") == 0
+    assert match_score("Desk chair", "Office chair") == 0
+
+
+def test_a_different_object_does_not_align_on_a_shared_modifier():
+    """The head noun has to agree; sharing a modifier is not enough.
+
+    These are the pairs a looser rule would collapse, and collapsing them
+    would hide a real change rather than invent one.
+    """
+    assert match_score("Bathtub", "Bath side panel") == 0
+    assert match_score("Kitchen cabinet plinths", "Kitchen roll holder") == 0
+    assert match_score("Entrance door", "Door handle") == 0
+
+
+def test_a_head_noun_only_match_never_outranks_a_real_one():
+    """Tier 1 is last resort, and that is what makes it safe.
+
+    ``align_items`` assigns best score first, so a bedside table pairs with
+    the bedside table that is still there — not with the dining table that
+    happens to share a head noun.
+    """
+    checkin = [Item(id="A-001", name="Bedside table"),
+               Item(id="A-002", name="Dining table")]
+    checkout = [Item(id="B-001", name="Dining table"),
+                Item(id="B-002", name="Bedside table")]
+    pairs, removed, added = align_items(checkin, checkout)
+    assert removed == [] and added == []
+    assert {(a.name, b.name) for a, b, _ in pairs} == {
+        ("Bedside table", "Bedside table"), ("Dining table", "Dining table")}
+    assert all(score == 4 for _, _, score in pairs)
+
+
+def test_a_plural_aligns_without_mangling_a_double_s_singular():
+    """"Glasses" reduces to "glass", and "glass" stays "glass".
+
+    The singulariser is the part most likely to do quiet damage, so both
+    directions are pinned: the plural has to reach the singular, and the
+    singular has to survive being asked.
+    """
+    assert _singular("glasses") == "glass"
+    assert _singular("glass") == "glass"
+    assert _singular("mattress") == "mattress"
+    assert match_score("Glass", "Glasses") == 1
+    assert match_score("Mattress", "Mattresses") == 1
 
 
 def test_align_unmutated_is_100_percent():

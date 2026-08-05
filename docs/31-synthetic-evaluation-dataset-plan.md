@@ -404,7 +404,7 @@ Complete four-view packets, which is the number room-level scoring depends on:
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
 | 3 — development and validation | **In progress; blocked on Pass B, not on generation** | 46 of 50 packet review records are `provisional`. Only the four Phase-1 records are `verified_synthetic_gold`. Every remaining generation task could complete tomorrow and Phase 4 would still be blocked. Amendment B repairs generation (B2–B4) and tiers Pass B (B5–B6). |
-| 3.5 — delta pairs | **Complete and scored, 5 Aug 2026** | Promoted to the programme's centre by B7. Thirty pairs generated, re-adjudicated under Amendment C to 27 accept / 3 reject, gold corrected, and all 27 scored through `run_delta_eval.py`: **delta recall 26.6%, false-change rate 90.8%**, with condition changes (cleanliness 3.8%) missed at roughly a fifth the rate of presence changes (item_added 54.3%). A `match_score` defect accounts for 40% of the false changes. Development evidence only; it does not promote compare behaviour. |
+| 3.5 — delta pairs | **Complete and scored, 5 Aug 2026** | Promoted to the programme's centre by B7. Thirty pairs generated, re-adjudicated under Amendment C to 27 accept / 3 reject, gold corrected, and all 27 scored through `run_delta_eval.py`: **delta recall 26.6%, false-change rate 90.4%**, with condition changes (cleanliness 3.8%) missed at roughly a fifth the rate of presence changes (item_added 54.3%). A `match_score` defect found here is fixed, for 17 fewer false changes at no cost to recall. Development evidence only; it does not promote compare behaviour. |
 | 4 — sealed comparison | **Not started** | Downstream of a validation prompt decision that has not been made. Validation holds two complete GPT packets, so no decision is currently possible on it; B4 addresses that. The amended order admits a per-task prompt assignment as a winner. |
 | 5 — real transfer | **Not started** | Downstream of Phase 4. The separate native-resolution evidence gate also remains open. |
 
@@ -1490,10 +1490,10 @@ rejected pairs are removed. Report:
 
 | Slice | Pairs | Delta recall | False change rate |
 |---|---:|---:|---:|
-| Clean | 18 | 34.4% | 88.0% |
+| Clean | 18 | 34.4% | 87.5% |
 | Thin signal | 6 | 10.0% | 96.4% |
 | Cross-view conflict | 3 | 12.5% | 96.5% |
-| **All** | **27** | **26.6%** | **90.8%** |
+| **All** | **27** | **26.6%** | **90.4%** |
 
 **The headline is bad and it is real.** Nine in ten reported changes have no
 enumerated counterpart. This is the metric docs/31 calls decisive — a compare
@@ -1517,30 +1517,48 @@ and those are what a deposit adjudication turns on. A compare surface with
 this profile answers the question nobody is arguing about.
 
 Attributing all 77 missed condition changes to a cause, because the three call
-for different fixes: **42 were never named by either describe run** (the item
+for different fixes: **43 were never named by either describe run** (the item
 is not in the schedule, so no delta was ever possible — a coverage problem, not
-a compare one), **18 were split by the aligner**, and **17 were tracked
+a compare one), **17 were split by the aligner**, and **17 were tracked
 correctly while the change went unreported**.
 
-**A defect in `match_score`, found by this run.** 154 of the 385 false changes
-— 40% — are one untouched object reported twice because the two runs named it
-differently: `Recessed spotlight` removed and `Ceiling spotlight` added,
-`Tabletop vanity mirror` and `Standing mirror`, `Wall Tiling` and `Wall tiles`.
+**A defect in `match_score`, found and fixed by this run.** Some of the false
+changes are one untouched object reported twice because the two runs named it
+differently: `Recessed spotlight` removed and `Ceiling spotlight` added.
 `merge._head_nouns` is documented as returning "the discriminating noun
 tokens" and `match_score` promises that names differing only in descriptors
 score 3 and align. But `_head_nouns` only filters against `_DESCRIPTOR_TOKENS`,
-a hand-curated list of colours and materials. Positional and mounting words —
-`recessed`, `ceiling`, `standing`, `tabletop`, `vanity` — survive as false head
-nouns, so the two sets are neither equal nor nested and the score is 0.
-Singular/plural alone defeats it. This would fire identically in a real
-tenancy: a check-out report claiming a lamp was removed and another installed,
-for a lamp nobody touched. Fixing it is a product change and is not in this
-phase.
+a hand-curated list of colours and materials, so mounting words — `recessed`,
+`ceiling`, `hanging` — survive as false head nouns and the two sets are neither
+equal nor nested. Singular/plural alone defeats it too. This would fire
+identically in a real tenancy: a check-out report claiming one lamp was removed
+and another installed, for a lamp nobody touched.
 
-With every rename aligned the rate would still be 85.6%. That figure is a
-diagnostic and is never subtracted from the headline — a landlord reads both
-halves of a rename as real changes. The remainder is description
-non-determinism: 72 items named at T0 and absent at T1, 87 the other way.
+`match_score` now has a fourth tier. Tier 1 aligns two names whose head nouns
+agree — the rightmost discriminating token, singularised — when every differing
+modifier is positional. **The restriction is the whole design.** Head-noun
+agreement alone was implemented first and measured: it removed 80 false changes
+and cost four real ones, aligning `Waste bin` with `Bread bin` and `Bedside
+lamp` with `Table lamp`, because a modifier naming the surface a thing sits on
+discriminates identity exactly as firmly as a function word does. Where a
+fitting is *mounted* does not identify it; what it is *for* does.
+
+Measured over the same 27 pairs, re-scored from the cached describe records so
+no generation or description was repeated: **17 fewer false changes, 8 more
+items correctly reported unchanged, and no recall lost anywhere** — every
+per-kind rate is unchanged. Headline 90.8% → 90.4%, unchanged stability
+42.6% → 44.4%.
+
+That is a small correction to a large number, and the size is the finding.
+An earlier diagnostic here put alignment churn at 40% of false changes by
+pairing any removal and addition sharing a token; that over-counted, and the
+lexically reachable share is 17 of 385. The rest of the churn is synonymy —
+`Heated towel rail` against `Towel radiator`, `Framed picture` against `Framed
+artwork`, `Decorative dish` against `Decorative bowl` — which no token rule
+reaches and which docs/08 already records as the reason an embedding matcher
+was considered for compare. The dominant term was never alignment at all: it is
+description non-determinism, 72 items named at T0 and absent at T1 and 87 the
+other way.
 
 **What this result is not.** One arm, one run, no repeat, so run-to-run
 variance is unmeasured and none of these rates has an interval. Severity

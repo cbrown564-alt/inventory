@@ -108,19 +108,14 @@
           "checkin_id": "LIV-015",
           "checkout_id": "LIV-015",
           "name": "Black bag"
+        },
+        {
+          "checkin_id": "LIV-006",
+          "checkout_id": "LIV-006",
+          "name": "Venetian blind"
         }
       ],
       "removed": [
-        {
-          "id": "LIV-006",
-          "name": "Venetian blinds",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "RP-013-A-wide",
-            "RP-013-D-condition"
-          ]
-        },
         {
           "id": "LIV-008",
           "name": "Radiator",
@@ -163,16 +158,6 @@
         }
       ],
       "added": [
-        {
-          "id": "LIV-006",
-          "name": "Venetian blind",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "P35-012-T1-A-wide",
-            "P35-012-T1-D-condition"
-          ]
-        },
         {
           "id": "LIV-008",
           "name": "Heater",
@@ -217,11 +202,11 @@
     }
   ],
   "totals": {
-    "matched": 11,
+    "matched": 12,
     "changed": 0,
-    "unchanged": 11,
-    "removed": 5,
-    "added": 5,
+    "unchanged": 12,
+    "removed": 4,
+    "added": 4,
     "classified": 0
   },
   "usage": {

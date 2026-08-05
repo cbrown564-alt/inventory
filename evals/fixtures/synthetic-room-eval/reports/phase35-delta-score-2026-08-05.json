@@ -52,8 +52,8 @@
   "all_pairs": {
     "metrics": {
       "delta_recall": 26.6,
-      "false_change_rate": 90.8,
-      "unchanged_stability": 42.6,
+      "false_change_rate": 90.4,
+      "unchanged_stability": 44.4,
       "severity_direction_accuracy": 75.0,
       "immaterial_change_report_rate": 16.7
     },
@@ -61,9 +61,9 @@
       "material_changes": 139,
       "material_changes_detected": 37,
       "immaterial_changes": 12,
-      "reported_changes": 424,
-      "false_changes": 385,
-      "unchanged_reported": 286,
+      "reported_changes": 407,
+      "false_changes": 368,
+      "unchanged_reported": 294,
       "directional_changes_scored": 4
     }
   },
@@ -92,8 +92,8 @@
     ],
     "metrics": {
       "delta_recall": 34.4,
-      "false_change_rate": 88.0,
-      "unchanged_stability": 40.9,
+      "false_change_rate": 87.5,
+      "unchanged_stability": 42.7,
       "severity_direction_accuracy": 75.0,
       "immaterial_change_report_rate": 20.0
     },
@@ -101,9 +101,9 @@
       "material_changes": 93,
       "material_changes_detected": 32,
       "immaterial_changes": 10,
-      "reported_changes": 284,
-      "false_changes": 250,
-      "unchanged_reported": 173,
+      "reported_changes": 273,
+      "false_changes": 239,
+      "unchanged_reported": 178,
       "directional_changes_scored": 4
     }
   },
@@ -120,8 +120,8 @@
     ],
     "metrics": {
       "delta_recall": 10.0,
-      "false_change_rate": 96.4,
-      "unchanged_stability": 49.0,
+      "false_change_rate": 96.3,
+      "unchanged_stability": 50.0,
       "severity_direction_accuracy": 0.0,
       "immaterial_change_report_rate": 0.0
     },
@@ -129,9 +129,9 @@
       "material_changes": 30,
       "material_changes_detected": 3,
       "immaterial_changes": 1,
-      "reported_changes": 83,
-      "false_changes": 80,
-      "unchanged_reported": 77,
+      "reported_changes": 81,
+      "false_changes": 78,
+      "unchanged_reported": 78,
       "directional_changes_scored": 0
     }
   },
@@ -145,8 +145,8 @@
     ],
     "metrics": {
       "delta_recall": 12.5,
-      "false_change_rate": 96.5,
-      "unchanged_stability": 39.6,
+      "false_change_rate": 96.2,
+      "unchanged_stability": 42.7,
       "severity_direction_accuracy": 0.0,
       "immaterial_change_report_rate": 0.0
     },
@@ -154,28 +154,28 @@
       "material_changes": 16,
       "material_changes_detected": 2,
       "immaterial_changes": 1,
-      "reported_changes": 57,
-      "false_changes": 55,
-      "unchanged_reported": 36,
+      "reported_changes": 53,
+      "false_changes": 51,
+      "unchanged_reported": 38,
       "directional_changes_scored": 0
     }
   },
   "false_change_decomposition": {
     "counts": {
-      "false_changes": 385,
-      "alignment_churn": 154,
-      "unpaired_removed": 72,
-      "unpaired_added": 87,
-      "changed_bucket": 72
+      "false_changes": 368,
+      "alignment_churn": 138,
+      "unpaired_removed": 71,
+      "unpaired_added": 86,
+      "changed_bucket": 73
     },
-    "share_of_false_changes_that_are_alignment_churn": 40.0,
-    "false_change_rate_if_renames_aligned": 85.6,
+    "share_of_false_changes_that_are_alignment_churn": 37.5,
+    "false_change_rate_if_renames_aligned": 85.5,
     "diagnostic_note": "false_change_rate_if_renames_aligned is a diagnostic, not a corrected metric. The reported rate stands as measured: a landlord reading the report sees both halves of a rename as real changes."
   },
   "missed_condition_attribution": {
-    "split_by_aligner": 18,
+    "split_by_aligner": 17,
     "tracked_but_silent": 17,
-    "never_named": 42
+    "never_named": 43
   },
   "by_change_kind": {
     "cleanliness": {
@@ -220,8 +220,8 @@
       ],
       "metrics": {
         "delta_recall": 24.0,
-        "false_change_rate": 91.3,
-        "unchanged_stability": 44.5,
+        "false_change_rate": 91.2,
+        "unchanged_stability": 45.1,
         "severity_direction_accuracy": 100.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -229,9 +229,9 @@
         "material_changes": 50,
         "material_changes_detected": 12,
         "immaterial_changes": 1,
-        "reported_changes": 138,
-        "false_changes": 126,
-        "unchanged_reported": 101,
+        "reported_changes": 136,
+        "false_changes": 124,
+        "unchanged_reported": 102,
         "directional_changes_scored": 1
       }
     },
@@ -259,8 +259,8 @@
       ],
       "metrics": {
         "delta_recall": 28.1,
-        "false_change_rate": 90.6,
-        "unchanged_stability": 41.7,
+        "false_change_rate": 90.0,
+        "unchanged_stability": 44.0,
         "severity_direction_accuracy": 66.7,
         "immaterial_change_report_rate": 18.2
       },
@@ -268,9 +268,9 @@
         "material_changes": 89,
         "material_changes_detected": 25,
         "immaterial_changes": 11,
-        "reported_changes": 286,
-        "false_changes": 259,
-        "unchanged_reported": 185,
+        "reported_changes": 271,
+        "false_changes": 244,
+        "unchanged_reported": 192,
         "directional_changes_scored": 3
       }
     }
@@ -285,8 +285,8 @@
       ],
       "metrics": {
         "delta_recall": 40.0,
-        "false_change_rate": 82.4,
-        "unchanged_stability": 60.0,
+        "false_change_rate": 81.2,
+        "unchanged_stability": 62.3,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -294,9 +294,9 @@
         "material_changes": 15,
         "material_changes_detected": 6,
         "immaterial_changes": 1,
-        "reported_changes": 34,
-        "false_changes": 28,
-        "unchanged_reported": 42,
+        "reported_changes": 32,
+        "false_changes": 26,
+        "unchanged_reported": 43,
         "directional_changes_scored": 1
       }
     },
@@ -313,8 +313,8 @@
       ],
       "metrics": {
         "delta_recall": 44.4,
-        "false_change_rate": 86.4,
-        "unchanged_stability": 32.5,
+        "false_change_rate": 86.3,
+        "unchanged_stability": 32.7,
         "severity_direction_accuracy": 100.0,
         "immaterial_change_report_rate": 66.7
       },
@@ -322,8 +322,8 @@
         "material_changes": 36,
         "material_changes_detected": 16,
         "immaterial_changes": 3,
-        "reported_changes": 132,
-        "false_changes": 114,
+        "reported_changes": 131,
+        "false_changes": 113,
         "unchanged_reported": 55,
         "directional_changes_scored": 3
       }
@@ -339,8 +339,8 @@
       ],
       "metrics": {
         "delta_recall": 18.5,
-        "false_change_rate": 92.4,
-        "unchanged_stability": 40.8,
+        "false_change_rate": 91.7,
+        "unchanged_stability": 45.0,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -348,9 +348,9 @@
         "material_changes": 27,
         "material_changes_detected": 5,
         "immaterial_changes": 1,
-        "reported_changes": 66,
-        "false_changes": 61,
-        "unchanged_reported": 42,
+        "reported_changes": 60,
+        "false_changes": 55,
+        "unchanged_reported": 45,
         "directional_changes_scored": 0
       }
     },
@@ -386,8 +386,8 @@
       ],
       "metrics": {
         "delta_recall": 20.0,
-        "false_change_rate": 93.6,
-        "unchanged_stability": 47.6,
+        "false_change_rate": 93.3,
+        "unchanged_stability": 49.4,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -395,9 +395,9 @@
         "material_changes": 15,
         "material_changes_detected": 3,
         "immaterial_changes": 1,
-        "reported_changes": 47,
-        "false_changes": 44,
-        "unchanged_reported": 40,
+        "reported_changes": 45,
+        "false_changes": 42,
+        "unchanged_reported": 41,
         "directional_changes_scored": 0
       }
     },
@@ -413,8 +413,8 @@
       ],
       "metrics": {
         "delta_recall": 12.9,
-        "false_change_rate": 96.3,
-        "unchanged_stability": 41.5,
+        "false_change_rate": 96.2,
+        "unchanged_stability": 42.3,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -422,9 +422,9 @@
         "material_changes": 31,
         "material_changes_detected": 4,
         "immaterial_changes": 3,
-        "reported_changes": 107,
-        "false_changes": 103,
-        "unchanged_reported": 73,
+        "reported_changes": 105,
+        "false_changes": 101,
+        "unchanged_reported": 74,
         "directional_changes_scored": 0
       }
     },
@@ -435,8 +435,8 @@
       ],
       "metrics": {
         "delta_recall": 20.0,
-        "false_change_rate": 92.3,
-        "unchanged_stability": 47.8,
+        "false_change_rate": 88.9,
+        "unchanged_stability": 61.9,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -444,9 +444,9 @@
         "material_changes": 5,
         "material_changes_detected": 1,
         "immaterial_changes": 1,
-        "reported_changes": 13,
-        "false_changes": 12,
-        "unchanged_reported": 11,
+        "reported_changes": 9,
+        "false_changes": 8,
+        "unchanged_reported": 13,
         "directional_changes_scored": 0
       }
     }
@@ -458,8 +458,8 @@
       "room_type": "Bathroom",
       "metrics": {
         "delta_recall": 40.0,
-        "false_change_rate": 84.6,
-        "unchanged_stability": 57.7,
+        "false_change_rate": 81.8,
+        "unchanged_stability": 64.0,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -467,16 +467,16 @@
         "material_changes": 5,
         "material_changes_detected": 2,
         "immaterial_changes": 1,
-        "reported_changes": 13,
-        "false_changes": 11,
-        "unchanged_reported": 15,
+        "reported_changes": 11,
+        "false_changes": 9,
+        "unchanged_reported": 16,
         "directional_changes_scored": 1
       },
       "thin_signal": false,
       "cross_view_conflict": false,
       "false_change_decomposition": {
-        "false_changes": 11,
-        "alignment_churn": 6,
+        "false_changes": 9,
+        "alignment_churn": 4,
         "unpaired_removed": 4,
         "unpaired_added": 1,
         "changed_bucket": 0
@@ -518,8 +518,8 @@
       "room_type": "Kitchen",
       "metrics": {
         "delta_recall": 16.7,
-        "false_change_rate": 94.7,
-        "unchanged_stability": 43.8,
+        "false_change_rate": 94.1,
+        "unchanged_stability": 48.4,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -527,18 +527,18 @@
         "material_changes": 6,
         "material_changes_detected": 1,
         "immaterial_changes": 0,
-        "reported_changes": 19,
-        "false_changes": 18,
-        "unchanged_reported": 14,
+        "reported_changes": 17,
+        "false_changes": 16,
+        "unchanged_reported": 15,
         "directional_changes_scored": 0
       },
       "thin_signal": false,
       "cross_view_conflict": false,
       "false_change_decomposition": {
-        "false_changes": 18,
+        "false_changes": 16,
         "alignment_churn": 10,
-        "unpaired_removed": 4,
-        "unpaired_added": 3,
+        "unpaired_removed": 3,
+        "unpaired_added": 2,
         "changed_bucket": 1
       }
     },
@@ -578,8 +578,8 @@
       "room_type": "Shower room",
       "metrics": {
         "delta_recall": 20.0,
-        "false_change_rate": 92.3,
-        "unchanged_stability": 47.8,
+        "false_change_rate": 88.9,
+        "unchanged_stability": 61.9,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -587,16 +587,16 @@
         "material_changes": 5,
         "material_changes_detected": 1,
         "immaterial_changes": 1,
-        "reported_changes": 13,
-        "false_changes": 12,
-        "unchanged_reported": 11,
+        "reported_changes": 9,
+        "false_changes": 8,
+        "unchanged_reported": 13,
         "directional_changes_scored": 0
       },
       "thin_signal": false,
       "cross_view_conflict": false,
       "false_change_decomposition": {
-        "false_changes": 12,
-        "alignment_churn": 6,
+        "false_changes": 8,
+        "alignment_churn": 2,
         "unpaired_removed": 1,
         "unpaired_added": 4,
         "changed_bucket": 1
@@ -608,7 +608,7 @@
       "room_type": "Bedroom",
       "metrics": {
         "delta_recall": 50.0,
-        "false_change_rate": 76.5,
+        "false_change_rate": 75.0,
         "unchanged_stability": 0.0,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 100.0
@@ -617,19 +617,19 @@
         "material_changes": 4,
         "material_changes_detected": 2,
         "immaterial_changes": 2,
-        "reported_changes": 17,
-        "false_changes": 13,
+        "reported_changes": 16,
+        "false_changes": 12,
         "unchanged_reported": 0,
         "directional_changes_scored": 0
       },
       "thin_signal": false,
       "cross_view_conflict": false,
       "false_change_decomposition": {
-        "false_changes": 13,
-        "alignment_churn": 4,
+        "false_changes": 12,
+        "alignment_churn": 2,
         "unpaired_removed": 0,
         "unpaired_added": 2,
-        "changed_bucket": 7
+        "changed_bucket": 8
       }
     },
     {
@@ -759,7 +759,7 @@
       "metrics": {
         "delta_recall": 0.0,
         "false_change_rate": 100.0,
-        "unchanged_stability": 52.4,
+        "unchanged_stability": 60.0,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -767,16 +767,16 @@
         "material_changes": 4,
         "material_changes_detected": 0,
         "immaterial_changes": 0,
-        "reported_changes": 10,
-        "false_changes": 10,
-        "unchanged_reported": 11,
+        "reported_changes": 8,
+        "false_changes": 8,
+        "unchanged_reported": 12,
         "directional_changes_scored": 0
       },
       "thin_signal": true,
       "cross_view_conflict": false,
       "false_change_decomposition": {
-        "false_changes": 10,
-        "alignment_churn": 6,
+        "false_changes": 8,
+        "alignment_churn": 4,
         "unpaired_removed": 2,
         "unpaired_added": 2,
         "changed_bucket": 0
@@ -849,7 +849,7 @@
       "metrics": {
         "delta_recall": 0.0,
         "false_change_rate": 100.0,
-        "unchanged_stability": 44.1,
+        "unchanged_stability": 53.1,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -857,16 +857,16 @@
         "material_changes": 5,
         "material_changes_detected": 0,
         "immaterial_changes": 1,
-        "reported_changes": 19,
-        "false_changes": 19,
-        "unchanged_reported": 15,
+        "reported_changes": 15,
+        "false_changes": 15,
+        "unchanged_reported": 17,
         "directional_changes_scored": 0
       },
       "thin_signal": false,
       "cross_view_conflict": true,
       "false_change_decomposition": {
-        "false_changes": 19,
-        "alignment_churn": 8,
+        "false_changes": 15,
+        "alignment_churn": 4,
         "unpaired_removed": 5,
         "unpaired_added": 5,
         "changed_bucket": 1
@@ -1178,8 +1178,8 @@
       "room_type": "Dining room",
       "metrics": {
         "delta_recall": 16.7,
-        "false_change_rate": 83.3,
-        "unchanged_stability": 58.3,
+        "false_change_rate": 75.0,
+        "unchanged_stability": 72.7,
         "severity_direction_accuracy": 0.0,
         "immaterial_change_report_rate": 0.0
       },
@@ -1187,16 +1187,16 @@
         "material_changes": 6,
         "material_changes_detected": 1,
         "immaterial_changes": 0,
-        "reported_changes": 6,
-        "false_changes": 5,
-        "unchanged_reported": 7,
+        "reported_changes": 4,
+        "false_changes": 3,
+        "unchanged_reported": 8,
         "directional_changes_scored": 0
       },
       "thin_signal": false,
       "cross_view_conflict": false,
       "false_change_decomposition": {
-        "false_changes": 5,
-        "alignment_churn": 2,
+        "false_changes": 3,
+        "alignment_churn": 0,
         "unpaired_removed": 0,
         "unpaired_added": 0,
         "changed_bucket": 3
@@ -1264,14 +1264,6 @@
     }
   ],
   "rename_candidates": [
-    {
-      "removed": "Recessed spotlight",
-      "added": "Ceiling spotlight",
-      "shared_tokens": [
-        "spotlight"
-      ],
-      "delta_id": "P35-002-T1"
-    },
     {
       "removed": "Tabletop vanity mirror",
       "added": "Standing mirror",
@@ -1361,36 +1353,12 @@
       "delta_id": "P35-005-T1"
     },
     {
-      "removed": "Recessed spotlight",
-      "added": "Ceiling Spotlight",
-      "shared_tokens": [
-        "spotlight"
-      ],
-      "delta_id": "P35-006-T1"
-    },
-    {
       "removed": "Pedestal wash hand basin",
       "added": "Pedestal Washbasin",
       "shared_tokens": [
         "pedestal"
       ],
       "delta_id": "P35-006-T1"
-    },
-    {
-      "removed": "Bath mat",
-      "added": "Bath Mats",
-      "shared_tokens": [
-        "bath"
-      ],
-      "delta_id": "P35-006-T1"
-    },
-    {
-      "removed": "Door Frames",
-      "added": "Door frame",
-      "shared_tokens": [
-        "door"
-      ],
-      "delta_id": "P35-007-T1"
     },
     {
       "removed": "Pendant Light Fitting",
@@ -1531,14 +1499,6 @@
       "delta_id": "P35-012-T1"
     },
     {
-      "removed": "Venetian blinds",
-      "added": "Venetian blind",
-      "shared_tokens": [
-        "venetian"
-      ],
-      "delta_id": "P35-012-T1"
-    },
-    {
       "removed": "Wall bracket",
       "added": "Wall mounting hook",
       "shared_tokens": [
@@ -1593,22 +1553,6 @@
       "shared_tokens": [
         "artificial",
         "vase"
-      ],
-      "delta_id": "P35-015-T1"
-    },
-    {
-      "removed": "Double power socket",
-      "added": "Power sockets",
-      "shared_tokens": [
-        "power"
-      ],
-      "delta_id": "P35-015-T1"
-    },
-    {
-      "removed": "Framed pictures",
-      "added": "Framed picture (left wall)",
-      "shared_tokens": [
-        "framed"
       ],
       "delta_id": "P35-015-T1"
     },
@@ -1815,14 +1759,6 @@
         "tv"
       ],
       "delta_id": "P35-027-CF"
-    },
-    {
-      "removed": "Door frame",
-      "added": "Door frames",
-      "shared_tokens": [
-        "door"
-      ],
-      "delta_id": "P35-028-CF"
     },
     {
       "removed": "Main glazed door",
@@ -2936,12 +2872,6 @@
     {
       "room": "Bathroom",
       "bucket": "removed",
-      "name": "Recessed spotlight",
-      "delta_id": "P35-002-T1"
-    },
-    {
-      "room": "Bathroom",
-      "bucket": "removed",
       "name": "Hand towel",
       "delta_id": "P35-002-T1"
     },
@@ -2961,12 +2891,6 @@
       "room": "Bathroom",
       "bucket": "added",
       "name": "Threshold strip",
-      "delta_id": "P35-002-T1"
-    },
-    {
-      "room": "Bathroom",
-      "bucket": "added",
-      "name": "Ceiling spotlight",
       "delta_id": "P35-002-T1"
     },
     {
@@ -3050,12 +2974,6 @@
     {
       "room": "Kitchen",
       "bucket": "removed",
-      "name": "Worktop",
-      "delta_id": "P35-004-T1"
-    },
-    {
-      "room": "Kitchen",
-      "bucket": "removed",
       "name": "Electrical sockets",
       "delta_id": "P35-004-T1"
     },
@@ -3093,12 +3011,6 @@
       "room": "Kitchen",
       "bucket": "removed",
       "name": "Decorative vases",
-      "delta_id": "P35-004-T1"
-    },
-    {
-      "room": "Kitchen",
-      "bucket": "added",
-      "name": "Worktops",
       "delta_id": "P35-004-T1"
     },
     {
@@ -3206,31 +3118,13 @@
     {
       "room": "Shower room",
       "bucket": "removed",
-      "name": "Recessed spotlight",
-      "delta_id": "P35-006-T1"
-    },
-    {
-      "room": "Shower room",
-      "bucket": "removed",
       "name": "Pedestal wash hand basin",
       "delta_id": "P35-006-T1"
     },
     {
       "room": "Shower room",
       "bucket": "removed",
-      "name": "Bath mat",
-      "delta_id": "P35-006-T1"
-    },
-    {
-      "room": "Shower room",
-      "bucket": "removed",
       "name": "Hand towel",
-      "delta_id": "P35-006-T1"
-    },
-    {
-      "room": "Shower room",
-      "bucket": "added",
-      "name": "Ceiling Spotlight",
       "delta_id": "P35-006-T1"
     },
     {
@@ -3255,12 +3149,6 @@
       "room": "Shower room",
       "bucket": "added",
       "name": "Shower Unit & Fittings",
-      "delta_id": "P35-006-T1"
-    },
-    {
-      "room": "Shower room",
-      "bucket": "added",
-      "name": "Bath Mats",
       "delta_id": "P35-006-T1"
     },
     {
@@ -3313,20 +3201,14 @@
     },
     {
       "room": "Bedroom",
-      "bucket": "removed",
-      "name": "Door Frames",
+      "bucket": "changed",
+      "name": "Door frame",
       "delta_id": "P35-007-T1"
     },
     {
       "room": "Bedroom",
       "bucket": "removed",
       "name": "Pendant Light Fitting",
-      "delta_id": "P35-007-T1"
-    },
-    {
-      "room": "Bedroom",
-      "bucket": "added",
-      "name": "Door frame",
       "delta_id": "P35-007-T1"
     },
     {
@@ -3788,12 +3670,6 @@
     {
       "room": "Living room",
       "bucket": "removed",
-      "name": "Venetian blinds",
-      "delta_id": "P35-012-T1"
-    },
-    {
-      "room": "Living room",
-      "bucket": "removed",
       "name": "Radiator",
       "delta_id": "P35-012-T1"
     },
@@ -3813,12 +3689,6 @@
       "room": "Living room",
       "bucket": "removed",
       "name": "Area rug",
-      "delta_id": "P35-012-T1"
-    },
-    {
-      "room": "Living room",
-      "bucket": "added",
-      "name": "Venetian blind",
       "delta_id": "P35-012-T1"
     },
     {
@@ -4004,12 +3874,6 @@
     {
       "room": "Dining room",
       "bucket": "removed",
-      "name": "Double power socket",
-      "delta_id": "P35-015-T1"
-    },
-    {
-      "room": "Dining room",
-      "bucket": "removed",
       "name": "Sideboard / display cabinet",
       "delta_id": "P35-015-T1"
     },
@@ -4017,12 +3881,6 @@
       "room": "Dining room",
       "bucket": "removed",
       "name": "Artificial flower arrangement in vase",
-      "delta_id": "P35-015-T1"
-    },
-    {
-      "room": "Dining room",
-      "bucket": "removed",
-      "name": "Framed pictures",
       "delta_id": "P35-015-T1"
     },
     {
@@ -4058,12 +3916,6 @@
     {
       "room": "Dining room",
       "bucket": "added",
-      "name": "Power sockets",
-      "delta_id": "P35-015-T1"
-    },
-    {
-      "room": "Dining room",
-      "bucket": "added",
       "name": "Light switch",
       "delta_id": "P35-015-T1"
     },
@@ -4083,12 +3935,6 @@
       "room": "Dining room",
       "bucket": "added",
       "name": "Net curtains",
-      "delta_id": "P35-015-T1"
-    },
-    {
-      "room": "Dining room",
-      "bucket": "added",
-      "name": "Framed picture (left wall)",
       "delta_id": "P35-015-T1"
     },
     {
@@ -4983,18 +4829,6 @@
       "room": "Dining room",
       "bucket": "changed",
       "name": "Dining chairs",
-      "delta_id": "P35-028-CF"
-    },
-    {
-      "room": "Dining room",
-      "bucket": "removed",
-      "name": "Door frame",
-      "delta_id": "P35-028-CF"
-    },
-    {
-      "room": "Dining room",
-      "bucket": "added",
-      "name": "Door frames",
       "delta_id": "P35-028-CF"
     },
     {

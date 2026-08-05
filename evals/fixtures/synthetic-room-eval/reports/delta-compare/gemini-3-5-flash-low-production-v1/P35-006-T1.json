@@ -146,30 +146,22 @@
           "checkin_id": "SHO-014",
           "checkout_id": "SHO-014",
           "name": "Toilet"
+        },
+        {
+          "checkin_id": "SHO-009",
+          "checkout_id": "SHO-009",
+          "name": "Ceiling Spotlight"
+        },
+        {
+          "checkin_id": "SHO-015",
+          "checkout_id": "SHO-018",
+          "name": "Bath Mats"
         }
       ],
       "removed": [
         {
-          "id": "SHO-009",
-          "name": "Recessed spotlight",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "RP-007-A-wide"
-          ]
-        },
-        {
           "id": "SHO-011",
           "name": "Pedestal wash hand basin",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "RP-007-A-wide"
-          ]
-        },
-        {
-          "id": "SHO-015",
-          "name": "Bath mat",
           "condition": "good",
           "defects": [],
           "photo_ids": [
@@ -187,16 +179,6 @@
         }
       ],
       "added": [
-        {
-          "id": "SHO-009",
-          "name": "Ceiling Spotlight",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "P35-006-T1-A-wide",
-            "P35-006-T1-D-condition"
-          ]
-        },
         {
           "id": "SHO-010",
           "name": "Shaver Socket",
@@ -241,16 +223,6 @@
           ]
         },
         {
-          "id": "SHO-018",
-          "name": "Bath Mats",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "P35-006-T1-A-wide",
-            "P35-006-T1-D-condition"
-          ]
-        },
-        {
           "id": "SHO-019",
           "name": "Shower Squeegee",
           "condition": "good",
@@ -274,11 +246,11 @@
     }
   ],
   "totals": {
-    "matched": 12,
+    "matched": 14,
     "changed": 1,
-    "unchanged": 11,
-    "removed": 4,
-    "added": 8,
+    "unchanged": 13,
+    "removed": 2,
+    "added": 6,
     "classified": 0
   },
   "usage": {

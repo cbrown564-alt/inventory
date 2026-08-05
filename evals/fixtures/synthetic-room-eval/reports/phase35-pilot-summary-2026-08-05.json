@@ -103,13 +103,13 @@
     "metered_api_call": false,
     "metrics": {
       "delta_recall": 26.6,
-      "false_change_rate": 90.8,
-      "unchanged_stability": 42.6,
+      "false_change_rate": 90.4,
+      "unchanged_stability": 44.4,
       "severity_direction_accuracy": 75.0,
       "immaterial_change_report_rate": 16.7
     },
     "material_gold_scored": 139,
-    "note": "Scores the 27 review-accepted pairs only; the 139 material changes scored are the 153 pilot total less the three rejected pairs. One arm, one run, no repeat, so run-to-run variance is unmeasured and no rate carries an interval. P35-028-CF T0 was re-run after an empty response under a SUCCESS status; no other run was repeated."
+    "note": "Scores the 27 review-accepted pairs only; the 139 material changes scored are the 153 pilot total less the three rejected pairs. One arm, one run, no repeat, so run-to-run variance is unmeasured and no rate carries an interval. P35-028-CF T0 was re-run after an empty response under a SUCCESS status; no other run was repeated. Re-scored from the same cached describe records after the match_score fix landed (docs/31): 17 fewer false changes, no recall lost."
   },
   "gold_corrections_applied": {
     "record": "reports/phase35-gold-corrections-applied-2026-08-05.json",

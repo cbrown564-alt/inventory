@@ -139,20 +139,22 @@ the backend it is looking at a delta. Cached describe records are immutable;
 
 ### Scored result, 5 Aug 2026
 
-All 27 accepted pairs scored: **delta recall 26.6%, false-change rate 90.8%**
+All 27 accepted pairs scored: **delta recall 26.6%, false-change rate 90.4%**
 (`reports/phase35-delta-score-2026-08-05.json`, Markdown alongside it).
 
 Presence changes are caught about half the time — item added 54.3%, item
 removed 50.0% — and changes of state are not: worsened 14.8%, new defect
-12.1%, cleanliness 3.8%. Of the 77 missed condition changes, 42 involve an
-object neither describe run ever named, 18 an object the aligner split across
+12.1%, cleanliness 3.8%. Of the 77 missed condition changes, 43 involve an
+object neither describe run ever named, 17 an object the aligner split across
 `removed` and `added`, and 17 an object tracked correctly whose change went
 unreported.
 
-Two-fifths of the false changes are one untouched object reported twice
-because the runs named it differently and `compare.match_score` did not align
-them (`Recessed spotlight` / `Ceiling spotlight`). That is a product defect,
-recorded in docs/31; the reported rate is not adjusted for it.
+Some of the false changes were one untouched object reported twice because the
+runs named it differently and `compare.match_score` did not align them
+(`Recessed spotlight` / `Ceiling spotlight`). That defect is fixed — see
+docs/31 — worth 17 fewer false changes at no cost to recall. The remaining
+churn is synonymy (`Heated towel rail` / `Towel radiator`), which no token
+rule reaches.
 
 This is development evidence. It cannot promote compare behaviour, and one
 describe call (`P35-028-CF` T0) was re-run after returning an empty response

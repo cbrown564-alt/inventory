@@ -22,7 +22,7 @@ import logging
 from pathlib import Path
 from typing import Optional, Union
 
-from .merge import _head_nouns
+from .merge import _DESCRIPTOR_TOKENS, _head_nouns, _tokens
 from .schema import CLEANLINESS_GRADES, CONDITION_GRADES, Inventory, Item
 from .usecases import get_use_case, use_case_for
 from .usecases.base import ComparisonSpec, UseCase
@@ -46,14 +46,81 @@ def _norm_name(name: str) -> str:
     return " ".join(name.strip().lower().split())
 
 
+#: Modifiers that say where or how a fitting is mounted, never what it is for.
+#: These cannot go in ``merge._DESCRIPTOR_TOKENS``: several of them double as
+#: item names in their own right ("Ceiling", "Wall"), and demoting those to
+#: descriptors would empty the head-noun set of a legitimate item and stop it
+#: matching anything. Consulted here only for the *modifier* tokens, so the
+#: head noun is never affected.
+#: Kept deliberately narrow. A modifier naming the surface a thing sits on —
+#: "desk lamp", "bedside lamp", "worktop kettle" — discriminates identity just
+#: as firmly as a function word does, so those stay out however positional they
+#: sound.
+_POSITIONAL_MODIFIERS = frozenset(
+    "recessed ceiling overhead flush inset integrated undercounter "
+    "under-counter hanging suspended standing freestanding free-standing "
+    "corner central centre center".split()
+)
+
+
+def _singular(token: str) -> str:
+    """Crude English singulariser — enough for "tiles"/"tile", not a stemmer.
+
+    Deliberately conservative: it never touches a word ending in "ss", so
+    "glass" and "mattress" survive intact.
+    """
+    if len(token) > 4 and token.endswith("ies"):
+        return token[:-3] + "y"
+    if len(token) > 4 and token.endswith(("sses", "shes", "ches", "xes")):
+        return token[:-2]
+    if len(token) > 3 and token.endswith("s") and not token.endswith("ss"):
+        return token[:-1]
+    return token
+
+
+def _head_and_modifiers(name: str) -> tuple[str, set[str]]:
+    """Split a name into its head noun and the tokens qualifying it.
+
+    English noun phrases put the head last: a "recessed spotlight" is a
+    spotlight, a "bath side panel" is a panel. :func:`merge._head_nouns` keeps
+    *every* non-descriptor token, which is right for its own job — deciding
+    whether to collapse two items inside one room, where over-merging silently
+    loses an item — but leaves compare unable to align "Recessed spotlight"
+    with "Ceiling spotlight", so it reports a removal and an addition for a
+    lamp nobody touched.
+    """
+    tokens = [_singular(t) for t in _tokens(name) if t not in _DESCRIPTOR_TOKENS]
+    if not tokens:
+        return "", set()
+    return tokens[-1], set(tokens[:-1])
+
+
 def match_score(checkin_name: str, checkout_name: str) -> int:
     """Lexical alignment score between two item names.
 
     4 = names equal after normalisation; 3 = head-noun sets equal (the names
     differ only in descriptor words — material, colour, finish, qualifier);
     2 = one head-noun set contains the other (one name only qualifies the
-    other); 0 = no match. Reuses merge._head_nouns so compare and the merge
-    pass share one definition of "the same thing".
+    other); 1 = the head nouns agree while the modifiers do not; 0 = no match.
+    Tiers 4-2 reuse merge._head_nouns, so compare and the merge pass still
+    share one definition of "the same thing".
+
+    Tier 1 exists because ``_DESCRIPTOR_TOKENS`` is a fixed list of colours and
+    materials, so a mounting word outside it — ``recessed``, ``ceiling`` —
+    survives as a false head noun and defeats tiers 3 and 2 outright. Delta
+    scoring measured that on the Phase 3.5 pairs (docs/31).
+
+    It requires *every* differing modifier to be positional, which is what
+    keeps it from becoming a licence. Head-noun agreement alone is far too
+    weak: measured against the same pairs it aligned "Waste bin" with "Bread
+    bin" and "Bedside lamp" with "Table lamp", turning four real changes into
+    silence. Where a thing is fixed does not identify it; what it is for does.
+
+    Tier 1 is also last, so ``align_items`` — which assigns best score first —
+    only reaches for it when nothing better is available on either side. The
+    pairing is never silent: the entry keeps both ``checkin_name`` and
+    ``name``, and carries ``match_score`` so a reader can see how weak the
+    alignment was.
     """
     if _norm_name(checkin_name) == _norm_name(checkout_name):
         return 4
@@ -64,6 +131,11 @@ def match_score(checkin_name: str, checkout_name: str) -> int:
         return 3
     if a <= b or b <= a:
         return 2
+    head_a, mods_a = _head_and_modifiers(checkin_name)
+    head_b, mods_b = _head_and_modifiers(checkout_name)
+    if head_a and head_a == head_b:
+        if (mods_a ^ mods_b) <= _POSITIONAL_MODIFIERS:
+            return 1
     return 0
 
 

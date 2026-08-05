@@ -164,6 +164,16 @@
           "checkin_id": "DIN-022",
           "checkout_id": "DIN-024",
           "name": "Ceramic tableware set"
+        },
+        {
+          "checkin_id": "DIN-012",
+          "checkout_id": "DIN-012",
+          "name": "Power sockets"
+        },
+        {
+          "checkin_id": "DIN-020",
+          "checkout_id": "DIN-022",
+          "name": "Framed picture (left wall)"
         }
       ],
       "removed": [
@@ -188,16 +198,6 @@
           ]
         },
         {
-          "id": "DIN-012",
-          "name": "Double power socket",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "RP-017-A-wide",
-            "RP-017-D-condition"
-          ]
-        },
-        {
           "id": "DIN-017",
           "name": "Sideboard / display cabinet",
           "condition": "good",
@@ -210,16 +210,6 @@
         {
           "id": "DIN-019",
           "name": "Artificial flower arrangement in vase",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "RP-017-A-wide",
-            "RP-017-D-condition"
-          ]
-        },
-        {
-          "id": "DIN-020",
-          "name": "Framed pictures",
           "condition": "good",
           "defects": [],
           "photo_ids": [
@@ -278,15 +268,6 @@
           ]
         },
         {
-          "id": "DIN-012",
-          "name": "Power sockets",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "P35-015-T1-A-wide"
-          ]
-        },
-        {
           "id": "DIN-013",
           "name": "Light switch",
           "condition": "good",
@@ -326,16 +307,6 @@
           ]
         },
         {
-          "id": "DIN-022",
-          "name": "Framed picture (left wall)",
-          "condition": "good",
-          "defects": [],
-          "photo_ids": [
-            "P35-015-T1-A-wide",
-            "P35-015-T1-D-condition"
-          ]
-        },
-        {
           "id": "DIN-023",
           "name": "Vase and artificial flowers",
           "condition": "good",
@@ -348,11 +319,11 @@
     }
   ],
   "totals": {
-    "matched": 16,
+    "matched": 18,
     "changed": 1,
-    "unchanged": 15,
-    "removed": 9,
-    "added": 9,
+    "unchanged": 17,
+    "removed": 7,
+    "added": 7,
     "classified": 0
   },
   "usage": {
