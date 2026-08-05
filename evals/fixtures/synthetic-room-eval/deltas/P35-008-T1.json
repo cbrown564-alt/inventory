@@ -12,5 +12,8 @@
     {"id": "D5", "kind": "cleanliness", "target": "bedside table", "description": "a few loose items and a visible dust mark are present on the bedside table", "material": true},
     {"id": "D6", "kind": "item_added", "target": "bedside book", "description": "a single plain book is newly present on the bedside table", "material": true, "views": ["A-wide"]}
   ],
-  "unchanged_assertions": ["same double bed, headboard, oak wardrobes, cream carpet and bay window", "same chest of drawers, mirror, radiator, curtains, sockets and camera viewpoint", "no change to room shape, door, floor finish or window geometry"]
+  "unchanged_assertions": ["same double bed, headboard, oak wardrobes, cream carpet and bay window", "same chest of drawers, mirror, radiator, curtains, sockets and camera viewpoint", "no change to room shape, door, floor finish or window geometry"],
+  "observed_changes": [
+    {"id": "O1", "kind": "immaterial", "target": "bay blinds", "description": "The bay-window blinds sit at a slightly different slat angle.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"}
+  ]
 }

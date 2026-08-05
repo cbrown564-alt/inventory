@@ -349,9 +349,40 @@ state conflicts** where the two T1 frames disagree (P35-001-T1, P35-009-T1,
 P35-015-T1, P35-029-CF); scoring must stay view-aware. Six accepted pairs carry
 only **one** readable material change and should be weighted accordingly.
 
+**`retracted_changes` — the other half of the mechanism.** `observed_changes`
+above completes gold that was too small. A spec can also be too large: it
+enumerates a change the frames do not carry. Scored, that change costs recall
+for an absence no model could see and rewards one that reports the prompt
+instead of the photograph. It cannot be deleted from `changes` for the same
+reason `observed_changes` cannot be appended to it — that list is the frozen
+prompt of an image that already exists. So the spec carries a third list:
+
+| Field | Feeds the prompt | Scored as gold | Authored |
+|---|---|---|---|
+| `changes` | yes | yes, minus retractions | before the render |
+| `observed_changes` | no | yes | after, from review |
+| `retracted_changes` | no | **removes from gold** | after, from review |
+
+A retraction names the change, an issue (`t0_premise_wrong` or
+`not_rendered`), a reason and the review that found it — withdrawing gold is a
+claim like any other. `apply_delta_gold_corrections.py` writes both side lists
+from a review report and then re-derives every prompt hash in the ledger; if a
+correction had reached the prompt path the run fails rather than orphaning a
+frame from its provenance.
+
+**Applied 5 Aug 2026** (`reports/phase35-gold-corrections-applied-2026-08-05.json`):
+24 retractions and 12 observed changes across 21 specs, prompt hashes
+unchanged. Pilot gold moves from 173 to **153 scorable material changes**. One
+correction could not be applied: P35-018-T1's D2 removes the pendant light
+while its unchanged assertions claim the same pendant light, and both feed the
+frozen prompt — recorded as a known wording fault to avoid in future specs.
+
 The 4 Aug report is retained unedited as evidence. The re-adjudication is one
 reviewer working to an owner-stated rubric, not the two independent AI reviews
-this document requires, and must not be described as satisfying that rule.
+this document requires, and must not be described as satisfying that rule. The
+owner adopted the rubric, authorised the corrections and accepted P35-014-T1
+on 5 Aug (`reports/phase35-pilot-owner-adjudication-2026-08-05.json`),
+superseding their 4 Aug reject of that pair; it still has one review, not two.
 
 ## Current execution status — 3 Aug 2026 (Amendment B)
 
@@ -1499,7 +1530,8 @@ claim.
 | `evals/synthetic/build_delta_tasks.py` | Turn `delta_of` specs into T1/counterfactual generation tasks with reference frames |
 | `evals/synthetic/generate_delta_codex.py` | Drive Codex built-in `imagegen` per delta view with the T0 frame attached; verifies the prompt that reached the image tool matches the queue verbatim |
 | `evals/synthetic/record_delta_outputs.py` | Delta provenance into `review_pending`; refuses a T1 that copies its T0 reference, a duplicate frame, a moved reference pin or a third attempt |
-| `evals/synthetic/review_delta_pair.py` | Pair review: same-room identity, enumerated-change visibility, unenumerated-change detection |
+| `evals/synthetic/review_delta_pair.py` | Pair review: room identity, enumerated-change visibility, incidental drift (Amendment C) |
+| `evals/synthetic/apply_delta_gold_corrections.py` | Write a review's retractions and observed changes into the specs; fails if a correction reaches a generation prompt |
 | `evals/synthetic/score_delta.py` | Delta recall, false-change rate, unchanged stability, severity direction |
 | `evals/synthetic/degrade.py` | Deterministic degradation ladder over accepted images; labels inherited unchanged |
 | `evals/synthetic/review_pass_b.py` | Pinned, scriptable Pass B for validation and sealed records: hashed review prompt, cached raw output, reviewer model id and version |

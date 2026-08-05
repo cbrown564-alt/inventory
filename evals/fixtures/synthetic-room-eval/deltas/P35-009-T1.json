@@ -12,5 +12,8 @@
     {"id": "D5", "kind": "worsened", "target": "door edge", "description": "the small rub mark on the door edge is darker than at T0", "material": true, "views": ["D-condition"]},
     {"id": "D6", "kind": "item_removed", "target": "bedside book", "description": "the book present on the bedside table at T0 is absent at T1", "material": true, "views": ["A-wide"]}
   ],
-  "unchanged_assertions": ["same room layout, painted walls, carpet, window, desk, radiator and built-in storage", "same sockets, door, skirting, light fitting and camera viewpoint", "no other furniture, fitting or finish changes"]
+  "unchanged_assertions": ["same room layout, painted walls, carpet, window, desk, radiator and built-in storage", "same sockets, door, skirting, light fitting and camera viewpoint", "no other furniture, fitting or finish changes"],
+  "retracted_changes": [
+    {"id": "D6", "issue": "t0_premise_wrong", "reason": "No bedside book at T0; drop D6.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ]
 }

@@ -12,5 +12,11 @@
     {"id": "D5", "kind": "worsened", "target": "base unit door", "description": "the existing lower-edge chip on the base unit door is larger", "material": true, "views": ["D-condition"]},
     {"id": "D6", "kind": "immaterial", "target": "dish towel", "description": "the same one cotton dish towel, same material and same count remains on the same oven handle, only hanging with a different fold", "material": false}
   ],
-  "unchanged_assertions": ["same pale units, dark worktop, sink, oven, hob, extractor hood and window", "same room shape, floor, radiator, blind, door, skirting and camera viewpoint", "no other appliance, fitting, object or finish changes"]
+  "unchanged_assertions": ["same pale units, dark worktop, sink, oven, hob, extractor hood and window", "same room shape, floor, radiator, blind, door, skirting and camera viewpoint", "no other appliance, fitting, object or finish changes"],
+  "retracted_changes": [
+    {"id": "D6", "issue": "t0_premise_wrong", "reason": "There is no dish towel at T0.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ],
+  "observed_changes": [
+    {"id": "O1", "kind": "immaterial", "target": "dish towel", "description": "A towel appears on the oven handle at T1.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"}
+  ]
 }

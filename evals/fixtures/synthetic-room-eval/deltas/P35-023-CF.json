@@ -12,5 +12,8 @@
     {"id": "D5", "kind": "cleanliness", "target": "carpet", "description": "loose dust and a small paper scrap are present on the carpet", "material": true},
     {"id": "D6", "kind": "worsened", "target": "skirting board", "description": "a rub mark on the skirting is visibly darker", "material": true, "views": ["D-condition"]}
   ],
-  "unchanged_assertions": ["same pale blue walls, grey carpet, white radiator, sash window, wardrobe and doorway", "same sockets, skirting, ceiling pendant, threshold and camera viewpoint", "no changed room dimensions, window geometry or fixed fittings"]
+  "unchanged_assertions": ["same pale blue walls, grey carpet, white radiator, sash window, wardrobe and doorway", "same sockets, skirting, ceiling pendant, threshold and camera viewpoint", "no changed room dimensions, window geometry or fixed fittings"],
+  "retracted_changes": [
+    {"id": "D1", "issue": "not_rendered", "reason": "Drop D1 or re-shoot.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ]
 }

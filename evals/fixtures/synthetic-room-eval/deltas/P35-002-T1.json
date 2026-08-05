@@ -12,5 +12,11 @@
     {"id": "D5", "kind": "cleanliness", "target": "lower wall tiles", "description": "light splash marks are visible on the lower wall tiles at T1", "material": true},
     {"id": "D6", "kind": "item_added", "target": "waste bin", "description": "a small plain waste bin is newly present beside the basin", "material": true, "views": ["A-wide"]}
   ],
-  "unchanged_assertions": ["same white suite, grey wall tiles, glass screen, towel rail and window", "same bath, WC, basin, mirror, extractor and door positions", "no new sanitary fixture, no changed camera viewpoint and no changed room geometry"]
+  "unchanged_assertions": ["same white suite, grey wall tiles, glass screen, towel rail and window", "same bath, WC, basin, mirror, extractor and door positions", "no new sanitary fixture, no changed camera viewpoint and no changed room geometry"],
+  "retracted_changes": [
+    {"id": "D3", "issue": "t0_premise_wrong", "reason": "No bath mat exists at T0; drop D3.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ],
+  "observed_changes": [
+    {"id": "O1", "kind": "immaterial", "target": "toiletries", "description": "Bottles on the sill and bath ledge are arranged differently.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"}
+  ]
 }

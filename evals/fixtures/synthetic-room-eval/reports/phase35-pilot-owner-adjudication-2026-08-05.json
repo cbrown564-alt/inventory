@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "record_type": "phase35_delta_pilot_owner_adjudication",
+  "adjudicated_at": "2026-08-05",
+  "adjudicated_by": "project owner",
+  "scope": "the 30-pair Phase 3.5 pilot",
+  "decisions": [
+    {
+      "id": "materiality-rubric",
+      "decision": "adopted",
+      "statement": "A delta pair fails when the room stops being the same room. Movable clutter — tea towels, toasters, toiletry bottles — is recorded and never rejects.",
+      "origin": "The owner read the 4 Aug rejections against the frames and found they focused on the wrong details; P35-001-T1 fails because the oven moves position, not because a tea towel appeared.",
+      "recorded_in": "docs/31-synthetic-evaluation-dataset-plan.md — Amendment C, 5 Aug 2026"
+    },
+    {
+      "id": "gold-corrections",
+      "decision": "authorised",
+      "statement": "Apply the 25 gold corrections found by the re-adjudication, in the knowledge that they come from one owner-directed reviewer rather than the two independent AI reviews docs/31 requires.",
+      "applied_in": "reports/phase35-gold-corrections-applied-2026-08-05.json",
+      "provenance_caveat": "Every retraction and observed change names phase35-pilot-review-recut-2026-08-05.json as its source, so the strength of the evidence behind each entry is auditable from the spec itself."
+    },
+    {
+      "id": "P35-014-T1",
+      "decision": "accept",
+      "supersedes": "reports/phase35-pilot-owner-adjudication-2026-08-04.json",
+      "statement": "The owner accepts the re-adjudication of this pair. Room identity holds and D2 is visible: the chair at the head of the table at T0 is absent at T1, confirmed on a full-resolution crop.",
+      "was": "reject",
+      "why_it_changed": "The 4 Aug reject was made on the enumerated axis — four of six changes absent or ambiguous — and read D2 as absent. Under the room-identity rubric an absent change corrects the gold rather than discarding the frames, and D1 and D4 are retracted accordingly. The pair remains the one pilot pair with no independent AI review at all, because Antigravity quota was exhausted on 4 Aug; that limitation is unchanged.",
+      "still_true": "P35-014-T1 has one review, not two. Do not describe it as independently reviewed."
+    }
+  ],
+  "resulting_state": {
+    "review_counts": {"accept": 27, "reject": 3},
+    "rejected_pairs": ["P35-001-T1", "P35-019-T1", "P35-022-CF"],
+    "gold_retractions_applied": 24,
+    "observed_changes_added": 12,
+    "unrepairable": [
+      {
+        "delta_id": "P35-018-T1",
+        "issue": "spec_contradiction",
+        "detail": "D2 removes the pendant light while the unchanged assertions claim the same pendant light. Both feed the frozen generation prompt, so neither can be edited without orphaning the rendered frame from its provenance. Recorded as a known wording fault; reword it in any future spec, not this one."
+      }
+    ]
+  },
+  "evidence_class": "Synthetic development evidence; cannot promote compare behaviour (docs/00)."
+}

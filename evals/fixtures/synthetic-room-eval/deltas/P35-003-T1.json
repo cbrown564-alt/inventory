@@ -12,5 +12,9 @@
     {"id": "D5", "kind": "worsened", "target": "splashback grout", "description": "one grout line behind the hob is darker and more discoloured than at T0", "material": true, "views": ["D-condition"]},
     {"id": "D6", "kind": "item_removed", "target": "oven mitt", "description": "the oven mitt hanging by the cooker at T0 is absent at T1", "material": true, "views": ["A-wide"]}
   ],
-  "unchanged_assertions": ["same white shaker units, oak-effect worktop, black appliances, sink, oven and rear window", "same room shape, floor, door, sockets and camera viewpoint", "no change to the radiator, blind, skirting or ceiling light"]
+  "unchanged_assertions": ["same white shaker units, oak-effect worktop, black appliances, sink, oven and rear window", "same room shape, floor, door, sockets and camera viewpoint", "no change to the radiator, blind, skirting or ceiling light"],
+  "retracted_changes": [
+    {"id": "D2", "issue": "t0_premise_wrong", "reason": "No kettle at T0; drop D2.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"},
+    {"id": "D6", "issue": "t0_premise_wrong", "reason": "No oven mitt at T0; drop D6.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ]
 }

@@ -12,5 +12,9 @@
     {"id": "D5", "kind": "worsened", "target": "chair upholstery", "description": "one grey chair seat has a darker flattened mark than at T0", "material": true},
     {"id": "D6", "kind": "item_added", "target": "small vase", "description": "a small plain vase is newly present on the dining table", "material": true, "views": ["A-wide"]}
   ],
-  "unchanged_assertions": ["same oak table, six chair positions, French doors, pendant light and pale timber floor", "same display items, wall finish, sockets, skirting and camera viewpoint", "no change to table size, room dimensions or door and window geometry"]
+  "unchanged_assertions": ["same oak table, six chair positions, French doors, pendant light and pale timber floor", "same display items, wall finish, sockets, skirting and camera viewpoint", "no change to table size, room dimensions or door and window geometry"],
+  "retracted_changes": [
+    {"id": "D1", "issue": "not_rendered", "reason": "Drop D1 or re-shoot.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"},
+    {"id": "D4", "issue": "not_rendered", "reason": "Drop D4 or re-shoot.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ]
 }

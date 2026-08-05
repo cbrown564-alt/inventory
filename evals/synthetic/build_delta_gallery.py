@@ -22,7 +22,11 @@ from html import escape
 from pathlib import Path
 from typing import Any
 
-from evals.synthetic.build_delta_tasks import DELTA_VIEWS, load_specs
+from evals.synthetic.build_delta_tasks import (
+    DELTA_VIEWS,
+    RETRACTED_CHANGES_FIELD,
+    load_specs,
+)
 from evals.synthetic.build_pass_a_gallery import GALLERY_CSS
 from evals.synthetic.build_tasks import DEFAULT_DATASET
 
@@ -59,6 +63,9 @@ h1 { font: 600 26px/1.2 var(--serif); margin: 0 0 6px; }
 .kind { font-variant: all-small-caps; letter-spacing: .04em; color: var(--brass-deep);
         font-weight: 600; }
 .immaterial { color: var(--muted); }
+.changes li.retracted { color: var(--muted); }
+.changes li.retracted .struck { text-decoration: line-through; }
+.changes li.observed .kind { color: var(--muted); }
 .tag { font-size: 11px; border: 1px solid var(--line); border-radius: 999px;
        padding: 1px 8px; margin-left: 6px; color: var(--muted); }
 .drift { margin-top: 14px; padding: 12px 16px; border-radius: 9px;
@@ -139,14 +146,37 @@ def build(
             )
 
         changes = []
+        retractions = {
+            item["id"]: item for item in spec.get(RETRACTED_CHANGES_FIELD) or []
+        }
         for change in spec["changes"]:
             scope = change.get("views")
             tag = f'<span class="tag">{escape(", ".join(scope))}</span>' if scope else ""
             immaterial = "" if change["material"] else ' <em class="immaterial">(immaterial — reporting this is a false change)</em>'
+            retraction = retractions.get(change["id"])
+            note = (
+                f' <em class="immaterial">(retracted — '
+                f'{escape(retraction["issue"].replace("_", " "))}: '
+                f'{escape(retraction["reason"])})</em>'
+                if retraction
+                else ""
+            )
+            # The strikethrough has to stop at the withdrawn claim: struck text
+            # over the reason for striking it is unreadable.
+            open_li = '<li class="retracted"><span class="struck">' if retraction else "<li>"
+            close_struck = "</span>" if retraction else ""
             changes.append(
-                f'<li><span class="kind">{escape(change["kind"].replace("_", " "))}</span> — '
+                f"{open_li}"
+                f'<span class="kind">{escape(change["kind"].replace("_", " "))}</span> — '
                 f'{escape(change["target"])}: {escape(change["description"])}'
-                f"{tag}{immaterial}</li>"
+                f"{close_struck}{tag}{immaterial}{note}</li>"
+            )
+        for change in spec.get("observed_changes") or []:
+            changes.append(
+                f'<li class="observed"><span class="kind">observed</span> — '
+                f'{escape(change["target"])}: {escape(change["description"])}'
+                ' <em class="immaterial">(found after the render; scored so '
+                'reporting it is not a false change)</em></li>'
             )
         unchanged = "".join(
             f"<li>{escape(item)}</li>" for item in spec["unchanged_assertions"]

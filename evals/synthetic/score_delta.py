@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 from evals.run_eval import name_match
-from evals.synthetic.build_delta_tasks import load_specs
+from evals.synthetic.build_delta_tasks import load_specs, scorable_changes
 from evals.synthetic.build_tasks import DEFAULT_DATASET
 from evals.synthetic.score import MATCH_THRESHOLD, _tokens, DEFECT_WORDS
 
@@ -130,15 +130,18 @@ def score_delta(
 ) -> dict[str, Any]:
     """Score one compare run against every enumerated change in ``specs``.
 
-    Gold is ``changes`` plus ``observed_changes``. Leaving the observed drift
-    out would charge a compare run with a false change for correctly reporting
-    something that is visibly in the frame — the metric would then be measuring
-    the generator's drift rather than the model's invention, and it would
-    penalise exactly the right answer.
+    Gold is ``changes`` plus ``observed_changes``, minus anything retracted.
+    Leaving the observed drift out would charge a compare run with a false
+    change for correctly reporting something that is visibly in the frame — the
+    metric would then be measuring the generator's drift rather than the
+    model's invention, and it would penalise exactly the right answer. Keeping
+    a retracted change in does the same damage from the other side: it costs
+    recall for an absence no model could see, and rewards one that reports the
+    prompt instead of the photograph.
     """
     gold_changes = [
         dict(change, delta_id=spec["id"]) for spec in specs
-        for change in list(spec["changes"]) + list(spec.get("observed_changes") or [])
+        for change in scorable_changes(spec) + list(spec.get("observed_changes") or [])
     ]
     reported = _iter_reported(comparison)
     matched_entries: set[int] = set()

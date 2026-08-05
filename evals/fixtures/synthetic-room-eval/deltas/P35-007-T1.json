@@ -12,5 +12,11 @@
     {"id": "D5", "kind": "worsened", "target": "painted wall", "description": "a small scuff near the light switch is darker than at T0", "material": true},
     {"id": "D6", "kind": "immaterial", "target": "ceiling pendant", "description": "the same one ceiling pendant, same material and same count remains in the same position, with only its shade orientation slightly changed", "material": false}
   ],
-  "unchanged_assertions": ["same pale blue walls, grey carpet, white radiator, sash window and doorway", "same wardrobe, sockets, skirting, threshold and camera viewpoint", "no change to window geometry, room dimensions or radiator position"]
+  "unchanged_assertions": ["same pale blue walls, grey carpet, white radiator, sash window and doorway", "same wardrobe, sockets, skirting, threshold and camera viewpoint", "no change to window geometry, room dimensions or radiator position"],
+  "retracted_changes": [
+    {"id": "D1", "issue": "not_rendered", "reason": "No stain was rendered; drop D1 or re-shoot.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ],
+  "observed_changes": [
+    {"id": "O1", "kind": "immaterial", "target": "door leaf", "description": "The bedroom door stands at a different opening angle at T1.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"}
+  ]
 }

@@ -12,5 +12,11 @@
     {"id": "D5", "kind": "cleanliness", "target": "oak coffee table", "description": "crumbs and drink rings are present on the coffee table", "material": true},
     {"id": "D6", "kind": "worsened", "target": "cream throw", "description": "the throw has a visibly darker worn patch", "material": true, "views": ["D-condition"]}
   ],
-  "unchanged_assertions": ["same grey sofa, armchair position, oak coffee table, television unit, television and carpet", "same cream throw, glazing, balcony view, walls, door positions and camera viewpoint", "no change to room shape, furniture upholstery, visible exterior or fixed fittings"]
+  "unchanged_assertions": ["same grey sofa, armchair position, oak coffee table, television unit, television and carpet", "same cream throw, glazing, balcony view, walls, door positions and camera viewpoint", "no change to room shape, furniture upholstery, visible exterior or fixed fittings"],
+  "retracted_changes": [
+    {"id": "D3", "issue": "t0_premise_wrong", "reason": "The floor lamp is present at T0; drop D3.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ],
+  "observed_changes": [
+    {"id": "O1", "kind": "immaterial", "target": "cream throw", "description": "The throw moves from the armchair to the sofa arm, which follows from the enumerated armchair removal.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"}
+  ]
 }

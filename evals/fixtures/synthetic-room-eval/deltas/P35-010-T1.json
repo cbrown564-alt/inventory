@@ -12,5 +12,8 @@
     {"id": "D5", "kind": "worsened", "target": "carpet", "description": "the existing faint carpet mark near the coffee table is darker", "material": true, "views": ["D-condition"]},
     {"id": "D6", "kind": "immaterial", "target": "scatter cushions", "description": "the same two scatter cushions, same materials and same count remain on the same sofa, with only their order along the seat changed", "material": false}
   ],
-  "unchanged_assertions": ["same grey sofa, armchair, oak coffee table, television unit, television and cream throw", "same carpet, wall, glazing, balcony view, door positions and camera viewpoint", "no change to visible exterior balcony items, room shape or furniture upholstery"]
+  "unchanged_assertions": ["same grey sofa, armchair, oak coffee table, television unit, television and cream throw", "same carpet, wall, glazing, balcony view, door positions and camera viewpoint", "no change to visible exterior balcony items, room shape or furniture upholstery"],
+  "observed_changes": [
+    {"id": "O1", "kind": "immaterial", "target": "oak coffee table", "description": "The coffee table sits further right at T1.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"}
+  ]
 }

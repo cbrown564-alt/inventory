@@ -1,0 +1,439 @@
+{
+  "schema_version": 1,
+  "record_type": "phase35_delta_gold_corrections_applied",
+  "applied_at": "2026-08-05T11:55:03.278193+00:00",
+  "review": "phase35-pilot-review-recut-2026-08-05.json",
+  "specs_edited": [
+    "P35-001-T1",
+    "P35-002-T1",
+    "P35-003-T1",
+    "P35-005-T1",
+    "P35-006-T1",
+    "P35-007-T1",
+    "P35-008-T1",
+    "P35-009-T1",
+    "P35-010-T1",
+    "P35-012-T1",
+    "P35-013-T1",
+    "P35-014-T1",
+    "P35-016-T1",
+    "P35-017-T1",
+    "P35-019-T1",
+    "P35-020-T1",
+    "P35-022-CF",
+    "P35-023-CF",
+    "P35-025-CF",
+    "P35-027-CF",
+    "P35-030-CF"
+  ],
+  "counts": {
+    "not_rendered": 4,
+    "observed": 12,
+    "skipped:spec_contradiction": 1,
+    "t0_premise_wrong": 20
+  },
+  "prompt_hashes_unchanged": true,
+  "specs_reformatted": [],
+  "note": "Retractions and observed changes never reach build_prompt, so every rendered frame keeps the prompt hash it was made under.",
+  "edits": [
+    {
+      "delta_id": "P35-001-T1",
+      "retractions": [
+        {
+          "id": "D3",
+          "issue": "t0_premise_wrong",
+          "reason": "The dish rack is already present at T0; drop D3 or re-target it.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        },
+        {
+          "id": "D6",
+          "issue": "t0_premise_wrong",
+          "reason": "There is no tea towel at T0; D6 cannot be an immaterial re-fold.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "tea towel",
+          "description": "A tea towel hangs on the oven handle at T1 and none is there at T0.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        },
+        {
+          "id": "O2",
+          "kind": "immaterial",
+          "target": "cloth on toaster",
+          "description": "A folded cloth sits on the toaster in T1 D-condition.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-002-T1",
+      "retractions": [
+        {
+          "id": "D3",
+          "issue": "t0_premise_wrong",
+          "reason": "No bath mat exists at T0; drop D3.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "toiletries",
+          "description": "Bottles on the sill and bath ledge are arranged differently.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-003-T1",
+      "retractions": [
+        {
+          "id": "D2",
+          "issue": "t0_premise_wrong",
+          "reason": "No kettle at T0; drop D2.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        },
+        {
+          "id": "D6",
+          "issue": "t0_premise_wrong",
+          "reason": "No oven mitt at T0; drop D6.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": []
+    },
+    {
+      "delta_id": "P35-005-T1",
+      "retractions": [
+        {
+          "id": "D2",
+          "issue": "t0_premise_wrong",
+          "reason": "No bath mat at T0; drop D2.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        },
+        {
+          "id": "D6",
+          "issue": "t0_premise_wrong",
+          "reason": "No shelf at T0; drop D6.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": []
+    },
+    {
+      "delta_id": "P35-006-T1",
+      "retractions": [
+        {
+          "id": "D6",
+          "issue": "t0_premise_wrong",
+          "reason": "A mat exists at T0; re-state D6 as moved, or drop it.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "bath mat",
+          "description": "The existing mat is larger and lies differently at T1.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-007-T1",
+      "retractions": [
+        {
+          "id": "D1",
+          "issue": "not_rendered",
+          "reason": "No stain was rendered; drop D1 or re-shoot.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "door leaf",
+          "description": "The bedroom door stands at a different opening angle at T1.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-008-T1",
+      "retractions": [],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "bay blinds",
+          "description": "The bay-window blinds sit at a slightly different slat angle.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-009-T1",
+      "retractions": [
+        {
+          "id": "D6",
+          "issue": "t0_premise_wrong",
+          "reason": "No bedside book at T0; drop D6.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": []
+    },
+    {
+      "delta_id": "P35-010-T1",
+      "retractions": [],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "oak coffee table",
+          "description": "The coffee table sits further right at T1.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-012-T1",
+      "retractions": [
+        {
+          "id": "D2",
+          "issue": "t0_premise_wrong",
+          "reason": "No plant pot at T0; drop D2.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        },
+        {
+          "id": "D6",
+          "issue": "t0_premise_wrong",
+          "reason": "The room has no curtain; drop D6.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": []
+    },
+    {
+      "delta_id": "P35-013-T1",
+      "retractions": [
+        {
+          "id": "D2",
+          "issue": "t0_premise_wrong",
+          "reason": "No umbrella stand at T0; drop D2.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "shoes",
+          "description": "Shoes on the floor and rack are rearranged, added and removed.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-014-T1",
+      "retractions": [
+        {
+          "id": "D1",
+          "issue": "not_rendered",
+          "reason": "Drop D1 or re-shoot.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        },
+        {
+          "id": "D4",
+          "issue": "not_rendered",
+          "reason": "Drop D4 or re-shoot.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": []
+    },
+    {
+      "delta_id": "P35-016-T1",
+      "retractions": [
+        {
+          "id": "D2",
+          "issue": "t0_premise_wrong",
+          "reason": "No umbrella stand at T0; drop D2.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "shoes",
+          "description": "Shoes on the bench and floor are rearranged.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-017-T1",
+      "retractions": [
+        {
+          "id": "D2",
+          "issue": "t0_premise_wrong",
+          "reason": "No desk lamp at T0; drop D2.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": []
+    },
+    {
+      "delta_id": "P35-019-T1",
+      "retractions": [
+        {
+          "id": "D6",
+          "issue": "t0_premise_wrong",
+          "reason": "There is no dish towel at T0.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "dish towel",
+          "description": "A towel appears on the oven handle at T1.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-020-T1",
+      "retractions": [
+        {
+          "id": "D6",
+          "issue": "t0_premise_wrong",
+          "reason": "No oven glove at T0; D6 cannot be an immaterial re-hang.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "oven glove",
+          "description": "A quilted glove hangs on the cooker handle at T1 and none is there at T0.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-022-CF",
+      "retractions": [
+        {
+          "id": "D4",
+          "issue": "t0_premise_wrong",
+          "reason": "No soap dispenser at T0; drop D4.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": []
+    },
+    {
+      "delta_id": "P35-023-CF",
+      "retractions": [
+        {
+          "id": "D1",
+          "issue": "not_rendered",
+          "reason": "Drop D1 or re-shoot.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": []
+    },
+    {
+      "delta_id": "P35-025-CF",
+      "retractions": [
+        {
+          "id": "D3",
+          "issue": "t0_premise_wrong",
+          "reason": "The floor lamp is present at T0; drop D3.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": [
+        {
+          "id": "O1",
+          "kind": "immaterial",
+          "target": "cream throw",
+          "description": "The throw moves from the armchair to the sofa arm, which follows from the enumerated armchair removal.",
+          "material": false,
+          "source": "phase35-pilot-review-recut-2026-08-05.json"
+        }
+      ]
+    },
+    {
+      "delta_id": "P35-027-CF",
+      "retractions": [
+        {
+          "id": "D4",
+          "issue": "t0_premise_wrong",
+          "reason": "No plant pot at T0; drop D4.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": []
+    },
+    {
+      "delta_id": "P35-030-CF",
+      "retractions": [
+        {
+          "id": "D4",
+          "issue": "t0_premise_wrong",
+          "reason": "No desk lamp at T0; drop D4.",
+          "source": "phase35-pilot-review-recut-2026-08-05.json",
+          "retracted_at": "2026-08-05"
+        }
+      ],
+      "observed": []
+    }
+  ]
+}

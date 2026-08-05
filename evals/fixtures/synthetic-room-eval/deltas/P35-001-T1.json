@@ -12,5 +12,13 @@
     {"id": "D5", "kind": "worsened", "target": "window blind", "description": "one slat is slightly bent and hangs lower than at T0", "material": true, "views": ["A-wide"]},
     {"id": "D6", "kind": "immaterial", "target": "tea towel", "description": "the same one tea towel, same cotton material and same count remains on the same oven handle, with only its fold orientation changed", "material": false}
   ],
-  "unchanged_assertions": ["same pale units, dark worktop, sink, oven, hob, extractor hood and window", "same camera viewpoint, room shape, flooring and door positions", "no change to the visible radiator, skirting, sockets or ceiling light"]
+  "unchanged_assertions": ["same pale units, dark worktop, sink, oven, hob, extractor hood and window", "same camera viewpoint, room shape, flooring and door positions", "no change to the visible radiator, skirting, sockets or ceiling light"],
+  "retracted_changes": [
+    {"id": "D3", "issue": "t0_premise_wrong", "reason": "The dish rack is already present at T0; drop D3 or re-target it.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"},
+    {"id": "D6", "issue": "t0_premise_wrong", "reason": "There is no tea towel at T0; D6 cannot be an immaterial re-fold.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ],
+  "observed_changes": [
+    {"id": "O1", "kind": "immaterial", "target": "tea towel", "description": "A tea towel hangs on the oven handle at T1 and none is there at T0.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"},
+    {"id": "O2", "kind": "immaterial", "target": "cloth on toaster", "description": "A folded cloth sits on the toaster in T1 D-condition.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"}
+  ]
 }

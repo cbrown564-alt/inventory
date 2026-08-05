@@ -35,6 +35,24 @@ DELTA_VIEWS = ("A-wide", "D-condition")
 #: completing the gold can never rewrite the prompt of an image already made.
 OBSERVED_CHANGES_FIELD = "observed_changes"
 
+#: The mirror of ``observed_changes``. A spec can also be wrong in the other
+#: direction: it enumerates a change the frames do not carry, either because
+#: the render never produced it or because the spec asserted a T0 state the
+#: reference frame never showed ("the kettle present at T0 is absent at T1"
+#: where there is no kettle at T0). Scored as gold, that change costs recall
+#: for an absence no model could see, and it invites a false change from any
+#: model that takes the prompt's word for it. It cannot be deleted from
+#: ``changes`` either, because that list is the frozen prompt of an image that
+#: already exists. So it is retracted: still in the record, out of the gold.
+RETRACTED_CHANGES_FIELD = "retracted_changes"
+
+RETRACTION_ISSUES = {
+    #: the spec's T0 premise is not in the reference frame
+    "t0_premise_wrong",
+    #: the change was asked for and the generator did not render it
+    "not_rendered",
+}
+
 DELTA_CLASSES = {"temporal", "counterfactual"}
 
 VALID_CHANGE_KINDS = {
@@ -137,13 +155,37 @@ def validate_spec(spec: dict[str, Any], parent: dict[str, Any]) -> None:
                 "review that found it — it is gold nobody specified in advance"
             )
 
+    enumerated = {change["id"] for change in changes}
+    retracted: set[str] = set()
+    for retraction in spec.get(RETRACTED_CHANGES_FIELD) or []:
+        change_id = retraction.get("id")
+        if change_id not in enumerated:
+            raise ValueError(
+                f"{delta_id}: retracted change {change_id!r} is not in changes"
+            )
+        if change_id in retracted:
+            raise ValueError(f"{delta_id}: duplicate retraction {change_id!r}")
+        retracted.add(change_id)
+        if retraction.get("issue") not in RETRACTION_ISSUES:
+            raise ValueError(
+                f"{delta_id}.{change_id}: retraction issue must be one of "
+                f"{sorted(RETRACTION_ISSUES)}"
+            )
+        for field in ("reason", "source"):
+            if not retraction.get(field):
+                raise ValueError(
+                    f"{delta_id}.{change_id}: a retraction must give a "
+                    f"{field} — withdrawing gold is a claim like any other"
+                )
+
     assertions = spec.get("unchanged_assertions")
     if not isinstance(assertions, list) or not assertions:
         raise ValueError(
             f"{delta_id}: unchanged_assertions must be a non-empty list — "
             "without it the pair cannot be scored for false changes"
         )
-    if not any(change["material"] for change in changes):
+    scorable = scorable_changes(spec)
+    if not any(change["material"] for change in scorable):
         raise ValueError(
             f"{delta_id}: at least one change must be material, otherwise the "
             "pair carries no delta signal"
@@ -163,12 +205,25 @@ def validate_spec(spec: dict[str, Any], parent: dict[str, Any]) -> None:
                 f"delta pairs render only {list(DELTA_VIEWS)}"
             )
     for view_id in DELTA_VIEWS:
-        if not any(change["material"] for change in changes_for(changes, view_id)):
+        if not any(change["material"] for change in changes_for(scorable, view_id)):
             raise ValueError(
                 f"{delta_id}: view {view_id} receives no material change. A "
                 "render with nothing to show carries no delta signal and its "
                 "half of the pair cannot be scored."
             )
+
+
+def scorable_changes(spec: dict[str, Any]) -> list[dict[str, Any]]:
+    """The enumerated changes still standing as gold.
+
+    Retractions are never applied to the prompt path — :func:`build_prompt`
+    reads ``changes`` directly, so a frame's provenance hash is untouched by
+    anything decided after it was rendered.
+    """
+    retracted = {
+        retraction["id"] for retraction in spec.get(RETRACTED_CHANGES_FIELD) or []
+    }
+    return [change for change in spec["changes"] if change["id"] not in retracted]
 
 
 def changes_for(changes: list[dict[str, Any]], view_id: str) -> list[dict[str, Any]]:

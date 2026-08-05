@@ -12,5 +12,8 @@
     {"id": "D5", "kind": "cleanliness", "target": "window glass", "description": "finger marks are present on the lower window glass", "material": true},
     {"id": "D6", "kind": "worsened", "target": "sofa arm", "description": "the sofa arm has a visibly darker worn patch", "material": true, "views": ["D-condition"]}
   ],
-  "unchanged_assertions": ["same sofa, armchair, coffee table, television unit, carpet, window and door", "same walls, skirting, sockets, radiator, exterior view and camera viewpoint", "no other object, fitting, finish or room geometry changes"]
+  "unchanged_assertions": ["same sofa, armchair, coffee table, television unit, carpet, window and door", "same walls, skirting, sockets, radiator, exterior view and camera viewpoint", "no other object, fitting, finish or room geometry changes"],
+  "retracted_changes": [
+    {"id": "D4", "issue": "t0_premise_wrong", "reason": "No plant pot at T0; drop D4.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ]
 }

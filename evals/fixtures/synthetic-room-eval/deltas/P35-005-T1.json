@@ -12,5 +12,9 @@
     {"id": "D5", "kind": "worsened", "target": "silicone joint", "description": "the existing discolouration along the vanity silicone joint is darker", "material": true, "views": ["D-condition"]},
     {"id": "D6", "kind": "item_removed", "target": "bath shelf", "description": "the small shelf visible beside the basin at T0 is absent at T1", "material": true, "views": ["A-wide"]}
   ],
-  "unchanged_assertions": ["same white suite, pale stone tiles, walk-in shower, glass screen, vanity and chrome towel rail", "same window, door, mirror, extractor, floor drain and camera viewpoint", "no extra sanitary fixture and no changed room geometry"]
+  "unchanged_assertions": ["same white suite, pale stone tiles, walk-in shower, glass screen, vanity and chrome towel rail", "same window, door, mirror, extractor, floor drain and camera viewpoint", "no extra sanitary fixture and no changed room geometry"],
+  "retracted_changes": [
+    {"id": "D2", "issue": "t0_premise_wrong", "reason": "No bath mat at T0; drop D2.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"},
+    {"id": "D6", "issue": "t0_premise_wrong", "reason": "No shelf at T0; drop D6.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ]
 }

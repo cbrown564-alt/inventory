@@ -126,6 +126,8 @@ T0 side is always an already-accepted frame reused as the visual reference.
 .\.venv\Scripts\python.exe -m evals.synthetic.review_delta_pair --output "$fixture/reports/phase35-delta-review-2026-08-04.json"
 .\.venv\Scripts\python.exe -m evals.synthetic.review_delta_pair --output "$fixture/reports/phase35-delta-review-2026-08-04.json" --probe
 .\.venv\Scripts\python.exe -m evals.synthetic.build_delta_gallery --review "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --reviewed-only --output "$fixture/reports/phase35-pilot-gallery-2026-08-05.html"
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_delta_gold_corrections "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.apply_delta_gold_corrections "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --report "$fixture/reports/phase35-gold-corrections-applied-2026-08-05.json"
 ```
 
 ### What rejects a delta pair (docs/31 Amendment C, 5 Aug 2026)
@@ -149,9 +151,29 @@ fatal) and rejected 27 of 30 pairs on clutter. The re-adjudication is
 `reports/phase35-pilot-gallery-2026-08-05.html`: **27 accept, 3 reject**
 (P35-001-T1 and P35-019-T1 — the oven moves in the run and the D-condition
 frames show a different kitchen; P35-022-CF — the basin loses its mixer tap in
-one view only). It also lists **25 gold corrections**, 20 of which are specs
-asserting a T0 state the T0 frame never showed. Apply those before scoring.
-Both 4 Aug reports are retained unedited as evidence.
+one view only). Both 4 Aug reports are retained unedited as evidence, and the
+owner's 5 Aug decisions are in
+`reports/phase35-pilot-owner-adjudication-2026-08-05.json`.
+
+### Correcting gold without touching a frozen prompt
+
+`changes` is the generation prompt as well as the gold, so once a frame exists
+that list cannot be edited — its hash pins the frame's provenance. Corrections
+go to two side lists that `build_prompt` never reads:
+
+- `observed_changes` — real differences nobody enumerated. Without them a
+  compare run that correctly reports one is scored as inventing a change.
+- `retracted_changes` — enumerated changes the frames do not carry, either
+  `not_rendered` or `t0_premise_wrong` (the spec asserted a T0 state the
+  reference never showed). Each names an issue, a reason and the review that
+  found it. Retracted changes leave the gold entirely, so they stop costing
+  recall and start counting as invention if a model reports them anyway.
+
+Applied on 5 Aug 2026: 24 retractions and 12 observed changes across 21 specs,
+pilot gold from 173 to 153 scorable material changes, prompt hashes unchanged
+(`reports/phase35-gold-corrections-applied-2026-08-05.json`). One fault cannot
+be repaired this way — P35-018-T1's D2 removes the pendant light while its
+unchanged assertions claim it — because both sides feed the frozen prompt.
 
 `record_delta_outputs` refuses a T1 frame that is byte-identical to its own T0
 reference. That is the delta-specific failure mode: it presents as the perfect

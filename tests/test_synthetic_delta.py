@@ -14,6 +14,7 @@ from evals.synthetic.build_delta_tasks import (
     validate_spec,
     write_tasks,
 )
+from evals.synthetic.apply_delta_gold_corrections import apply as apply_corrections
 from evals.synthetic.build_delta_gallery import build as build_gallery
 from evals.synthetic.generate_delta_codex import (
     build_command,
@@ -246,6 +247,143 @@ def test_an_observed_change_cannot_reuse_an_enumerated_change_id():
     spec["observed_changes"] = [dict(OBSERVED, id="D1")]
     with pytest.raises(ValueError, match="duplicate change id"):
         validate_spec(spec, PARENT)
+
+
+RETRACTION = {
+    "id": "D1",
+    "issue": "t0_premise_wrong",
+    "reason": "there is no stain-free carpet at T0 to worsen",
+    "source": "reports/phase35-pilot-review-recut-2026-08-05.json",
+}
+
+
+def test_a_retracted_change_leaves_the_generation_prompt_alone(tmp_path):
+    """Same reason as observed_changes, from the other direction.
+
+    A change the frames do not carry still has to stay in `changes`, because
+    that list is the prompt an existing image was made under.
+    """
+    dataset = _write_dataset(tmp_path)
+    before = write_tasks(dataset)
+    hashes = {row["task_id"]: row["prompt_sha256"] for row in before}
+
+    spec = copy.deepcopy(SPEC)
+    spec["retracted_changes"] = [RETRACTION]
+    (dataset / "deltas/RP-901-T1.json").write_text(json.dumps(spec), encoding="utf-8")
+
+    after = write_tasks(dataset)
+    assert {row["task_id"]: row["prompt_sha256"] for row in after} == hashes
+    assert "dark stain roughly 15cm" in after[0]["exact_prompt"]
+
+
+def test_a_retracted_change_stops_costing_recall_and_starts_costing_invention():
+    """A change that is not in the frames must score both ways round.
+
+    Missing it is not a miss — there is nothing to see. Reporting it is an
+    invention, because the model is describing the prompt, not the photograph.
+    """
+    spec = copy.deepcopy(SPEC)
+    spec["retracted_changes"] = [RETRACTION]
+    comparison = _comparison()
+
+    without = score_delta(comparison, [SPEC])
+    assert without["counts"]["material_changes"] == 2
+    assert without["counts"]["false_changes"] == 0
+
+    with_retraction = score_delta(comparison, [spec])
+    assert with_retraction["counts"]["material_changes"] == 1
+    assert with_retraction["counts"]["false_changes"] == 1
+
+
+def test_a_retraction_must_name_a_real_change_and_carry_its_reasons():
+    spec = copy.deepcopy(SPEC)
+    spec["retracted_changes"] = [dict(RETRACTION, id="D9")]
+    with pytest.raises(ValueError, match="not in changes"):
+        validate_spec(spec, PARENT)
+
+    for field in ("reason", "source"):
+        spec["retracted_changes"] = [
+            {k: v for k, v in RETRACTION.items() if k != field}
+        ]
+        with pytest.raises(ValueError, match=f"must give a {field}"):
+            validate_spec(spec, PARENT)
+
+    spec["retracted_changes"] = [dict(RETRACTION, issue="looked wrong")]
+    with pytest.raises(ValueError, match="retraction issue must be"):
+        validate_spec(spec, PARENT)
+
+
+def test_retracting_every_material_change_in_a_view_is_rejected():
+    """A spec that retracts its way to nothing cannot be scored."""
+    spec = copy.deepcopy(SPEC)
+    spec["retracted_changes"] = [
+        dict(RETRACTION, id=change["id"]) for change in spec["changes"]
+    ]
+    with pytest.raises(ValueError, match="at least one change must be material"):
+        validate_spec(spec, PARENT)
+
+
+def _recut_review(tmp_path: Path) -> Path:
+    review = tmp_path / "recut.json"
+    review.write_text(json.dumps({
+        "completed_at": "2026-08-05",
+        "pairs": [{
+            "delta_id": "RP-901-T1",
+            "decision": "accept",
+            "gold_corrections": [
+                {"change_id": "D1", "issue": "t0_premise_wrong",
+                 "recommendation": "no clean carpet at T0; drop D1"},
+                {"change_id": "D2", "issue": "spec_contradiction",
+                 "recommendation": "reword the unchanged assertion"},
+            ],
+            "incidental_differences": [
+                {"target": "tea towel", "description": "moved to the other handle"},
+                {"target": "camera", "description": "the T1 framing is closer"},
+            ],
+        }],
+    }), encoding="utf-8")
+    return review
+
+
+def test_applying_gold_corrections_writes_both_side_lists(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    write_tasks(dataset)
+    report = apply_corrections(dataset, _recut_review(tmp_path))
+
+    spec = json.loads(
+        (dataset / "deltas/RP-901-T1.json").read_text(encoding="utf-8")
+    )
+    assert [item["id"] for item in spec["retracted_changes"]] == ["D1"]
+    assert [item["target"] for item in spec["observed_changes"]] == ["tea towel"]
+    assert spec["observed_changes"][0]["material"] is False
+    assert report["prompt_hashes_unchanged"] is True
+    # A wording problem in the unchanged assertions cannot be repaired by a
+    # side list, so it is skipped loudly rather than half-applied.
+    assert report["counts"]["skipped:spec_contradiction"] == 1
+
+
+def test_applying_gold_corrections_never_records_a_camera_move_as_gold(tmp_path):
+    """Framing drift is review context. As gold it would let a compare run
+    score a camera move as a change in the property."""
+    dataset = _write_dataset(tmp_path)
+    write_tasks(dataset)
+    apply_corrections(dataset, _recut_review(tmp_path))
+
+    spec = json.loads(
+        (dataset / "deltas/RP-901-T1.json").read_text(encoding="utf-8")
+    )
+    assert all(item["target"] != "camera" for item in spec["observed_changes"])
+
+
+def test_applying_gold_corrections_twice_changes_nothing_the_second_time(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    write_tasks(dataset)
+    review = _recut_review(tmp_path)
+    apply_corrections(dataset, review)
+    first = (dataset / "deltas/RP-901-T1.json").read_text(encoding="utf-8")
+
+    apply_corrections(dataset, review)
+    assert (dataset / "deltas/RP-901-T1.json").read_text(encoding="utf-8") == first
 
 
 def test_load_specs_rejects_a_missing_parent(tmp_path):

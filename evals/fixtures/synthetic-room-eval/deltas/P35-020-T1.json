@@ -12,5 +12,11 @@
     {"id": "D5", "kind": "worsened", "target": "base unit plinth", "description": "the existing scuff on the plinth is darker and longer", "material": true, "views": ["D-condition"]},
     {"id": "D6", "kind": "immaterial", "target": "oven glove", "description": "the same one fabric oven glove, same material and same count remains on the same handle, only turned to face the other way", "material": false}
   ],
-  "unchanged_assertions": ["same wood-effect units, cream laminate worktop, freestanding cooker, sink and patterned floor", "same radiator, window blind, wall clock, door, skirting and camera viewpoint", "no other appliance, fitting, furniture or room geometry changes"]
+  "unchanged_assertions": ["same wood-effect units, cream laminate worktop, freestanding cooker, sink and patterned floor", "same radiator, window blind, wall clock, door, skirting and camera viewpoint", "no other appliance, fitting, furniture or room geometry changes"],
+  "retracted_changes": [
+    {"id": "D6", "issue": "t0_premise_wrong", "reason": "No oven glove at T0; D6 cannot be an immaterial re-hang.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ],
+  "observed_changes": [
+    {"id": "O1", "kind": "immaterial", "target": "oven glove", "description": "A quilted glove hangs on the cooker handle at T1 and none is there at T0.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"}
+  ]
 }

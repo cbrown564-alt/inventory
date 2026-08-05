@@ -12,5 +12,11 @@
     {"id": "D5", "kind": "worsened", "target": "threshold strip", "description": "the existing rub on the threshold strip is darker than at T0", "material": true, "views": ["D-condition"]},
     {"id": "D6", "kind": "item_added", "target": "coat", "description": "one plain coat is newly hanging on the open coat bench", "material": true, "views": ["A-wide"]}
   ],
-  "unchanged_assertions": ["same pale walls, tiled floor, glazed door, coat bench, wall hooks, mirror and radiator", "same threshold, skirting, door furniture and camera viewpoint", "no change to hall geometry, fixed fittings or tile layout"]
+  "unchanged_assertions": ["same pale walls, tiled floor, glazed door, coat bench, wall hooks, mirror and radiator", "same threshold, skirting, door furniture and camera viewpoint", "no change to hall geometry, fixed fittings or tile layout"],
+  "retracted_changes": [
+    {"id": "D2", "issue": "t0_premise_wrong", "reason": "No umbrella stand at T0; drop D2.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ],
+  "observed_changes": [
+    {"id": "O1", "kind": "immaterial", "target": "shoes", "description": "Shoes on the bench and floor are rearranged.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"}
+  ]
 }

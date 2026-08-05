@@ -90,7 +90,19 @@
     "P35-027-CF"
   ],
   "incidental_differences_recorded": 20,
-  "review_blocker": "The re-adjudication is a single owner-directed reviewer, not two independent AI reviews. P35-014-T1 additionally has no independent AI review at all (Antigravity quota) and its 4 Aug owner adjudication stands on the enumerated axis.",
+  "review_blocker": "The re-adjudication is a single owner-directed reviewer, not two independent AI reviews. P35-014-T1 additionally has no independent AI review at all (Antigravity quota, 4 Aug); the owner accepted it on 5 Aug and that limitation is unchanged.",
   "evidence_class": "Synthetic development evidence; cannot promote compare behaviour.",
-  "compare_scoring": "not_run — apply the 25 gold corrections first, then use score_delta.py with a review-gated compare output."
+  "compare_scoring": "not_run — gold corrections are applied, so score_delta.py can now be run against a review-gated compare output.",
+  "gold_corrections_applied": {
+    "record": "reports/phase35-gold-corrections-applied-2026-08-05.json",
+    "retractions": 24,
+    "observed_changes_added": 12,
+    "unrepairable": [
+      "P35-018-T1 D2 — spec_contradiction, both sides feed the frozen prompt"
+    ],
+    "prompt_hashes_unchanged": true
+  },
+  "scorable_material_changes": 153,
+  "scorable_material_changes_before_corrections": 173,
+  "owner_adjudication": "reports/phase35-pilot-owner-adjudication-2026-08-05.json"
 }

@@ -12,5 +12,11 @@
     {"id": "D5", "kind": "worsened", "target": "vinyl floor", "description": "a faint scuff near the basin is longer and darker than at T0", "material": true, "views": ["D-condition"]},
     {"id": "D6", "kind": "item_added", "target": "bath mat", "description": "a small bath mat is newly present beside the basin", "material": true, "views": ["A-wide"]}
   ],
-  "unchanged_assertions": ["same sloped ceiling, compact shower, pedestal basin, WC, mosaic tiles and vinyl floor", "same door, mirror, towel ring location, extractor, shower controls and camera viewpoint", "no extra sanitary fixture or changed room shape"]
+  "unchanged_assertions": ["same sloped ceiling, compact shower, pedestal basin, WC, mosaic tiles and vinyl floor", "same door, mirror, towel ring location, extractor, shower controls and camera viewpoint", "no extra sanitary fixture or changed room shape"],
+  "retracted_changes": [
+    {"id": "D6", "issue": "t0_premise_wrong", "reason": "A mat exists at T0; re-state D6 as moved, or drop it.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ],
+  "observed_changes": [
+    {"id": "O1", "kind": "immaterial", "target": "bath mat", "description": "The existing mat is larger and lies differently at T1.", "material": false, "source": "phase35-pilot-review-recut-2026-08-05.json"}
+  ]
 }

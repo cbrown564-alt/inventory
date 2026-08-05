@@ -12,5 +12,8 @@
     {"id": "D5", "kind": "cleanliness", "target": "blue rug", "description": "dust and a paper scrap are present on the blue rug", "material": true},
     {"id": "D6", "kind": "worsened", "target": "skirting board", "description": "a visible darkened wear patch is present on the skirting", "material": true, "views": ["D-condition"]}
   ],
-  "unchanged_assertions": ["same single bed, white wardrobe, blue rug, small window, desk and toy storage", "same carpet, skirting, door, radiator, ceiling light and camera viewpoint", "no changed room dimensions, furniture layout or window geometry"]
+  "unchanged_assertions": ["same single bed, white wardrobe, blue rug, small window, desk and toy storage", "same carpet, skirting, door, radiator, ceiling light and camera viewpoint", "no changed room dimensions, furniture layout or window geometry"],
+  "retracted_changes": [
+    {"id": "D4", "issue": "t0_premise_wrong", "reason": "No desk lamp at T0; drop D4.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ]
 }

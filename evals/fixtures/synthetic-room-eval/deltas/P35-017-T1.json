@@ -12,5 +12,8 @@
     {"id": "D5", "kind": "worsened", "target": "skirting board", "description": "the existing rub on the skirting is darker than at T0", "material": true, "views": ["D-condition"]},
     {"id": "D6", "kind": "item_added", "target": "bedside book", "description": "a plain book is newly present beside the single bed", "material": true, "views": ["A-wide"]}
   ],
-  "unchanged_assertions": ["same single bed, white wardrobe, blue rug, small window, desk and toy storage", "same carpet, skirting, door, radiator, ceiling light and camera viewpoint", "no change to room dimensions, furniture layout or window geometry"]
+  "unchanged_assertions": ["same single bed, white wardrobe, blue rug, small window, desk and toy storage", "same carpet, skirting, door, radiator, ceiling light and camera viewpoint", "no change to room dimensions, furniture layout or window geometry"],
+  "retracted_changes": [
+    {"id": "D2", "issue": "t0_premise_wrong", "reason": "No desk lamp at T0; drop D2.", "source": "phase35-pilot-review-recut-2026-08-05.json", "retracted_at": "2026-08-05"}
+  ]
 }
