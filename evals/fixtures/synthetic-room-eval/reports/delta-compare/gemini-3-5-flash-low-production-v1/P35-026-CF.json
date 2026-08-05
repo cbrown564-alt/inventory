@@ -1,0 +1,435 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-026-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-026-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Living room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "LIV-003",
+          "checkout_id": "LIV-003",
+          "name": "Flooring",
+          "checkin_name": "Flooring",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "light superficial scratches and scuffing consistent with age and use"
+          ],
+          "new_defects": [
+            "light superficial scratches and scuffing consistent with age and use"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-026-CF-A-wide",
+            "P35-026-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "LIV-006",
+          "checkout_id": "LIV-004",
+          "name": "Skirting boards",
+          "checkin_name": "Skirting boards",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "angle chip low level to right hand side corner adjacent to fireplace hearth",
+            "scuff marks low level behind metal plant stand"
+          ],
+          "new_defects": [
+            "angle chip low level to right hand side corner adjacent to fireplace hearth",
+            "scuff marks low level behind metal plant stand"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-026-CF-A-wide",
+            "P35-026-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "LIV-010",
+          "checkout_id": "LIV-012",
+          "name": "Three-seat sofa",
+          "checkin_name": "Three-seat sofa",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "natural creasing and light wear to leather cushions and armrests"
+          ],
+          "new_defects": [
+            "natural creasing and light wear to leather cushions and armrests"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-026-CF-A-wide",
+            "P35-026-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "LIV-001",
+          "checkout_id": "LIV-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "LIV-002",
+          "checkout_id": "LIV-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "LIV-011",
+          "checkout_id": "LIV-015",
+          "name": "Coffee table"
+        },
+        {
+          "checkin_id": "LIV-014",
+          "checkout_id": "LIV-021",
+          "name": "Television"
+        },
+        {
+          "checkin_id": "LIV-017",
+          "checkout_id": "LIV-014",
+          "name": "Armchair"
+        },
+        {
+          "checkin_id": "LIV-018",
+          "checkout_id": "LIV-024",
+          "name": "Table lamps"
+        },
+        {
+          "checkin_id": "LIV-021",
+          "checkout_id": "LIV-025",
+          "name": "Potted plant"
+        },
+        {
+          "checkin_id": "LIV-022",
+          "checkout_id": "LIV-020",
+          "name": "Metal plant stand"
+        },
+        {
+          "checkin_id": "LIV-016",
+          "checkout_id": "LIV-017",
+          "name": "Wooden stool"
+        },
+        {
+          "checkin_id": "LIV-004",
+          "checkout_id": "LIV-005",
+          "name": "Door and frame"
+        },
+        {
+          "checkin_id": "LIV-005",
+          "checkout_id": "LIV-006",
+          "name": "Bay window and frame"
+        },
+        {
+          "checkin_id": "LIV-007",
+          "checkout_id": "LIV-007",
+          "name": "Central pendant light"
+        },
+        {
+          "checkin_id": "LIV-009",
+          "checkout_id": "LIV-011",
+          "name": "Curtains and net blinds"
+        },
+        {
+          "checkin_id": "LIV-012",
+          "checkout_id": "LIV-010",
+          "name": "Area rug"
+        },
+        {
+          "checkin_id": "LIV-019",
+          "checkout_id": "LIV-022",
+          "name": "Ornate wall mirror"
+        },
+        {
+          "checkin_id": "LIV-023",
+          "checkout_id": "LIV-019",
+          "name": "Dresser cabinet"
+        }
+      ],
+      "removed": [
+        {
+          "id": "LIV-008",
+          "name": "Fireplace and hearth",
+          "condition": "good",
+          "defects": [
+            "light dusting of white ash and faint cup ring marks low level to slate hearth"
+          ],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-013",
+          "name": "TV media console",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-015",
+          "name": "Tall bookshelves",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-020",
+          "name": "Framed wall art",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-024",
+          "name": "Dark wood sideboard",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-025",
+          "name": "Spindle back chair",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "LIV-008",
+          "name": "Double power socket",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-026-CF-A-wide",
+            "P35-026-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-009",
+          "name": "Fireplace and surround",
+          "condition": "good",
+          "defects": [
+            "minor scuffing to low level outer edges of the dark wood surround",
+            "light dust/ash residue to coal bed"
+          ],
+          "photo_ids": [
+            "P35-026-CF-A-wide",
+            "P35-026-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-013",
+          "name": "Sofa cushions",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-026-CF-A-wide",
+            "P35-026-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-016",
+          "name": "TV stand",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-026-CF-A-wide",
+            "P35-026-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-018",
+          "name": "White bookcase",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-026-CF-A-wide",
+            "P35-026-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-023",
+          "name": "Framed landscape artwork",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-026-CF-A-wide",
+            "P35-026-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-026",
+          "name": "Metal buckets",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-026-CF-A-wide",
+            "P35-026-CF-D-condition"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 19,
+    "changed": 3,
+    "unchanged": 16,
+    "removed": 6,
+    "added": 7,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "delta_eval": {
+    "schema_version": 1,
+    "delta_id": "P35-026-CF",
+    "delta_class": "counterfactual",
+    "parent_scenario_id": "RP-012",
+    "parent_split": "development",
+    "room_type": "Living room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "bea7d302f8c769d5d7c542f866ce373b2a33dcb2015775b2a5697e5a94a9a22f",
+    "rubric": "offline",
+    "rubric_note": "Gated changes stay unclassified. Classification is not a delta metric and the openai rubric would be a metered call; grade_delta is computed by compare, so severity direction still scores.",
+    "sides": {
+      "T0": {
+        "run_id": "P35-026-CF.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-012-A-wide.png",
+          "images/openai/gpt-image-2/RP-012-D-condition.png"
+        ],
+        "frame_sha256": [
+          "0272b4a1f5441c1a860e83fff482cd60dbb16e913c3ef7d5c2947afd491e55cc",
+          "ab8cd736d3c88b32217b83bbabdcad1d7e3a7c58ec706afe80312095f4900fee"
+        ],
+        "item_count": 25
+      },
+      "T1": {
+        "run_id": "P35-026-CF.T1.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/deltas/P35-026-CF-A-wide.png",
+          "images/openai/gpt-image-2/deltas/P35-026-CF-D-condition.png"
+        ],
+        "frame_sha256": [
+          "04a8f0aa30c4c8c96d9cf52f15b69379668d43ea93e7db0aad6fb777ddf04428",
+          "3a92d3ba0f36ddab1d3c0b443fb555ba9137d45fbdeaa85907e3d9c5d4ed6e07"
+        ],
+        "item_count": 29
+      }
+    },
+    "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08)."
+  }
+}

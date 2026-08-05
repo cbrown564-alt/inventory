@@ -1,0 +1,416 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-025-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-025-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Living room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "LIV-011",
+          "checkout_id": "LIV-008",
+          "name": "Three-seat sofa",
+          "checkin_name": "Three-seat sofa",
+          "checkin_condition": "good",
+          "checkout_condition": "poor",
+          "grade_delta": 2,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "Dark circular stain high level left hand side to top of armrest",
+            "Small tear and frayed hole knee level left hand side exterior of armrest"
+          ],
+          "new_defects": [
+            "Dark circular stain high level left hand side to top of armrest",
+            "Small tear and frayed hole knee level left hand side exterior of armrest"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "requires cleaning",
+          "checkin_photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-025-CF-A-wide",
+            "P35-025-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "LIV-001",
+          "checkout_id": "LIV-003",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "LIV-002",
+          "checkout_id": "LIV-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "LIV-005",
+          "checkout_id": "LIV-020",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "LIV-008",
+          "checkout_id": "LIV-006",
+          "name": "Curtains"
+        },
+        {
+          "checkin_id": "LIV-012",
+          "checkout_id": "LIV-009",
+          "name": "Sofa cushions"
+        },
+        {
+          "checkin_id": "LIV-015",
+          "checkout_id": "LIV-011",
+          "name": "Coffee table"
+        },
+        {
+          "checkin_id": "LIV-017",
+          "checkout_id": "LIV-016",
+          "name": "Floor lamp"
+        },
+        {
+          "checkin_id": "LIV-018",
+          "checkout_id": "LIV-014",
+          "name": "Television"
+        },
+        {
+          "checkin_id": "LIV-023",
+          "checkout_id": "LIV-019",
+          "name": "Photo frames"
+        },
+        {
+          "checkin_id": "LIV-014",
+          "checkout_id": "LIV-010",
+          "name": "Throw blanket"
+        },
+        {
+          "checkin_id": "LIV-022",
+          "checkout_id": "LIV-018",
+          "name": "Houseplant"
+        }
+      ],
+      "removed": [
+        {
+          "id": "LIV-003",
+          "name": "Carpeted flooring",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-004",
+          "name": "Doorway frame and architrave",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-006",
+          "name": "Patio doors and side windows",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-007",
+          "name": "Curtain track",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-009",
+          "name": "Voile curtains",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-010",
+          "name": "Armchair",
+          "condition": "fair",
+          "defects": [
+            "small pull/snag to fabric on outer face of right armrest, mid level"
+          ],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-013",
+          "name": "Armchair cushion",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-016",
+          "name": "TV cabinet",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-019",
+          "name": "Media boxes",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-020",
+          "name": "Remote control",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-021",
+          "name": "Framed wall art",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-024",
+          "name": "Coffee table ornaments",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "LIV-001",
+          "name": "Carpet",
+          "condition": "good",
+          "defects": [
+            "Small dark spot/stain low level left hand side to carpet approx. 30cm right of sofa armrest"
+          ],
+          "photo_ids": [
+            "P35-025-CF-A-wide",
+            "P35-025-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-004",
+          "name": "Door frame",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-025-CF-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-005",
+          "name": "French doors",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-025-CF-A-wide",
+            "P35-025-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-007",
+          "name": "Net curtains",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-025-CF-A-wide",
+            "P35-025-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-012",
+          "name": "Coffee table decor",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-025-CF-A-wide",
+            "P35-025-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-013",
+          "name": "TV stand",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-025-CF-A-wide",
+            "P35-025-CF-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-015",
+          "name": "Media devices",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-025-CF-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-017",
+          "name": "Picture frame",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-025-CF-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-021",
+          "name": "Threshold strip",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-025-CF-A-wide"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 12,
+    "changed": 1,
+    "unchanged": 11,
+    "removed": 12,
+    "added": 9,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "delta_eval": {
+    "schema_version": 1,
+    "delta_id": "P35-025-CF",
+    "delta_class": "counterfactual",
+    "parent_scenario_id": "RP-011",
+    "parent_split": "development",
+    "room_type": "Living room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "bea7d302f8c769d5d7c542f866ce373b2a33dcb2015775b2a5697e5a94a9a22f",
+    "rubric": "offline",
+    "rubric_note": "Gated changes stay unclassified. Classification is not a delta metric and the openai rubric would be a metered call; grade_delta is computed by compare, so severity direction still scores.",
+    "sides": {
+      "T0": {
+        "run_id": "P35-025-CF.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-011-A-wide.png",
+          "images/openai/gpt-image-2/RP-011-D-condition.png"
+        ],
+        "frame_sha256": [
+          "a337a4a594ebd866d061bb381a49659b433af4e1b3b890782a77230b379de8d5",
+          "2b94ae7cd22697583611eb0c4ee4b8b2e3418bd7660bbeb039886c0e0ec6ace4"
+        ],
+        "item_count": 25
+      },
+      "T1": {
+        "run_id": "P35-025-CF.T1.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/deltas/P35-025-CF-A-wide.png",
+          "images/openai/gpt-image-2/deltas/P35-025-CF-D-condition.png"
+        ],
+        "frame_sha256": [
+          "8e2d427066b744bcc0de4cf62692e5c316b2fb3604001cdc2c24f25beb34c681",
+          "4f4725528fc3bc8d6536ac40003915b8a56933938909950f2230b8f907d03c3d"
+        ],
+        "item_count": 23
+      }
+    },
+    "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08)."
+  }
+}

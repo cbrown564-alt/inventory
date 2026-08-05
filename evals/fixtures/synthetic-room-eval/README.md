@@ -128,7 +128,35 @@ T0 side is always an already-accepted frame reused as the visual reference.
 .\.venv\Scripts\python.exe -m evals.synthetic.build_delta_gallery --review "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --reviewed-only --output "$fixture/reports/phase35-pilot-gallery-2026-08-05.html"
 .\.venv\Scripts\python.exe -m evals.synthetic.apply_delta_gold_corrections "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --dry-run
 .\.venv\Scripts\python.exe -m evals.synthetic.apply_delta_gold_corrections "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --report "$fixture/reports/phase35-gold-corrections-applied-2026-08-05.json"
+.\.venv\Scripts\python.exe -m evals.synthetic.run_delta_eval --review "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.run_delta_eval --review "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --resume
+.\.venv\Scripts\python.exe -m evals.synthetic.aggregate_delta_scores "$fixture/reports/delta-compare/gemini-3-5-flash-low-production-v1" --review "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --summary "$fixture/reports/phase35-pilot-summary-2026-08-05.json" --out "$fixture/reports/phase35-delta-score-2026-08-05.json"
 ```
+
+`run_delta_eval` describes each timepoint through Antigravity and never tells
+the backend it is looking at a delta. Cached describe records are immutable;
+`--resume` continues an interrupted run instead of failing on them.
+
+### Scored result, 5 Aug 2026
+
+All 27 accepted pairs scored: **delta recall 26.6%, false-change rate 90.8%**
+(`reports/phase35-delta-score-2026-08-05.json`, Markdown alongside it).
+
+Presence changes are caught about half the time — item added 54.3%, item
+removed 50.0% — and changes of state are not: worsened 14.8%, new defect
+12.1%, cleanliness 3.8%. Of the 77 missed condition changes, 42 involve an
+object neither describe run ever named, 18 an object the aligner split across
+`removed` and `added`, and 17 an object tracked correctly whose change went
+unreported.
+
+Two-fifths of the false changes are one untouched object reported twice
+because the runs named it differently and `compare.match_score` did not align
+them (`Recessed spotlight` / `Ceiling spotlight`). That is a product defect,
+recorded in docs/31; the reported rate is not adjusted for it.
+
+This is development evidence. It cannot promote compare behaviour, and one
+describe call (`P35-028-CF` T0) was re-run after returning an empty response
+under a SUCCESS status.
 
 ### What rejects a delta pair (docs/31 Amendment C, 5 Aug 2026)
 

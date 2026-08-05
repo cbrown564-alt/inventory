@@ -404,7 +404,7 @@ Complete four-view packets, which is the number room-level scoring depends on:
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
 | 3 — development and validation | **In progress; blocked on Pass B, not on generation** | 46 of 50 packet review records are `provisional`. Only the four Phase-1 records are `verified_synthetic_gold`. Every remaining generation task could complete tomorrow and Phase 4 would still be blocked. Amendment B repairs generation (B2–B4) and tiers Pass B (B5–B6). |
-| 3.5 — delta pairs | **30-pair pilot complete 4 Aug 2026; re-adjudicated under Amendment C on 5 Aug 2026; compare scoring remains separate** | Promoted to the programme's centre by B7. The pilot contains 20 temporal and 10 counterfactual pairs, 60 generated T1 frames, and 180 enumerated changes. The 4 Aug review rejected 27 of 30 on movable clutter; the room-identity rubric accepts 27 and rejects 3 (P35-001-T1, P35-019-T1, P35-022-CF). Twenty-five gold corrections must be applied before scoring. No compare output was supplied, so these are reviewed synthetic evidence, not a scored or promoted compare result. |
+| 3.5 — delta pairs | **Complete and scored, 5 Aug 2026** | Promoted to the programme's centre by B7. Thirty pairs generated, re-adjudicated under Amendment C to 27 accept / 3 reject, gold corrected, and all 27 scored through `run_delta_eval.py`: **delta recall 26.6%, false-change rate 90.8%**, with condition changes (cleanliness 3.8%) missed at roughly a fifth the rate of presence changes (item_added 54.3%). A `match_score` defect accounts for 40% of the false changes. Development evidence only; it does not promote compare behaviour. |
 | 4 — sealed comparison | **Not started** | Downstream of a validation prompt decision that has not been made. Validation holds two complete GPT packets, so no decision is currently possible on it; B4 addresses that. The amended order admits a per-task prompt assignment as a winner. |
 | 5 — real transfer | **Not started** | Downstream of Phase 4. The separate native-resolution evidence gate also remains open. |
 
@@ -1470,6 +1470,93 @@ no `compare_inventories` output was supplied. Use `score_delta.py` only after
 a review-gated compare output exists. This pilot remains development evidence
 and does not promote compare behaviour.
 
+#### Scored result, 5 Aug 2026 — the compare surface fails on its own gold
+
+The pilot could not be scored until now for a reason nobody had written down:
+`score_delta.py` takes a `compare_inventories` JSON and nothing in this dataset
+produced one. `run_delta_eval.py` closes that. Per accepted pair it describes
+T0 from the parent's accepted reference frames and T1 from the generated ones
+through subscription-backed Antigravity CLI, assembles both sides with the
+product's own `_parse_items` and `merge_items`, and aligns them with
+`compare_inventories`. The describe call is never told it is looking at a
+delta, and the two calls differ only in their images — the instruction text is
+hashed on both sides and a run that diverges fails.
+
+**Run:** 27 accepted pairs, 54 describe calls, `gemini-3.5-flash-low`,
+`production-v1`, offline rubric, one comparison per pair. 139 material gold
+changes, which reconciles with the 153 across all 30 pairs once the three
+rejected pairs are removed. Report:
+`reports/phase35-delta-score-2026-08-05.json`.
+
+| Slice | Pairs | Delta recall | False change rate |
+|---|---:|---:|---:|
+| Clean | 18 | 34.4% | 88.0% |
+| Thin signal | 6 | 10.0% | 96.4% |
+| Cross-view conflict | 3 | 12.5% | 96.5% |
+| **All** | **27** | **26.6%** | **90.8%** |
+
+**The headline is bad and it is real.** Nine in ten reported changes have no
+enumerated counterpart. This is the metric docs/31 calls decisive — a compare
+feature that invents change converts the landlord's evidence into the
+tenant's — and on synthetic pairs built for it, the current surface fails.
+
+**Presence is seen; condition is not.** This is the finding with product
+consequences:
+
+| Kind | Gold | Recall |
+|---|---:|---:|
+| item_added | 35 | 54.3% |
+| item_removed | 18 | 50.0% |
+| worsened | 27 | 14.8% |
+| new_defect | 33 | 12.1% |
+| cleanliness | 26 | **3.8%** |
+
+Things arriving and leaving are caught about half the time. Changes of *state*
+— a widened chip, a greasy hob, a stained carpet — are missed almost entirely,
+and those are what a deposit adjudication turns on. A compare surface with
+this profile answers the question nobody is arguing about.
+
+Attributing all 77 missed condition changes to a cause, because the three call
+for different fixes: **42 were never named by either describe run** (the item
+is not in the schedule, so no delta was ever possible — a coverage problem, not
+a compare one), **18 were split by the aligner**, and **17 were tracked
+correctly while the change went unreported**.
+
+**A defect in `match_score`, found by this run.** 154 of the 385 false changes
+— 40% — are one untouched object reported twice because the two runs named it
+differently: `Recessed spotlight` removed and `Ceiling spotlight` added,
+`Tabletop vanity mirror` and `Standing mirror`, `Wall Tiling` and `Wall tiles`.
+`merge._head_nouns` is documented as returning "the discriminating noun
+tokens" and `match_score` promises that names differing only in descriptors
+score 3 and align. But `_head_nouns` only filters against `_DESCRIPTOR_TOKENS`,
+a hand-curated list of colours and materials. Positional and mounting words —
+`recessed`, `ceiling`, `standing`, `tabletop`, `vanity` — survive as false head
+nouns, so the two sets are neither equal nor nested and the score is 0.
+Singular/plural alone defeats it. This would fire identically in a real
+tenancy: a check-out report claiming a lamp was removed and another installed,
+for a lamp nobody touched. Fixing it is a product change and is not in this
+phase.
+
+With every rename aligned the rate would still be 85.6%. That figure is a
+diagnostic and is never subtracted from the headline — a landlord reads both
+halves of a rename as real changes. The remainder is description
+non-determinism: 72 items named at T0 and absent at T1, 87 the other way.
+
+**What this result is not.** One arm, one run, no repeat, so run-to-run
+variance is unmeasured and none of these rates has an interval. Severity
+direction is 75% on four scored instances and should not be quoted. Delta
+pairs carry two frames per timepoint by design, which is less evidence than a
+real capture gives, so coverage here is a lower bound. The three rejected
+pairs and the probe pairs are excluded. `P35-014-T1` is in the scored set and
+still has one review rather than two. One describe call returned an empty
+response under a SUCCESS status and was re-run (`P35-028-CF` T0); no other run
+was repeated.
+
+Phase 3.5 now exits as specified: a scored delta set with the metrics below.
+The boundaries do not move. This is development evidence, it cannot promote
+compare behaviour, and it says nothing about real check-in/check-out evidence
+except where to look first.
+
 #### Metrics
 
 Reported separately from the static-image metrics; these are compare metrics,
@@ -1532,7 +1619,9 @@ claim.
 | `evals/synthetic/record_delta_outputs.py` | Delta provenance into `review_pending`; refuses a T1 that copies its T0 reference, a duplicate frame, a moved reference pin or a third attempt |
 | `evals/synthetic/review_delta_pair.py` | Pair review: room identity, enumerated-change visibility, incidental drift (Amendment C) |
 | `evals/synthetic/apply_delta_gold_corrections.py` | Write a review's retractions and observed changes into the specs; fails if a correction reaches a generation prompt |
+| `evals/synthetic/run_delta_eval.py` | Describe both timepoints of an accepted pair and align them with `compare_inventories`; delta-blind, and refuses a frame that no longer matches the ledger |
 | `evals/synthetic/score_delta.py` | Delta recall, false-change rate, unchanged stability, severity direction |
+| `evals/synthetic/aggregate_delta_scores.py` | Pool per-pair scores from summed counts; decompose false changes and attribute missed condition changes |
 | `evals/synthetic/degrade.py` | Deterministic degradation ladder over accepted images; labels inherited unchanged |
 | `evals/synthetic/review_pass_b.py` | Pinned, scriptable Pass B for validation and sealed records: hashed review prompt, cached raw output, reviewer model id and version |
 | `evals/synthetic/run_eval.py` | Run named off-the-shelf VLM configurations and cache raw output |

@@ -1,0 +1,430 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-029-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-029-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Dining room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "DIN-002",
+          "checkout_id": "DIN-002",
+          "name": "Walls",
+          "checkin_name": "Walls",
+          "checkin_condition": "good",
+          "checkout_condition": "fair",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "wallpaper damaged with a torn/peeled patch revealing plaster, mid level to right hand wall, approx 15cm x 15cm"
+          ],
+          "new_defects": [
+            "wallpaper damaged with a torn/peeled patch revealing plaster, mid level to right hand wall, approx 15cm x 15cm"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-012",
+          "checkout_id": "DIN-017",
+          "name": "Dining chairs",
+          "checkin_name": "Dining chairs",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": 0,
+          "checkin_defects": [
+            "rubbing and wear to the dark lacquer finish on the top rail of one backrest (high level)"
+          ],
+          "checkout_defects": [
+            "minor scuffs and rubbing to woodwork frames, eye to mid level on leading edges"
+          ],
+          "new_defects": [
+            "minor scuffs and rubbing to woodwork frames, eye to mid level on leading edges"
+          ],
+          "resolved_defects": [
+            "rubbing and wear to the dark lacquer finish on the top rail of one backrest (high level)"
+          ],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-018",
+          "checkout_id": "DIN-019",
+          "name": "Tablecloth",
+          "checkin_name": "Tablecloth",
+          "checkin_condition": "good",
+          "checkout_condition": "fair",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "tear to leading edge, front centre, approx 2cm",
+            "light soil/shade marks to lower drape"
+          ],
+          "new_defects": [
+            "tear to leading edge, front centre, approx 2cm",
+            "light soil/shade marks to lower drape"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "requires cleaning",
+          "checkin_photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "DIN-001",
+          "checkout_id": "DIN-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "DIN-003",
+          "checkout_id": "DIN-005",
+          "name": "Flooring"
+        },
+        {
+          "checkin_id": "DIN-006",
+          "checkout_id": "DIN-004",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "DIN-007",
+          "checkout_id": "DIN-009",
+          "name": "Window"
+        },
+        {
+          "checkin_id": "DIN-009",
+          "checkout_id": "DIN-013",
+          "name": "Radiator"
+        },
+        {
+          "checkin_id": "DIN-013",
+          "checkout_id": "DIN-016",
+          "name": "Dining table"
+        },
+        {
+          "checkin_id": "DIN-015",
+          "checkout_id": "DIN-021",
+          "name": "Pedestal stand"
+        },
+        {
+          "checkin_id": "DIN-019",
+          "checkout_id": "DIN-023",
+          "name": "Framed wall pictures"
+        },
+        {
+          "checkin_id": "DIN-008",
+          "checkout_id": "DIN-014",
+          "name": "Chandelier ceiling light"
+        },
+        {
+          "checkin_id": "DIN-005",
+          "checkout_id": "DIN-008",
+          "name": "Hallway doorway frame"
+        },
+        {
+          "checkin_id": "DIN-016",
+          "checkout_id": "DIN-010",
+          "name": "Curtains"
+        },
+        {
+          "checkin_id": "DIN-017",
+          "checkout_id": "DIN-011",
+          "name": "Net curtains"
+        },
+        {
+          "checkin_id": "DIN-021",
+          "checkout_id": "DIN-024",
+          "name": "Ceramic tableware set"
+        },
+        {
+          "checkin_id": "DIN-022",
+          "checkout_id": "DIN-025",
+          "name": "Crystal glassware set"
+        }
+      ],
+      "removed": [
+        {
+          "id": "DIN-004",
+          "name": "Main glazed door",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-010",
+          "name": "Wall socket",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-011",
+          "name": "Wall-mounted box",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-014",
+          "name": "Glazed display cabinet",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-020",
+          "name": "Vase and artificial flowers",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "DIN-003",
+          "name": "Dado rail",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-006",
+          "name": "Entrance door",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-007",
+          "name": "Entrance door frame",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-012",
+          "name": "Curtain pole",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-015",
+          "name": "Double plug socket",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-018",
+          "name": "Welsh dresser",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-020",
+          "name": "Alcove shelves",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-022",
+          "name": "Artificial floral arrangement",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-026",
+          "name": "Silverware tea set",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-029-CF-A-wide",
+            "P35-029-CF-D-condition"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 17,
+    "changed": 3,
+    "unchanged": 14,
+    "removed": 5,
+    "added": 9,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "delta_eval": {
+    "schema_version": 1,
+    "delta_id": "P35-029-CF",
+    "delta_class": "counterfactual",
+    "parent_scenario_id": "RP-017",
+    "parent_split": "validation",
+    "room_type": "Dining room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "4b67157f88c9edda79cd9bdf880a620fbf692109dcc891d0bf56107d3985fa12",
+    "rubric": "offline",
+    "rubric_note": "Gated changes stay unclassified. Classification is not a delta metric and the openai rubric would be a metered call; grade_delta is computed by compare, so severity direction still scores.",
+    "sides": {
+      "T0": {
+        "run_id": "P35-029-CF.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-017-A-wide.png",
+          "images/openai/gpt-image-2/RP-017-D-condition.png"
+        ],
+        "frame_sha256": [
+          "97596b5483603237e8dae97d04f065cd2255e80f833ca763656ac060683a955b",
+          "18cf9876ad7cdf9912b870e24355422e440a628b269abbfcd38c4791f86b99fb"
+        ],
+        "item_count": 22
+      },
+      "T1": {
+        "run_id": "P35-029-CF.T1.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/deltas/P35-029-CF-A-wide.png",
+          "images/openai/gpt-image-2/deltas/P35-029-CF-D-condition.png"
+        ],
+        "frame_sha256": [
+          "6131bd675e07abbe2cfd22e19f9bb33d81d101384a5ae03a81741738e85c07d2",
+          "9b80e752f1456fb690c14ef83d20cdf84b18087de132fb0fb9ad3c1607d927a0"
+        ],
+        "item_count": 26
+      }
+    },
+    "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08)."
+  }
+}

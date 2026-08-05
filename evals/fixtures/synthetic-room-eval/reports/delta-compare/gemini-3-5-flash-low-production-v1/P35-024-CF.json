@@ -1,0 +1,326 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-024-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-024-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Bedroom",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "BED-018",
+          "checkout_id": "BED-018",
+          "name": "Chest of drawers",
+          "checkin_name": "Chest of drawers",
+          "checkin_condition": "good",
+          "checkout_condition": "fair",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [
+            "two horizontal scratches chest level right hand side to top drawer front"
+          ],
+          "checkout_defects": [
+            "two horizontal scratches mid level right hand side to front of top drawer, adjacent to the handle"
+          ],
+          "new_defects": [
+            "two horizontal scratches mid level right hand side to front of top drawer, adjacent to the handle"
+          ],
+          "resolved_defects": [
+            "two horizontal scratches chest level right hand side to top drawer front"
+          ],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-009-A-wide",
+            "RP-009-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-024-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "BED-001",
+          "checkout_id": "BED-002",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "BED-002",
+          "checkout_id": "BED-001",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "BED-004",
+          "checkout_id": "BED-006",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "BED-007",
+          "checkout_id": "BED-007",
+          "name": "Bay window"
+        },
+        {
+          "checkin_id": "BED-009",
+          "checkout_id": "BED-012",
+          "name": "Bedding set"
+        },
+        {
+          "checkin_id": "BED-013",
+          "checkout_id": "BED-009",
+          "name": "Venetian blinds"
+        },
+        {
+          "checkin_id": "BED-016",
+          "checkout_id": "BED-016",
+          "name": "Suitcase"
+        },
+        {
+          "checkin_id": "BED-019",
+          "checkout_id": "BED-019",
+          "name": "Wall mirror"
+        },
+        {
+          "checkin_id": "BED-021",
+          "checkout_id": "BED-021",
+          "name": "Smart speaker"
+        },
+        {
+          "checkin_id": "BED-003",
+          "checkout_id": "BED-003",
+          "name": "Carpet flooring"
+        },
+        {
+          "checkin_id": "BED-010",
+          "checkout_id": "BED-014",
+          "name": "Bedside tables"
+        },
+        {
+          "checkin_id": "BED-017",
+          "checkout_id": "BED-017",
+          "name": "Double wardrobe"
+        },
+        {
+          "checkin_id": "BED-005",
+          "checkout_id": "BED-004",
+          "name": "Room entry door"
+        },
+        {
+          "checkin_id": "BED-006",
+          "checkout_id": "BED-005",
+          "name": "Door frame and architrave"
+        },
+        {
+          "checkin_id": "BED-008",
+          "checkout_id": "BED-011",
+          "name": "Double bed frame"
+        },
+        {
+          "checkin_id": "BED-012",
+          "checkout_id": "BED-010",
+          "name": "Curtains and pole"
+        },
+        {
+          "checkin_id": "BED-014",
+          "checkout_id": "BED-008",
+          "name": "Curved radiator"
+        },
+        {
+          "checkin_id": "BED-015",
+          "checkout_id": "BED-022",
+          "name": "Wicker laundry basket"
+        },
+        {
+          "checkin_id": "BED-022",
+          "checkout_id": "BED-024",
+          "name": "Digital clock radio"
+        }
+      ],
+      "removed": [
+        {
+          "id": "BED-011",
+          "name": "Bedside lamps x2",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-009-A-wide",
+            "RP-009-D-condition"
+          ]
+        },
+        {
+          "id": "BED-020",
+          "name": "Decorative plate",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-009-A-wide",
+            "RP-009-D-condition"
+          ]
+        },
+        {
+          "id": "BED-023",
+          "name": "Clear glass bottle",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-009-A-wide",
+            "RP-009-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "BED-013",
+          "name": "Bed throw",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-024-CF-A-wide"
+          ]
+        },
+        {
+          "id": "BED-015",
+          "name": "Table lamp",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-024-CF-A-wide",
+            "P35-024-CF-D-condition"
+          ]
+        },
+        {
+          "id": "BED-020",
+          "name": "Decorative bowl",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-024-CF-D-condition"
+          ]
+        },
+        {
+          "id": "BED-023",
+          "name": "Wicker storage basket",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-024-CF-A-wide"
+          ]
+        },
+        {
+          "id": "BED-025",
+          "name": "Hand pump dispenser bottle",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-024-CF-D-condition"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 20,
+    "changed": 1,
+    "unchanged": 19,
+    "removed": 3,
+    "added": 5,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "delta_eval": {
+    "schema_version": 1,
+    "delta_id": "P35-024-CF",
+    "delta_class": "counterfactual",
+    "parent_scenario_id": "RP-009",
+    "parent_split": "development",
+    "room_type": "Bedroom",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "cf6f8118ac07dfd9d468317a8a7cea9b4092138fd4500d39982e838dde5b07cc",
+    "rubric": "offline",
+    "rubric_note": "Gated changes stay unclassified. Classification is not a delta metric and the openai rubric would be a metered call; grade_delta is computed by compare, so severity direction still scores.",
+    "sides": {
+      "T0": {
+        "run_id": "P35-024-CF.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-009-A-wide.png",
+          "images/openai/gpt-image-2/RP-009-D-condition.png"
+        ],
+        "frame_sha256": [
+          "6eb364bbe95da6993d7a7c6f99e89304e73af4f1ff34641528b00742f429ac96",
+          "23afa7f2c9ec40ae14adb7c280e3e60184a3c90de3fdaa2c5d1f4ab2c45e2d30"
+        ],
+        "item_count": 23
+      },
+      "T1": {
+        "run_id": "P35-024-CF.T1.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/deltas/P35-024-CF-A-wide.png",
+          "images/openai/gpt-image-2/deltas/P35-024-CF-D-condition.png"
+        ],
+        "frame_sha256": [
+          "c5e709155e4c41951d54568cfa79cf1f034df1ff01a8b3dd031c96aba61b919b",
+          "7d94bafd8a855fa631dc6b6fcc6fd6360d9cc66beeb2b94583177bb3e7aa2430"
+        ],
+        "item_count": 25
+      }
+    },
+    "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08)."
+  }
+}

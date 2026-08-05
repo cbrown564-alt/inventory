@@ -1,0 +1,296 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-016-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-016-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Entrance hall",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [],
+      "unchanged": [
+        {
+          "checkin_id": "ENT-001",
+          "checkout_id": "ENT-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "ENT-002",
+          "checkout_id": "ENT-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "ENT-003",
+          "checkout_id": "ENT-003",
+          "name": "Flooring"
+        },
+        {
+          "checkin_id": "ENT-004",
+          "checkout_id": "ENT-006",
+          "name": "Skirting Boards"
+        },
+        {
+          "checkin_id": "ENT-005",
+          "checkout_id": "ENT-004",
+          "name": "Entrance Door"
+        },
+        {
+          "checkin_id": "ENT-008",
+          "checkout_id": "ENT-008",
+          "name": "Threshold Strip"
+        },
+        {
+          "checkin_id": "ENT-009",
+          "checkout_id": "ENT-010",
+          "name": "Radiator"
+        },
+        {
+          "checkin_id": "ENT-010",
+          "checkout_id": "ENT-011",
+          "name": "Wall Mirror"
+        },
+        {
+          "checkin_id": "ENT-011",
+          "checkout_id": "ENT-015",
+          "name": "Key Rack"
+        },
+        {
+          "checkin_id": "ENT-014",
+          "checkout_id": "ENT-009",
+          "name": "Doormat"
+        },
+        {
+          "checkin_id": "ENT-015",
+          "checkout_id": "ENT-014",
+          "name": "Light Switch"
+        },
+        {
+          "checkin_id": "ENT-017",
+          "checkout_id": "ENT-016",
+          "name": "Shoes"
+        }
+      ],
+      "removed": [
+        {
+          "id": "ENT-006",
+          "name": "Entrance door frame",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-015-A-wide",
+            "RP-015-D-condition"
+          ]
+        },
+        {
+          "id": "ENT-007",
+          "name": "Rear door and sidelight",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-015-A-wide",
+            "RP-015-D-condition"
+          ]
+        },
+        {
+          "id": "ENT-012",
+          "name": "Shoe cupboard",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-015-A-wide",
+            "RP-015-D-condition"
+          ]
+        },
+        {
+          "id": "ENT-013",
+          "name": "Coat and shoe rack unit",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-015-A-wide",
+            "RP-015-D-condition"
+          ]
+        },
+        {
+          "id": "ENT-016",
+          "name": "Assorted coats and clothing",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-015-A-wide",
+            "RP-015-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "ENT-005",
+          "name": "Rear Outer Glass Door",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "P35-016-T1-A-wide",
+            "P35-016-T1-D-condition"
+          ]
+        },
+        {
+          "id": "ENT-007",
+          "name": "Door Frames",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "P35-016-T1-A-wide",
+            "P35-016-T1-D-condition"
+          ]
+        },
+        {
+          "id": "ENT-012",
+          "name": "Side Cabinet",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "P35-016-T1-A-wide",
+            "P35-016-T1-D-condition"
+          ]
+        },
+        {
+          "id": "ENT-013",
+          "name": "Hallway Storage Unit",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "P35-016-T1-A-wide",
+            "P35-016-T1-D-condition"
+          ]
+        },
+        {
+          "id": "ENT-017",
+          "name": "Coats and Jackets",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-016-T1-A-wide"
+          ]
+        },
+        {
+          "id": "ENT-018",
+          "name": "Bags",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-016-T1-A-wide",
+            "P35-016-T1-D-condition"
+          ]
+        },
+        {
+          "id": "ENT-019",
+          "name": "Cabinet Contents",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-016-T1-A-wide"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 12,
+    "changed": 0,
+    "unchanged": 12,
+    "removed": 5,
+    "added": 7,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "delta_eval": {
+    "schema_version": 1,
+    "delta_id": "P35-016-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-015",
+    "parent_split": "development",
+    "room_type": "Entrance hall",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "7fd5daec68e08e7f8fd7f68608ad453ec9b108199c5c86321f25bdf1267e5264",
+    "rubric": "offline",
+    "rubric_note": "Gated changes stay unclassified. Classification is not a delta metric and the openai rubric would be a metered call; grade_delta is computed by compare, so severity direction still scores.",
+    "sides": {
+      "T0": {
+        "run_id": "P35-016-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-015-A-wide.png",
+          "images/openai/gpt-image-2/RP-015-D-condition.png"
+        ],
+        "frame_sha256": [
+          "fa2f17e2ecb0790ffbcb4468e94457c05e5593eaf4955d6733c3095a073191ee",
+          "c304b000e027130a2f90f3cffe3e02850a03b82f96185c8cdb98676238953c70"
+        ],
+        "item_count": 17
+      },
+      "T1": {
+        "run_id": "P35-016-T1.T1.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/deltas/P35-016-T1-A-wide.png",
+          "images/openai/gpt-image-2/deltas/P35-016-T1-D-condition.png"
+        ],
+        "frame_sha256": [
+          "85c2922eedc5bf35a9a8c768ef9cf4af6471bd4f071d9fa3144705b523097191",
+          "c2ffb2375a6a0367009601e6b2be04d12e7570cd23c2d1cabe1002129b867160"
+        ],
+        "item_count": 19
+      }
+    },
+    "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08)."
+  }
+}

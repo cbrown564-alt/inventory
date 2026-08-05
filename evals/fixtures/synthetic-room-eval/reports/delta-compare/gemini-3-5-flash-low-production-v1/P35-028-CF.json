@@ -1,0 +1,281 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-028-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-028-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Dining room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "DIN-003",
+          "checkout_id": "DIN-003",
+          "name": "Flooring",
+          "checkin_name": "Flooring",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "multiple dark shoe footprint marks to floor surface on right hand side of table"
+          ],
+          "new_defects": [
+            "multiple dark shoe footprint marks to floor surface on right hand side of table"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "requires cleaning",
+          "checkin_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-028-CF-A-wide",
+            "P35-028-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-010",
+          "checkout_id": "DIN-010",
+          "name": "Dining table",
+          "checkin_name": "Dining table",
+          "checkin_condition": "good",
+          "checkout_condition": "fair",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "circular watermark ring stain to center-left tabletop surface"
+          ],
+          "new_defects": [
+            "circular watermark ring stain to center-left tabletop surface"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-028-CF-A-wide",
+            "P35-028-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-011",
+          "checkout_id": "DIN-011",
+          "name": "Dining chairs",
+          "checkin_name": "Dining chairs",
+          "checkin_condition": "good",
+          "checkout_condition": "fair",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "split and frayed seam to right hand side edge of seat cushion of foreground chair"
+          ],
+          "new_defects": [
+            "split and frayed seam to right hand side edge of seat cushion of foreground chair"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-028-CF-A-wide",
+            "P35-028-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "DIN-001",
+          "checkout_id": "DIN-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "DIN-002",
+          "checkout_id": "DIN-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "DIN-004",
+          "checkout_id": "DIN-004",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "DIN-005",
+          "checkout_id": "DIN-005",
+          "name": "Internal door"
+        },
+        {
+          "checkin_id": "DIN-007",
+          "checkout_id": "DIN-007",
+          "name": "French doors"
+        },
+        {
+          "checkin_id": "DIN-008",
+          "checkout_id": "DIN-008",
+          "name": "Pendant light"
+        },
+        {
+          "checkin_id": "DIN-009",
+          "checkout_id": "DIN-009",
+          "name": "Double socket"
+        }
+      ],
+      "removed": [
+        {
+          "id": "DIN-006",
+          "name": "Door frame",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "DIN-006",
+          "name": "Door frames",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-028-CF-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-012",
+          "name": "Table runner",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-028-CF-A-wide"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 10,
+    "changed": 3,
+    "unchanged": 7,
+    "removed": 1,
+    "added": 2,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "delta_eval": {
+    "schema_version": 1,
+    "delta_id": "P35-028-CF",
+    "delta_class": "counterfactual",
+    "parent_scenario_id": "RP-016",
+    "parent_split": "validation",
+    "room_type": "Dining room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "4b67157f88c9edda79cd9bdf880a620fbf692109dcc891d0bf56107d3985fa12",
+    "rubric": "offline",
+    "rubric_note": "Gated changes stay unclassified. Classification is not a delta metric and the openai rubric would be a metered call; grade_delta is computed by compare, so severity direction still scores.",
+    "sides": {
+      "T0": {
+        "run_id": "P35-028-CF.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-016-A-wide.png",
+          "images/openai/gpt-image-2/RP-016-D-condition.png"
+        ],
+        "frame_sha256": [
+          "75498173cb7feb3c5552bc352ee37892db0a8f8a26f6e629d01b97a84ad2020d",
+          "953e96de2b4c7fb1a1264c7829add3426c1f9c4d702f90bd0385c0bdf3efb883"
+        ],
+        "item_count": 11
+      },
+      "T1": {
+        "run_id": "P35-028-CF.T1.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/deltas/P35-028-CF-A-wide.png",
+          "images/openai/gpt-image-2/deltas/P35-028-CF-D-condition.png"
+        ],
+        "frame_sha256": [
+          "a9d21933b86749f40c68d4421d2142fd667a530086f99e66210ec9d9493de17e",
+          "d6b3f92ae0aa4d6a1d3c644b50b75d4668af2ffe641a816c36c2e9c39f601ab3"
+        ],
+        "item_count": 12
+      }
+    },
+    "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08)."
+  }
+}

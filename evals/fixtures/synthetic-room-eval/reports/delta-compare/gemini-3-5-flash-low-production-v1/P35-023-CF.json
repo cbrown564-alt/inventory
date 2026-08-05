@@ -1,0 +1,508 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-023-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-023-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Bedroom",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "BED-001",
+          "checkout_id": "BED-001",
+          "name": "Ceiling",
+          "checkin_name": "Ceiling",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-A-wide"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-002",
+          "checkout_id": "BED-002",
+          "name": "Walls",
+          "checkin_name": "Walls",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "small paint chip low level to wall on right hand side of wardrobe door"
+          ],
+          "new_defects": [
+            "small paint chip low level to wall on right hand side of wardrobe door"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-A-wide",
+            "P35-023-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-004",
+          "checkout_id": "BED-004",
+          "name": "Skirting boards",
+          "checkin_name": "Skirting boards",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "dark scuff mark low level to right hand side of wardrobe door"
+          ],
+          "new_defects": [
+            "dark scuff mark low level to right hand side of wardrobe door"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-A-wide",
+            "P35-023-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-005",
+          "checkout_id": "BED-006",
+          "name": "Entrance Door",
+          "checkin_name": "Entrance door",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-A-wide",
+            "P35-023-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-006",
+          "checkout_id": "BED-007",
+          "name": "Wardrobe Door",
+          "checkin_name": "Wardrobe door",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-007",
+          "checkout_id": "BED-005",
+          "name": "Door frames",
+          "checkin_name": "Door frames",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-A-wide",
+            "P35-023-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-008",
+          "checkout_id": "BED-008",
+          "name": "Window",
+          "checkin_name": "Window",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-A-wide"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-010",
+          "checkout_id": "BED-010",
+          "name": "Radiator",
+          "checkin_name": "Radiator",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-A-wide"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-013",
+          "checkout_id": "BED-015",
+          "name": "Doorstop",
+          "checkin_name": "Doorstop",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-014",
+          "checkout_id": "BED-014",
+          "name": "Threshold strip",
+          "checkin_name": "Threshold strip",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-012",
+          "checkout_id": "BED-011",
+          "name": "Double Sockets",
+          "checkin_name": "Double plug sockets",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-023-CF-A-wide",
+            "P35-023-CF-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 2
+        }
+      ],
+      "unchanged": [],
+      "removed": [
+        {
+          "id": "BED-003",
+          "name": "Carpet",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ]
+        },
+        {
+          "id": "BED-009",
+          "name": "Curtain track",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ]
+        },
+        {
+          "id": "BED-011",
+          "name": "Pendant light",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "BED-003",
+          "name": "Flooring",
+          "condition": "good",
+          "defects": [
+            "small white scrap / debris to carpet center-left"
+          ],
+          "photo_ids": [
+            "P35-023-CF-A-wide",
+            "P35-023-CF-D-condition"
+          ]
+        },
+        {
+          "id": "BED-009",
+          "name": "Ceiling light fixture",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-023-CF-A-wide"
+          ]
+        },
+        {
+          "id": "BED-012",
+          "name": "Single Bed",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-023-CF-A-wide"
+          ]
+        },
+        {
+          "id": "BED-013",
+          "name": "Bedding",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-023-CF-A-wide"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 11,
+    "changed": 11,
+    "unchanged": 0,
+    "removed": 3,
+    "added": 4,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "delta_eval": {
+    "schema_version": 1,
+    "delta_id": "P35-023-CF",
+    "delta_class": "counterfactual",
+    "parent_scenario_id": "RP-008",
+    "parent_split": "development",
+    "room_type": "Bedroom",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "cf6f8118ac07dfd9d468317a8a7cea9b4092138fd4500d39982e838dde5b07cc",
+    "rubric": "offline",
+    "rubric_note": "Gated changes stay unclassified. Classification is not a delta metric and the openai rubric would be a metered call; grade_delta is computed by compare, so severity direction still scores.",
+    "sides": {
+      "T0": {
+        "run_id": "P35-023-CF.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-008-A-wide.png",
+          "images/openai/gpt-image-2/RP-008-D-condition.png"
+        ],
+        "frame_sha256": [
+          "ce9bd71f833c4897d66b4d33f789d4014431e7579529ce303107efcee513db02",
+          "cf632ceaec42a54e003cf6687f2f80c10cec6034e1a212aa2edfb90dcda14e4d"
+        ],
+        "item_count": 14
+      },
+      "T1": {
+        "run_id": "P35-023-CF.T1.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/deltas/P35-023-CF-A-wide.png",
+          "images/openai/gpt-image-2/deltas/P35-023-CF-D-condition.png"
+        ],
+        "frame_sha256": [
+          "cfbc2cd7aa2e411586c8c3c2dc86d3acd61ced8a738a24af05eaa9267f5e9d59",
+          "db8c21853109cda61690b94c44474802ed026a2dbad3fc1db35a708b659ba522"
+        ],
+        "item_count": 15
+      }
+    },
+    "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08)."
+  }
+}

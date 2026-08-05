@@ -92,7 +92,25 @@
   "incidental_differences_recorded": 20,
   "review_blocker": "The re-adjudication is a single owner-directed reviewer, not two independent AI reviews. P35-014-T1 additionally has no independent AI review at all (Antigravity quota, 4 Aug); the owner accepted it on 5 Aug and that limitation is unchanged.",
   "evidence_class": "Synthetic development evidence; cannot promote compare behaviour.",
-  "compare_scoring": "not_run — gold corrections are applied, so score_delta.py can now be run against a review-gated compare output.",
+  "compare_scoring": {
+    "status": "complete",
+    "completed_at": "2026-08-05",
+    "report": "reports/phase35-delta-score-2026-08-05.json",
+    "runner": "evals.synthetic.run_delta_eval",
+    "pairs_scored": 27,
+    "backend": "antigravity-cli / gemini-3.5-flash-low, prompt production-v1",
+    "rubric": "offline",
+    "metered_api_call": false,
+    "metrics": {
+      "delta_recall": 26.6,
+      "false_change_rate": 90.8,
+      "unchanged_stability": 42.6,
+      "severity_direction_accuracy": 75.0,
+      "immaterial_change_report_rate": 16.7
+    },
+    "material_gold_scored": 139,
+    "note": "Scores the 27 review-accepted pairs only; the 139 material changes scored are the 153 pilot total less the three rejected pairs. One arm, one run, no repeat, so run-to-run variance is unmeasured and no rate carries an interval. P35-028-CF T0 was re-run after an empty response under a SUCCESS status; no other run was repeated."
+  },
   "gold_corrections_applied": {
     "record": "reports/phase35-gold-corrections-applied-2026-08-05.json",
     "retractions": 24,

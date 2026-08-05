@@ -1,0 +1,404 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-015-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-015-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Dining room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "DIN-015",
+          "checkout_id": "DIN-021",
+          "name": "Tablecloth",
+          "checkin_name": "Tablecloth",
+          "checkin_condition": "good",
+          "checkout_condition": "fair",
+          "grade_delta": 1,
+          "cleanliness_delta": 1,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "small frayed tear to leading edge of cream tablecloth, table height, front right hand side",
+            "multiple light grey/brown shade marks and stains to lower hanging fabric, low level, front face"
+          ],
+          "new_defects": [
+            "small frayed tear to leading edge of cream tablecloth, table height, front right hand side",
+            "multiple light grey/brown shade marks and stains to lower hanging fabric, low level, front face"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "requires cleaning",
+          "checkin_photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "P35-015-T1-A-wide",
+            "P35-015-T1-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "DIN-001",
+          "checkout_id": "DIN-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "DIN-002",
+          "checkout_id": "DIN-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "DIN-003",
+          "checkout_id": "DIN-003",
+          "name": "Flooring"
+        },
+        {
+          "checkin_id": "DIN-007",
+          "checkout_id": "DIN-007",
+          "name": "Window"
+        },
+        {
+          "checkin_id": "DIN-008",
+          "checkout_id": "DIN-008",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "DIN-009",
+          "checkout_id": "DIN-009",
+          "name": "Dado rail"
+        },
+        {
+          "checkin_id": "DIN-011",
+          "checkout_id": "DIN-011",
+          "name": "Radiator"
+        },
+        {
+          "checkin_id": "DIN-014",
+          "checkout_id": "DIN-015",
+          "name": "Dining table"
+        },
+        {
+          "checkin_id": "DIN-016",
+          "checkout_id": "DIN-016",
+          "name": "Dining chairs"
+        },
+        {
+          "checkin_id": "DIN-005",
+          "checkout_id": "DIN-005",
+          "name": "Door frame (glazed door)"
+        },
+        {
+          "checkin_id": "DIN-018",
+          "checkout_id": "DIN-018",
+          "name": "Pedestal plant stand"
+        },
+        {
+          "checkin_id": "DIN-021",
+          "checkout_id": "DIN-025",
+          "name": "Glassware"
+        },
+        {
+          "checkin_id": "DIN-004",
+          "checkout_id": "DIN-004",
+          "name": "Glazed door"
+        },
+        {
+          "checkin_id": "DIN-013",
+          "checkout_id": "DIN-014",
+          "name": "Curtain pole"
+        },
+        {
+          "checkin_id": "DIN-022",
+          "checkout_id": "DIN-024",
+          "name": "Ceramic tableware set"
+        }
+      ],
+      "removed": [
+        {
+          "id": "DIN-006",
+          "name": "Door frame and architrave (background left)",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-010",
+          "name": "Ceiling light fixture",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-012",
+          "name": "Double power socket",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-017",
+          "name": "Sideboard / display cabinet",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-019",
+          "name": "Artificial flower arrangement in vase",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-020",
+          "name": "Framed pictures",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-023",
+          "name": "Glassware in display cabinet",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-024",
+          "name": "Doorbell chime box",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-025",
+          "name": "Threshold strip",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "DIN-006",
+          "name": "Arched doorway",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-015-T1-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-010",
+          "name": "Chandelier",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-015-T1-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-012",
+          "name": "Power sockets",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-015-T1-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-013",
+          "name": "Light switch",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-015-T1-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-017",
+          "name": "Display dresser cabinet",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-015-T1-A-wide",
+            "P35-015-T1-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-019",
+          "name": "Curtains (pair)",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-015-T1-A-wide",
+            "P35-015-T1-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-020",
+          "name": "Net curtains",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-015-T1-A-wide",
+            "P35-015-T1-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-022",
+          "name": "Framed picture (left wall)",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-015-T1-A-wide",
+            "P35-015-T1-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-023",
+          "name": "Vase and artificial flowers",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "P35-015-T1-A-wide"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 16,
+    "changed": 1,
+    "unchanged": 15,
+    "removed": 9,
+    "added": 9,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "delta_eval": {
+    "schema_version": 1,
+    "delta_id": "P35-015-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-017",
+    "parent_split": "validation",
+    "room_type": "Dining room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "4b67157f88c9edda79cd9bdf880a620fbf692109dcc891d0bf56107d3985fa12",
+    "rubric": "offline",
+    "rubric_note": "Gated changes stay unclassified. Classification is not a delta metric and the openai rubric would be a metered call; grade_delta is computed by compare, so severity direction still scores.",
+    "sides": {
+      "T0": {
+        "run_id": "P35-015-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-017-A-wide.png",
+          "images/openai/gpt-image-2/RP-017-D-condition.png"
+        ],
+        "frame_sha256": [
+          "97596b5483603237e8dae97d04f065cd2255e80f833ca763656ac060683a955b",
+          "18cf9876ad7cdf9912b870e24355422e440a628b269abbfcd38c4791f86b99fb"
+        ],
+        "item_count": 25
+      },
+      "T1": {
+        "run_id": "P35-015-T1.T1.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/deltas/P35-015-T1-A-wide.png",
+          "images/openai/gpt-image-2/deltas/P35-015-T1-D-condition.png"
+        ],
+        "frame_sha256": [
+          "e82cc467b486f6032b35b7e0991b1511ca7235fe0d104dc1bcd481c46a38dbd5",
+          "d4cbf0115e907e255e8e056c8e60429f0b95255044a4acd46328d79a60f60476"
+        ],
+        "item_count": 26
+      }
+    },
+    "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08)."
+  }
+}

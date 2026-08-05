@@ -1,0 +1,5230 @@
+{
+  "schema_version": 1,
+  "record_type": "phase35_delta_score_aggregate",
+  "dataset_id": "synthetic-room-eval",
+  "review": "phase35-pilot-review-recut-2026-08-05.json",
+  "comparison_dir": "gemini-3-5-flash-low-production-v1",
+  "pairs_scored": 27,
+  "pairs_accepted_by_review": 27,
+  "pairs_not_yet_run": [],
+  "backend": {
+    "schema_version": 1,
+    "delta_id": "P35-002-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-002",
+    "parent_split": "development",
+    "room_type": "Bathroom",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "05b1be22394bbfa97b9b47c16876ed63726f9ead0aaea175039d3ae4af8067b0",
+    "rubric": "offline",
+    "rubric_note": "Gated changes stay unclassified. Classification is not a delta metric and the openai rubric would be a metered call; grade_delta is computed by compare, so severity direction still scores.",
+    "sides": {
+      "T0": {
+        "run_id": "P35-002-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-002-A-wide.png",
+          "images/openai/gpt-image-2/RP-002-D-condition.png"
+        ],
+        "frame_sha256": [
+          "a6fd3bfa8a25a63d8401b949fbe7d3253e15b7f7b6804333abf46d5c53930f32",
+          "8983a790ffb00ae70a8b61abdb1634ca5120264bd4087aa9a50f89c7eedd5964"
+        ],
+        "item_count": 23
+      },
+      "T1": {
+        "run_id": "P35-002-T1.T1.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/deltas/P35-002-T1-A-wide.png",
+          "images/openai/gpt-image-2/deltas/P35-002-T1-D-condition.png"
+        ],
+        "frame_sha256": [
+          "184453be89802ea821bb4cc9160508c94361d5fe3406026f3285fdde26e0336a",
+          "2eefb2902af3e38916dea60dbe058311e2da62e4247ca3a2eaf59e5bd0bee466"
+        ],
+        "item_count": 23
+      }
+    },
+    "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08)."
+  },
+  "all_pairs": {
+    "metrics": {
+      "delta_recall": 26.6,
+      "false_change_rate": 90.8,
+      "unchanged_stability": 42.6,
+      "severity_direction_accuracy": 75.0,
+      "immaterial_change_report_rate": 16.7
+    },
+    "counts": {
+      "material_changes": 139,
+      "material_changes_detected": 37,
+      "immaterial_changes": 12,
+      "reported_changes": 424,
+      "false_changes": 385,
+      "unchanged_reported": 286,
+      "directional_changes_scored": 4
+    }
+  },
+  "clean_slice": {
+    "note": "Pairs with neither a thin-signal nor a cross-view-conflict caveat. This is the number to quote.",
+    "pairs": 18,
+    "delta_ids": [
+      "P35-002-T1",
+      "P35-004-T1",
+      "P35-005-T1",
+      "P35-006-T1",
+      "P35-007-T1",
+      "P35-008-T1",
+      "P35-010-T1",
+      "P35-014-T1",
+      "P35-016-T1",
+      "P35-017-T1",
+      "P35-018-T1",
+      "P35-020-T1",
+      "P35-021-CF",
+      "P35-023-CF",
+      "P35-024-CF",
+      "P35-025-CF",
+      "P35-028-CF",
+      "P35-030-CF"
+    ],
+    "metrics": {
+      "delta_recall": 34.4,
+      "false_change_rate": 88.0,
+      "unchanged_stability": 40.9,
+      "severity_direction_accuracy": 75.0,
+      "immaterial_change_report_rate": 20.0
+    },
+    "counts": {
+      "material_changes": 93,
+      "material_changes_detected": 32,
+      "immaterial_changes": 10,
+      "reported_changes": 284,
+      "false_changes": 250,
+      "unchanged_reported": 173,
+      "directional_changes_scored": 4
+    }
+  },
+  "thin_signal_slice": {
+    "note": "Review found only one readable material change; one miss takes the pair from 100% to 0%.",
+    "pairs": 6,
+    "delta_ids": [
+      "P35-003-T1",
+      "P35-011-T1",
+      "P35-012-T1",
+      "P35-013-T1",
+      "P35-026-CF",
+      "P35-027-CF"
+    ],
+    "metrics": {
+      "delta_recall": 10.0,
+      "false_change_rate": 96.4,
+      "unchanged_stability": 49.0,
+      "severity_direction_accuracy": 0.0,
+      "immaterial_change_report_rate": 0.0
+    },
+    "counts": {
+      "material_changes": 30,
+      "material_changes_detected": 3,
+      "immaterial_changes": 1,
+      "reported_changes": 83,
+      "false_changes": 80,
+      "unchanged_reported": 77,
+      "directional_changes_scored": 0
+    }
+  },
+  "cross_view_conflict_slice": {
+    "note": "The two T1 frames disagree about some state. The whole-room architecture describes both frames in one call, so a reported change here may be the generator's contradiction rather than the model's invention.",
+    "pairs": 3,
+    "delta_ids": [
+      "P35-009-T1",
+      "P35-015-T1",
+      "P35-029-CF"
+    ],
+    "metrics": {
+      "delta_recall": 12.5,
+      "false_change_rate": 96.5,
+      "unchanged_stability": 39.6,
+      "severity_direction_accuracy": 0.0,
+      "immaterial_change_report_rate": 0.0
+    },
+    "counts": {
+      "material_changes": 16,
+      "material_changes_detected": 2,
+      "immaterial_changes": 1,
+      "reported_changes": 57,
+      "false_changes": 55,
+      "unchanged_reported": 36,
+      "directional_changes_scored": 0
+    }
+  },
+  "false_change_decomposition": {
+    "counts": {
+      "false_changes": 385,
+      "alignment_churn": 154,
+      "unpaired_removed": 72,
+      "unpaired_added": 87,
+      "changed_bucket": 72
+    },
+    "share_of_false_changes_that_are_alignment_churn": 40.0,
+    "false_change_rate_if_renames_aligned": 85.6,
+    "diagnostic_note": "false_change_rate_if_renames_aligned is a diagnostic, not a corrected metric. The reported rate stands as measured: a landlord reading the report sees both halves of a rename as real changes."
+  },
+  "missed_condition_attribution": {
+    "split_by_aligner": 18,
+    "tracked_but_silent": 17,
+    "never_named": 42
+  },
+  "by_change_kind": {
+    "cleanliness": {
+      "gold": 26,
+      "detected": 1,
+      "recall": 3.8
+    },
+    "item_added": {
+      "gold": 35,
+      "detected": 19,
+      "recall": 54.3
+    },
+    "item_removed": {
+      "gold": 18,
+      "detected": 9,
+      "recall": 50.0
+    },
+    "new_defect": {
+      "gold": 33,
+      "detected": 4,
+      "recall": 12.1
+    },
+    "worsened": {
+      "gold": 27,
+      "detected": 4,
+      "recall": 14.8
+    }
+  },
+  "by_delta_class": {
+    "counterfactual": {
+      "pairs": 9,
+      "delta_ids": [
+        "P35-021-CF",
+        "P35-023-CF",
+        "P35-024-CF",
+        "P35-025-CF",
+        "P35-026-CF",
+        "P35-027-CF",
+        "P35-028-CF",
+        "P35-029-CF",
+        "P35-030-CF"
+      ],
+      "metrics": {
+        "delta_recall": 24.0,
+        "false_change_rate": 91.3,
+        "unchanged_stability": 44.5,
+        "severity_direction_accuracy": 100.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 50,
+        "material_changes_detected": 12,
+        "immaterial_changes": 1,
+        "reported_changes": 138,
+        "false_changes": 126,
+        "unchanged_reported": 101,
+        "directional_changes_scored": 1
+      }
+    },
+    "temporal": {
+      "pairs": 18,
+      "delta_ids": [
+        "P35-002-T1",
+        "P35-003-T1",
+        "P35-004-T1",
+        "P35-005-T1",
+        "P35-006-T1",
+        "P35-007-T1",
+        "P35-008-T1",
+        "P35-009-T1",
+        "P35-010-T1",
+        "P35-011-T1",
+        "P35-012-T1",
+        "P35-013-T1",
+        "P35-014-T1",
+        "P35-015-T1",
+        "P35-016-T1",
+        "P35-017-T1",
+        "P35-018-T1",
+        "P35-020-T1"
+      ],
+      "metrics": {
+        "delta_recall": 28.1,
+        "false_change_rate": 90.6,
+        "unchanged_stability": 41.7,
+        "severity_direction_accuracy": 66.7,
+        "immaterial_change_report_rate": 18.2
+      },
+      "counts": {
+        "material_changes": 89,
+        "material_changes_detected": 25,
+        "immaterial_changes": 11,
+        "reported_changes": 286,
+        "false_changes": 259,
+        "unchanged_reported": 185,
+        "directional_changes_scored": 3
+      }
+    }
+  },
+  "by_room_type": {
+    "Bathroom": {
+      "pairs": 3,
+      "delta_ids": [
+        "P35-002-T1",
+        "P35-005-T1",
+        "P35-021-CF"
+      ],
+      "metrics": {
+        "delta_recall": 40.0,
+        "false_change_rate": 82.4,
+        "unchanged_stability": 60.0,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 15,
+        "material_changes_detected": 6,
+        "immaterial_changes": 1,
+        "reported_changes": 34,
+        "false_changes": 28,
+        "unchanged_reported": 42,
+        "directional_changes_scored": 1
+      }
+    },
+    "Bedroom": {
+      "pairs": 7,
+      "delta_ids": [
+        "P35-007-T1",
+        "P35-008-T1",
+        "P35-009-T1",
+        "P35-017-T1",
+        "P35-023-CF",
+        "P35-024-CF",
+        "P35-030-CF"
+      ],
+      "metrics": {
+        "delta_recall": 44.4,
+        "false_change_rate": 86.4,
+        "unchanged_stability": 32.5,
+        "severity_direction_accuracy": 100.0,
+        "immaterial_change_report_rate": 66.7
+      },
+      "counts": {
+        "material_changes": 36,
+        "material_changes_detected": 16,
+        "immaterial_changes": 3,
+        "reported_changes": 132,
+        "false_changes": 114,
+        "unchanged_reported": 55,
+        "directional_changes_scored": 3
+      }
+    },
+    "Dining room": {
+      "pairs": 5,
+      "delta_ids": [
+        "P35-014-T1",
+        "P35-015-T1",
+        "P35-018-T1",
+        "P35-028-CF",
+        "P35-029-CF"
+      ],
+      "metrics": {
+        "delta_recall": 18.5,
+        "false_change_rate": 92.4,
+        "unchanged_stability": 40.8,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 27,
+        "material_changes_detected": 5,
+        "immaterial_changes": 1,
+        "reported_changes": 66,
+        "false_changes": 61,
+        "unchanged_reported": 42,
+        "directional_changes_scored": 0
+      }
+    },
+    "Entrance hall": {
+      "pairs": 2,
+      "delta_ids": [
+        "P35-013-T1",
+        "P35-016-T1"
+      ],
+      "metrics": {
+        "delta_recall": 20.0,
+        "false_change_rate": 92.0,
+        "unchanged_stability": 50.0,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 10,
+        "material_changes_detected": 2,
+        "immaterial_changes": 2,
+        "reported_changes": 25,
+        "false_changes": 23,
+        "unchanged_reported": 23,
+        "directional_changes_scored": 0
+      }
+    },
+    "Kitchen": {
+      "pairs": 3,
+      "delta_ids": [
+        "P35-003-T1",
+        "P35-004-T1",
+        "P35-020-T1"
+      ],
+      "metrics": {
+        "delta_recall": 20.0,
+        "false_change_rate": 93.6,
+        "unchanged_stability": 47.6,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 15,
+        "material_changes_detected": 3,
+        "immaterial_changes": 1,
+        "reported_changes": 47,
+        "false_changes": 44,
+        "unchanged_reported": 40,
+        "directional_changes_scored": 0
+      }
+    },
+    "Living room": {
+      "pairs": 6,
+      "delta_ids": [
+        "P35-010-T1",
+        "P35-011-T1",
+        "P35-012-T1",
+        "P35-025-CF",
+        "P35-026-CF",
+        "P35-027-CF"
+      ],
+      "metrics": {
+        "delta_recall": 12.9,
+        "false_change_rate": 96.3,
+        "unchanged_stability": 41.5,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 31,
+        "material_changes_detected": 4,
+        "immaterial_changes": 3,
+        "reported_changes": 107,
+        "false_changes": 103,
+        "unchanged_reported": 73,
+        "directional_changes_scored": 0
+      }
+    },
+    "Shower room": {
+      "pairs": 1,
+      "delta_ids": [
+        "P35-006-T1"
+      ],
+      "metrics": {
+        "delta_recall": 20.0,
+        "false_change_rate": 92.3,
+        "unchanged_stability": 47.8,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 1,
+        "immaterial_changes": 1,
+        "reported_changes": 13,
+        "false_changes": 12,
+        "unchanged_reported": 11,
+        "directional_changes_scored": 0
+      }
+    }
+  },
+  "per_pair": [
+    {
+      "delta_id": "P35-002-T1",
+      "delta_class": "temporal",
+      "room_type": "Bathroom",
+      "metrics": {
+        "delta_recall": 40.0,
+        "false_change_rate": 84.6,
+        "unchanged_stability": 57.7,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 2,
+        "immaterial_changes": 1,
+        "reported_changes": 13,
+        "false_changes": 11,
+        "unchanged_reported": 15,
+        "directional_changes_scored": 1
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 11,
+        "alignment_churn": 6,
+        "unpaired_removed": 4,
+        "unpaired_added": 1,
+        "changed_bucket": 0
+      }
+    },
+    {
+      "delta_id": "P35-003-T1",
+      "delta_class": "temporal",
+      "room_type": "Kitchen",
+      "metrics": {
+        "delta_recall": 25.0,
+        "false_change_rate": 90.0,
+        "unchanged_stability": 59.1,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 4,
+        "material_changes_detected": 1,
+        "immaterial_changes": 0,
+        "reported_changes": 10,
+        "false_changes": 9,
+        "unchanged_reported": 13,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": true,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 9,
+        "alignment_churn": 4,
+        "unpaired_removed": 3,
+        "unpaired_added": 2,
+        "changed_bucket": 0
+      }
+    },
+    {
+      "delta_id": "P35-004-T1",
+      "delta_class": "temporal",
+      "room_type": "Kitchen",
+      "metrics": {
+        "delta_recall": 16.7,
+        "false_change_rate": 94.7,
+        "unchanged_stability": 43.8,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 6,
+        "material_changes_detected": 1,
+        "immaterial_changes": 0,
+        "reported_changes": 19,
+        "false_changes": 18,
+        "unchanged_reported": 14,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 18,
+        "alignment_churn": 10,
+        "unpaired_removed": 4,
+        "unpaired_added": 3,
+        "changed_bucket": 1
+      }
+    },
+    {
+      "delta_id": "P35-005-T1",
+      "delta_class": "temporal",
+      "room_type": "Bathroom",
+      "metrics": {
+        "delta_recall": 50.0,
+        "false_change_rate": 81.8,
+        "unchanged_stability": 52.6,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 4,
+        "material_changes_detected": 2,
+        "immaterial_changes": 0,
+        "reported_changes": 11,
+        "false_changes": 9,
+        "unchanged_reported": 10,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 9,
+        "alignment_churn": 4,
+        "unpaired_removed": 2,
+        "unpaired_added": 3,
+        "changed_bucket": 0
+      }
+    },
+    {
+      "delta_id": "P35-006-T1",
+      "delta_class": "temporal",
+      "room_type": "Shower room",
+      "metrics": {
+        "delta_recall": 20.0,
+        "false_change_rate": 92.3,
+        "unchanged_stability": 47.8,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 1,
+        "immaterial_changes": 1,
+        "reported_changes": 13,
+        "false_changes": 12,
+        "unchanged_reported": 11,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 12,
+        "alignment_churn": 6,
+        "unpaired_removed": 1,
+        "unpaired_added": 4,
+        "changed_bucket": 1
+      }
+    },
+    {
+      "delta_id": "P35-007-T1",
+      "delta_class": "temporal",
+      "room_type": "Bedroom",
+      "metrics": {
+        "delta_recall": 50.0,
+        "false_change_rate": 76.5,
+        "unchanged_stability": 0.0,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 100.0
+      },
+      "counts": {
+        "material_changes": 4,
+        "material_changes_detected": 2,
+        "immaterial_changes": 2,
+        "reported_changes": 17,
+        "false_changes": 13,
+        "unchanged_reported": 0,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 13,
+        "alignment_churn": 4,
+        "unpaired_removed": 0,
+        "unpaired_added": 2,
+        "changed_bucket": 7
+      }
+    },
+    {
+      "delta_id": "P35-008-T1",
+      "delta_class": "temporal",
+      "room_type": "Bedroom",
+      "metrics": {
+        "delta_recall": 50.0,
+        "false_change_rate": 82.4,
+        "unchanged_stability": 53.3,
+        "severity_direction_accuracy": 100.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 6,
+        "material_changes_detected": 3,
+        "immaterial_changes": 1,
+        "reported_changes": 17,
+        "false_changes": 14,
+        "unchanged_reported": 16,
+        "directional_changes_scored": 1
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 14,
+        "alignment_churn": 6,
+        "unpaired_removed": 3,
+        "unpaired_added": 5,
+        "changed_bucket": 0
+      }
+    },
+    {
+      "delta_id": "P35-009-T1",
+      "delta_class": "temporal",
+      "room_type": "Bedroom",
+      "metrics": {
+        "delta_recall": 40.0,
+        "false_change_rate": 90.5,
+        "unchanged_stability": 26.9,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 2,
+        "immaterial_changes": 0,
+        "reported_changes": 21,
+        "false_changes": 19,
+        "unchanged_reported": 7,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": true,
+      "false_change_decomposition": {
+        "false_changes": 19,
+        "alignment_churn": 6,
+        "unpaired_removed": 1,
+        "unpaired_added": 7,
+        "changed_bucket": 5
+      }
+    },
+    {
+      "delta_id": "P35-010-T1",
+      "delta_class": "temporal",
+      "room_type": "Living room",
+      "metrics": {
+        "delta_recall": 40.0,
+        "false_change_rate": 92.0,
+        "unchanged_stability": 28.1,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 2,
+        "immaterial_changes": 2,
+        "reported_changes": 25,
+        "false_changes": 23,
+        "unchanged_reported": 9,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 23,
+        "alignment_churn": 14,
+        "unpaired_removed": 4,
+        "unpaired_added": 4,
+        "changed_bucket": 1
+      }
+    },
+    {
+      "delta_id": "P35-011-T1",
+      "delta_class": "temporal",
+      "room_type": "Living room",
+      "metrics": {
+        "delta_recall": 0.0,
+        "false_change_rate": 100.0,
+        "unchanged_stability": 54.1,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 6,
+        "material_changes_detected": 0,
+        "immaterial_changes": 0,
+        "reported_changes": 17,
+        "false_changes": 17,
+        "unchanged_reported": 20,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": true,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 17,
+        "alignment_churn": 4,
+        "unpaired_removed": 7,
+        "unpaired_added": 4,
+        "changed_bucket": 2
+      }
+    },
+    {
+      "delta_id": "P35-012-T1",
+      "delta_class": "temporal",
+      "room_type": "Living room",
+      "metrics": {
+        "delta_recall": 0.0,
+        "false_change_rate": 100.0,
+        "unchanged_stability": 52.4,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 4,
+        "material_changes_detected": 0,
+        "immaterial_changes": 0,
+        "reported_changes": 10,
+        "false_changes": 10,
+        "unchanged_reported": 11,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": true,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 10,
+        "alignment_churn": 6,
+        "unpaired_removed": 2,
+        "unpaired_added": 2,
+        "changed_bucket": 0
+      }
+    },
+    {
+      "delta_id": "P35-013-T1",
+      "delta_class": "temporal",
+      "room_type": "Entrance hall",
+      "metrics": {
+        "delta_recall": 20.0,
+        "false_change_rate": 92.3,
+        "unchanged_stability": 47.8,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 1,
+        "immaterial_changes": 1,
+        "reported_changes": 13,
+        "false_changes": 12,
+        "unchanged_reported": 11,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": true,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 12,
+        "alignment_churn": 4,
+        "unpaired_removed": 2,
+        "unpaired_added": 3,
+        "changed_bucket": 3
+      }
+    },
+    {
+      "delta_id": "P35-014-T1",
+      "delta_class": "temporal",
+      "room_type": "Dining room",
+      "metrics": {
+        "delta_recall": 25.0,
+        "false_change_rate": 91.7,
+        "unchanged_stability": 31.2,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 4,
+        "material_changes_detected": 1,
+        "immaterial_changes": 0,
+        "reported_changes": 12,
+        "false_changes": 11,
+        "unchanged_reported": 5,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 11,
+        "alignment_churn": 4,
+        "unpaired_removed": 2,
+        "unpaired_added": 3,
+        "changed_bucket": 2
+      }
+    },
+    {
+      "delta_id": "P35-015-T1",
+      "delta_class": "temporal",
+      "room_type": "Dining room",
+      "metrics": {
+        "delta_recall": 0.0,
+        "false_change_rate": 100.0,
+        "unchanged_stability": 44.1,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 0,
+        "immaterial_changes": 1,
+        "reported_changes": 19,
+        "false_changes": 19,
+        "unchanged_reported": 15,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": true,
+      "false_change_decomposition": {
+        "false_changes": 19,
+        "alignment_churn": 8,
+        "unpaired_removed": 5,
+        "unpaired_added": 5,
+        "changed_bucket": 1
+      }
+    },
+    {
+      "delta_id": "P35-016-T1",
+      "delta_class": "temporal",
+      "room_type": "Entrance hall",
+      "metrics": {
+        "delta_recall": 20.0,
+        "false_change_rate": 91.7,
+        "unchanged_stability": 52.2,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 1,
+        "immaterial_changes": 1,
+        "reported_changes": 12,
+        "false_changes": 11,
+        "unchanged_reported": 12,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 11,
+        "alignment_churn": 6,
+        "unpaired_removed": 2,
+        "unpaired_added": 3,
+        "changed_bucket": 0
+      }
+    },
+    {
+      "delta_id": "P35-017-T1",
+      "delta_class": "temporal",
+      "room_type": "Bedroom",
+      "metrics": {
+        "delta_recall": 40.0,
+        "false_change_rate": 92.6,
+        "unchanged_stability": 7.4,
+        "severity_direction_accuracy": 100.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 2,
+        "immaterial_changes": 0,
+        "reported_changes": 27,
+        "false_changes": 25,
+        "unchanged_reported": 2,
+        "directional_changes_scored": 1
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 25,
+        "alignment_churn": 8,
+        "unpaired_removed": 2,
+        "unpaired_added": 1,
+        "changed_bucket": 14
+      }
+    },
+    {
+      "delta_id": "P35-018-T1",
+      "delta_class": "temporal",
+      "room_type": "Dining room",
+      "metrics": {
+        "delta_recall": 50.0,
+        "false_change_rate": 75.0,
+        "unchanged_stability": 10.0,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 6,
+        "material_changes_detected": 3,
+        "immaterial_changes": 0,
+        "reported_changes": 12,
+        "false_changes": 9,
+        "unchanged_reported": 1,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 9,
+        "alignment_churn": 0,
+        "unpaired_removed": 1,
+        "unpaired_added": 0,
+        "changed_bucket": 8
+      }
+    },
+    {
+      "delta_id": "P35-020-T1",
+      "delta_class": "temporal",
+      "room_type": "Kitchen",
+      "metrics": {
+        "delta_recall": 20.0,
+        "false_change_rate": 94.4,
+        "unchanged_stability": 43.3,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 1,
+        "immaterial_changes": 1,
+        "reported_changes": 18,
+        "false_changes": 17,
+        "unchanged_reported": 13,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 17,
+        "alignment_churn": 4,
+        "unpaired_removed": 4,
+        "unpaired_added": 6,
+        "changed_bucket": 3
+      }
+    },
+    {
+      "delta_id": "P35-021-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Bathroom",
+      "metrics": {
+        "delta_recall": 33.3,
+        "false_change_rate": 80.0,
+        "unchanged_stability": 68.0,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 6,
+        "material_changes_detected": 2,
+        "immaterial_changes": 0,
+        "reported_changes": 10,
+        "false_changes": 8,
+        "unchanged_reported": 17,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 8,
+        "alignment_churn": 2,
+        "unpaired_removed": 3,
+        "unpaired_added": 3,
+        "changed_bucket": 0
+      }
+    },
+    {
+      "delta_id": "P35-023-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Bedroom",
+      "metrics": {
+        "delta_recall": 60.0,
+        "false_change_rate": 83.3,
+        "unchanged_stability": 0.0,
+        "severity_direction_accuracy": 100.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 3,
+        "immaterial_changes": 0,
+        "reported_changes": 18,
+        "false_changes": 15,
+        "unchanged_reported": 0,
+        "directional_changes_scored": 1
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 15,
+        "alignment_churn": 0,
+        "unpaired_removed": 2,
+        "unpaired_added": 3,
+        "changed_bucket": 10
+      }
+    },
+    {
+      "delta_id": "P35-024-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Bedroom",
+      "metrics": {
+        "delta_recall": 33.3,
+        "false_change_rate": 77.8,
+        "unchanged_stability": 73.1,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 6,
+        "material_changes_detected": 2,
+        "immaterial_changes": 0,
+        "reported_changes": 9,
+        "false_changes": 7,
+        "unchanged_reported": 19,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 7,
+        "alignment_churn": 4,
+        "unpaired_removed": 0,
+        "unpaired_added": 3,
+        "changed_bucket": 0
+      }
+    },
+    {
+      "delta_id": "P35-025-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Living room",
+      "metrics": {
+        "delta_recall": 20.0,
+        "false_change_rate": 95.5,
+        "unchanged_stability": 34.4,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 1,
+        "immaterial_changes": 1,
+        "reported_changes": 22,
+        "false_changes": 21,
+        "unchanged_reported": 11,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 21,
+        "alignment_churn": 12,
+        "unpaired_removed": 5,
+        "unpaired_added": 3,
+        "changed_bucket": 1
+      }
+    },
+    {
+      "delta_id": "P35-026-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Living room",
+      "metrics": {
+        "delta_recall": 0.0,
+        "false_change_rate": 100.0,
+        "unchanged_stability": 50.0,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 6,
+        "material_changes_detected": 0,
+        "immaterial_changes": 0,
+        "reported_changes": 16,
+        "false_changes": 16,
+        "unchanged_reported": 16,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": true,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 16,
+        "alignment_churn": 6,
+        "unpaired_removed": 3,
+        "unpaired_added": 4,
+        "changed_bucket": 3
+      }
+    },
+    {
+      "delta_id": "P35-027-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Living room",
+      "metrics": {
+        "delta_recall": 20.0,
+        "false_change_rate": 94.1,
+        "unchanged_stability": 27.3,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 1,
+        "immaterial_changes": 0,
+        "reported_changes": 17,
+        "false_changes": 16,
+        "unchanged_reported": 6,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": true,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 16,
+        "alignment_churn": 8,
+        "unpaired_removed": 4,
+        "unpaired_added": 3,
+        "changed_bucket": 1
+      }
+    },
+    {
+      "delta_id": "P35-028-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Dining room",
+      "metrics": {
+        "delta_recall": 16.7,
+        "false_change_rate": 83.3,
+        "unchanged_stability": 58.3,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 6,
+        "material_changes_detected": 1,
+        "immaterial_changes": 0,
+        "reported_changes": 6,
+        "false_changes": 5,
+        "unchanged_reported": 7,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 5,
+        "alignment_churn": 2,
+        "unpaired_removed": 0,
+        "unpaired_added": 0,
+        "changed_bucket": 3
+      }
+    },
+    {
+      "delta_id": "P35-029-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Dining room",
+      "metrics": {
+        "delta_recall": 0.0,
+        "false_change_rate": 100.0,
+        "unchanged_stability": 45.2,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 6,
+        "material_changes_detected": 0,
+        "immaterial_changes": 0,
+        "reported_changes": 17,
+        "false_changes": 17,
+        "unchanged_reported": 14,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": true,
+      "false_change_decomposition": {
+        "false_changes": 17,
+        "alignment_churn": 6,
+        "unpaired_removed": 2,
+        "unpaired_added": 6,
+        "changed_bucket": 3
+      }
+    },
+    {
+      "delta_id": "P35-030-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Bedroom",
+      "metrics": {
+        "delta_recall": 40.0,
+        "false_change_rate": 91.3,
+        "unchanged_stability": 34.4,
+        "severity_direction_accuracy": 0.0,
+        "immaterial_change_report_rate": 0.0
+      },
+      "counts": {
+        "material_changes": 5,
+        "material_changes_detected": 2,
+        "immaterial_changes": 0,
+        "reported_changes": 23,
+        "false_changes": 21,
+        "unchanged_reported": 11,
+        "directional_changes_scored": 0
+      },
+      "thin_signal": false,
+      "cross_view_conflict": false,
+      "false_change_decomposition": {
+        "false_changes": 21,
+        "alignment_churn": 10,
+        "unpaired_removed": 4,
+        "unpaired_added": 4,
+        "changed_bucket": 3
+      }
+    }
+  ],
+  "rename_candidates": [
+    {
+      "removed": "Recessed spotlight",
+      "added": "Ceiling spotlight",
+      "shared_tokens": [
+        "spotlight"
+      ],
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "removed": "Tabletop vanity mirror",
+      "added": "Standing mirror",
+      "shared_tokens": [
+        "mirror"
+      ],
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "removed": "Assorted toiletries and tumbler",
+      "added": "Toiletries and accessories",
+      "shared_tokens": [
+        "toiletries"
+      ],
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "removed": "Electric hob",
+      "added": "Induction hob",
+      "shared_tokens": [
+        "hob"
+      ],
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "removed": "Electric oven",
+      "added": "Integrated oven",
+      "shared_tokens": [
+        "oven"
+      ],
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "removed": "Kitchen cabinet plinths",
+      "added": "Kitchen roll holder",
+      "shared_tokens": [
+        "kitchen"
+      ],
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "removed": "Electrical sockets",
+      "added": "Power sockets",
+      "shared_tokens": [
+        "sockets"
+      ],
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "removed": "Electric cooker",
+      "added": "Double oven cooker",
+      "shared_tokens": [
+        "cooker"
+      ],
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "removed": "Washing-up rack",
+      "added": "Dish rack",
+      "shared_tokens": [
+        "rack"
+      ],
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "removed": "Trash bin",
+      "added": "Waste bin",
+      "shared_tokens": [
+        "bin"
+      ],
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "removed": "Heated towel rail",
+      "added": "Towel radiator",
+      "shared_tokens": [
+        "towel"
+      ],
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "removed": "Shower mixer",
+      "added": "Shower fittings",
+      "shared_tokens": [
+        "shower"
+      ],
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "removed": "Recessed spotlight",
+      "added": "Ceiling Spotlight",
+      "shared_tokens": [
+        "spotlight"
+      ],
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "removed": "Pedestal wash hand basin",
+      "added": "Pedestal Washbasin",
+      "shared_tokens": [
+        "pedestal"
+      ],
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "removed": "Bath mat",
+      "added": "Bath Mats",
+      "shared_tokens": [
+        "bath"
+      ],
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "removed": "Door Frames",
+      "added": "Door frame",
+      "shared_tokens": [
+        "door"
+      ],
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "removed": "Pendant Light Fitting",
+      "added": "Ceiling light fitting",
+      "shared_tokens": [
+        "fitting"
+      ],
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "removed": "Window blinds",
+      "added": "Venetian Blinds",
+      "shared_tokens": [
+        "blinds"
+      ],
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "removed": "Bedding and soft furnishings",
+      "added": "Bedding Set",
+      "shared_tokens": [
+        "bedding"
+      ],
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "removed": "Decorative dish",
+      "added": "Decorative Bowl",
+      "shared_tokens": [
+        "decorative"
+      ],
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "removed": "Bedroom Door",
+      "added": "Entrance door",
+      "shared_tokens": [
+        "door"
+      ],
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "removed": "Wall Socket",
+      "added": "Electrical socket",
+      "shared_tokens": [
+        "socket"
+      ],
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "removed": "Children's Toys",
+      "added": "Toys and books",
+      "shared_tokens": [
+        "toys"
+      ],
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "removed": "Patio doors and windows",
+      "added": "Patio doors and glazing",
+      "shared_tokens": [
+        "doors",
+        "patio"
+      ],
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "removed": "Entrance door",
+      "added": "Door handle",
+      "shared_tokens": [
+        "door"
+      ],
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "removed": "Curtains and tracks",
+      "added": "Curtains and voiles",
+      "shared_tokens": [
+        "curtains"
+      ],
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "removed": "Scatter cushions and throw",
+      "added": "Sofa cushions",
+      "shared_tokens": [
+        "cushions"
+      ],
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "removed": "Media devices",
+      "added": "Media equipment",
+      "shared_tokens": [
+        "media"
+      ],
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "removed": "Framed picture",
+      "added": "Framed artwork",
+      "shared_tokens": [
+        "framed"
+      ],
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "removed": "Potted houseplant",
+      "added": "Houseplant in pot",
+      "shared_tokens": [
+        "houseplant"
+      ],
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "removed": "TV stand",
+      "added": "TV cabinet",
+      "shared_tokens": [
+        "tv"
+      ],
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "removed": "Framed wall art",
+      "added": "Framed artwork",
+      "shared_tokens": [
+        "framed"
+      ],
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "removed": "Nest of coffee tables",
+      "added": "Nesting coffee tables",
+      "shared_tokens": [
+        "coffee",
+        "tables"
+      ],
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "removed": "Venetian blinds",
+      "added": "Venetian blind",
+      "shared_tokens": [
+        "venetian"
+      ],
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "removed": "Wall bracket",
+      "added": "Wall mounting hook",
+      "shared_tokens": [
+        "wall"
+      ],
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "removed": "Key hook rail",
+      "added": "Key Rack",
+      "shared_tokens": [
+        "key"
+      ],
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "removed": "Assorted shoes",
+      "added": "Assorted Footwear",
+      "shared_tokens": [
+        "assorted"
+      ],
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "removed": "Double patio doors",
+      "added": "Entrance double doors",
+      "shared_tokens": [
+        "doors"
+      ],
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "removed": "Double wall socket",
+      "added": "Double power socket",
+      "shared_tokens": [
+        "socket"
+      ],
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "removed": "Sideboard / display cabinet",
+      "added": "Display dresser cabinet",
+      "shared_tokens": [
+        "cabinet",
+        "display"
+      ],
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "removed": "Artificial flower arrangement in vase",
+      "added": "Vase and artificial flowers",
+      "shared_tokens": [
+        "artificial",
+        "vase"
+      ],
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "removed": "Double power socket",
+      "added": "Power sockets",
+      "shared_tokens": [
+        "power"
+      ],
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "removed": "Framed pictures",
+      "added": "Framed picture (left wall)",
+      "shared_tokens": [
+        "framed"
+      ],
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "removed": "Rear door and sidelight",
+      "added": "Rear Outer Glass Door",
+      "shared_tokens": [
+        "door",
+        "rear"
+      ],
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "removed": "Entrance door frame",
+      "added": "Door Frames",
+      "shared_tokens": [
+        "door"
+      ],
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "removed": "Coat and shoe rack unit",
+      "added": "Hallway Storage Unit",
+      "shared_tokens": [
+        "unit"
+      ],
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "removed": "Toy garage playset",
+      "added": "Toy garage track",
+      "shared_tokens": [
+        "garage",
+        "toy"
+      ],
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "removed": "Double electrical socket",
+      "added": "Wall socket",
+      "shared_tokens": [
+        "socket"
+      ],
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "removed": "Plastic storage tubs",
+      "added": "Grey fabric storage box",
+      "shared_tokens": [
+        "storage"
+      ],
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "removed": "Children's books",
+      "added": "Assorted books",
+      "shared_tokens": [
+        "books"
+      ],
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "removed": "Double power sockets",
+      "added": "Double wall sockets",
+      "shared_tokens": [
+        "sockets"
+      ],
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "removed": "Dish rack and kitchenware",
+      "added": "Dish drainer",
+      "shared_tokens": [
+        "dish"
+      ],
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "removed": "Recessed ceiling downlight",
+      "added": "Ceiling spotlight",
+      "shared_tokens": [
+        "ceiling"
+      ],
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "removed": "Decorative plate",
+      "added": "Decorative bowl",
+      "shared_tokens": [
+        "decorative"
+      ],
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "removed": "Clear glass bottle",
+      "added": "Hand pump dispenser bottle",
+      "shared_tokens": [
+        "bottle"
+      ],
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "removed": "Coffee table ornaments",
+      "added": "Coffee table decor",
+      "shared_tokens": [
+        "coffee",
+        "table"
+      ],
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "removed": "Doorway frame and architrave",
+      "added": "Door frame",
+      "shared_tokens": [
+        "frame"
+      ],
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "removed": "Patio doors and side windows",
+      "added": "French doors",
+      "shared_tokens": [
+        "doors"
+      ],
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "removed": "Voile curtains",
+      "added": "Net curtains",
+      "shared_tokens": [
+        "curtains"
+      ],
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "removed": "TV cabinet",
+      "added": "TV stand",
+      "shared_tokens": [
+        "tv"
+      ],
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "removed": "Media boxes",
+      "added": "Media devices",
+      "shared_tokens": [
+        "media"
+      ],
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "removed": "Fireplace and hearth",
+      "added": "Fireplace and surround",
+      "shared_tokens": [
+        "fireplace"
+      ],
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "removed": "TV media console",
+      "added": "TV stand",
+      "shared_tokens": [
+        "tv"
+      ],
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "removed": "Framed wall art",
+      "added": "Framed landscape artwork",
+      "shared_tokens": [
+        "framed"
+      ],
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "removed": "Cardboard moving boxes",
+      "added": "Cardboard packing boxes",
+      "shared_tokens": [
+        "boxes",
+        "cardboard"
+      ],
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "removed": "Window blind",
+      "added": "Venetian blind",
+      "shared_tokens": [
+        "blind"
+      ],
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "removed": "Coffee tables (nest of 2)",
+      "added": "Nesting tables",
+      "shared_tokens": [
+        "tables"
+      ],
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "removed": "TV stand",
+      "added": "TV cabinet",
+      "shared_tokens": [
+        "tv"
+      ],
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "removed": "Door frame",
+      "added": "Door frames",
+      "shared_tokens": [
+        "door"
+      ],
+      "delta_id": "P35-028-CF"
+    },
+    {
+      "removed": "Main glazed door",
+      "added": "Entrance door",
+      "shared_tokens": [
+        "door"
+      ],
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "removed": "Wall socket",
+      "added": "Double plug socket",
+      "shared_tokens": [
+        "socket"
+      ],
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "removed": "Vase and artificial flowers",
+      "added": "Artificial floral arrangement",
+      "shared_tokens": [
+        "artificial"
+      ],
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "removed": "Storage Drawer Unit",
+      "added": "Storage drawer tower",
+      "shared_tokens": [
+        "drawer",
+        "storage"
+      ],
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "removed": "Toy Garage / Car Ramp",
+      "added": "Toy garage track",
+      "shared_tokens": [
+        "garage",
+        "toy"
+      ],
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "removed": "Plastic Storage Containers",
+      "added": "Clear plastic storage box",
+      "shared_tokens": [
+        "plastic",
+        "storage"
+      ],
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "removed": "Office Chair",
+      "added": "Desk chair",
+      "shared_tokens": [
+        "chair"
+      ],
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "removed": "LEGO Storage Head",
+      "added": "Patterned storage box",
+      "shared_tokens": [
+        "storage"
+      ],
+      "delta_id": "P35-030-CF"
+    }
+  ],
+  "missed_material_changes": [
+    {
+      "delta_id": "P35-002-T1",
+      "change_id": "D2",
+      "kind": "new_defect",
+      "target": "silicone seal",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-002-T1",
+      "change_id": "D4",
+      "kind": "item_added",
+      "target": "shampoo bottle",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-002-T1",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "lower wall tiles",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-003-T1",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "oak-effect worktop",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-003-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "ceramic hob",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-003-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "splashback grout",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-004-T1",
+      "change_id": "D1",
+      "kind": "worsened",
+      "target": "vinyl floor tear",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-004-T1",
+      "change_id": "D2",
+      "kind": "item_removed",
+      "target": "wall clock",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-004-T1",
+      "change_id": "D3",
+      "kind": "item_added",
+      "target": "dishcloth",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-004-T1",
+      "change_id": "D4",
+      "kind": "new_defect",
+      "target": "base unit plinth",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-004-T1",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "cream laminate worktop",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-005-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "glass shower screen",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-005-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "silicone joint",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-006-T1",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "mosaic wall grout",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-006-T1",
+      "change_id": "D2",
+      "kind": "item_removed",
+      "target": "towel ring",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-006-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "shower glass",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-006-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "vinyl floor",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-007-T1",
+      "change_id": "D2",
+      "kind": "item_added",
+      "target": "single bed",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-007-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "painted wall",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-008-T1",
+      "change_id": "D4",
+      "kind": "new_defect",
+      "target": "cream carpet",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-008-T1",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "bedside table",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-008-T1",
+      "change_id": "D6",
+      "kind": "item_added",
+      "target": "bedside book",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-009-T1",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "window reveal",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-009-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "desk surface",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-009-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "door edge",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-010-T1",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "grey sofa arm",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-010-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "oak coffee table",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-010-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "carpet",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-011-T1",
+      "change_id": "D1",
+      "kind": "worsened",
+      "target": "armchair upholstery",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-011-T1",
+      "change_id": "D2",
+      "kind": "item_removed",
+      "target": "television remote",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-011-T1",
+      "change_id": "D3",
+      "kind": "item_added",
+      "target": "magazine stack",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-011-T1",
+      "change_id": "D4",
+      "kind": "new_defect",
+      "target": "painted skirting",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-011-T1",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "television unit",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-011-T1",
+      "change_id": "D6",
+      "kind": "item_added",
+      "target": "television remote",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-012-T1",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "window sill",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-012-T1",
+      "change_id": "D3",
+      "kind": "item_added",
+      "target": "floor cushion",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-012-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "window glass",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-012-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "door leaf",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-013-T1",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "hall skirting",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-013-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "vinyl floor",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-013-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "door threshold",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-013-T1",
+      "change_id": "D6",
+      "kind": "item_added",
+      "target": "coat hook",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-014-T1",
+      "change_id": "D2",
+      "kind": "item_removed",
+      "target": "sixth dining chair",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-014-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "chair upholstery",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-014-T1",
+      "change_id": "D6",
+      "kind": "item_added",
+      "target": "small vase",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-015-T1",
+      "change_id": "D1",
+      "kind": "worsened",
+      "target": "table edge",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-015-T1",
+      "change_id": "D2",
+      "kind": "item_removed",
+      "target": "tablecloth",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-015-T1",
+      "change_id": "D3",
+      "kind": "item_added",
+      "target": "serving bowl",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-015-T1",
+      "change_id": "D4",
+      "kind": "new_defect",
+      "target": "patterned wallpaper",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-015-T1",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "dark dining table",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-016-T1",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "hall skirting",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-016-T1",
+      "change_id": "D3",
+      "kind": "item_added",
+      "target": "shoe rack",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-016-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "floor tiles",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-016-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "threshold strip",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-017-T1",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "bed frame",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-017-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "blue rug",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-017-T1",
+      "change_id": "D6",
+      "kind": "item_added",
+      "target": "bedside book",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-018-T1",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "chair upholstery",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-018-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "oak tabletop",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-018-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "timber floor",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-020-T1",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "cooker side panel",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-020-T1",
+      "change_id": "D3",
+      "kind": "item_added",
+      "target": "draining board",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-020-T1",
+      "change_id": "D4",
+      "kind": "cleanliness",
+      "target": "patterned vinyl floor",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-020-T1",
+      "change_id": "D5",
+      "kind": "worsened",
+      "target": "base unit plinth",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-021-CF",
+      "change_id": "D2",
+      "kind": "new_defect",
+      "target": "silicone seal",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-021-CF",
+      "change_id": "D4",
+      "kind": "item_removed",
+      "target": "hand towel",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-021-CF",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "lower wall tiles",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-021-CF",
+      "change_id": "D6",
+      "kind": "worsened",
+      "target": "bath panel",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-023-CF",
+      "change_id": "D2",
+      "kind": "new_defect",
+      "target": "pale blue wall",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-023-CF",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "carpet",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-024-CF",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "cream carpet",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-024-CF",
+      "change_id": "D3",
+      "kind": "item_added",
+      "target": "laundry basket",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-024-CF",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "bedside table",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-024-CF",
+      "change_id": "D6",
+      "kind": "worsened",
+      "target": "headboard",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-025-CF",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "grey sofa",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-025-CF",
+      "change_id": "D2",
+      "kind": "new_defect",
+      "target": "carpet",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-025-CF",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "oak coffee table",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-025-CF",
+      "change_id": "D6",
+      "kind": "worsened",
+      "target": "cream throw",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-026-CF",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "armchair upholstery",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-026-CF",
+      "change_id": "D2",
+      "kind": "new_defect",
+      "target": "painted skirting",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-026-CF",
+      "change_id": "D3",
+      "kind": "item_added",
+      "target": "magazine stack",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-026-CF",
+      "change_id": "D4",
+      "kind": "item_removed",
+      "target": "television remote",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-026-CF",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "television unit",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-026-CF",
+      "change_id": "D6",
+      "kind": "worsened",
+      "target": "carpet",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-027-CF",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "window sill",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-027-CF",
+      "change_id": "D2",
+      "kind": "new_defect",
+      "target": "door leaf",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-027-CF",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "window glass",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-027-CF",
+      "change_id": "D6",
+      "kind": "worsened",
+      "target": "sofa arm",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-028-CF",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "oak tabletop",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-028-CF",
+      "change_id": "D2",
+      "kind": "new_defect",
+      "target": "chair upholstery",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-028-CF",
+      "change_id": "D4",
+      "kind": "item_removed",
+      "target": "sixth dining chair",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-028-CF",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "timber floor",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-028-CF",
+      "change_id": "D6",
+      "kind": "worsened",
+      "target": "table leg",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-029-CF",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "table edge",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-029-CF",
+      "change_id": "D2",
+      "kind": "new_defect",
+      "target": "patterned wallpaper",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-029-CF",
+      "change_id": "D3",
+      "kind": "item_added",
+      "target": "serving bowl",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-029-CF",
+      "change_id": "D4",
+      "kind": "item_removed",
+      "target": "tablecloth",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-029-CF",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "dark dining table",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-029-CF",
+      "change_id": "D6",
+      "kind": "worsened",
+      "target": "chair back",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-030-CF",
+      "change_id": "D1",
+      "kind": "new_defect",
+      "target": "bed frame",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-030-CF",
+      "change_id": "D5",
+      "kind": "cleanliness",
+      "target": "blue rug",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    },
+    {
+      "delta_id": "P35-030-CF",
+      "change_id": "D6",
+      "kind": "worsened",
+      "target": "skirting board",
+      "material": true,
+      "detected": false,
+      "reported_as": null,
+      "direction_correct": null
+    }
+  ],
+  "false_changes": [
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Wall Tiling",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Bathtub",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Basin mixer tap",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Recessed spotlight",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Hand towel",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Tabletop vanity mirror",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Assorted toiletries and tumbler",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Threshold strip",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Ceiling spotlight",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Standing mirror",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Toiletries and accessories",
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Ceiling light fixture",
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Cooker control unit",
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Backsplash tiling",
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Electric hob",
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Electric oven",
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Tiled splashback",
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Pendant light fitting",
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Induction hob",
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Integrated oven",
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "changed",
+      "name": "Flooring",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Kitchen cabinet plinths",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Worktop",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Electrical sockets",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Extractor fan",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Electric cooker",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Washing-up rack",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Trash bin",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Paper towel holder",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Decorative vases",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Worktops",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Double oven cooker",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Power sockets",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Net curtain",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Kitchen roll holder",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Dish rack",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Waste bin",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Storage canisters",
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Recessed spotlights",
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Heated towel rail",
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Washbasin",
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Shower mixer",
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Downlights",
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Towel radiator",
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Wall mirror",
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Wash basin",
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Shower fittings",
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "changed",
+      "name": "Shower Cubicle Enclosure",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "removed",
+      "name": "Recessed spotlight",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "removed",
+      "name": "Pedestal wash hand basin",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "removed",
+      "name": "Bath mat",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "removed",
+      "name": "Hand towel",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "added",
+      "name": "Ceiling Spotlight",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "added",
+      "name": "Shaver Socket",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "added",
+      "name": "Pedestal Washbasin",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "added",
+      "name": "Shower Tray",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "added",
+      "name": "Shower Unit & Fittings",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "added",
+      "name": "Bath Mats",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Shower room",
+      "bucket": "added",
+      "name": "Toilet Brush Holder & Stand",
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Walls",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Flooring",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Radiator",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Doorstop",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Threshold strip",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Window",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Double wall sockets",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Door Frames",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Pendant Light Fitting",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Door frame",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Ceiling light fitting",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Bed frame",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Bedding",
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Flooring",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Window blinds",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Bedding and soft furnishings",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Decorative dish",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Lotion bottle",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Coaster",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Bedding Set",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Textured Throw",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Decorative Bowl",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Table Lamp",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Bedside Accessories",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Venetian Blinds",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Carpet",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Door Handle",
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Walls",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Window",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Radiator",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Bed frame",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Wardrobe",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Flooring (Carpet)",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Bedroom Door",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Wall Socket",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Children's Toys",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Ceiling",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Carpet",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Entrance door",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Curtain track",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Rug",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Electrical socket",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Desk chair",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Floor lamp",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Toys and books",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Threshold strip",
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "changed",
+      "name": "Armchair",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Carpet",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Entrance door",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Patio doors and windows",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Curtains and tracks",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Scatter cushions and throw",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Media devices",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Router / media box",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Framed picture",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Potted houseplant",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Photo frames",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Balcony potted plant",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Flooring",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Door handle",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Patio doors and glazing",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Curtains and voiles",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Sofa cushions",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Armchair cushion and throw",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Media equipment",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Framed artwork",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Houseplant in pot",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Framed photos",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Threshold strip",
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "changed",
+      "name": "Flooring",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "changed",
+      "name": "Fireplace",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Wall socket",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "TV stand",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Wooden sideboard cabinet",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Net curtains",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Framed wall art",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Small metal buckets",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "TV box",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Vintage storage case",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Collection of books",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "TV cabinet",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Wooden chest",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Media player",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Framed artwork",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Candle holders",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Coal bucket and accessories",
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Venetian blinds",
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Radiator",
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Wall bracket",
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Nest of coffee tables",
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Area rug",
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Venetian blind",
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Heater",
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Nesting coffee tables",
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Pet bed",
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Wall mounting hook",
+      "delta_id": "P35-012-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "changed",
+      "name": "Flooring",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "changed",
+      "name": "Threshold Strip",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "changed",
+      "name": "Doormat",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "removed",
+      "name": "Double patio doors",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "removed",
+      "name": "Hallway storage stand",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "removed",
+      "name": "Key hook rail",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "removed",
+      "name": "Assorted shoes",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "uPVC Exterior Door and Side Panel",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "Hall Tree with Bench",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "Assorted Footwear",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "Toiletries and Cap on Sideboard",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "Key Rack",
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Dining table",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Dining chairs",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Double patio doors",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Internal door",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Door frames",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Double wall socket",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Entrance double doors",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "French doors",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Double power socket",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Threshold strip",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Ceramic vase",
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Tablecloth",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Door frame and architrave (background left)",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Ceiling light fixture",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Double power socket",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Sideboard / display cabinet",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Artificial flower arrangement in vase",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Framed pictures",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Glassware in display cabinet",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Doorbell chime box",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Threshold strip",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Arched doorway",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Chandelier",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Power sockets",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Light switch",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Display dresser cabinet",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Curtains (pair)",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Net curtains",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Framed picture (left wall)",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Vase and artificial flowers",
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "removed",
+      "name": "Entrance door frame",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "removed",
+      "name": "Rear door and sidelight",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "removed",
+      "name": "Shoe cupboard",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "removed",
+      "name": "Coat and shoe rack unit",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "removed",
+      "name": "Assorted coats and clothing",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "Rear Outer Glass Door",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "Door Frames",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "Side Cabinet",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "Hallway Storage Unit",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "Bags",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Entrance hall",
+      "bucket": "added",
+      "name": "Cabinet Contents",
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Ceiling",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Walls",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Carpet",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Window and sill",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Radiator",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Curtains",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Single bed frame",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Wardrobe",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Desk chair",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Door",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Rug",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Bedding",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Storage unit",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Lego head storage jar",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Double electrical socket",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Bookcase",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Toy garage playset",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Plastic storage tubs",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Children's books",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Assorted toys",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Door frame",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Wall socket",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Grey fabric storage box",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Toy garage track",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Assorted books",
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Walls",
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Flooring",
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "French doors",
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Dining table",
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Dining chairs",
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Skirting boards and door frames",
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Entrance door",
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Double socket",
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Door frame",
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "changed",
+      "name": "Ceiling",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "changed",
+      "name": "Flooring",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "changed",
+      "name": "Freestanding electric cooker",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Double power sockets",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Pendant light",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Kettle",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Dish rack and kitchenware",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Canisters",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "removed",
+      "name": "Paper towel holder",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Cabinet kickboards and skirting boards",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Kitchen worktops",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Ceiling light fixture",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Double wall sockets",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Coffee machine",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Oven glove",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Dish drainer",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Kitchen",
+      "bucket": "added",
+      "name": "Kitchen counter accessories",
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Recessed ceiling downlight",
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Bath side panel",
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Soap dispensers",
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "removed",
+      "name": "Toiletry bottle",
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Ceiling spotlight",
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Door handle",
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Threshold strip",
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "room": "Bathroom",
+      "bucket": "added",
+      "name": "Toiletries",
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Ceiling",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Walls",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Entrance Door",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Wardrobe Door",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Door frames",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Window",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Radiator",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Doorstop",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Threshold strip",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Double Sockets",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Carpet",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Pendant light",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Flooring",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Ceiling light fixture",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Bedding",
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Decorative plate",
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Clear glass bottle",
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Bed throw",
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Table lamp",
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Decorative bowl",
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Wicker storage basket",
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Hand pump dispenser bottle",
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "changed",
+      "name": "Three-seat sofa",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Carpeted flooring",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Doorway frame and architrave",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Patio doors and side windows",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Curtain track",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Voile curtains",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Armchair cushion",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "TV cabinet",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Media boxes",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Remote control",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Framed wall art",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Coffee table ornaments",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Carpet",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Door frame",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "French doors",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Net curtains",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Coffee table decor",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "TV stand",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Media devices",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Picture frame",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Threshold strip",
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "changed",
+      "name": "Flooring",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "changed",
+      "name": "Skirting boards",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "changed",
+      "name": "Three-seat sofa",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Fireplace and hearth",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "TV media console",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Tall bookshelves",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Framed wall art",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Dark wood sideboard",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Spindle back chair",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Double power socket",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Fireplace and surround",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Sofa cushions",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "TV stand",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "White bookcase",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Framed landscape artwork",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Metal buckets",
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "changed",
+      "name": "Walls",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Ceiling",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Window blind",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Radiator",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Coffee tables (nest of 2)",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "TV stand",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Rug",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Cardboard moving boxes",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "removed",
+      "name": "Black bag",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Venetian blind",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Convector heater",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Wall bracket",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Nesting tables",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "TV cabinet",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Black fabric case",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Living room",
+      "bucket": "added",
+      "name": "Cardboard packing boxes",
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Flooring",
+      "delta_id": "P35-028-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Dining table",
+      "delta_id": "P35-028-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Dining chairs",
+      "delta_id": "P35-028-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Door frame",
+      "delta_id": "P35-028-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Door frames",
+      "delta_id": "P35-028-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Walls",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Dining chairs",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "changed",
+      "name": "Tablecloth",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Main glazed door",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Wall socket",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Wall-mounted box",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Glazed display cabinet",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "removed",
+      "name": "Vase and artificial flowers",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Dado rail",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Entrance door",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Entrance door frame",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Curtain pole",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Double plug socket",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Welsh dresser",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Alcove shelves",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Artificial floral arrangement",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Dining room",
+      "bucket": "added",
+      "name": "Silverware tea set",
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Walls",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Ceiling",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "changed",
+      "name": "Bed frame",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Carpet",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Door",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Office Chair",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Storage Drawer Unit",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Door Handle",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Toy Garage / Car Ramp",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Plastic Storage Containers",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "LEGO Storage Head",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "removed",
+      "name": "Alarm Clock",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Flooring",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Threshold strip",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Wardrobe",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Bookcase / shelving unit",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Desk chair",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Storage drawer tower",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Toy garage track",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Clear plastic storage box",
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "room": "Bedroom",
+      "bucket": "added",
+      "name": "Patterned storage box",
+      "delta_id": "P35-030-CF"
+    }
+  ],
+  "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08). Never present a synthetic delta pair as a real tenancy comparison."
+}
