@@ -1,0 +1,102 @@
+{
+  "id": "EX-3",
+  "use_case": "occlusion-flip-mid-clip",
+  "title": "Occlusion flip via conversational edit",
+  "question": "If the camera holds at the cupboard doorway for the whole take, then a single Omni edit opens the reveal at a stated time without changing anything else, does the describer confine rear-floor claims to the post-reveal arm?",
+  "feeds": ["docs/00", "docs/29-evidential-spec-audit", "docs/34 VU-5"],
+  "one_way": "both_ways",
+  "one_way_note": "Same room and light; only whether/when the rear becomes visible changes. A rear-floor claim in the hold output is a hallucination by construction. Extends VU-5 by using Omni's edit strength instead of two independent generations — day-1 already showed independent hold generations can advance past the doorway.",
+  "omni_mode": "image_to_video_then_conversational_edit",
+  "budget_slots": 1,
+  "retry_budget": 2,
+  "operator_notes": [
+    "Turn 0 must be a true hold: rear floor and lower rear wall NEVER visible. Day-1 VU-5.RP-019-hold failed this — reject and retry the base before editing.",
+    "Turn 1 is an edit, not a new generation: 'from about 6 seconds, move forward until the rear is visible'.",
+    "Optional: also attach RP-019-D-condition.jpeg on turn 1 as a reference for what the revealed rear should look like (pass_a_accepted).",
+    "Save both MP4s. The pair is the evidence; a single surviving clip is worth nothing on its own.",
+    "Silent. 16:9."
+  ],
+  "wall": "Development evidence only. Same wall as VU-5.",
+  "pair_design": {
+    "class": "counterfactual",
+    "varied": ["camera reach / reveal timing only"],
+    "held_fixed": [
+      "scenario",
+      "reference frame",
+      "room contents",
+      "lighting",
+      "audio mode",
+      "opening framing",
+      "washer dryer, boiler, fuse box, shelves"
+    ],
+    "unchanged_assertions": [
+      "stacked washer dryer, boiler, fuse box and shelf contents are identical in both clips",
+      "harsh single-bulb lighting and shadow pattern are identical",
+      "no item is added, removed, moved or cleaned between the two clips",
+      "no defect exists in either clip; the rear floor is ordinary and undamaged when revealed"
+    ],
+    "invalidation_rule": "Any material difference other than camera reach/reveal voids the pair. If the hold clip shows the rear at all, the control arm is dead — do not edit it; regenerate the hold."
+  },
+  "clips": [
+    {
+      "id": "EX-3.RP-019-hold",
+      "turn": 0,
+      "scenario_id": "RP-019",
+      "reference_view": "A-wide",
+      "reference_path": "images/google/gemini-omni/RP-019-A-wide.jpeg",
+      "reference_provenance": "pass_a_accepted",
+      "arm": "occluded",
+      "audio_mode": "silent",
+      "aspect_ratio": "16:9",
+      "required_evidence": [
+        "stacked washer dryer",
+        "boiler",
+        "shelves",
+        "cleaning tools",
+        "storage baskets",
+        "pipework"
+      ],
+      "must_not_be_visible": [
+        "rear floor behind the storage",
+        "lower rear wall behind the storage"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "deep shadow is not mould",
+        "hidden areas are not assumed damaged",
+        "unseen floor is not claimed clean or damaged"
+      ],
+      "exact_prompt": "Create one continuous photorealistic video that looks like an ordinary handheld smartphone walkthrough of a utility cupboard in a deep apartment utility cupboard crowded with household storage. The supplied reference image is the opening frame: match its layout, fittings, finishes and lighting exactly, then move from it. Camera: start on the reference framing at the open cupboard door and stay at the doorway for the whole take, panning gently up and down the visible front of the cupboard without ever advancing past the storage baskets; the rear floor and the lower rear wall behind the storage stay occluded and are never visible in any frame. One unbroken take from a single handheld phone. Visible evidence required across the take: stacked washer dryer, boiler, shelves, cleaning tools, storage baskets, pipework. Intended visible defects: none. Negative controls: deep shadow is not mould; hidden areas are not assumed damaged; unseen floor is not claimed clean or damaged. The room is partially obscured and deliberately difficult but accessible under single harsh bulb with deep shadows. Hold fixed for the whole take: same stacked washer dryer, boiler, fuse box and crowded shelves. Must never become visible in any frame: rear floor behind the storage, lower rear wall behind the storage. Audio: the clip is silent; no speech, no music, no sound effects, no room tone. Avoid: people, logos, readable text, watermark, impossible geometry, scene cuts, dissolves or fades, speed ramps, slow motion, title cards, music, sound effects, camera-operator commentary, drone or crane moves, tripod-smooth motorised motion. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible."
+    },
+    {
+      "id": "EX-3.RP-019-reveal-edit",
+      "turn": 1,
+      "scenario_id": "RP-019",
+      "arm": "revealed",
+      "audio_mode": "silent",
+      "depends_on": "EX-3.RP-019-hold",
+      "optional_edit_reference": {
+        "view_id": "D-condition",
+        "path": "images/google/gemini-omni/RP-019-D-condition.jpeg",
+        "provenance": "pass_a_accepted",
+        "role": "appearance of the revealed rear floor and plinth only"
+      },
+      "required_evidence_after_reveal": [
+        "rear floor behind the storage",
+        "lower rear wall behind the storage"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "the revealed rear floor is ordinary and undamaged",
+        "deep shadow is not mould"
+      ],
+      "exact_prompt": "Keep the exact same utility cupboard, lighting, fittings, silence and opening. Change only the camera after about 6 seconds: from roughly the 6-second mark, move slowly forward past the storage baskets until the rear floor and the lower rear wall behind the storage are fully in frame, then hold. The revealed rear floor is ordinary and undamaged — do not invent mould, cracks, water damage or missing fittings. Do not rearrange the washer dryer, boiler, shelves or baskets. Do not add people, logos, readable text, titles, music or sound. Before the 6-second mark the take should still match the previous version.",
+      "exact_prompt_with_condition_ref": "Keep the exact same utility cupboard, lighting, fittings, silence and opening. Change only the camera after about 6 seconds: from roughly the 6-second mark, move slowly forward past the storage baskets until the rear floor and the lower rear wall behind the storage are fully in frame, matching the attached condition reference for how that rear floor and plinth look, then hold. The revealed rear is ordinary and undamaged — do not invent mould, cracks or water damage. Do not rearrange the washer dryer, boiler, shelves or baskets. Do not add people, logos, readable text, titles, music or sound."
+    }
+  ],
+  "gold": {
+    "rooms": ["Utility cupboard"],
+    "scored_by": "As VU-5: (a) hallucination rate of rear-floor/wall claims in the hold output; (b) reveal recall in the edited output. Prefer this over regenerating VU-5.RP-019-hold if edit control is tighter than a second independent generation.",
+    "pass_bar": "Hold output makes no condition claim about the rear. Reveal output records the rear floor it saw without inventing damage."
+  }
+}

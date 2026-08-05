@@ -1,0 +1,122 @@
+{
+  "id": "EX-R",
+  "use_case": "creative-risky-no-physics-gold",
+  "title": "Creative / risky Omni pack (precision optional)",
+  "report": "docs/35-gemini-omni-creative-exploration.md",
+  "premise": "Photoreal walkthrough gold is limited by Omni's weak object permanence and physics. These experiments ask for stylized or comic beats where fixture drift does not matter. Every generation is image-to-video from named stills. Prompts describe only what should appear on screen — no product jargon, no 'edit this video'.",
+  "generation_rule": "Attach the listed reference image(s). Paste exact_prompt as the full instruction. Prefer fresh image-to-video over video-to-video edit.",
+  "wall": "Internal / development / demo only. Never present as real property evidence. Google arm excluded from publication and training.",
+  "success_bar": "A human watching for 10 seconds understands the joke, lesson, or mood. Not inventory gold.",
+  "budget": {
+    "suggested_slots": 8,
+    "mode": "image_to_video",
+    "refs_dir": "evals/fixtures/synthetic-room-eval/video/exploratory/refs/"
+  },
+  "experiments": [
+    {
+      "id": "EX-R1",
+      "title": "£165 ghost",
+      "risk": "high",
+      "aspect_ratio": "9:16",
+      "attach": [
+        "images/google/gemini-omni/RP-014-A-wide.jpeg"
+      ],
+      "exact_prompt": "Vertical 9:16 video, about 6 seconds, silent except soft whooshes. Opening frame matches the attached hallway photo: cream walls, striped runner, coats, shoe rack, warm ceiling light. Handheld phone walks slowly forward down that hall. At about 2 seconds a translucent pale clerk in a beige mac appears beside the coats, holding a clipboard and ticking a form with a pen; he is semi-transparent like a ghost. At about 4 seconds a large yellow price tag swings into the lower third with black text reading £165, then pops and vanishes. Final second: cut to a plain cream card with black sans-serif text: film it once. No company logos. No readable brand names on coats or shoes. No music."
+    },
+    {
+      "id": "EX-R2",
+      "title": "Chip dispute comic",
+      "risk": "high",
+      "aspect_ratio": "9:16",
+      "attach": [
+        "video/exploratory/refs/EX-R2-chip-still.jpg"
+      ],
+      "exact_prompt": "Vertical 9:16 video, about 6 seconds. Start on the attached photo: white kitchen, oak-effect worktop, stainless sink, and a pale chip on the worktop edge near the sink. Slow push-in toward that chip. At 0–2.5 seconds a torn scrap of paper sits in the lower left with black marker handwriting: Landlord: pre-existing. At 2.5 seconds that scrap is replaced by another: Tenant: that was not there — and the camera eases a little closer to the chip. Light paper texture over the whole frame. No faces. No music. Quiet paper rustle only. Keep the chip visible the whole time; cabinetry may be imperfect."
+    },
+    {
+      "id": "EX-R3",
+      "title": "Claymation explainer",
+      "risk": "medium",
+      "aspect_ratio": "16:9",
+      "attach": [],
+      "exact_prompt": "Landscape 16:9 claymation stop-motion, about 8 seconds, everything made of coloured clay, no human hands visible. A small clay smartphone on stubby clay legs walks room to room through a tiny clay flat (kitchen, then hall). Each time it enters a room, a clay clipboard in the corner grows a round clay tick mark. Continuous calm British voiceover with no cuts in the speech: A schedule of condition is just a dated record of how the place looked, so later nobody has to argue from memory. End on a close-up of the clay clipboard closing. Slightly wonky clay is fine. No on-screen text. No music; soft clay thumps only."
+    },
+    {
+      "id": "EX-R4",
+      "title": "Defect word reel",
+      "risk": "medium",
+      "aspect_ratio": "9:16",
+      "attach": [],
+      "exact_prompt": "Vertical 9:16 kinetic type video, about 7 seconds, abstract soft backgrounds only — no real rooms. Show one word at a time, each in a different animated style, black marker on a scrap of paper in the lower left, rapid but readable, roughly one word per second: scuff, then chip, then watermark, then burn, then crack, then dent. Final beat: a scrap of paper centred that reads evidence beats vibes. Calm smooth music. No photographs of property."
+    },
+    {
+      "id": "EX-R5",
+      "title": "Split screen: live walk + frame strip",
+      "risk": "medium",
+      "aspect_ratio": "16:9",
+      "attach": [
+        "images/google/gemini-omni/RP-014-A-wide.jpeg",
+        "images/google/gemini-omni/RP-014-C-inventory.jpeg",
+        "images/google/gemini-omni/RP-014-D-condition.jpeg"
+      ],
+      "exact_prompt": "Landscape 16:9 video, about 8 seconds, soft. Layout is a fixed two-panel screen for the whole clip. LEFT panel (about two thirds of the width): a handheld phone walk slowly forward through the cream hallway in the first attached photo — striped runner, coats, warm light. RIGHT panel (about one third): a light grey column. At the top of the right column, white sans-serif text on a dark bar reads Entrance hall. Below it, four small still frames appear one after another from top to bottom, taken from the three attached hallway photos (reuse views as needed), each frame fading in then gaining a small green tick in its top-right corner. Flat clean interface chrome, no app logos, no street addresses, no people. The left walk may wobble; the right column stays sharp."
+    },
+    {
+      "id": "EX-R6",
+      "title": "Careful kitchen pan",
+      "risk": "low",
+      "aspect_ratio": "9:16",
+      "attach": [
+        "images/google/gemini-omni/RP-003-A-wide.jpeg"
+      ],
+      "exact_prompt": "Vertical 9:16 video, about 6 seconds, silent. Opening frame matches the attached kitchen photo: white shaker units, oak-effect worktop, sink, hob, bright daylight. Slow steady handheld pan left to right along the worktop at the pace of someone carefully filming evidence, small natural wobble only, no dramatic camera moves. Slightly flat documentary lighting, mildly desaturated. No captions, no logos, no people, no music."
+    },
+    {
+      "id": "EX-R7",
+      "title": "Sparkle clean wipe",
+      "risk": "high",
+      "aspect_ratio": "9:16",
+      "attach": [
+        "images/google/gemini-omni/RP-003-A-wide.jpeg"
+      ],
+      "exact_prompt": "Vertical 9:16 video, about 6 seconds. Opening matches the attached kitchen photo. First 2.5 seconds: the same kitchen looking a little tired — duller worktop, a few crumbs, softer light. At the midpoint a soft sparkling wipe sweeps left to right across the frame with a single short chime. Final 3 seconds: the same kitchen layout looking brighter and freshly cleaned, clear worktops, no crumbs. Cartoon sparkles during the wipe are fine. No text, no people, no song, no brand logos."
+    },
+    {
+      "id": "EX-R8",
+      "title": "Hand fills the frame",
+      "risk": "medium",
+      "aspect_ratio": "16:9",
+      "attach": [
+        "images/google/gemini-omni/RP-024-A-wide.jpeg",
+        "video/exploratory/refs/EX-R8-hand-still.jpg"
+      ],
+      "exact_prompt": "Landscape 16:9 video, about 6 seconds, silent. Start matching the first attached photo: doorway view into a small white home office with desk, black chair, bookcase, roller blind. Walk hurriedly toward the desk with a shaky handheld phone. In the final two seconds the frame matches the second attached photo: an out-of-focus hand and black phone fill most of the view, desk only at the edges. The moment the hand dominates, a large friendly red rectangular stamp slams onto the centre with white bold text: not a hero frame — then hold that frozen stamped frame for one second. No music. No other people or faces."
+    },
+    {
+      "id": "EX-R9",
+      "title": "Wrong physics kitchen",
+      "risk": "high",
+      "aspect_ratio": "9:16",
+      "attach": [
+        "images/google/gemini-omni/RP-003-A-wide.jpeg"
+      ],
+      "exact_prompt": "Vertical 9:16 video, about 6 seconds. Opening matches the attached kitchen photo. Slow handheld walk into the kitchen while physics goes gently wrong on purpose: the oak-effect worktop ripples like slow liquid, a ceramic mug floats and rotates beside the sink, the stainless extractor hood expands and contracts as if breathing. Still clearly a kitchen. Soft odd ambient tones, no dialogue, no text, no people."
+    },
+    {
+      "id": "EX-R10",
+      "title": "Nervous walk down the hall",
+      "risk": "medium",
+      "aspect_ratio": "9:16",
+      "attach": [
+        "images/google/gemini-omni/RP-014-A-wide.jpeg"
+      ],
+      "exact_prompt": "Vertical 9:16 video, about 6 seconds, quiet room tone only. Opening matches the attached hallway photo. Camera height is lower than usual, about chest height of a shorter adult. Very slow forward walk down the cream hall past the striped runner and coats. Warm colour grade, soft dark vignette at the edges. From about 3 seconds, faint handwriting in grey appears in the lower third: is this what I'm signing? No music. No faces. No brand logos."
+    }
+  ],
+  "recommended_first_four_slots": [
+    "EX-R2 — attach refs/EX-R2-chip-still.jpg",
+    "EX-R8 — attach RP-024-A-wide.jpeg + refs/EX-R8-hand-still.jpg",
+    "EX-R3 — text only, claymation",
+    "EX-R5 — attach RP-014 A-wide + C-inventory + D-condition"
+  ]
+}

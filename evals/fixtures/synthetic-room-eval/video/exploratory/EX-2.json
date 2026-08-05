@@ -1,0 +1,107 @@
+{
+  "id": "EX-2",
+  "use_case": "conversational-defect-injection",
+  "title": "Conversational defect injection",
+  "question": "Can a multi-turn Omni edit introduce one enumerated defect while holding every other kitchen identity fixed, tightly enough that describe/compare can score the authored delta?",
+  "feeds": ["docs/00", "docs/29-evidential-spec-audit", "homeinventory/compare.py"],
+  "one_way": "both_ways",
+  "one_way_note": "The before/after pair is the evidence. A claim about the chip in the base (pre-edit) output is a hallucination by construction. A missing chip claim in the post-edit output is a recall failure by construction. No resemblance to real capture is required for those two statements.",
+  "omni_mode": "image_to_video_then_conversational_edit",
+  "budget_slots": 1,
+  "retry_budget": 2,
+  "operator_notes": [
+    "Turn 0 is a fresh image-to-video generation. Turns 1–2 are conversational edits on the SAME interaction (previous_interaction_id / chat thread). Do not re-upload a new base between turns.",
+    "Save each turn's MP4 separately: EX-2.RP-003-base, EX-2.RP-003-chip, EX-2.RP-003-aged.",
+    "Record the edit transcript as provenance: defect introduced at turn 1, aged at turn 2.",
+    "Aspect ratio 16:9. Silent on every turn.",
+    "Reference is pass_a_accepted RP-003 A-wide only."
+  ],
+  "wall": "Development evidence only. Never present as a real walkthrough. Do not promote a compare claim from this pair.",
+  "pair_design": {
+    "class": "counterfactual",
+    "varied": ["one worktop chip only", "then chip age/colour only"],
+    "held_fixed": [
+      "scenario",
+      "reference frame",
+      "camera path",
+      "all other room contents",
+      "lighting",
+      "audio mode",
+      "requested duration"
+    ],
+    "unchanged_assertions": [
+      "white shaker units, oak-effect worktop, black appliances and rear window are identical across turns",
+      "no item is added, removed, moved or cleaned except the authored chip",
+      "the chip location stays left of the sink on the worktop edge"
+    ],
+    "invalidation_rule": "Any material change other than the authored chip (or its ageing) voids the pair."
+  },
+  "clips": [
+    {
+      "id": "EX-2.RP-003-base",
+      "turn": 0,
+      "scenario_id": "RP-003",
+      "reference_view": "A-wide",
+      "reference_path": "images/google/gemini-omni/RP-003-A-wide.jpeg",
+      "reference_provenance": "pass_a_accepted",
+      "arm": "clean_baseline",
+      "audio_mode": "silent",
+      "aspect_ratio": "16:9",
+      "required_evidence": [
+        "white kitchen units",
+        "oak-effect worktop",
+        "sink",
+        "oven",
+        "ceramic hob",
+        "extractor hood",
+        "splashback tiles",
+        "grout",
+        "sockets",
+        "vinyl floor",
+        "skirting boards"
+      ],
+      "intended_defects": [],
+      "must_not_be_visible": [
+        "chip in the worktop",
+        "crack in the worktop",
+        "burn mark on the worktop"
+      ],
+      "intended_negatives": [
+        "clean timber grain is not mould",
+        "hob reflection is not a stain",
+        "dark grout line is not a crack",
+        "ordinary shadow is not damp"
+      ],
+      "exact_prompt": "Create one continuous photorealistic video that looks like an ordinary handheld smartphone walkthrough of a kitchen in a recently refurbished compact UK terrace with inexpensive white fittings. The supplied reference image is the opening frame: match its layout, fittings, finishes and lighting exactly, then move from it. Camera: hold the reference framing for about one second, then turn slowly and steadily to the right across the run of units and on to the cooking wall, and come to rest there; the operator stands still and pivots, at the pace of someone looking rather than searching; keep worktop and floor in frame throughout; small natural handheld wobble only. One unbroken take from a single handheld phone. Visible evidence required across the take: white kitchen units, oak-effect worktop, sink, oven, ceramic hob, extractor hood, splashback tiles, grout, sockets, vinyl floor, skirting boards. Intended visible defects: none. Negative controls: clean timber grain is not mould; hob reflection is not a stain; dark grout line is not a crack; ordinary shadow is not damp. The room is clean and tidy with clear worktops under bright overcast daylight. Hold fixed for the whole take: same white shaker units, oak-effect worktop, black appliances and rear window. Must never become visible in any frame: chip in the worktop, crack in the worktop, burn mark on the worktop. Audio: the clip is silent; no speech, no music, no sound effects, no room tone. Avoid: people, logos, readable text, watermark, impossible geometry, scene cuts, dissolves or fades, speed ramps, slow motion, title cards, music, sound effects, camera-operator commentary, drone or crane moves, tripod-smooth motorised motion. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible."
+    },
+    {
+      "id": "EX-2.RP-003-chip",
+      "turn": 1,
+      "scenario_id": "RP-003",
+      "arm": "defect_injected",
+      "audio_mode": "silent",
+      "depends_on": "EX-2.RP-003-base",
+      "intended_defects": [
+        "approximately 3cm pale chip on the oak-effect worktop edge, immediately left of the sink bowl when facing the sink"
+      ],
+      "exact_prompt": "Keep the exact same kitchen, camera path, lighting, timing and silence. Change only this: add one approximately 3cm pale chip on the oak-effect worktop edge, immediately left of the sink bowl when facing the sink. The chip must be visible during the part of the pivot when the sink and worktop edge are in frame. Do not add any other damage, stains, cracks, burns, or missing fittings. Do not move or restyle any appliance, unit, floor or window. Do not add people, logos, readable text, titles, music or sound."
+    },
+    {
+      "id": "EX-2.RP-003-aged",
+      "turn": 2,
+      "scenario_id": "RP-003",
+      "arm": "defect_aged",
+      "audio_mode": "silent",
+      "depends_on": "EX-2.RP-003-chip",
+      "intended_defects": [
+        "same ~3cm chip left of the sink, now slightly darker and dirtier at the edges as if older wear, still the only defect"
+      ],
+      "exact_prompt": "Keep the exact same kitchen, camera path, lighting, timing, silence and chip location. Change only the chip's appearance: make that same ~3cm chip look slightly older — a little darker and dirtier at the edges — still approximately 3cm, still immediately left of the sink. Do not move the chip. Do not add a second defect. Do not change anything else in the room."
+    }
+  ],
+  "gold": {
+    "rooms": ["Kitchen"],
+    "scored_by": "Run base and chip (and optionally aged) through describe under the same prompt/model. Report (a) hallucination: any chip/crack/burn claim in the base output; (b) recall: whether the chip clip's output records a worktop chip left of the sink; (c) overclaim: any additional unauthored defect in the chip or aged output.",
+    "pass_bar": "Base makes no worktop-damage claim. Chip records the authored chip without inventing further damage. Aged still describes one chip in the same place."
+  }
+}

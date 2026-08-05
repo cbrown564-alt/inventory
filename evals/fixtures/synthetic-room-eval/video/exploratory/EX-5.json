@@ -1,0 +1,56 @@
+{
+  "id": "EX-5",
+  "use_case": "hand-as-hero-adversary",
+  "title": "Hand-as-hero curation adversary",
+  "question": "When the final seconds of a walkthrough are dominated by the operator's hand, does curate.py still pick a usable hero — or does it promote the failure mode docs/26 fears?",
+  "feeds": ["docs/18", "docs/26", "docs/34 VU-4", "homeinventory/curate.py"],
+  "one_way": "falsify_only",
+  "one_way_note": "This manufactures the failure. If curation still picks a clean desk/chair frame, that is weak positive evidence only. If it promotes the hand frame as hero, the failure transfers in spirit to real hurried capture. VU-4 cannot run on RP-022 (reference rejected); this adversary uses pass_a_accepted RP-024 A-wide instead.",
+  "omni_mode": "image_to_video",
+  "budget_slots": 1,
+  "retry_budget": 1,
+  "operator_notes": [
+    "The avoid-list carve-out is intentional: the operator's own hand and phone edge MUST appear. Faces, other people, logos and readable screen content remain forbidden.",
+    "Silent. 16:9.",
+    "Reference: RP-024-A-wide.jpeg (pass_a_accepted).",
+    "After accept, extract frames at production cadence and run curate; record whether the chosen hero is hand-dominated.",
+    "Not a substitute for Amendment B's free still degradation ladder — run that first for blur/compression; this clip is specifically for temporally coherent end-of-take hand intrusion."
+  ],
+  "wall": "Development evidence only. Cannot promote a capture-strategy verdict.",
+  "clips": [
+    {
+      "id": "EX-5.RP-024-hand",
+      "scenario_id": "RP-024",
+      "reference_view": "A-wide",
+      "reference_path": "images/google/gemini-omni/RP-024-A-wide.jpeg",
+      "reference_provenance": "pass_a_accepted",
+      "arm": "hand_intrusion",
+      "speed_rung": "hurried",
+      "audio_mode": "silent",
+      "aspect_ratio": "16:9",
+      "required_evidence": [
+        "desk",
+        "office chair",
+        "bookcase",
+        "roller blind",
+        "pale carpet"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "carpet shading is not a stain",
+        "ordinary shadow is not damp"
+      ],
+      "must_become_visible": [
+        "operator's own hand",
+        "phone bezel or fingers occupying most of the final frames"
+      ],
+      "exact_prompt": "Create one continuous photorealistic video that looks like an ordinary handheld smartphone walkthrough of a home office in a recently refurbished small office in a UK flat. The supplied reference image is the opening frame: match its layout, fittings, finishes and lighting exactly, then move from it. Camera: start on the reference framing at the doorway, then walk forward hurriedly toward the desk with a fast shaky handheld sweep; in the final two seconds the camera drops and yaws so that the operator's own hand and phone edge fill most of the frame and the desk and chair are only partially visible at the margins; the hand remains in frame until the end. One unbroken take from a single handheld phone. Visible evidence required across the take: desk, office chair, bookcase, roller blind, pale carpet. The operator's own hand and phone edge must dominate the final two seconds — this is required, not accidental. Intended visible defects: none. Negative controls: carpet shading is not a stain; ordinary shadow is not damp. The room is clean and tidy with minimal desk equipment under balanced daylight and neutral task light. Hold fixed for the whole take: same white desk, black chair, bookcase, roller blind and pale carpet. Audio: the clip is silent; no speech, no music, no sound effects, no room tone. Avoid: faces, other people, logos, readable text, watermark, impossible geometry, visible screen content, scene cuts, dissolves or fades, speed ramps, slow motion, title cards, music, sound effects, camera-operator commentary, drone or crane moves, tripod-smooth motorised motion. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence aside from the required hand intrusion; do not invent damage.",
+      "gold": {
+        "rooms": ["Home office"],
+        "scored_by": "Run through curate (+ optional describe). Primary metric: is the selected hero frame hand-dominated (yes/no by strip inspection). Secondary: item recall from non-hand frames only.",
+        "fail_interesting": "hero is the hand frame or a near-black/unusable end frame",
+        "pass_weak": "hero is a mid-take desk/chair frame despite the intrusion"
+      }
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": "EX-1",
+  "use_case": "multi-reference-identity-orbit",
+  "title": "Three-view identity orbit",
+  "question": "Can Gemini Omni hold one room's identity through continuous motion when conditioned on every Pass A–accepted still of that room at once?",
+  "feeds": ["docs/34", "docs/18", "docs/12"],
+  "one_way": "falsify_only",
+  "one_way_note": "A clean synthetic orbit is a best case for identity. Drift here damages the whole video probe. Parity with the still packet proves nothing about real capture.",
+  "omni_mode": "reference_to_video",
+  "budget_slots": 1,
+  "retry_budget": 2,
+  "operator_notes": [
+    "Attach all three reference images in one generation. Do not generate from A-wide alone.",
+    "No complete four-view Pass A–accepted Omni packet exists yet; RP-014 is the strongest three-view set (A-wide, C-inventory, D-condition).",
+    "RP-014-B-reverse is not pass_a_accepted — do not attach it.",
+    "Aspect ratio 16:9. Duration ~10s. Silent.",
+    "Not wired into build_video_tasks.py (VU-* only). Stage manually under video/google/gemini-omni/ if accepted."
+  ],
+  "wall": "Development evidence only. Never present as a real walkthrough. Google arm excluded from publication and training (docs/31 B9).",
+  "clips": [
+    {
+      "id": "EX-1.RP-014-orbit",
+      "scenario_id": "RP-014",
+      "room_type": "Entrance hall",
+      "arm": "multi_reference",
+      "audio_mode": "silent",
+      "aspect_ratio": "16:9",
+      "duration_s_target": 10,
+      "references": [
+        {
+          "view_id": "A-wide",
+          "path": "images/google/gemini-omni/RP-014-A-wide.jpeg",
+          "role": "opening_frame_and_layout",
+          "provenance": "pass_a_accepted"
+        },
+        {
+          "view_id": "C-inventory",
+          "path": "images/google/gemini-omni/RP-014-C-inventory.jpeg",
+          "role": "fixture_detail_consistency",
+          "provenance": "pass_a_accepted"
+        },
+        {
+          "view_id": "D-condition",
+          "path": "images/google/gemini-omni/RP-014-D-condition.jpeg",
+          "role": "condition_surface_consistency",
+          "provenance": "pass_a_accepted"
+        }
+      ],
+      "required_evidence": [
+        "hall walls",
+        "striped runner",
+        "coat hooks",
+        "entryphone",
+        "ceiling light",
+        "skirting",
+        "front door",
+        "shoe rack"
+      ],
+      "intended_defects": [],
+      "intended_negatives": [
+        "runner stripe is not a stain",
+        "door shadow is not damp"
+      ],
+      "continuity_must_hold": [
+        "same cream walls, striped runner, entryphone and dark front door",
+        "door count and door positions never change",
+        "runner pattern and colour never morph",
+        "no second doorway invented mid-take"
+      ],
+      "exact_prompt": "Create one continuous photorealistic video that looks like an ordinary handheld smartphone walkthrough of an entrance hall in a narrow communal-entry flat hallway with dated finishes. You are given three reference photographs of the SAME hall from different viewpoints. Match layout, fittings, finishes and lighting to those references; the A-wide image is the opening frame. Camera: hold the A-wide doorway framing for about one second, then walk slowly forward down the hall while gently orbiting the viewpoint so that by mid-take the entryphone and coat hooks from the inventory reference are clearly readable, and by the final two seconds a low condition detail of the runner edge and skirting matching the condition reference is in frame; one unbroken take; small natural handheld wobble only; no pause that feels like a cut. Visible evidence required across the take: hall walls, striped runner, coat hooks, entryphone, ceiling light, skirting, front door, shoe rack. Intended visible defects: none. Negative controls: runner stripe is not a stain; door shadow is not damp. The room is ordinarily occupied with coats and shoes under warm ceiling light without daylight. Hold fixed for the whole take: same cream walls, striped runner, entryphone and dark front door; door count and positions never change; runner pattern never morphs; no second doorway is invented. Audio: the clip is silent; no speech, no music, no sound effects, no room tone. Avoid: people, logos, readable text, watermark, impossible geometry, extra doors, scene cuts, dissolves or fades, speed ramps, slow motion, title cards, music, sound effects, camera-operator commentary, drone or crane moves, tripod-smooth motorised motion. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "gold": {
+        "rooms": ["Entrance hall"],
+        "scored_by": "Pass A strip continuity across 1 fps samples plus opening-frame match to A-wide; then optional segment+describe item recall against the union of the three accepted RP-014 stills under Pass B labels",
+        "fail_if": [
+          "opening frame does not match A-wide",
+          "any fixture identity morphs between sampled frames",
+          "an extra door or room appears",
+          "readable brand text appears"
+        ]
+      }
+    }
+  ]
+}

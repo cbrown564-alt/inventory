@@ -1,0 +1,62 @@
+{
+  "id": "EX-4",
+  "use_case": "filming-guide-loop",
+  "title": "ASMR / start-page filming guide",
+  "question": "Can Omni produce a ~10s vertical phone loop that teaches slow pan + spoken room name, grounded on an accepted kitchen still, suitable as a local start-page demo?",
+  "feeds": ["docs/17 § filming guide", "homeinventory/templates/start.html.j2", "docs/33"],
+  "one_way": "ux_demo_only",
+  "one_way_note": "This clip is not scored for item recall and cannot inform capture-strategy or accuracy claims. It is a product-surface demo asset. Label it synthetic in the UI if shown.",
+  "omni_mode": "image_to_video",
+  "budget_slots": 1,
+  "retry_budget": 1,
+  "operator_notes": [
+    "Aspect ratio MUST be 9:16 (portrait phone).",
+    "Reference: RP-003-A-wide.jpeg (pass_a_accepted).",
+    "If speech is wrong or music appears, reject — audio mode is part of the acceptance criteria.",
+    "Do not drop into the VU tasks queue; stage under video/exploratory/outputs/ if kept.",
+    "docs/17 asked for a silent loop; this variant adds one spoken room name on purpose (speaking-capture hypothesis). For a silent sibling, strip audio with ffmpeg — same footage, zero extra Omni quota."
+  ],
+  "wall": "Demo / development only. Never present as a real landlord walkthrough. Google terms: internal use.",
+  "clips": [
+    {
+      "id": "EX-4.RP-003-guide",
+      "scenario_id": "RP-003",
+      "reference_view": "A-wide",
+      "reference_path": "images/google/gemini-omni/RP-003-A-wide.jpeg",
+      "reference_provenance": "pass_a_accepted",
+      "arm": "narrated_filming_guide",
+      "audio_mode": "narrated",
+      "aspect_ratio": "9:16",
+      "duration_s_target": 10,
+      "audio": {
+        "voice": "calm British adult, plain and unhurried",
+        "cue_text": "Kitchen",
+        "cue_at_s": 1.5,
+        "after_cue": "silence for the rest of the clip; no music, no footsteps, no ambient room tone"
+      },
+      "required_evidence": [
+        "white kitchen units",
+        "oak-effect worktop",
+        "sink",
+        "oven",
+        "ceramic hob"
+      ],
+      "intended_defects": [],
+      "intended_negatives": ["clean timber grain is not mould"],
+      "exact_prompt": "Create one continuous photorealistic video that looks like an ordinary handheld smartphone walkthrough of a kitchen in a recently refurbished compact UK terrace with inexpensive white fittings. The supplied reference image is the opening frame: match its layout, fittings, finishes and lighting exactly, then move from it. Camera: hold the reference framing for about one second, then pan slowly left to right across the kitchen at the pace of a careful landlord filming evidence; pause briefly when the sink and worktop edge are centred; small natural handheld wobble only; vertical phone framing throughout. One unbroken take from a single handheld phone. Visible evidence required across the take: white kitchen units, oak-effect worktop, sink, oven, ceramic hob. Intended visible defects: none. Negative controls: clean timber grain is not mould. The room is clean and tidy with clear worktops under bright overcast daylight. Hold fixed for the whole take: same white shaker units, oak-effect worktop, black appliances and rear window. Audio: one line of speech only, calm British adult, plain and unhurried, saying exactly \"Kitchen\" at about 1.5 seconds in; then silence for the rest of the clip; no music, no footsteps, no ambient room tone. Avoid: people, logos, readable text, watermark, impossible geometry, scene cuts, dissolves or fades, speed ramps, slow motion, title cards, music, sound effects, camera-operator commentary, drone or crane moves, tripod-smooth motorised motion. Do not add labels, captions, borders, or inspection annotations. Show only visually supportable property evidence; do not make hidden areas visible.",
+      "acceptance_extra": [
+        "9:16 portrait throughout",
+        "exactly one spoken word/phrase: Kitchen",
+        "no music or invented ambience",
+        "pace reads as careful evidence filming, not a cinematic drone"
+      ]
+    }
+  ],
+  "sketch_variant": {
+    "id": "EX-4b.sketch-protocol",
+    "budget_slots": 1,
+    "omni_mode": "image_to_video",
+    "note": "Optional second slot: photograph a hand-drawn shot list (wide box → arrow → detail box → pause mark) and use Omni's drawing-as-motion-guide path. Do not show the drawing in the final video. Same kitchen evidence contract as EX-4 if you also attach RP-003-A-wide; otherwise treat as pure UX metaphor and do not score.",
+    "exact_prompt": "Turn this drawing into realistic vertical smartphone footage of a careful landlord filming a kitchen inventory, using the drawing only as a guide for camera movement; do not show the drawing in the final video. Slow left-to-right pan, brief pause on a sink and worktop edge, small handheld wobble, 9:16. One unbroken take. Audio: one calm British voice saying exactly \"Kitchen\" at about 1.5 seconds, then silence. No people faces, no logos, no readable brand text, no music, no titles."
+  }
+}

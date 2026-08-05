@@ -1,0 +1,23 @@
+{
+  "pack_id": "omni-exploratory-ex-1-to-5",
+  "created": "2026-08-05",
+  "purpose": "Concrete Gemini Omni prompts and VU-style clip specs for five high-leverage experiments beyond the Phase 3.6 VU-1…5 queue.",
+  "does_not_auto_queue": "build_video_tasks.py only globs video/clips/VU-*.json. These EX-* files are operator-run from the Gemini Omni subscription surface.",
+  "reference_rule": "Every clip pins only pass_a_accepted Gemini Omni stills from the parent ledger (as of 2026-08-04 import + adjudication).",
+  "wall": "Development / demo evidence only. No capture-strategy, compare, or product accuracy promotion. Google arm excluded from publication and training (docs/31 B9).",
+  "day1_priority_reminder": "Six cleared VU regenerations still outrank this pack for the formal probe: VU-1.RP-003, VU-2.RP-014-transit, VU-3.RP-021-narrated, VU-5.RP-019-push, VU-5.RP-019-hold, VU-1.RP-024. Spend exploratory slots only after those, or on a day you are explicitly not regenerating VU.",
+  "suggested_burn_order_after_vu": [
+    "EX-3.RP-019-hold then edit reveal (fixes day-1 hold-control failure mode with Omni's best trick)",
+    "EX-2.RP-003-base then chip edit (authored compare delta)",
+    "EX-1.RP-014-orbit (multi-ref identity)",
+    "EX-5.RP-024-hand (curation adversary; VU-4 substitute)",
+    "EX-4.RP-003-guide (start-page demo; lowest eval urgency)"
+  ],
+  "files": [
+    "EX-1.json",
+    "EX-2.json",
+    "EX-3.json",
+    "EX-4.json",
+    "EX-5.json"
+  ]
+}
