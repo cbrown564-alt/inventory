@@ -1,0 +1,2264 @@
+{
+  "review_type": "phase35_delta_pair_review",
+  "schema_version": 2,
+  "status": "complete",
+  "reviewed_at": "2026-08-05T06:59:06.213537+00:00",
+  "completed_at": "2026-08-05",
+  "supersedes": "reports/phase35-pilot-review-final-2026-08-04.json",
+  "supersedes_note": "The 4 Aug review applied a rubric under which any unenumerated difference was material, so it rejected 27 of 30 pairs on movable clutter — tea towels, toasters, toiletry bottles — while describing genuine fixed-fitting drift as one bullet among many. The owner rejected that reading on 5 Aug 2026: a pair fails when the room stops being the same room, not when a tenant moves a towel. The earlier report is retained unchanged as evidence.",
+  "materiality_rubric": {
+    "rejects": [
+      "fixed fabric differs: room geometry, walls, ceilings, floors, finishes, windows, doors",
+      "a fitted or fixed unit, appliance, sanitary fitting, radiator or light fitting moves, resizes, changes model or disappears",
+      "large fitted or defining furniture is swapped for a different item",
+      "the two views of one timepoint contradict each other about any of the above",
+      "no enumerated material change is observable, so the pair carries no delta signal"
+    ],
+    "records_but_does_not_reject": [
+      "movable everyday objects: textiles, toiletries, worktop clutter, small decor, shoes, books",
+      "an object of that kind moving, appearing or disappearing",
+      "modest camera framing drift that still shows the same part of the room"
+    ],
+    "why": "The pilot exists to measure compare behaviour on delta pairs. A moved tea towel is a real change a compare run may report, so it belongs in observed gold; it is not evidence that the generator failed to hold the room. An oven that moves is."
+  },
+  "generation_path": "Owner-directed re-adjudication by Claude Opus 5 in Claude Code, reading the local T0/T1 frames directly",
+  "reviewer": "claude-opus-5 (Claude Code), single reviewer",
+  "independent_ai_review": false,
+  "independent_ai_review_note": "This is one reviewer working to an owner-stated rubric, not the two independent AI reviews docs/31 requires. It re-classifies the evidence in the 4 Aug review and adds direct observation; it does not by itself satisfy the two-reviewer rule and must not be described as doing so.",
+  "metered_api_call": false,
+  "review_evidence": {
+    "frames": "full-resolution T0/T1 PNGs under images/openai/gpt-image-2",
+    "method": "one 2x2 T0/T1 composite per pair at 640px panels, plus full-resolution crops wherever an identity finding or a contested enumerated change had to be confirmed",
+    "full_resolution_crops_taken": [
+      "P35-001-T1 A-wide oven run",
+      "P35-002-T1 D-condition bath panel",
+      "P35-003-T1 D-condition oven and hob",
+      "P35-004-T1 A-wide cooker",
+      "P35-005-T1 A-wide shower and vanity",
+      "P35-014-T1 A-wide chair count",
+      "P35-019-T1 A-wide oven run and D-condition full frame",
+      "P35-020-T1 A-wide cooker",
+      "P35-022-CF A-wide shower and vanity",
+      "P35-026-CF D-condition fireplace",
+      "P35-029-CF D-condition wallpaper"
+    ]
+  },
+  "counts": {
+    "accept": 27,
+    "reject": 3
+  },
+  "pairs": [
+    {
+      "delta_id": "P35-001-T1",
+      "delta_class": "temporal",
+      "room_type": "Kitchen",
+      "decision": "reject",
+      "decision_basis": "room identity failed",
+      "same_room": false,
+      "room_identity_findings": [
+        {
+          "view": "A-wide",
+          "element": "built-in oven",
+          "description": "The oven sits lower in the base-unit run at T1. At T0 its control strip meets the underside of the worktop with the hob immediately above it; at T1 there is a clear band of cabinet between worktop and oven top, and the hob has grown and shifted right. Confirmed on a full-resolution crop: the window sill and wall-unit edges hold position, so this is the appliance moving, not the camera."
+        },
+        {
+          "view": "D-condition",
+          "element": "room shown",
+          "description": "The T1 frame is not the T0 corner. It is a wider view containing a radiator, a light switch and a window looking onto trees; the T0 frame is a close view of the base units with no radiator and no window in shot."
+        },
+        {
+          "view": "D-condition",
+          "element": "window outlook",
+          "description": "The T1 D-condition window shows green trees while both A-wide frames show a brick building through the kitchen window, so the two T1 views do not describe the same room."
+        }
+      ],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "base unit door",
+          "material": true,
+          "visibility": "absent",
+          "notes": "The chipped base-unit door is not in the T1 D-condition frame at all, because that frame no longer shows the T0 door."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "countertop toaster",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The toaster is gone from the worktop in T1 A-wide."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "dish rack",
+          "material": true,
+          "visibility": "absent",
+          "notes": "A chrome dish rack is already beside the sink at T0, so there is no added item."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "dark worktop",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Crumbs and water marks are not resolvable on the dark worktop at this scale."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "window blind",
+          "material": true,
+          "visibility": "absent",
+          "notes": "Every blind slat is straight at T1, as at T0."
+        },
+        {
+          "change_id": "D6",
+          "kind": "immaterial",
+          "target": "tea towel",
+          "material": false,
+          "visibility": "absent",
+          "notes": "No tea towel hangs on the oven handle at T0; one appears at T1, so the 'unchanged tea towel' premise is wrong."
+        }
+      ],
+      "observable_material_changes": 1,
+      "incidental_differences": [
+        {
+          "target": "tea towel",
+          "description": "A tea towel hangs on the oven handle at T1 and none is there at T0."
+        },
+        {
+          "target": "cloth on toaster",
+          "description": "A folded cloth sits on the toaster in T1 D-condition."
+        }
+      ],
+      "cross_view_conflicts": [
+        "The toaster is absent in T1 A-wide (D2) but present on the worktop in T1 D-condition."
+      ],
+      "gold_corrections": [
+        {
+          "change_id": "D3",
+          "issue": "t0_premise_wrong",
+          "recommendation": "The dish rack is already present at T0; drop D3 or re-target it."
+        },
+        {
+          "change_id": "D6",
+          "issue": "t0_premise_wrong",
+          "recommendation": "There is no tea towel at T0; D6 cannot be an immaterial re-fold."
+        }
+      ],
+      "reviewer_note": "This is the pair the owner flagged. The decisive fault is the oven moving within the run and the D-condition frame showing a different corner of a different kitchen — not the tea towel or the toaster."
+    },
+    {
+      "delta_id": "P35-002-T1",
+      "delta_class": "temporal",
+      "room_type": "Bathroom",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "worsened",
+          "target": "bath panel",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The bath-panel scuff is genuinely longer and darker at T1; a short mark at T0 becomes a longer streaked mark. Confirmed on a full-resolution crop."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "silicone seal",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The silicone split is not resolvable at review scale."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_removed",
+          "target": "blue bath mat",
+          "material": true,
+          "visibility": "absent",
+          "notes": "There is no blue bath mat in the T0 frame, so nothing was removed."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_added",
+          "target": "shampoo bottle",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A plain white bottle stands on the bath ledge at T1."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "lower wall tiles",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Splash marks on the lower tiles are not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_added",
+          "target": "waste bin",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A small dark waste bin stands beside the basin at T1."
+        }
+      ],
+      "observable_material_changes": 3,
+      "incidental_differences": [
+        {
+          "target": "toiletries",
+          "description": "Bottles on the sill and bath ledge are arranged differently."
+        },
+        {
+          "target": "camera",
+          "description": "The T1 A-wide framing is slightly closer than T0."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D3",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No bath mat exists at T0; drop D3."
+        }
+      ],
+      "reviewer_note": "The owner's second calibration case. The bottle differences are exactly the kind of movable-object noise this rubric now records and does not act on."
+    },
+    {
+      "delta_id": "P35-003-T1",
+      "delta_class": "temporal",
+      "room_type": "Kitchen",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "oak-effect worktop",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A burn mark beside the hob is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "countertop kettle",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No kettle stands on the worktop at T0."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "fruit bowl",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A bowl of fruit sits on the worktop at T1 in both views."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "ceramic hob",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A greasy smear on the black hob is not resolvable."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "splashback grout",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Grout discolouration behind the hob is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_removed",
+          "target": "oven mitt",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No oven mitt hangs by the cooker at T0."
+        }
+      ],
+      "observable_material_changes": 1,
+      "incidental_differences": [
+        {
+          "target": "camera",
+          "description": "Both T1 views sit slightly further right than T0."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D2",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No kettle at T0; drop D2."
+        },
+        {
+          "change_id": "D6",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No oven mitt at T0; drop D6."
+        }
+      ],
+      "reviewer_note": "Oven, hob, splashback, sockets and unit runs all hold position on a full-resolution crop of the D-condition frame."
+    },
+    {
+      "delta_id": "P35-004-T1",
+      "delta_class": "temporal",
+      "room_type": "Kitchen",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "worsened",
+          "target": "vinyl floor tear",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The triangular vinyl tear is wider at T1 with a lifted edge."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "wall clock",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The round wall clock above the window at T0 is gone at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "dishcloth",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A blue dishcloth lies beside the sink at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "new_defect",
+          "target": "base unit plinth",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A plinth dent is not resolvable."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "cream laminate worktop",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Water marks and crumbs on the cream worktop are not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_added",
+          "target": "bread bin",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A cream bread bin stands on the left-hand worktop at T1."
+        }
+      ],
+      "observable_material_changes": 4,
+      "incidental_differences": [
+        {
+          "target": "camera",
+          "description": "The T1 A-wide framing is marginally tighter."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [],
+      "reviewer_note": "At composite scale the freestanding cooker looked like a different model; a full-resolution crop shows the same double-oven cooker, control panel and wall units. No identity finding."
+    },
+    {
+      "delta_id": "P35-005-T1",
+      "delta_class": "temporal",
+      "room_type": "Bathroom",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "vanity drawer front",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A chip on the vanity drawer corner is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "small bath mat",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No bath mat is present at T0."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "soap dispenser",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A soap dispenser stands beside the basin at T1 in both views."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "glass shower screen",
+          "material": true,
+          "visibility": "clear",
+          "notes": "Water spotting is visible on the shower glass at T1."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "silicone joint",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Silicone discolouration is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_removed",
+          "target": "bath shelf",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No shelf is present beside the basin at T0."
+        }
+      ],
+      "observable_material_changes": 2,
+      "incidental_differences": [
+        {
+          "target": "camera",
+          "description": "The T1 A-wide view is pulled back, showing more of the door."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D2",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No bath mat at T0; drop D2."
+        },
+        {
+          "change_id": "D6",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No shelf at T0; drop D6."
+        }
+      ],
+      "reviewer_note": "Checked on a full-resolution crop: single fixed shower screen, basin form and chrome mixer all unchanged — unlike its counterfactual sibling P35-022-CF."
+    },
+    {
+      "delta_id": "P35-006-T1",
+      "delta_class": "temporal",
+      "room_type": "Shower room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "mosaic wall grout",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Cracked grout beside the tray is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "towel ring",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The towel ring and towel on the door-side wall at T0 are gone at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "shower squeegee",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A squeegee hangs inside the enclosure at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "shower glass",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Light water spotting is not separable from reflections."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "vinyl floor",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A vinyl scuff near the basin is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_added",
+          "target": "bath mat",
+          "material": true,
+          "visibility": "absent",
+          "notes": "A bath mat is already on the floor at T0; it is larger and moved at T1 but not newly present."
+        }
+      ],
+      "observable_material_changes": 2,
+      "incidental_differences": [
+        {
+          "target": "bath mat",
+          "description": "The existing mat is larger and lies differently at T1."
+        },
+        {
+          "target": "camera",
+          "description": "The T1 framing is slightly tighter."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D6",
+          "issue": "t0_premise_wrong",
+          "recommendation": "A mat exists at T0; re-state D6 as moved, or drop it."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-007-T1",
+      "delta_class": "temporal",
+      "room_type": "Bedroom",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "grey carpet",
+          "material": true,
+          "visibility": "absent",
+          "notes": "The carpet by the doorway carries no stain at T1."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_added",
+          "target": "single bed",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A made single bed stands against the far wall at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_removed",
+          "target": "curtain pole",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The curtain pole above the sash window at T0 is gone at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "skirting board",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A dusty mark on the skirting is not resolvable."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "painted wall",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "No light switch is in frame, so the wall scuff cannot be judged."
+        },
+        {
+          "change_id": "D6",
+          "kind": "immaterial",
+          "target": "ceiling pendant",
+          "material": false,
+          "visibility": "clear",
+          "notes": "The same single pendant remains in the same position."
+        }
+      ],
+      "observable_material_changes": 2,
+      "incidental_differences": [
+        {
+          "target": "door leaf",
+          "description": "The bedroom door stands at a different opening angle at T1."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D1",
+          "issue": "not_rendered",
+          "recommendation": "No stain was rendered; drop D1 or re-shoot."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-008-T1",
+      "delta_class": "temporal",
+      "room_type": "Bedroom",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "worsened",
+          "target": "top drawer",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Scratches beside the drawer handle are not resolvable in this pair."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "bedside lamp",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The right-hand bedside lamp at T0 is gone at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "laundry basket",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A woven laundry basket stands beside the wardrobe at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "new_defect",
+          "target": "cream carpet",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A flattened carpet patch is not resolvable."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "bedside table",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A small dish and loose items appear on the bedside table."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_added",
+          "target": "bedside book",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A plain book lies on the bedside table at T1."
+        }
+      ],
+      "observable_material_changes": 4,
+      "incidental_differences": [
+        {
+          "target": "bay blinds",
+          "description": "The bay-window blinds sit at a slightly different slat angle."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-009-T1",
+      "delta_class": "temporal",
+      "room_type": "Bedroom",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "window reveal",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A water mark on the window reveal is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "desk chair",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The desk chair is gone from the A-wide frame at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "floor lamp",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A black floor lamp stands beside the desk at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "desk surface",
+          "material": true,
+          "visibility": "clear",
+          "notes": "Papers lie on the desk at T1."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "door edge",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A rub on the door edge is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_removed",
+          "target": "bedside book",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No bedside table or book is in either T0 frame."
+        }
+      ],
+      "observable_material_changes": 3,
+      "incidental_differences": [],
+      "cross_view_conflicts": [
+        "The desk chair is absent in T1 A-wide (D2) but still present in T1 D-condition. D2 is scoped to A-wide, so scoring must stay view-aware."
+      ],
+      "gold_corrections": [
+        {
+          "change_id": "D6",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No bedside book at T0; drop D6."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-010-T1",
+      "delta_class": "temporal",
+      "room_type": "Living room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "grey sofa arm",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A comparable mark is already on the sofa arm at T0."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "floor lamp",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The floor lamp at T0 is gone at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "side table",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A small round side table stands beside the sofa at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "oak coffee table",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Rings and crumbs are not separable from the existing tableware."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "carpet",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The carpet mark is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "immaterial",
+          "target": "scatter cushions",
+          "material": false,
+          "visibility": "clear",
+          "notes": "The same two scatter cushions remain."
+        }
+      ],
+      "observable_material_changes": 2,
+      "incidental_differences": [
+        {
+          "target": "oak coffee table",
+          "description": "The coffee table sits further right at T1."
+        },
+        {
+          "target": "camera",
+          "description": "The T1 A-wide framing is slightly wider."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-011-T1",
+      "delta_class": "temporal",
+      "room_type": "Living room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "worsened",
+          "target": "armchair upholstery",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A pull in the armchair upholstery is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "television remote",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The remote is too small to track on the cluttered table."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "magazine stack",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A stack of magazines and an open book sit on the coffee table at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "new_defect",
+          "target": "painted skirting",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A skirting scuff by the door is not resolvable."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "television unit",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A dust line on the television unit is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_added",
+          "target": "television remote",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A newly present remote cannot be separated from D2."
+        }
+      ],
+      "observable_material_changes": 1,
+      "incidental_differences": [
+        {
+          "target": "camera",
+          "description": "The T1 D-condition view is shifted right and slightly closer."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [],
+      "reviewer_note": "Identity holds, but only one enumerated change is observable: this pair carries thin delta signal and should be weighted accordingly."
+    },
+    {
+      "delta_id": "P35-012-T1",
+      "delta_class": "temporal",
+      "room_type": "Living room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "window sill",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A chip on the window sill is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "plant pot",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No plant pot stands on the sill at T0; the sill carries packing boxes."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "floor cushion",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A round floor cushion lies beside the shelving at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "window glass",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Finger marks on the glass are not resolvable."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "door leaf",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "No door leaf is in frame."
+        },
+        {
+          "change_id": "D6",
+          "kind": "immaterial",
+          "target": "curtain panel",
+          "material": false,
+          "visibility": "absent",
+          "notes": "The window has a blind, not a curtain panel."
+        }
+      ],
+      "observable_material_changes": 1,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D2",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No plant pot at T0; drop D2."
+        },
+        {
+          "change_id": "D6",
+          "issue": "t0_premise_wrong",
+          "recommendation": "The room has no curtain; drop D6."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-013-T1",
+      "delta_class": "temporal",
+      "room_type": "Entrance hall",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "hall skirting",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A skirting chip is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "umbrella stand",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No umbrella stand is in the T0 frame."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "shoe rack",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A narrow shoe rack stands near the glazed door at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "vinyl floor",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Muddy marks are not separable from the tile pattern."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "door threshold",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Threshold wear is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_added",
+          "target": "coat hook",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Coat hooks are already present at T0; a single added hook cannot be isolated."
+        }
+      ],
+      "observable_material_changes": 1,
+      "incidental_differences": [
+        {
+          "target": "shoes",
+          "description": "Shoes on the floor and rack are rearranged, added and removed."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D2",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No umbrella stand at T0; drop D2."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-014-T1",
+      "delta_class": "temporal",
+      "room_type": "Dining room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "oak tabletop",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No ring mark is rendered on the tabletop."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "sixth dining chair",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The chair at the head of the table at T0 is absent at T1, leaving the table end open to the French doors. Confirmed on a full-resolution crop."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "table runner",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A plain runner lies along the table at T1 in both views."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "timber floor",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No dusty area is rendered on the timber floor."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "chair upholstery",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A flattened mark on a chair seat is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_added",
+          "target": "small vase",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A small grey vase stands on the table at T1."
+        }
+      ],
+      "observable_material_changes": 3,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D1",
+          "issue": "not_rendered",
+          "recommendation": "Drop D1 or re-shoot."
+        },
+        {
+          "change_id": "D4",
+          "issue": "not_rendered",
+          "recommendation": "Drop D4 or re-shoot."
+        }
+      ],
+      "reviewer_note": "The owner adjudicated this pair on 4 Aug as a reject because four changes were absent or ambiguous — a judgement on the enumerated axis, which the new rubric does not overturn. Room identity holds and three changes are observable, so under an identity-first bar the pair is usable with gold trimmed. One disagreement to note: the owner read D2 as absent; at full resolution the head-of-table chair is clearly gone."
+    },
+    {
+      "delta_id": "P35-015-T1",
+      "delta_class": "temporal",
+      "room_type": "Dining room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "worsened",
+          "target": "table edge",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The table edge is covered by the cloth in D-condition."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "tablecloth",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The tablecloth is gone in T1 A-wide, showing bare polished timber."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "serving bowl",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A ceramic serving bowl sits on the table at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "new_defect",
+          "target": "patterned wallpaper",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A wallpaper tear beside the cabinet is not resolvable in this pair."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "dark dining table",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The tabletop is still covered in the D-condition frame."
+        },
+        {
+          "change_id": "D6",
+          "kind": "immaterial",
+          "target": "chair cushion",
+          "material": false,
+          "visibility": "clear",
+          "notes": "The same four chair cushions remain."
+        }
+      ],
+      "observable_material_changes": 2,
+      "incidental_differences": [],
+      "cross_view_conflicts": [
+        "The tablecloth is absent in T1 A-wide (D2) but still on the table in T1 D-condition, so the two T1 frames disagree about the state of the room."
+      ],
+      "gold_corrections": [],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-016-T1",
+      "delta_class": "temporal",
+      "room_type": "Entrance hall",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "hall skirting",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A scratch on the skirting is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "umbrella stand",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No umbrella stand is in the T0 frame."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "shoe rack",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A narrow shoe rack stands by the glazed door at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "floor tiles",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Dust and mud on the tiles are not separable from the tile pattern."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "threshold strip",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Threshold-strip wear is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_added",
+          "target": "coat",
+          "material": true,
+          "visibility": "clear",
+          "notes": "An olive coat now hangs on the bench hooks at T1."
+        }
+      ],
+      "observable_material_changes": 2,
+      "incidental_differences": [
+        {
+          "target": "shoes",
+          "description": "Shoes on the bench and floor are rearranged."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D2",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No umbrella stand at T0; drop D2."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-017-T1",
+      "delta_class": "temporal",
+      "room_type": "Bedroom",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "bed frame",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A dent on the bed frame is not resolvable in this pair."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "desk lamp",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No desk lamp is in the T0 frame."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "storage box",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A plain storage box stands beside the wardrobe at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "blue rug",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A paper scrap and dust lie on the blue rug at T1."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "skirting board",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Skirting wear is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_added",
+          "target": "bedside book",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A book lies on the bed at T1."
+        }
+      ],
+      "observable_material_changes": 3,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D2",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No desk lamp at T0; drop D2."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-018-T1",
+      "delta_class": "temporal",
+      "room_type": "Dining room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "chair upholstery",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A tear on a chair seat is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "pendant light",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The pendant above the table at T0 is gone at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "serving trolley",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A chrome serving trolley stands beside the table at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "oak tabletop",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Crumbs and rings on the tabletop are not resolvable."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "timber floor",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A floor scuff beneath the table is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "item_added",
+          "target": "place mat",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A place mat lies at one end of the table at T1."
+        }
+      ],
+      "observable_material_changes": 3,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D2",
+          "issue": "spec_contradiction",
+          "recommendation": "D2 removes the pendant while the unchanged assertions claim the same pendant light. Removing a fixed light fitting is a legitimate enumerated change, but the assertion must be reworded or a reviewer will read it as an identity failure."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-019-T1",
+      "delta_class": "temporal",
+      "room_type": "Kitchen",
+      "decision": "reject",
+      "decision_basis": "room identity failed",
+      "same_room": false,
+      "room_identity_findings": [
+        {
+          "view": "A-wide",
+          "element": "built-in oven",
+          "description": "The same drift as P35-001-T1 from the same parent room: the oven sits lower in the run at T1 with a band of cabinet above it, and the hob has grown and shifted right."
+        },
+        {
+          "view": "D-condition",
+          "element": "hob and extractor",
+          "description": "The T1 frame shows a gas hob with pan supports under a flat stainless extractor. Both A-wide frames and the T0 D-condition frame show a black ceramic hob and a chimney extractor. The kitchen has been re-imagined."
+        },
+        {
+          "view": "D-condition",
+          "element": "window",
+          "description": "The T1 frame adds a Venetian-blinded window on the right that exists in neither T0 frame."
+        }
+      ],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "splashback tile",
+          "material": true,
+          "visibility": "absent",
+          "notes": "The splashback behind the T1 hob is a different wall; no hairline crack is present."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "microwave",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The microwave is gone from the worktop in T1 A-wide."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "bread bin",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A bread bin cannot be confirmed against a re-imagined worktop."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "sink",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Water marks around the sink are not resolvable."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "base unit door",
+          "material": true,
+          "visibility": "absent",
+          "notes": "The base-unit door in question is not in the T1 frame."
+        },
+        {
+          "change_id": "D6",
+          "kind": "immaterial",
+          "target": "dish towel",
+          "material": false,
+          "visibility": "absent",
+          "notes": "No dish towel hangs on the oven handle at T0; one appears at T1."
+        }
+      ],
+      "observable_material_changes": 1,
+      "incidental_differences": [
+        {
+          "target": "dish towel",
+          "description": "A towel appears on the oven handle at T1."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D6",
+          "issue": "t0_premise_wrong",
+          "recommendation": "There is no dish towel at T0."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-020-T1",
+      "delta_class": "temporal",
+      "room_type": "Kitchen",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "cooker side panel",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A dent on the cooker side panel is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "item_removed",
+          "target": "countertop kettle",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The black kettle on the left worktop at T0 is gone at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "draining board",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A draining tray sits at the sink at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "cleanliness",
+          "target": "patterned vinyl floor",
+          "material": true,
+          "visibility": "clear",
+          "notes": "Dark scuffed marks appear on the vinyl floor at T1."
+        },
+        {
+          "change_id": "D5",
+          "kind": "worsened",
+          "target": "base unit plinth",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Plinth wear is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "immaterial",
+          "target": "oven glove",
+          "material": false,
+          "visibility": "absent",
+          "notes": "No oven glove hangs on the cooker handle at T0; one appears at T1."
+        }
+      ],
+      "observable_material_changes": 3,
+      "incidental_differences": [
+        {
+          "target": "oven glove",
+          "description": "A quilted glove hangs on the cooker handle at T1 and none is there at T0."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D6",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No oven glove at T0; D6 cannot be an immaterial re-hang."
+        }
+      ],
+      "reviewer_note": "Full-resolution crop confirms the same freestanding cooker, wall units, sockets and splashback."
+    },
+    {
+      "delta_id": "P35-021-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Bathroom",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "bath panel",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A dark scuff runs across the lower bath panel at T1."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "silicone seal",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The silicone split is not resolvable."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "bath mat",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A blue bath mat lies on the floor at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_removed",
+          "target": "hand towel",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The dark hand towel on the rail at T0 is gone at T1."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "lower wall tiles",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Splash marks on the lower tiles are not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "worsened",
+          "target": "bath panel",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The panel finish is visibly worn around the scuff."
+        }
+      ],
+      "observable_material_changes": 4,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [],
+      "reviewer_note": "One of the strongest pairs: four of six changes are plainly readable and the room holds."
+    },
+    {
+      "delta_id": "P35-022-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Bathroom",
+      "decision": "reject",
+      "decision_basis": "room identity failed",
+      "same_room": false,
+      "room_identity_findings": [
+        {
+          "view": "A-wide",
+          "element": "basin and mixer tap",
+          "description": "At T1 the vanity carries a plain white slab with no mixer tap and no waste; at T0 it is an inset rectangular basin with a chrome mixer. Confirmed on a full-resolution crop. A sanitary fitting cannot vanish between check-in and check-out."
+        },
+        {
+          "view": "A-wide",
+          "element": "cross-view contradiction",
+          "description": "The T1 D-condition frame shows the basin and mixer intact, so the two T1 views disagree about a fixed fitting."
+        }
+      ],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "vanity drawer",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A chipped vanity drawer corner is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "pale stone tile",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A cracked tile beside the shower is not resolvable."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "bath mat",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A folded bath mat lies outside the shower at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_removed",
+          "target": "soap dispenser",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No soap dispenser stands beside the basin at T0, so its absence is not a difference."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "glass shower screen",
+          "material": true,
+          "visibility": "clear",
+          "notes": "Water spotting is visible on the shower glass at T1."
+        },
+        {
+          "change_id": "D6",
+          "kind": "worsened",
+          "target": "silicone joint",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Silicone discolouration is not resolvable."
+        }
+      ],
+      "observable_material_changes": 2,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D4",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No soap dispenser at T0; drop D4."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-023-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Bedroom",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "grey carpet",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No circular stain is rendered on the carpet by the radiator."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "pale blue wall",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A nail hole and flaked paint near the door are not resolvable."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "single bed",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A metal-framed single bed stands against the far wall."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_removed",
+          "target": "curtain pole",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The curtain pole at T0 is gone at T1."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "carpet",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A paper scrap lies on the carpet at T1 in both views."
+        },
+        {
+          "change_id": "D6",
+          "kind": "worsened",
+          "target": "skirting board",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Skirting wear is not resolvable."
+        }
+      ],
+      "observable_material_changes": 3,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D1",
+          "issue": "not_rendered",
+          "recommendation": "Drop D1 or re-shoot."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-024-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Bedroom",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "cream carpet",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A carpet stain beside the bed is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "chest of drawers",
+          "material": true,
+          "visibility": "clear",
+          "notes": "Two long scratches run beside the top drawer handle at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "laundry basket",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A woven laundry basket stands beside the wardrobe at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_removed",
+          "target": "bedside lamp",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The right-hand bedside lamp at T0 is gone at T1."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "bedside table",
+          "material": true,
+          "visibility": "clear",
+          "notes": "Loose belongings appear on the bedside table at T1."
+        },
+        {
+          "change_id": "D6",
+          "kind": "worsened",
+          "target": "headboard",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A worn headboard corner is not resolvable."
+        }
+      ],
+      "observable_material_changes": 4,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [],
+      "reviewer_note": "The strongest pair in the set: four changes plainly readable, identity intact, no incidental drift worth recording."
+    },
+    {
+      "delta_id": "P35-025-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Living room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "grey sofa",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A stain on the sofa seat is not separable from shading."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "carpet",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A dark snag is visible in the carpet near the coffee table."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "floor lamp",
+          "material": true,
+          "visibility": "absent",
+          "notes": "A floor lamp is already present at T0, so it is not a counterfactual difference."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_removed",
+          "target": "armchair",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The armchair present at T0 is absent at T1."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "oak coffee table",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Crumbs and rings are not separable from existing tableware."
+        },
+        {
+          "change_id": "D6",
+          "kind": "worsened",
+          "target": "cream throw",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The throw has moved to the sofa arm, so a worn patch cannot be compared."
+        }
+      ],
+      "observable_material_changes": 2,
+      "incidental_differences": [
+        {
+          "target": "cream throw",
+          "description": "The throw moves from the armchair to the sofa arm, which follows from the enumerated armchair removal."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D3",
+          "issue": "t0_premise_wrong",
+          "recommendation": "The floor lamp is present at T0; drop D3."
+        }
+      ],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-026-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Living room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "armchair upholstery",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A torn seam on the armchair is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "painted skirting",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A skirting scuff by the door is not resolvable."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "magazine stack",
+          "material": true,
+          "visibility": "clear",
+          "notes": "Magazines and an open book sit on the coffee table at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_removed",
+          "target": "television remote",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The remote cannot be tracked on the cluttered table."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "television unit",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A dust line on the television unit is not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "worsened",
+          "target": "carpet",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The carpet mark is not resolvable."
+        }
+      ],
+      "observable_material_changes": 1,
+      "incidental_differences": [
+        {
+          "target": "camera",
+          "description": "The T1 D-condition view is shifted right; the fireplace, tiled insert, hearth and plant are unchanged on a full-resolution crop."
+        }
+      ],
+      "cross_view_conflicts": [],
+      "gold_corrections": [],
+      "reviewer_note": "Identity holds, but only one enumerated change is observable: thin delta signal."
+    },
+    {
+      "delta_id": "P35-027-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Living room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "window sill",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A chipped sill corner is not resolvable."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "door leaf",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "No door leaf is in frame."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "floor cushion",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A floor cushion lies beside the shelving at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_removed",
+          "target": "plant pot",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No plant pot stands on the sill at T0."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "window glass",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Finger marks on the glass are not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "worsened",
+          "target": "sofa arm",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A worn patch on the sofa arm is not resolvable."
+        }
+      ],
+      "observable_material_changes": 1,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D4",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No plant pot at T0; drop D4."
+        }
+      ],
+      "reviewer_note": "Identity holds, but only one enumerated change is observable: thin delta signal."
+    },
+    {
+      "delta_id": "P35-028-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Dining room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "oak tabletop",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A dark ring mark is visible on the tabletop at T1."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "chair upholstery",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A torn seam runs down a grey chair seat at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "table runner",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A runner lies along the table at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_removed",
+          "target": "sixth dining chair",
+          "material": true,
+          "visibility": "clear",
+          "notes": "One chair is missing at T1, leaving five around the table."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "timber floor",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Footprints on the timber floor are not resolvable."
+        },
+        {
+          "change_id": "D6",
+          "kind": "worsened",
+          "target": "table leg",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A rub on the table leg is not resolvable."
+        }
+      ],
+      "observable_material_changes": 4,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [],
+      "reviewer_note": "Four changes plainly readable; identity intact."
+    },
+    {
+      "delta_id": "P35-029-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Dining room",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "table edge",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The table edge is covered by the cloth in D-condition."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "patterned wallpaper",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A pale torn patch is visible in the wallpaper above the dado beside the cabinet at T1. Confirmed on a full-resolution crop."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "serving bowl",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A ceramic bowl sits on the table at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_removed",
+          "target": "tablecloth",
+          "material": true,
+          "visibility": "clear",
+          "notes": "The tablecloth is gone in T1 A-wide."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "dark dining table",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "The tabletop is still covered in the D-condition frame."
+        },
+        {
+          "change_id": "D6",
+          "kind": "worsened",
+          "target": "chair back",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "A scuff on a chair back is not resolvable."
+        }
+      ],
+      "observable_material_changes": 3,
+      "incidental_differences": [],
+      "cross_view_conflicts": [
+        "The tablecloth is absent in T1 A-wide (D4) but still on the table in T1 D-condition, the same conflict as P35-015-T1 from the same parent room."
+      ],
+      "gold_corrections": [],
+      "reviewer_note": null
+    },
+    {
+      "delta_id": "P35-030-CF",
+      "delta_class": "counterfactual",
+      "room_type": "Bedroom",
+      "decision": "accept",
+      "decision_basis": "room identity holds",
+      "same_room": true,
+      "room_identity_findings": [],
+      "enumerated": [
+        {
+          "change_id": "D1",
+          "kind": "new_defect",
+          "target": "bed frame",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A deep dent is visible on the white bed frame panel at T1."
+        },
+        {
+          "change_id": "D2",
+          "kind": "new_defect",
+          "target": "blue rug",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A dark snag is visible in the blue rug at T1."
+        },
+        {
+          "change_id": "D3",
+          "kind": "item_added",
+          "target": "storage box",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A storage box stands beside the wardrobe at T1."
+        },
+        {
+          "change_id": "D4",
+          "kind": "item_removed",
+          "target": "desk lamp",
+          "material": true,
+          "visibility": "absent",
+          "notes": "No desk lamp is in the T0 frame."
+        },
+        {
+          "change_id": "D5",
+          "kind": "cleanliness",
+          "target": "blue rug",
+          "material": true,
+          "visibility": "clear",
+          "notes": "A paper scrap lies on the rug at T1."
+        },
+        {
+          "change_id": "D6",
+          "kind": "worsened",
+          "target": "skirting board",
+          "material": true,
+          "visibility": "ambiguous",
+          "notes": "Skirting wear is not resolvable."
+        }
+      ],
+      "observable_material_changes": 4,
+      "incidental_differences": [],
+      "cross_view_conflicts": [],
+      "gold_corrections": [
+        {
+          "change_id": "D4",
+          "issue": "t0_premise_wrong",
+          "recommendation": "No desk lamp at T0; drop D4."
+        }
+      ],
+      "reviewer_note": "Four changes plainly readable; identity intact."
+    }
+  ]
+}

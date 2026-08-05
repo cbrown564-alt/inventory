@@ -125,7 +125,33 @@ T0 side is always an already-accepted frame reused as the visual reference.
 .\.venv\Scripts\python.exe -m evals.synthetic.review_delta_pair --output "$fixture/reports/phase35-delta-review-2026-08-04.json" --dry-run
 .\.venv\Scripts\python.exe -m evals.synthetic.review_delta_pair --output "$fixture/reports/phase35-delta-review-2026-08-04.json"
 .\.venv\Scripts\python.exe -m evals.synthetic.review_delta_pair --output "$fixture/reports/phase35-delta-review-2026-08-04.json" --probe
+.\.venv\Scripts\python.exe -m evals.synthetic.build_delta_gallery --review "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --reviewed-only --output "$fixture/reports/phase35-pilot-gallery-2026-08-05.html"
 ```
+
+### What rejects a delta pair (docs/31 Amendment C, 5 Aug 2026)
+
+A pair fails when the room stops being the same room: geometry, walls, floors,
+finishes, windows, doors, fitted units, appliances, sanitaryware, radiators,
+fixed lighting or large defining furniture moving, resizing, changing model or
+disappearing — or the two views of one timepoint contradicting each other about
+any of it. A pair also fails when no enumerated material change is observable,
+because then it is not a delta pair.
+
+Movable clutter — towels, toiletries, worktop items, cushions, shoes, books —
+is **recorded and never rejects**. It goes to `observed_changes` so that a
+compare run that correctly reports it is not scored as inventing a change. An
+enumerated change that did not render is a gold correction, not a reason to
+discard the frames.
+
+The 4 Aug pilot review applied the older rubric (any unenumerated difference is
+fatal) and rejected 27 of 30 pairs on clutter. The re-adjudication is
+`reports/phase35-pilot-review-recut-2026-08-05.json` with gallery
+`reports/phase35-pilot-gallery-2026-08-05.html`: **27 accept, 3 reject**
+(P35-001-T1 and P35-019-T1 — the oven moves in the run and the D-condition
+frames show a different kitchen; P35-022-CF — the basin loses its mixer tap in
+one view only). It also lists **25 gold corrections**, 20 of which are specs
+asserting a T0 state the T0 frame never showed. Apply those before scoring.
+Both 4 Aug reports are retained unedited as evidence.
 
 `record_delta_outputs` refuses a T1 frame that is byte-identical to its own T0
 reference. That is the delta-specific failure mode: it presents as the perfect

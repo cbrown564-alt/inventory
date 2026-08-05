@@ -294,6 +294,65 @@ The docs/00 wall stands unchanged. Delta pairs are development evidence. No
 synthetic result promotes a compare claim; that remains gated on real
 check-in/check-out evidence.
 
+### Amendment C, 5 Aug 2026 — what counts as material in a delta pair
+
+The 4 Aug pilot review rejected 27 of 30 pairs. Reading the rejections against
+the frames, the project owner found they were mostly about the wrong things: a
+tea towel that appeared on an oven handle, a toaster that moved, toiletry
+bottles that were not on the same shelf. Under the original rubric — *any*
+unenumerated difference is fatal — each of those carried the same weight as
+the finding that actually mattered, which in P35-001-T1 was **the oven moving
+position within the base-unit run**. The signal was in the report and it was
+indistinguishable from the noise.
+
+**The rule.** A delta pair fails when the room stops being the same room.
+
+| Rejects the pair | Recorded, never rejects |
+|---|---|
+| Room geometry, walls, ceilings, floors, finishes | Movable everyday objects: textiles, toiletries, worktop clutter, small decor, shoes, books |
+| Windows and doors | Those objects appearing, moving or disappearing |
+| Fitted units, appliances, sanitary fittings, radiators, fixed light fittings — moved, resized, re-modelled or gone | Modest framing drift that still shows the same part of the room |
+| Large defining furniture swapped for a different item | |
+| The two views of one timepoint contradicting each other about any of the above | |
+| No enumerated material change observable at all — the pair carries no delta signal | |
+
+**Why the demoted list is still written down.** `false_change_rate` counts any
+reported change with no enumerated counterpart. If a compare run correctly
+reports a moved tea towel and the gold does not name it, the metric punishes
+the right answer. So incidental drift goes to `observed_changes` under the
+existing rule that each entry names the review that found it. Recording it and
+rejecting on it are different acts, and the original rubric conflated them.
+
+**Why an absent enumerated change no longer rejects.** It is a fault in the
+gold, not in the frames. The pair still holds a real room and real deltas; the
+fix is to correct the list before scoring, which is cheaper and more honest
+than discarding evidence that cost a generation. The exception is a pair where
+*nothing* enumerated is observable — that is not a delta pair at all.
+
+**Re-adjudication result** (`reports/phase35-pilot-review-recut-2026-08-05.json`,
+gallery `reports/phase35-pilot-gallery-2026-08-05.html`). 27 accept, 3 reject:
+
+- **P35-001-T1 and P35-019-T1** (both from RP-001). The built-in oven sits
+  lower in the run at T1 with the hob resized, and each D-condition frame is a
+  different corner of a different kitchen — P35-019-T1's shows a gas hob with
+  pan supports where every other frame of that room has a black ceramic hob.
+- **P35-022-CF.** The basin loses its mixer tap and becomes a plain white slab
+  in A-wide, while the same timepoint's D-condition frame shows the mixer
+  intact.
+
+Alongside those: **25 gold corrections**, of which **20 are the specification
+asserting a T0 state the T0 frame does not show** — "the kettle present at T0
+is absent at T1" where there is no kettle at T0. That is an authoring failure
+in the delta specs, not a generator failure, and it would have inflated
+`false_change_rate` against a correct compare run. Four pairs have **cross-view
+state conflicts** where the two T1 frames disagree (P35-001-T1, P35-009-T1,
+P35-015-T1, P35-029-CF); scoring must stay view-aware. Six accepted pairs carry
+only **one** readable material change and should be weighted accordingly.
+
+The 4 Aug report is retained unedited as evidence. The re-adjudication is one
+reviewer working to an owner-stated rubric, not the two independent AI reviews
+this document requires, and must not be described as satisfying that rule.
+
 ## Current execution status — 3 Aug 2026 (Amendment B)
 
 Read against the ledger, not against the narrative. `tasks.csv` currently
@@ -314,7 +373,7 @@ Complete four-view packets, which is the number room-level scoring depends on:
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
 | 3 — development and validation | **In progress; blocked on Pass B, not on generation** | 46 of 50 packet review records are `provisional`. Only the four Phase-1 records are `verified_synthetic_gold`. Every remaining generation task could complete tomorrow and Phase 4 would still be blocked. Amendment B repairs generation (B2–B4) and tiers Pass B (B5–B6). |
-| 3.5 — delta pairs | **30-pair pilot complete 4 Aug 2026; compare scoring remains separate** | Promoted to the programme's centre by B7. The pilot contains 20 temporal and 10 counterfactual pairs, 60 generated T1 frames, and 180 enumerated changes. Twenty-nine pairs have two independent AI reviews; P35-014-T1 is an explicit owner-only reject because the reviewer hit an individual quota limit. No compare output was supplied, so these are reviewed synthetic evidence, not a scored or promoted compare result. |
+| 3.5 — delta pairs | **30-pair pilot complete 4 Aug 2026; re-adjudicated under Amendment C on 5 Aug 2026; compare scoring remains separate** | Promoted to the programme's centre by B7. The pilot contains 20 temporal and 10 counterfactual pairs, 60 generated T1 frames, and 180 enumerated changes. The 4 Aug review rejected 27 of 30 on movable clutter; the room-identity rubric accepts 27 and rejects 3 (P35-001-T1, P35-019-T1, P35-022-CF). Twenty-five gold corrections must be applied before scoring. No compare output was supplied, so these are reviewed synthetic evidence, not a scored or promoted compare result. |
 | 4 — sealed comparison | **Not started** | Downstream of a validation prompt decision that has not been made. Validation holds two complete GPT packets, so no decision is currently possible on it; B4 addresses that. The amended order admits a per-task prompt assignment as a winner. |
 | 5 — real transfer | **Not started** | Downstream of Phase 4. The separate native-resolution evidence gate also remains open. |
 
@@ -747,7 +806,7 @@ it is not required to clear the v1 product gate.
 | Initial generation yield | At least 150/200 first or second attempts accepted (75%); retain and exclude failed outputs rather than stopping prompt/VLM work |
 | Label quality | 100% defects/negatives double-checked; ≥25% ordinary labels double-checked |
 | Packet completeness | All 25 specifications have complete four-view Google and GPT Image 2 packets |
-| Delta probe (Phase 3.5) | ≥2 of 3 probe scenarios yield an acceptable pair within 2 attempts, with zero unenumerated material changes |
+| Delta probe (Phase 3.5) | ≥2 of 3 probe scenarios yield an acceptable pair within 2 attempts, with the room intact in each — no room-identity finding (Amendment C) |
 | Prompt win | Either a single prompt improves validation notable recall ≥5 pp or drops hallucination ≥2 pp with the other metric non-regressing, **or** a per-task assignment beats the production prompt on both passes with no metric regressing on the pass it is assigned to |
 | Architecture win | Validation quality improves and per-property projected cost remains ≤ docs/00 budget |
 | Sealed confirmation | Named winner retains the direction of improvement on sealed synthetic packets |
@@ -1297,7 +1356,7 @@ provenance of a claim nobody predicted is the only thing that makes it
 auditable later.
 
 **Pass:** ≥2 of 3 scenarios yield an acceptable pair within 2 attempts each,
-with zero unenumerated material changes in an accepted pair, and median
+with no room-identity finding in an accepted pair (Amendment C), and median
 operator time within the existing 8-minute-per-accepted-image bar.
 
 **Fail:** record the drift modes observed, abandon the extension, and keep

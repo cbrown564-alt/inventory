@@ -2,14 +2,21 @@
 """Run two independent subscription-backed reviews of Phase 3.5 delta pairs.
 
 The reviewer sees the accepted T0 frame and the generated T1 frame side by
-side and answers three questions per pair: is this the same room, is each
-enumerated change visible, and — the one that decides the phase — what
-material differences are present that nobody enumerated.
+side and answers three questions per pair: is this still the same room, is
+each enumerated change visible, and what else differs.
 
-Any unenumerated material difference rejects the pair. Reviews read local
-images through Antigravity CLI and never call an image or vision API endpoint.
-The second reviewer receives the same evidence and never the first reviewer's
-conclusion.
+What "else differs" costs the pair changed on 5 Aug 2026. The first rubric
+treated every unenumerated difference as fatal, so a tea towel that moved to a
+different oven handle rejected a pair on the same footing as an oven that
+moved — and 27 of the 30 pilot pairs were rejected on movable clutter while
+the real fixed-fitting drift sat buried in the same list. The owner's rule
+replaces it: a pair fails when the room stops being the same room. Movable
+objects are recorded, because a compare run may legitimately report them and
+the gold has to be complete, but they never reject.
+
+Reviews read local images through Antigravity CLI and never call an image or
+vision API endpoint. The second reviewer receives the same evidence and never
+the first reviewer's conclusion.
 """
 
 from __future__ import annotations
@@ -151,28 +158,45 @@ def _prompt(inputs: list[dict[str, Any]], reviewer_id: str) -> str:
         "for a bounded synthetic property evaluation. Do not edit any file. "
         "Use the local image-reading tool to inspect every t0_image_path and "
         "t1_image_path before deciding. The T0 image is accepted ground "
-        "evidence; the T1 image is a candidate re-render of the same room.\n\n"
-        "For each pair decide three things.\n"
-        "1. Same room: is the T1 image the same physical room as T0 — same "
-        "layout, fittings, finishes and viewpoint? A different room, a "
-        "re-imagined layout or a changed camera position is a hard failure.\n"
-        "2. Enumerated changes: for each listed change, is it visible in T1 "
-        "and absent in T0 as described?\n"
-        "3. Unenumerated changes: list EVERY material difference you can see "
-        "between T0 and T1 that is not in the enumerated list — new or moved "
-        "objects, altered fittings, changed flooring or finishes, new marks or "
-        "defects, removed items. This is the most important field. Report a "
-        "difference even when it looks minor or incidental. Do not explain it "
-        "away because the enumerated changes are present.\n\n"
-        "Reject when the room identity fails, when any unenumerated material "
-        "difference is present, or when a change listed as material is not "
-        "visible. Escalate genuine visual uncertainty. Ignore pure image-noise "
-        "differences such as compression grain.\n\n"
+        "evidence; the T1 image is a candidate re-render of the same room "
+        "after a period of tenancy.\n\n"
+        "The question that decides a pair is whether T1 is still the same "
+        "room. It is not whether everything in the room stayed put: a tenant "
+        "moves towels, mugs, bottles, cushions, books and shoes, and those "
+        "differences are expected. Judge the room, not the clutter.\n\n"
+        "For each pair report four things.\n"
+        "1. Same room: does the fixed fabric hold? Room geometry, walls, "
+        "ceilings, floors and finishes; windows and doors; fitted units, "
+        "built-in and freestanding appliances, sanitary fittings, radiators "
+        "and fixed light fittings; large defining furniture. Any of these "
+        "moving, resizing, changing model or disappearing is a hard failure, "
+        "as is a re-imagined layout or a viewpoint that has moved so far it no "
+        "longer shows the same part of the room. So is a contradiction between "
+        "the two views of the same timepoint about any of it.\n"
+        "2. Room identity findings: for each such failure, name the view, the "
+        "element and what differs. Be specific about which fitting moved and "
+        "how you know it is the fitting rather than the camera — check whether "
+        "surrounding fixed edges held position.\n"
+        "3. Enumerated changes: for each listed change, is it visible in T1 "
+        "and absent in T0 as described? Mark 'absent' when the change did not "
+        "render, and also when the T0 frame does not show what the change "
+        "assumes was there. Mark 'ambiguous' when it is too fine to resolve.\n"
+        "4. Incidental differences: list every other difference you can see — "
+        "movable objects added, removed or moved, textiles, toiletries, "
+        "worktop clutter, small decor, and modest framing drift. These never "
+        "reject a pair. They are recorded because the gold has to name "
+        "everything that differs, or a correct compare run reporting one of "
+        "them scores as a false change.\n\n"
+        "Reject only when room identity fails, or when no enumerated material "
+        "change is observable at all so the pair carries no delta signal. "
+        "Escalate genuine visual uncertainty about identity. Ignore pure "
+        "image-noise differences such as compression grain.\n\n"
         "Return only a JSON array, one object per pair, with exactly: "
         "delta_id, decision (accept|reject|escalate), same_room (boolean), "
-        "same_room_notes, enumerated [{change_id, visibility(clear|ambiguous|"
-        "absent), notes}], unenumerated_changes [{target, description, "
-        "material(boolean)}], reason. Do not wrap the JSON in Markdown. "
+        "same_room_notes, room_identity_findings [{view, element, "
+        "description}], enumerated [{change_id, visibility(clear|ambiguous|"
+        "absent), notes}], incidental_differences [{target, description}], "
+        "reason. Do not wrap the JSON in Markdown. "
         f"Reviewer context: {reviewer_id}.\n\n"
         + json.dumps(inputs, ensure_ascii=False, indent=2)
     )
@@ -213,17 +237,32 @@ def _validate_review(
                 raise ValueError(
                     f"{delta_id}.{entry.get('change_id')}: invalid visibility"
                 )
-        if not isinstance(item.get("unenumerated_changes"), list):
-            raise ValueError(f"{delta_id}: unenumerated_changes is not a list")
+        if not isinstance(item.get("room_identity_findings"), list):
+            raise ValueError(f"{delta_id}: room_identity_findings is not a list")
+        if not isinstance(item.get("incidental_differences"), list):
+            raise ValueError(f"{delta_id}: incidental_differences is not a list")
     return by_id
 
 
-def _material_drift(entry: dict[str, Any]) -> list[dict[str, Any]]:
-    return [
-        change
-        for change in entry.get("unenumerated_changes", [])
-        if change.get("material") is not False
-    ]
+def _material_ids(expected: dict[str, Any]) -> set[str]:
+    return {
+        change["id"] for change in expected["enumerated_changes"] if change["material"]
+    }
+
+
+def _visible_material(
+    expected: dict[str, Any], *reviews: dict[str, Any]
+) -> list[str]:
+    """Material changes at least one reviewer read as clearly present."""
+    material = _material_ids(expected)
+    return sorted(
+        {
+            entry["change_id"]
+            for review in reviews
+            for entry in review["enumerated"]
+            if entry["visibility"] == "clear" and entry["change_id"] in material
+        }
+    )
 
 
 def combine(
@@ -231,38 +270,48 @@ def combine(
     first: dict[str, Any],
     second: dict[str, Any],
 ) -> dict[str, Any]:
-    """Merge two independent reviews into one conservative pair outcome.
+    """Merge two independent reviews into one pair outcome.
 
-    Agreement on accept is the only path to accept. Either reviewer seeing
-    material drift, or the two disagreeing at all, sends the pair to the
-    owner — a delta set that cannot hold identity must fail loudly.
+    Only two things reject a pair: the room stopped being the same room, or
+    nothing the pair was built to show is visible in it. An absent enumerated
+    change is a fault in the gold rather than in the pair, so it is reported
+    as a correction to make before scoring and does not throw the frames away.
+    Incidental drift is carried through for the same reason — the gold has to
+    name it, or a compare run that reports it is scored as inventing a change.
     """
-    drift = _material_drift(first) + _material_drift(second)
+    identity = [
+        finding
+        for review in (first, second)
+        for finding in review.get("room_identity_findings", [])
+    ]
+    incidental = [
+        difference
+        for review in (first, second)
+        for difference in review.get("incidental_differences", [])
+    ]
     missing_material = sorted(
         {
             entry["change_id"]
             for review in (first, second)
             for entry in review["enumerated"]
             if entry["visibility"] == "absent"
-            and any(
-                change["id"] == entry["change_id"] and change["material"]
-                for change in expected["enumerated_changes"]
-            )
+            and entry["change_id"] in _material_ids(expected)
         }
     )
+    visible_material = _visible_material(expected, first, second)
     agreed = first["decision"] == second["decision"]
-    if not (first["same_room"] and second["same_room"]):
+    if not (first["same_room"] and second["same_room"]) or identity:
         decision = "reject"
         basis = "room identity failed"
-    elif drift:
+    elif not visible_material:
         decision = "reject"
-        basis = "unenumerated material change observed"
-    elif missing_material:
-        decision = "reject"
-        basis = f"material change not visible: {', '.join(missing_material)}"
+        basis = (
+            "no enumerated material change is observable, so the pair carries "
+            "no delta signal"
+        )
     elif agreed and first["decision"] == "accept":
         decision = "accept"
-        basis = "both reviewers accepted"
+        basis = "room identity holds"
     elif agreed:
         decision = first["decision"]
         basis = "both reviewers agreed"
@@ -277,8 +326,12 @@ def combine(
         "decision": decision,
         "decision_basis": basis,
         "reviewers_agreed": agreed,
-        "unenumerated_material_changes": drift,
+        "same_room": not identity,
+        "room_identity_findings": identity,
+        "observable_material_changes": len(visible_material),
+        "visible_material_changes": visible_material,
         "missing_material_changes": missing_material,
+        "incidental_differences": incidental,
         "first_review": first,
         "second_review": second,
     }
@@ -388,23 +441,29 @@ def review(
     return write_report("complete")
 
 
+def _identity_findings(pair: dict[str, Any]) -> list[dict[str, Any]]:
+    """Identity findings, tolerating reports written under the old rubric."""
+    if "room_identity_findings" in pair:
+        return pair["room_identity_findings"]
+    return [] if pair.get("same_room", True) else [{"description": pair["decision_basis"]}]
+
+
 def probe_verdict(report: dict[str, Any]) -> dict[str, Any]:
     """Apply the docs/31 Phase 3.5 probe gate to a completed review.
 
-    Pass needs at least two of three probe scenarios accepted with zero
-    unenumerated material changes. The gate is deliberately not retryable at
-    a looser bar.
+    Pass needs at least two of three probe scenarios accepted with the room
+    intact in each. The gate is deliberately not retryable at a looser bar.
     """
     pairs = report.get("pairs", [])
     accepted = [pair for pair in pairs if pair["decision"] == "accept"]
-    drifted = [pair for pair in pairs if pair["unenumerated_material_changes"]]
+    drifted = [pair for pair in pairs if _identity_findings(pair)]
     passed = len(accepted) >= 2 and not any(
-        pair["unenumerated_material_changes"] for pair in accepted
+        _identity_findings(pair) for pair in accepted
     )
     return {
         "pairs_reviewed": len(pairs),
         "accepted": len(accepted),
-        "pairs_with_unenumerated_material_change": len(drifted),
+        "pairs_with_room_identity_finding": len(drifted),
         "probe_passed": passed,
         "verdict": (
             "Probe passed — proceed to the Phase 3.5 pilot."

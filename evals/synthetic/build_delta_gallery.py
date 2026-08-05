@@ -64,6 +64,16 @@ h1 { font: 600 26px/1.2 var(--serif); margin: 0 0 6px; }
 .drift { margin-top: 14px; padding: 12px 16px; border-radius: 9px;
          background: rgba(163,49,42,.06); border: 1px solid rgba(163,49,42,.25); }
 .drift h3 { color: var(--bad); }
+.drift .where { font-variant: all-small-caps; letter-spacing: .04em; font-weight: 600; }
+.incidental { margin-top: 14px; padding: 12px 16px; border-radius: 9px;
+              background: var(--panel-muted); }
+.incidental h3, .incidental li { color: var(--muted); }
+.incidental h3 { font: 600 12px/1 var(--sans); letter-spacing: .08em;
+                 text-transform: uppercase; margin: 0 0 8px; }
+.incidental ul { margin: 0; padding-left: 20px; }
+.audit li.absent { color: var(--bad); }
+.audit li.ambiguous { color: var(--muted); }
+.vis { font-variant: all-small-caps; letter-spacing: .04em; font-weight: 600; }
 @media (max-width: 820px) { .frames { grid-template-columns: 1fr; } }
 """
 
@@ -143,17 +153,83 @@ def build(
         )
 
         drift_html = ""
-        drift = (review or {}).get("unenumerated_material_changes") or []
-        if drift:
+        findings = (review or {}).get("room_identity_findings")
+        if findings is None:
+            # Reports written before the 5 Aug rubric kept one flat drift list.
+            findings = [
+                {
+                    "description": f'{item.get("target", "")}: '
+                                   f'{item.get("description", "")}'.strip(": ")
+                }
+                for item in (review or {}).get("unenumerated_material_changes") or []
+            ]
+        if findings:
+            items = "".join(
+                "<li>"
+                + (
+                    f'<span class="where">{escape(str(item["view"]))} · '
+                    f'{escape(str(item.get("element", "")))}</span> — '
+                    if item.get("view")
+                    else ""
+                )
+                + f'{escape(str(item.get("description", "")))}</li>'
+                for item in findings
+            )
+            drift_html = (
+                '<div class="drift"><h3>Room identity findings</h3>'
+                f"<ul>{items}</ul></div>"
+            )
+
+        for conflict in (review or {}).get("cross_view_conflicts") or []:
+            drift_html += (
+                '<div class="drift"><h3>Views disagree at the same timepoint</h3>'
+                f"<p>{escape(str(conflict))}</p></div>"
+            )
+
+        audit_html = ""
+        audited = (review or {}).get("enumerated") or []
+        if audited:
+            items = "".join(
+                f'<li class="{escape(entry["visibility"])}">'
+                f'{escape(entry["change_id"])} '
+                f'<span class="vis">{escape(entry["visibility"])}</span> — '
+                f'{escape(str(entry.get("notes", "")))}</li>'
+                for entry in audited
+            )
+            audit_html = (
+                '<div class="changes audit"><h3>What is actually visible</h3>'
+                f"<ul>{items}</ul></div>"
+            )
+
+        corrections = (review or {}).get("gold_corrections") or []
+        if corrections:
+            items = "".join(
+                f'<li>{escape(item["change_id"])} '
+                f'<span class="vis">{escape(item["issue"].replace("_", " "))}</span> — '
+                f'{escape(item["recommendation"])}</li>'
+                for item in corrections
+            )
+            audit_html += (
+                '<div class="changes"><h3>Gold corrections before scoring</h3>'
+                f"<ul>{items}</ul></div>"
+            )
+
+        incidental = (review or {}).get("incidental_differences") or []
+        incidental_html = ""
+        if incidental:
             items = "".join(
                 f'<li>{escape(str(item.get("target", "")))}: '
                 f'{escape(str(item.get("description", "")))}</li>'
-                for item in drift
+                for item in incidental
             )
-            drift_html = (
-                '<div class="drift"><h3>Unenumerated material differences reported</h3>'
+            incidental_html = (
+                '<div class="incidental"><h3>Incidental — recorded, not counted '
+                "against the pair</h3>"
                 f"<ul>{items}</ul></div>"
             )
+
+        note = (review or {}).get("reviewer_note")
+        note_html = f'<p class="basis">{escape(note)}</p>' if note else ""
 
         sections.append(
             f'<section class="pair"><header><h2>{escape(delta_id)}</h2>'
@@ -161,12 +237,15 @@ def build(
             f'{escape(spec["delta_class"])}</span>'
             f'<span class="verdict {escape(decision)}">{escape(decision)}</span></header>'
             f'<p class="basis">{escape(basis)}</p>'
+            + note_html
+            + drift_html
             + "".join(views_html)
             + '<div class="changes"><h3>Enumerated changes (the gold)</h3>'
             f"<ol>{''.join(changes)}</ol></div>"
+            + audit_html
             + '<div class="changes"><h3>Asserted unchanged</h3>'
             f"<ul>{unchanged}</ul></div>"
-            + drift_html
+            + incidental_html
             + "</section>"
         )
 
@@ -183,9 +262,11 @@ def build(
 <div class="wrap">
 <h1>Phase 3.5 delta pairs — owner adjudication</h1>
 <p class="lede">For each pair, the question is not whether the T1 frame is a
-good image but whether anything differs between T0 and T1 that is not in the
-enumerated list below it. Any such difference rejects the pair. These images
-are synthetic evidence and are never treated as real tenancy comparisons.</p>
+good image but whether it is still the same room. Fixed fabric — layout,
+fittings, appliances, sanitaryware, finishes — has to hold; movable clutter
+does not, and is listed separately because the gold must name it, not because
+it counts against the pair. These images are synthetic evidence and are never
+treated as real tenancy comparisons.</p>
 {"".join(sections)}
 </div>
 </body>

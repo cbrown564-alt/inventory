@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "record_type": "phase35_delta_pilot_summary",
+  "completed_at": "2026-08-05",
+  "supersedes": "reports/phase35-pilot-summary-2026-08-04.json",
+  "supersedes_note": "Same 30 pairs, same frames, re-adjudicated under the room-identity rubric the owner set on 5 Aug 2026 (docs/31 Amendment C). Nothing was regenerated.",
+  "dataset_id": "synthetic-room-eval",
+  "status": "complete_under_amendment_c_rubric",
+  "pair_count": 30,
+  "pair_classes": {
+    "counterfactual": 10,
+    "temporal": 20
+  },
+  "parent_splits": {
+    "development": 50,
+    "validation": 10
+  },
+  "view_frame_count": 60,
+  "generated_frame_count": 60,
+  "enumerated_change_count": 180,
+  "change_kinds": {
+    "new_defect": 40,
+    "item_added": 40,
+    "item_removed": 33,
+    "cleanliness": 30,
+    "worsened": 30,
+    "immaterial": 7
+  },
+  "immaterial_pair_count": 7,
+  "review_counts": {
+    "accept": 27,
+    "reject": 3
+  },
+  "review_counts_2026_08_04": {
+    "accept": 3,
+    "reject": 27,
+    "escalate": 0
+  },
+  "rejected_pairs": [
+    {
+      "delta_id": "P35-001-T1",
+      "basis": "room identity failed",
+      "findings": [
+        "A-wide · built-in oven",
+        "D-condition · room shown",
+        "D-condition · window outlook"
+      ]
+    },
+    {
+      "delta_id": "P35-019-T1",
+      "basis": "room identity failed",
+      "findings": [
+        "A-wide · built-in oven",
+        "D-condition · hob and extractor",
+        "D-condition · window"
+      ]
+    },
+    {
+      "delta_id": "P35-022-CF",
+      "basis": "room identity failed",
+      "findings": [
+        "A-wide · basin and mixer tap",
+        "A-wide · cross-view contradiction"
+      ]
+    }
+  ],
+  "enumerated_visibility": {
+    "absent": 28,
+    "clear": 75,
+    "ambiguous": 77
+  },
+  "gold_corrections_required": 25,
+  "gold_correction_issues": {
+    "t0_premise_wrong": 20,
+    "not_rendered": 4,
+    "spec_contradiction": 1
+  },
+  "cross_view_conflict_pairs": [
+    "P35-001-T1",
+    "P35-009-T1",
+    "P35-015-T1",
+    "P35-029-CF"
+  ],
+  "thin_signal_pairs": [
+    "P35-003-T1",
+    "P35-011-T1",
+    "P35-012-T1",
+    "P35-013-T1",
+    "P35-026-CF",
+    "P35-027-CF"
+  ],
+  "incidental_differences_recorded": 20,
+  "review_blocker": "The re-adjudication is a single owner-directed reviewer, not two independent AI reviews. P35-014-T1 additionally has no independent AI review at all (Antigravity quota) and its 4 Aug owner adjudication stands on the enumerated axis.",
+  "evidence_class": "Synthetic development evidence; cannot promote compare behaviour.",
+  "compare_scoring": "not_run — apply the 25 gold corrections first, then use score_delta.py with a review-gated compare output."
+}

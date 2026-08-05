@@ -266,11 +266,12 @@ def _accepting_review(delta_id="RP-901-T1", **overrides):
         "decision": "accept",
         "same_room": True,
         "same_room_notes": "",
+        "room_identity_findings": [],
         "enumerated": [
             {"change_id": "D1", "visibility": "clear", "notes": ""},
             {"change_id": "D2", "visibility": "clear", "notes": ""},
         ],
-        "unenumerated_changes": [],
+        "incidental_differences": [],
         "reason": "",
     }
     review.update(overrides)
@@ -290,21 +291,30 @@ def test_two_accepting_reviews_accept_the_pair():
     assert result["reviewers_agreed"] is True
 
 
-def test_any_unenumerated_material_change_rejects_the_pair():
-    drifted = _accepting_review(unenumerated_changes=[
-        {"target": "curtains", "description": "now patterned", "material": True}
-    ])
-    result = combine(EXPECTED, drifted, _accepting_review())
-    assert result["decision"] == "reject"
-    assert "unenumerated material change" in result["decision_basis"]
-
-
-def test_drift_rejects_even_when_both_reviewers_said_accept():
-    drifted = _accepting_review(unenumerated_changes=[
-        {"target": "flooring", "description": "laminate replaced carpet"}
+def test_a_moved_fixture_rejects_the_pair_even_when_both_reviewers_accepted():
+    """The failure the pilot has to catch: the room stopped being the room."""
+    drifted = _accepting_review(room_identity_findings=[
+        {"view": "A-wide", "element": "oven",
+         "description": "the built-in oven sits lower in the run at T1"}
     ])
     result = combine(EXPECTED, drifted, drifted)
     assert result["decision"] == "reject"
+    assert result["decision_basis"] == "room identity failed"
+    assert result["same_room"] is False
+
+
+def test_moved_clutter_is_recorded_and_never_rejects_the_pair():
+    """A tenant moves a tea towel; that is not the generator losing the room.
+
+    The old rubric rejected on exactly this, which buried the real failures
+    under a list of towels and toasters.
+    """
+    cluttered = _accepting_review(incidental_differences=[
+        {"target": "tea towel", "description": "hung on the other oven handle"}
+    ])
+    result = combine(EXPECTED, cluttered, _accepting_review())
+    assert result["decision"] == "accept"
+    assert result["incidental_differences"][0]["target"] == "tea towel"
 
 
 def test_failed_room_identity_rejects_the_pair():
@@ -317,14 +327,25 @@ def test_failed_room_identity_rejects_the_pair():
     assert result["decision_basis"] == "room identity failed"
 
 
-def test_missing_material_change_rejects_the_pair():
+def test_a_missing_change_corrects_the_gold_rather_than_binning_the_pair():
     absent = _accepting_review(enumerated=[
         {"change_id": "D1", "visibility": "absent", "notes": ""},
         {"change_id": "D2", "visibility": "clear", "notes": ""},
     ])
     result = combine(EXPECTED, absent, _accepting_review())
+    assert result["decision"] == "accept"
+    assert result["missing_material_changes"] == ["D1"]
+    assert result["visible_material_changes"] == ["D1", "D2"]
+
+
+def test_a_pair_showing_no_enumerated_change_carries_no_signal():
+    blank = _accepting_review(enumerated=[
+        {"change_id": "D1", "visibility": "absent", "notes": ""},
+        {"change_id": "D2", "visibility": "ambiguous", "notes": ""},
+    ])
+    result = combine(EXPECTED, blank, blank)
     assert result["decision"] == "reject"
-    assert "D1" in result["decision_basis"]
+    assert "no delta signal" in result["decision_basis"]
 
 
 def test_reviewer_disagreement_escalates():
@@ -370,7 +391,7 @@ def test_probe_gate_needs_two_clean_accepted_pairs():
         return {
             "delta_id": delta_id,
             "decision": decision,
-            "unenumerated_material_changes": list(drift),
+            "room_identity_findings": list(drift),
         }
 
     passing = {"pairs": [
@@ -646,6 +667,7 @@ def test_the_gallery_names_the_immaterial_change_as_a_false_change(tmp_path):
 
 
 def test_the_gallery_surfaces_reported_drift(tmp_path):
+    """Old flat-drift reports still render; they predate the 5 Aug rubric."""
     dataset = _write_dataset(tmp_path)
     _render(dataset)
     review = tmp_path / "review.json"
@@ -662,6 +684,41 @@ def test_the_gallery_surfaces_reported_drift(tmp_path):
     ).read_text(encoding="utf-8")
     assert "curtains" in html and "now patterned" in html
     assert 'class="verdict reject"' in html
+
+
+def test_the_gallery_separates_identity_findings_from_moved_clutter(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    _render(dataset)
+    review = tmp_path / "review.json"
+    review.write_text(json.dumps({"status": "complete", "pairs": [{
+        "delta_id": "RP-901-T1", "decision": "reject",
+        "decision_basis": "room identity failed",
+        "room_identity_findings": [
+            {"view": "A-wide", "element": "oven",
+             "description": "the oven sits lower in the run at T1"}
+        ],
+        "incidental_differences": [
+            {"target": "tea towel", "description": "hung on the other handle"}
+        ],
+        "cross_view_conflicts": ["the toaster is in one T1 view only"],
+        "enumerated": [
+            {"change_id": "D1", "visibility": "absent", "notes": "no stain rendered"}
+        ],
+        "gold_corrections": [
+            {"change_id": "D1", "issue": "not_rendered", "recommendation": "drop D1"}
+        ],
+    }]}), encoding="utf-8")
+
+    html = build_gallery(
+        dataset, tmp_path / "gallery.html", review
+    ).read_text(encoding="utf-8")
+    identity = html.index("Room identity findings")
+    incidental = html.index("Incidental")
+    assert identity < incidental, "identity findings must lead the pair"
+    assert "the oven sits lower in the run at T1" in html
+    assert "hung on the other handle" in html
+    assert "the toaster is in one T1 view only" in html
+    assert "no stain rendered" in html and "drop D1" in html
 
 
 def test_the_gallery_can_limit_to_reviewed_pairs(tmp_path):
