@@ -29,6 +29,14 @@ from evals.synthetic.review_delta_pair import (
     probe_verdict,
     review_inputs,
 )
+from evals.synthetic.prompts import PROMPTS, prompt_sha256
+from evals.synthetic.run_eval import _rendered_request, _sha256_file
+from evals.synthetic.run_delta_eval import build_delta_run_plan, compare_pair
+from evals.synthetic.aggregate_delta_scores import (
+    _decomposition_summary,
+    _metrics,
+    decompose_false_changes,
+)
 from evals.synthetic.score_delta import build_report, score_delta
 
 DATASET = Path(__file__).resolve().parents[1] / "evals/fixtures/synthetic-room-eval"
@@ -1050,3 +1058,230 @@ def test_no_recorded_probe_frame_is_a_copy_of_its_reference():
         if not row["output_sha256"]:
             continue
         assert row["output_sha256"] != row["reference_sha256"], row["task_id"]
+
+
+# --------------------------------------------------------------------------
+# run_delta_eval
+# --------------------------------------------------------------------------
+
+
+def _write_eval_dataset(tmp_path: Path) -> Path:
+    """A dataset with two delta pairs whose frames exist and hash correctly."""
+    dataset = _write_dataset(tmp_path)
+    (dataset / "dataset.json").write_text(json.dumps({
+        "phase_1_prompt_comparison": {
+            "prompts": {name: prompt_sha256(body) for name, body in PROMPTS.items()}
+        }
+    }), encoding="utf-8")
+    images = dataset / "images/openai/gpt-image-2"
+    deltas = images / "deltas"
+    deltas.mkdir(parents=True, exist_ok=True)
+    rows = []
+    for delta_id in ("RP-901-T1", "RP-902-T1"):
+        for view in DELTA_VIEWS:
+            reference = images / f"RP-901-{view}.png"
+            output = deltas / f"{delta_id}-{view}.png"
+            output.write_bytes(f"t1-{delta_id}-{view}".encode())
+            rows.append({
+                "delta_id": delta_id,
+                "parent_scenario_id": "RP-901",
+                "parent_split": "development",
+                "delta_class": "temporal",
+                "room_type": "Living Room",
+                "model_display_name": "GPT Image 2",
+                "view_id": view,
+                "reference_path": str(reference.relative_to(dataset)),
+                "reference_sha256": _sha256_file(reference),
+                "output_path": str(output.relative_to(dataset)),
+                "output_sha256": _sha256_file(output),
+            })
+    with (dataset / "delta_tasks.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer.writeheader()
+        writer.writerows(rows)
+    return dataset
+
+
+def _write_review(dataset: Path, decisions: dict[str, str]) -> Path:
+    path = dataset / "review.json"
+    path.write_text(json.dumps({
+        "status": "complete",
+        "pairs": [
+            {"delta_id": delta_id, "decision": decision}
+            for delta_id, decision in decisions.items()
+        ],
+    }), encoding="utf-8")
+    return path
+
+
+def test_only_pairs_the_review_accepted_are_planned(tmp_path):
+    """An unreviewed or rejected pair has no standing gold to score against.
+
+    ``score_delta`` already refuses to score one; planning a describe run for
+    it would spend quota producing a comparison nobody may use.
+    """
+    dataset = _write_eval_dataset(tmp_path)
+    review = _write_review(dataset, {"RP-901-T1": "accept", "RP-902-T1": "reject"})
+    plan = build_delta_run_plan(dataset, review, "production-v1", "gemini-3.5-flash-low")
+    assert [pair["delta_id"] for pair in plan] == ["RP-901-T1"]
+
+
+def test_an_incomplete_review_cannot_authorise_a_run(tmp_path):
+    dataset = _write_eval_dataset(tmp_path)
+    review = dataset / "review.json"
+    review.write_text(json.dumps({"status": "in_progress", "pairs": []}), encoding="utf-8")
+    with pytest.raises(ValueError, match="not complete"):
+        build_delta_run_plan(dataset, review, "production-v1", "gemini-3.5-flash-low")
+
+
+def test_a_frame_that_no_longer_matches_the_ledger_is_refused(tmp_path):
+    """The reviewed frame and the scored frame have to be the same bytes.
+
+    Otherwise a result is attributed to evidence nobody adjudicated, which is
+    the one thing the provenance discipline in this dataset exists to prevent.
+    """
+    dataset = _write_eval_dataset(tmp_path)
+    review = _write_review(dataset, {"RP-901-T1": "accept"})
+    frame = dataset / "images/openai/gpt-image-2/deltas/RP-901-T1-A-wide.png"
+    frame.write_bytes(b"a different image entirely")
+    with pytest.raises(ValueError, match="does not match the ledger"):
+        build_delta_run_plan(dataset, review, "production-v1", "gemini-3.5-flash-low")
+
+
+def test_t0_reads_the_reference_frames_and_t1_the_generated_ones(tmp_path):
+    dataset = _write_eval_dataset(tmp_path)
+    review = _write_review(dataset, {"RP-901-T1": "accept"})
+    plan = build_delta_run_plan(dataset, review, "production-v1", "gemini-3.5-flash-low")
+    sides = {run["side"]: run for run in plan[0]["runs"]}
+    assert all("deltas/" not in item["relative_path"] for item in sides["T0"]["inputs"])
+    assert all("deltas/" in item["relative_path"] for item in sides["T1"]["inputs"])
+
+
+def test_the_describe_request_never_mentions_the_delta(tmp_path):
+    """A backend told what changed reports the prompt, not the photograph.
+
+    This is the same objection that bars an operator who has read the gold
+    from describing the frames by hand: the run stops measuring vision. Here
+    it is enforceable, so it is enforced.
+    """
+    dataset = _write_eval_dataset(tmp_path)
+    review = _write_review(dataset, {"RP-901-T1": "accept"})
+    plan = build_delta_run_plan(dataset, review, "production-v1", "gemini-3.5-flash-low")
+    for run in plan[0]["runs"]:
+        request = _rendered_request(
+            room_type=run["room_type"],
+            prompt_id=run["prompt_id"],
+            prompt=PROMPTS[run["prompt_id"]],
+            inputs=run["inputs"],
+            model=run["model"],
+        )
+        text = json.dumps(request)
+        for change in SPEC["changes"]:
+            assert change["description"] not in text
+            assert change["target"] not in text
+        assert "T0" not in text and "delta" not in text.lower()
+
+
+def test_a_prompt_difference_between_timepoints_refuses_the_comparison(tmp_path):
+    """The delta must be carried by the images alone.
+
+    Any other difference between the two calls is confounded with the change
+    under test, and the resulting rate would not be about the frames at all.
+    """
+    dataset = _write_eval_dataset(tmp_path)
+    review = _write_review(dataset, {"RP-901-T1": "accept"})
+    plan = build_delta_run_plan(dataset, review, "production-v1", "gemini-3.5-flash-low")
+    records = {
+        side: {
+            "instruction_sha256": digest,
+            "backend_model": "gemini-3.5-flash-low",
+            "prompt_id": "production-v1",
+            "prompt_sha256": "x",
+            "run_id": f"RP-901-T1.{side}",
+            "room_type": "Living Room",
+            "delta_id": "RP-901-T1",
+            "completed_at": "2026-08-05T00:00:00+00:00",
+            "inputs": [],
+            "parsed_output": {"room_summary": "", "items": []},
+        }
+        for side, digest in (("T0", "aaa"), ("T1", "bbb"))
+    }
+    with pytest.raises(ValueError, match="instructions differ"):
+        compare_pair(plan[0], records)
+
+
+# --------------------------------------------------------------------------
+# aggregate_delta_scores
+# --------------------------------------------------------------------------
+
+
+def test_a_renamed_object_is_decomposed_as_alignment_churn():
+    """One lamp nobody touched, reported twice because the names moved.
+
+    ``match_score`` needs the discriminating tokens to be equal or contained,
+    so ``Recessed spotlight`` and ``Ceiling spotlight`` do not align and both
+    halves are counted against the model. Naming that as churn is what makes
+    the headline rate readable; it never subtracts from it.
+    """
+    report = {
+        "false_changes": [
+            {"room": "Living Room", "bucket": "removed", "name": "Recessed spotlight"},
+            {"room": "Living Room", "bucket": "added", "name": "Ceiling spotlight"},
+            {"room": "Living Room", "bucket": "added", "name": "Threshold strip"},
+        ]
+    }
+    decomposition = decompose_false_changes(report)
+    assert decomposition["counts"]["alignment_churn"] == 2
+    assert decomposition["counts"]["unpaired_added"] == 1
+    assert decomposition["counts"]["unpaired_removed"] == 0
+    assert decomposition["rename_candidates"][0]["shared_tokens"] == ["spotlight"]
+
+
+def test_two_genuinely_different_items_are_not_paired_away():
+    report = {
+        "false_changes": [
+            {"room": "Bathroom", "bucket": "removed", "name": "Hand towel"},
+            {"room": "Bathroom", "bucket": "added", "name": "Waste bin"},
+        ]
+    }
+    decomposition = decompose_false_changes(report)
+    assert decomposition["counts"]["alignment_churn"] == 0
+    assert decomposition["rename_candidates"] == []
+
+
+def test_the_diagnostic_never_lowers_the_reported_false_change_rate():
+    decompositions = [
+        decompose_false_changes({
+            "false_changes": [
+                {"room": "R", "bucket": "removed", "name": "Recessed spotlight"},
+                {"room": "R", "bucket": "added", "name": "Ceiling spotlight"},
+            ]
+        })
+    ]
+    totals = {"reported_changes": 10, "false_changes": 2, "unchanged_reported": 5}
+    summary = _decomposition_summary(decompositions, totals)
+    assert summary["share_of_false_changes_that_are_alignment_churn"] == 100.0
+    assert summary["false_change_rate_if_renames_aligned"] == 0.0
+    assert "not a corrected metric" in summary["diagnostic_note"]
+
+
+def test_pooled_rates_come_from_summed_counts_not_averaged_pairs():
+    """A pair carrying one change must not outvote a pair carrying nine.
+
+    Averaging per-pair rates is what gives the six thin-signal pairs the same
+    weight as the rest of the pilot; summing the counts first is the only
+    arrangement in which "delta recall" means what the phase says it means.
+    """
+    rows = (
+        [{"material": True, "detected": False, "direction_correct": None}]
+        + [{"material": True, "detected": True, "direction_correct": None}] * 9
+    )
+    totals = {
+        "reported_changes": 10,
+        "false_changes": 0,
+        "unchanged_reported": 10,
+    }
+    pooled = _metrics(rows, totals)["delta_recall"]
+    averaged = (0.0 + 100.0) / 2
+    assert pooled == 90.0
+    assert pooled != averaged
