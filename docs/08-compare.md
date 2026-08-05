@@ -53,15 +53,19 @@ have" was true when written and is not true now. The delta pairs produce them
 in quantity, because two independent describe runs of one room disagree about
 wording in a way a single run never reveals: `Heated towel rail` against
 `Towel radiator`, `Framed picture` against `Framed artwork`, `Decorative dish`
-against `Decorative bowl`, `TV stand` against `TV cabinet`. Roughly 41 such
-pairs survived the tier-1 fix, and no token rule reaches any of them.
+against `Decorative bowl`, `TV stand` against `TV cabinet`. Tier 1 resolved 8
+of the 77 rename pairs on these fixtures; **69 survive**, and no token rule
+reaches any of them.
 
-That removes the stated reason for the M4 non-goal; it does not by itself
-promote embeddings. Synonym churn is a minority of the false-change rate on
-these pairs — the dominant term is description non-determinism, items one run
-names and the other does not — so an embedding matcher would buy less here
-than the paragraph above implies its absence costs. The decision should be
-retaken on evidence, and the evidence now exists.
+That removes the stated reason for the M4 non-goal without by itself promoting
+embeddings. `docs/35-describe-stability.md` argues the cheaper attack is to
+stop the two runs disagreeing about names in the first place, rather than
+teaching the aligner to forgive it after the fact. Synonym churn is also a
+minority of the false-change rate on these pairs — the dominant term is
+description non-determinism, items one run names and the other does not — so
+an embedding matcher would buy less here than the paragraph above implies its
+absence costs. The decision should be retaken on evidence, and the evidence
+now exists.
 
 Reviewer-`rejected` items are excluded from alignment on both sides — same
 rule as report rendering (struck items are not part of the attested

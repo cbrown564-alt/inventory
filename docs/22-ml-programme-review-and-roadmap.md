@@ -65,7 +65,7 @@ cause** rather than pass/fail:
 | E11 | pass | **productive data work** | 101 verified boxes — the *right* kind of investment |
 | E12 | fail | **un-run / under-powered** | Fine-tuned on 37 pseudo-boxes from rooms lacking the val classes |
 | E13 | fail | **un-run + weak hypothesis** | Histogram proxy, real SegFormer never ran; floor/wall≈cover is a weak prior |
-| E14 | blocked | **no data** | No paired check-in/out fixture exists |
+| E14 | blocked | **unblocked 5 Aug 2026** | Fixture built and scored: docs/31 Phase 3.5, 27 delta pairs. Findings in docs/35 |
 | E15 | fail | **broken eval** (as designed) | FP-rate on deliberately-clean photos with zero defect positives present |
 | E16 | fail | **un-run** | "Documented-stub" weights; Indoor67 never downloaded/fine-tuned |
 | E17 | pass | **un-run + illusory pass** | KonIQ-10k absent; "pass" = tied ML-E6's *failing* 4/9 |
@@ -254,6 +254,19 @@ programme.
   the common cases, it runs on our own GPU at ≈£0 marginal. → **cheap** at scale
   (removes per-token API spend), **fast** (local), accuracy pinned by opus
   fallback on the hard tail.
+
+**Added 5 Aug 2026 — the stability axis this section was missing.** Everything
+above attacks the describe step on *cost*. Scoring the Phase 3.5 delta pairs
+found a second, larger problem: two independent describe runs of the same room
+produce different schedules. 368 of 407 reported changes on those pairs had no
+counterpart in gold, and the residue after fixing the compare aligner is
+entirely description movement — 138 rename pairs, 157 items named by one run
+and not the other, 73 aligned items graded differently. The largest single
+cause of missed condition changes is that neither run listed the object at all
+(43 of 77). None of the three bullets above would move any of it, and E14 is no
+longer `no data` — the fixture exists and is scored. Scoped in
+**docs/35-describe-stability.md**; its Phase 0 measures the non-determinism
+floor before any intervention is chosen.
 
 ### 5.3 Fix the accuracy ceilings at their source (parallel, 3–8 weeks)
 

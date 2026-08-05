@@ -1570,6 +1570,11 @@ still has one review rather than two. One describe call returned an empty
 response under a SUCCESS status and was re-run (`P35-028-CF` T0); no other run
 was repeated.
 
+The dominant term is description non-determinism, and it is now scoped as its
+own piece of work in `docs/35-describe-stability.md` — which opens by measuring
+the noise floor these pairs cannot separate from real change, because T0 and T1
+are different photographs.
+
 Phase 3.5 now exits as specified: a scored delta set with the metrics below.
 The boundaries do not move. This is development evidence, it cannot promote
 compare behaviour, and it says nothing about real check-in/check-out evidence
