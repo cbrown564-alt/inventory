@@ -1,0 +1,16 @@
+{
+  "id": "P35-028-CF",
+  "delta_of": "RP-016",
+  "delta_class": "counterfactual",
+  "timepoint": "same-timepoint-present",
+  "elapsed_description": "the same inspection timepoint in a counterfactual variant",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "oak tabletop", "description": "a deep dark ring mark is present on the tabletop", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "new_defect", "target": "chair upholstery", "description": "a torn seam is present on one grey chair seat", "material": true, "views": ["D-condition"]},
+    {"id": "D3", "kind": "item_added", "target": "table runner", "description": "a table runner is present on the dining table", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "item_removed", "target": "sixth dining chair", "description": "one chair is absent, leaving five chairs around the table", "material": true, "views": ["A-wide"]},
+    {"id": "D5", "kind": "cleanliness", "target": "timber floor", "description": "muddy footprints are present on the timber floor", "material": true},
+    {"id": "D6", "kind": "worsened", "target": "table leg", "description": "the table leg has a visibly darker rub mark", "material": true, "views": ["D-condition"]}
+  ],
+  "unchanged_assertions": ["same oak table, French doors, pendant light, timber floor and dining-room layout", "same chair positions except the enumerated missing chair, display items, skirting and camera viewpoint", "no changed room dimensions, fixed lighting or door and window geometry"]
+}

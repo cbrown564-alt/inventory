@@ -1,0 +1,1068 @@
+{
+  "review_type": "phase35_delta_pair_review",
+  "status": "partial",
+  "reviewed_at": "2026-08-05T00:10:51.543270+00:00",
+  "completed_at": null,
+  "generation_path": "Antigravity CLI independent local-image review",
+  "metered_api_call": false,
+  "cli_version": "1.1.10",
+  "reviewer_model_mode": "gemini-3.5-flash-low",
+  "counts": {
+    "accept": 1,
+    "reject": 7
+  },
+  "pairs": [
+    {
+      "delta_id": "P35-001-T1",
+      "delta_class": "temporal",
+      "decision": "reject",
+      "decision_basis": "room identity failed",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [
+        {
+          "target": "tea towel",
+          "description": "A green and grey patterned cotton tea towel is newly present on the oven door handle in T1 views, which was completely absent in T0.",
+          "material": true
+        },
+        {
+          "target": "toaster",
+          "description": "The toaster is inconsistently present in T1 D-condition but absent in T1 A-wide.",
+          "material": true
+        },
+        {
+          "target": "cloth on toaster",
+          "description": "In T1 D-condition, a checkered cloth is newly placed on top of the toaster.",
+          "material": true
+        },
+        {
+          "target": "tea towel",
+          "description": "A new cotton tea towel has been added to the oven handle in T1 wide view (absent in T0 wide view).",
+          "material": true
+        },
+        {
+          "target": "window view",
+          "description": "The scene outside the kitchen window in T1 D-condition shows green trees instead of the brick building seen in T0 and T1 A-wide.",
+          "material": true
+        },
+        {
+          "target": "toaster accessory",
+          "description": "A cloth has been placed on top of the toaster in T1 D-condition (which itself should have been removed).",
+          "material": true
+        },
+        {
+          "target": "left wall and fixtures",
+          "description": "A white radiator, a light switch on the wall, and a kickboard heater vent under the oven are visible in T1 D-condition due to the changed camera viewpoint.",
+          "material": true
+        }
+      ],
+      "missing_material_changes": [
+        "D1",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "first_review": {
+        "delta_id": "P35-001-T1",
+        "decision": "reject",
+        "same_room": false,
+        "same_room_notes": "The camera viewpoint in T1 D-condition is significantly changed (wider and further back, showing the radiator, window, and oven) compared to T0 D-condition which was a close-up of the base cabinet. This violates the same camera position requirement.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "absent",
+            "notes": "The chipped paint on the lower edge of the base unit door is already present in T0 D-condition, so it is not a new defect."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "ambiguous",
+            "notes": "The toaster is absent on the worktop in T1 A-wide but is still present on the worktop in T1 D-condition, leading to a state conflict between the two T1 views."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "absent",
+            "notes": "A small chrome dish rack is already present beside the sink in T0 A-wide, so it is not a new item."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "ambiguous",
+            "notes": "Crumbs and water marks are not clearly distinguishable on the dark worktop, and the changed camera viewpoint in D-condition prevents reliable comparison."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "absent",
+            "notes": "All slats on the window blind in T1 A-wide are straight and identical to T0 A-wide; none are bent or hanging lower."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "absent",
+            "notes": "The description is incorrect. There is no tea towel on the oven door handle in T0, whereas a new green/grey tea towel is hanging there in T1."
+          }
+        ],
+        "unenumerated_changes": [
+          {
+            "target": "tea towel",
+            "description": "A green and grey patterned cotton tea towel is newly present on the oven door handle in T1 views, which was completely absent in T0.",
+            "material": true
+          },
+          {
+            "target": "toaster",
+            "description": "The toaster is inconsistently present in T1 D-condition but absent in T1 A-wide.",
+            "material": true
+          },
+          {
+            "target": "cloth on toaster",
+            "description": "In T1 D-condition, a checkered cloth is newly placed on top of the toaster.",
+            "material": true
+          }
+        ],
+        "reason": "Rejected due to a changed camera viewpoint in D-condition (room identity failure), multiple listed material changes being absent/already present in T0 (D1, D3, D5), and unenumerated changes including a new tea towel and inconsistent toaster presence between T1 views."
+      },
+      "second_review": {
+        "delta_id": "P35-001-T1",
+        "decision": "reject",
+        "same_room": false,
+        "same_room_notes": "The viewpoint for the D-condition image is completely changed from a close-up of the base cabinet door to a wide view of the left side of the kitchen. Additionally, there is a severe environmental inconsistency where the window view in T1 D-condition shows trees, whereas T0 A-wide and T1 A-wide show a brick building. Finally, the toaster is present in T1 D-condition but absent in T1 A-wide.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "absent",
+            "notes": "The chipped paint area on the bottom-right corner of the left base cabinet door is already present in T0 D-condition, so it is not a new defect."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "ambiguous",
+            "notes": "The toaster is absent in T1 A-wide but still present on the countertop in T1 D-condition."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "absent",
+            "notes": "The chrome dish rack is already present beside the sink in T0 A-wide."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "absent",
+            "notes": "No crumbs or water marks are visible on the worktop in T1 views."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "clear",
+            "notes": "One window blind slat is bent slightly downward in T1 A-wide."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "absent",
+            "notes": "No tea towel was present on the oven handle in T0 A-wide, so it is a new addition in T1 rather than a fold orientation change."
+          }
+        ],
+        "unenumerated_changes": [
+          {
+            "target": "tea towel",
+            "description": "A new cotton tea towel has been added to the oven handle in T1 wide view (absent in T0 wide view).",
+            "material": true
+          },
+          {
+            "target": "window view",
+            "description": "The scene outside the kitchen window in T1 D-condition shows green trees instead of the brick building seen in T0 and T1 A-wide.",
+            "material": true
+          },
+          {
+            "target": "toaster accessory",
+            "description": "A cloth has been placed on top of the toaster in T1 D-condition (which itself should have been removed).",
+            "material": true
+          },
+          {
+            "target": "left wall and fixtures",
+            "description": "A white radiator, a light switch on the wall, and a kickboard heater vent under the oven are visible in T1 D-condition due to the changed camera viewpoint.",
+            "material": true
+          }
+        ],
+        "reason": "Room identity/viewpoint failure for D-condition, rendering inconsistencies (window view and toaster presence), and multiple incorrect assertions regarding enumerated changes (D1, D3, D6)."
+      }
+    },
+    {
+      "delta_id": "P35-002-T1",
+      "delta_class": "temporal",
+      "decision": "reject",
+      "decision_basis": "unenumerated material change observed",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [
+        {
+          "target": "bath ledge bottles",
+          "description": "Two additional bottles (one white, one black) are present on the bath ledge near the glass screen in T1, increasing the bottle count there from two to four.",
+          "material": true
+        }
+      ],
+      "missing_material_changes": [
+        "D2",
+        "D3",
+        "D5"
+      ],
+      "first_review": {
+        "delta_id": "P35-002-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The room layout, fittings, finishes, and camera viewpoints are identical between T0 and T1 views.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "The scuff on the bath panel is clearly longer and darker in T1 D-condition compared to T0 D-condition."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "absent",
+            "notes": "No split in the silicone seal is visible at the bath corner in the T1 views."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "absent",
+            "notes": "The blue bath mat is not present in T0 A-wide, so its described absence in T1 is not a change from T0."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "A plain white shampoo bottle with a black pump cap is newly present on the front-left corner of the bath ledge in T1 views."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "absent",
+            "notes": "No splash marks are visible on the lower wall tiles in T1."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "clear",
+            "notes": "A small black waste bin is newly present beside the pedestal basin in T1 A-wide."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "Rejected because multiple material changes (D2, D3, D5) are absent or not visible as described."
+      },
+      "second_review": {
+        "delta_id": "P35-002-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The bathroom layout, fixtures, tiling, and camera viewpoints match between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "The scuff mark on the bottom-left of the bath panel is longer and darker in T1 D-condition."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "absent",
+            "notes": "No split is visible in the silicone seal at the bath corner; the corner is obscured by the white shampoo bottle in T1."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "absent",
+            "notes": "No blue bath mat was present on the floor or elsewhere in T0, so it could not be removed."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "A white shampoo bottle is newly present on the left ledge of the bath in T1."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "absent",
+            "notes": "No splash marks are visible on the lower wall tiles in T1."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "clear",
+            "notes": "A black waste bin is newly present beside the basin in T1."
+          }
+        ],
+        "unenumerated_changes": [
+          {
+            "target": "bath ledge bottles",
+            "description": "Two additional bottles (one white, one black) are present on the bath ledge near the glass screen in T1, increasing the bottle count there from two to four.",
+            "material": true
+          }
+        ],
+        "reason": "Unenumerated material changes are present (additional bottles near the glass screen in T1), and several material enumerated changes are absent or not visible (D2 split in silicone seal, D3 presence of bath mat in T0, D5 splash marks on tiles)."
+      }
+    },
+    {
+      "delta_id": "P35-003-T1",
+      "delta_class": "temporal",
+      "decision": "reject",
+      "decision_basis": "material change not visible: D1, D2, D4, D5, D6",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [],
+      "missing_material_changes": [
+        "D1",
+        "D2",
+        "D4",
+        "D5",
+        "D6"
+      ],
+      "first_review": {
+        "delta_id": "P35-003-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The room layout, units, finishes, flooring, window view, and camera viewpoint are identical between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "absent",
+            "notes": "No burn mark is visible on the oak-effect worktop next to the hob in T1."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "absent",
+            "notes": "No kettle is present in T0, so it cannot be absent/removed in T1."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "A bowl of fruit is clearly present on the worktop corner in T1, and is absent in T0."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "absent",
+            "notes": "No greasy smear is visible on the ceramic hob in T1."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "absent",
+            "notes": "Grout lines behind the hob look clean and identical in both T0 and T1; no dark/discoloured grout line is visible."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "absent",
+            "notes": "No oven mitt is present hanging by the cooker in T0, so it cannot be absent/removed in T1."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "Multiple enumerated material changes (D1, D2, D4, D5, D6) are absent (not visible) in T1."
+      },
+      "second_review": {
+        "delta_id": "P35-003-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The kitchen structure, cabinetry, finishes, and viewpoint are identical between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "absent",
+            "notes": "No dark burn mark is visible on the oak-effect worktop beside the hob in T1."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "absent",
+            "notes": "No countertop kettle is present in the T0 images to be removed."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "A small bowl containing fruit is clearly visible on the left side of the worktop near the window in T1."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "absent",
+            "notes": "No greasy smear is visible on the ceramic hob in T1."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "absent",
+            "notes": "Grout lines behind the hob remain clean and uniform in both T0 and T1; no dark discolouration is present."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "absent",
+            "notes": "No oven mitt is hanging near the cooker in T0."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "The room identity is correct, but multiple material enumerated changes (D1, D2, D4, D5, and D6) are not present in the T1 images."
+      }
+    },
+    {
+      "delta_id": "P35-004-T1",
+      "delta_class": "temporal",
+      "decision": "reject",
+      "decision_basis": "material change not visible: D2, D4, D5",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [],
+      "missing_material_changes": [
+        "D2",
+        "D4",
+        "D5"
+      ],
+      "first_review": {
+        "delta_id": "P35-004-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The room layout, wood cabinets, patterned flooring, sink, cooker, and viewpoint match exactly between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "The triangular tear in the vinyl floor beside the cooker is wider and its edge is clearly lifted more in T1."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "absent",
+            "notes": "No wall clock is present on the walls in T0, so it cannot be absent in T1."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "A blue dishcloth is clearly visible resting on the edge of the sink drainer in T1, but is absent in T0."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "absent",
+            "notes": "No dent is visible in the base unit plinth beneath the sink in T1."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "absent",
+            "notes": "No water marks or crumbs are visible on the cream laminate worktop in T1."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "clear",
+            "notes": "A white bread bin is clearly visible on the worktop near the corner in T1, and is absent in T0."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "Multiple enumerated material changes (D2, D4, D5) are absent in the T1 images."
+      },
+      "second_review": {
+        "delta_id": "P35-004-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The room matches exactly in layout, wood-effect units, flooring pattern, appliances, and viewpoint.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "The triangular tear in the vinyl floor beside the cooker is noticeably wider and curled upward in T1."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "absent",
+            "notes": "No wall clock is visible in the T0 images."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "A blue dishcloth is clearly visible draped over the edge of the sink unit in T1."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "absent",
+            "notes": "No dent is visible on the plinths beneath the sink or cooker in T1."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "absent",
+            "notes": "No crumbs or water marks are visible on the worktop at this image resolution."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "clear",
+            "notes": "A cream bread bin is newly present on the worktop to the left of the kettle in T1."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "The room identity is correct, but multiple material enumerated changes (D2, D4, and D5) are absent or not visible in the T1 images."
+      }
+    },
+    {
+      "delta_id": "P35-005-T1",
+      "delta_class": "temporal",
+      "decision": "reject",
+      "decision_basis": "material change not visible: D1, D2, D6",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [],
+      "missing_material_changes": [
+        "D1",
+        "D2",
+        "D6"
+      ],
+      "first_review": {
+        "delta_id": "P35-005-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The room layout, tiling, major sanitary fixtures, and viewpoint are identical between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "absent",
+            "notes": "The chip on the top-right corner of the vanity drawer is already present at T0; it is not newly visible."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "absent",
+            "notes": "No bath mat is visible on the floor in T0, so it cannot be absent in T1."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "A beige cylindrical soap dispenser is newly present on the right of the basin in T1."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "Water spots are clearly visible on the glass shower screen in T1."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "clear",
+            "notes": "The silicone joint on the right side of the vanity is significantly darker/blacker in T1."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "absent",
+            "notes": "No shelf is visible beside the basin in T0."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "Rejected because three material changes are absent: D1 (the chip is already present in T0), D2 (no bath mat is visible in T0), and D6 (no shelf is visible in T0)."
+      },
+      "second_review": {
+        "delta_id": "P35-005-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The physical room layout, fittings, finishes (tiles, vanity unit, toilet, shower tray, glass screen, towel rail), and camera viewpoint are identical between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "absent",
+            "notes": "The chip on the top right corner of the vanity drawer is already clearly visible in T0 D-condition, so it is not a new defect."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "absent",
+            "notes": "No bath mat is visible on the floor in the T0 images, so it could not have been removed."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "A grey soap dispenser is newly present on the basin in T1."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "Water spots are clearly visible on the glass shower screen in T1."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "clear",
+            "notes": "The dark discolouration along the back silicone joint of the vanity is darker in T1."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "absent",
+            "notes": "There is no shelf visible beside the basin in T0, so it could not have been removed."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "Material changes D1, D2, and D6 are absent or not visible as described."
+      }
+    },
+    {
+      "delta_id": "P35-006-T1",
+      "delta_class": "temporal",
+      "decision": "reject",
+      "decision_basis": "unenumerated material change observed",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [
+        {
+          "target": "shower enclosure door handles",
+          "description": "The handles on the curved shower glass doors have been changed from round cylindrical knobs in T0 to square/diamond-shaped knobs in T1.",
+          "material": true
+        },
+        {
+          "target": "towel on door handle",
+          "description": "A brown towel hanging from the door handle in T0 is completely removed in T1.",
+          "material": true
+        },
+        {
+          "target": "towel on door handle",
+          "description": "A beige/brown hand towel draped over the door handle in T0 is absent in T1.",
+          "material": true
+        }
+      ],
+      "missing_material_changes": [
+        "D2",
+        "D5"
+      ],
+      "first_review": {
+        "delta_id": "P35-006-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The physical room has the same layout, tiling, and viewpoint, but has altered fittings and removed items.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "A dark vertical crack in the white grout of the bottom-most tile row is visible in T1 near the shower tray."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "absent",
+            "notes": "No towel ring is visible beside the basin in T0."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "A white squeegee is newly hanging inside the shower enclosure in T1."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "Light water spotting is visible on the shower screen glass in T1."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "absent",
+            "notes": "No vinyl floor scuff is visible near the basin in T0 or T1."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "clear",
+            "notes": "A small bath mat is newly present on the floor in front of the toilet/basin in T1."
+          }
+        ],
+        "unenumerated_changes": [
+          {
+            "target": "shower enclosure door handles",
+            "description": "The handles on the curved shower glass doors have been changed from round cylindrical knobs in T0 to square/diamond-shaped knobs in T1.",
+            "material": true
+          },
+          {
+            "target": "towel on door handle",
+            "description": "A brown towel hanging from the door handle in T0 is completely removed in T1.",
+            "material": true
+          }
+        ],
+        "reason": "Rejected because two enumerated changes are absent (D2 and D5), and there are two unenumerated material differences (altered shower door handles and a removed towel on the door handle)."
+      },
+      "second_review": {
+        "delta_id": "P35-006-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The physical layout, sloped ceiling, mosaic tiling, vinyl flooring, toilet, pedestal basin, mirror, and shower enclosure are identical between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "A dark cracked section is visible in the sealant/grout joint directly above the shower tray in T1."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "absent",
+            "notes": "No towel ring is visible on the wall in T0, so its removal is absent. Note that a towel was on the door handle in T0 but is gone in T1."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "A white shower squeegee is newly hanging inside the shower enclosure in T1."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "Water spots are visible on the curved glass of the shower enclosure in T1."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "absent",
+            "notes": "No scuff on the vinyl floor is visible in either T0 or T1, and a new bath mat partially covers the floor area near the basin."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "clear",
+            "notes": "A small rectangular bath mat is newly present on the floor next to the toilet/basin in T1."
+          }
+        ],
+        "unenumerated_changes": [
+          {
+            "target": "towel on door handle",
+            "description": "A beige/brown hand towel draped over the door handle in T0 is absent in T1.",
+            "material": true
+          }
+        ],
+        "reason": "Material changes D2 and D5 are absent/not visible, and there is an unenumerated change (removal of the towel from the door handle)."
+      }
+    },
+    {
+      "delta_id": "P35-007-T1",
+      "delta_class": "temporal",
+      "decision": "accept",
+      "decision_basis": "both reviewers accepted",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [],
+      "missing_material_changes": [],
+      "first_review": {
+        "delta_id": "P35-007-T1",
+        "decision": "accept",
+        "same_room": true,
+        "same_room_notes": "The T1 images depict the same physical room, fittings, finishes, and camera viewpoints as T0.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "A small dark stain is clearly visible on the carpet near the doorway threshold in T1 D-condition."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "clear",
+            "notes": "A simple single bed with white bedding is present against the far wall in T1 A-wide."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "The white curtain pole above the window in T0 is absent in T1 A-wide."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "A dark dusty smudge mark is visible along the top of the skirting board to the right of the open doorway in T1 D-condition."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "clear",
+            "notes": "The small scuff mark next to the double outlet socket is darker in T1 D-condition compared to T0."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "clear",
+            "notes": "The ceiling pendant remains in the same position with its shade rotated slightly."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "All enumerated changes are visible exactly as described, and there are no unenumerated material changes or room identity discrepancies."
+      },
+      "second_review": {
+        "delta_id": "P35-007-T1",
+        "decision": "accept",
+        "same_room": true,
+        "same_room_notes": "The physical room layout, fittings, finishes, and viewpoint are identical between T0 and T1.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "A small dark stain is clearly visible on the carpet near the doorway in the T1 condition view."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "clear",
+            "notes": "A simple single bed is newly present against the far wall in the T1 wide view."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "The curtain pole is absent in the T1 wide view."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "A dusty mark is visible along the top of the skirting board near the open doorway in the T1 condition view."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "clear",
+            "notes": "The scuff near the socket (described as light switch) is darker and more prominent in the T1 condition view."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "clear",
+            "notes": "The ceiling pendant is in the same position with its shade slightly rotated."
+          }
+        ],
+        "unenumerated_changes": [],
+        "reason": "All enumerated changes are visible as described, the room identity is preserved, and there are no unenumerated material differences."
+      }
+    },
+    {
+      "delta_id": "P35-008-T1",
+      "delta_class": "temporal",
+      "decision": "reject",
+      "decision_basis": "unenumerated material change observed",
+      "reviewers_agreed": true,
+      "unenumerated_material_changes": [
+        {
+          "target": "laundry basket",
+          "description": "The woven laundry basket is placed next to the wardrobe in the T1 A-wide view, but appears next to the far bedside table/chest of drawers in the T1 D-condition view, indicating a spatial layout inconsistency.",
+          "material": true
+        },
+        {
+          "target": "bedside table accessory",
+          "description": "A small white jar/tub is newly present on the far bedside table in T1 D-condition, which was absent in T0.",
+          "material": true
+        },
+        {
+          "target": "woven laundry basket",
+          "description": "Inconsistent placement between T1 views: it is located beside the wardrobe in the T1 wide view, but appears next to the far bedside table in the T1 condition view (where it should have been visible in the wide view but is absent).",
+          "material": true
+        },
+        {
+          "target": "bedside lamp",
+          "description": "State inconsistency between T1 views: the far bedside lamp is turned off in the T1 wide view but remains lit in the T1 condition view.",
+          "material": true
+        }
+      ],
+      "missing_material_changes": [
+        "D5",
+        "D6"
+      ],
+      "first_review": {
+        "delta_id": "P35-008-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The T1 images depict the same physical room, layout, and camera viewpoints as T0, although there is an object placement inconsistency between the T1 views.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "Scratches beside the top drawer handle of the chest of drawers are longer and more numerous in T1 D-condition."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "clear",
+            "notes": "The bedside lamp on the left bedside table is absent in T1 A-wide."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "A woven laundry basket is present next to the wardrobe in T1 A-wide, but is inconsistently placed next to the bedside table/chest of drawers in T1 D-condition."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "A small dark flattened spot is visible on the carpet beside the bed in T1 D-condition."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "absent",
+            "notes": "There is no visible dust mark on either bedside table, and the only item on the far bedside table is a small white jar/tub in T1 D-condition."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "absent",
+            "notes": "No single plain book is visible on either bedside table."
+          }
+        ],
+        "unenumerated_changes": [
+          {
+            "target": "laundry basket",
+            "description": "The woven laundry basket is placed next to the wardrobe in the T1 A-wide view, but appears next to the far bedside table/chest of drawers in the T1 D-condition view, indicating a spatial layout inconsistency.",
+            "material": true
+          },
+          {
+            "target": "bedside table accessory",
+            "description": "A small white jar/tub is newly present on the far bedside table in T1 D-condition, which was absent in T0.",
+            "material": true
+          }
+        ],
+        "reason": "Rejected because enumerated changes D5 (loose items and dust mark) and D6 (plain book) are absent, the laundry basket (D3) is inconsistently positioned between the T1 views, and there is an unenumerated new white jar on the bedside table."
+      },
+      "second_review": {
+        "delta_id": "P35-008-T1",
+        "decision": "reject",
+        "same_room": true,
+        "same_room_notes": "The room layout and fittings match T0, but there are significant physical inconsistencies in object placement and states between the T1 views.",
+        "enumerated": [
+          {
+            "change_id": "D1",
+            "visibility": "clear",
+            "notes": "Scratches beside the top drawer handle are longer and more numerous in the T1 condition view."
+          },
+          {
+            "change_id": "D2",
+            "visibility": "ambiguous",
+            "notes": "The bedside lamp on the left bedside table is absent in T1 wide, but the one on the far bedside table is still present (turned off in wide, lit in condition view)."
+          },
+          {
+            "change_id": "D3",
+            "visibility": "clear",
+            "notes": "The laundry basket is present but is positioned inconsistently between the T1 wide and T1 condition views."
+          },
+          {
+            "change_id": "D4",
+            "visibility": "clear",
+            "notes": "A small flattened dark patch is visible on the carpet beside the bed in both T1 views."
+          },
+          {
+            "change_id": "D5",
+            "visibility": "clear",
+            "notes": "A small white saucer and faint marks are visible on the far bedside table in the T1 condition view."
+          },
+          {
+            "change_id": "D6",
+            "visibility": "absent",
+            "notes": "No plain book is visible on the far bedside table in the T1 condition view."
+          }
+        ],
+        "unenumerated_changes": [
+          {
+            "target": "woven laundry basket",
+            "description": "Inconsistent placement between T1 views: it is located beside the wardrobe in the T1 wide view, but appears next to the far bedside table in the T1 condition view (where it should have been visible in the wide view but is absent).",
+            "material": true
+          },
+          {
+            "target": "bedside lamp",
+            "description": "State inconsistency between T1 views: the far bedside lamp is turned off in the T1 wide view but remains lit in the T1 condition view.",
+            "material": true
+          }
+        ],
+        "reason": "The T1 views contain major physical inconsistencies: the newly added laundry basket is located next to the wardrobe in the wide view but next to the far bedside table in the condition view. Additionally, the far bedside lamp is lit in the condition view but turned off in the wide view, and the plain book (D6) is not visible on the far bedside table."
+      }
+    }
+  ],
+  "calls": [
+    {
+      "batch": 1,
+      "delta_ids": [
+        "P35-001-T1",
+        "P35-002-T1"
+      ],
+      "first_prompt_sha256": "a8880be48c9e5849183604694993c2a2031bc21ffdc803636c6fb164be4c99f7",
+      "second_prompt_sha256": "45ecbd7964d4f912c29020480ce446319eabc68c4e302d3489c6338205f91443",
+      "first_latency_seconds": 57.76,
+      "second_latency_seconds": 385.752,
+      "first_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"P35-001-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": false,\n    \"same_room_notes\": \"The camera viewpoint in T1 D-condition is significantly changed (wider and further back, showing the radiator, window, and oven) compared to T0 D-condition which was a close-up of the base cabinet. This violates the same camera position requirement.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"absent\",\n        \"notes\": \"The chipped paint on the lower edge of the base unit door is already present in T0 D-condition, so it is not a new defect.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"ambiguous\",\n        \"notes\": \"The toaster is absent on the worktop in T1 A-wide but is still present on the worktop in T1 D-condition, leading to a state conflict between the two T1 views.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"absent\",\n        \"notes\": \"A small chrome dish rack is already present beside the sink in T0 A-wide, so it is not a new item.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"ambiguous\",\n        \"notes\": \"Crumbs and water marks are not clearly distinguishable on the dark worktop, and the changed camera viewpoint in D-condition prevents reliable comparison.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"absent\",\n        \"notes\": \"All slats on the window blind in T1 A-wide are straight and identical to T0 A-wide; none are bent or hanging lower.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"absent\",\n        \"notes\": \"The description is incorrect. There is no tea towel on the oven door handle in T0, whereas a new green/grey tea towel is hanging there in T1.\"\n      }\n    ],\n    \"unenumerated_changes\": [\n      {\n        \"target\": \"tea towel\",\n        \"description\": \"A green and grey patterned cotton tea towel is newly present on the oven door handle in T1 views, which was completely absent in T0.\",\n        \"material\": true\n      },\n      {\n        \"target\": \"toaster\",\n        \"description\": \"The toaster is inconsistently present in T1 D-condition but absent in T1 A-wide.\",\n        \"material\": true\n      },\n      {\n        \"target\": \"cloth on toaster\",\n        \"description\": \"In T1 D-condition, a checkered cloth is newly placed on top of the toaster.\",\n        \"material\": true\n      }\n    ],\n    \"reason\": \"Rejected due to a changed camera viewpoint in D-condition (room identity failure), multiple listed material changes being absent/already present in T0 (D1, D3, D5), and unenumerated changes including a new tea towel and inconsistent toaster presence between T1 views.\"\n  },\n  {\n    \"delta_id\": \"P35-002-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The room layout, fittings, finishes, and camera viewpoints are identical between T0 and T1 views.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The scuff on the bath panel is clearly longer and darker in T1 D-condition compared to T0 D-condition.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No split in the silicone seal is visible at the bath corner in the T1 views.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"absent\",\n        \"notes\": \"The blue bath mat is not present in T0 A-wide, so its described absence in T1 is not a change from T0.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A plain white shampoo bottle with a black pump cap is newly present on the front-left corner of the bath ledge in T1 views.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No splash marks are visible on the lower wall tiles in T1.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A small black waste bin is newly present beside the pedestal basin in T1 A-wide.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"Rejected because multiple material changes (D2, D3, D5) are absent or not visible as described.\"\n  }\n]\n",
+        "duration_seconds": 52.236641,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 174893,
+          "output_tokens": 13825,
+          "thinking_tokens": 12107,
+          "cache_read_tokens": 154949,
+          "total_tokens": 188718
+        }
+      },
+      "second_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"P35-001-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": false,\n    \"same_room_notes\": \"The viewpoint for the D-condition image is completely changed from a close-up of the base cabinet door to a wide view of the left side of the kitchen. Additionally, there is a severe environmental inconsistency where the window view in T1 D-condition shows trees, whereas T0 A-wide and T1 A-wide show a brick building. Finally, the toaster is present in T1 D-condition but absent in T1 A-wide.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"absent\",\n        \"notes\": \"The chipped paint area on the bottom-right corner of the left base cabinet door is already present in T0 D-condition, so it is not a new defect.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"ambiguous\",\n        \"notes\": \"The toaster is absent in T1 A-wide but still present on the countertop in T1 D-condition.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"absent\",\n        \"notes\": \"The chrome dish rack is already present beside the sink in T0 A-wide.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No crumbs or water marks are visible on the worktop in T1 views.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"clear\",\n        \"notes\": \"One window blind slat is bent slightly downward in T1 A-wide.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No tea towel was present on the oven handle in T0 A-wide, so it is a new addition in T1 rather than a fold orientation change.\"\n      }\n    ],\n    \"unenumerated_changes\": [\n      {\n        \"target\": \"tea towel\",\n        \"description\": \"A new cotton tea towel has been added to the oven handle in T1 wide view (absent in T0 wide view).\",\n        \"material\": true\n      },\n      {\n        \"target\": \"window view\",\n        \"description\": \"The scene outside the kitchen window in T1 D-condition shows green trees instead of the brick building seen in T0 and T1 A-wide.\",\n        \"material\": true\n      },\n      {\n        \"target\": \"toaster accessory\",\n        \"description\": \"A cloth has been placed on top of the toaster in T1 D-condition (which itself should have been removed).\",\n        \"material\": true\n      },\n      {\n        \"target\": \"left wall and fixtures\",\n        \"description\": \"A white radiator, a light switch on the wall, and a kickboard heater vent under the oven are visible in T1 D-condition due to the changed camera viewpoint.\",\n        \"material\": true\n      }\n    ],\n    \"reason\": \"Room identity/viewpoint failure for D-condition, rendering inconsistencies (window view and toaster presence), and multiple incorrect assertions regarding enumerated changes (D1, D3, D6).\"\n  },\n  {\n    \"delta_id\": \"P35-002-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The bathroom layout, fixtures, tiling, and camera viewpoints match between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The scuff mark on the bottom-left of the bath panel is longer and darker in T1 D-condition.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No split is visible in the silicone seal at the bath corner; the corner is obscured by the white shampoo bottle in T1.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No blue bath mat was present on the floor or elsewhere in T0, so it could not be removed.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A white shampoo bottle is newly present on the left ledge of the bath in T1.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No splash marks are visible on the lower wall tiles in T1.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A black waste bin is newly present beside the basin in T1.\"\n      }\n    ],\n    \"unenumerated_changes\": [\n      {\n        \"target\": \"bath ledge bottles\",\n        \"description\": \"Two additional bottles (one white, one black) are present on the bath ledge near the glass screen in T1, increasing the bottle count there from two to four.\",\n        \"material\": true\n      }\n    ],\n    \"reason\": \"Unenumerated material changes are present (additional bottles near the glass screen in T1), and several material enumerated changes are absent or not visible (D2 split in silicone seal, D3 presence of bath mat in T0, D5 splash marks on tiles).\"\n  }\n]\n",
+        "duration_seconds": 381.179612,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 499824,
+          "output_tokens": 39941,
+          "thinking_tokens": 23666,
+          "cache_read_tokens": 3578748,
+          "total_tokens": 539765
+        }
+      }
+    },
+    {
+      "batch": 2,
+      "delta_ids": [
+        "P35-003-T1",
+        "P35-004-T1"
+      ],
+      "first_prompt_sha256": "3f27df84d225eba0371f3f15a87e86345caadd572a1b8fcf247b00c213b5ccad",
+      "second_prompt_sha256": "27ed5b615466827244fe22835ab88e938cd0fab7e668917313080db13ac0d495",
+      "first_latency_seconds": 48.934,
+      "second_latency_seconds": 48.509,
+      "first_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"P35-003-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The room layout, units, finishes, flooring, window view, and camera viewpoint are identical between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No burn mark is visible on the oak-effect worktop next to the hob in T1.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No kettle is present in T0, so it cannot be absent/removed in T1.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A bowl of fruit is clearly present on the worktop corner in T1, and is absent in T0.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No greasy smear is visible on the ceramic hob in T1.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"absent\",\n        \"notes\": \"Grout lines behind the hob look clean and identical in both T0 and T1; no dark/discoloured grout line is visible.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No oven mitt is present hanging by the cooker in T0, so it cannot be absent/removed in T1.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"Multiple enumerated material changes (D1, D2, D4, D5, D6) are absent (not visible) in T1.\"\n  },\n  {\n    \"delta_id\": \"P35-004-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The room layout, wood cabinets, patterned flooring, sink, cooker, and viewpoint match exactly between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The triangular tear in the vinyl floor beside the cooker is wider and its edge is clearly lifted more in T1.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No wall clock is present on the walls in T0, so it cannot be absent in T1.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A blue dishcloth is clearly visible resting on the edge of the sink drainer in T1, but is absent in T0.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No dent is visible in the base unit plinth beneath the sink in T1.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No water marks or crumbs are visible on the cream laminate worktop in T1.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A white bread bin is clearly visible on the worktop near the corner in T1, and is absent in T0.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"Multiple enumerated material changes (D2, D4, D5) are absent in the T1 images.\"\n  }\n]\n",
+        "duration_seconds": 44.879096,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 143054,
+          "output_tokens": 10699,
+          "thinking_tokens": 9227,
+          "cache_read_tokens": 187553,
+          "total_tokens": 153753
+        }
+      },
+      "second_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"P35-003-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The kitchen structure, cabinetry, finishes, and viewpoint are identical between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No dark burn mark is visible on the oak-effect worktop beside the hob in T1.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No countertop kettle is present in the T0 images to be removed.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A small bowl containing fruit is clearly visible on the left side of the worktop near the window in T1.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No greasy smear is visible on the ceramic hob in T1.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"absent\",\n        \"notes\": \"Grout lines behind the hob remain clean and uniform in both T0 and T1; no dark discolouration is present.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No oven mitt is hanging near the cooker in T0.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"The room identity is correct, but multiple material enumerated changes (D1, D2, D4, D5, and D6) are not present in the T1 images.\"\n  },\n  {\n    \"delta_id\": \"P35-004-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The room matches exactly in layout, wood-effect units, flooring pattern, appliances, and viewpoint.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The triangular tear in the vinyl floor beside the cooker is noticeably wider and curled upward in T1.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No wall clock is visible in the T0 images.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A blue dishcloth is clearly visible draped over the edge of the sink unit in T1.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No dent is visible on the plinths beneath the sink or cooker in T1.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No crumbs or water marks are visible on the worktop at this image resolution.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A cream bread bin is newly present on the worktop to the left of the kettle in T1.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"The room identity is correct, but multiple material enumerated changes (D2, D4, and D5) are absent or not visible in the T1 images.\"\n  }\n]\n",
+        "duration_seconds": 44.034211,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 160216,
+          "output_tokens": 10863,
+          "thinking_tokens": 9429,
+          "cache_read_tokens": 163064,
+          "total_tokens": 171079
+        }
+      }
+    },
+    {
+      "batch": 3,
+      "delta_ids": [
+        "P35-005-T1",
+        "P35-006-T1"
+      ],
+      "first_prompt_sha256": "1dda22c2a39d59d86ebd3b29618b17be3657e00aa0e50cba3a2965246604bd1e",
+      "second_prompt_sha256": "1359bcdb6b0cb6c1bbb324ade3a450044cf26d74a78fec5b10fdfb6a4970347f",
+      "first_latency_seconds": 452.563,
+      "second_latency_seconds": 47.483,
+      "first_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"P35-005-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The room layout, tiling, major sanitary fixtures, and viewpoint are identical between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"absent\",\n        \"notes\": \"The chip on the top-right corner of the vanity drawer is already present at T0; it is not newly visible.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No bath mat is visible on the floor in T0, so it cannot be absent in T1.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A beige cylindrical soap dispenser is newly present on the right of the basin in T1.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"Water spots are clearly visible on the glass shower screen in T1.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The silicone joint on the right side of the vanity is significantly darker/blacker in T1.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No shelf is visible beside the basin in T0.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"Rejected because three material changes are absent: D1 (the chip is already present in T0), D2 (no bath mat is visible in T0), and D6 (no shelf is visible in T0).\"\n  },\n  {\n    \"delta_id\": \"P35-006-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The physical room has the same layout, tiling, and viewpoint, but has altered fittings and removed items.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A dark vertical crack in the white grout of the bottom-most tile row is visible in T1 near the shower tray.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No towel ring is visible beside the basin in T0.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A white squeegee is newly hanging inside the shower enclosure in T1.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"Light water spotting is visible on the shower screen glass in T1.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No vinyl floor scuff is visible near the basin in T0 or T1.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A small bath mat is newly present on the floor in front of the toilet/basin in T1.\"\n      }\n    ],\n    \"unenumerated_changes\": [\n      {\n        \"target\": \"shower enclosure door handles\",\n        \"description\": \"The handles on the curved shower glass doors have been changed from round cylindrical knobs in T0 to square/diamond-shaped knobs in T1.\",\n        \"material\": true\n      },\n      {\n        \"target\": \"towel on door handle\",\n        \"description\": \"A brown towel hanging from the door handle in T0 is completely removed in T1.\",\n        \"material\": true\n      }\n    ],\n    \"reason\": \"Rejected because two enumerated changes are absent (D2 and D5), and there are two unenumerated material differences (altered shower door handles and a removed towel on the door handle).\"\n  }\n]\n",
+        "duration_seconds": 448.216655,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 586200,
+          "output_tokens": 34591,
+          "thinking_tokens": 21316,
+          "cache_read_tokens": 2991575,
+          "total_tokens": 620791
+        }
+      },
+      "second_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"P35-005-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The physical room layout, fittings, finishes (tiles, vanity unit, toilet, shower tray, glass screen, towel rail), and camera viewpoint are identical between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"absent\",\n        \"notes\": \"The chip on the top right corner of the vanity drawer is already clearly visible in T0 D-condition, so it is not a new defect.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No bath mat is visible on the floor in the T0 images, so it could not have been removed.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A grey soap dispenser is newly present on the basin in T1.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"Water spots are clearly visible on the glass shower screen in T1.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The dark discolouration along the back silicone joint of the vanity is darker in T1.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"absent\",\n        \"notes\": \"There is no shelf visible beside the basin in T0, so it could not have been removed.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"Material changes D1, D2, and D6 are absent or not visible as described.\"\n  },\n  {\n    \"delta_id\": \"P35-006-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The physical layout, sloped ceiling, mosaic tiling, vinyl flooring, toilet, pedestal basin, mirror, and shower enclosure are identical between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A dark cracked section is visible in the sealant/grout joint directly above the shower tray in T1.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No towel ring is visible on the wall in T0, so its removal is absent. Note that a towel was on the door handle in T0 but is gone in T1.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A white shower squeegee is newly hanging inside the shower enclosure in T1.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"Water spots are visible on the curved glass of the shower enclosure in T1.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No scuff on the vinyl floor is visible in either T0 or T1, and a new bath mat partially covers the floor area near the basin.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A small rectangular bath mat is newly present on the floor next to the toilet/basin in T1.\"\n      }\n    ],\n    \"unenumerated_changes\": [\n      {\n        \"target\": \"towel on door handle\",\n        \"description\": \"A beige/brown hand towel draped over the door handle in T0 is absent in T1.\",\n        \"material\": true\n      }\n    ],\n    \"reason\": \"Material changes D2 and D5 are absent/not visible, and there is an unenumerated change (removal of the towel from the door handle).\"\n  }\n]\n",
+        "duration_seconds": 43.565515,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 100234,
+          "output_tokens": 9723,
+          "thinking_tokens": 8096,
+          "cache_read_tokens": 224245,
+          "total_tokens": 109957
+        }
+      }
+    },
+    {
+      "batch": 4,
+      "delta_ids": [
+        "P35-007-T1",
+        "P35-008-T1"
+      ],
+      "first_prompt_sha256": "312978e58075af16f529e0fb851511b747cbfe726ddaa1bebb3e1ceb22d238e4",
+      "second_prompt_sha256": "c80002d3f3b5f9c8734a0131dbb7bceee17aa7dc55f545b316277ce81505260d",
+      "first_latency_seconds": 65.091,
+      "second_latency_seconds": 60.816,
+      "first_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"P35-007-T1\",\n    \"decision\": \"accept\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The T1 images depict the same physical room, fittings, finishes, and camera viewpoints as T0.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A small dark stain is clearly visible on the carpet near the doorway threshold in T1 D-condition.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A simple single bed with white bedding is present against the far wall in T1 A-wide.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The white curtain pole above the window in T0 is absent in T1 A-wide.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A dark dusty smudge mark is visible along the top of the skirting board to the right of the open doorway in T1 D-condition.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The small scuff mark next to the double outlet socket is darker in T1 D-condition compared to T0.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The ceiling pendant remains in the same position with its shade rotated slightly.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"All enumerated changes are visible exactly as described, and there are no unenumerated material changes or room identity discrepancies.\"\n  },\n  {\n    \"delta_id\": \"P35-008-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The T1 images depict the same physical room, layout, and camera viewpoints as T0, although there is an object placement inconsistency between the T1 views.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"Scratches beside the top drawer handle of the chest of drawers are longer and more numerous in T1 D-condition.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The bedside lamp on the left bedside table is absent in T1 A-wide.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A woven laundry basket is present next to the wardrobe in T1 A-wide, but is inconsistently placed next to the bedside table/chest of drawers in T1 D-condition.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A small dark flattened spot is visible on the carpet beside the bed in T1 D-condition.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"absent\",\n        \"notes\": \"There is no visible dust mark on either bedside table, and the only item on the far bedside table is a small white jar/tub in T1 D-condition.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No single plain book is visible on either bedside table.\"\n      }\n    ],\n    \"unenumerated_changes\": [\n      {\n        \"target\": \"laundry basket\",\n        \"description\": \"The woven laundry basket is placed next to the wardrobe in the T1 A-wide view, but appears next to the far bedside table/chest of drawers in the T1 D-condition view, indicating a spatial layout inconsistency.\",\n        \"material\": true\n      },\n      {\n        \"target\": \"bedside table accessory\",\n        \"description\": \"A small white jar/tub is newly present on the far bedside table in T1 D-condition, which was absent in T0.\",\n        \"material\": true\n      }\n    ],\n    \"reason\": \"Rejected because enumerated changes D5 (loose items and dust mark) and D6 (plain book) are absent, the laundry basket (D3) is inconsistently positioned between the T1 views, and there is an unenumerated new white jar on the bedside table.\"\n  }\n]\n",
+        "duration_seconds": 60.841156,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 227219,
+          "output_tokens": 18050,
+          "thinking_tokens": 16369,
+          "cache_read_tokens": 97827,
+          "total_tokens": 245269
+        }
+      },
+      "second_wrapper": {
+        "status": "SUCCESS",
+        "response": "[\n  {\n    \"delta_id\": \"P35-007-T1\",\n    \"decision\": \"accept\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The physical room layout, fittings, finishes, and viewpoint are identical between T0 and T1.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A small dark stain is clearly visible on the carpet near the doorway in the T1 condition view.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A simple single bed is newly present against the far wall in the T1 wide view.\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The curtain pole is absent in the T1 wide view.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A dusty mark is visible along the top of the skirting board near the open doorway in the T1 condition view.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The scuff near the socket (described as light switch) is darker and more prominent in the T1 condition view.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The ceiling pendant is in the same position with its shade slightly rotated.\"\n      }\n    ],\n    \"unenumerated_changes\": [],\n    \"reason\": \"All enumerated changes are visible as described, the room identity is preserved, and there are no unenumerated material differences.\"\n  },\n  {\n    \"delta_id\": \"P35-008-T1\",\n    \"decision\": \"reject\",\n    \"same_room\": true,\n    \"same_room_notes\": \"The room layout and fittings match T0, but there are significant physical inconsistencies in object placement and states between the T1 views.\",\n    \"enumerated\": [\n      {\n        \"change_id\": \"D1\",\n        \"visibility\": \"clear\",\n        \"notes\": \"Scratches beside the top drawer handle are longer and more numerous in the T1 condition view.\"\n      },\n      {\n        \"change_id\": \"D2\",\n        \"visibility\": \"ambiguous\",\n        \"notes\": \"The bedside lamp on the left bedside table is absent in T1 wide, but the one on the far bedside table is still present (turned off in wide, lit in condition view).\"\n      },\n      {\n        \"change_id\": \"D3\",\n        \"visibility\": \"clear\",\n        \"notes\": \"The laundry basket is present but is positioned inconsistently between the T1 wide and T1 condition views.\"\n      },\n      {\n        \"change_id\": \"D4\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A small flattened dark patch is visible on the carpet beside the bed in both T1 views.\"\n      },\n      {\n        \"change_id\": \"D5\",\n        \"visibility\": \"clear\",\n        \"notes\": \"A small white saucer and faint marks are visible on the far bedside table in the T1 condition view.\"\n      },\n      {\n        \"change_id\": \"D6\",\n        \"visibility\": \"absent\",\n        \"notes\": \"No plain book is visible on the far bedside table in the T1 condition view.\"\n      }\n    ],\n    \"unenumerated_changes\": [\n      {\n        \"target\": \"woven laundry basket\",\n        \"description\": \"Inconsistent placement between T1 views: it is located beside the wardrobe in the T1 wide view, but appears next to the far bedside table in the T1 condition view (where it should have been visible in the wide view but is absent).\",\n        \"material\": true\n      },\n      {\n        \"target\": \"bedside lamp\",\n        \"description\": \"State inconsistency between T1 views: the far bedside lamp is turned off in the T1 wide view but remains lit in the T1 condition view.\",\n        \"material\": true\n      }\n    ],\n    \"reason\": \"The T1 views contain major physical inconsistencies: the newly added laundry basket is located next to the wardrobe in the wide view but next to the far bedside table in the condition view. Additionally, the far bedside lamp is lit in the condition view but turned off in the wide view, and the plain book (D6) is not visible on the far bedside table.\"\n  }\n]\n",
+        "duration_seconds": 56.224079,
+        "num_turns": 1,
+        "usage": {
+          "input_tokens": 175927,
+          "output_tokens": 16646,
+          "thinking_tokens": 14930,
+          "cache_read_tokens": 159028,
+          "total_tokens": 192573
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "record_type": "phase35_delta_owner_adjudication",
+  "adjudicated_at": "2026-08-04",
+  "adjudicated_by": "project owner",
+  "dataset_id": "synthetic-room-eval",
+  "reviews_considered": "reports/phase35-delta-review-2026-08-04.json",
+  "gate": {
+    "rule": "docs/31 Phase 3.5 — at least 2 of 3 probe scenarios yield an acceptable pair within 2 attempts, with zero unenumerated material changes in an accepted pair",
+    "automated_verdict": "passed on RP-002 and RP-004",
+    "owner_verdict": "passed; all three pairs approved"
+  },
+  "pairs": [
+    {
+      "delta_id": "RP-002-T1",
+      "room_type": "Bathroom",
+      "independent_review": "accept",
+      "owner_decision": "approved",
+      "note": "Both reviewers accepted; no unenumerated difference reported."
+    },
+    {
+      "delta_id": "RP-004-T1",
+      "room_type": "Kitchen",
+      "independent_review": "accept",
+      "owner_decision": "approved",
+      "note": "Both reviewers accepted; no unenumerated difference reported."
+    },
+    {
+      "delta_id": "RP-011-T1",
+      "room_type": "Living room",
+      "independent_review": "reject",
+      "owner_decision": "approved",
+      "owner_reasoning": "The drift is realistic — a tenant may add a plant pot or a cushion to a room — so the frames are not disqualified by containing it.",
+      "consequence_applied": "Realism was not the objection; completeness of the gold was. The two drift items both reviewers named are recorded as observed_changes in deltas/RP-011-T1.json so that a compare run reporting them is not charged with a false change. They are scored as gold and excluded from the generation prompt, leaving the frame's prompt hash and provenance untouched.",
+      "gold_class": "observational — derived after the render from the cited independent reviews, and complete only to the extent those reviews were"
+    }
+  ],
+  "attempts_policy": "RP-011 stays at attempts=1 and is not retried. The gate is met without it and docs/31 forbids re-rolling to buy a pass.",
+  "evidence_class": "Probe images are calibration evidence, not scored data. Delta pairs are development evidence and cannot promote compare behaviour (docs/00, docs/08)."
+}

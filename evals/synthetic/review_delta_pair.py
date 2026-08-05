@@ -41,6 +41,29 @@ def _sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def _review_proxy(
+    source: Path,
+    destination: Path,
+    max_width: int = 1024,
+) -> str:
+    """Create a smaller lossless review copy without changing source evidence.
+
+    Antigravity's local image reader can spend its entire timeout tokenising a
+    two-pair batch of 1536px PNGs. The reviewer needs the visible room and
+    delta, not the source raster dimensions, so the proxy is deliberately
+    derived and its hash is recorded alongside the original hash.
+    """
+    from PIL import Image
+
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if not destination.is_file():
+        with Image.open(source) as image:
+            image = image.convert("RGB")
+            image.thumbnail((max_width, max_width))
+            image.save(destination, format="PNG", optimize=True)
+    return hashlib.sha256(destination.read_bytes()).hexdigest()
+
+
 def _load_rows(dataset_dir: Path) -> list[dict[str, str]]:
     path = dataset_dir / "delta_tasks.csv"
     if not path.is_file():
@@ -52,6 +75,8 @@ def _load_rows(dataset_dir: Path) -> list[dict[str, str]]:
 def review_inputs(
     dataset_dir: Path,
     delta_ids: set[str] | None = None,
+    proxy_dir: Path | None = None,
+    proxy_width: int = 1024,
 ) -> list[dict[str, Any]]:
     """One review input per *pair*, carrying both views of both timepoints."""
     rows = _load_rows(dataset_dir)
@@ -80,12 +105,26 @@ def review_inputs(
             for path in (t0_path, t1_path):
                 if not path.is_file():
                     raise FileNotFoundError(path)
-            views.append({
+            view = {
                 "view_id": row["view_id"],
                 "t0_image_path": str(t0_path.resolve()),
                 "t1_image_path": str(t1_path.resolve()),
                 "t1_image_sha256": row["output_sha256"],
-            })
+            }
+            if proxy_dir is not None:
+                t0_proxy = proxy_dir / delta_id / f"{row['view_id']}-t0.png"
+                t1_proxy = proxy_dir / delta_id / f"{row['view_id']}-t1.png"
+                view.update({
+                    "source_t0_image_path": view["t0_image_path"],
+                    "source_t1_image_path": view["t1_image_path"],
+                    "source_t0_image_sha256": row["reference_sha256"],
+                    "source_t1_image_sha256": row["output_sha256"],
+                    "t0_proxy_sha256": _review_proxy(t0_path, t0_proxy, proxy_width),
+                    "t1_proxy_sha256": _review_proxy(t1_path, t1_proxy, proxy_width),
+                    "t0_image_path": str(t0_proxy.resolve()),
+                    "t1_image_path": str(t1_proxy.resolve()),
+                })
+            views.append(view)
         inputs.append({
             "delta_id": delta_id,
             "delta_class": spec["delta_class"],
@@ -253,12 +292,14 @@ def review(
     model: str = MODEL_MODE,
     batch_size: int = 1,
     timeout: int = 480,
+    proxy_dir: Path | None = None,
+    proxy_width: int = 1024,
 ) -> dict[str, Any]:
     if batch_size < 1:
         raise ValueError("batch_size must be at least 1")
     cli = _resolve_cli(cli_path)
     cli_version = _cli_version(cli)
-    inputs = review_inputs(dataset_dir, delta_ids)
+    inputs = review_inputs(dataset_dir, delta_ids, proxy_dir, proxy_width)
     if not inputs:
         raise ValueError("no delta pairs are ready for review")
     pairs: list[dict[str, Any]] = []
@@ -288,6 +329,8 @@ def review(
             "reviewed_at": started_at,
             "completed_at": _utc_now() if status == "complete" else None,
             "generation_path": "Antigravity CLI independent local-image review",
+            "review_proxy_dir": str(proxy_dir.resolve()) if proxy_dir else None,
+            "review_proxy_max_width": proxy_width if proxy_dir else None,
             "metered_api_call": False,
             "cli_version": cli_version,
             "reviewer_model_mode": model,
@@ -391,6 +434,12 @@ def main() -> int:
     parser.add_argument("--model", default=MODEL_MODE)
     parser.add_argument("--batch-size", type=int, default=1)
     parser.add_argument("--timeout", type=int, default=480)
+    parser.add_argument(
+        "--proxy-dir",
+        type=Path,
+        help="write/use 1024px lossless review proxies while retaining source hashes",
+    )
+    parser.add_argument("--proxy-width", type=int, default=1024)
     args = parser.parse_args()
     delta_ids = set(args.deltas) if args.deltas else None
     if args.probe:
@@ -398,7 +447,9 @@ def main() -> int:
         print(json.dumps(probe_verdict(report), indent=2))
         return 0
     if args.dry_run:
-        inputs = review_inputs(args.dataset_dir, delta_ids)
+        inputs = review_inputs(
+            args.dataset_dir, delta_ids, args.proxy_dir, args.proxy_width
+        )
         print(json.dumps({
             "review_type": "phase35_delta_pair_preflight",
             "count": len(inputs),
@@ -421,6 +472,8 @@ def main() -> int:
         args.model,
         args.batch_size,
         args.timeout,
+        args.proxy_dir,
+        args.proxy_width,
     )
     print(json.dumps(report["counts"], indent=2))
     print(json.dumps(probe_verdict(report), indent=2))

@@ -1,0 +1,16 @@
+{
+  "id": "P35-019-T1",
+  "delta_of": "RP-001",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "one tenancy period",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "splashback tile", "description": "a hairline crack is newly visible in the tile behind the hob", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "microwave", "description": "the microwave present on the worktop at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "bread bin", "description": "a plain bread bin is newly present on the worktop at T1", "material": true},
+    {"id": "D4", "kind": "cleanliness", "target": "sink", "description": "a few water marks and food crumbs are visible around the sink at T1", "material": true},
+    {"id": "D5", "kind": "worsened", "target": "base unit door", "description": "the existing lower-edge chip on the base unit door is larger", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "immaterial", "target": "dish towel", "description": "the same one cotton dish towel, same material and same count remains on the same oven handle, only hanging with a different fold", "material": false}
+  ],
+  "unchanged_assertions": ["same pale units, dark worktop, sink, oven, hob, extractor hood and window", "same room shape, floor, radiator, blind, door, skirting and camera viewpoint", "no other appliance, fitting, object or finish changes"]
+}

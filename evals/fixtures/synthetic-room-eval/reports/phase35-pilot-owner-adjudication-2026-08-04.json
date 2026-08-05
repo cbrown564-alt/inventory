@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "record_type": "phase35_delta_pilot_owner_adjudication",
+  "adjudicated_at": "2026-08-04",
+  "adjudicated_by": "project owner",
+  "delta_id": "P35-014-T1",
+  "room_type": "Dining room",
+  "independent_ai_review": "not completed",
+  "external_blocker": "Antigravity individual quota reached; service reported reset in 4h36m",
+  "evidence": {
+    "t0_a_wide": "images/openai/gpt-image-2/RP-016-A-wide.png",
+    "t1_a_wide": "images/openai/gpt-image-2/deltas/P35-014-T1-A-wide.png",
+    "t0_d_condition": "images/openai/gpt-image-2/RP-016-D-condition.png",
+    "t1_d_condition": "images/openai/gpt-image-2/deltas/P35-014-T1-D-condition.png"
+  },
+  "decision": "reject",
+  "same_room": true,
+  "same_room_notes": "The dining room, table, chairs, French doors, flooring, lighting and viewpoint remain recognisably the same.",
+  "enumerated": [
+    {"change_id": "D1", "visibility": "absent", "notes": "No new ring mark is visibly established on the oak tabletop."},
+    {"change_id": "D2", "visibility": "absent", "notes": "The chair count and positions do not show the specified sixth-chair removal clearly."},
+    {"change_id": "D3", "visibility": "clear", "notes": "A plain runner is clearly present on the table at T1."},
+    {"change_id": "D4", "visibility": "absent", "notes": "No new dusty area is visibly established on the timber floor."},
+    {"change_id": "D5", "visibility": "absent", "notes": "No darker flattened upholstery mark is visibly established on a grey chair seat."},
+    {"change_id": "D6", "visibility": "clear", "notes": "A small plain vase is clearly present on the table at T1."}
+  ],
+  "unenumerated_changes": [],
+  "reason": "Owner inspection rejects the pair because four material changes are absent or ambiguous. This is an owner adjudication exception caused by exhausted independent-review quota, not an independent AI review and not evidence that the generator met the prompt. Do not count this pair as an independently reviewed acceptance."
+}

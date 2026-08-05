@@ -26,6 +26,15 @@ from evals.synthetic.build_tasks import DEFAULT_DATASET
 #: drift surface for no extra signal at probe scale (docs/31 Phase 3.5).
 DELTA_VIEWS = ("A-wide", "D-condition")
 
+#: ``changes`` is both the generation instruction and the scoring gold, and
+#: after a frame exists those two jobs come apart. The prompt is frozen
+#: history — its hash pins the provenance of a rendered image — while the gold
+#: has to describe what the frame actually contains, including drift the
+#: reviewers found and nobody asked for. ``observed_changes`` carries that
+#: second kind: scored as gold, invisible to :func:`build_prompt`, so
+#: completing the gold can never rewrite the prompt of an image already made.
+OBSERVED_CHANGES_FIELD = "observed_changes"
+
 DELTA_CLASSES = {"temporal", "counterfactual"}
 
 VALID_CHANGE_KINDS = {
@@ -42,7 +51,7 @@ VALID_CHANGE_KINDS = {
 DELTA_PROVIDER = "gpt-image-2"
 
 FIELDNAMES = [
-    "task_id", "delta_id", "parent_scenario_id", "delta_class", "timepoint",
+    "task_id", "delta_id", "parent_scenario_id", "parent_split", "delta_class", "timepoint",
     "room_type", "provider", "product", "model_display_name", "view_id",
     "reference_path", "reference_sha256", "output_path", "prompt_sha256",
     "exact_prompt", "status", "attempts", "operator", "generated_at",
@@ -54,8 +63,47 @@ def _load(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _split_for_scenario(dataset_dir: Path, scenario_id: str) -> str:
+    """Resolve the frozen parent split; delta pairs never choose their own."""
+    matches = []
+    for split_path in sorted((dataset_dir / "splits").glob("*.json")):
+        split = _load(split_path)
+        if scenario_id in split.get("scenario_ids", []):
+            matches.append(split.get("split", split_path.stem))
+    if len(matches) != 1:
+        raise ValueError(
+            f"{scenario_id}: expected one frozen split assignment, found {matches}"
+        )
+    return matches[0]
+
+
 def _sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _validate_change(delta_id: str, change: dict[str, Any], seen: set[str]) -> None:
+    change_id = change.get("id")
+    if not change_id:
+        raise ValueError(f"{delta_id}: every change needs an id")
+    if change_id in seen:
+        raise ValueError(f"{delta_id}: duplicate change id {change_id!r}")
+    seen.add(change_id)
+    if change.get("kind") not in VALID_CHANGE_KINDS:
+        raise ValueError(
+            f"{delta_id}.{change_id}: kind must be one of "
+            f"{sorted(VALID_CHANGE_KINDS)}"
+        )
+    for field in ("target", "description"):
+        if not change.get(field):
+            raise ValueError(f"{delta_id}.{change_id}: {field} is required")
+    if not isinstance(change.get("material"), bool):
+        raise ValueError(
+            f"{delta_id}.{change_id}: material must be an explicit boolean"
+        )
+    if change["kind"] == "immaterial" and change["material"]:
+        raise ValueError(
+            f"{delta_id}.{change_id}: immaterial changes cannot be material"
+        )
 
 
 def validate_spec(spec: dict[str, Any], parent: dict[str, Any]) -> None:
@@ -79,27 +127,14 @@ def validate_spec(spec: dict[str, Any], parent: dict[str, Any]) -> None:
         raise ValueError(f"{delta_id}: changes must be a non-empty list")
     seen: set[str] = set()
     for change in changes:
-        change_id = change.get("id")
-        if not change_id:
-            raise ValueError(f"{delta_id}: every change needs an id")
-        if change_id in seen:
-            raise ValueError(f"{delta_id}: duplicate change id {change_id!r}")
-        seen.add(change_id)
-        if change.get("kind") not in VALID_CHANGE_KINDS:
+        _validate_change(delta_id, change, seen)
+
+    for change in spec.get("observed_changes") or []:
+        _validate_change(delta_id, change, seen)
+        if not change.get("source"):
             raise ValueError(
-                f"{delta_id}.{change_id}: kind must be one of "
-                f"{sorted(VALID_CHANGE_KINDS)}"
-            )
-        for field in ("target", "description"):
-            if not change.get(field):
-                raise ValueError(f"{delta_id}.{change_id}: {field} is required")
-        if not isinstance(change.get("material"), bool):
-            raise ValueError(
-                f"{delta_id}.{change_id}: material must be an explicit boolean"
-            )
-        if change["kind"] == "immaterial" and change["material"]:
-            raise ValueError(
-                f"{delta_id}.{change_id}: immaterial changes cannot be material"
+                f"{delta_id}.{change['id']}: an observed change must name the "
+                "review that found it — it is gold nobody specified in advance"
             )
 
     assertions = spec.get("unchanged_assertions")
@@ -174,12 +209,19 @@ def build_prompt(
     changes = _change_lines(changes_for(spec["changes"], view["id"]))
     unchanged = "; ".join(spec["unchanged_assertions"])
     avoid = ", ".join(parent["avoid"])
-    horizon = spec.get("elapsed_description", "a single tenancy period")
+    if spec["delta_class"] == "counterfactual":
+        temporal_context = (
+            "at the same inspection timepoint as the reference, in a "
+            "counterfactual variant"
+        )
+    else:
+        horizon = spec.get("elapsed_description", "a single tenancy period")
+        temporal_context = f"at a later inspection, after {horizon}"
     return (
         f"Re-photograph the exact room shown in the attached reference image "
         f"{reference_name}. This is the same physical "
-        f"{parent['room_type'].lower()} at a later inspection, after "
-        f"{horizon}. Reproduce view {view['id']}: {view['viewpoint']}; "
+        f"{parent['room_type'].lower()} {temporal_context}. "
+        f"Reproduce view {view['id']}: {view['viewpoint']}; "
         f"{view['shot_scale']}. "
         "Keep the room identical to the reference in every respect — same "
         "layout, fittings, furniture, finishes, flooring, window, door "
@@ -230,6 +272,7 @@ def build_rows(
     extension = provider["file_extension"]
     rows: list[dict[str, str]] = []
     for spec, parent in load_specs(dataset_dir, delta_ids):
+        parent_split = _split_for_scenario(dataset_dir, parent["id"])
         views = {view["id"]: view for view in parent["views"]}
         for view_id in DELTA_VIEWS:
             if view_id not in views:
@@ -258,6 +301,7 @@ def build_rows(
                 "task_id": f"{spec['id']}.{DELTA_PROVIDER}.{view_id}",
                 "delta_id": spec["id"],
                 "parent_scenario_id": parent["id"],
+                "parent_split": parent_split,
                 "delta_class": spec["delta_class"],
                 "timepoint": spec["timepoint"],
                 "room_type": parent["room_type"],

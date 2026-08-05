@@ -1,0 +1,16 @@
+{
+  "id": "P35-024-CF",
+  "delta_of": "RP-009",
+  "delta_class": "counterfactual",
+  "timepoint": "same-timepoint-present",
+  "elapsed_description": "the same inspection timepoint in a counterfactual variant",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "cream carpet", "description": "a dark stain is present beside the double bed", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "new_defect", "target": "chest of drawers", "description": "two deep scratches are present beside the top drawer handle", "material": true, "views": ["D-condition"]},
+    {"id": "D3", "kind": "item_added", "target": "laundry basket", "description": "a woven laundry basket is present beside the wardrobe", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "item_removed", "target": "bedside lamp", "description": "the bedside lamp is absent from the bedside table", "material": true, "views": ["A-wide"]},
+    {"id": "D5", "kind": "cleanliness", "target": "bedside table", "description": "a visible dust mark and loose belongings are present on the bedside table", "material": true},
+    {"id": "D6", "kind": "worsened", "target": "headboard", "description": "the headboard has a darker worn patch near one corner", "material": true, "views": ["D-condition"]}
+  ],
+  "unchanged_assertions": ["same double bed, headboard, oak wardrobes, cream carpet, bay window and bedside tables", "same chest of drawers, mirror, radiator, curtains, sockets and camera viewpoint", "no changed room shape, door, floor finish or window geometry"]
+}

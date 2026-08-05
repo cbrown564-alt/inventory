@@ -1,0 +1,16 @@
+{
+  "id": "P35-023-CF",
+  "delta_of": "RP-008",
+  "delta_class": "counterfactual",
+  "timepoint": "same-timepoint-present",
+  "elapsed_description": "the same inspection timepoint in a counterfactual variant",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "grey carpet", "description": "a dark circular stain is present near the radiator", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "new_defect", "target": "pale blue wall", "description": "a small nail hole and flaked paint are present near the door", "material": true, "views": ["D-condition"]},
+    {"id": "D3", "kind": "item_added", "target": "single bed", "description": "a single bed is present against the far wall", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "item_removed", "target": "curtain pole", "description": "the curtain pole is absent from the sash window", "material": true, "views": ["A-wide"]},
+    {"id": "D5", "kind": "cleanliness", "target": "carpet", "description": "loose dust and a small paper scrap are present on the carpet", "material": true},
+    {"id": "D6", "kind": "worsened", "target": "skirting board", "description": "a rub mark on the skirting is visibly darker", "material": true, "views": ["D-condition"]}
+  ],
+  "unchanged_assertions": ["same pale blue walls, grey carpet, white radiator, sash window, wardrobe and doorway", "same sockets, skirting, ceiling pendant, threshold and camera viewpoint", "no changed room dimensions, window geometry or fixed fittings"]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "P35-014-T1",
+  "delta_of": "RP-016",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "one tenancy period",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "oak tabletop", "description": "a small ring mark is newly visible on the tabletop", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "sixth dining chair", "description": "one of the six chairs present at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "table runner", "description": "a plain table runner is newly laid on the dining table", "material": true},
+    {"id": "D4", "kind": "cleanliness", "target": "timber floor", "description": "a small dusty area is visible beneath the table at T1", "material": true, "views": ["D-condition"]},
+    {"id": "D5", "kind": "worsened", "target": "chair upholstery", "description": "one grey chair seat has a darker flattened mark than at T0", "material": true},
+    {"id": "D6", "kind": "item_added", "target": "small vase", "description": "a small plain vase is newly present on the dining table", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same oak table, six chair positions, French doors, pendant light and pale timber floor", "same display items, wall finish, sockets, skirting and camera viewpoint", "no change to table size, room dimensions or door and window geometry"]
+}

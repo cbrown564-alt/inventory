@@ -1,0 +1,16 @@
+{
+  "id": "P35-004-T1",
+  "delta_of": "RP-004",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "one tenancy period",
+  "changes": [
+    {"id": "D1", "kind": "worsened", "target": "vinyl floor tear", "description": "the triangular tear beside the cooker is wider and its edge is lifted", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "wall clock", "description": "the wall clock visible at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "dishcloth", "description": "a blue dishcloth is newly present beside the sink", "material": true},
+    {"id": "D4", "kind": "new_defect", "target": "base unit plinth", "description": "a small dent is visible in the plinth beneath the sink", "material": true, "views": ["D-condition"]},
+    {"id": "D5", "kind": "cleanliness", "target": "cream laminate worktop", "description": "two small water marks and crumbs are visible on the worktop at T1", "material": true},
+    {"id": "D6", "kind": "item_added", "target": "bread bin", "description": "a plain bread bin is newly present on the worktop", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same wood-effect units, cream laminate worktop, freestanding cooker, sink and patterned floor", "same wall clock location is empty but all other walls, radiator, blind and door remain unchanged", "no other furniture, fitting, finish or camera position changes"]
+}

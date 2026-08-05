@@ -1,0 +1,16 @@
+{
+  "id": "P35-005-T1",
+  "delta_of": "RP-006",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "several months",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "vanity drawer front", "description": "a small chip is newly visible on the upper corner of the vanity drawer", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "small bath mat", "description": "the bath mat visible at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "soap dispenser", "description": "a plain soap dispenser is newly present beside the basin", "material": true},
+    {"id": "D4", "kind": "cleanliness", "target": "glass shower screen", "description": "a few water spots are visible on the shower glass at T1", "material": true},
+    {"id": "D5", "kind": "worsened", "target": "silicone joint", "description": "the existing discolouration along the vanity silicone joint is darker", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "item_removed", "target": "bath shelf", "description": "the small shelf visible beside the basin at T0 is absent at T1", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same white suite, pale stone tiles, walk-in shower, glass screen, vanity and chrome towel rail", "same window, door, mirror, extractor, floor drain and camera viewpoint", "no extra sanitary fixture and no changed room geometry"]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "P35-002-T1",
+  "delta_of": "RP-002",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "one tenancy period",
+  "changes": [
+    {"id": "D1", "kind": "worsened", "target": "bath panel", "description": "the existing scuff on the bath panel is longer and darker than at T0", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "new_defect", "target": "silicone seal", "description": "a short split is visible in the silicone seal at the bath corner", "material": true, "views": ["D-condition"]},
+    {"id": "D3", "kind": "item_removed", "target": "blue bath mat", "description": "the blue bath mat present at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "item_added", "target": "shampoo bottle", "description": "one plain shampoo bottle is newly present on the bath ledge", "material": true},
+    {"id": "D5", "kind": "cleanliness", "target": "lower wall tiles", "description": "light splash marks are visible on the lower wall tiles at T1", "material": true},
+    {"id": "D6", "kind": "item_added", "target": "waste bin", "description": "a small plain waste bin is newly present beside the basin", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same white suite, grey wall tiles, glass screen, towel rail and window", "same bath, WC, basin, mirror, extractor and door positions", "no new sanitary fixture, no changed camera viewpoint and no changed room geometry"]
+}

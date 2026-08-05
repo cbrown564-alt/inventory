@@ -1,0 +1,16 @@
+{
+  "id": "P35-020-T1",
+  "delta_of": "RP-004",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "several months",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "cooker side panel", "description": "a small dent is newly visible on the side panel of the cooker", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "countertop kettle", "description": "the kettle present beside the sink at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "draining board", "description": "a plastic draining board is newly present beside the sink", "material": true},
+    {"id": "D4", "kind": "cleanliness", "target": "patterned vinyl floor", "description": "a few muddy footprints are visible on the floor at T1", "material": true, "views": ["D-condition"]},
+    {"id": "D5", "kind": "worsened", "target": "base unit plinth", "description": "the existing scuff on the plinth is darker and longer", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "immaterial", "target": "oven glove", "description": "the same one fabric oven glove, same material and same count remains on the same handle, only turned to face the other way", "material": false}
+  ],
+  "unchanged_assertions": ["same wood-effect units, cream laminate worktop, freestanding cooker, sink and patterned floor", "same radiator, window blind, wall clock, door, skirting and camera viewpoint", "no other appliance, fitting, furniture or room geometry changes"]
+}

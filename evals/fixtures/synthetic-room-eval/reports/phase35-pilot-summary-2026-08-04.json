@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "record_type": "phase35_delta_pilot_summary",
+  "completed_at": "2026-08-04",
+  "dataset_id": "synthetic-room-eval",
+  "status": "complete_with_explicit_owner_review_exception",
+  "pair_count": 30,
+  "pair_classes": {
+    "counterfactual": 10,
+    "temporal": 20
+  },
+  "parent_splits": {
+    "development": 50,
+    "validation": 10
+  },
+  "view_frame_count": 60,
+  "generated_frame_count": 60,
+  "enumerated_change_count": 180,
+  "change_kinds": {
+    "new_defect": 40,
+    "item_added": 40,
+    "item_removed": 33,
+    "cleanliness": 30,
+    "worsened": 30,
+    "immaterial": 7
+  },
+  "immaterial_pair_count": 7,
+  "review_counts": {
+    "accept": 3,
+    "reject": 27,
+    "escalate": 0
+  },
+  "independent_ai_pairs": 29,
+  "owner_only_pairs": 1,
+  "owner_only_pair_ids": [
+    "P35-014-T1"
+  ],
+  "review_blocker": "The owner-only pair is retained as an explicit exception and must not be described as two independent AI reviews.",
+  "evidence_class": "Synthetic development evidence; cannot promote compare behaviour.",
+  "compare_scoring": "not_run — no compare_inventories output was supplied; use score_delta.py with a review-gated compare output."
+}

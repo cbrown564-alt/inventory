@@ -1,0 +1,16 @@
+{
+  "id": "P35-010-T1",
+  "delta_of": "RP-011",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "one tenancy period",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "grey sofa arm", "description": "a small dark mark is visible on the front of the sofa arm", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "floor lamp", "description": "the floor lamp present at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "side table", "description": "a small round side table is newly present beside the sofa", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "cleanliness", "target": "oak coffee table", "description": "a few visible rings and crumbs are present on the coffee table at T1", "material": true},
+    {"id": "D5", "kind": "worsened", "target": "carpet", "description": "the existing faint carpet mark near the coffee table is darker", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "immaterial", "target": "scatter cushions", "description": "the same two scatter cushions, same materials and same count remain on the same sofa, with only their order along the seat changed", "material": false}
+  ],
+  "unchanged_assertions": ["same grey sofa, armchair, oak coffee table, television unit, television and cream throw", "same carpet, wall, glazing, balcony view, door positions and camera viewpoint", "no change to visible exterior balcony items, room shape or furniture upholstery"]
+}

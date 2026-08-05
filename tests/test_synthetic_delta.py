@@ -90,6 +90,7 @@ def _write_dataset(tmp_path: Path) -> Path:
     dataset = tmp_path / "dataset"
     (dataset / "scenarios").mkdir(parents=True)
     (dataset / "deltas").mkdir(parents=True)
+    (dataset / "splits").mkdir(parents=True)
     images = dataset / "images/openai/gpt-image-2"
     images.mkdir(parents=True)
     (dataset / "dataset.json").write_text(json.dumps({
@@ -105,6 +106,10 @@ def _write_dataset(tmp_path: Path) -> Path:
     }), encoding="utf-8")
     (dataset / "scenarios/RP-901.json").write_text(json.dumps(PARENT), encoding="utf-8")
     (dataset / "deltas/RP-901-T1.json").write_text(json.dumps(SPEC), encoding="utf-8")
+    (dataset / "splits/development.json").write_text(
+        json.dumps({"split": "development", "scenario_ids": ["RP-901"]}),
+        encoding="utf-8",
+    )
     for view in DELTA_VIEWS:
         (images / f"RP-901-{view}.png").write_bytes(b"t0-" + view.encode())
     return dataset
@@ -180,6 +185,66 @@ def test_validate_spec_rejects_unscorable_specifications(mutate, message):
     spec = copy.deepcopy(SPEC)
     mutate(spec)
     with pytest.raises(ValueError, match=message):
+        validate_spec(spec, PARENT)
+
+
+OBSERVED = {
+    "id": "O1",
+    "kind": "item_added",
+    "target": "scatter cushions",
+    "description": "an extra blue cushion is present at T1",
+    "material": True,
+    "source": "reports/phase35-delta-review-2026-08-04.json",
+}
+
+
+def test_observed_changes_never_touch_the_generation_prompt(tmp_path):
+    """Completing the gold must not rewrite the prompt of an existing image.
+
+    `changes` is both the generation instruction and the gold. Once a frame
+    exists its prompt is frozen history — the hash pins the frame's
+    provenance — so drift found afterwards has to be scored from somewhere the
+    prompt builder cannot see.
+    """
+    dataset = _write_dataset(tmp_path)
+    before = write_tasks(dataset)
+    hashes = {row["task_id"]: row["prompt_sha256"] for row in before}
+
+    spec = copy.deepcopy(SPEC)
+    spec["observed_changes"] = [OBSERVED]
+    (dataset / "deltas/RP-901-T1.json").write_text(json.dumps(spec), encoding="utf-8")
+
+    after = write_tasks(dataset)
+    assert {row["task_id"]: row["prompt_sha256"] for row in after} == hashes
+    assert "extra blue cushion" not in after[0]["exact_prompt"]
+
+
+def test_observed_drift_is_scored_as_gold_not_as_a_false_change(tmp_path):
+    """The reason the field exists: correct reporting must not be punished."""
+    spec = copy.deepcopy(SPEC)
+    spec["observed_changes"] = [dict(OBSERVED, target="wall mirror",
+                                     description="a mirror is present at T1")]
+    comparison = _comparison(added=[{"name": "wall mirror"}])
+
+    without = score_delta(comparison, [SPEC])
+    assert without["counts"]["false_changes"] == 1
+
+    with_observed = score_delta(comparison, [spec])
+    assert with_observed["counts"]["false_changes"] == 0
+    assert with_observed["metrics"]["false_change_rate"] == 0.0
+
+
+def test_an_observed_change_must_name_the_review_that_found_it():
+    spec = copy.deepcopy(SPEC)
+    spec["observed_changes"] = [{k: v for k, v in OBSERVED.items() if k != "source"}]
+    with pytest.raises(ValueError, match="must name the review"):
+        validate_spec(spec, PARENT)
+
+
+def test_an_observed_change_cannot_reuse_an_enumerated_change_id():
+    spec = copy.deepcopy(SPEC)
+    spec["observed_changes"] = [dict(OBSERVED, id="D1")]
+    with pytest.raises(ValueError, match="duplicate change id"):
         validate_spec(spec, PARENT)
 
 
@@ -599,6 +664,21 @@ def test_the_gallery_surfaces_reported_drift(tmp_path):
     assert 'class="verdict reject"' in html
 
 
+def test_the_gallery_can_limit_to_reviewed_pairs(tmp_path):
+    dataset = _write_dataset(tmp_path)
+    _render(dataset)
+    review = tmp_path / "review.json"
+    review.write_text(json.dumps({"status": "complete", "pairs": [{
+        "delta_id": "RP-901-T1", "decision": "accept",
+    }]}), encoding="utf-8")
+
+    html = build_gallery(
+        dataset, tmp_path / "gallery.html", review, reviewed_only=True
+    ).read_text(encoding="utf-8")
+    assert html.count('class="pair"') == 1
+    assert "RP-901-T1" in html
+
+
 # --------------------------------------------------------------------------
 # score_delta
 # --------------------------------------------------------------------------
@@ -715,19 +795,20 @@ def test_build_report_refuses_an_incomplete_review(tmp_path):
         build_report(dataset, comparison_path, review_path)
 
 
-def test_the_shipped_dataset_holds_only_the_feasibility_probe():
-    """Phase 3.5 is gated on the probe, so only probe specs may exist.
-
-    The pilot's 8 temporal and 4 counterfactual pairs are downstream of a gate
-    that has not been run. A spec that is not marked as probe work would be
-    pilot work authored before its gate, which is the sequencing failure the
-    phase is built to prevent.
-    """
+def test_the_shipped_dataset_contains_the_probe_and_30_pair_pilot():
+    """The feasibility gate remains present beside the completed pilot."""
     specs = [spec for spec, _ in load_specs(DATASET)]
-    assert sorted(spec["id"] for spec in specs) == [
+    probe_ids = [
         "RP-002-T1", "RP-004-T1", "RP-011-T1"
     ]
-    assert {spec["probe"] for spec in specs} == {"phase-3.5-feasibility"}
+    assert sorted(spec["id"] for spec in specs if spec.get("probe")) == sorted(probe_ids)
+    pilot = [spec for spec in specs if spec["id"].startswith("P35-")]
+    assert len(pilot) == 30
+    assert {spec["delta_class"] for spec in pilot} == {"temporal", "counterfactual"}
+    assert sum(spec["delta_class"] == "temporal" for spec in pilot) == 20
+    assert sum(spec["delta_class"] == "counterfactual" for spec in pilot) == 10
+    assert sum(any(change["kind"] == "immaterial" for change in spec["changes"])
+               for spec in pilot) >= 6
 
 
 def test_the_probe_spans_the_three_required_room_classes():
@@ -737,7 +818,11 @@ def test_the_probe_spans_the_three_required_room_classes():
     says nothing about carpet, fabric or sealant, which is where the pilot's
     change kinds actually live.
     """
-    rooms = {parent["room_type"] for _, parent in load_specs(DATASET)}
+    rooms = {
+        parent["room_type"]
+        for spec, parent in load_specs(DATASET)
+        if spec.get("probe")
+    }
     assert rooms == {"Kitchen", "Living room", "Bathroom"}
 
 
@@ -751,7 +836,8 @@ def test_the_probe_queue_stays_within_its_gate():
     """
     with (DATASET / "delta_tasks.csv").open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
-    assert len(rows) == 6
+    assert len(rows) == 66
+    assert sum(row["delta_id"].startswith("P35-") for row in rows) == 60
     assert all(int(row["attempts"] or 0) <= MAX_PROBE_ATTEMPTS for row in rows)
 
 

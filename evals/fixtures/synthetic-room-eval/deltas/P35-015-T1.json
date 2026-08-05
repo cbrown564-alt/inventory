@@ -1,0 +1,16 @@
+{
+  "id": "P35-015-T1",
+  "delta_of": "RP-017",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "several months",
+  "changes": [
+    {"id": "D1", "kind": "worsened", "target": "table edge", "description": "the existing nick on the table edge is wider and more visible", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "tablecloth", "description": "the tablecloth present at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "serving bowl", "description": "a ceramic serving bowl is newly present on the table", "material": true},
+    {"id": "D4", "kind": "new_defect", "target": "patterned wallpaper", "description": "a small tear is newly visible in the wallpaper beside the cabinet", "material": true},
+    {"id": "D5", "kind": "cleanliness", "target": "dark dining table", "description": "crumbs and a light ring mark are visible on the tabletop at T1", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "immaterial", "target": "chair cushion", "description": "the same four chair cushions, same fabric material and same count remain on the same four chairs, only their ties are arranged differently", "material": false}
+  ],
+  "unchanged_assertions": ["same dark table, four upholstered chairs, display cabinet, chandelier, patterned wallpaper and carpet", "same doorway, radiator, skirting, chair count and camera viewpoint", "no change to cabinet, wall geometry, floor finish or fixed lighting"]
+}

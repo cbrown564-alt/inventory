@@ -128,10 +128,17 @@ def score_delta(
     comparison: dict[str, Any],
     specs: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    """Score one compare run against every enumerated change in ``specs``."""
+    """Score one compare run against every enumerated change in ``specs``.
+
+    Gold is ``changes`` plus ``observed_changes``. Leaving the observed drift
+    out would charge a compare run with a false change for correctly reporting
+    something that is visibly in the frame — the metric would then be measuring
+    the generator's drift rather than the model's invention, and it would
+    penalise exactly the right answer.
+    """
     gold_changes = [
         dict(change, delta_id=spec["id"]) for spec in specs
-        for change in spec["changes"]
+        for change in list(spec["changes"]) + list(spec.get("observed_changes") or [])
     ]
     reported = _iter_reported(comparison)
     matched_entries: set[int] = set()

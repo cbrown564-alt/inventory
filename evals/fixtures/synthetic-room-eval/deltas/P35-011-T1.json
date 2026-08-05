@@ -1,0 +1,16 @@
+{
+  "id": "P35-011-T1",
+  "delta_of": "RP-012",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "several months",
+  "changes": [
+    {"id": "D1", "kind": "worsened", "target": "armchair upholstery", "description": "a small existing pull in the upholstery is longer at T1", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "television remote", "description": "the remote control visible on the coffee table at T0 is absent", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "magazine stack", "description": "a small stack of magazines is newly present on the coffee table", "material": true},
+    {"id": "D4", "kind": "new_defect", "target": "painted skirting", "description": "a short scuff is newly visible on the skirting by the door", "material": true, "views": ["D-condition"]},
+    {"id": "D5", "kind": "cleanliness", "target": "television unit", "description": "a visible dust line is present on the television unit at T1", "material": true},
+    {"id": "D6", "kind": "item_added", "target": "television remote", "description": "a television remote is newly present on the coffee table", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same living room layout, sofa, armchair, coffee table, television unit, television and carpet", "same glazing, window, door, walls, skirting and camera viewpoint", "no change to furniture count, upholstery colour or room geometry"]
+}

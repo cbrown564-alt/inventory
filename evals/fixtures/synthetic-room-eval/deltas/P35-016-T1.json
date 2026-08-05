@@ -1,0 +1,16 @@
+{
+  "id": "P35-016-T1",
+  "delta_of": "RP-015",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "one tenancy period",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "hall skirting", "description": "a short scratch is newly visible on the skirting beside the tiled floor", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "umbrella stand", "description": "the umbrella stand present beside the coat bench at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "shoe rack", "description": "a narrow shoe rack is newly present beside the glazed door", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "cleanliness", "target": "floor tiles", "description": "dust and muddy marks are visible on the entrance tiles at T1", "material": true, "views": ["D-condition"]},
+    {"id": "D5", "kind": "worsened", "target": "threshold strip", "description": "the existing rub on the threshold strip is darker than at T0", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "item_added", "target": "coat", "description": "one plain coat is newly hanging on the open coat bench", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same pale walls, tiled floor, glazed door, coat bench, wall hooks, mirror and radiator", "same threshold, skirting, door furniture and camera viewpoint", "no change to hall geometry, fixed fittings or tile layout"]
+}

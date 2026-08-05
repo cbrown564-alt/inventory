@@ -1,0 +1,16 @@
+{
+  "id": "P35-006-T1",
+  "delta_of": "RP-007",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "one tenancy period",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "mosaic wall grout", "description": "a short cracked grout section is visible beside the shower tray", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "towel ring", "description": "the towel ring visible beside the basin at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "shower squeegee", "description": "a small squeegee is newly hanging inside the shower enclosure", "material": true},
+    {"id": "D4", "kind": "cleanliness", "target": "shower glass", "description": "light water spotting is visible on the shower glass at T1", "material": true},
+    {"id": "D5", "kind": "worsened", "target": "vinyl floor", "description": "a faint scuff near the basin is longer and darker than at T0", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "item_added", "target": "bath mat", "description": "a small bath mat is newly present beside the basin", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same sloped ceiling, compact shower, pedestal basin, WC, mosaic tiles and vinyl floor", "same door, mirror, towel ring location, extractor, shower controls and camera viewpoint", "no extra sanitary fixture or changed room shape"]
+}

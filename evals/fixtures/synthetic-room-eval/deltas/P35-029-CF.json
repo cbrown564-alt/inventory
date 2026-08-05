@@ -1,0 +1,16 @@
+{
+  "id": "P35-029-CF",
+  "delta_of": "RP-017",
+  "delta_class": "counterfactual",
+  "timepoint": "same-timepoint-present",
+  "elapsed_description": "the same inspection timepoint in a counterfactual variant",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "table edge", "description": "a chipped section is present on the front table edge", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "new_defect", "target": "patterned wallpaper", "description": "a torn patch is present in the wallpaper beside the cabinet", "material": true, "views": ["D-condition"]},
+    {"id": "D3", "kind": "item_added", "target": "serving bowl", "description": "a ceramic serving bowl is present on the table", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "item_removed", "target": "tablecloth", "description": "the tablecloth is absent from the table", "material": true, "views": ["A-wide"]},
+    {"id": "D5", "kind": "cleanliness", "target": "dark dining table", "description": "crumbs and two rings are present on the tabletop", "material": true},
+    {"id": "D6", "kind": "worsened", "target": "chair back", "description": "one chair back has a visibly darker scuff", "material": true, "views": ["D-condition"]}
+  ],
+  "unchanged_assertions": ["same dark table, four upholstered chairs, display cabinet, chandelier, patterned wallpaper and carpet", "same doorway, radiator, skirting, chair count and camera viewpoint", "no changed cabinet, floor finish, room geometry or fixed lighting"]
+}

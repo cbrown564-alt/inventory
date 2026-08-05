@@ -1,0 +1,16 @@
+{
+  "id": "P35-018-T1",
+  "delta_of": "RP-016",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "one tenancy period",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "chair upholstery", "description": "a dark tear is newly visible on one grey chair seat", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "pendant light", "description": "the pendant light present above the table at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "serving trolley", "description": "a small serving trolley is newly present beside the table", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "cleanliness", "target": "oak tabletop", "description": "crumbs and two visible rings are present on the tabletop at T1", "material": true},
+    {"id": "D5", "kind": "worsened", "target": "timber floor", "description": "the existing scuff beneath the table is darker than at T0", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "item_added", "target": "place mat", "description": "a plain place mat is newly present at one end of the table", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same oak table, six grey chairs, French doors, pale timber floor and pendant light position", "same wall finish, skirting, sockets, door and camera viewpoint", "no change to table size, room geometry or window and door positions"]
+}

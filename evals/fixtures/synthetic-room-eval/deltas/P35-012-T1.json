@@ -1,0 +1,16 @@
+{
+  "id": "P35-012-T1",
+  "delta_of": "RP-013",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "one tenancy period",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "window sill", "description": "a small chip is visible on the painted window sill", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "plant pot", "description": "the plant pot present on the sill at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "floor cushion", "description": "one floor cushion is newly present beside the armchair", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "cleanliness", "target": "window glass", "description": "finger marks are visible on the lower part of the window glass at T1", "material": true},
+    {"id": "D5", "kind": "worsened", "target": "door leaf", "description": "the existing scuff on the lower door leaf is darker and longer", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "immaterial", "target": "curtain panel", "description": "the same one curtain panel, same fabric and same count remains on the same window, only gathered to a different width", "material": false}
+  ],
+  "unchanged_assertions": ["same sofa, armchair, coffee table, television unit, carpet, window and door", "same wall finish, skirting, sockets, radiator and camera viewpoint", "no change to visible exterior view, furniture layout or room shape"]
+}

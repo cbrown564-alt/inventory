@@ -38,6 +38,26 @@
       "views": ["A-wide"]
     }
   ],
+  "observed_changes": [
+    {
+      "id": "O1",
+      "kind": "item_added",
+      "target": "scatter cushions on the sofa",
+      "description": "an extra dark blue scatter cushion is present on the sofa at T1 that is not present at T0, and one textured beige cushion has been replaced by a smooth beige one",
+      "material": true,
+      "views": ["A-wide"],
+      "source": "reports/phase35-delta-review-2026-08-04.json — both independent reviewers, 4 Aug 2026"
+    },
+    {
+      "id": "O2",
+      "kind": "item_removed",
+      "target": "potted plant on the balcony outside the glass doors",
+      "description": "the brown potted plant standing on the balcony floor at T0 is absent at T1; it is outside the room but plainly visible through the glazing",
+      "material": true,
+      "views": ["A-wide"],
+      "source": "reports/phase35-delta-review-2026-08-04.json — both independent reviewers, 4 Aug 2026"
+    }
+  ],
   "unchanged_assertions": [
     "same grey sofa and armchair in the same positions, same upholstery and same cushion covers",
     "same oak coffee table, timber television unit and television",
@@ -46,5 +66,6 @@
     "same cream throw over the arm of the armchair",
     "no change to the room's shape, furniture layout, or camera viewpoint"
   ],
-  "design_note": "The soft-furnished arm of the probe, and the only spec carrying an immaterial change. D4 exists because the false-change metric's hardest case is a real but immaterial difference: a scorer that reports rearranged cushions as a change would convert an ordinary tenancy into a deposit dispute, and a spec with only material changes never tests that. D2 is deliberately unscoped — the carpet is prominent in both views, so it is the one change this probe renders twice, which is the only place the pair can show whether one enumerated change survives two independent renders."
+  "design_note": "The soft-furnished arm of the probe, and the only spec carrying an immaterial change. D4 exists because the false-change metric's hardest case is a real but immaterial difference: a scorer that reports rearranged cushions as a change would convert an ordinary tenancy into a deposit dispute, and a spec with only material changes never tests that. D2 is deliberately unscoped — the carpet is prominent in both views, so it is the one change this probe renders twice, which is the only place the pair can show whether one enumerated change survives two independent renders.",
+  "observed_note": "Both independent reviewers rejected this pair on O1 and O2, and the project owner approved it anyway on 4 Aug 2026: a tenant may well add a plant pot or a cushion, so the frames are realistic. Realism was never the objection. The gold's claim is that it lists everything that differs, so an unlisted difference makes a correct compare run look like it invented a change. O1 and O2 are recorded here rather than appended to changes because changes is also the generation prompt, and this image already exists: editing it would rewrite the prompt hash that pins the frame's provenance. This gold is therefore observational, derived after the render from the two reviews cited in each source, and is complete only to the extent those reviews were. Note also that D4 asked for cushions to be rearranged and the generator instead added one — the immaterial change is where it took licence, which is the finding that reshapes the pilot."
 }

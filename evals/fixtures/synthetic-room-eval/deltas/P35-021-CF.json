@@ -1,0 +1,16 @@
+{
+  "id": "P35-021-CF",
+  "delta_of": "RP-002",
+  "delta_class": "counterfactual",
+  "timepoint": "same-timepoint-present",
+  "elapsed_description": "the same inspection timepoint in a counterfactual variant",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "bath panel", "description": "a dark 12cm scuff is present on the lower bath panel", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "new_defect", "target": "silicone seal", "description": "a short split is present in the bath corner silicone seal", "material": true, "views": ["D-condition"]},
+    {"id": "D3", "kind": "item_added", "target": "bath mat", "description": "a blue bath mat is present on the floor", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "item_removed", "target": "hand towel", "description": "the hand towel on the rail is absent", "material": true, "views": ["A-wide"]},
+    {"id": "D5", "kind": "cleanliness", "target": "lower wall tiles", "description": "visible splash marks are present on the lower wall tiles", "material": true},
+    {"id": "D6", "kind": "worsened", "target": "bath panel", "description": "the panel finish is visibly more worn around the scuff", "material": true, "views": ["D-condition"]}
+  ],
+  "unchanged_assertions": ["same white suite, grey tiles, glass screen, towel rail, window, bath, basin and WC", "same door, mirror, extractor, floor and camera viewpoint", "no additional sanitary fixture and no changed room geometry"]
+}

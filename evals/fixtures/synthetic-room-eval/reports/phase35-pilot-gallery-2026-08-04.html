@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phase 3.5 delta pairs — owner adjudication</title>
+<style>
+:root {
+  --paper: #f6f3ec;
+  --panel: #fffdf8;
+  --panel-muted: #f1ede3;
+  --ink: #22262d;
+  --muted: #626b76;
+  --line: #e4dfd3;
+  --brass: #9a7729;
+  --brass-deep: #7d5e1b;
+  --ok: #1d6f4c;
+  --warn: #8a6a1f;
+  --bad: #a3312a;
+  --media: #0e1116;
+  --shadow: 0 18px 40px rgba(34, 38, 45, 0.08);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --sans: "Avenir Next", Avenir, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --serif: Fraunces, "New York", "Iowan Old Style", Palatino, Charter, Georgia, serif;
+}
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(154, 119, 41, 0.08), transparent 60%),
+    linear-gradient(180deg, #f8f5ef 0%, var(--paper) 40%, #f3efe6 100%);
+  font: 14px/1.55 var(--sans);
+}
+button, textarea { font: inherit; color: inherit; }
+button {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 7px;
+  padding: 10px 14px;
+  min-height: 44px;
+  cursor: pointer;
+  transition: background 180ms var(--ease), border-color 180ms var(--ease), transform 180ms var(--ease);
+}
+button:hover { border-color: #d2c9b5; }
+button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+button[data-active="1"] {
+  border-color: var(--brass);
+  background: var(--primary-soft, #f0e7d2);
+  color: var(--brass-deep);
+}
+button.primary {
+  background: var(--brass);
+  border-color: var(--brass);
+  color: var(--panel);
+}
+button.primary:hover { background: var(--brass-deep); border-color: var(--brass-deep); }
+button.danger {
+  background: color-mix(in srgb, var(--bad) 10%, white);
+  border-color: color-mix(in srgb, var(--bad) 35%, white);
+  color: var(--bad);
+}
+button.ghost { background: transparent; }
+.app {
+  min-height: 100%;
+  width: 100%;
+  max-width: 100vw;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow-x: hidden;
+}
+.top {
+  display: grid;
+  gap: 16px;
+  padding: 20px 28px 14px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+@media (min-width: 1100px) {
+  .top {
+    grid-template-columns: minmax(280px, 1fr) auto;
+    align-items: end;
+    justify-content: space-between;
+  }
+}
+.controls { display: grid; gap: 10px; justify-items: start; }
+@media (min-width: 1100px) {
+  .controls { justify-items: end; }
+}
+.brand h1 {
+  margin: 0;
+  font: 600 28px/1.2 var(--serif);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.brand p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  max-width: 62ch;
+}
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.hint {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.75fr);
+  gap: 20px;
+  padding: 20px 28px;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.stage {
+  background: var(--media);
+  border-radius: 14px;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  position: relative;
+  align-self: start;
+}
+.stage img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(70vh, 760px);
+  object-fit: contain;
+}
+.stage .missing {
+  color: #c9c4b8;
+  padding: 40px;
+  text-align: center;
+}
+.rail {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 18px 16px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 108px;
+  min-width: 0;
+}
+.ask {
+  margin: 0;
+  font: 600 22px/1.25 var(--serif);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--ink);
+}
+.identity-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+.identity {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.identity h2 {
+  margin: 0;
+  font: 600 13px/1.35 var(--sans);
+  color: var(--muted);
+}
+.rail .subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.rail details.secondary {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+.rail details.secondary summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.rail details.secondary[open] summary { margin-bottom: 10px; }
+.rail details.secondary ol {
+  margin: 10px 0 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.badge.ok { background: color-mix(in srgb, var(--ok) 12%, white); color: var(--ok); }
+.badge.warn { background: color-mix(in srgb, var(--warn) 14%, white); color: var(--warn); }
+.badge.bad { background: color-mix(in srgb, var(--bad) 12%, white); color: var(--bad); }
+.focus {
+  padding: 14px 14px 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--warn) 12%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--warn) 28%, var(--line));
+}
+.focus-label {
+  margin: 0 0 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #6d5418;
+  letter-spacing: 0.01em;
+}
+.focus-body {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.section {
+  display: grid;
+  gap: 8px;
+}
+.section-label {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+#required-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+#required-list li {
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--panel-muted);
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--ink);
+}
+#required-list li.empty {
+  background: transparent;
+  border-style: dashed;
+  color: var(--muted);
+}
+.defect-block[hidden],
+.disagreement[hidden],
+#owner-badge[hidden] {
+  display: none !important;
+}
+.defect-block {
+  padding: 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bad) 8%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--bad) 22%, var(--line));
+}
+.defect-block .section-label { color: var(--bad); }
+.defect-block p:last-child {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+.disagreement {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--panel-muted);
+  color: #6d5418;
+  font-size: 12.5px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+.note-block {
+  display: grid;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+}
+.note-block label {
+  display: grid;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+textarea {
+  width: 100%;
+  min-height: 64px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px 12px;
+  background: var(--paper);
+}
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding-top: 2px;
+}
+.actions .primary,
+.actions .danger {
+  min-height: 48px;
+  font-weight: 600;
+}
+.nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.nav #progress {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  font-weight: 600;
+}
+.film {
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  padding: 14px 28px 18px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.film-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.film-head strong { font: 600 16px/1.3 var(--serif); }
+.film-head span { color: var(--muted); font-size: 12.5px; }
+#filmstrip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+  min-width: 0;
+  max-width: 100%;
+}
+.thumb {
+  flex: 0 0 auto;
+  width: 148px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--panel);
+  scroll-snap-align: start;
+  text-align: left;
+}
+.thumb img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background: #d9d4c8;
+}
+.thumb span {
+  display: block;
+  padding: 8px 10px 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.thumb[data-active="1"] { border-color: var(--brass); box-shadow: inset 0 0 0 1px var(--brass); }
+.thumb[data-decision="accept"] span { color: var(--ok); }
+.thumb[data-decision="reject"] span { color: var(--bad); }
+.thumb[data-decision="escalate"] span { color: var(--warn); }
+.toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  background: var(--ink);
+  color: var(--panel);
+  padding: 10px 14px;
+  border-radius: 999px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 180ms var(--ease), transform 180ms var(--ease);
+  pointer-events: none;
+  z-index: 20;
+}
+.toast[data-show="1"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (max-width: 980px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+  .controls { justify-items: start; }
+  .stage { min-height: 42vh; order: 1; }
+  .stage img { max-height: 42vh; }
+  .rail {
+    position: static;
+    order: 2;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+<style>
+.wrap { max-width: 1180px; margin: 0 auto; padding: 32px 20px 80px; }
+h1 { font: 600 26px/1.2 var(--serif); margin: 0 0 6px; }
+.lede { color: var(--muted); margin: 0 0 28px; max-width: 62ch; }
+.pair { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+        box-shadow: var(--shadow); padding: 20px; margin: 0 0 28px; }
+.pair > header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+                 margin-bottom: 4px; }
+.pair h2 { font: 600 18px/1.3 var(--serif); margin: 0; }
+.room { color: var(--muted); }
+.verdict { margin-left: auto; font-weight: 600; font-size: 12px; letter-spacing: .06em;
+           text-transform: uppercase; padding: 4px 10px; border-radius: 999px;
+           border: 1px solid var(--line); }
+.verdict.accept { color: var(--ok); border-color: rgba(29,111,76,.35); }
+.verdict.reject { color: var(--bad); border-color: rgba(163,49,42,.35); }
+.verdict.escalate, .verdict.unreviewed { color: var(--warn); border-color: rgba(138,106,31,.35); }
+.basis { color: var(--muted); margin: 2px 0 18px; }
+.view { margin: 22px 0 0; }
+.view h3 { font: 600 12px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase;
+           color: var(--muted); margin: 0 0 10px; }
+.frames { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.frame figcaption { font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+.frame img { width: 100%; height: auto; display: block; border-radius: 8px;
+             background: var(--media); border: 1px solid var(--line); }
+.changes { margin: 16px 0 0; padding: 14px 16px; background: var(--panel-muted);
+           border-radius: 9px; }
+.changes h3 { font: 600 12px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase;
+              color: var(--muted); margin: 0 0 10px; }
+.changes ol, .changes ul { margin: 0; padding-left: 20px; }
+.changes li { margin: 0 0 6px; }
+.kind { font-variant: all-small-caps; letter-spacing: .04em; color: var(--brass-deep);
+        font-weight: 600; }
+.immaterial { color: var(--muted); }
+.tag { font-size: 11px; border: 1px solid var(--line); border-radius: 999px;
+       padding: 1px 8px; margin-left: 6px; color: var(--muted); }
+.drift { margin-top: 14px; padding: 12px 16px; border-radius: 9px;
+         background: rgba(163,49,42,.06); border: 1px solid rgba(163,49,42,.25); }
+.drift h3 { color: var(--bad); }
+@media (max-width: 820px) { .frames { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Phase 3.5 delta pairs — owner adjudication</h1>
+<p class="lede">For each pair, the question is not whether the T1 frame is a
+good image but whether anything differs between T0 and T1 that is not in the
+enumerated list below it. Any such difference rejects the pair. These images
+are synthetic evidence and are never treated as real tenancy comparisons.</p>
+<section class="pair"><header><h2>P35-001-T1</h2><span class="room">Kitchen · temporal</span><span class="verdict reject">reject</span></header><p class="basis">room identity failed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-001-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-001-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-001-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-001-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — base unit door: small chipped paint area on the lower edge of the base unit door<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — countertop toaster: the toaster present on the worktop at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — dish rack: a small chrome dish rack is present beside the sink at T1</li><li><span class="kind">cleanliness</span> — dark worktop: a few visible crumbs and water marks are present on the worktop at T1</li><li><span class="kind">worsened</span> — window blind: one slat is slightly bent and hangs lower than at T0<span class="tag">A-wide</span></li><li><span class="kind">immaterial</span> — tea towel: the same one tea towel, same cotton material and same count remains on the same oven handle, with only its fold orientation changed <em class="immaterial">(immaterial — reporting this is a false change)</em></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same pale units, dark worktop, sink, oven, hob, extractor hood and window</li><li>same camera viewpoint, room shape, flooring and door positions</li><li>no change to the visible radiator, skirting, sockets or ceiling light</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>tea towel: A green and grey patterned cotton tea towel is newly present on the oven door handle in T1 views, which was completely absent in T0.</li><li>toaster: The toaster is inconsistently present in T1 D-condition but absent in T1 A-wide.</li><li>cloth on toaster: In T1 D-condition, a checkered cloth is newly placed on top of the toaster.</li><li>tea towel: A new cotton tea towel has been added to the oven handle in T1 wide view (absent in T0 wide view).</li><li>window view: The scene outside the kitchen window in T1 D-condition shows green trees instead of the brick building seen in T0 and T1 A-wide.</li><li>toaster accessory: A cloth has been placed on top of the toaster in T1 D-condition (which itself should have been removed).</li><li>left wall and fixtures: A white radiator, a light switch on the wall, and a kickboard heater vent under the oven are visible in T1 D-condition due to the changed camera viewpoint.</li></ul></div></section><section class="pair"><header><h2>P35-002-T1</h2><span class="room">Bathroom · temporal</span><span class="verdict reject">reject</span></header><p class="basis">unenumerated material change observed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-002-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-002-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-002-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-002-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">worsened</span> — bath panel: the existing scuff on the bath panel is longer and darker than at T0<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — silicone seal: a short split is visible in the silicone seal at the bath corner<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — blue bath mat: the blue bath mat present at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — shampoo bottle: one plain shampoo bottle is newly present on the bath ledge</li><li><span class="kind">cleanliness</span> — lower wall tiles: light splash marks are visible on the lower wall tiles at T1</li><li><span class="kind">item added</span> — waste bin: a small plain waste bin is newly present beside the basin<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same white suite, grey wall tiles, glass screen, towel rail and window</li><li>same bath, WC, basin, mirror, extractor and door positions</li><li>no new sanitary fixture, no changed camera viewpoint and no changed room geometry</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>bath ledge bottles: Two additional bottles (one white, one black) are present on the bath ledge near the glass screen in T1, increasing the bottle count there from two to four.</li></ul></div></section><section class="pair"><header><h2>P35-003-T1</h2><span class="room">Kitchen · temporal</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D1, D2, D4, D5, D6</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-003-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-003-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-003-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-003-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — oak-effect worktop: a narrow dark burn mark is visible beside the hob<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — countertop kettle: the kettle present at T0 is absent from the worktop at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — fruit bowl: a small bowl of fruit is present on the worktop at T1</li><li><span class="kind">cleanliness</span> — ceramic hob: a faint greasy smear is visible on the ceramic hob at T1</li><li><span class="kind">worsened</span> — splashback grout: one grout line behind the hob is darker and more discoloured than at T0<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — oven mitt: the oven mitt hanging by the cooker at T0 is absent at T1<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same white shaker units, oak-effect worktop, black appliances, sink, oven and rear window</li><li>same room shape, floor, door, sockets and camera viewpoint</li><li>no change to the radiator, blind, skirting or ceiling light</li></ul></div></section><section class="pair"><header><h2>P35-004-T1</h2><span class="room">Kitchen · temporal</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D2, D4, D5</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-004-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-004-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-004-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-004-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">worsened</span> — vinyl floor tear: the triangular tear beside the cooker is wider and its edge is lifted<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — wall clock: the wall clock visible at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — dishcloth: a blue dishcloth is newly present beside the sink</li><li><span class="kind">new defect</span> — base unit plinth: a small dent is visible in the plinth beneath the sink<span class="tag">D-condition</span></li><li><span class="kind">cleanliness</span> — cream laminate worktop: two small water marks and crumbs are visible on the worktop at T1</li><li><span class="kind">item added</span> — bread bin: a plain bread bin is newly present on the worktop<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same wood-effect units, cream laminate worktop, freestanding cooker, sink and patterned floor</li><li>same wall clock location is empty but all other walls, radiator, blind and door remain unchanged</li><li>no other furniture, fitting, finish or camera position changes</li></ul></div></section><section class="pair"><header><h2>P35-005-T1</h2><span class="room">Bathroom · temporal</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D1, D2, D6</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-006-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-005-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-006-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-005-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — vanity drawer front: a small chip is newly visible on the upper corner of the vanity drawer<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — small bath mat: the bath mat visible at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — soap dispenser: a plain soap dispenser is newly present beside the basin</li><li><span class="kind">cleanliness</span> — glass shower screen: a few water spots are visible on the shower glass at T1</li><li><span class="kind">worsened</span> — silicone joint: the existing discolouration along the vanity silicone joint is darker<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — bath shelf: the small shelf visible beside the basin at T0 is absent at T1<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same white suite, pale stone tiles, walk-in shower, glass screen, vanity and chrome towel rail</li><li>same window, door, mirror, extractor, floor drain and camera viewpoint</li><li>no extra sanitary fixture and no changed room geometry</li></ul></div></section><section class="pair"><header><h2>P35-006-T1</h2><span class="room">Shower room · temporal</span><span class="verdict reject">reject</span></header><p class="basis">unenumerated material change observed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-007-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-006-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-007-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-006-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — mosaic wall grout: a short cracked grout section is visible beside the shower tray<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — towel ring: the towel ring visible beside the basin at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — shower squeegee: a small squeegee is newly hanging inside the shower enclosure</li><li><span class="kind">cleanliness</span> — shower glass: light water spotting is visible on the shower glass at T1</li><li><span class="kind">worsened</span> — vinyl floor: a faint scuff near the basin is longer and darker than at T0<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — bath mat: a small bath mat is newly present beside the basin<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same sloped ceiling, compact shower, pedestal basin, WC, mosaic tiles and vinyl floor</li><li>same door, mirror, towel ring location, extractor, shower controls and camera viewpoint</li><li>no extra sanitary fixture or changed room shape</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>shower enclosure door handles: The handles on the curved shower glass doors have been changed from round cylindrical knobs in T0 to square/diamond-shaped knobs in T1.</li><li>towel on door handle: A brown towel hanging from the door handle in T0 is completely removed in T1.</li><li>towel on door handle: A beige/brown hand towel draped over the door handle in T0 is absent in T1.</li></ul></div></section><section class="pair"><header><h2>P35-007-T1</h2><span class="room">Bedroom · temporal</span><span class="verdict accept">accept</span></header><p class="basis">both reviewers accepted</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-008-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-007-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-008-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-007-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — grey carpet: a small dark stain is visible near the doorway<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — single bed: a simple single bed is newly present against the far wall<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — curtain pole: the curtain pole visible at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — skirting board: a visible dusty mark runs along the skirting beside the doorway<span class="tag">D-condition</span></li><li><span class="kind">worsened</span> — painted wall: a small scuff near the light switch is darker than at T0</li><li><span class="kind">immaterial</span> — ceiling pendant: the same one ceiling pendant, same material and same count remains in the same position, with only its shade orientation slightly changed <em class="immaterial">(immaterial — reporting this is a false change)</em></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same pale blue walls, grey carpet, white radiator, sash window and doorway</li><li>same wardrobe, sockets, skirting, threshold and camera viewpoint</li><li>no change to window geometry, room dimensions or radiator position</li></ul></div></section><section class="pair"><header><h2>P35-008-T1</h2><span class="room">Bedroom · temporal</span><span class="verdict reject">reject</span></header><p class="basis">unenumerated material change observed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-009-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-008-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-009-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-008-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">worsened</span> — top drawer: the scratches beside the top drawer handle are longer and more numerous<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — bedside lamp: the bedside lamp visible at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — laundry basket: a woven laundry basket is newly present beside the wardrobe</li><li><span class="kind">new defect</span> — cream carpet: a small flattened dark patch is visible beside the bed<span class="tag">D-condition</span></li><li><span class="kind">cleanliness</span> — bedside table: a few loose items and a visible dust mark are present on the bedside table</li><li><span class="kind">item added</span> — bedside book: a single plain book is newly present on the bedside table<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same double bed, headboard, oak wardrobes, cream carpet and bay window</li><li>same chest of drawers, mirror, radiator, curtains, sockets and camera viewpoint</li><li>no change to room shape, door, floor finish or window geometry</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>laundry basket: The woven laundry basket is placed next to the wardrobe in the T1 A-wide view, but appears next to the far bedside table/chest of drawers in the T1 D-condition view, indicating a spatial layout inconsistency.</li><li>bedside table accessory: A small white jar/tub is newly present on the far bedside table in T1 D-condition, which was absent in T0.</li><li>woven laundry basket: Inconsistent placement between T1 views: it is located beside the wardrobe in the T1 wide view, but appears next to the far bedside table in the T1 condition view (where it should have been visible in the wide view but is absent).</li><li>bedside lamp: State inconsistency between T1 views: the far bedside lamp is turned off in the T1 wide view but remains lit in the T1 condition view.</li></ul></div></section><section class="pair"><header><h2>P35-009-T1</h2><span class="room">Bedroom · temporal</span><span class="verdict reject">reject</span></header><p class="basis">room identity failed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-010-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-009-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-010-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-009-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — window reveal: a small water mark is visible on the lower painted window reveal<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — desk chair: the desk chair present at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — floor lamp: a plain floor lamp is newly present beside the desk</li><li><span class="kind">cleanliness</span> — desk surface: papers and a light dust mark are visible on the desk at T1</li><li><span class="kind">worsened</span> — door edge: the small rub mark on the door edge is darker than at T0<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — bedside book: the book present on the bedside table at T0 is absent at T1<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same room layout, painted walls, carpet, window, desk, radiator and built-in storage</li><li>same sockets, door, skirting, light fitting and camera viewpoint</li><li>no other furniture, fitting or finish changes</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>blue rug: The blue rug is shifted to the right (further away from the bed frame&#x27;s leg) in T1 compared to T0.</li><li>ladybug toy: The green-and-red ladybug toy on the bed has been rotated and shifted.</li><li>stuffed dog toy: The stuffed dog toy on the bed pillows has been rotated/moved.</li><li>window view: The background view outside the window (sky color/brightness and the pattern of illuminated windows in the distant building) has changed.</li><li>desk chair: The desk chair is inconsistently rendered: absent in the A-wide-t1 view but still present in the D-condition-t1 view.</li><li>camera viewpoint: Slight camera position translation/rotation shift between T0 and T1 in both views.</li><li>desk chair: Desk chair remains present in D-condition-t1 despite being absent in A-wide-t1, representing a layout inconsistency.</li></ul></div></section><section class="pair"><header><h2>P35-010-T1</h2><span class="room">Living room · temporal</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D1, D4</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-011-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-010-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-011-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-010-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — grey sofa arm: a small dark mark is visible on the front of the sofa arm<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — floor lamp: the floor lamp present at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — side table: a small round side table is newly present beside the sofa<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — oak coffee table: a few visible rings and crumbs are present on the coffee table at T1</li><li><span class="kind">worsened</span> — carpet: the existing faint carpet mark near the coffee table is darker<span class="tag">D-condition</span></li><li><span class="kind">immaterial</span> — scatter cushions: the same two scatter cushions, same materials and same count remain on the same sofa, with only their order along the seat changed <em class="immaterial">(immaterial — reporting this is a false change)</em></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same grey sofa, armchair, oak coffee table, television unit, television and cream throw</li><li>same carpet, wall, glazing, balcony view, door positions and camera viewpoint</li><li>no change to visible exterior balcony items, room shape or furniture upholstery</li></ul></div></section><section class="pair"><header><h2>P35-011-T1</h2><span class="room">Living room · temporal</span><span class="verdict reject">reject</span></header><p class="basis">unenumerated material change observed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-012-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-011-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-012-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-011-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">worsened</span> — armchair upholstery: a small existing pull in the upholstery is longer at T1<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — television remote: the remote control visible on the coffee table at T0 is absent<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — magazine stack: a small stack of magazines is newly present on the coffee table</li><li><span class="kind">new defect</span> — painted skirting: a short scuff is newly visible on the skirting by the door<span class="tag">D-condition</span></li><li><span class="kind">cleanliness</span> — television unit: a visible dust line is present on the television unit at T1</li><li><span class="kind">item added</span> — television remote: a television remote is newly present on the coffee table<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same living room layout, sofa, armchair, coffee table, television unit, television and carpet</li><li>same glazing, window, door, walls, skirting and camera viewpoint</li><li>no change to furniture count, upholstery colour or room geometry</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>D-condition illumination: The D-condition T1 image is significantly darker than the T0 image, indicating a global illumination/exposure difference.</li><li>coffee table books: The books on the top surface of the coffee table (including the stack on the right and the book on the left) have different covers and colors in T1 compared to T0.</li></ul></div></section><section class="pair"><header><h2>P35-012-T1</h2><span class="room">Living room · temporal</span><span class="verdict reject">reject</span></header><p class="basis">unenumerated material change observed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-013-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-012-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-013-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-012-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — window sill: a small chip is visible on the painted window sill<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — plant pot: the plant pot present on the sill at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — floor cushion: one floor cushion is newly present beside the armchair<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — window glass: finger marks are visible on the lower part of the window glass at T1</li><li><span class="kind">worsened</span> — door leaf: the existing scuff on the lower door leaf is darker and longer<span class="tag">D-condition</span></li><li><span class="kind">immaterial</span> — curtain panel: the same one curtain panel, same fabric and same count remains on the same window, only gathered to a different width <em class="immaterial">(immaterial — reporting this is a false change)</em></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same sofa, armchair, coffee table, television unit, carpet, window and door</li><li>same wall finish, skirting, sockets, radiator and camera viewpoint</li><li>no change to visible exterior view, furniture layout or room shape</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>blue folder/binder: The blue folder/binder standing vertically next to the background box stack in T0 is absent or hidden in D-condition-t1.</li><li>curtain panel: A gold/beige curtain panel is newly present on the left side of the window in D-condition-t1, but is completely absent in all other views (both T0 views and A-wide-t1).</li><li>floor cushion: The dark grey floor cushion added in A-wide-t1 is completely missing from the floor in D-condition-t1, representing a severe inter-view state inconsistency.</li></ul></div></section><section class="pair"><header><h2>P35-013-T1</h2><span class="room">Entrance hall · temporal</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D1, D2, D4, D5</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-015-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-013-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-015-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-013-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — hall skirting: a small chip is newly visible on the skirting near the entrance<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — umbrella stand: the umbrella stand visible at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — shoe rack: a narrow shoe rack is newly present beside the door<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — vinyl floor: several muddy marks are visible on the entrance floor at T1</li><li><span class="kind">worsened</span> — door threshold: the existing rub at the threshold is darker and more worn<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — coat hook: a single coat hook is newly present beside the entrance door<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same entrance hall, front door, internal door, wall finish, floor and radiator</li><li>same console table, mirror, light fitting, skirting and camera viewpoint</li><li>no change to door positions, room geometry or fixed fittings</li></ul></div></section><section class="pair"><header><h2>P35-014-T1</h2><span class="room">Dining room · temporal</span><span class="verdict reject">reject</span></header><p class="basis">owner adjudication; independent AI quota exception</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-016-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-014-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-016-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-014-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — oak tabletop: a small ring mark is newly visible on the tabletop<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — sixth dining chair: one of the six chairs present at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — table runner: a plain table runner is newly laid on the dining table</li><li><span class="kind">cleanliness</span> — timber floor: a small dusty area is visible beneath the table at T1<span class="tag">D-condition</span></li><li><span class="kind">worsened</span> — chair upholstery: one grey chair seat has a darker flattened mark than at T0</li><li><span class="kind">item added</span> — small vase: a small plain vase is newly present on the dining table<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same oak table, six chair positions, French doors, pendant light and pale timber floor</li><li>same display items, wall finish, sockets, skirting and camera viewpoint</li><li>no change to table size, room dimensions or door and window geometry</li></ul></div></section><section class="pair"><header><h2>P35-015-T1</h2><span class="room">Dining room · temporal</span><span class="verdict reject">reject</span></header><p class="basis">room identity failed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-017-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-015-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-017-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-015-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">worsened</span> — table edge: the existing nick on the table edge is wider and more visible<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — tablecloth: the tablecloth present at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — serving bowl: a ceramic serving bowl is newly present on the table</li><li><span class="kind">new defect</span> — patterned wallpaper: a small tear is newly visible in the wallpaper beside the cabinet</li><li><span class="kind">cleanliness</span> — dark dining table: crumbs and a light ring mark are visible on the tabletop at T1<span class="tag">D-condition</span></li><li><span class="kind">immaterial</span> — chair cushion: the same four chair cushions, same fabric material and same count remain on the same four chairs, only their ties are arranged differently <em class="immaterial">(immaterial — reporting this is a false change)</em></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same dark table, four upholstered chairs, display cabinet, chandelier, patterned wallpaper and carpet</li><li>same doorway, radiator, skirting, chair count and camera viewpoint</li><li>no change to cabinet, wall geometry, floor finish or fixed lighting</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>white gravy boat: A white gravy boat on a matching plate present on the table at T0 is missing at T1 in the wide view.</li><li>foreground doorframe column: Two vertical scuff marks/paint chips are newly visible on the cream column on the right edge of the wide view.</li><li>tablecloth edge: A new tear is visible on the scalloped edge of the tablecloth in D-condition-t1.</li><li>tablecloth presence: A major state inconsistency exists between views: the tablecloth is present in view D-condition-t1 but completely absent in view A-wide-t1.</li><li>tablecloth edge defect: A new tear or worn spot is visible on the edge of the tablecloth in D-condition-t1 that is absent in D-condition-t0.</li></ul></div></section><section class="pair"><header><h2>P35-016-T1</h2><span class="room">Entrance hall · temporal</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D1, D2, D4, D5, D6</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-015-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-016-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-015-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-016-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — hall skirting: a short scratch is newly visible on the skirting beside the tiled floor<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — umbrella stand: the umbrella stand present beside the coat bench at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — shoe rack: a narrow shoe rack is newly present beside the glazed door<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — floor tiles: dust and muddy marks are visible on the entrance tiles at T1<span class="tag">D-condition</span></li><li><span class="kind">worsened</span> — threshold strip: the existing rub on the threshold strip is darker than at T0<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — coat: one plain coat is newly hanging on the open coat bench<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same pale walls, tiled floor, glazed door, coat bench, wall hooks, mirror and radiator</li><li>same threshold, skirting, door furniture and camera viewpoint</li><li>no change to hall geometry, fixed fittings or tile layout</li></ul></div></section><section class="pair"><header><h2>P35-017-T1</h2><span class="room">Bedroom · temporal</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D1, D2, D5</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-010-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-017-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-010-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-017-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — bed frame: a small dent is newly visible on the bed frame<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — desk lamp: the desk lamp present at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — storage box: a plain storage box is newly present beside the wardrobe<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — blue rug: dust and a small paper scrap are visible on the blue rug at T1</li><li><span class="kind">worsened</span> — skirting board: the existing rub on the skirting is darker than at T0<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — bedside book: a plain book is newly present beside the single bed<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same single bed, white wardrobe, blue rug, small window, desk and toy storage</li><li>same carpet, skirting, door, radiator, ceiling light and camera viewpoint</li><li>no change to room dimensions, furniture layout or window geometry</li></ul></div></section><section class="pair"><header><h2>P35-018-T1</h2><span class="room">Dining room · temporal</span><span class="verdict reject">reject</span></header><p class="basis">unenumerated material change observed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-016-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-018-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-016-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-018-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — chair upholstery: a dark tear is newly visible on one grey chair seat<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — pendant light: the pendant light present above the table at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — serving trolley: a small serving trolley is newly present beside the table<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — oak tabletop: crumbs and two visible rings are present on the tabletop at T1</li><li><span class="kind">worsened</span> — timber floor: the existing scuff beneath the table is darker than at T0<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — place mat: a plain place mat is newly present at one end of the table<span class="tag">A-wide</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same oak table, six grey chairs, French doors, pale timber floor and pendant light position</li><li>same wall finish, skirting, sockets, door and camera viewpoint</li><li>no change to table size, room geometry or window and door positions</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>place mat: Inconsistency between views: the grey place mat is visible on the dining table in A-wide-t1 but absent in D-condition-t1.</li></ul></div></section><section class="pair"><header><h2>P35-019-T1</h2><span class="room">Kitchen · temporal</span><span class="verdict reject">reject</span></header><p class="basis">room identity failed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-001-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-019-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-001-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-019-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — splashback tile: a hairline crack is newly visible in the tile behind the hob<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — microwave: the microwave present on the worktop at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — bread bin: a plain bread bin is newly present on the worktop at T1</li><li><span class="kind">cleanliness</span> — sink: a few water marks and food crumbs are visible around the sink at T1</li><li><span class="kind">worsened</span> — base unit door: the existing lower-edge chip on the base unit door is larger<span class="tag">D-condition</span></li><li><span class="kind">immaterial</span> — dish towel: the same one cotton dish towel, same material and same count remains on the same oven handle, only hanging with a different fold <em class="immaterial">(immaterial — reporting this is a false change)</em></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same pale units, dark worktop, sink, oven, hob, extractor hood and window</li><li>same room shape, floor, radiator, blind, door, skirting and camera viewpoint</li><li>no other appliance, fitting, object or finish changes</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>dish towel: A blue and white checkered dish towel is newly present on the oven handle in A-wide-t1, whereas the handle was empty in A-wide-t0.</li><li>hob/layout: In D-condition-t1, a gas hob and extractor hood are located on the left counter, which is a different layout/room than T0 (where the hob is on the right wall).</li><li>window blind: In D-condition-t1, the window has a white Venetian blind with horizontal slats, whereas the wide views show a roller blind.</li><li>door: An open white door with a handle is visible on the left in D-condition-t1, which is not visible in D-condition-t0.</li><li>kettle: The kettle present on the counter next to the toaster in D-condition-t0 is absent in D-condition-t1.</li><li>dish towel: A checkered cotton dish towel has been newly added to the oven handle in T1 (it was completely absent in T0).</li><li>window blinds: The window in D-condition-t1 is fitted with horizontal slatted Venetian blinds, which are absent in all T0 views.</li><li>door handle: The door visible in D-condition-t1 has a modern silver lever handle, whereas the wide views show a gold/brass handle.</li><li>wall power socket: A double power socket with a plugged-in wire is newly present on the tiled wall in D-condition-t1, which is absent in the T0 images.</li><li>kitchen layout: In D-condition-t1, the hob and hood are on the left wall, and the window/sink are on the right wall, which is a different layout from T0.</li><li>bread bin placement: In D-condition-t1, the bread bin is placed next to the toaster on the left, which is not its position in A-wide-t1 (where it is on the right).</li></ul></div></section><section class="pair"><header><h2>P35-020-T1</h2><span class="room">Kitchen · temporal</span><span class="verdict reject">reject</span></header><p class="basis">unenumerated material change observed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-004-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-020-T1-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-004-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-020-T1-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — cooker side panel: a small dent is newly visible on the side panel of the cooker<span class="tag">D-condition</span></li><li><span class="kind">item removed</span> — countertop kettle: the kettle present beside the sink at T0 is absent at T1<span class="tag">A-wide</span></li><li><span class="kind">item added</span> — draining board: a plastic draining board is newly present beside the sink</li><li><span class="kind">cleanliness</span> — patterned vinyl floor: a few muddy footprints are visible on the floor at T1<span class="tag">D-condition</span></li><li><span class="kind">worsened</span> — base unit plinth: the existing scuff on the plinth is darker and longer<span class="tag">D-condition</span></li><li><span class="kind">immaterial</span> — oven glove: the same one fabric oven glove, same material and same count remains on the same handle, only turned to face the other way <em class="immaterial">(immaterial — reporting this is a false change)</em></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same wood-effect units, cream laminate worktop, freestanding cooker, sink and patterned floor</li><li>same radiator, window blind, wall clock, door, skirting and camera viewpoint</li><li>no other appliance, fitting, furniture or room geometry changes</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>wire dish rack and dishes: The metal wire dish rack containing plates, bowls, and glasses present on the left side of the sink in T0 is completely removed in T1.</li></ul></div></section><section class="pair"><header><h2>P35-021-CF</h2><span class="room">Bathroom · counterfactual</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D2, D4, D5, D6</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-002-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-021-CF-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-002-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-021-CF-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — bath panel: a dark 12cm scuff is present on the lower bath panel<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — silicone seal: a short split is present in the bath corner silicone seal<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — bath mat: a blue bath mat is present on the floor<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — hand towel: the hand towel on the rail is absent<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — lower wall tiles: visible splash marks are present on the lower wall tiles</li><li><span class="kind">worsened</span> — bath panel: the panel finish is visibly more worn around the scuff<span class="tag">D-condition</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same white suite, grey tiles, glass screen, towel rail, window, bath, basin and WC</li><li>same door, mirror, extractor, floor and camera viewpoint</li><li>no additional sanitary fixture and no changed room geometry</li></ul></div></section><section class="pair"><header><h2>P35-022-CF</h2><span class="room">Bathroom · counterfactual</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D1, D4, D5, D6</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-006-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-022-CF-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-006-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-022-CF-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — vanity drawer: a chipped corner is present on the vanity drawer front<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — pale stone tile: a single cracked tile is present beside the shower<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — bath mat: a folded bath mat is present outside the walk-in shower<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — soap dispenser: the soap dispenser beside the basin is absent<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — glass shower screen: several water spots are present on the shower glass</li><li><span class="kind">worsened</span> — silicone joint: the silicone joint has visibly darkened discolouration<span class="tag">D-condition</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same white suite, pale stone tiles, walk-in shower, glass screen, vanity and chrome towel rail</li><li>same window, door, mirror, extractor, drain and camera viewpoint</li><li>no extra sanitary fixture and no changed room geometry</li></ul></div></section><section class="pair"><header><h2>P35-023-CF</h2><span class="room">Bedroom · counterfactual</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D4</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-008-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-023-CF-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-008-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-023-CF-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — grey carpet: a dark circular stain is present near the radiator<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — pale blue wall: a small nail hole and flaked paint are present near the door<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — single bed: a single bed is present against the far wall<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — curtain pole: the curtain pole is absent from the sash window<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — carpet: loose dust and a small paper scrap are present on the carpet</li><li><span class="kind">worsened</span> — skirting board: a rub mark on the skirting is visibly darker<span class="tag">D-condition</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same pale blue walls, grey carpet, white radiator, sash window, wardrobe and doorway</li><li>same sockets, skirting, ceiling pendant, threshold and camera viewpoint</li><li>no changed room dimensions, window geometry or fixed fittings</li></ul></div></section><section class="pair"><header><h2>P35-024-CF</h2><span class="room">Bedroom · counterfactual</span><span class="verdict accept">accept</span></header><p class="basis">both reviewers accepted</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-009-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-024-CF-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-009-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-024-CF-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — cream carpet: a dark stain is present beside the double bed<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — chest of drawers: two deep scratches are present beside the top drawer handle<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — laundry basket: a woven laundry basket is present beside the wardrobe<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — bedside lamp: the bedside lamp is absent from the bedside table<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — bedside table: a visible dust mark and loose belongings are present on the bedside table</li><li><span class="kind">worsened</span> — headboard: the headboard has a darker worn patch near one corner<span class="tag">D-condition</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same double bed, headboard, oak wardrobes, cream carpet, bay window and bedside tables</li><li>same chest of drawers, mirror, radiator, curtains, sockets and camera viewpoint</li><li>no changed room shape, door, floor finish or window geometry</li></ul></div></section><section class="pair"><header><h2>P35-025-CF</h2><span class="room">Living room · counterfactual</span><span class="verdict reject">reject</span></header><p class="basis">room identity failed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-011-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-025-CF-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-011-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-025-CF-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — grey sofa: a dark circular stain is present on the sofa seat<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — carpet: a visible snag is present in the carpet near the coffee table<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — floor lamp: a floor lamp is present beside the sofa<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — armchair: the armchair is absent from its position at T0<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — oak coffee table: crumbs and drink rings are present on the coffee table</li><li><span class="kind">worsened</span> — cream throw: the throw has a visibly darker worn patch<span class="tag">D-condition</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same grey sofa, armchair position, oak coffee table, television unit, television and carpet</li><li>same cream throw, glazing, balcony view, walls, door positions and camera viewpoint</li><li>no change to room shape, furniture upholstery, visible exterior or fixed fittings</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>armchair: The armchair is present in D-condition-t1 but absent in A-wide-t1, showing a layout inconsistency between views.</li><li>armchair armrest: A dark circular stain is present on the armchair&#x27;s armrest in D-condition-t1 (wrong target for D1).</li><li>armchair: Inconsistent presence across T1 views: the armchair is present in D-condition-t1 but completely absent in A-wide-t1.</li><li>armchair: A dark circular stain is present on the top of the armchair armrest in D-condition-t1.</li><li>carpet: A circular indentation/mark is present on the carpet near the coffee table in D-condition-t1.</li></ul></div></section><section class="pair"><header><h2>P35-026-CF</h2><span class="room">Living room · counterfactual</span><span class="verdict reject">reject</span></header><p class="basis">unenumerated material change observed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-012-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-026-CF-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-012-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-026-CF-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — armchair upholstery: a torn seam is present on the armchair upholstery<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — painted skirting: a long scuff is present on the skirting beside the door<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — magazine stack: a stack of magazines is present on the coffee table<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — television remote: the television remote is absent from the coffee table<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — television unit: a visible dust line is present on the television unit</li><li><span class="kind">worsened</span> — carpet: a pre-existing faint mark on the carpet is visibly darker<span class="tag">D-condition</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same sofa, armchair, coffee table, television unit, television, carpet and cream throw</li><li>same window, door, walls, skirting, sockets and camera viewpoint</li><li>no change to furniture count except the enumerated armchair state and no changed room geometry</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>armchair arm: A white rectangular pamphlet or booklet present on the left arm of the armchair in T0 is removed/absent in T1.</li><li>coffee table tissue box: The tissue box on the coffee table is open with white tissues protruding in T0, but is closed and flat in T1.</li><li>coffee table top items: A yellow book and a small dark object (coaster/key) present on the left side of the coffee table in T0 are removed/absent in T1.</li><li>skirting board beside fireplace: A dark brown scuff mark is present on the bottom-left corner of the white skirting block next to the fireplace hearth in T1, which is clean in T0.</li><li>skirting board behind metal stand: A horizontal brown scuff line is present at the base of the white skirting board behind the metal stand (next to the bookshelf) in T1, which is clean in T0.</li><li>coffee table items: The tissue box and other books present on the coffee table in T0 are removed in T1, leaving only the magazine stacks.</li></ul></div></section><section class="pair"><header><h2>P35-027-CF</h2><span class="room">Living room · counterfactual</span><span class="verdict reject">reject</span></header><p class="basis">unenumerated material change observed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-013-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-027-CF-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-013-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-027-CF-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — window sill: a chipped corner is present on the painted window sill<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — door leaf: a deep scuff is present on the lower door leaf<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — floor cushion: a floor cushion is present beside the armchair<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — plant pot: the plant pot is absent from the window sill<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — window glass: finger marks are present on the lower window glass</li><li><span class="kind">worsened</span> — sofa arm: the sofa arm has a visibly darker worn patch<span class="tag">D-condition</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same sofa, armchair, coffee table, television unit, carpet, window and door</li><li>same walls, skirting, sockets, radiator, exterior view and camera viewpoint</li><li>no other object, fitting, finish or room geometry changes</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>cardboard box: Dark scribbles or scuff marks are present on the side of the cardboard box in the right foreground in D-condition-t1, which are completely absent in D-condition-t0.</li><li>foreground cardboard box: A dark scribble or scuff mark is present on the lower side of the cardboard box in the right foreground of the T1 images.</li></ul></div></section><section class="pair"><header><h2>P35-028-CF</h2><span class="room">Dining room · counterfactual</span><span class="verdict accept">accept</span></header><p class="basis">both reviewers accepted</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-016-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-028-CF-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-016-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-028-CF-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — oak tabletop: a deep dark ring mark is present on the tabletop<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — chair upholstery: a torn seam is present on one grey chair seat<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — table runner: a table runner is present on the dining table<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — sixth dining chair: one chair is absent, leaving five chairs around the table<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — timber floor: muddy footprints are present on the timber floor</li><li><span class="kind">worsened</span> — table leg: the table leg has a visibly darker rub mark<span class="tag">D-condition</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same oak table, French doors, pendant light, timber floor and dining-room layout</li><li>same chair positions except the enumerated missing chair, display items, skirting and camera viewpoint</li><li>no changed room dimensions, fixed lighting or door and window geometry</li></ul></div></section><section class="pair"><header><h2>P35-029-CF</h2><span class="room">Dining room · counterfactual</span><span class="verdict reject">reject</span></header><p class="basis">unenumerated material change observed</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-017-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-029-CF-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-017-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-029-CF-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — table edge: a chipped section is present on the front table edge<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — patterned wallpaper: a torn patch is present in the wallpaper beside the cabinet<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — serving bowl: a ceramic serving bowl is present on the table<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — tablecloth: the tablecloth is absent from the table<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — dark dining table: crumbs and two rings are present on the tabletop</li><li><span class="kind">worsened</span> — chair back: one chair back has a visibly darker scuff<span class="tag">D-condition</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same dark table, four upholstered chairs, display cabinet, chandelier, patterned wallpaper and carpet</li><li>same doorway, radiator, skirting, chair count and camera viewpoint</li><li>no changed cabinet, floor finish, room geometry or fixed lighting</li></ul></div><div class="drift"><h3>Unenumerated material differences reported</h3><ul><li>tablecloth: The tablecloth remains present in D-condition-t1 but is absent in A-wide-t1, creating a severe physical inconsistency between views.</li><li>serving bowl: The ceramic serving bowl is present on the table in A-wide-t1 but is completely absent in D-condition-t1.</li><li>tablecloth edge: A torn hole/rip is present on the front edge of the tablecloth in D-condition-t1, which is absent in D-condition-t0.</li><li>tablecloth surface: Dark spots and light stains are present on the tablecloth in D-condition-t1, which is clean in D-condition-t0.</li><li>tablecloth in D-condition-t1: The tablecloth remains present on the dining table in the T1 condition view, contradicting the change description D4 and the T1 wide view.</li><li>gravy boat on table: The white gravy boat present on the table in A-wide-t0 is missing in A-wide-t1.</li><li>tableware arrangement: The layout of crystal glasses and plates on the table in A-wide-t1 differs from A-wide-t0.</li></ul></div></section><section class="pair"><header><h2>P35-030-CF</h2><span class="room">Bedroom · counterfactual</span><span class="verdict reject">reject</span></header><p class="basis">material change not visible: D4, D6</p><div class="view"><h3>A-wide</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-010-A-wide.png" alt="A-wide at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-030-CF-A-wide.png" alt="A-wide at T1"></figure></div></div><div class="view"><h3>D-condition</h3><div class="frames"><figure class="frame"><figcaption>T0 — check-in (accepted)</figcaption><img src="../images/openai/gpt-image-2/RP-010-D-condition.png" alt="D-condition at T0"></figure><figure class="frame"><figcaption>T1 — check-out (candidate)</figcaption><img src="../images/openai/gpt-image-2/deltas/P35-030-CF-D-condition.png" alt="D-condition at T1"></figure></div></div><div class="changes"><h3>Enumerated changes (the gold)</h3><ol><li><span class="kind">new defect</span> — bed frame: a deep dent is present on the bed frame<span class="tag">D-condition</span></li><li><span class="kind">new defect</span> — blue rug: a dark snag is present in the blue rug<span class="tag">D-condition</span></li><li><span class="kind">item added</span> — storage box: a storage box is present beside the wardrobe<span class="tag">A-wide</span></li><li><span class="kind">item removed</span> — desk lamp: the desk lamp is absent from the desk<span class="tag">A-wide</span></li><li><span class="kind">cleanliness</span> — blue rug: dust and a paper scrap are present on the blue rug</li><li><span class="kind">worsened</span> — skirting board: a visible darkened wear patch is present on the skirting<span class="tag">D-condition</span></li></ol></div><div class="changes"><h3>Asserted unchanged</h3><ul><li>same single bed, white wardrobe, blue rug, small window, desk and toy storage</li><li>same carpet, skirting, door, radiator, ceiling light and camera viewpoint</li><li>no changed room dimensions, furniture layout or window geometry</li></ul></div></section>
+</div>
+</body>
+</html>

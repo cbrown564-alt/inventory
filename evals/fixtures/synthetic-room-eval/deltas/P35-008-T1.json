@@ -1,0 +1,16 @@
+{
+  "id": "P35-008-T1",
+  "delta_of": "RP-009",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "one tenancy period",
+  "changes": [
+    {"id": "D1", "kind": "worsened", "target": "top drawer", "description": "the scratches beside the top drawer handle are longer and more numerous", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "bedside lamp", "description": "the bedside lamp visible at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "laundry basket", "description": "a woven laundry basket is newly present beside the wardrobe", "material": true},
+    {"id": "D4", "kind": "new_defect", "target": "cream carpet", "description": "a small flattened dark patch is visible beside the bed", "material": true, "views": ["D-condition"]},
+    {"id": "D5", "kind": "cleanliness", "target": "bedside table", "description": "a few loose items and a visible dust mark are present on the bedside table", "material": true},
+    {"id": "D6", "kind": "item_added", "target": "bedside book", "description": "a single plain book is newly present on the bedside table", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same double bed, headboard, oak wardrobes, cream carpet and bay window", "same chest of drawers, mirror, radiator, curtains, sockets and camera viewpoint", "no change to room shape, door, floor finish or window geometry"]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "P35-007-T1",
+  "delta_of": "RP-008",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "several months",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "grey carpet", "description": "a small dark stain is visible near the doorway", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_added", "target": "single bed", "description": "a simple single bed is newly present against the far wall", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_removed", "target": "curtain pole", "description": "the curtain pole visible at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "cleanliness", "target": "skirting board", "description": "a visible dusty mark runs along the skirting beside the doorway", "material": true, "views": ["D-condition"]},
+    {"id": "D5", "kind": "worsened", "target": "painted wall", "description": "a small scuff near the light switch is darker than at T0", "material": true},
+    {"id": "D6", "kind": "immaterial", "target": "ceiling pendant", "description": "the same one ceiling pendant, same material and same count remains in the same position, with only its shade orientation slightly changed", "material": false}
+  ],
+  "unchanged_assertions": ["same pale blue walls, grey carpet, white radiator, sash window and doorway", "same wardrobe, sockets, skirting, threshold and camera viewpoint", "no change to window geometry, room dimensions or radiator position"]
+}

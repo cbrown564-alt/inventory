@@ -83,6 +83,7 @@ def build(
     dataset_dir: Path,
     output: Path,
     review_path: Path | None = None,
+    reviewed_only: bool = False,
 ) -> Path:
     with (dataset_dir / "delta_tasks.csv").open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
@@ -92,6 +93,9 @@ def build(
     by_delta: dict[str, dict[str, dict[str, str]]] = {}
     for row in rows:
         by_delta.setdefault(row["delta_id"], {})[row["view_id"]] = row
+    if reviewed_only:
+        by_delta = {delta_id: views for delta_id, views in by_delta.items()
+                    if delta_id in reviews}
 
     sections: list[str] = []
     for delta_id in sorted(by_delta):
@@ -178,11 +182,10 @@ def build(
 <body>
 <div class="wrap">
 <h1>Phase 3.5 delta pairs — owner adjudication</h1>
-<p class="lede">Three feasibility-probe pairs. For each, the question is not
-whether the T1 frame is a good image but whether anything differs between T0
-and T1 that is not in the enumerated list below it. Any such difference
-rejects the pair. These images are calibration evidence and are never scored
-as data.</p>
+<p class="lede">For each pair, the question is not whether the T1 frame is a
+good image but whether anything differs between T0 and T1 that is not in the
+enumerated list below it. Any such difference rejects the pair. These images
+are synthetic evidence and are never treated as real tenancy comparisons.</p>
 {"".join(sections)}
 </div>
 </body>
@@ -197,10 +200,14 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset-dir", type=Path, default=DEFAULT_DATASET)
     parser.add_argument("--review", type=Path)
+    parser.add_argument(
+        "--reviewed-only", action="store_true",
+        help="show only pairs present in the supplied review report",
+    )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     output = args.output or args.dataset_dir / "reports" / "delta-owner-gallery.html"
-    print(build(args.dataset_dir, output, args.review))
+    print(build(args.dataset_dir, output, args.review, args.reviewed_only))
     return 0
 
 

@@ -1,0 +1,16 @@
+{
+  "id": "P35-022-CF",
+  "delta_of": "RP-006",
+  "delta_class": "counterfactual",
+  "timepoint": "same-timepoint-present",
+  "elapsed_description": "the same inspection timepoint in a counterfactual variant",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "vanity drawer", "description": "a chipped corner is present on the vanity drawer front", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "new_defect", "target": "pale stone tile", "description": "a single cracked tile is present beside the shower", "material": true, "views": ["D-condition"]},
+    {"id": "D3", "kind": "item_added", "target": "bath mat", "description": "a folded bath mat is present outside the walk-in shower", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "item_removed", "target": "soap dispenser", "description": "the soap dispenser beside the basin is absent", "material": true, "views": ["A-wide"]},
+    {"id": "D5", "kind": "cleanliness", "target": "glass shower screen", "description": "several water spots are present on the shower glass", "material": true},
+    {"id": "D6", "kind": "worsened", "target": "silicone joint", "description": "the silicone joint has visibly darkened discolouration", "material": true, "views": ["D-condition"]}
+  ],
+  "unchanged_assertions": ["same white suite, pale stone tiles, walk-in shower, glass screen, vanity and chrome towel rail", "same window, door, mirror, extractor, drain and camera viewpoint", "no extra sanitary fixture and no changed room geometry"]
+}

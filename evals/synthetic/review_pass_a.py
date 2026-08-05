@@ -179,7 +179,16 @@ def _invoke(
         raise RuntimeError(result.stderr.strip() or result.stdout.strip())
     wrapper = json.loads(result.stdout)
     if wrapper.get("status") != "SUCCESS":
-        raise RuntimeError(str(wrapper))
+        # Antigravity can finish the model task and then race its cleanup:
+        # the wrapper reports ERROR even though `response` contains a complete
+        # JSON answer and the only error is "task is not running". Preserve
+        # that answer, but accept no other non-success status here.
+        cleanup_race = (
+            wrapper.get("response")
+            and "task is not running" in str(wrapper.get("error", ""))
+        )
+        if not cleanup_race:
+            raise RuntimeError(str(wrapper))
     wrapper.pop("conversation_id", None)
     parsed = _extract_json(wrapper.get("response"))
     if isinstance(parsed, dict):

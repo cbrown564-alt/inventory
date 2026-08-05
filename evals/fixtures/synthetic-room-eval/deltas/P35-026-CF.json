@@ -1,0 +1,16 @@
+{
+  "id": "P35-026-CF",
+  "delta_of": "RP-012",
+  "delta_class": "counterfactual",
+  "timepoint": "same-timepoint-present",
+  "elapsed_description": "the same inspection timepoint in a counterfactual variant",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "armchair upholstery", "description": "a torn seam is present on the armchair upholstery", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "new_defect", "target": "painted skirting", "description": "a long scuff is present on the skirting beside the door", "material": true, "views": ["D-condition"]},
+    {"id": "D3", "kind": "item_added", "target": "magazine stack", "description": "a stack of magazines is present on the coffee table", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "item_removed", "target": "television remote", "description": "the television remote is absent from the coffee table", "material": true, "views": ["A-wide"]},
+    {"id": "D5", "kind": "cleanliness", "target": "television unit", "description": "a visible dust line is present on the television unit", "material": true},
+    {"id": "D6", "kind": "worsened", "target": "carpet", "description": "a pre-existing faint mark on the carpet is visibly darker", "material": true, "views": ["D-condition"]}
+  ],
+  "unchanged_assertions": ["same sofa, armchair, coffee table, television unit, television, carpet and cream throw", "same window, door, walls, skirting, sockets and camera viewpoint", "no change to furniture count except the enumerated armchair state and no changed room geometry"]
+}

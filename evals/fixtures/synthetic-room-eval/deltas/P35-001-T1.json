@@ -1,0 +1,16 @@
+{
+  "id": "P35-001-T1",
+  "delta_of": "RP-001",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "several months",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "base unit door", "description": "small chipped paint area on the lower edge of the base unit door", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "countertop toaster", "description": "the toaster present on the worktop at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "dish rack", "description": "a small chrome dish rack is present beside the sink at T1", "material": true},
+    {"id": "D4", "kind": "cleanliness", "target": "dark worktop", "description": "a few visible crumbs and water marks are present on the worktop at T1", "material": true},
+    {"id": "D5", "kind": "worsened", "target": "window blind", "description": "one slat is slightly bent and hangs lower than at T0", "material": true, "views": ["A-wide"]},
+    {"id": "D6", "kind": "immaterial", "target": "tea towel", "description": "the same one tea towel, same cotton material and same count remains on the same oven handle, with only its fold orientation changed", "material": false}
+  ],
+  "unchanged_assertions": ["same pale units, dark worktop, sink, oven, hob, extractor hood and window", "same camera viewpoint, room shape, flooring and door positions", "no change to the visible radiator, skirting, sockets or ceiling light"]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "P35-017-T1",
+  "delta_of": "RP-010",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "several months",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "bed frame", "description": "a small dent is newly visible on the bed frame", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "desk lamp", "description": "the desk lamp present at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "storage box", "description": "a plain storage box is newly present beside the wardrobe", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "cleanliness", "target": "blue rug", "description": "dust and a small paper scrap are visible on the blue rug at T1", "material": true},
+    {"id": "D5", "kind": "worsened", "target": "skirting board", "description": "the existing rub on the skirting is darker than at T0", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "item_added", "target": "bedside book", "description": "a plain book is newly present beside the single bed", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same single bed, white wardrobe, blue rug, small window, desk and toy storage", "same carpet, skirting, door, radiator, ceiling light and camera viewpoint", "no change to room dimensions, furniture layout or window geometry"]
+}

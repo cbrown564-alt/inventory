@@ -1,0 +1,16 @@
+{
+  "id": "P35-013-T1",
+  "delta_of": "RP-015",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "several months",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "hall skirting", "description": "a small chip is newly visible on the skirting near the entrance", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "umbrella stand", "description": "the umbrella stand visible at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "shoe rack", "description": "a narrow shoe rack is newly present beside the door", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "cleanliness", "target": "vinyl floor", "description": "several muddy marks are visible on the entrance floor at T1", "material": true},
+    {"id": "D5", "kind": "worsened", "target": "door threshold", "description": "the existing rub at the threshold is darker and more worn", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "item_added", "target": "coat hook", "description": "a single coat hook is newly present beside the entrance door", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same entrance hall, front door, internal door, wall finish, floor and radiator", "same console table, mirror, light fitting, skirting and camera viewpoint", "no change to door positions, room geometry or fixed fittings"]
+}

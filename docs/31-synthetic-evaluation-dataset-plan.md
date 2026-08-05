@@ -314,7 +314,7 @@ Complete four-view packets, which is the number room-level scoring depends on:
 | 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
 | 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
 | 3 — development and validation | **In progress; blocked on Pass B, not on generation** | 46 of 50 packet review records are `provisional`. Only the four Phase-1 records are `verified_synthetic_gold`. Every remaining generation task could complete tomorrow and Phase 4 would still be blocked. Amendment B repairs generation (B2–B4) and tiers Pass B (B5–B6). |
-| 3.5 — delta pairs | **Probe passed 4 Aug 2026 (2 of 3); pilot pending owner adjudication** | Promoted to the programme's centre by B7. RP-002 and RP-004 accepted, RP-011 rejected on unenumerated drift in its *immaterial* change. Gates an 8-pair temporal and 4-pair counterfactual set. |
+| 3.5 — delta pairs | **30-pair pilot complete 4 Aug 2026; compare scoring remains separate** | Promoted to the programme's centre by B7. The pilot contains 20 temporal and 10 counterfactual pairs, 60 generated T1 frames, and 180 enumerated changes. Twenty-nine pairs have two independent AI reviews; P35-014-T1 is an explicit owner-only reject because the reviewer hit an individual quota limit. No compare output was supplied, so these are reviewed synthetic evidence, not a scored or promoted compare result. |
 | 4 — sealed comparison | **Not started** | Downstream of a validation prompt decision that has not been made. Validation holds two complete GPT packets, so no decision is currently possible on it; B4 addresses that. The amended order admits a per-task prompt assignment as a winner. |
 | 5 — real transfer | **Not started** | Downstream of Phase 4. The separate native-resolution evidence gate also remains open. |
 
@@ -1173,6 +1173,11 @@ Delta specifications reuse the existing scene schema and add:
     {"id": "D3", "kind": "worsened", "target": "chip on base unit door",
      "description": "chip widened and paint lifted at the edge", "material": true}
   ],
+  "observed_changes": [
+    {"id": "O1", "kind": "item_added", "target": "scatter cushions",
+     "description": "an extra cushion is present at T1", "material": true,
+     "source": "reports/phase35-delta-review-2026-08-04.json — both reviewers"}
+  ],
   "unchanged_assertions": [
     "same units, worktop, flooring, window and appliance positions",
     "no change to the splashback or skirting"
@@ -1180,9 +1185,12 @@ Delta specifications reuse the existing scene schema and add:
 }
 ```
 
-`changes` is the delta gold. `unchanged_assertions` is what makes the pair
-scorable at all: without it, an unenumerated drift is indistinguishable from a
-true change, and a false-change metric is meaningless.
+`changes` is the delta gold *and* the generation instruction.
+`unchanged_assertions` is what makes the pair scorable at all: without it, an
+unenumerated drift is indistinguishable from a true change, and a
+false-change metric is meaningless. `observed_changes` is gold found after the
+render by independent review and never fed to the generator — see
+"`observed_changes` — completing gold without rewriting a prompt" below.
 
 #### Views
 
@@ -1222,8 +1230,11 @@ already-accepted T0 packets as the reference so the probe pays only for T1:
       *unenumerated* material difference observed. *Two independent reviews
       per pair, Antigravity CLI 1.1.10 / `gemini-3.5-flash-low`, in
       `reports/phase35-delta-review-2026-08-04.json`.*
-- [ ] Owner adjudicates all three pairs. Probe images are calibration
-      evidence, not scored data. *Gallery:
+- [x] Owner adjudicates all three pairs. Probe images are calibration
+      evidence, not scored data. *All three approved 4 Aug 2026, including
+      the rejected RP-011: the drift is realistic, because a tenant may add a
+      plant pot or a cushion. Recorded in
+      `reports/phase35-owner-adjudication-2026-08-04.json`; gallery at
       `reports/delta-owner-gallery.html`.*
 
 #### Probe result, 4 Aug 2026 — passed, 2 of 3
@@ -1259,6 +1270,32 @@ Two consequences for the pilot, neither requiring the gate to be re-run:
 RP-011 keeps `attempts=1` and is not retried. The gate is met without it, and
 docs/31 forbids buying a pass by re-rolling until the drift stops.
 
+#### `observed_changes` — completing gold without rewriting a prompt
+
+The owner approved RP-011 on the ground that the drift is realistic: a tenant
+may well add a plant pot or a cushion. That is true and it is not the
+objection. The gold's claim is that it lists *everything* that differs, so an
+unlisted difference makes a correct compare run look like it invented a
+change — `false_change_rate` counts any reported change with no enumerated
+counterpart, and the metric would then be scoring our generator's drift while
+penalising the right answer.
+
+Completing the gold cannot mean appending to `changes`, because `changes` is
+also the generation prompt. Editing it changes `prompt_sha256`, and the frame
+it describes already exists — the ledger row would be orphaned from the image
+it pins. So delta specs carry a second list:
+
+| Field | Feeds the prompt | Scored as gold | Authored |
+|---|---|---|---|
+| `changes` | yes | yes | before the render |
+| `observed_changes` | **no** | yes | after, from independent review |
+
+Each `observed_changes` entry must name the review that found it. That is
+enforced, not conventional: this gold is observational rather than specified,
+and it is complete only to the extent the review that produced it was. The
+provenance of a claim nobody predicted is the only thing that makes it
+auditable later.
+
 **Pass:** ≥2 of 3 scenarios yield an acceptable pair within 2 attempts each,
 with zero unenumerated material changes in an accepted pair, and median
 operator time within the existing 8-minute-per-accepted-image bar.
@@ -1268,17 +1305,80 @@ this section as a negative result. Do not retry with a looser bar — a delta
 set that cannot hold identity produces confidently wrong gold, which is worse
 than no gold.
 
-#### Pilot, if the probe passes
+#### Pilot — 30 pairs (resized 4 Aug 2026)
 
-- [ ] 8 temporal pairs and 4 counterfactual pairs, drawn from accepted
+*Was 8 temporal + 4 counterfactual. The owner resized it to ~30 after the
+probe passed; the reasoning is recorded here because the number is only
+defensible against a stated goal.*
+
+**What it is for.** ML-E14 in docs/22 is `blocked | no data` — "no paired
+check-in/out fixture exists". This is the only way to build that fixture
+without a twelve-month tenancy. **What it is not for:** docs/00 forbids
+promoting from synthetic data, so no sample size lets these certify compare
+for production. Only real check-in/check-out evidence does that. Scale is
+therefore argued to development signal and regression detection, and stops
+where those stop improving.
+
+**Why 30 and not 12.** The unit that matters is not the pair but the
+*reported change*, because `false_change_rate` is false changes over changes
+reported. At roughly 4–8 reported changes per pair:
+
+| Pairs | ≈ reported changes | 95% CI at a 10% true rate | Answers |
+|---|---|---|---|
+| 3 (probe) | — | — | Can identity hold at all? *Yes, 2 of 3.* |
+| 12 | 50–100 | ±8pp | Gross failure only: tells 30% from 10%, not 15% from 8% |
+| **30** | **~200** | **±4pp** | A rate worth quoting and regressing against in CI |
+
+**Stratification binds harder than n.** Six change kinds across 12 pairs is
+~2 per kind, so only the pooled rate means anything and "does it hallucinate
+more on cleanliness than on removals" stays unanswerable. Thirty gives ~5 per
+kind, which is the point at which per-kind rates become readable.
+
+- [x] 30 pairs, 20 temporal and 10 counterfactual, drawn from accepted
       development and validation specifications, stratified across room types
       and change kinds (new defect, worsened defect, item removed, item added,
-      cleanliness change, and at least 2 pairs whose only changes are
-      immaterial).
-- [ ] Every pair passes the same Pass A / Pass B review path as the main
-      dataset, plus the unenumerated-change check.
-- [ ] Delta pairs inherit the split of the specification they derive from.
+      cleanliness change, immaterial).
+- [x] **Overweight the immaterial stratum** to at least 6 pairs, not the 2 the
+      original pilot allowed. RP-011 showed that the immaterial change is
+      where the generator takes licence — asked to rearrange cushions, it
+      added one — and it is also where a compare system earns its false
+      changes. This is the highest-signal stratum, not the safe filler.
+- [x] Immaterial change prompts pin what may **not** vary about the
+      object: count, material and position. "Rearranged" reads as permission.
+- [x] `unchanged_assertions` cover everything the *frame* can resolve,
+      not everything in the room. RP-011's balcony plant drifted because the
+      assertions described the room and the glazing showed the balcony.
+- [x] Every pair has the same review record and unenumerated-change check as
+      the main dataset. Twenty-nine pairs have two independent AI reviews;
+      P35-014-T1 is retained as an explicit owner-only quota exception and
+      rejected after local inspection. It must not be described as two
+      independent AI reviews.
+- [x] Delta pairs inherit the split of the specification they derive from.
       A delta pair never crosses into a different split from its T0 parent.
+
+#### Pilot result, 4 Aug 2026
+
+The pilot is complete as a reviewed synthetic evidence set. It contains 30
+pairs (20 temporal, 10 counterfactual), 60 generated frames, 180 enumerated
+changes, 7 immaterial pairs, 50 development-parent pairs and 10
+validation-parent pairs. The change-kind counts are: 40 new defects, 30
+worsened defects, 33 item removals, 40 item additions, 30 cleanliness changes
+and 7 immaterial changes.
+
+The review result is 3 accepts, 27 rejects and 0 escalations. Twenty-nine
+pairs have two independent AI reviews. P35-014-T1 has an explicit owner-only
+review because Antigravity reported an individual quota limit; the owner
+rejected it after inspecting the original-resolution frames. The exception is
+recorded in `reports/phase35-pilot-owner-adjudication-2026-08-04.json` and the
+merged review is in `reports/phase35-pilot-review-final-2026-08-04.json`.
+
+The generation ledger, summary and review gallery are respectively
+`reports/phase35-pilot-generation-2026-08-04.json`,
+`reports/phase35-pilot-summary-2026-08-04.json` and
+`reports/phase35-pilot-gallery-2026-08-04.html`. Compare scoring was not run:
+no `compare_inventories` output was supplied. Use `score_delta.py` only after
+a review-gated compare output exists. This pilot remains development evidence
+and does not promote compare behaviour.
 
 #### Metrics
 
@@ -1393,7 +1493,9 @@ so it was unreachable.*
 - [ ] Baseline and candidate results are reported at both frame level and
   room level with `n` stated, with Antigravity and Gemini Omni service slices
   broken out separately.
-- [ ] Phase 3.5 has either a scored delta set or a recorded negative result.
+- [x] Phase 3.5 has a complete 30-pair reviewed synthetic evidence set, with
+      the P35-014-T1 quota exception recorded. Compare scoring is still a
+      separate downstream check and was not run for this pilot.
 - [ ] Degradation-ladder sensitivity results are reported alongside the clean
   synthetic numbers.
 - [ ] A sealed synthetic comparison is complete.

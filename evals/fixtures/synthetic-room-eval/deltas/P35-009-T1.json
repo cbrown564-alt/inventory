@@ -1,0 +1,16 @@
+{
+  "id": "P35-009-T1",
+  "delta_of": "RP-010",
+  "delta_class": "temporal",
+  "timepoint": "T1",
+  "elapsed_description": "several months",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "window reveal", "description": "a small water mark is visible on the lower painted window reveal", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "item_removed", "target": "desk chair", "description": "the desk chair present at T0 is absent at T1", "material": true, "views": ["A-wide"]},
+    {"id": "D3", "kind": "item_added", "target": "floor lamp", "description": "a plain floor lamp is newly present beside the desk", "material": true},
+    {"id": "D4", "kind": "cleanliness", "target": "desk surface", "description": "papers and a light dust mark are visible on the desk at T1", "material": true},
+    {"id": "D5", "kind": "worsened", "target": "door edge", "description": "the small rub mark on the door edge is darker than at T0", "material": true, "views": ["D-condition"]},
+    {"id": "D6", "kind": "item_removed", "target": "bedside book", "description": "the book present on the bedside table at T0 is absent at T1", "material": true, "views": ["A-wide"]}
+  ],
+  "unchanged_assertions": ["same room layout, painted walls, carpet, window, desk, radiator and built-in storage", "same sockets, door, skirting, light fitting and camera viewpoint", "no other furniture, fitting or finish changes"]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "P35-027-CF",
+  "delta_of": "RP-013",
+  "delta_class": "counterfactual",
+  "timepoint": "same-timepoint-present",
+  "elapsed_description": "the same inspection timepoint in a counterfactual variant",
+  "changes": [
+    {"id": "D1", "kind": "new_defect", "target": "window sill", "description": "a chipped corner is present on the painted window sill", "material": true, "views": ["D-condition"]},
+    {"id": "D2", "kind": "new_defect", "target": "door leaf", "description": "a deep scuff is present on the lower door leaf", "material": true, "views": ["D-condition"]},
+    {"id": "D3", "kind": "item_added", "target": "floor cushion", "description": "a floor cushion is present beside the armchair", "material": true, "views": ["A-wide"]},
+    {"id": "D4", "kind": "item_removed", "target": "plant pot", "description": "the plant pot is absent from the window sill", "material": true, "views": ["A-wide"]},
+    {"id": "D5", "kind": "cleanliness", "target": "window glass", "description": "finger marks are present on the lower window glass", "material": true},
+    {"id": "D6", "kind": "worsened", "target": "sofa arm", "description": "the sofa arm has a visibly darker worn patch", "material": true, "views": ["D-condition"]}
+  ],
+  "unchanged_assertions": ["same sofa, armchair, coffee table, television unit, carpet, window and door", "same walls, skirting, sockets, radiator, exterior view and camera viewpoint", "no other object, fitting, finish or room geometry changes"]
+}
