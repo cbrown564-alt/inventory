@@ -624,14 +624,14 @@ def test_curation_override_endpoint(server):
     photo = [p for r in state.load().rooms for p in r.photos
              if p.id == "P001"][0]
     assert photo.hero == 1
-    cur = json.loads((out / "work" / "curation.json").read_text("utf-8"))
+    cur = json.loads((out / "work" / "curation.json").read_text(encoding="utf-8"))
     assert photo.sha256 in cur["overrides"]
     assert cur["overrides"][photo.sha256] == "hero"
 
     status, body = _req("POST", base + "/api/curation",
                         {"photo_id": "P001", "action": "demote"})
     assert status == 200 and body["hero"] is None
-    cur = json.loads((out / "work" / "curation.json").read_text("utf-8"))
+    cur = json.loads((out / "work" / "curation.json").read_text(encoding="utf-8"))
     assert cur["overrides"][photo.sha256] == "hidden"
 
     status, _ = _req("POST", base + "/api/curation",

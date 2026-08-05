@@ -25,7 +25,7 @@ def test_native_fixture_initialise_rejects_unsafe_property_paths(tmp_path):
 def test_native_fixture_audit_requires_frozen_status(tmp_path):
     fixture = tmp_path / "native"
     manifest_path = initialise(fixture, ["property-a", "property-b"])
-    manifest = __import__("json").loads(manifest_path.read_text())
+    manifest = __import__("json").loads(manifest_path.read_text(encoding="utf-8"))
     manifest["frozen_at"] = "2026-07-30T12:00:00+00:00"
 
     result = audit_fixture(fixture, manifest)
@@ -36,7 +36,7 @@ def test_native_fixture_audit_requires_frozen_status(tmp_path):
 def test_native_fixture_freeze_hashes_complete_external_evidence(tmp_path):
     fixture = tmp_path / "native"
     manifest_path = initialise(fixture, ["property-a", "property-b"])
-    manifest = __import__("json").loads(manifest_path.read_text())
+    manifest = __import__("json").loads(manifest_path.read_text(encoding="utf-8"))
     for index, prop in enumerate(manifest["properties"]):
         prop["annotator"] = f"independent-reviewer-{index}"
         prop["source_authority"] = "permission-record"
@@ -57,7 +57,7 @@ def test_native_fixture_freeze_hashes_complete_external_evidence(tmp_path):
     result = freeze(fixture)
 
     assert result["ready"]
-    saved = __import__("json").loads(manifest_path.read_text())
+    saved = __import__("json").loads(manifest_path.read_text(encoding="utf-8"))
     assert saved["status"] == "frozen"
     expected = hashlib.sha256(b"image-0").hexdigest()
     assert saved["image_manifest"][0]["sha256"] == expected
@@ -66,7 +66,7 @@ def test_native_fixture_freeze_hashes_complete_external_evidence(tmp_path):
 def test_native_fixture_audit_detects_changed_image(tmp_path):
     fixture = tmp_path / "native"
     manifest_path = initialise(fixture, ["property-a", "property-b"])
-    manifest = __import__("json").loads(manifest_path.read_text())
+    manifest = __import__("json").loads(manifest_path.read_text(encoding="utf-8"))
     for index, prop in enumerate(manifest["properties"]):
         prop["annotator"] = f"reviewer-{index}"
         prop["source_authority"] = "permission-record"
@@ -78,11 +78,11 @@ def test_native_fixture_audit_detects_changed_image(tmp_path):
         (fixture / "capture" / prop["capture_subdir"] / "source.jpg").write_bytes(
             f"image-{index}".encode()
         )
-    manifest_path.write_text(__import__("json").dumps(manifest))
+    manifest_path.write_text(__import__("json").dumps(manifest), encoding="utf-8")
     freeze(fixture)
     changed = fixture / "capture/property-a/source.jpg"
     changed.write_bytes(b"changed")
-    saved = __import__("json").loads(manifest_path.read_text())
+    saved = __import__("json").loads(manifest_path.read_text(encoding="utf-8"))
 
     result = audit_fixture(fixture, saved)
 
@@ -93,7 +93,7 @@ def test_native_fixture_audit_detects_changed_image(tmp_path):
 def test_native_fixture_freeze_requires_images_for_each_property(tmp_path):
     fixture = tmp_path / "native"
     manifest_path = initialise(fixture, ["property-a", "property-b"])
-    manifest = __import__("json").loads(manifest_path.read_text())
+    manifest = __import__("json").loads(manifest_path.read_text(encoding="utf-8"))
     for index, prop in enumerate(manifest["properties"]):
         prop["annotator"] = f"reviewer-{index}"
         prop["source_authority"] = "permission-record"
@@ -103,7 +103,7 @@ def test_native_fixture_freeze_requires_images_for_each_property(tmp_path):
         prop["negative_controls"]["clean"] = [{}]
         prop["negative_controls"]["ambiguous"] = [{}]
     (fixture / "capture/property-a/source.jpg").write_bytes(b"only one property")
-    manifest_path.write_text(__import__("json").dumps(manifest))
+    manifest_path.write_text(__import__("json").dumps(manifest), encoding="utf-8")
 
     with pytest.raises(ValueError, match="property capture dirs"):
         freeze(fixture)
