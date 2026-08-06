@@ -363,3 +363,134 @@ def test_the_strip_hash_is_stable_across_rebuilds():
     assert after["strip_sha256"] == before["strip_sha256"]
     assert [f["pixel_sha256"] for f in after["frames"]] == \
            [f["pixel_sha256"] for f in before["frames"]]
+
+
+def _triage_ledger(tmp_path, rows):
+    dataset = tmp_path / "ds"
+    (dataset / "video").mkdir(parents=True)
+    with (dataset / "video" / "tasks.csv").open("w", newline="",
+                                               encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=FIELDNAMES)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({name: "" for name in FIELDNAMES} | row)
+    return dataset
+
+
+def _triage_row(use_case_id, **overrides):
+    return {"task_id": f"{use_case_id}.RP-000.gemini-omni-video",
+            "clip_id": f"{use_case_id}.RP-000", "use_case_id": use_case_id,
+            "reference_provenance": "pass_a_accepted",
+            "status": "retry_pending"} | overrides
+
+
+def test_the_triage_clears_only_vu5_and_says_why_for_the_rest(tmp_path):
+    """Three dispositions, not two. The arm is five questions, not one."""
+    from evals.synthetic.triage_video_arm import triage
+
+    dataset = _triage_ledger(tmp_path, [_triage_row(uc)
+                                        for uc in ("VU-1", "VU-2", "VU-3",
+                                                   "VU-4", "VU-5")])
+    record = triage(dataset)
+
+    now = {d["use_case_id"]: d["now"] for d in record["decisions"]}
+    assert now == {"VU-1": "suspended", "VU-2": "suspended", "VU-3": "suspended",
+                   "VU-4": "retired", "VU-5": "retry_pending"}
+    assert record["clips_cleared_to_generate"] == ["VU-5.RP-000"]
+    # A suspension that does not carry its reason is indistinguishable from
+    # having run out of schedule, which is the thing this triage is not.
+    assert all(d["reason"] for d in record["decisions"])
+
+
+def test_the_triage_survives_being_applied_twice(tmp_path):
+    from evals.synthetic.triage_video_arm import triage
+
+    dataset = _triage_ledger(tmp_path, [_triage_row("VU-1"), _triage_row("VU-5")])
+    first = triage(dataset)
+    second = triage(dataset)
+    assert [d["now"] for d in first["decisions"]] == [d["now"] for d in
+                                                      second["decisions"]]
+    assert [d["was"] for d in second["decisions"]] == ["suspended", "retry_pending"]
+
+
+def test_the_triage_refuses_when_vu5s_reference_stops_being_accepted(tmp_path):
+    """The clearance is the load-bearing half and it rests on a mutable fact."""
+    from evals.synthetic.triage_video_arm import triage
+
+    dataset = _triage_ledger(
+        tmp_path, [_triage_row("VU-5", reference_provenance="pass_a_rejected")])
+    with pytest.raises(ValueError, match="cannot produce gold"):
+        triage(dataset)
+
+
+def test_the_triage_refuses_to_park_a_row_holding_a_delivered_clip(tmp_path):
+    """Suspension is not an archive. The artefact belongs in video/rejected/."""
+    from evals.synthetic.triage_video_arm import triage
+
+    dataset = _triage_ledger(tmp_path,
+                             [_triage_row("VU-1", output_sha256="delivered")])
+    with pytest.raises(ValueError, match="reject_video_clip"):
+        triage(dataset)
+
+
+def test_a_new_use_case_must_be_decided_rather_than_defaulted(tmp_path):
+    from evals.synthetic.triage_video_arm import triage
+
+    dataset = _triage_ledger(tmp_path, [_triage_row("VU-6")])
+    with pytest.raises(ValueError, match="no disposition for VU-6"):
+        triage(dataset)
+
+
+def test_the_applied_triage_matches_the_shipped_ledger():
+    """The fixture is the record; drift between them is a silent revival."""
+    with (DATASET / "video" / "tasks.csv").open(newline="",
+                                                encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    by_status = {}
+    for row in rows:
+        by_status.setdefault(row["status"], []).append(row["use_case_id"])
+    assert sorted(by_status["retry_pending"]) == ["VU-5", "VU-5"]
+    assert sorted(by_status["suspended"]) == ["VU-1", "VU-1", "VU-2", "VU-3"]
+    assert sorted(by_status["retired"]) == ["VU-4", "VU-4", "VU-4"]
+
+
+def test_a_retired_row_stops_blocking_the_queue_but_a_suspended_one_does_not():
+    """Exempting retired rows must not read as having repaired their reference."""
+    from evals.synthetic.build_video_tasks import check_reference_provenance
+
+    rows = [{"clip_id": "VU-4.RP-022-slow", "status": "retired",
+             "reference_provenance": "pass_a_rejected"},
+            {"clip_id": "VU-1.RP-003", "status": "suspended",
+             "reference_provenance": "pass_a_rejected"},
+            {"clip_id": "VU-5.RP-019-push", "status": "retry_pending",
+             "reference_provenance": "pass_a_accepted"}]
+    assert check_reference_provenance(rows) == [("VU-1.RP-003", "pass_a_rejected")]
+
+
+def test_the_provenance_gate_sees_the_carried_status_not_the_fresh_one(tmp_path,
+                                                                      monkeypatch):
+    """The exemption turns on the previous status; a built row is always pending.
+
+    Checking before the carry-forward would gate every retired row forever and
+    leave the queue permanently unbuildable.
+    """
+    import evals.synthetic.build_video_tasks as build
+
+    fresh = {name: "" for name in FIELDNAMES} | {
+        "task_id": "VU-4.RP-022-slow.gemini-omni-video",
+        "clip_id": "VU-4.RP-022-slow", "use_case_id": "VU-4", "prompt_sha256": "p",
+        "reference_provenance": "pass_a_rejected", "status": "pending"}
+    monkeypatch.setattr(build, "build_rows", lambda _dir: [dict(fresh)])
+    dataset = tmp_path / "ds"
+    (dataset / "video").mkdir(parents=True)
+    task_path = dataset / "video" / "tasks.csv"
+
+    # No prior ledger: nothing has retired this row, so the gate still bites.
+    with pytest.raises(SystemExit, match="pass_a_rejected"):
+        build.write_tasks(dataset)
+
+    with task_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=FIELDNAMES)
+        writer.writeheader()
+        writer.writerow(dict(fresh, status="retired"))
+    assert build.write_tasks(dataset)[0]["status"] == "retired"

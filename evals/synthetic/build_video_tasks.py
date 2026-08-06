@@ -219,27 +219,22 @@ def check_reference_provenance(rows: list[dict[str, str]]) -> list[tuple[str, st
     ``pass_a_rejected``, which is a different and worse thing: an unimported
     still might turn out fine, whereas a rejected one has been looked at twice
     and found wanting, and no amount of regenerating the clip changes it.
+
+    ``retired`` rows are exempt, and only ``retired``. The gate exists to stop a
+    clip being *generated* against a reference that cannot produce gold; a use
+    case the programme has retired will not be generated, so holding a rejected
+    reference is now its recorded epitaph rather than a live risk — and leaving
+    it gated would make the queue permanently unbuildable in order to prevent
+    something nobody is going to do. ``suspended`` stays gated on purpose: a
+    suspension can be revived, and the reference must still be good when it is.
     """
     return [(row["clip_id"], row["reference_provenance"]) for row in rows
-            if row["reference_provenance"] != "pass_a_accepted"]
+            if row["reference_provenance"] != "pass_a_accepted"
+            and row.get("status") != "retired"]
 
 
 def write_tasks(dataset_dir: Path, allow_unimported: bool = False) -> list[dict[str, str]]:
     rows = build_rows(dataset_dir)
-    ungated = check_reference_provenance(rows)
-    if ungated and not allow_unimported:
-        listing = "\n  ".join(f"{clip_id:24} reference is {status}"
-                              for clip_id, status in ungated)
-        raise SystemExit(
-            f"{len(ungated)} of {len(rows)} clips are conditioned on a still that "
-            f"is not pass_a_accepted:\n  {listing}\n\n"
-            "A clip may only be conditioned on a still the ledger records as "
-            "accepted. 'pass_a_rejected' is terminal for that clip: the "
-            "reference itself failed review, and regenerating the clip cannot "
-            "repair it — the use case needs a different scenario or dropping.\n"
-            "Pass --allow-unimported-reference to write the queue anyway as an "
-            "explicitly ungated probe."
-        )
     path = dataset_dir / "video" / "tasks.csv"
     previous: dict[str, dict[str, str]] = {}
     if path.exists():
@@ -270,6 +265,24 @@ def write_tasks(dataset_dir: Path, allow_unimported: bool = False) -> list[dict[
             for field in ("status", "attempts", "operator", "generated_at",
                           "duration_s", "output_sha256", "strip_sha256"):
                 row[field] = old.get(field, row[field])
+
+    # Gated after the carry-forward, not before it: the exemption above turns on
+    # the row's *previous* status, and a freshly built row is always "pending".
+    ungated = check_reference_provenance(rows)
+    if ungated and not allow_unimported:
+        listing = "\n  ".join(f"{clip_id:24} reference is {status}"
+                              for clip_id, status in ungated)
+        raise SystemExit(
+            f"{len(ungated)} of {len(rows)} clips are conditioned on a still that "
+            f"is not pass_a_accepted:\n  {listing}\n\n"
+            "A clip may only be conditioned on a still the ledger records as "
+            "accepted. 'pass_a_rejected' is terminal for that clip: the "
+            "reference itself failed review, and regenerating the clip cannot "
+            "repair it — the use case needs a different scenario or dropping.\n"
+            "Pass --allow-unimported-reference to write the queue anyway as an "
+            "explicitly ungated probe."
+        )
+
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=FIELDNAMES)
@@ -302,8 +315,15 @@ def main() -> int:
     for clip_id, status in ungated:
         print(f"WARNING: {clip_id} is conditioned on a {status} still and "
               "cannot produce gold")
-    print(f"{len(rows) - len(ungated)} of {len(rows)} clips have an accepted "
-          "reference frame")
+    # Counted from the reference itself, not from what the gate let through:
+    # exempting retired rows must not read as having repaired them.
+    accepted = sum(1 for row in rows
+                   if row["reference_provenance"] == "pass_a_accepted")
+    print(f"{accepted} of {len(rows)} clips have an accepted reference frame")
+    for status in ("retry_pending", "suspended", "retired"):
+        held = [row["clip_id"] for row in rows if row["status"] == status]
+        if held:
+            print(f"{status:14} {len(held):>2}  {', '.join(sorted(held))}")
     return 0
 
 

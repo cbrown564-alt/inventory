@@ -31,8 +31,9 @@ Four consequences, in the order they should be acted on:
    blocked only on the Antigravity path, not on the question.
 2. **The Pass B backlog is cut, not cleared**, unless a decision that needs
    those labels can be named.
-3. **The video probe (docs/34) is closed one way or the other** — regenerated
-   against its now-accepted references, or suspended in writing.
+3. ~~**The video probe (docs/34) is closed one way or the other.**~~ **Done,
+   6 Aug 2026** — triaged three ways rather than two: VU-5 regenerates (2 clips),
+   VU-1/2/3 suspended, VU-4 retired. See §6.3.
 4. **The 27 delta pairs are wired into `evals/ci_gate.py`.** docs/35 calls them
    a regression baseline; nothing re-runs them, so they are a report.
 
@@ -210,14 +211,34 @@ The 43 `not_generated` and 39 `generator_failed` rows follow the same rule:
 generation yield stops being a programme metric the moment the metric it feeds
 is known to be under-powered.
 
-### 6.3 Close the video arm
+### 6.3 Close the video arm — **done, 6 Aug 2026**
 
-docs/34's five day-1 clips now have accepted, correctly-filed reference stills
-and an enforceable rule that a clip may only be conditioned on a
-`pass_a_accepted` still. Either regenerate those five, or record docs/34 as
-suspended with the fixture repair as its terminal state. Its two findings that
-survive the void batch — readable brands in 6 of 8 clips, and geometry drifting
-mid-take with no cut — are worth carrying into docs/26 either way, as leads.
+The framing above was a binary, and the binary was the wrong shape. docs/34 is
+five independent questions sharing a generator and a budget, and the §3 floor
+lands on them unevenly, so they do not stand or fall together. Applied through
+`evals/synthetic/triage_video_arm.py`
+(`video/reports/phase36-video-arm-triage-2026-08-06.json`), full reasoning in
+docs/34 "Triage — 6 Aug 2026":
+
+| Disposition | Clips | Use cases |
+|---|---:|---|
+| `retry_pending` — regenerate | 2 | VU-5 |
+| `suspended` — under-powered against a measured floor | 4 | VU-1, VU-2, VU-3 |
+| `retired` — terminal on its reference | 3 | VU-4 |
+
+VU-5 survives because it is a **hallucination test, not a recall test**: a claim
+about geometry the camera never reached is wrong whichever run emits it, so
+run-to-run instability does not make it unreadable the way it makes a recall
+difference unreadable. It is also the only use case that closes the arm on
+either branch.
+
+`suspended` is deliberately not `generator_failed` and deliberately not silence.
+It records that the measurement is under-powered against a floor now measured,
+so reviving VU-1/2/3 needs a design change rather than a free afternoon.
+
+Two findings survive the void batch independent of all this and are worth
+carrying into docs/26 as leads: readable brands in 6 of 8 clips, and geometry
+drifting mid-take with no cut.
 
 ### 6.4 Make the delta pairs an actual baseline
 

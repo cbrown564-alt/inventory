@@ -1,8 +1,8 @@
 {
   "dataset_id": "synthetic-room-video-probe",
   "phase": "phase-3.6-video-feasibility-probe",
-  "status": "day_1_void_six_clips_clear_to_regenerate",
-  "status_note": "Nine clips queued, eight delivered, all eight rejected at Pass A on 4 Aug 2026 and archived to video/rejected/ with their reasons. That batch is void rather than a negative result: every clip was conditioned on a reference still whose view id was wrong, so each prompt asked for an opening frame and a camera start that could not both be satisfied. The upstream defect is now repaired and the stills are through Pass A, so six of nine clips hold an accepted reference and are clear to regenerate. The three VU-4 rungs are not and cannot be on RP-022: that reference was rejected by both reviewers, and no regeneration repairs a reference. Nothing in this dataset has produced a result; it has produced a corrected starting position.",
+  "status": "triaged_2026_08_06_vu5_only",
+  "status_note": "Triaged 6 Aug 2026 by docs/36 §6.3, applied through evals/synthetic/triage_video_arm.py (record: video/reports/phase36-video-arm-triage-2026-08-06.json). The day-1 batch remains void rather than a negative result — every clip was conditioned on a reference still whose view id was wrong, so each prompt asked for an opening frame and a camera start that could not both be satisfied — and the upstream defect is repaired. What changed is the answer to 'regenerate or suspend': neither wholesale. This arm is five independent questions sharing a generator, and the docs/35 Phase 0 describe-stability floor lands on them unevenly. VU-5 alone is cleared to regenerate; VU-1, VU-2 and VU-3 are suspended as under-powered against that floor rather than unfinished; VU-4 is retired on a rejected reference. Two clips, not nine. Nothing in this dataset has yet produced a result.",
   "parent_dataset": "synthetic-room-eval",
   "observed_truth_rule": "Only independently AI-reviewed Pass B claims, with required owner adjudication resolved, may be scored as gold. Unchanged from the parent dataset.",
   "wall": "Synthetic video is development evidence. No result from this dataset promotes a capture-strategy claim, a compare claim, or a product accuracy claim. docs/26 still resolves photo-vs-video on real capture.",
@@ -116,5 +116,50 @@
     ],
     "partial_positive": "VU-2 room naming worked: both reviewers named Entrance hall then Kitchen. Their boundary brackets disagree by two seconds (sampled frame 7 versus 9), which is the resolution limit of a 1 fps strip, not a segmentation result.",
     "budget": "Nine of ten day-1 clips were spent. Two of them (VU-1.RP-024 and the VU-4 rungs) are day-2-or-later work under docs/34 and should not have been generated on day 1."
+  },
+  "triage_2026_08_06": {
+    "decided_by": "docs/36-synthetic-programme-review.md §6.3",
+    "record": "video/reports/phase36-video-arm-triage-2026-08-06.json",
+    "applied_by": "evals/synthetic/triage_video_arm.py",
+    "ledger_statuses": {
+      "retry_pending": "cleared to generate; the triage's live half",
+      "suspended": "a programme decision that the measurement is under-powered, not a generator failure and not an absence of schedule",
+      "retired": "terminal; no regeneration can repair the reason"
+    },
+    "dispositions": [
+      {
+        "use_case_id": "VU-5",
+        "status": "retry_pending",
+        "clips": 2,
+        "reason": "A hallucination test, not a recall test: a claim about geometry the camera never reached is wrong whichever run emits it, so run-to-run instability does not make it unreadable the way it makes a recall difference unreadable. The probe's only both_ways case. Its day-1 failure was on the control arm — the hold clip advanced past the doorway it was told to hold — which is precisely the ambiguity a correct reference resolves.",
+        "closes_either_way": "A hold clip that honours the instruction is the first positive-capable result this probe can produce. One that breaches again is a clean negative about controllability and the counterfactual has no control arm on this generator. Neither outcome leaves the arm open."
+      },
+      {
+        "use_case_id": "VU-1",
+        "status": "suspended",
+        "clips": 2,
+        "reason": "Measures a recall difference between two describe runs on different inputs at n=2 clips, against a floor where two runs on byte-identical pixels agree on 34.6% of the schedule. This is the measurement shape docs/35 Phase 0 invalidated in the image arm."
+      },
+      {
+        "use_case_id": "VU-2",
+        "status": "suspended",
+        "clips": 1,
+        "reason": "Room naming and boundary timing are not a describe schedule, so the floor does not reach this one. Suspended on its own ceiling instead: n=1 on the strongest boundary cue that exists, where this document already grants that a miss is decisive and a hit is weak. Day 1's partial positive — both reviewers naming Entrance hall then Kitchen — is most of what it can give, and the 2s bracket disagreement was the 1 fps strip's resolution."
+      },
+      {
+        "use_case_id": "VU-3",
+        "status": "suspended",
+        "clips": 1,
+        "reason": "'Does one spoken cue move any metric' at n=1 clip against the same floor. The input control is the cleanest in the probe — byte-identical footage with the audio stripped — and the measurement either side of it is still one describe run."
+      },
+      {
+        "use_case_id": "VU-4",
+        "status": "retired",
+        "clips": 3,
+        "reason": "Terminal on its reference: both reviewers rejected RP-022's A-wide for a wall-hung basin where the specification requires a corner one, and no regeneration repairs a reference. Already dominated by docs/31 Amendment B's free degradation ladder, which answers the same question with no clip, no quota and no terms exposure."
+      }
+    ],
+    "not_a_sunk_cost_argument": "repair_gemini_omni_views.py, the Pass A import and the three reference adjudications are already paid for and are not wasted by suspension: they corrected 36 misfiled views in the parent image ledger, which was a real defect in docs/31's dataset independent of any video. 'The fixture is repaired, so we should use it' is not a reason to generate.",
+    "if_suspension_becomes_permanent": "VU-5's question re-homes rather than dying — any real capture where what sits behind a closed door is known gives the same guarantee and buys transfer, which this arm can never buy under B9. The counter is that docs/26 is itself an open gate that has not produced its verdict, and moving a live question into a stalled document is how questions disappear."
   }
 }

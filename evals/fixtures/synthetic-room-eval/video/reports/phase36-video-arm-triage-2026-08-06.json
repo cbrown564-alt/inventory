@@ -1,0 +1,101 @@
+{
+  "applied_at": "2026-08-06T08:39:53.158815+00:00",
+  "clips_cleared_to_generate": [
+    "VU-5.RP-019-hold",
+    "VU-5.RP-019-push"
+  ],
+  "counts": {
+    "retired": 3,
+    "retry_pending": 2,
+    "suspended": 4
+  },
+  "dataset_id": "synthetic-room-video-probe",
+  "decided_by": "docs/36-synthetic-programme-review.md \u00a76.3",
+  "decisions": [
+    {
+      "clip_id": "VU-1.RP-003",
+      "now": "suspended",
+      "reason": "Under-powered against the docs/35 Phase 0 floor: a recall difference between two describe runs at n=2 clips, where two runs on identical pixels agree on 34.6% of the schedule.",
+      "reference_provenance": "pass_a_accepted",
+      "task_id": "VU-1.RP-003.gemini-omni-video",
+      "use_case_id": "VU-1",
+      "was": "retry_pending"
+    },
+    {
+      "clip_id": "VU-1.RP-024",
+      "now": "suspended",
+      "reason": "Under-powered against the docs/35 Phase 0 floor: a recall difference between two describe runs at n=2 clips, where two runs on identical pixels agree on 34.6% of the schedule.",
+      "reference_provenance": "pass_a_accepted",
+      "task_id": "VU-1.RP-024.gemini-omni-video",
+      "use_case_id": "VU-1",
+      "was": "retry_pending"
+    },
+    {
+      "clip_id": "VU-2.RP-014-transit",
+      "now": "suspended",
+      "reason": "Not reached by the floor \u2014 room naming and boundary timing are not a describe schedule \u2014 but n=1 on the strongest boundary cue that exists, where docs/34 already grants that a hit is weak.",
+      "reference_provenance": "pass_a_accepted",
+      "task_id": "VU-2.RP-014-transit.gemini-omni-video",
+      "use_case_id": "VU-2",
+      "was": "retry_pending"
+    },
+    {
+      "clip_id": "VU-3.RP-021-narrated",
+      "now": "suspended",
+      "reason": "Under-powered against the docs/35 Phase 0 floor: 'does one spoken cue move any metric' at n=1 clip. The input control is perfect and the measurement is still one describe run a side.",
+      "reference_provenance": "pass_a_accepted",
+      "task_id": "VU-3.RP-021-narrated.gemini-omni-video",
+      "use_case_id": "VU-3",
+      "was": "retry_pending"
+    },
+    {
+      "clip_id": "VU-4.RP-022-slow",
+      "now": "retired",
+      "reason": "Terminal on its reference: RP-022's A-wide was rejected by both reviewers for a wall-hung basin where the specification requires a corner one, and no regeneration repairs a reference. Already dominated by Amendment B's free degradation ladder.",
+      "reference_provenance": "pass_a_rejected",
+      "task_id": "VU-4.RP-022-slow.gemini-omni-video",
+      "use_case_id": "VU-4",
+      "was": "retry_pending"
+    },
+    {
+      "clip_id": "VU-4.RP-022-ordinary",
+      "now": "retired",
+      "reason": "Terminal on its reference: RP-022's A-wide was rejected by both reviewers for a wall-hung basin where the specification requires a corner one, and no regeneration repairs a reference. Already dominated by Amendment B's free degradation ladder.",
+      "reference_provenance": "pass_a_rejected",
+      "task_id": "VU-4.RP-022-ordinary.gemini-omni-video",
+      "use_case_id": "VU-4",
+      "was": "retry_pending"
+    },
+    {
+      "clip_id": "VU-4.RP-022-hurried",
+      "now": "retired",
+      "reason": "Terminal on its reference: RP-022's A-wide was rejected by both reviewers for a wall-hung basin where the specification requires a corner one, and no regeneration repairs a reference. Already dominated by Amendment B's free degradation ladder.",
+      "reference_provenance": "pass_a_rejected",
+      "task_id": "VU-4.RP-022-hurried.gemini-omni-video",
+      "use_case_id": "VU-4",
+      "was": "retry_pending"
+    },
+    {
+      "clip_id": "VU-5.RP-019-push",
+      "now": "retry_pending",
+      "reason": "Cleared to regenerate. A hallucination test, not a recall test, so the describe-stability floor does not reach it; the probe's only both-ways case; resolves either way on two clips.",
+      "reference_provenance": "pass_a_accepted",
+      "task_id": "VU-5.RP-019-push.gemini-omni-video",
+      "use_case_id": "VU-5",
+      "was": "retry_pending"
+    },
+    {
+      "clip_id": "VU-5.RP-019-hold",
+      "now": "retry_pending",
+      "reason": "Cleared to regenerate. A hallucination test, not a recall test, so the describe-stability floor does not reach it; the probe's only both-ways case; resolves either way on two clips.",
+      "reference_provenance": "pass_a_accepted",
+      "task_id": "VU-5.RP-019-hold.gemini-omni-video",
+      "use_case_id": "VU-5",
+      "was": "retry_pending"
+    }
+  ],
+  "operator": "cobro",
+  "record_type": "phase36_video_arm_triage",
+  "schema_version": 1,
+  "wall": "Synthetic video is development evidence. Nothing here promotes a capture-strategy, compare or product accuracy claim, and the Google arm remains unpublishable on terms grounds (docs/31 B9)."
+}
