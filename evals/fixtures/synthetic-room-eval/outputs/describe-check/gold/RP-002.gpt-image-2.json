@@ -1,0 +1,271 @@
+{
+  "schema_version": 1,
+  "record_type": "describe_check_gold",
+  "packet_id": "RP-002.gpt-image-2",
+  "scenario_id": "RP-002",
+  "room_type": "Bathroom",
+  "generator": "GPT Image 2",
+  "gold_method": "spec-seeded + gemini-3.5-flash cross-family fill",
+  "created_at": "2026-08-06T20:47:21.733188+00:00",
+  "image_sha256": {
+    "A-wide": "a6fd3bfa8a25a63d8401b949fbe7d3253e15b7f7b6804333abf46d5c53930f32",
+    "B-reverse": "5dd69f93bef04c50f338d681ecc529ed65973e6641e427cd0bcd23daded29a01",
+    "C-inventory": "4734c411f8f25bdaf4d3f1bb7942a3eacdd67785e6ce10ac80e898142c4ad131",
+    "D-condition": "8983a790ffb00ae70a8b61abdb1634ca5120264bd4087aa9a50f89c7eedd5964"
+  },
+  "claims": [
+    {
+      "name": "bath",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "glass shower screen",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "wash basin",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "WC",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "heated towel rail",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "grey wall tiles",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "mirror",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "door furniture",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "extractor vent",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "skirting board",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "mixer taps",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "shower handset",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "bath panel",
+      "aliases": [],
+      "condition": "fair",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [
+        "short shallow scuff on the lower bath panel"
+      ],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "silicone seal",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "vinyl floor",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "lower wall tiles",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "internal door",
+      "aliases": [
+        "door"
+      ],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "window",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "C-inventory"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "ceiling",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "painted walls",
+      "aliases": [
+        "walls"
+      ],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "ai_fill"
+    }
+  ],
+  "spot_check": {
+    "status": "owner_accepted",
+    "accepted_at": "2026-08-06T22:01:22.993089+00:00",
+    "accepted_by": "project owner",
+    "rule": "Owner reviews every defect claim, every post-score invent/omit disagreement, plus a small random sample of other claims.",
+    "note": "Owner accepted all seven defect claims on 2026-08-06."
+  }
+}

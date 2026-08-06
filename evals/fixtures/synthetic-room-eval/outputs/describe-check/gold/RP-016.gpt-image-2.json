@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "record_type": "describe_check_gold",
+  "packet_id": "RP-016.gpt-image-2",
+  "scenario_id": "RP-016",
+  "room_type": "Dining room",
+  "generator": "GPT Image 2",
+  "gold_method": "spec-seeded + gemini-3.5-flash cross-family fill",
+  "created_at": "2026-08-06T20:49:25.516264+00:00",
+  "image_sha256": {
+    "A-wide": "75498173cb7feb3c5552bc352ee37892db0a8f8a26f6e629d01b97a84ad2020d",
+    "B-reverse": "b9816a265bcbcbbf663949592ad8ad300a4fbd2231032be01e0eff1b5eb4d500",
+    "C-inventory": "742a6468496b6ef559e846b1dc5e14fa02bdd6b5f74aa132e953aee60ba25c5a",
+    "D-condition": "953e96de2b4c7fb1a1264c7829add3426c1f9c4d702f90bd0385c0bdf3efb883"
+  },
+  "claims": [
+    {
+      "name": "oak dining table",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "six chairs",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "French doors",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "pendant light",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "timber floor",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "internal door",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "sideboard",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "radiator",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "wall mirror",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "skirting",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "curtain pole",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "sockets",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "thermostatic valve",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "oak tabletop",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "chair upholstery",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "table leg",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "walls",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "ceiling",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "ai_fill"
+    }
+  ],
+  "spot_check": {
+    "status": "owner_accepted",
+    "accepted_at": "2026-08-06T22:01:22.993089+00:00",
+    "accepted_by": "project owner",
+    "rule": "Owner reviews every defect claim, every post-score invent/omit disagreement, plus a small random sample of other claims.",
+    "note": "Owner accepted all seven defect claims on 2026-08-06."
+  }
+}

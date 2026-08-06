@@ -1,0 +1,299 @@
+{
+  "schema_version": 1,
+  "record_type": "describe_check_gold",
+  "packet_id": "RP-006.gpt-image-2",
+  "scenario_id": "RP-006",
+  "room_type": "Bathroom",
+  "generator": "GPT Image 2",
+  "gold_method": "spec-seeded + gemini-3.5-flash cross-family fill",
+  "created_at": "2026-08-06T20:47:53.340607+00:00",
+  "image_sha256": {
+    "A-wide": "88d76e41a0b559a5f897d9f6d35cbb298e14fe3d4f16e2478355e06a6a855fe0",
+    "B-reverse": "fa8d1cccdb84cad8c5c42c78798f3556d73337935e4c9f310e533ba06fda955f",
+    "C-inventory": "966ad5bf4acb843bbb14268625a79378e7363c69f911f20ce2ec5e81e323ef98",
+    "D-condition": "d1a58c4121bd9b0aae7c92d14061b17ead2760c6bb4912a374f227220062cce4"
+  },
+  "claims": [
+    {
+      "name": "walk-in shower",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "WC",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "vanity basin",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "heated towel rail",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "stone wall tiles",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "door",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "vanity unit",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "mirror",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "extractor vent",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "floor tiles",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "rain shower",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "handset",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "mixer controls",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "glass screen",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "floor drain",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "vanity drawer",
+      "aliases": [],
+      "condition": "fair",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [
+        "small chip on the upper corner of the vanity drawer front"
+      ],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "basin edge",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "mixer tap",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "silicone joint",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "ceiling",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "walls",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "skirting",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "ai_fill"
+    }
+  ],
+  "spot_check": {
+    "status": "owner_accepted",
+    "accepted_at": "2026-08-06T22:01:22.993089+00:00",
+    "accepted_by": "project owner",
+    "rule": "Owner reviews every defect claim, every post-score invent/omit disagreement, plus a small random sample of other claims.",
+    "note": "Owner accepted all seven defect claims on 2026-08-06."
+  }
+}

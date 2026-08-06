@@ -1,0 +1,1069 @@
+{
+  "record_type": "describe_check_score",
+  "scored_at": "2026-08-06T20:55:06.184460+00:00",
+  "packet_ids": [
+    "RP-001.gpt-image-2",
+    "RP-002.gpt-image-2",
+    "RP-004.gpt-image-2",
+    "RP-006.gpt-image-2",
+    "RP-007.gpt-image-2",
+    "RP-009.gpt-image-2",
+    "RP-011.gpt-image-2",
+    "RP-013.gpt-image-2",
+    "RP-015.gpt-image-2",
+    "RP-016.gpt-image-2",
+    "RP-021.gpt-image-2",
+    "RP-024.gpt-image-2"
+  ],
+  "backend": "openai",
+  "model": "gemini-3.5-flash",
+  "aggregate": {
+    "identity": {
+      "omit_n": 97,
+      "invent_n": 75,
+      "omit_rate": 0.4076,
+      "invent_rate": 0.3472
+    },
+    "condition_disagreement": {
+      "n": 5,
+      "matched": 141,
+      "rate": 0.0355
+    },
+    "cleanliness_disagreement": {
+      "n": 34,
+      "matched": 141,
+      "rate": 0.2411
+    },
+    "defects": {
+      "omit_n": 0,
+      "invent_n": 42,
+      "omit_rate": 0.0,
+      "invent_rate": 0.75
+    }
+  },
+  "packets": [
+    {
+      "scenario_id": "RP-001",
+      "room_type": "Kitchen",
+      "counts": {
+        "gold_claims": 21,
+        "predictions": 24,
+        "matched": 15,
+        "gold_defects": 1,
+        "pred_defects": 7
+      },
+      "identity": {
+        "omit_n": 6,
+        "invent_n": 9,
+        "omit_rate": 0.2857,
+        "invent_rate": 0.375,
+        "omit": [
+          "dark worktop",
+          "door furniture",
+          "splashback",
+          "electrical sockets",
+          "base unit door",
+          "plinth"
+        ],
+        "invent": [
+          "Kitchen Wall Cabinets",
+          "Kitchen Base Cabinets",
+          "Fridge Freezer",
+          "Microwave",
+          "Air Fryer",
+          "Toaster",
+          "Kettle",
+          "Power Sockets and Switches",
+          "Dish Drainer"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "cleanliness": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 6,
+        "omit_rate": 0.0,
+        "invent_rate": 0.8571,
+        "omit": [],
+        "invent": [
+          {
+            "name": "Walls",
+            "defect": "Light scuff marks mid-level near the doorway"
+          },
+          {
+            "name": "Skirting Boards",
+            "defect": "Minor scuff marks near the floor level"
+          },
+          {
+            "name": "Radiator",
+            "defect": "Light dust accumulation within top grille"
+          },
+          {
+            "name": "Entrance Door",
+            "defect": "Minor scuff marks to the lower edge on the interior side"
+          },
+          {
+            "name": "Hob",
+            "defect": "Minor surface usage scratches"
+          },
+          {
+            "name": "Kitchen Sink and Tap",
+            "defect": "Light water spotting and minor limescale at the base of the mixer tap"
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "RP-002",
+      "room_type": "Bathroom",
+      "counts": {
+        "gold_claims": 20,
+        "predictions": 15,
+        "matched": 10,
+        "gold_defects": 1,
+        "pred_defects": 1
+      },
+      "identity": {
+        "omit_n": 10,
+        "invent_n": 5,
+        "omit_rate": 0.5,
+        "invent_rate": 0.3333,
+        "omit": [
+          "glass shower screen",
+          "wash basin",
+          "WC",
+          "grey wall tiles",
+          "door furniture",
+          "skirting board",
+          "mixer taps",
+          "silicone seal",
+          "vinyl floor",
+          "lower wall tiles"
+        ],
+        "invent": [
+          "Flooring",
+          "Pedestal Basin",
+          "Toilet",
+          "Hand Towel",
+          "Toilet Brush & Holder"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 1,
+        "disagreement_rate": 0.1,
+        "examples": [
+          {
+            "name": "bath panel",
+            "gold": "fair",
+            "pred": "good"
+          }
+        ]
+      },
+      "cleanliness": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 0,
+        "omit_rate": 0.0,
+        "invent_rate": 0.0,
+        "omit": [],
+        "invent": []
+      }
+    },
+    {
+      "scenario_id": "RP-004",
+      "room_type": "Kitchen",
+      "counts": {
+        "gold_claims": 20,
+        "predictions": 23,
+        "matched": 10,
+        "gold_defects": 1,
+        "pred_defects": 7
+      },
+      "identity": {
+        "omit_n": 10,
+        "invent_n": 13,
+        "omit_rate": 0.5,
+        "invent_rate": 0.5652,
+        "omit": [
+          "wood-effect units",
+          "laminate worktop",
+          "freestanding cooker",
+          "patterned vinyl floor",
+          "entrance door",
+          "skirting",
+          "draining board",
+          "mixer tap",
+          "plinth",
+          "base unit"
+        ],
+        "invent": [
+          "Flooring",
+          "Door and Frame",
+          "Kitchen Cabinets",
+          "Worktops",
+          "Tiled Splashback",
+          "Pendant Light",
+          "Wall Vents",
+          "Dishwasher",
+          "Kettle",
+          "Toaster",
+          "Net Curtains",
+          "Waste Bin",
+          "Dish Drainer"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "cleanliness": {
+        "disagreement_n": 1,
+        "disagreement_rate": 0.1,
+        "examples": [
+          {
+            "name": "window",
+            "gold": "cleaned to domestic standard",
+            "pred": "requires cleaning"
+          }
+        ]
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 3,
+        "omit_rate": 0.0,
+        "invent_rate": 0.4286,
+        "omit": [],
+        "invent": [
+          {
+            "name": "Window",
+            "defect": "Glazing is dusty and shows light smears behind the net curtains"
+          },
+          {
+            "name": "Walls",
+            "defect": "Minor scuffs and rub marks at low level near the doorway"
+          },
+          {
+            "name": "Sink and Drainer",
+            "defect": "Light water-spotting and minor limescale to the base of the tap"
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "RP-006",
+      "room_type": "Bathroom",
+      "counts": {
+        "gold_claims": 22,
+        "predictions": 16,
+        "matched": 9,
+        "gold_defects": 1,
+        "pred_defects": 1
+      },
+      "identity": {
+        "omit_n": 13,
+        "invent_n": 7,
+        "omit_rate": 0.5909,
+        "invent_rate": 0.4375,
+        "omit": [
+          "walk-in shower",
+          "WC",
+          "stone wall tiles",
+          "vanity unit",
+          "floor tiles",
+          "rain shower",
+          "handset",
+          "mixer controls",
+          "glass screen",
+          "vanity drawer",
+          "basin edge",
+          "mixer tap",
+          "silicone joint"
+        ],
+        "invent": [
+          "Shower Enclosure",
+          "Shower Fittings",
+          "Wash Basin",
+          "Toilet",
+          "Ceiling Spotlights",
+          "Smoke Detector",
+          "Robe Hook"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 1,
+        "disagreement_rate": 0.1111,
+        "examples": [
+          {
+            "name": "vanity basin",
+            "gold": "good",
+            "pred": "fair"
+          }
+        ]
+      },
+      "cleanliness": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 1,
+        "omit_rate": 0.0,
+        "invent_rate": 1.0,
+        "omit": [],
+        "invent": [
+          {
+            "name": "Vanity Cabinet",
+            "defect": "Small triangular chip to the veneer on the top right-hand corner of the upper drawer front"
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "RP-007",
+      "room_type": "Shower room",
+      "counts": {
+        "gold_claims": 20,
+        "predictions": 16,
+        "matched": 10,
+        "gold_defects": 0,
+        "pred_defects": 11
+      },
+      "identity": {
+        "omit_n": 10,
+        "invent_n": 6,
+        "omit_rate": 0.5,
+        "invent_rate": 0.375,
+        "omit": [
+          "WC",
+          "mosaic tiles",
+          "vinyl floor",
+          "shower handset",
+          "mixer controls",
+          "glass door",
+          "soap tray",
+          "grout",
+          "silicone seal",
+          "skirting board"
+        ],
+        "invent": [
+          "Flooring",
+          "Door and Frame",
+          "Basin Tap",
+          "Toilet",
+          "Hand Towel",
+          "Bath Mat"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "cleanliness": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 8,
+        "omit_rate": null,
+        "invent_rate": 0.7273,
+        "omit": [],
+        "invent": [
+          {
+            "name": "Walls",
+            "defect": "minor yellowing to sealant at the bottom left-hand corner junction with the shower tray"
+          },
+          {
+            "name": "Mirror",
+            "defect": "light dust accumulation to the top edge"
+          },
+          {
+            "name": "Pedestal Basin",
+            "defect": "light water markings inside the bowl"
+          },
+          {
+            "name": "Shower Enclosure",
+            "defect": "light water marking and smears to glass panes"
+          },
+          {
+            "name": "Shower Enclosure",
+            "defect": "sealant at bottom corner joint shows slight discoloration"
+          },
+          {
+            "name": "Door Handle",
+            "defect": "light surface fingerprint marks"
+          },
+          {
+            "name": "Extractor Fan",
+            "defect": "light dust buildup in the external grille slots"
+          },
+          {
+            "name": "Shower Unit",
+            "defect": "slight water spotting and trace limescale to chrome surfaces"
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "RP-009",
+      "room_type": "Bedroom",
+      "counts": {
+        "gold_claims": 19,
+        "predictions": 21,
+        "matched": 15,
+        "gold_defects": 1,
+        "pred_defects": 1
+      },
+      "identity": {
+        "omit_n": 4,
+        "invent_n": 6,
+        "omit_rate": 0.2105,
+        "invent_rate": 0.2857,
+        "omit": [
+          "headboard",
+          "cream carpet",
+          "drawer front",
+          "metal handle"
+        ],
+        "invent": [
+          "Flooring",
+          "Bedding set",
+          "Bedside lamps",
+          "Curved bay radiator",
+          "Laundry basket",
+          "Light switch"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 1,
+        "disagreement_rate": 0.0667,
+        "examples": [
+          {
+            "name": "chest of drawers",
+            "gold": "good",
+            "pred": "fair"
+          }
+        ]
+      },
+      "cleanliness": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 1,
+        "omit_rate": 0.0,
+        "invent_rate": 1.0,
+        "omit": [],
+        "invent": [
+          {
+            "name": "Chest of drawers",
+            "defect": "Two prominent horizontal scratch marks, chest level on the front face of the top drawer, directly to the right of the handle."
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "RP-011",
+      "room_type": "Living room",
+      "counts": {
+        "gold_claims": 21,
+        "predictions": 22,
+        "matched": 14,
+        "gold_defects": 1,
+        "pred_defects": 1
+      },
+      "identity": {
+        "omit_n": 7,
+        "invent_n": 8,
+        "omit_rate": 0.3333,
+        "invent_rate": 0.3636,
+        "omit": [
+          "grey sofa",
+          "ceiling shade",
+          "balcony door",
+          "sockets",
+          "sofa arm",
+          "fabric seam",
+          "windows"
+        ],
+        "invent": [
+          "Partially Glazed Door",
+          "Solid Panel Door",
+          "Three-seat Sofa",
+          "TV Media Cabinet",
+          "Ceiling Pendant Light",
+          "Floor-length Curtains",
+          "Throw Blanket",
+          "Framed Wall Art"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 1,
+        "disagreement_rate": 0.0714,
+        "examples": [
+          {
+            "name": "armchair",
+            "gold": "good",
+            "pred": "fair"
+          }
+        ]
+      },
+      "cleanliness": {
+        "disagreement_n": 1,
+        "disagreement_rate": 0.0714,
+        "examples": [
+          {
+            "name": "carpet",
+            "gold": "cleaned to domestic standard",
+            "pred": "professionally cleaned"
+          }
+        ]
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 1,
+        "omit_rate": 0.0,
+        "invent_rate": 1.0,
+        "omit": [],
+        "invent": [
+          {
+            "name": "Armchair",
+            "defect": "snag and loose thread pull to fabric on the mid-level outer face of the left-hand side armrest"
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "RP-013",
+      "room_type": "Living room",
+      "counts": {
+        "gold_claims": 17,
+        "predictions": 17,
+        "matched": 11,
+        "gold_defects": 0,
+        "pred_defects": 1
+      },
+      "identity": {
+        "omit_n": 6,
+        "invent_n": 6,
+        "omit_rate": 0.3529,
+        "invent_rate": 0.3529,
+        "omit": [
+          "charcoal sofa",
+          "moving boxes",
+          "laminate floor",
+          "boxes",
+          "table leg",
+          "rug edge"
+        ],
+        "invent": [
+          "Flooring",
+          "Two-seat sofa",
+          "TV console unit",
+          "Narrow shelving unit",
+          "Flat panel radiator",
+          "Light switch"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "cleanliness": {
+        "disagreement_n": 11,
+        "disagreement_rate": 1.0,
+        "examples": [
+          {
+            "name": "walls",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "roller blind",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "floor lamp",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "entrance door",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "television stand",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "skirting",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "radiator",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "window",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "sockets",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "nested tables",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "coat hooks",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          }
+        ]
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 1,
+        "omit_rate": null,
+        "invent_rate": 1.0,
+        "omit": [],
+        "invent": [
+          {
+            "name": "Walls",
+            "defect": "Small nail hole/mark to eye level on the right hand side wall above the television"
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "RP-015",
+      "room_type": "Entrance hall",
+      "counts": {
+        "gold_claims": 20,
+        "predictions": 16,
+        "matched": 12,
+        "gold_defects": 0,
+        "pred_defects": 16
+      },
+      "identity": {
+        "omit_n": 8,
+        "invent_n": 4,
+        "omit_rate": 0.4,
+        "invent_rate": 0.25,
+        "omit": [
+          "tiled floor",
+          "coat bench",
+          "wall hooks",
+          "door furniture",
+          "shoe storage",
+          "skirting",
+          "threshold strip",
+          "inner door"
+        ],
+        "invent": [
+          "Rear Glazed Door and Side Panel",
+          "Pendant Light",
+          "Coat Rack and Shoe Bench Unit",
+          "Small Cabinet"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "cleanliness": {
+        "disagreement_n": 12,
+        "disagreement_rate": 1.0,
+        "examples": [
+          {
+            "name": "ceiling",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "walls",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "smoke alarm",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "light switch",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "radiator",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "staircase banister",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "glazed front door",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "doormat",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "thermostat",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "hall mirror",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "floor tiles",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "sockets",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          }
+        ]
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 11,
+        "omit_rate": null,
+        "invent_rate": 0.6875,
+        "omit": [],
+        "invent": [
+          {
+            "name": "Walls",
+            "defect": "Light scuff marks mid to low level on left hand side wall behind radiator"
+          },
+          {
+            "name": "Walls",
+            "defect": "Minor scuffs on right hand side wall behind coat unit"
+          },
+          {
+            "name": "Smoke Alarm",
+            "defect": "Light dust on exterior casing"
+          },
+          {
+            "name": "Light Switch",
+            "defect": "Light dust on top edge"
+          },
+          {
+            "name": "Staircase Bannister",
+            "defect": "Very minor wear to paintwork finish on some spindles"
+          },
+          {
+            "name": "Front Door",
+            "defect": "Light surface scratches around the interior handle area"
+          },
+          {
+            "name": "Coir Doormat",
+            "defect": "Light shedding to fibers"
+          },
+          {
+            "name": "Coir Doormat",
+            "defect": "Minor loose dirt embedded from use"
+          },
+          {
+            "name": "Wall Mirror",
+            "defect": "Faint smudge marks to glass surface"
+          },
+          {
+            "name": "Flooring",
+            "defect": "Minor dust and debris to grout lines in heavy traffic area"
+          },
+          {
+            "name": "Double Socket",
+            "defect": "Minor dust accumulation"
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "RP-016",
+      "room_type": "Dining room",
+      "counts": {
+        "gold_claims": 18,
+        "predictions": 15,
+        "matched": 13,
+        "gold_defects": 0,
+        "pred_defects": 3
+      },
+      "identity": {
+        "omit_n": 5,
+        "invent_n": 2,
+        "omit_rate": 0.2778,
+        "invent_rate": 0.1333,
+        "omit": [
+          "timber floor",
+          "thermostatic valve",
+          "oak tabletop",
+          "chair upholstery",
+          "table leg"
+        ],
+        "invent": [
+          "Flooring",
+          "Light switch"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "cleanliness": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 3,
+        "omit_rate": null,
+        "invent_rate": 1.0,
+        "omit": [],
+        "invent": [
+          {
+            "name": "Pendant light fitting",
+            "defect": "light dust to the top flat surface of the glass shade"
+          },
+          {
+            "name": "French doors and frame",
+            "defect": "light external dust to outer frame corners"
+          },
+          {
+            "name": "Dining chairs",
+            "defect": "faint creasing to seat fabric consistent with light domestic use"
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "RP-021",
+      "room_type": "Stairs and landing",
+      "counts": {
+        "gold_claims": 19,
+        "predictions": 10,
+        "matched": 9,
+        "gold_defects": 1,
+        "pred_defects": 7
+      },
+      "identity": {
+        "omit_n": 10,
+        "invent_n": 1,
+        "omit_rate": 0.5263,
+        "invent_rate": 0.1,
+        "omit": [
+          "stair runner",
+          "timber handrail",
+          "ceiling light",
+          "stairs",
+          "lower door",
+          "landing light",
+          "light switch",
+          "tread edge",
+          "riser",
+          "wall string"
+        ],
+        "invent": [
+          "Fused spur switch"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 1,
+        "disagreement_rate": 0.1111,
+        "examples": [
+          {
+            "name": "carpet",
+            "gold": "good",
+            "pred": "fair"
+          }
+        ]
+      },
+      "cleanliness": {
+        "disagreement_n": 9,
+        "disagreement_rate": 1.0,
+        "examples": [
+          {
+            "name": "ceiling",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "radiator",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "smoke alarm",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "skirting",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "handrail",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "carpet",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "newel post",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "painted walls",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          },
+          {
+            "name": "boxes",
+            "gold": "requires cleaning",
+            "pred": "cleaned to domestic standard"
+          }
+        ]
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 7,
+        "omit_rate": 0.0,
+        "invent_rate": 1.0,
+        "omit": [],
+        "invent": [
+          {
+            "name": "Skirting boards",
+            "defect": "Light scuff marks and minor dust build-up to top edges"
+          },
+          {
+            "name": "Wooden handrail",
+            "defect": "Light surface scratches consistent with regular use"
+          },
+          {
+            "name": "Stair carpet",
+            "defect": "Fraying and threadbare wear to the carpet pile on the nose of the fourth step tread as shown in P004"
+          },
+          {
+            "name": "Stair carpet",
+            "defect": "Light dust accumulation to the outer corners near the painted margins"
+          },
+          {
+            "name": "Banister and newel post",
+            "defect": "Minor scuffs and paint wear to the leading edges of the white timber structure"
+          },
+          {
+            "name": "Walls",
+            "defect": "Minor scuff marks and light rub marks at mid to low level along the stair path"
+          },
+          {
+            "name": "Tenant storage boxes and bags",
+            "defect": "Unpacked belongings obstructing full inspection of the alcove wall and floor surfaces"
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "RP-024",
+      "room_type": "Home office",
+      "counts": {
+        "gold_claims": 21,
+        "predictions": 21,
+        "matched": 13,
+        "gold_defects": 0,
+        "pred_defects": 0
+      },
+      "identity": {
+        "omit_n": 8,
+        "invent_n": 8,
+        "omit_rate": 0.381,
+        "invent_rate": 0.381,
+        "omit": [
+          "roller blind",
+          "pale carpet",
+          "ceiling light",
+          "monitor with blank screen",
+          "desk surface",
+          "drawer",
+          "chair arm",
+          "carpet"
+        ],
+        "invent": [
+          "Flooring",
+          "Light Switch",
+          "Window Blind",
+          "Computer Monitor",
+          "Laptop",
+          "Faux Plants",
+          "Storage Boxes",
+          "Smoke Alarm"
+        ]
+      },
+      "condition": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "cleanliness": {
+        "disagreement_n": 0,
+        "disagreement_rate": 0.0,
+        "examples": []
+      },
+      "defects": {
+        "omit_n": 0,
+        "invent_n": 0,
+        "omit_rate": null,
+        "invent_rate": null,
+        "omit": [],
+        "invent": []
+      }
+    }
+  ]
+}

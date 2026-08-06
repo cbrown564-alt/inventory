@@ -1,0 +1,9 @@
+{
+  "scenario_id": "RP-015",
+  "packet_id": "RP-015.gpt-image-2",
+  "finished_at": "2026-08-06T20:53:33.724912+00:00",
+  "backend": "openai",
+  "model": "gemini-3.5-flash",
+  "inventory_path": "outputs/describe-check/captures/RP-015/report/inventory.json",
+  "inventory_sha256": "c506fb46d7ad7556580f307adca35610f64e14e920298fc2a5ecf817c6f9ef08"
+}

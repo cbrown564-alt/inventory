@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "record_type": "describe_check_gold",
+  "packet_id": "RP-021.gpt-image-2",
+  "scenario_id": "RP-021",
+  "room_type": "Stairs and landing",
+  "generator": "GPT Image 2",
+  "gold_method": "spec-seeded + gemini-3.5-flash cross-family fill",
+  "created_at": "2026-08-06T20:49:40.189419+00:00",
+  "image_sha256": {
+    "A-wide": "e7c05b500d1aa213e450283d2635a8c9df6e7fce247cf6a30e408add6d7c640d",
+    "B-reverse": "38281df1b7fa1ee978a881440823c68081ecf824a8bd4046f0194a7bf3107172",
+    "C-inventory": "f4e29ee86cf5a5a652aa9727651b73cfb67d5600c00841bd4358c40b6a876213",
+    "D-condition": "6461feca83c3ae3286cf19bacfba1677c837b4a099bad2b988a6e3789fb5c9b7"
+  },
+  "claims": [
+    {
+      "name": "stair runner",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "timber handrail",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "painted walls",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "boxes",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "ceiling light",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "stairs",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "lower door",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "handrail",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "newel post",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "smoke alarm",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "landing light",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "light switch",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "radiator",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "skirting",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "tread edge",
+      "aliases": [],
+      "condition": "fair",
+      "cleanliness": "requires cleaning",
+      "defects": [
+        "frayed strip along the front edge of one stair tread"
+      ],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "riser",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "wall string",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "carpet",
+      "aliases": [
+        "carpet flooring",
+        "floor carpet"
+      ],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "ceiling",
+      "aliases": [
+        "painted ceiling"
+      ],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "ai_fill"
+    }
+  ],
+  "spot_check": {
+    "status": "owner_accepted",
+    "accepted_at": "2026-08-06T22:01:22.993089+00:00",
+    "accepted_by": "project owner",
+    "rule": "Owner reviews every defect claim, every post-score invent/omit disagreement, plus a small random sample of other claims.",
+    "note": "Owner accepted all seven defect claims on 2026-08-06."
+  }
+}

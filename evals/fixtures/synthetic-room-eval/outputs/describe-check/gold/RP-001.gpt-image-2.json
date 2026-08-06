@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "record_type": "describe_check_gold",
+  "packet_id": "RP-001.gpt-image-2",
+  "scenario_id": "RP-001",
+  "room_type": "Kitchen",
+  "generator": "GPT Image 2",
+  "gold_method": "spec-seeded + gemini-3.5-flash cross-family fill",
+  "created_at": "2026-08-06T20:47:03.343977+00:00",
+  "image_sha256": {
+    "A-wide": "6dc1764c92b3f8c21acf2ef0d46403aa9e6982b0a5e9499462020c2b5d2ccee0",
+    "B-reverse": "4fa9817d6e858947b36f72a906a04bd3484a663814c547216f8f0e99a3b4bbe1",
+    "C-inventory": "5fe1d437e6e160a84dfab0625eaa0103dd13958a67d3240d703f76d499044d1d",
+    "D-condition": "414e26b83d4a45cd198ddb061334e734646b54f0a4407317be1761644cb04095"
+  },
+  "claims": [
+    {
+      "name": "kitchen units",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "dark worktop",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "sink",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "oven",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "induction hob",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "extractor hood",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "window blind",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "radiator",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "door furniture",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "skirting boards",
+      "aliases": [
+        "skirting board"
+      ],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "smoke alarm",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "splashback",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "electrical sockets",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "base unit door",
+      "aliases": [],
+      "condition": "fair",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [
+        "one small chip on the lower edge of a base unit door"
+      ],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "plinth",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "vinyl floor",
+      "aliases": [
+        "floor",
+        "vinyl flooring"
+      ],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "walls",
+      "aliases": [
+        "wall"
+      ],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "ceiling",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "door",
+      "aliases": [
+        "internal door"
+      ],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "window",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "ceiling light",
+      "aliases": [
+        "spotlights"
+      ],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "ai_fill"
+    }
+  ],
+  "spot_check": {
+    "status": "owner_accepted",
+    "accepted_at": "2026-08-06T22:01:22.993089+00:00",
+    "accepted_by": "project owner",
+    "rule": "Owner reviews every defect claim, every post-score invent/omit disagreement, plus a small random sample of other claims.",
+    "note": "Owner accepted all seven defect claims on 2026-08-06."
+  }
+}
