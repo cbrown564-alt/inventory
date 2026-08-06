@@ -315,9 +315,24 @@ in any report of their results.
 
 ## Phases
 
+> **Reordered 6 Aug 2026 by [`36-synthetic-programme-review.md`](36-synthetic-programme-review.md) §6.1.**
+> Arm E is not blocked on the *question*, only on the Antigravity path.
+> `homeinventory/describe.py:366` — `LocalBackend` — takes `temperature` and
+> defaults to `0.0` through Ollama: free, unmetered, and outside this
+> programme's terms rule, which binds *"every vision run for this dataset"*, and
+> an instrument check produces no labels that enter the scored set. **Phase 0.5
+> runs the repeat-describe control on `LocalBackend` at `temperature=0` and
+> `0.7` before Phase 1 begins.** If temperature-0 still churns, sampling is
+> excluded and arms A–D proceed with the risk closed rather than hedged; if it
+> does not, arms A–D shrink to a lexicon question. A local model's variance is
+> not `gemini-3.5-flash-low`'s and this yields a *mechanism*, never a magnitude.
+
 - **Phase 0 — the floor.** ✅ Done 6 Aug 2026. Floor 336 reported changes,
   91.3% of the 368; the control and the delta pairs decompose almost
   identically. Gate passed, decision recorded above.
+- **Phase 0.5 — exclude sampling.** The local-backend control above. Ordered
+  in front of Phase 1 because every arm below is designed against a cause
+  nobody has excluded, and this is the cheapest thing that can exclude it.
 - **Phase 1 — attribute the 368.** With the floor known, split the delta-pair
   false changes into non-determinism, legitimate framing difference, and
   generator drift. The Amendment C reviews already name incidental drift per
@@ -384,6 +399,9 @@ path had drifted from the runs it is the floor for would measure the drift.
 
 ## Related
 
+- `docs/36-synthetic-programme-review.md` — reads this document's Phase 0
+  against the whole synthetic programme, reorders arm E in front of A–D, and
+  owns the work order that follows.
 - `docs/31-synthetic-evaluation-dataset-plan.md` — the delta pairs, the gold
   contract, and the scored result this is scoped from.
 - `docs/08-compare.md` — the compare surface, the alignment tiers, and the

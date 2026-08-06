@@ -15,6 +15,7 @@
 | Capture-strategy decision | [`26-capture-strategy-experiment.md`](26-capture-strategy-experiment.md) |
 | Native-resolution quality gate | [`30-phase4-quality-gate.md`](30-phase4-quality-gate.md) |
 | Synthetic VLM evaluation dataset | [`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md) |
+| Synthetic programme status and next work | [`36-synthetic-programme-review.md`](36-synthetic-programme-review.md) |
 
 Update the owner instead of creating a second live plan. Implementation and tests own current behavior; dated records explain history.
 
@@ -28,7 +29,7 @@ Update the owner instead of creating a second live plan. Implementation and test
 | **Milestone ledger** | [03](03-implementation-plan.md) | Historical — what shipped when (frozen) |
 | **Feature records** | [06](06-professional-report-benchmark.md)–[09](09-web-ui-and-capture.md), [15](15-curation-and-one-app.md)–[16](16-report-redesign.md) | Deep dive on a shipped milestone |
 | **Design reference** | [05](05-review-experience.md), [14](14-frontend-craft.md), [17](17-experience-redesign.md) | Review UX principles and next work |
-| **Evidence and technical work** | [02](02-research.md), [11](11-video-segmentation.md), [13](13-yoloe-detection.md), [18](18-hero-image-selection.md), [26](26-capture-strategy-experiment.md), [29 evidential](29-evidential-spec-audit.md), [29 local](29-local-inference-tuning.md), [30 quality gate](30-phase4-quality-gate.md), [31](31-synthetic-evaluation-dataset-plan.md), [34](34-synthetic-video-probe.md), [35](35-gemini-omni-creative-exploration.md), [market-research](market-research-2026-07.md) | Current evidence gates, research and evaluation method |
+| **Evidence and technical work** | [02](02-research.md), [11](11-video-segmentation.md), [13](13-yoloe-detection.md), [18](18-hero-image-selection.md), [26](26-capture-strategy-experiment.md), [29 evidential](29-evidential-spec-audit.md), [29 local](29-local-inference-tuning.md), [30 quality gate](30-phase4-quality-gate.md), [31](31-synthetic-evaluation-dataset-plan.md), [34](34-synthetic-video-probe.md), [35 stability](35-describe-stability.md), [35 omni](35-gemini-omni-creative-exploration.md), [36](36-synthetic-programme-review.md), [market-research](market-research-2026-07.md) | Current evidence gates, research and evaluation method |
 | **ML programme** | [19](19-ml-dl-exploration-plan.md), [21](21-ml-dl-experiment-log.md), [22](22-ml-programme-review-and-roadmap.md), [23](23-gpu-rerun-runbook.md) | ML experiments — subordinate to docs/00 |
 | **Future** | [20](20-ios-native-app.md) | Post-v1 iOS track |
 
@@ -40,7 +41,7 @@ Update the owner instead of creating a second live plan. Implementation and test
 
 **Current v1 work, in order**
 
-1. [31](31-synthetic-evaluation-dataset-plan.md) → review the staged Gemini Omni candidate cohort and GPT replacements, then complete human review and validation for the 200-image pilot
+1. [36](36-synthetic-programme-review.md) → run the local-backend sampling control (§6.1), then cut or justify the Pass B backlog, close the video arm, and wire the delta pairs into CI. *Supersedes the former item 1, "complete human review and validation for the 200-image pilot" — docs/36 §6.2 is why that is no longer the next move.*
 2. [26](26-capture-strategy-experiment.md) → decide Property A capture strategy
 3. [30](30-phase4-quality-gate.md) → freeze independent native-resolution evidence and run the gate
 4. [25](25-design-overhaul.md) → complete first-screen trust sign-off
@@ -111,5 +112,7 @@ Update the owner instead of creating a second live plan. Implementation and test
 | 32 | [acoustic-evidence-synthetic-lab](32-acoustic-evidence-synthetic-lab.md) | active | Acoustic observations, adversarial spoken labels, audiovisual delta pairs |
 | 33 | [speaking-capture-guide](33-speaking-capture-guide.md) | exploratory | Research prototype; blocked on live capture, not on the v1 path |
 | 34 | [synthetic-video-probe](34-synthetic-video-probe.md) | active | Five Gemini Omni video use cases over the docs/31 scenarios; falsification-only except the occlusion pair |
+| 35 | [describe-stability](35-describe-stability.md) | active | Two describes of one photograph disagree as much as two rooms; the noise floor and the arms that attack it |
 | 35 | [gemini-omni-creative-exploration](35-gemini-omni-creative-exploration.md) | exploratory | Omni creative/demo threads: product-demo angles, claymation, ghost clerk, kinetic type |
+| 36 | [synthetic-programme-review](36-synthetic-programme-review.md) | active | Verdict on docs/31/34/35 as one programme: Phases 1–3 superseded, sampling control first, work order |
 | — | [market-research-2026-07](market-research-2026-07.md) | active | Competitive map, evidential spec, pricing anchors |
