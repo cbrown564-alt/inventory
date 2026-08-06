@@ -34,8 +34,13 @@ Four consequences, in the order they should be acted on:
 3. ~~**The video probe (docs/34) is closed one way or the other.**~~ **Done,
    6 Aug 2026** — triaged three ways rather than two: VU-5 regenerates (2 clips),
    VU-1/2/3 suspended, VU-4 retired. See §6.3.
-4. **The 27 delta pairs are wired into `evals/ci_gate.py`.** docs/35 calls them
-   a regression baseline; nothing re-runs them, so they are a report.
+4. ~~**The 27 delta pairs are wired into `evals/ci_gate.py`.**~~ **Done,
+   6 Aug 2026** — the gate re-derives compare and score from the committed
+   describe records on every run and holds them to the 5 Aug numbers, with the
+   gold hashed. See §6.4.
+
+Of the four, only 1 and 2 remain. Item 1's instrument is built and unrun; item 2
+is a decision, not a task.
 
 ---
 
@@ -199,6 +204,27 @@ produce a stable schedule at all — and that is the question standing in front
 of a multi-week roadmap. Nothing here promotes anything; docs/00's wall is
 unchanged.
 
+**Instrument built 6 Aug 2026 — `evals/synthetic/run_local_stability.py`.**
+Not yet run: Ollama is not installed on the machine this was written on. Three
+things the build settled that the paragraph above had glossed:
+
+- **The call count is 4 per pair, not 1.** The Phase 0 control gets its first
+  run for free from the cached T0 describe. This arm cannot — those records are
+  Antigravity, and pairing one against an Ollama run measures the backend gap.
+  Both runs are fresh, per arm. Default scope is the first 10 accepted pairs in
+  sorted order, 40 calls; `--limit 0` runs all 27 for 108.
+- **A second incomparability, on top of the model.** `LocalBackend` carries
+  `homeinventory`'s own system prompt, not the dataset's frozen `production-v1`.
+  Keeping it that way is right — the argument for this arm is that it exercises
+  *the production describe path* — but it means the churn number cannot be set
+  beside 336 even loosely. Both limits are recorded in the report the script
+  emits, not left to whoever reads it.
+- **The experiment can be silently disarmed by an environment variable.**
+  `LocalBackend` reads `HI_TEMPERATURE` and lets it beat its own constructor
+  argument, so a stray export runs both arms at one temperature and the report
+  says "sampling excluded" about a comparison that never happened. Any of the
+  `HI_*` sampling variables being set is now a hard refusal to start.
+
 ### 6.2 Cut the Pass B backlog rather than clearing it
 
 73 provisional records feed Phase 4. Phase 4 needs a prompt decision that
@@ -240,15 +266,35 @@ Two findings survive the void batch independent of all this and are worth
 carrying into docs/26 as leads: readable brands in 6 of 8 clips, and geometry
 drifting mid-take with no cut.
 
-### 6.4 Make the delta pairs an actual baseline
+### 6.4 Make the delta pairs an actual baseline — **done, 6 Aug 2026**
 
 docs/35 states the 27 pairs "are a regression baseline now that they are
 scored", and that their value dies if the pairs are regenerated or the gold
-edited to suit a result. Both halves need enforcement they do not have:
-`evals/ci_gate.py` does not run them, and nothing pins the gold's hash. Wire the
-scored run in with its numbers pinned, so an arm that moves `false_change_rate`
-without moving `item_removed` recall is caught by the harness rather than by
-somebody remembering to look.
+edited to suit a result. Both halves needed enforcement they did not have:
+`evals/ci_gate.py` did not run them, and nothing pinned the gold's hash.
+
+Wired through `evals/synthetic/delta_baseline.py`, called from
+`evals/ci_gate.py`, pinned in `evals/fixtures/thresholds.json`. **What is
+re-derived is the point.** The describes are not re-run — they are metered
+Antigravity calls and their records are committed. Everything downstream of
+them is: `compare_inventories` against the cached schedules, then `score_delta`
+against the specs. That is exactly the surface a change to
+`homeinventory/compare.py` moves, and `match_score` tier 1 is the only product
+code this programme has produced, so the gate covers the thing the programme
+actually built. Reading `reports/delta-compare/` back instead would gate the
+numbers against themselves and pass for any compare change whatsoever.
+
+The re-derivation reproduces 5 Aug exactly — `delta_recall` 26.6,
+`false_change_rate` 90.4, and all five per-kind recalls — in 0.66s, offline.
+Per-kind recalls are pinned individually because the failure mode named above
+is specific: an arm that drops `false_change_rate` by reporting fewer removals
+leaves `delta_recall` roughly intact while gutting the kind the product needs.
+
+`gold_sha256` covers every scored spec's `changes`, `observed_changes` and
+`retracted_changes` and nothing else, so prose edits do not trip it but an
+Amendment-C-shaped move does. Legitimate gold corrections stay possible; they
+just have to re-pin in the same commit, which is the difference between a
+correction and a quiet re-baseline.
 
 ## 7. What this review does not do
 
