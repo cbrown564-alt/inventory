@@ -35,6 +35,7 @@ from typing import Any, Iterable
 
 from homeinventory.compare import (
     OfflineRubric,
+    _active_items,
     align_items,
     compare_inventories,
     _norm_name,
@@ -192,8 +193,12 @@ def pair_stability(
     both instruments.
     """
     inv_a, inv_b = inventory_from_record(record_a), inventory_from_record(record_b)
-    items_a: list[Item] = inv_a.rooms[0].items
-    items_b: list[Item] = inv_b.rooms[0].items
+    # ``_active_items`` because that is what ``compare_inventories`` aligns; a
+    # metric aligning a different list would report churn against buckets that
+    # were never compared. Nothing is reviewer-rejected in an eval record, so
+    # this is agreement by construction rather than a filter that does work.
+    items_a: list[Item] = _active_items(inv_a.rooms[0].items)
+    items_b: list[Item] = _active_items(inv_b.rooms[0].items)
     names_a = [item.name for item in items_a]
     names_b = [item.name for item in items_b]
 
