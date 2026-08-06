@@ -160,6 +160,32 @@ This is development evidence. It cannot promote compare behaviour, and one
 describe call (`P35-028-CF` T0) was re-run after returning an empty response
 under a SUCCESS status.
 
+## Phase 0 — the describe-stability floor (docs/35)
+
+The delta scoring found that nine in ten reported changes had no gold
+counterpart, and that the bulk of them were the *description* moving rather
+than the room. The delta pairs cannot prove that, because T0 and T1 are
+different photographs. This control removes the difference: it describes the
+**T0 frames a second time** and compares the two runs, so every change reported
+has no possible cause but non-determinism.
+
+```powershell
+.\.venv\Scripts\python.exe -m evals.synthetic.run_repeat_describe --review "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --dry-run
+.\.venv\Scripts\python.exe -m evals.synthetic.run_repeat_describe --review "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --resume
+.\.venv\Scripts\python.exe -m evals.synthetic.score_stability --review "$fixture/reports/phase35-pilot-review-recut-2026-08-05.json" --delta-score "$fixture/reports/phase35-delta-score-2026-08-05.json" --out "$fixture/reports/phase0-describe-stability-2026-08-06.json"
+```
+
+`run_repeat_describe` reuses the cached T0 describe as the first run and makes
+one more call per pair — 27 calls, subscription-backed, no image generation. It
+goes through `run_delta_eval.describe_side` rather than a copy of it, and
+refuses any pair whose two runs differ in instruction, prompt, schema, model or
+frame hashes: a floor confounded with a prompt difference is worse than no
+floor.
+
+`score_stability` scores **both** instruments — the control and the delta pairs
+— from the cached describe records and reports them side by side, never
+averaged. Their difference is the finding.
+
 ### What rejects a delta pair (docs/31 Amendment C, 5 Aug 2026)
 
 A pair fails when the room stops being the same room: geometry, walls, floors,

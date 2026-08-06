@@ -207,8 +207,19 @@ def describe_side(
     run: dict[str, Any],
     dataset_dir: Path = DEFAULT_DATASET,
     cli: Path | None = None,
+    *,
+    dataset_phase: str = "phase-3.5-delta-pairs",
+    provenance: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """One whole-room describe call for one timepoint, cached immutably."""
+    """One whole-room describe call for one timepoint, cached immutably.
+
+    ``dataset_phase`` and ``provenance`` exist for the Phase 0 repeat-describe
+    control (docs/35), which needs a describe call that is byte-identical to
+    this one in every input and differs only in that it happens a second time.
+    Reusing this function rather than copying it is the point: a control whose
+    call path had drifted from the runs it is the floor for would measure the
+    drift instead of the non-determinism.
+    """
     output = Path(run["output"])
     if output.exists():
         raise FileExistsError(
@@ -280,7 +291,7 @@ def describe_side(
         "started_at": started_at,
         "completed_at": _utc_now(),
         "dataset_id": "synthetic-room-eval",
-        "dataset_phase": "phase-3.5-delta-pairs",
+        "dataset_phase": dataset_phase,
         "delta_id": run["delta_id"],
         "side": run["side"],
         "room_type": run["room_type"],
@@ -319,6 +330,7 @@ def describe_side(
         "latency_seconds": elapsed,
         "usage": wrapper.get("usage") or {},
         "estimated_cost": {**QUOTA_ACCOUNTING, "amount": 0.0},
+        **(provenance or {}),
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(
