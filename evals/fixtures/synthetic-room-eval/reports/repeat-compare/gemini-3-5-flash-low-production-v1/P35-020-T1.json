@@ -1,0 +1,432 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-020-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-020-T1",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Kitchen",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "KIT-001",
+          "checkout_id": "KIT-001",
+          "name": "Ceiling",
+          "checkin_name": "Ceiling",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-004-A-wide"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "KIT-003",
+          "checkout_id": "KIT-003",
+          "name": "Flooring",
+          "checkin_name": "Flooring",
+          "checkin_condition": "poor",
+          "checkout_condition": "fair",
+          "grade_delta": -1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [
+            "triangular tear to surface low level in front of cooker"
+          ],
+          "checkout_defects": [
+            "triangular tear to vinyl flooring, low level, central, in front of cooker"
+          ],
+          "new_defects": [
+            "triangular tear to vinyl flooring, low level, central, in front of cooker"
+          ],
+          "resolved_defects": [
+            "triangular tear to surface low level in front of cooker"
+          ],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "KIT-002",
+          "checkout_id": "KIT-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "KIT-004",
+          "checkout_id": "KIT-004",
+          "name": "Door"
+        },
+        {
+          "checkin_id": "KIT-005",
+          "checkout_id": "KIT-005",
+          "name": "Door frame"
+        },
+        {
+          "checkin_id": "KIT-006",
+          "checkout_id": "KIT-006",
+          "name": "Window"
+        },
+        {
+          "checkin_id": "KIT-007",
+          "checkout_id": "KIT-013",
+          "name": "Light switch"
+        },
+        {
+          "checkin_id": "KIT-009",
+          "checkout_id": "KIT-016",
+          "name": "Extractor fan"
+        },
+        {
+          "checkin_id": "KIT-013",
+          "checkout_id": "KIT-011",
+          "name": "Tiled splashback"
+        },
+        {
+          "checkin_id": "KIT-015",
+          "checkout_id": "KIT-020",
+          "name": "Cooker"
+        },
+        {
+          "checkin_id": "KIT-016",
+          "checkout_id": "KIT-021",
+          "name": "Kettle"
+        },
+        {
+          "checkin_id": "KIT-017",
+          "checkout_id": "KIT-022",
+          "name": "Toaster"
+        },
+        {
+          "checkin_id": "KIT-022",
+          "checkout_id": "KIT-028",
+          "name": "Decorative vase"
+        },
+        {
+          "checkin_id": "KIT-023",
+          "checkout_id": "KIT-024",
+          "name": "Waste bin"
+        },
+        {
+          "checkin_id": "KIT-008",
+          "checkout_id": "KIT-014",
+          "name": "Double sockets"
+        },
+        {
+          "checkin_id": "KIT-014",
+          "checkout_id": "KIT-012",
+          "name": "Sink and tap"
+        },
+        {
+          "checkin_id": "KIT-018",
+          "checkout_id": "KIT-017",
+          "name": "Floral curtains"
+        }
+      ],
+      "removed": [
+        {
+          "id": "KIT-010",
+          "name": "Pendant light",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-011",
+          "name": "Kitchen cabinets",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-012",
+          "name": "Countertops",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-019",
+          "name": "Dish rack and kitchenware",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-020",
+          "name": "Canisters",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-021",
+          "name": "Paper towel holder",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "KIT-007",
+          "name": "Window sill",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide"
+          ]
+        },
+        {
+          "id": "KIT-008",
+          "name": "Kitchen units",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-009",
+          "name": "Base unit plinths",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-010",
+          "name": "Worktops",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide",
+            "RP-004-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-015",
+          "name": "Ceiling light fixture",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide"
+          ]
+        },
+        {
+          "id": "KIT-018",
+          "name": "Net curtain",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide"
+          ]
+        },
+        {
+          "id": "KIT-019",
+          "name": "Oven glove",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide"
+          ]
+        },
+        {
+          "id": "KIT-023",
+          "name": "Coffee maker",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide"
+          ]
+        },
+        {
+          "id": "KIT-025",
+          "name": "Washing up bowl and dish drainer",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide"
+          ]
+        },
+        {
+          "id": "KIT-026",
+          "name": "Kitchen roll holder",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide"
+          ]
+        },
+        {
+          "id": "KIT-027",
+          "name": "Storage jars",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide"
+          ]
+        },
+        {
+          "id": "KIT-029",
+          "name": "Soap dispensers",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-004-A-wide"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 17,
+    "changed": 2,
+    "unchanged": 15,
+    "removed": 6,
+    "added": 12,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-020-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-004",
+    "parent_split": "development",
+    "room_type": "Kitchen",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "a6f6d500c060b680d1ab91e1264689b15d20b93b87d1e878ac9b26fcabb0f075",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-020-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-004-A-wide.png",
+          "images/openai/gpt-image-2/RP-004-D-condition.png"
+        ],
+        "frame_sha256": [
+          "07d4e347fe0823ca480c6b863468759a9fafe550cb353b76ee8016cac44ef7b7",
+          "30c006c06c6f46730bb6cf8fe297e414776bf40ef2bffa38f690a68e5641f44d"
+        ],
+        "item_count": 23
+      },
+      "R2": {
+        "run_id": "P35-020-T1.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-004-A-wide.png",
+          "images/openai/gpt-image-2/RP-004-D-condition.png"
+        ],
+        "frame_sha256": [
+          "07d4e347fe0823ca480c6b863468759a9fafe550cb353b76ee8016cac44ef7b7",
+          "30c006c06c6f46730bb6cf8fe297e414776bf40ef2bffa38f690a68e5641f44d"
+        ],
+        "item_count": 29
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}

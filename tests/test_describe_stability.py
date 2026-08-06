@@ -348,6 +348,25 @@ def test_a_wholesale_grade_shift_is_visible_even_when_compare_is_silent():
     assert result["counts"]["reported_changes"] == 0
     assert result["metrics"]["condition_agreement"] == 0.0
     assert result["metrics"]["condition_agreement_within_one"] == 100.0
+    # Both disagreements are real and both are invisible through compare, so
+    # the headline floor understates the instability by exactly this much.
+    assert result["counts"]["grade_disagreements"] == 2
+    assert result["counts"]["grade_disagreements_gated_out"] == 2
+
+
+def test_a_worsening_grade_is_not_counted_as_gated_out():
+    """The gate suppresses improvements, not everything.
+
+    Without this the gated-out count could quietly become "every grade move",
+    and the report's claim that these are changes a reader never sees would
+    stop being true.
+    """
+    a = _record([_item("Sofa", condition="good")])
+    b = _record([_item("Sofa", condition="poor")], side=REPEAT_SIDE)
+    counts = pair_stability(a, b, [])["counts"]
+    assert counts["reported_changes"] == 1
+    assert counts["grade_disagreements"] == 1
+    assert counts["grade_disagreements_gated_out"] == 0
 
 
 def test_grade_agreement_within_one_is_reported_apart_from_exact():
@@ -436,7 +455,7 @@ def test_the_gate_states_the_fraction_and_decides_nothing(tmp_path):
         json.dumps({"all_pairs": {"counts": {"false_changes": 368}}}), "utf-8"
     )
     gate = _gate(
-        {"counts": {"reported_changes": 92}},
+        {"counts": {"reported_changes": 92, "grade_disagreements_gated_out": 0}},
         {"counts": {"reported_changes": 407}},
         score,
     )
@@ -448,7 +467,7 @@ def test_the_gate_states_the_fraction_and_decides_nothing(tmp_path):
 def test_the_gate_never_invents_a_denominator():
     """The 368 is read from the scored report or not stated at all."""
     gate = _gate(
-        {"counts": {"reported_changes": 92}},
+        {"counts": {"reported_changes": 92, "grade_disagreements_gated_out": 0}},
         {"counts": {"reported_changes": 407}},
         None,
     )

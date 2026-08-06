@@ -1,0 +1,438 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-010-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-010-T1",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Living room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "LIV-009",
+          "checkout_id": "LIV-009",
+          "name": "Armchair",
+          "checkin_name": "Armchair",
+          "checkin_condition": "good",
+          "checkout_condition": "fair",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [
+            "fabric snag/pull to front face of right-hand armrest, knee level"
+          ],
+          "checkout_defects": [
+            "small fabric snag with minor fraying hole at mid level on the outer left-hand side of the armrest"
+          ],
+          "new_defects": [
+            "small fabric snag with minor fraying hole at mid level on the outer left-hand side of the armrest"
+          ],
+          "resolved_defects": [
+            "fabric snag/pull to front face of right-hand armrest, knee level"
+          ],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "LIV-001",
+          "checkout_id": "LIV-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "LIV-002",
+          "checkout_id": "LIV-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "LIV-004",
+          "checkout_id": "LIV-004",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "LIV-008",
+          "checkout_id": "LIV-008",
+          "name": "Three-seat sofa"
+        },
+        {
+          "checkin_id": "LIV-010",
+          "checkout_id": "LIV-010",
+          "name": "Coffee table"
+        },
+        {
+          "checkin_id": "LIV-011",
+          "checkout_id": "LIV-011",
+          "name": "TV stand"
+        },
+        {
+          "checkin_id": "LIV-012",
+          "checkout_id": "LIV-021",
+          "name": "Floor lamp"
+        },
+        {
+          "checkin_id": "LIV-015",
+          "checkout_id": "LIV-017",
+          "name": "Television"
+        },
+        {
+          "checkin_id": "LIV-020",
+          "checkout_id": "LIV-024",
+          "name": "Photo frames"
+        },
+        {
+          "checkin_id": "LIV-005",
+          "checkout_id": "LIV-005",
+          "name": "Entrance door frame & door edge"
+        },
+        {
+          "checkin_id": "LIV-007",
+          "checkout_id": "LIV-006",
+          "name": "Patio doors"
+        },
+        {
+          "checkin_id": "LIV-013",
+          "checkout_id": "LIV-012",
+          "name": "Curtains"
+        }
+      ],
+      "removed": [
+        {
+          "id": "LIV-003",
+          "name": "Carpet",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-006",
+          "name": "Entrance door",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-014",
+          "name": "Scatter cushions and throw",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-016",
+          "name": "Media devices",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-017",
+          "name": "Router / media box",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-018",
+          "name": "Framed picture",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-019",
+          "name": "Potted houseplant",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-021",
+          "name": "Coffee table accessories",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-022",
+          "name": "Balcony potted plant",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "LIV-003",
+          "name": "Flooring",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-007",
+          "name": "Entrance doorway threshold strip",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-013",
+          "name": "Sheer curtains",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-014",
+          "name": "Sofa scatter cushions",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-015",
+          "name": "Armchair scatter cushion",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-016",
+          "name": "Armchair throw",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-018",
+          "name": "Media receiver",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-019",
+          "name": "Media player",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-020",
+          "name": "Remote control",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-022",
+          "name": "Framed artwork",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-023",
+          "name": "Houseplant in pot",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-025",
+          "name": "Glass bowl",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-026",
+          "name": "Scented candle",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-011-A-wide",
+            "RP-011-D-condition"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 13,
+    "changed": 1,
+    "unchanged": 12,
+    "removed": 9,
+    "added": 13,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-010-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-011",
+    "parent_split": "development",
+    "room_type": "Living room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "bea7d302f8c769d5d7c542f866ce373b2a33dcb2015775b2a5697e5a94a9a22f",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-010-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-011-A-wide.png",
+          "images/openai/gpt-image-2/RP-011-D-condition.png"
+        ],
+        "frame_sha256": [
+          "a337a4a594ebd866d061bb381a49659b433af4e1b3b890782a77230b379de8d5",
+          "2b94ae7cd22697583611eb0c4ee4b8b2e3418bd7660bbeb039886c0e0ec6ace4"
+        ],
+        "item_count": 23
+      },
+      "R2": {
+        "run_id": "P35-010-T1.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-011-A-wide.png",
+          "images/openai/gpt-image-2/RP-011-D-condition.png"
+        ],
+        "frame_sha256": [
+          "a337a4a594ebd866d061bb381a49659b433af4e1b3b890782a77230b379de8d5",
+          "2b94ae7cd22697583611eb0c4ee4b8b2e3418bd7660bbeb039886c0e0ec6ace4"
+        ],
+        "item_count": 27
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}

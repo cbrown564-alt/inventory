@@ -214,11 +214,25 @@ def pair_stability(
         if _norm_name(ci.name) != _norm_name(co.name)
     ]
     view_a, view_b = _view_map(record_a), _view_map(record_b)
+    # Which aligned items compare actually put in front of a reader. The
+    # tenancy gate fires only on a *worsening* grade or a new defect, so a
+    # second run that grades the room better reports nothing at all. Holding
+    # the gate's own decision here is what lets the report say how much
+    # instability the compare surface never shows.
+    reported_ids = {
+        (change.get("checkin_id"), change.get("checkout_id"))
+        for room in comparison["rooms"]
+        for change in room["changed"]
+    }
     condition_exact = condition_within_one = condition_scored = 0
     cleanliness_exact = cleanliness_within_one = cleanliness_scored = 0
     quantity_agree = quantity_scored = 0
     photo_ids_agree = 0
+    grade_disagreements = grade_disagreements_gated_out = 0
     for ci, co, _ in pairs:
+        if ci.condition != co.condition or ci.cleanliness != co.cleanliness:
+            grade_disagreements += 1
+            grade_disagreements_gated_out += (ci.id, co.id) not in reported_ids
         gap = _grade_gap(ci.condition, co.condition, CONDITION_GRADES)
         if gap is not None:
             condition_scored += 1
@@ -262,6 +276,8 @@ def pair_stability(
             "quantity_scored": quantity_scored,
             "quantity_agree": quantity_agree,
             "photo_ids_agree": photo_ids_agree,
+            "grade_disagreements": grade_disagreements,
+            "grade_disagreements_gated_out": grade_disagreements_gated_out,
         },
         "metrics": {
             "schedule_agreement_exact": exact["agreement"],
@@ -298,7 +314,8 @@ _SUMMED = (
     "schedule_agreement_normalised_either", "condition_scored",
     "condition_exact", "condition_within_one", "cleanliness_scored",
     "cleanliness_exact", "cleanliness_within_one", "quantity_scored",
-    "quantity_agree", "photo_ids_agree",
+    "quantity_agree", "photo_ids_agree", "grade_disagreements",
+    "grade_disagreements_gated_out",
 )
 _COVERAGE_SUMMED = (
     "intended", "named_by_a", "named_by_b", "named_by_both", "named_by_either",
@@ -514,10 +531,22 @@ def _gate(
     gate: dict[str, Any] = {
         "control_reported_changes": floor,
         "delta_reported_changes": delta["counts"]["reported_changes"],
+        "control_grade_disagreements_gated_out": control["counts"][
+            "grade_disagreements_gated_out"
+        ],
         "note": (
             "Every change the control reports is spurious by construction, so "
             "control_reported_changes is the non-determinism floor in the same "
             "units as the delta pairs' false changes."
+        ),
+        "floor_is_itself_a_floor": (
+            "control_reported_changes counts only what the tenancy gate shows "
+            "a reader, and that gate fires solely on a worsening grade or a "
+            "new defect. A second run that grades the room *better* reports "
+            "nothing. control_grade_disagreements_gated_out is the aligned "
+            "items whose grades moved between two runs of the same frames "
+            "without compare saying so — real instability the headline number "
+            "does not contain."
         ),
         "decision": (
             "Not decided here. docs/35 Phase 0 exits on a measurement, and the "
@@ -554,7 +583,7 @@ def _markdown(report: dict[str, Any]) -> str:
         ("Cleanliness agreement", "cleanliness_agreement", "%"),
         ("Cleanliness agreement, within one", "cleanliness_agreement_within_one", "%"),
         ("Quantity agreement", "quantity_agreement", "%"),
-        ("Photo-ID agreement", "photo_view_agreement", "%"),
+        ("Photo-view agreement", "photo_view_agreement", "%"),
         ("Coverage, run A", "coverage_a", "%"),
         ("Coverage, run B", "coverage_b", "%"),
         ("Coverage stability", "coverage_stability", "%"),
@@ -604,6 +633,17 @@ def _markdown(report: dict[str, Any]) -> str:
         f"- unpaired additions: {control['counts']['unpaired_added']}",
         f"- aligned but renamed: {control['counts']['naming_churn']}",
         f"- aligned and reported as changed: {control['counts']['changed']}",
+        "",
+        "## The floor is itself a floor",
+        "",
+        f"{control['counts']['grade_disagreements']} of "
+        f"{control['counts']['aligned']} aligned items were graded differently "
+        f"by the two runs, and "
+        f"**{gate['control_grade_disagreements_gated_out']}** of those never "
+        "reached the reader: the tenancy gate reports an item only when it got "
+        "*worse* or gained a defect, so a second run that grades the room "
+        "better passes through compare in silence. The headline floor does not "
+        "contain them.",
         "",
         report["evidence_class"],
         "",

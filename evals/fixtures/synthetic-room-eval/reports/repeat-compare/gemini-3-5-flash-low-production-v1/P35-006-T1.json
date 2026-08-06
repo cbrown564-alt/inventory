@@ -1,0 +1,258 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-006-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-006-T1",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Shower room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [],
+      "unchanged": [
+        {
+          "checkin_id": "SHO-006",
+          "checkout_id": "SHO-005",
+          "name": "Door frame"
+        },
+        {
+          "checkin_id": "SHO-007",
+          "checkout_id": "SHO-006",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "SHO-008",
+          "checkout_id": "SHO-007",
+          "name": "Threshold strip"
+        },
+        {
+          "checkin_id": "SHO-012",
+          "checkout_id": "SHO-014",
+          "name": "Glass shelf"
+        },
+        {
+          "checkin_id": "SHO-015",
+          "checkout_id": "SHO-016",
+          "name": "Bath mat"
+        },
+        {
+          "checkin_id": "SHO-002",
+          "checkout_id": "SHO-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "SHO-004",
+          "checkout_id": "SHO-003",
+          "name": "Flooring"
+        },
+        {
+          "checkin_id": "SHO-001",
+          "checkout_id": "SHO-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "SHO-005",
+          "checkout_id": "SHO-004",
+          "name": "Door"
+        },
+        {
+          "checkin_id": "SHO-011",
+          "checkout_id": "SHO-011",
+          "name": "Wash basin"
+        },
+        {
+          "checkin_id": "SHO-013",
+          "checkout_id": "SHO-013",
+          "name": "Mirror"
+        },
+        {
+          "checkin_id": "SHO-014",
+          "checkout_id": "SHO-015",
+          "name": "Toilet"
+        },
+        {
+          "checkin_id": "SHO-016",
+          "checkout_id": "SHO-017",
+          "name": "Towel"
+        }
+      ],
+      "removed": [
+        {
+          "id": "SHO-003",
+          "name": "Mosaic wall tiles",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-007-A-wide",
+            "RP-007-D-condition"
+          ]
+        },
+        {
+          "id": "SHO-009",
+          "name": "Recessed spotlight",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-007-A-wide"
+          ]
+        },
+        {
+          "id": "SHO-010",
+          "name": "Shower cubicle",
+          "condition": "good",
+          "defects": [
+            "low level left hand side to corner join: discoloured and yellowed silicone sealant with brown dirt residue build-up to base of chrome frame"
+          ],
+          "photo_ids": [
+            "RP-007-A-wide",
+            "RP-007-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "SHO-008",
+          "name": "Shower enclosure",
+          "condition": "good",
+          "defects": [
+            "light water marking to bottom chrome frame left hand side"
+          ],
+          "photo_ids": [
+            "RP-007-A-wide",
+            "RP-007-D-condition"
+          ]
+        },
+        {
+          "id": "SHO-009",
+          "name": "Shower tray",
+          "condition": "good",
+          "defects": [
+            "yellowed discolouration to silicone sealant to base joins"
+          ],
+          "photo_ids": [
+            "RP-007-A-wide",
+            "RP-007-D-condition"
+          ]
+        },
+        {
+          "id": "SHO-010",
+          "name": "Shower unit",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-007-A-wide"
+          ]
+        },
+        {
+          "id": "SHO-012",
+          "name": "Wash basin mixer tap",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-007-A-wide"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 13,
+    "changed": 0,
+    "unchanged": 13,
+    "removed": 3,
+    "added": 4,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-006-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-007",
+    "parent_split": "development",
+    "room_type": "Shower room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "fd2678629ee22eaf89f843bf030331a511a6d919fa9e59b55fc5f9ee5dc06598",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-006-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-007-A-wide.png",
+          "images/openai/gpt-image-2/RP-007-D-condition.png"
+        ],
+        "frame_sha256": [
+          "a16554f71dabfabfa6b80cee8f55a9d6d450c8333800e15d57410d3a9752ccc3",
+          "fd68cdf5260861d309fa43a6a73354d3ea7b7c8e4d3b376f11130b4ef9148f32"
+        ],
+        "item_count": 16
+      },
+      "R2": {
+        "run_id": "P35-006-T1.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-007-A-wide.png",
+          "images/openai/gpt-image-2/RP-007-D-condition.png"
+        ],
+        "frame_sha256": [
+          "a16554f71dabfabfa6b80cee8f55a9d6d450c8333800e15d57410d3a9752ccc3",
+          "fd68cdf5260861d309fa43a6a73354d3ea7b7c8e4d3b376f11130b4ef9148f32"
+        ],
+        "item_count": 18
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}

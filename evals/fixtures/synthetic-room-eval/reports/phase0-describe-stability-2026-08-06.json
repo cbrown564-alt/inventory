@@ -1,0 +1,3668 @@
+{
+  "schema_version": 1,
+  "record_type": "phase0_describe_stability",
+  "dataset_id": "synthetic-room-eval",
+  "review": "phase35-pilot-review-recut-2026-08-05.json",
+  "backend_model": "gemini-3.5-flash-low",
+  "prompt_id": "production-v1",
+  "instruments": {
+    "repeat_describe_control": {
+      "note": "T0 against a second describe of the same frames. No room change, no framing change, no generator drift: every reported change is non-determinism.",
+      "pairs": 27,
+      "metrics": {
+        "schedule_agreement_exact": 34.6,
+        "schedule_agreement_normalised": 37.3,
+        "membership_churn_per_room": 10.7,
+        "naming_churn_per_room": 4.26,
+        "condition_agreement": 81.7,
+        "condition_agreement_within_one": 100.0,
+        "cleanliness_agreement": 80.7,
+        "cleanliness_agreement_within_one": 100.0,
+        "quantity_agreement": 96.1,
+        "photo_view_agreement": 64.8,
+        "coverage_a": 58.5,
+        "coverage_b": 57.7,
+        "coverage_stability": 77.8
+      },
+      "counts": {
+        "items_a": 527,
+        "items_b": 540,
+        "aligned": 389,
+        "unpaired_removed": 138,
+        "unpaired_added": 151,
+        "membership_churn": 289,
+        "naming_churn": 115,
+        "changed": 47,
+        "unchanged": 342,
+        "reported_changes": 336,
+        "schedule_agreement_exact_both": 274,
+        "schedule_agreement_exact_either": 793,
+        "schedule_agreement_normalised_both": 290,
+        "schedule_agreement_normalised_either": 777,
+        "condition_scored": 389,
+        "condition_exact": 318,
+        "condition_within_one": 389,
+        "cleanliness_scored": 389,
+        "cleanliness_exact": 314,
+        "cleanliness_within_one": 389,
+        "quantity_scored": 389,
+        "quantity_agree": 374,
+        "photo_ids_agree": 252,
+        "grade_disagreements": 116,
+        "grade_disagreements_gated_out": 76
+      },
+      "coverage": {
+        "intended": 234,
+        "named_by_a": 137,
+        "named_by_b": 135,
+        "named_by_both": 119,
+        "named_by_either": 153,
+        "named_by_neither": 81
+      }
+    },
+    "delta_pairs": {
+      "note": "T0 against T1 — different photographs. Disagreement here is non-determinism plus real difference, and is an upper bound on instability.",
+      "coverage_caveat": "intended_visible_items describe the parent scene, and a delta pair deliberately removes some of them at T1. Read coverage_b on this instrument as a floor, not a score.",
+      "pairs": 27,
+      "metrics": {
+        "schedule_agreement_exact": 32.4,
+        "schedule_agreement_normalised": 35.2,
+        "membership_churn_per_room": 11.96,
+        "naming_churn_per_room": 4.22,
+        "condition_agreement": 74.3,
+        "condition_agreement_within_one": 99.5,
+        "cleanliness_agreement": 70.1,
+        "cleanliness_agreement_within_one": 99.7,
+        "quantity_agreement": 94.4,
+        "photo_view_agreement": 62.2,
+        "coverage_a": 58.5,
+        "coverage_b": 56.4,
+        "coverage_stability": 77.0
+      },
+      "counts": {
+        "items_a": 527,
+        "items_b": 552,
+        "aligned": 378,
+        "unpaired_removed": 149,
+        "unpaired_added": 174,
+        "membership_churn": 323,
+        "naming_churn": 114,
+        "changed": 84,
+        "unchanged": 294,
+        "reported_changes": 407,
+        "schedule_agreement_exact_both": 264,
+        "schedule_agreement_exact_either": 815,
+        "schedule_agreement_normalised_both": 281,
+        "schedule_agreement_normalised_either": 798,
+        "condition_scored": 378,
+        "condition_exact": 281,
+        "condition_within_one": 376,
+        "cleanliness_scored": 378,
+        "cleanliness_exact": 265,
+        "cleanliness_within_one": 377,
+        "quantity_scored": 378,
+        "quantity_agree": 357,
+        "photo_ids_agree": 235,
+        "grade_disagreements": 148,
+        "grade_disagreements_gated_out": 74
+      },
+      "coverage": {
+        "intended": 234,
+        "named_by_a": 137,
+        "named_by_b": 132,
+        "named_by_both": 117,
+        "named_by_either": 152,
+        "named_by_neither": 82
+      }
+    }
+  },
+  "gate": {
+    "control_reported_changes": 336,
+    "delta_reported_changes": 407,
+    "control_grade_disagreements_gated_out": 76,
+    "note": "Every change the control reports is spurious by construction, so control_reported_changes is the non-determinism floor in the same units as the delta pairs' false changes.",
+    "floor_is_itself_a_floor": "control_reported_changes counts only what the tenancy gate shows a reader, and that gate fires solely on a worsening grade or a new defect. A second run that grades the room *better* reports nothing. control_grade_disagreements_gated_out is the aligned items whose grades moved between two runs of the same frames without compare saying so — real instability the headline number does not contain.",
+    "decision": "Not decided here. docs/35 Phase 0 exits on a measurement, and the decision is recorded against the number by a person.",
+    "delta_false_changes": 368,
+    "delta_score_report": "phase35-delta-score-2026-08-05.json",
+    "floor_share_of_delta_false_changes": 91.3
+  },
+  "per_pair": {
+    "repeat_describe_control": [
+      {
+        "delta_id": "P35-002-T1",
+        "room_type": "Bathroom",
+        "metrics": {
+          "schedule_agreement_exact": 38.7,
+          "schedule_agreement_normalised": 48.3,
+          "membership_churn": 5,
+          "naming_churn": 7,
+          "condition_agreement": 94.7,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 94.7
+        },
+        "counts": {
+          "items_a": 23,
+          "items_b": 20,
+          "aligned": 19,
+          "unpaired_removed": 4,
+          "unpaired_added": 1,
+          "membership_churn": 5,
+          "naming_churn": 7,
+          "changed": 1,
+          "unchanged": 18,
+          "reported_changes": 6,
+          "schedule_agreement_exact_both": 12,
+          "schedule_agreement_exact_either": 31,
+          "schedule_agreement_normalised_both": 14,
+          "schedule_agreement_normalised_either": 29,
+          "condition_scored": 19,
+          "condition_exact": 18,
+          "condition_within_one": 19,
+          "cleanliness_scored": 19,
+          "cleanliness_exact": 19,
+          "cleanliness_within_one": 19,
+          "quantity_scored": 19,
+          "quantity_agree": 19,
+          "photo_ids_agree": 18,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 1
+        }
+      },
+      {
+        "delta_id": "P35-003-T1",
+        "room_type": "Kitchen",
+        "metrics": {
+          "schedule_agreement_exact": 37.0,
+          "schedule_agreement_normalised": 37.0,
+          "membership_churn": 11,
+          "naming_churn": 3,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 18,
+          "items_b": 19,
+          "aligned": 13,
+          "unpaired_removed": 5,
+          "unpaired_added": 6,
+          "membership_churn": 11,
+          "naming_churn": 3,
+          "changed": 0,
+          "unchanged": 13,
+          "reported_changes": 11,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 27,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 27,
+          "condition_scored": 13,
+          "condition_exact": 13,
+          "condition_within_one": 13,
+          "cleanliness_scored": 13,
+          "cleanliness_exact": 13,
+          "cleanliness_within_one": 13,
+          "quantity_scored": 13,
+          "quantity_agree": 13,
+          "photo_ids_agree": 13,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-004-T1",
+        "room_type": "Kitchen",
+        "metrics": {
+          "schedule_agreement_exact": 36.1,
+          "schedule_agreement_normalised": 36.1,
+          "membership_churn": 17,
+          "naming_churn": 3,
+          "condition_agreement": 93.8,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 93.8,
+          "photo_view_agreement": 37.5
+        },
+        "counts": {
+          "items_a": 24,
+          "items_b": 25,
+          "aligned": 16,
+          "unpaired_removed": 8,
+          "unpaired_added": 9,
+          "membership_churn": 17,
+          "naming_churn": 3,
+          "changed": 1,
+          "unchanged": 15,
+          "reported_changes": 18,
+          "schedule_agreement_exact_both": 13,
+          "schedule_agreement_exact_either": 36,
+          "schedule_agreement_normalised_both": 13,
+          "schedule_agreement_normalised_either": 36,
+          "condition_scored": 16,
+          "condition_exact": 15,
+          "condition_within_one": 16,
+          "cleanliness_scored": 16,
+          "cleanliness_exact": 16,
+          "cleanliness_within_one": 16,
+          "quantity_scored": 16,
+          "quantity_agree": 15,
+          "photo_ids_agree": 6,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-005-T1",
+        "room_type": "Bathroom",
+        "metrics": {
+          "schedule_agreement_exact": 57.9,
+          "schedule_agreement_normalised": 66.7,
+          "membership_churn": 2,
+          "naming_churn": 3,
+          "condition_agreement": 0.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 35.7
+        },
+        "counts": {
+          "items_a": 15,
+          "items_b": 15,
+          "aligned": 14,
+          "unpaired_removed": 1,
+          "unpaired_added": 1,
+          "membership_churn": 2,
+          "naming_churn": 3,
+          "changed": 1,
+          "unchanged": 13,
+          "reported_changes": 3,
+          "schedule_agreement_exact_both": 11,
+          "schedule_agreement_exact_either": 19,
+          "schedule_agreement_normalised_both": 12,
+          "schedule_agreement_normalised_either": 18,
+          "condition_scored": 14,
+          "condition_exact": 0,
+          "condition_within_one": 14,
+          "cleanliness_scored": 14,
+          "cleanliness_exact": 14,
+          "cleanliness_within_one": 14,
+          "quantity_scored": 14,
+          "quantity_agree": 14,
+          "photo_ids_agree": 5,
+          "grade_disagreements": 14,
+          "grade_disagreements_gated_out": 13
+        }
+      },
+      {
+        "delta_id": "P35-006-T1",
+        "room_type": "Shower room",
+        "metrics": {
+          "schedule_agreement_exact": 17.9,
+          "schedule_agreement_normalised": 26.9,
+          "membership_churn": 7,
+          "naming_churn": 8,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 92.3
+        },
+        "counts": {
+          "items_a": 16,
+          "items_b": 17,
+          "aligned": 13,
+          "unpaired_removed": 3,
+          "unpaired_added": 4,
+          "membership_churn": 7,
+          "naming_churn": 8,
+          "changed": 0,
+          "unchanged": 13,
+          "reported_changes": 7,
+          "schedule_agreement_exact_both": 5,
+          "schedule_agreement_exact_either": 28,
+          "schedule_agreement_normalised_both": 7,
+          "schedule_agreement_normalised_either": 26,
+          "condition_scored": 13,
+          "condition_exact": 13,
+          "condition_within_one": 13,
+          "cleanliness_scored": 13,
+          "cleanliness_exact": 13,
+          "cleanliness_within_one": 13,
+          "quantity_scored": 13,
+          "quantity_agree": 13,
+          "photo_ids_agree": 12,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-007-T1",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 50.0,
+          "schedule_agreement_normalised": 50.0,
+          "membership_churn": 5,
+          "naming_churn": 2,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 90.9,
+          "photo_view_agreement": 54.5
+        },
+        "counts": {
+          "items_a": 13,
+          "items_b": 14,
+          "aligned": 11,
+          "unpaired_removed": 2,
+          "unpaired_added": 3,
+          "membership_churn": 5,
+          "naming_churn": 2,
+          "changed": 0,
+          "unchanged": 11,
+          "reported_changes": 5,
+          "schedule_agreement_exact_both": 9,
+          "schedule_agreement_exact_either": 18,
+          "schedule_agreement_normalised_both": 9,
+          "schedule_agreement_normalised_either": 18,
+          "condition_scored": 11,
+          "condition_exact": 11,
+          "condition_within_one": 11,
+          "cleanliness_scored": 11,
+          "cleanliness_exact": 11,
+          "cleanliness_within_one": 11,
+          "quantity_scored": 11,
+          "quantity_agree": 10,
+          "photo_ids_agree": 6,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-008-T1",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 43.8,
+          "schedule_agreement_normalised": 43.8,
+          "membership_churn": 12,
+          "naming_churn": 3,
+          "condition_agreement": 94.1,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 94.1,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 17.6
+        },
+        "counts": {
+          "items_a": 24,
+          "items_b": 22,
+          "aligned": 17,
+          "unpaired_removed": 7,
+          "unpaired_added": 5,
+          "membership_churn": 12,
+          "naming_churn": 3,
+          "changed": 1,
+          "unchanged": 16,
+          "reported_changes": 13,
+          "schedule_agreement_exact_both": 14,
+          "schedule_agreement_exact_either": 32,
+          "schedule_agreement_normalised_both": 14,
+          "schedule_agreement_normalised_either": 32,
+          "condition_scored": 17,
+          "condition_exact": 16,
+          "condition_within_one": 17,
+          "cleanliness_scored": 17,
+          "cleanliness_exact": 16,
+          "cleanliness_within_one": 17,
+          "quantity_scored": 17,
+          "quantity_agree": 17,
+          "photo_ids_agree": 3,
+          "grade_disagreements": 2,
+          "grade_disagreements_gated_out": 1
+        }
+      },
+      {
+        "delta_id": "P35-009-T1",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 22.9,
+          "schedule_agreement_normalised": 26.5,
+          "membership_churn": 19,
+          "naming_churn": 4,
+          "condition_agreement": 50.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 0.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 91.7,
+          "photo_view_agreement": 66.7
+        },
+        "counts": {
+          "items_a": 17,
+          "items_b": 26,
+          "aligned": 12,
+          "unpaired_removed": 5,
+          "unpaired_added": 14,
+          "membership_churn": 19,
+          "naming_churn": 4,
+          "changed": 6,
+          "unchanged": 6,
+          "reported_changes": 25,
+          "schedule_agreement_exact_both": 8,
+          "schedule_agreement_exact_either": 35,
+          "schedule_agreement_normalised_both": 9,
+          "schedule_agreement_normalised_either": 34,
+          "condition_scored": 12,
+          "condition_exact": 6,
+          "condition_within_one": 12,
+          "cleanliness_scored": 12,
+          "cleanliness_exact": 0,
+          "cleanliness_within_one": 12,
+          "quantity_scored": 12,
+          "quantity_agree": 11,
+          "photo_ids_agree": 8,
+          "grade_disagreements": 12,
+          "grade_disagreements_gated_out": 6
+        }
+      },
+      {
+        "delta_id": "P35-010-T1",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 26.3,
+          "schedule_agreement_normalised": 26.3,
+          "membership_churn": 22,
+          "naming_churn": 3,
+          "condition_agreement": 92.3,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 22,
+          "items_b": 26,
+          "aligned": 13,
+          "unpaired_removed": 9,
+          "unpaired_added": 13,
+          "membership_churn": 22,
+          "naming_churn": 3,
+          "changed": 1,
+          "unchanged": 12,
+          "reported_changes": 23,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 38,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 38,
+          "condition_scored": 13,
+          "condition_exact": 12,
+          "condition_within_one": 13,
+          "cleanliness_scored": 13,
+          "cleanliness_exact": 13,
+          "cleanliness_within_one": 13,
+          "quantity_scored": 13,
+          "quantity_agree": 13,
+          "photo_ids_agree": 13,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-011-T1",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 26.9,
+          "schedule_agreement_normalised": 26.9,
+          "membership_churn": 24,
+          "naming_churn": 7,
+          "condition_agreement": 95.2,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 95.2,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 90.5,
+          "photo_view_agreement": 42.9
+        },
+        "counts": {
+          "items_a": 31,
+          "items_b": 35,
+          "aligned": 21,
+          "unpaired_removed": 10,
+          "unpaired_added": 14,
+          "membership_churn": 24,
+          "naming_churn": 7,
+          "changed": 2,
+          "unchanged": 19,
+          "reported_changes": 26,
+          "schedule_agreement_exact_both": 14,
+          "schedule_agreement_exact_either": 52,
+          "schedule_agreement_normalised_both": 14,
+          "schedule_agreement_normalised_either": 52,
+          "condition_scored": 21,
+          "condition_exact": 20,
+          "condition_within_one": 21,
+          "cleanliness_scored": 21,
+          "cleanliness_exact": 20,
+          "cleanliness_within_one": 21,
+          "quantity_scored": 21,
+          "quantity_agree": 19,
+          "photo_ids_agree": 9,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-012-T1",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 47.6,
+          "schedule_agreement_normalised": 47.6,
+          "membership_churn": 11,
+          "naming_churn": 0,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 30.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 90.0,
+          "photo_view_agreement": 60.0
+        },
+        "counts": {
+          "items_a": 16,
+          "items_b": 15,
+          "aligned": 10,
+          "unpaired_removed": 6,
+          "unpaired_added": 5,
+          "membership_churn": 11,
+          "naming_churn": 0,
+          "changed": 0,
+          "unchanged": 10,
+          "reported_changes": 11,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 21,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 21,
+          "condition_scored": 10,
+          "condition_exact": 10,
+          "condition_within_one": 10,
+          "cleanliness_scored": 10,
+          "cleanliness_exact": 3,
+          "cleanliness_within_one": 10,
+          "quantity_scored": 10,
+          "quantity_agree": 9,
+          "photo_ids_agree": 6,
+          "grade_disagreements": 7,
+          "grade_disagreements_gated_out": 7
+        }
+      },
+      {
+        "delta_id": "P35-013-T1",
+        "room_type": "Entrance hall",
+        "metrics": {
+          "schedule_agreement_exact": 32.0,
+          "schedule_agreement_normalised": 32.0,
+          "membership_churn": 11,
+          "naming_churn": 3,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 72.7
+        },
+        "counts": {
+          "items_a": 18,
+          "items_b": 15,
+          "aligned": 11,
+          "unpaired_removed": 7,
+          "unpaired_added": 4,
+          "membership_churn": 11,
+          "naming_churn": 3,
+          "changed": 0,
+          "unchanged": 11,
+          "reported_changes": 11,
+          "schedule_agreement_exact_both": 8,
+          "schedule_agreement_exact_either": 25,
+          "schedule_agreement_normalised_both": 8,
+          "schedule_agreement_normalised_either": 25,
+          "condition_scored": 11,
+          "condition_exact": 11,
+          "condition_within_one": 11,
+          "cleanliness_scored": 11,
+          "cleanliness_exact": 11,
+          "cleanliness_within_one": 11,
+          "quantity_scored": 11,
+          "quantity_agree": 11,
+          "photo_ids_agree": 8,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-014-T1",
+        "room_type": "Dining room",
+        "metrics": {
+          "schedule_agreement_exact": 57.1,
+          "schedule_agreement_normalised": 69.2,
+          "membership_churn": 2,
+          "naming_churn": 2,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 0.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 90.0,
+          "photo_view_agreement": 70.0
+        },
+        "counts": {
+          "items_a": 11,
+          "items_b": 11,
+          "aligned": 10,
+          "unpaired_removed": 1,
+          "unpaired_added": 1,
+          "membership_churn": 2,
+          "naming_churn": 2,
+          "changed": 0,
+          "unchanged": 10,
+          "reported_changes": 2,
+          "schedule_agreement_exact_both": 8,
+          "schedule_agreement_exact_either": 14,
+          "schedule_agreement_normalised_both": 9,
+          "schedule_agreement_normalised_either": 13,
+          "condition_scored": 10,
+          "condition_exact": 10,
+          "condition_within_one": 10,
+          "cleanliness_scored": 10,
+          "cleanliness_exact": 0,
+          "cleanliness_within_one": 10,
+          "quantity_scored": 10,
+          "quantity_agree": 9,
+          "photo_ids_agree": 7,
+          "grade_disagreements": 10,
+          "grade_disagreements_gated_out": 10
+        }
+      },
+      {
+        "delta_id": "P35-015-T1",
+        "room_type": "Dining room",
+        "metrics": {
+          "schedule_agreement_exact": 15.6,
+          "schedule_agreement_normalised": 23.8,
+          "membership_churn": 12,
+          "naming_churn": 13,
+          "condition_agreement": 95.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 90.0,
+          "photo_view_agreement": 45.0
+        },
+        "counts": {
+          "items_a": 25,
+          "items_b": 27,
+          "aligned": 20,
+          "unpaired_removed": 5,
+          "unpaired_added": 7,
+          "membership_churn": 12,
+          "naming_churn": 13,
+          "changed": 1,
+          "unchanged": 19,
+          "reported_changes": 13,
+          "schedule_agreement_exact_both": 7,
+          "schedule_agreement_exact_either": 45,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 42,
+          "condition_scored": 20,
+          "condition_exact": 19,
+          "condition_within_one": 20,
+          "cleanliness_scored": 20,
+          "cleanliness_exact": 20,
+          "cleanliness_within_one": 20,
+          "quantity_scored": 20,
+          "quantity_agree": 18,
+          "photo_ids_agree": 9,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 1
+        }
+      },
+      {
+        "delta_id": "P35-016-T1",
+        "room_type": "Entrance hall",
+        "metrics": {
+          "schedule_agreement_exact": 37.5,
+          "schedule_agreement_normalised": 37.5,
+          "membership_churn": 9,
+          "naming_churn": 3,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 17,
+          "items_b": 16,
+          "aligned": 12,
+          "unpaired_removed": 5,
+          "unpaired_added": 4,
+          "membership_churn": 9,
+          "naming_churn": 3,
+          "changed": 0,
+          "unchanged": 12,
+          "reported_changes": 9,
+          "schedule_agreement_exact_both": 9,
+          "schedule_agreement_exact_either": 24,
+          "schedule_agreement_normalised_both": 9,
+          "schedule_agreement_normalised_either": 24,
+          "condition_scored": 12,
+          "condition_exact": 12,
+          "condition_within_one": 12,
+          "cleanliness_scored": 12,
+          "cleanliness_exact": 12,
+          "cleanliness_within_one": 12,
+          "quantity_scored": 12,
+          "quantity_agree": 12,
+          "photo_ids_agree": 12,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-017-T1",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 22.9,
+          "schedule_agreement_normalised": 26.5,
+          "membership_churn": 15,
+          "naming_churn": 6,
+          "condition_agreement": 7.1,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 42.9,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 64.3
+        },
+        "counts": {
+          "items_a": 23,
+          "items_b": 20,
+          "aligned": 14,
+          "unpaired_removed": 9,
+          "unpaired_added": 6,
+          "membership_churn": 15,
+          "naming_churn": 6,
+          "changed": 13,
+          "unchanged": 1,
+          "reported_changes": 28,
+          "schedule_agreement_exact_both": 8,
+          "schedule_agreement_exact_either": 35,
+          "schedule_agreement_normalised_both": 9,
+          "schedule_agreement_normalised_either": 34,
+          "condition_scored": 14,
+          "condition_exact": 1,
+          "condition_within_one": 14,
+          "cleanliness_scored": 14,
+          "cleanliness_exact": 6,
+          "cleanliness_within_one": 14,
+          "quantity_scored": 14,
+          "quantity_agree": 14,
+          "photo_ids_agree": 9,
+          "grade_disagreements": 13,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-018-T1",
+        "room_type": "Dining room",
+        "metrics": {
+          "schedule_agreement_exact": 46.7,
+          "schedule_agreement_normalised": 57.1,
+          "membership_churn": 0,
+          "naming_churn": 4,
+          "condition_agreement": 0.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 90.9,
+          "photo_view_agreement": 63.6
+        },
+        "counts": {
+          "items_a": 11,
+          "items_b": 11,
+          "aligned": 11,
+          "unpaired_removed": 0,
+          "unpaired_added": 0,
+          "membership_churn": 0,
+          "naming_churn": 4,
+          "changed": 11,
+          "unchanged": 0,
+          "reported_changes": 11,
+          "schedule_agreement_exact_both": 7,
+          "schedule_agreement_exact_either": 15,
+          "schedule_agreement_normalised_both": 8,
+          "schedule_agreement_normalised_either": 14,
+          "condition_scored": 11,
+          "condition_exact": 0,
+          "condition_within_one": 11,
+          "cleanliness_scored": 11,
+          "cleanliness_exact": 11,
+          "cleanliness_within_one": 11,
+          "quantity_scored": 11,
+          "quantity_agree": 10,
+          "photo_ids_agree": 7,
+          "grade_disagreements": 11,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-020-T1",
+        "room_type": "Kitchen",
+        "metrics": {
+          "schedule_agreement_exact": 36.8,
+          "schedule_agreement_normalised": 36.8,
+          "membership_churn": 18,
+          "naming_churn": 3,
+          "condition_agreement": 88.2,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 11.8
+        },
+        "counts": {
+          "items_a": 23,
+          "items_b": 29,
+          "aligned": 17,
+          "unpaired_removed": 6,
+          "unpaired_added": 12,
+          "membership_churn": 18,
+          "naming_churn": 3,
+          "changed": 2,
+          "unchanged": 15,
+          "reported_changes": 20,
+          "schedule_agreement_exact_both": 14,
+          "schedule_agreement_exact_either": 38,
+          "schedule_agreement_normalised_both": 14,
+          "schedule_agreement_normalised_either": 38,
+          "condition_scored": 17,
+          "condition_exact": 15,
+          "condition_within_one": 17,
+          "cleanliness_scored": 17,
+          "cleanliness_exact": 17,
+          "cleanliness_within_one": 17,
+          "quantity_scored": 17,
+          "quantity_agree": 17,
+          "photo_ids_agree": 2,
+          "grade_disagreements": 2,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-021-CF",
+        "room_type": "Bathroom",
+        "metrics": {
+          "schedule_agreement_exact": 44.4,
+          "schedule_agreement_normalised": 44.4,
+          "membership_churn": 9,
+          "naming_churn": 3,
+          "condition_agreement": 86.7,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 0.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 93.3,
+          "photo_view_agreement": 93.3
+        },
+        "counts": {
+          "items_a": 22,
+          "items_b": 17,
+          "aligned": 15,
+          "unpaired_removed": 7,
+          "unpaired_added": 2,
+          "membership_churn": 9,
+          "naming_churn": 3,
+          "changed": 1,
+          "unchanged": 14,
+          "reported_changes": 10,
+          "schedule_agreement_exact_both": 12,
+          "schedule_agreement_exact_either": 27,
+          "schedule_agreement_normalised_both": 12,
+          "schedule_agreement_normalised_either": 27,
+          "condition_scored": 15,
+          "condition_exact": 13,
+          "condition_within_one": 15,
+          "cleanliness_scored": 15,
+          "cleanliness_exact": 0,
+          "cleanliness_within_one": 15,
+          "quantity_scored": 15,
+          "quantity_agree": 14,
+          "photo_ids_agree": 14,
+          "grade_disagreements": 15,
+          "grade_disagreements_gated_out": 14
+        }
+      },
+      {
+        "delta_id": "P35-023-CF",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 35.0,
+          "schedule_agreement_normalised": 35.0,
+          "membership_churn": 5,
+          "naming_churn": 4,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 90.9,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 14,
+          "items_b": 13,
+          "aligned": 11,
+          "unpaired_removed": 3,
+          "unpaired_added": 2,
+          "membership_churn": 5,
+          "naming_churn": 4,
+          "changed": 0,
+          "unchanged": 11,
+          "reported_changes": 5,
+          "schedule_agreement_exact_both": 7,
+          "schedule_agreement_exact_either": 20,
+          "schedule_agreement_normalised_both": 7,
+          "schedule_agreement_normalised_either": 20,
+          "condition_scored": 11,
+          "condition_exact": 11,
+          "condition_within_one": 11,
+          "cleanliness_scored": 11,
+          "cleanliness_exact": 11,
+          "cleanliness_within_one": 11,
+          "quantity_scored": 11,
+          "quantity_agree": 10,
+          "photo_ids_agree": 11,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-024-CF",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 36.4,
+          "schedule_agreement_normalised": 50.0,
+          "membership_churn": 9,
+          "naming_churn": 6,
+          "condition_agreement": 94.4,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 23,
+          "items_b": 22,
+          "aligned": 18,
+          "unpaired_removed": 5,
+          "unpaired_added": 4,
+          "membership_churn": 9,
+          "naming_churn": 6,
+          "changed": 1,
+          "unchanged": 17,
+          "reported_changes": 10,
+          "schedule_agreement_exact_both": 12,
+          "schedule_agreement_exact_either": 33,
+          "schedule_agreement_normalised_both": 15,
+          "schedule_agreement_normalised_either": 30,
+          "condition_scored": 18,
+          "condition_exact": 17,
+          "condition_within_one": 18,
+          "cleanliness_scored": 18,
+          "cleanliness_exact": 18,
+          "cleanliness_within_one": 18,
+          "quantity_scored": 18,
+          "quantity_agree": 18,
+          "photo_ids_agree": 18,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-025-CF",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 42.4,
+          "schedule_agreement_normalised": 42.4,
+          "membership_churn": 15,
+          "naming_churn": 2,
+          "condition_agreement": 93.8,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 62.5
+        },
+        "counts": {
+          "items_a": 24,
+          "items_b": 23,
+          "aligned": 16,
+          "unpaired_removed": 8,
+          "unpaired_added": 7,
+          "membership_churn": 15,
+          "naming_churn": 2,
+          "changed": 1,
+          "unchanged": 15,
+          "reported_changes": 16,
+          "schedule_agreement_exact_both": 14,
+          "schedule_agreement_exact_either": 33,
+          "schedule_agreement_normalised_both": 14,
+          "schedule_agreement_normalised_either": 33,
+          "condition_scored": 16,
+          "condition_exact": 15,
+          "condition_within_one": 16,
+          "cleanliness_scored": 16,
+          "cleanliness_exact": 16,
+          "cleanliness_within_one": 16,
+          "quantity_scored": 16,
+          "quantity_agree": 16,
+          "photo_ids_agree": 10,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-026-CF",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 30.2,
+          "schedule_agreement_normalised": 33.3,
+          "membership_churn": 16,
+          "naming_churn": 7,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 35.0
+        },
+        "counts": {
+          "items_a": 25,
+          "items_b": 31,
+          "aligned": 20,
+          "unpaired_removed": 5,
+          "unpaired_added": 11,
+          "membership_churn": 16,
+          "naming_churn": 7,
+          "changed": 1,
+          "unchanged": 19,
+          "reported_changes": 17,
+          "schedule_agreement_exact_both": 13,
+          "schedule_agreement_exact_either": 43,
+          "schedule_agreement_normalised_both": 14,
+          "schedule_agreement_normalised_either": 42,
+          "condition_scored": 20,
+          "condition_exact": 20,
+          "condition_within_one": 20,
+          "cleanliness_scored": 20,
+          "cleanliness_exact": 20,
+          "cleanliness_within_one": 20,
+          "quantity_scored": 20,
+          "quantity_agree": 20,
+          "photo_ids_agree": 7,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-027-CF",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 63.2,
+          "schedule_agreement_normalised": 63.2,
+          "membership_churn": 1,
+          "naming_churn": 3,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 80.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 15,
+          "items_b": 16,
+          "aligned": 15,
+          "unpaired_removed": 0,
+          "unpaired_added": 1,
+          "membership_churn": 1,
+          "naming_churn": 3,
+          "changed": 2,
+          "unchanged": 13,
+          "reported_changes": 3,
+          "schedule_agreement_exact_both": 12,
+          "schedule_agreement_exact_either": 19,
+          "schedule_agreement_normalised_both": 12,
+          "schedule_agreement_normalised_either": 19,
+          "condition_scored": 15,
+          "condition_exact": 15,
+          "condition_within_one": 15,
+          "cleanliness_scored": 15,
+          "cleanliness_exact": 12,
+          "cleanliness_within_one": 15,
+          "quantity_scored": 15,
+          "quantity_agree": 15,
+          "photo_ids_agree": 15,
+          "grade_disagreements": 3,
+          "grade_disagreements_gated_out": 3
+        }
+      },
+      {
+        "delta_id": "P35-028-CF",
+        "room_type": "Dining room",
+        "metrics": {
+          "schedule_agreement_exact": 57.1,
+          "schedule_agreement_normalised": 57.1,
+          "membership_churn": 2,
+          "naming_churn": 2,
+          "condition_agreement": 0.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 0.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 90.0,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 11,
+          "items_b": 11,
+          "aligned": 10,
+          "unpaired_removed": 1,
+          "unpaired_added": 1,
+          "membership_churn": 2,
+          "naming_churn": 2,
+          "changed": 0,
+          "unchanged": 10,
+          "reported_changes": 2,
+          "schedule_agreement_exact_both": 8,
+          "schedule_agreement_exact_either": 14,
+          "schedule_agreement_normalised_both": 8,
+          "schedule_agreement_normalised_either": 14,
+          "condition_scored": 10,
+          "condition_exact": 0,
+          "condition_within_one": 10,
+          "cleanliness_scored": 10,
+          "cleanliness_exact": 0,
+          "cleanliness_within_one": 10,
+          "quantity_scored": 10,
+          "quantity_agree": 9,
+          "photo_ids_agree": 10,
+          "grade_disagreements": 10,
+          "grade_disagreements_gated_out": 10
+        }
+      },
+      {
+        "delta_id": "P35-029-CF",
+        "room_type": "Dining room",
+        "metrics": {
+          "schedule_agreement_exact": 26.5,
+          "schedule_agreement_normalised": 26.5,
+          "membership_churn": 11,
+          "naming_churn": 7,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 50.0
+        },
+        "counts": {
+          "items_a": 22,
+          "items_b": 21,
+          "aligned": 16,
+          "unpaired_removed": 6,
+          "unpaired_added": 5,
+          "membership_churn": 11,
+          "naming_churn": 7,
+          "changed": 1,
+          "unchanged": 15,
+          "reported_changes": 12,
+          "schedule_agreement_exact_both": 9,
+          "schedule_agreement_exact_either": 34,
+          "schedule_agreement_normalised_both": 9,
+          "schedule_agreement_normalised_either": 34,
+          "condition_scored": 16,
+          "condition_exact": 16,
+          "condition_within_one": 16,
+          "cleanliness_scored": 16,
+          "cleanliness_exact": 16,
+          "cleanliness_within_one": 16,
+          "quantity_scored": 16,
+          "quantity_agree": 16,
+          "photo_ids_agree": 8,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-030-CF",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 27.0,
+          "schedule_agreement_normalised": 27.0,
+          "membership_churn": 19,
+          "naming_churn": 4,
+          "condition_agreement": 64.3,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 42.9,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 85.7,
+          "photo_view_agreement": 42.9
+        },
+        "counts": {
+          "items_a": 24,
+          "items_b": 23,
+          "aligned": 14,
+          "unpaired_removed": 10,
+          "unpaired_added": 9,
+          "membership_churn": 19,
+          "naming_churn": 4,
+          "changed": 0,
+          "unchanged": 14,
+          "reported_changes": 19,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 37,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 37,
+          "condition_scored": 14,
+          "condition_exact": 9,
+          "condition_within_one": 14,
+          "cleanliness_scored": 14,
+          "cleanliness_exact": 6,
+          "cleanliness_within_one": 14,
+          "quantity_scored": 14,
+          "quantity_agree": 12,
+          "photo_ids_agree": 6,
+          "grade_disagreements": 10,
+          "grade_disagreements_gated_out": 10
+        }
+      }
+    ],
+    "delta_pairs": [
+      {
+        "delta_id": "P35-002-T1",
+        "room_type": "Bathroom",
+        "metrics": {
+          "schedule_agreement_exact": 25.7,
+          "schedule_agreement_normalised": 33.3,
+          "membership_churn": 10,
+          "naming_churn": 8,
+          "condition_agreement": 17.6,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 11.8,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 82.4
+        },
+        "counts": {
+          "items_a": 23,
+          "items_b": 21,
+          "aligned": 17,
+          "unpaired_removed": 6,
+          "unpaired_added": 4,
+          "membership_churn": 10,
+          "naming_churn": 8,
+          "changed": 1,
+          "unchanged": 16,
+          "reported_changes": 11,
+          "schedule_agreement_exact_both": 9,
+          "schedule_agreement_exact_either": 35,
+          "schedule_agreement_normalised_both": 11,
+          "schedule_agreement_normalised_either": 33,
+          "condition_scored": 17,
+          "condition_exact": 3,
+          "condition_within_one": 17,
+          "cleanliness_scored": 17,
+          "cleanliness_exact": 2,
+          "cleanliness_within_one": 17,
+          "quantity_scored": 17,
+          "quantity_agree": 17,
+          "photo_ids_agree": 14,
+          "grade_disagreements": 15,
+          "grade_disagreements_gated_out": 14
+        }
+      },
+      {
+        "delta_id": "P35-003-T1",
+        "room_type": "Kitchen",
+        "metrics": {
+          "schedule_agreement_exact": 28.6,
+          "schedule_agreement_normalised": 33.3,
+          "membership_churn": 10,
+          "naming_churn": 5,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 92.3,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 18,
+          "items_b": 18,
+          "aligned": 13,
+          "unpaired_removed": 5,
+          "unpaired_added": 5,
+          "membership_churn": 10,
+          "naming_churn": 5,
+          "changed": 0,
+          "unchanged": 13,
+          "reported_changes": 10,
+          "schedule_agreement_exact_both": 8,
+          "schedule_agreement_exact_either": 28,
+          "schedule_agreement_normalised_both": 9,
+          "schedule_agreement_normalised_either": 27,
+          "condition_scored": 13,
+          "condition_exact": 13,
+          "condition_within_one": 13,
+          "cleanliness_scored": 13,
+          "cleanliness_exact": 13,
+          "cleanliness_within_one": 13,
+          "quantity_scored": 13,
+          "quantity_agree": 12,
+          "photo_ids_agree": 13,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-004-T1",
+        "room_type": "Kitchen",
+        "metrics": {
+          "schedule_agreement_exact": 26.3,
+          "schedule_agreement_normalised": 26.3,
+          "membership_churn": 16,
+          "naming_churn": 6,
+          "condition_agreement": 93.8,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 93.8,
+          "photo_view_agreement": 37.5
+        },
+        "counts": {
+          "items_a": 24,
+          "items_b": 24,
+          "aligned": 16,
+          "unpaired_removed": 8,
+          "unpaired_added": 8,
+          "membership_churn": 16,
+          "naming_churn": 6,
+          "changed": 1,
+          "unchanged": 15,
+          "reported_changes": 17,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 38,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 38,
+          "condition_scored": 16,
+          "condition_exact": 15,
+          "condition_within_one": 16,
+          "cleanliness_scored": 16,
+          "cleanliness_exact": 16,
+          "cleanliness_within_one": 16,
+          "quantity_scored": 16,
+          "quantity_agree": 15,
+          "photo_ids_agree": 6,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-005-T1",
+        "room_type": "Bathroom",
+        "metrics": {
+          "schedule_agreement_exact": 39.1,
+          "schedule_agreement_normalised": 45.5,
+          "membership_churn": 10,
+          "naming_churn": 2,
+          "condition_agreement": 90.9,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 15,
+          "items_b": 17,
+          "aligned": 11,
+          "unpaired_removed": 4,
+          "unpaired_added": 6,
+          "membership_churn": 10,
+          "naming_churn": 2,
+          "changed": 1,
+          "unchanged": 10,
+          "reported_changes": 11,
+          "schedule_agreement_exact_both": 9,
+          "schedule_agreement_exact_either": 23,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 22,
+          "condition_scored": 11,
+          "condition_exact": 10,
+          "condition_within_one": 11,
+          "cleanliness_scored": 11,
+          "cleanliness_exact": 11,
+          "cleanliness_within_one": 11,
+          "quantity_scored": 11,
+          "quantity_agree": 11,
+          "photo_ids_agree": 11,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-006-T1",
+        "room_type": "Shower room",
+        "metrics": {
+          "schedule_agreement_exact": 16.1,
+          "schedule_agreement_normalised": 24.1,
+          "membership_churn": 8,
+          "naming_churn": 9,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 92.9,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 92.9,
+          "photo_view_agreement": 14.3
+        },
+        "counts": {
+          "items_a": 16,
+          "items_b": 20,
+          "aligned": 14,
+          "unpaired_removed": 2,
+          "unpaired_added": 6,
+          "membership_churn": 8,
+          "naming_churn": 9,
+          "changed": 1,
+          "unchanged": 13,
+          "reported_changes": 9,
+          "schedule_agreement_exact_both": 5,
+          "schedule_agreement_exact_either": 31,
+          "schedule_agreement_normalised_both": 7,
+          "schedule_agreement_normalised_either": 29,
+          "condition_scored": 14,
+          "condition_exact": 14,
+          "condition_within_one": 14,
+          "cleanliness_scored": 14,
+          "cleanliness_exact": 13,
+          "cleanliness_within_one": 14,
+          "quantity_scored": 14,
+          "quantity_agree": 13,
+          "photo_ids_agree": 2,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-007-T1",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 35.0,
+          "schedule_agreement_normalised": 35.0,
+          "membership_churn": 5,
+          "naming_churn": 4,
+          "condition_agreement": 0.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 0.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 81.8,
+          "photo_view_agreement": 54.5
+        },
+        "counts": {
+          "items_a": 13,
+          "items_b": 14,
+          "aligned": 11,
+          "unpaired_removed": 2,
+          "unpaired_added": 3,
+          "membership_churn": 5,
+          "naming_churn": 4,
+          "changed": 11,
+          "unchanged": 0,
+          "reported_changes": 16,
+          "schedule_agreement_exact_both": 7,
+          "schedule_agreement_exact_either": 20,
+          "schedule_agreement_normalised_both": 7,
+          "schedule_agreement_normalised_either": 20,
+          "condition_scored": 11,
+          "condition_exact": 0,
+          "condition_within_one": 11,
+          "cleanliness_scored": 11,
+          "cleanliness_exact": 0,
+          "cleanliness_within_one": 11,
+          "quantity_scored": 11,
+          "quantity_agree": 9,
+          "photo_ids_agree": 6,
+          "grade_disagreements": 11,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-008-T1",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 35.1,
+          "schedule_agreement_normalised": 38.9,
+          "membership_churn": 16,
+          "naming_churn": 4,
+          "condition_agreement": 94.1,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 11.8,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 23.5
+        },
+        "counts": {
+          "items_a": 24,
+          "items_b": 26,
+          "aligned": 17,
+          "unpaired_removed": 7,
+          "unpaired_added": 9,
+          "membership_churn": 16,
+          "naming_churn": 4,
+          "changed": 1,
+          "unchanged": 16,
+          "reported_changes": 17,
+          "schedule_agreement_exact_both": 13,
+          "schedule_agreement_exact_either": 37,
+          "schedule_agreement_normalised_both": 14,
+          "schedule_agreement_normalised_either": 36,
+          "condition_scored": 17,
+          "condition_exact": 16,
+          "condition_within_one": 17,
+          "cleanliness_scored": 17,
+          "cleanliness_exact": 2,
+          "cleanliness_within_one": 17,
+          "quantity_scored": 17,
+          "quantity_agree": 17,
+          "photo_ids_agree": 4,
+          "grade_disagreements": 15,
+          "grade_disagreements_gated_out": 14
+        }
+      },
+      {
+        "delta_id": "P35-009-T1",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 37.9,
+          "schedule_agreement_normalised": 37.9,
+          "membership_churn": 16,
+          "naming_churn": 1,
+          "condition_agreement": 58.3,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 91.7,
+          "photo_view_agreement": 75.0
+        },
+        "counts": {
+          "items_a": 17,
+          "items_b": 23,
+          "aligned": 12,
+          "unpaired_removed": 5,
+          "unpaired_added": 11,
+          "membership_churn": 16,
+          "naming_churn": 1,
+          "changed": 5,
+          "unchanged": 7,
+          "reported_changes": 21,
+          "schedule_agreement_exact_both": 11,
+          "schedule_agreement_exact_either": 29,
+          "schedule_agreement_normalised_both": 11,
+          "schedule_agreement_normalised_either": 29,
+          "condition_scored": 12,
+          "condition_exact": 7,
+          "condition_within_one": 12,
+          "cleanliness_scored": 12,
+          "cleanliness_exact": 12,
+          "cleanliness_within_one": 12,
+          "quantity_scored": 12,
+          "quantity_agree": 11,
+          "photo_ids_agree": 9,
+          "grade_disagreements": 5,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-010-T1",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 29.4,
+          "schedule_agreement_normalised": 29.4,
+          "membership_churn": 24,
+          "naming_churn": 0,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 90.0,
+          "photo_view_agreement": 30.0
+        },
+        "counts": {
+          "items_a": 22,
+          "items_b": 22,
+          "aligned": 10,
+          "unpaired_removed": 12,
+          "unpaired_added": 12,
+          "membership_churn": 24,
+          "naming_churn": 0,
+          "changed": 1,
+          "unchanged": 9,
+          "reported_changes": 25,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 34,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 34,
+          "condition_scored": 10,
+          "condition_exact": 10,
+          "condition_within_one": 10,
+          "cleanliness_scored": 10,
+          "cleanliness_exact": 10,
+          "cleanliness_within_one": 10,
+          "quantity_scored": 10,
+          "quantity_agree": 9,
+          "photo_ids_agree": 3,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-011-T1",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 40.5,
+          "schedule_agreement_normalised": 40.5,
+          "membership_churn": 15,
+          "naming_churn": 5,
+          "condition_agreement": 95.5,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 95.5,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 90.9,
+          "photo_view_agreement": 36.4
+        },
+        "counts": {
+          "items_a": 31,
+          "items_b": 28,
+          "aligned": 22,
+          "unpaired_removed": 9,
+          "unpaired_added": 6,
+          "membership_churn": 15,
+          "naming_churn": 5,
+          "changed": 2,
+          "unchanged": 20,
+          "reported_changes": 17,
+          "schedule_agreement_exact_both": 17,
+          "schedule_agreement_exact_either": 42,
+          "schedule_agreement_normalised_both": 17,
+          "schedule_agreement_normalised_either": 42,
+          "condition_scored": 22,
+          "condition_exact": 21,
+          "condition_within_one": 22,
+          "cleanliness_scored": 22,
+          "cleanliness_exact": 21,
+          "cleanliness_within_one": 22,
+          "quantity_scored": 22,
+          "quantity_agree": 20,
+          "photo_ids_agree": 8,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-012-T1",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 39.1,
+          "schedule_agreement_normalised": 39.1,
+          "membership_churn": 8,
+          "naming_churn": 3,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 25.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 16,
+          "items_b": 16,
+          "aligned": 12,
+          "unpaired_removed": 4,
+          "unpaired_added": 4,
+          "membership_churn": 8,
+          "naming_churn": 3,
+          "changed": 0,
+          "unchanged": 12,
+          "reported_changes": 8,
+          "schedule_agreement_exact_both": 9,
+          "schedule_agreement_exact_either": 23,
+          "schedule_agreement_normalised_both": 9,
+          "schedule_agreement_normalised_either": 23,
+          "condition_scored": 12,
+          "condition_exact": 12,
+          "condition_within_one": 12,
+          "cleanliness_scored": 12,
+          "cleanliness_exact": 3,
+          "cleanliness_within_one": 12,
+          "quantity_scored": 12,
+          "quantity_agree": 12,
+          "photo_ids_agree": 12,
+          "grade_disagreements": 9,
+          "grade_disagreements_gated_out": 9
+        }
+      },
+      {
+        "delta_id": "P35-013-T1",
+        "room_type": "Entrance hall",
+        "metrics": {
+          "schedule_agreement_exact": 35.7,
+          "schedule_agreement_normalised": 40.7,
+          "membership_churn": 10,
+          "naming_churn": 4,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 78.6
+        },
+        "counts": {
+          "items_a": 18,
+          "items_b": 20,
+          "aligned": 14,
+          "unpaired_removed": 4,
+          "unpaired_added": 6,
+          "membership_churn": 10,
+          "naming_churn": 4,
+          "changed": 3,
+          "unchanged": 11,
+          "reported_changes": 13,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 28,
+          "schedule_agreement_normalised_both": 11,
+          "schedule_agreement_normalised_either": 27,
+          "condition_scored": 14,
+          "condition_exact": 14,
+          "condition_within_one": 14,
+          "cleanliness_scored": 14,
+          "cleanliness_exact": 14,
+          "cleanliness_within_one": 14,
+          "quantity_scored": 14,
+          "quantity_agree": 14,
+          "photo_ids_agree": 11,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-014-T1",
+        "room_type": "Dining room",
+        "metrics": {
+          "schedule_agreement_exact": 33.3,
+          "schedule_agreement_normalised": 33.3,
+          "membership_churn": 10,
+          "naming_churn": 1,
+          "condition_agreement": 71.4,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 85.7,
+          "cleanliness_agreement_within_one": 85.7,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 11,
+          "items_b": 13,
+          "aligned": 7,
+          "unpaired_removed": 4,
+          "unpaired_added": 6,
+          "membership_churn": 10,
+          "naming_churn": 1,
+          "changed": 2,
+          "unchanged": 5,
+          "reported_changes": 12,
+          "schedule_agreement_exact_both": 6,
+          "schedule_agreement_exact_either": 18,
+          "schedule_agreement_normalised_both": 6,
+          "schedule_agreement_normalised_either": 18,
+          "condition_scored": 7,
+          "condition_exact": 5,
+          "condition_within_one": 7,
+          "cleanliness_scored": 7,
+          "cleanliness_exact": 6,
+          "cleanliness_within_one": 6,
+          "quantity_scored": 7,
+          "quantity_agree": 7,
+          "photo_ids_agree": 7,
+          "grade_disagreements": 2,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-015-T1",
+        "room_type": "Dining room",
+        "metrics": {
+          "schedule_agreement_exact": 25.0,
+          "schedule_agreement_normalised": 35.1,
+          "membership_churn": 14,
+          "naming_churn": 8,
+          "condition_agreement": 94.4,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 94.4,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 83.3,
+          "photo_view_agreement": 66.7
+        },
+        "counts": {
+          "items_a": 25,
+          "items_b": 25,
+          "aligned": 18,
+          "unpaired_removed": 7,
+          "unpaired_added": 7,
+          "membership_churn": 14,
+          "naming_churn": 8,
+          "changed": 1,
+          "unchanged": 17,
+          "reported_changes": 15,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 40,
+          "schedule_agreement_normalised_both": 13,
+          "schedule_agreement_normalised_either": 37,
+          "condition_scored": 18,
+          "condition_exact": 17,
+          "condition_within_one": 18,
+          "cleanliness_scored": 18,
+          "cleanliness_exact": 17,
+          "cleanliness_within_one": 18,
+          "quantity_scored": 18,
+          "quantity_agree": 15,
+          "photo_ids_agree": 12,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-016-T1",
+        "room_type": "Entrance hall",
+        "metrics": {
+          "schedule_agreement_exact": 44.0,
+          "schedule_agreement_normalised": 44.0,
+          "membership_churn": 12,
+          "naming_churn": 1,
+          "condition_agreement": 8.3,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 8.3,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 50.0
+        },
+        "counts": {
+          "items_a": 17,
+          "items_b": 19,
+          "aligned": 12,
+          "unpaired_removed": 5,
+          "unpaired_added": 7,
+          "membership_churn": 12,
+          "naming_churn": 1,
+          "changed": 0,
+          "unchanged": 12,
+          "reported_changes": 12,
+          "schedule_agreement_exact_both": 11,
+          "schedule_agreement_exact_either": 25,
+          "schedule_agreement_normalised_both": 11,
+          "schedule_agreement_normalised_either": 25,
+          "condition_scored": 12,
+          "condition_exact": 1,
+          "condition_within_one": 12,
+          "cleanliness_scored": 12,
+          "cleanliness_exact": 1,
+          "cleanliness_within_one": 12,
+          "quantity_scored": 12,
+          "quantity_agree": 12,
+          "photo_ids_agree": 6,
+          "grade_disagreements": 11,
+          "grade_disagreements_gated_out": 11
+        }
+      },
+      {
+        "delta_id": "P35-017-T1",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 27.8,
+          "schedule_agreement_normalised": 27.8,
+          "membership_churn": 12,
+          "naming_churn": 7,
+          "condition_agreement": 11.8,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 58.8,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 88.2,
+          "photo_view_agreement": 94.1
+        },
+        "counts": {
+          "items_a": 23,
+          "items_b": 23,
+          "aligned": 17,
+          "unpaired_removed": 6,
+          "unpaired_added": 6,
+          "membership_churn": 12,
+          "naming_churn": 7,
+          "changed": 15,
+          "unchanged": 2,
+          "reported_changes": 27,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 36,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 36,
+          "condition_scored": 17,
+          "condition_exact": 2,
+          "condition_within_one": 17,
+          "cleanliness_scored": 17,
+          "cleanliness_exact": 10,
+          "cleanliness_within_one": 17,
+          "quantity_scored": 17,
+          "quantity_agree": 15,
+          "photo_ids_agree": 16,
+          "grade_disagreements": 15,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-018-T1",
+        "room_type": "Dining room",
+        "metrics": {
+          "schedule_agreement_exact": 37.5,
+          "schedule_agreement_normalised": 37.5,
+          "membership_churn": 4,
+          "naming_churn": 3,
+          "condition_agreement": 11.1,
+          "condition_agreement_within_one": 88.9,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 88.9,
+          "photo_view_agreement": 77.8
+        },
+        "counts": {
+          "items_a": 11,
+          "items_b": 11,
+          "aligned": 9,
+          "unpaired_removed": 2,
+          "unpaired_added": 2,
+          "membership_churn": 4,
+          "naming_churn": 3,
+          "changed": 8,
+          "unchanged": 1,
+          "reported_changes": 12,
+          "schedule_agreement_exact_both": 6,
+          "schedule_agreement_exact_either": 16,
+          "schedule_agreement_normalised_both": 6,
+          "schedule_agreement_normalised_either": 16,
+          "condition_scored": 9,
+          "condition_exact": 1,
+          "condition_within_one": 8,
+          "cleanliness_scored": 9,
+          "cleanliness_exact": 9,
+          "cleanliness_within_one": 9,
+          "quantity_scored": 9,
+          "quantity_agree": 8,
+          "photo_ids_agree": 7,
+          "grade_disagreements": 8,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-020-T1",
+        "room_type": "Kitchen",
+        "metrics": {
+          "schedule_agreement_exact": 38.2,
+          "schedule_agreement_normalised": 38.2,
+          "membership_churn": 15,
+          "naming_churn": 3,
+          "condition_agreement": 81.2,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 18.8
+        },
+        "counts": {
+          "items_a": 23,
+          "items_b": 24,
+          "aligned": 16,
+          "unpaired_removed": 7,
+          "unpaired_added": 8,
+          "membership_churn": 15,
+          "naming_churn": 3,
+          "changed": 3,
+          "unchanged": 13,
+          "reported_changes": 18,
+          "schedule_agreement_exact_both": 13,
+          "schedule_agreement_exact_either": 34,
+          "schedule_agreement_normalised_both": 13,
+          "schedule_agreement_normalised_either": 34,
+          "condition_scored": 16,
+          "condition_exact": 13,
+          "condition_within_one": 16,
+          "cleanliness_scored": 16,
+          "cleanliness_exact": 16,
+          "cleanliness_within_one": 16,
+          "quantity_scored": 16,
+          "quantity_agree": 16,
+          "photo_ids_agree": 3,
+          "grade_disagreements": 3,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-021-CF",
+        "room_type": "Bathroom",
+        "metrics": {
+          "schedule_agreement_exact": 50.0,
+          "schedule_agreement_normalised": 50.0,
+          "membership_churn": 9,
+          "naming_churn": 3,
+          "condition_agreement": 94.4,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 0.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 94.4
+        },
+        "counts": {
+          "items_a": 22,
+          "items_b": 23,
+          "aligned": 18,
+          "unpaired_removed": 4,
+          "unpaired_added": 5,
+          "membership_churn": 9,
+          "naming_churn": 3,
+          "changed": 1,
+          "unchanged": 17,
+          "reported_changes": 10,
+          "schedule_agreement_exact_both": 15,
+          "schedule_agreement_exact_either": 30,
+          "schedule_agreement_normalised_both": 15,
+          "schedule_agreement_normalised_either": 30,
+          "condition_scored": 18,
+          "condition_exact": 17,
+          "condition_within_one": 18,
+          "cleanliness_scored": 18,
+          "cleanliness_exact": 0,
+          "cleanliness_within_one": 18,
+          "quantity_scored": 18,
+          "quantity_agree": 18,
+          "photo_ids_agree": 17,
+          "grade_disagreements": 18,
+          "grade_disagreements_gated_out": 17
+        }
+      },
+      {
+        "delta_id": "P35-023-CF",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 52.6,
+          "schedule_agreement_normalised": 52.6,
+          "membership_churn": 7,
+          "naming_churn": 1,
+          "condition_agreement": 0.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 0.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 45.5
+        },
+        "counts": {
+          "items_a": 14,
+          "items_b": 15,
+          "aligned": 11,
+          "unpaired_removed": 3,
+          "unpaired_added": 4,
+          "membership_churn": 7,
+          "naming_churn": 1,
+          "changed": 11,
+          "unchanged": 0,
+          "reported_changes": 18,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 19,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 19,
+          "condition_scored": 11,
+          "condition_exact": 0,
+          "condition_within_one": 11,
+          "cleanliness_scored": 11,
+          "cleanliness_exact": 0,
+          "cleanliness_within_one": 11,
+          "quantity_scored": 11,
+          "quantity_agree": 11,
+          "photo_ids_agree": 5,
+          "grade_disagreements": 11,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-024-CF",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 26.3,
+          "schedule_agreement_normalised": 37.1,
+          "membership_churn": 8,
+          "naming_churn": 10,
+          "condition_agreement": 95.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 30.0
+        },
+        "counts": {
+          "items_a": 23,
+          "items_b": 25,
+          "aligned": 20,
+          "unpaired_removed": 3,
+          "unpaired_added": 5,
+          "membership_churn": 8,
+          "naming_churn": 10,
+          "changed": 1,
+          "unchanged": 19,
+          "reported_changes": 9,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 38,
+          "schedule_agreement_normalised_both": 13,
+          "schedule_agreement_normalised_either": 35,
+          "condition_scored": 20,
+          "condition_exact": 19,
+          "condition_within_one": 20,
+          "cleanliness_scored": 20,
+          "cleanliness_exact": 20,
+          "cleanliness_within_one": 20,
+          "quantity_scored": 20,
+          "quantity_agree": 20,
+          "photo_ids_agree": 6,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-025-CF",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 28.6,
+          "schedule_agreement_normalised": 28.6,
+          "membership_churn": 21,
+          "naming_churn": 2,
+          "condition_agreement": 91.7,
+          "condition_agreement_within_one": 91.7,
+          "cleanliness_agreement": 91.7,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 66.7
+        },
+        "counts": {
+          "items_a": 24,
+          "items_b": 21,
+          "aligned": 12,
+          "unpaired_removed": 12,
+          "unpaired_added": 9,
+          "membership_churn": 21,
+          "naming_churn": 2,
+          "changed": 1,
+          "unchanged": 11,
+          "reported_changes": 22,
+          "schedule_agreement_exact_both": 10,
+          "schedule_agreement_exact_either": 35,
+          "schedule_agreement_normalised_both": 10,
+          "schedule_agreement_normalised_either": 35,
+          "condition_scored": 12,
+          "condition_exact": 11,
+          "condition_within_one": 11,
+          "cleanliness_scored": 12,
+          "cleanliness_exact": 11,
+          "cleanliness_within_one": 12,
+          "quantity_scored": 12,
+          "quantity_agree": 12,
+          "photo_ids_agree": 8,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-026-CF",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 27.5,
+          "schedule_agreement_normalised": 30.8,
+          "membership_churn": 13,
+          "naming_churn": 8,
+          "condition_agreement": 94.7,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 100.0
+        },
+        "counts": {
+          "items_a": 25,
+          "items_b": 26,
+          "aligned": 19,
+          "unpaired_removed": 6,
+          "unpaired_added": 7,
+          "membership_churn": 13,
+          "naming_churn": 8,
+          "changed": 3,
+          "unchanged": 16,
+          "reported_changes": 16,
+          "schedule_agreement_exact_both": 11,
+          "schedule_agreement_exact_either": 40,
+          "schedule_agreement_normalised_both": 12,
+          "schedule_agreement_normalised_either": 39,
+          "condition_scored": 19,
+          "condition_exact": 18,
+          "condition_within_one": 19,
+          "cleanliness_scored": 19,
+          "cleanliness_exact": 19,
+          "cleanliness_within_one": 19,
+          "quantity_scored": 19,
+          "quantity_agree": 19,
+          "photo_ids_agree": 19,
+          "grade_disagreements": 1,
+          "grade_disagreements_gated_out": 1
+        }
+      },
+      {
+        "delta_id": "P35-027-CF",
+        "room_type": "Living room",
+        "metrics": {
+          "schedule_agreement_exact": 30.4,
+          "schedule_agreement_normalised": 30.4,
+          "membership_churn": 16,
+          "naming_churn": 0,
+          "condition_agreement": 100.0,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 100.0,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 100.0,
+          "photo_view_agreement": 71.4
+        },
+        "counts": {
+          "items_a": 15,
+          "items_b": 15,
+          "aligned": 7,
+          "unpaired_removed": 8,
+          "unpaired_added": 8,
+          "membership_churn": 16,
+          "naming_churn": 0,
+          "changed": 1,
+          "unchanged": 6,
+          "reported_changes": 17,
+          "schedule_agreement_exact_both": 7,
+          "schedule_agreement_exact_either": 23,
+          "schedule_agreement_normalised_both": 7,
+          "schedule_agreement_normalised_either": 23,
+          "condition_scored": 7,
+          "condition_exact": 7,
+          "condition_within_one": 7,
+          "cleanliness_scored": 7,
+          "cleanliness_exact": 7,
+          "cleanliness_within_one": 7,
+          "quantity_scored": 7,
+          "quantity_agree": 7,
+          "photo_ids_agree": 5,
+          "grade_disagreements": 0,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-028-CF",
+        "room_type": "Dining room",
+        "metrics": {
+          "schedule_agreement_exact": 53.3,
+          "schedule_agreement_normalised": 53.3,
+          "membership_churn": 1,
+          "naming_churn": 3,
+          "condition_agreement": 81.8,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 18.2,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 81.8,
+          "photo_view_agreement": 63.6
+        },
+        "counts": {
+          "items_a": 11,
+          "items_b": 12,
+          "aligned": 11,
+          "unpaired_removed": 0,
+          "unpaired_added": 1,
+          "membership_churn": 1,
+          "naming_churn": 3,
+          "changed": 3,
+          "unchanged": 8,
+          "reported_changes": 4,
+          "schedule_agreement_exact_both": 8,
+          "schedule_agreement_exact_either": 15,
+          "schedule_agreement_normalised_both": 8,
+          "schedule_agreement_normalised_either": 15,
+          "condition_scored": 11,
+          "condition_exact": 9,
+          "condition_within_one": 11,
+          "cleanliness_scored": 11,
+          "cleanliness_exact": 2,
+          "cleanliness_within_one": 11,
+          "quantity_scored": 11,
+          "quantity_agree": 9,
+          "photo_ids_agree": 7,
+          "grade_disagreements": 11,
+          "grade_disagreements_gated_out": 8
+        }
+      },
+      {
+        "delta_id": "P35-029-CF",
+        "room_type": "Dining room",
+        "metrics": {
+          "schedule_agreement_exact": 29.7,
+          "schedule_agreement_normalised": 33.3,
+          "membership_churn": 14,
+          "naming_churn": 6,
+          "condition_agreement": 88.2,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 94.1,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 94.1,
+          "photo_view_agreement": 47.1
+        },
+        "counts": {
+          "items_a": 22,
+          "items_b": 26,
+          "aligned": 17,
+          "unpaired_removed": 5,
+          "unpaired_added": 9,
+          "membership_churn": 14,
+          "naming_churn": 6,
+          "changed": 3,
+          "unchanged": 14,
+          "reported_changes": 17,
+          "schedule_agreement_exact_both": 11,
+          "schedule_agreement_exact_either": 37,
+          "schedule_agreement_normalised_both": 12,
+          "schedule_agreement_normalised_either": 36,
+          "condition_scored": 17,
+          "condition_exact": 15,
+          "condition_within_one": 17,
+          "cleanliness_scored": 17,
+          "cleanliness_exact": 16,
+          "cleanliness_within_one": 17,
+          "quantity_scored": 17,
+          "quantity_agree": 16,
+          "photo_ids_agree": 8,
+          "grade_disagreements": 2,
+          "grade_disagreements_gated_out": 0
+        }
+      },
+      {
+        "delta_id": "P35-030-CF",
+        "room_type": "Bedroom",
+        "metrics": {
+          "schedule_agreement_exact": 19.5,
+          "schedule_agreement_normalised": 22.5,
+          "membership_churn": 19,
+          "naming_churn": 7,
+          "condition_agreement": 73.3,
+          "condition_agreement_within_one": 100.0,
+          "cleanliness_agreement": 93.3,
+          "cleanliness_agreement_within_one": 100.0,
+          "quantity_agreement": 80.0,
+          "photo_view_agreement": 66.7
+        },
+        "counts": {
+          "items_a": 24,
+          "items_b": 25,
+          "aligned": 15,
+          "unpaired_removed": 9,
+          "unpaired_added": 10,
+          "membership_churn": 19,
+          "naming_churn": 7,
+          "changed": 4,
+          "unchanged": 11,
+          "reported_changes": 23,
+          "schedule_agreement_exact_both": 8,
+          "schedule_agreement_exact_either": 41,
+          "schedule_agreement_normalised_both": 9,
+          "schedule_agreement_normalised_either": 40,
+          "condition_scored": 15,
+          "condition_exact": 11,
+          "condition_within_one": 15,
+          "cleanliness_scored": 15,
+          "cleanliness_exact": 14,
+          "cleanliness_within_one": 15,
+          "quantity_scored": 15,
+          "quantity_agree": 12,
+          "photo_ids_agree": 10,
+          "grade_disagreements": 4,
+          "grade_disagreements_gated_out": 0
+        }
+      }
+    ]
+  },
+  "control_naming_churn_pairs": [
+    {
+      "a": "Walls (painted areas)",
+      "b": "Walls",
+      "match_score": 3,
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "a": "Door",
+      "b": "Internal door",
+      "match_score": 3,
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "a": "Bath panel",
+      "b": "Bath",
+      "match_score": 2,
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "a": "Pedestal wash basin",
+      "b": "Pedestal basin",
+      "match_score": 2,
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "a": "Liquid soap dispenser",
+      "b": "Soap dispenser",
+      "match_score": 2,
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "a": "Tabletop vanity mirror",
+      "b": "Vanity mirror",
+      "match_score": 2,
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "a": "Assorted toiletries and tumbler",
+      "b": "Toiletries",
+      "match_score": 2,
+      "delta_id": "P35-002-T1"
+    },
+    {
+      "a": "Double wall sockets",
+      "b": "Double sockets",
+      "match_score": 2,
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "a": "Sink and mixer tap",
+      "b": "Sink and tap",
+      "match_score": 2,
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "a": "Electric oven",
+      "b": "Oven",
+      "match_score": 2,
+      "delta_id": "P35-003-T1"
+    },
+    {
+      "a": "Sink and mixer tap",
+      "b": "Sink and Tap",
+      "match_score": 2,
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "a": "Electric kettle",
+      "b": "Kettle",
+      "match_score": 2,
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "a": "Decorative vases",
+      "b": "Small Decorative Vase",
+      "match_score": 1,
+      "delta_id": "P35-004-T1"
+    },
+    {
+      "a": "Internal door",
+      "b": "Door",
+      "match_score": 3,
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "a": "Wall-hung toilet",
+      "b": "Toilet",
+      "match_score": 2,
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "a": "Recessed spotlights",
+      "b": "Ceiling spotlights",
+      "match_score": 1,
+      "delta_id": "P35-005-T1"
+    },
+    {
+      "a": "Painted walls",
+      "b": "Walls",
+      "match_score": 3,
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "a": "Vinyl flooring",
+      "b": "Flooring",
+      "match_score": 3,
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "a": "Sloping ceiling",
+      "b": "Ceiling",
+      "match_score": 2,
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "a": "Panel door",
+      "b": "Door",
+      "match_score": 2,
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "a": "Pedestal wash hand basin",
+      "b": "Wash basin",
+      "match_score": 2,
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "a": "Wall mirror",
+      "b": "Mirror",
+      "match_score": 2,
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "a": "Close-coupled toilet",
+      "b": "Toilet",
+      "match_score": 2,
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "a": "Hand towel",
+      "b": "Towel",
+      "match_score": 2,
+      "delta_id": "P35-006-T1"
+    },
+    {
+      "a": "Sash Window",
+      "b": "Window",
+      "match_score": 2,
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "a": "Double Sockets",
+      "b": "Double power sockets",
+      "match_score": 2,
+      "delta_id": "P35-007-T1"
+    },
+    {
+      "a": "Entry door and handle",
+      "b": "Door",
+      "match_score": 2,
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "a": "Wall mirror",
+      "b": "Mirror",
+      "match_score": 2,
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "a": "Smart speaker",
+      "b": "Smart speaker / alarm clock",
+      "match_score": 2,
+      "delta_id": "P35-008-T1"
+    },
+    {
+      "a": "Bed Frame",
+      "b": "Single bed frame",
+      "match_score": 3,
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "a": "Bedroom Door",
+      "b": "Door",
+      "match_score": 2,
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "a": "Window Sill",
+      "b": "Window sill toys",
+      "match_score": 2,
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "a": "Wall Socket",
+      "b": "Double socket",
+      "match_score": 2,
+      "delta_id": "P35-009-T1"
+    },
+    {
+      "a": "Door frame",
+      "b": "Entrance door frame & door edge",
+      "match_score": 2,
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "a": "Patio doors and windows",
+      "b": "Patio doors",
+      "match_score": 2,
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "a": "Curtains and tracks",
+      "b": "Curtains",
+      "match_score": 2,
+      "delta_id": "P35-010-T1"
+    },
+    {
+      "a": "Window",
+      "b": "Bay window",
+      "match_score": 2,
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "a": "Fireplace",
+      "b": "Fireplace surround & mantelpiece",
+      "match_score": 2,
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "a": "Armchair",
+      "b": "Tartan armchair",
+      "match_score": 2,
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "a": "White bookcase",
+      "b": "Built-in Bookcase (White)",
+      "match_score": 2,
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "a": "Wooden sideboard cabinet",
+      "b": "Wooden sideboard (foreground right)",
+      "match_score": 2,
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "a": "Large patterned rug",
+      "b": "Area rug",
+      "match_score": 2,
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "a": "Table lamps",
+      "b": "Table lamp (gold base)",
+      "match_score": 1,
+      "delta_id": "P35-011-T1"
+    },
+    {
+      "a": "Mirror",
+      "b": "Wall mirror",
+      "match_score": 2,
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "a": "Doormat",
+      "b": "Coir doormat",
+      "match_score": 2,
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "a": "Light switch plate",
+      "b": "Light switch",
+      "match_score": 2,
+      "delta_id": "P35-013-T1"
+    },
+    {
+      "a": "Double patio doors",
+      "b": "Patio doors",
+      "match_score": 3,
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "a": "Door frames",
+      "b": "Internal door frame",
+      "match_score": 1,
+      "delta_id": "P35-014-T1"
+    },
+    {
+      "a": "Double power socket",
+      "b": "Power socket",
+      "match_score": 3,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Ceramic tableware (on table)",
+      "b": "Ceramic tableware",
+      "match_score": 3,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Threshold strip",
+      "b": "Carpet threshold strip",
+      "match_score": 3,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Flooring",
+      "b": "Carpeted flooring",
+      "match_score": 2,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Door (foreground left)",
+      "b": "Glass panelled door",
+      "match_score": 2,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Door frame (foreground left)",
+      "b": "Door frame and doorstop",
+      "match_score": 2,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Window",
+      "b": "Rear window",
+      "match_score": 2,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Curtains and curtain pole",
+      "b": "Curtain pole",
+      "match_score": 2,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Sideboard / display cabinet",
+      "b": "Display cabinet",
+      "match_score": 2,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Pedestal / plant stand",
+      "b": "Pedestal stand",
+      "match_score": 2,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Artificial flower arrangement in vase",
+      "b": "Artificial flower arrangement",
+      "match_score": 2,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Framed pictures",
+      "b": "Framed wall pictures",
+      "match_score": 2,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Glassware (on table)",
+      "b": "Crystal glassware",
+      "match_score": 2,
+      "delta_id": "P35-015-T1"
+    },
+    {
+      "a": "Entrance door",
+      "b": "Front door",
+      "match_score": 2,
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "a": "Entrance door frame",
+      "b": "Front door frame",
+      "match_score": 2,
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "a": "Wall mirror",
+      "b": "Mirror",
+      "match_score": 2,
+      "delta_id": "P35-016-T1"
+    },
+    {
+      "a": "Single bed frame",
+      "b": "Bed frame",
+      "match_score": 3,
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "a": "Bedroom door",
+      "b": "Door",
+      "match_score": 2,
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "a": "Window and sill",
+      "b": "Window",
+      "match_score": 2,
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "a": "Double electrical socket",
+      "b": "Double socket",
+      "match_score": 2,
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "a": "Blue shaggy rug",
+      "b": "Rug",
+      "match_score": 2,
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "a": "Desk",
+      "b": "Desk and shelving unit",
+      "match_score": 2,
+      "delta_id": "P35-017-T1"
+    },
+    {
+      "a": "Dining chairs",
+      "b": "Dining chairs x6",
+      "match_score": 3,
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "a": "Internal door",
+      "b": "Entrance door",
+      "match_score": 2,
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "a": "Pendant light",
+      "b": "Pendant light fixture",
+      "match_score": 2,
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "a": "Double power socket",
+      "b": "Double socket",
+      "match_score": 2,
+      "delta_id": "P35-018-T1"
+    },
+    {
+      "a": "Double power sockets",
+      "b": "Double sockets",
+      "match_score": 2,
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "a": "Kitchen sink and tap",
+      "b": "Sink and tap",
+      "match_score": 2,
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "a": "Curtains",
+      "b": "Floral curtains",
+      "match_score": 2,
+      "delta_id": "P35-020-T1"
+    },
+    {
+      "a": "Wash basin",
+      "b": "Wash hand basin",
+      "match_score": 2,
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "a": "Pedestal vanity mirror",
+      "b": "Vanity mirror",
+      "match_score": 2,
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "a": "Soap dispensers",
+      "b": "Soap dispenser",
+      "match_score": 1,
+      "delta_id": "P35-021-CF"
+    },
+    {
+      "a": "Entrance door",
+      "b": "Door",
+      "match_score": 2,
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "a": "Pendant light",
+      "b": "Pendant light fitting",
+      "match_score": 2,
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "a": "Double plug sockets",
+      "b": "Double sockets",
+      "match_score": 2,
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "a": "Door frames",
+      "b": "Door frame",
+      "match_score": 1,
+      "delta_id": "P35-023-CF"
+    },
+    {
+      "a": "Door",
+      "b": "Internal door",
+      "match_score": 3,
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "a": "Bedside tables x2",
+      "b": "Bedside tables",
+      "match_score": 3,
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "a": "Bedside lamps x2",
+      "b": "Bedside lamps",
+      "match_score": 3,
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "a": "Flooring",
+      "b": "Carpeted flooring",
+      "match_score": 2,
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "a": "Door frame",
+      "b": "Door frame and architrave",
+      "match_score": 2,
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "a": "Curtains",
+      "b": "Curtains and pole",
+      "match_score": 2,
+      "delta_id": "P35-024-CF"
+    },
+    {
+      "a": "Carpeted flooring",
+      "b": "Carpet flooring",
+      "match_score": 2,
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "a": "Armchair throw blanket",
+      "b": "Throw blanket",
+      "match_score": 2,
+      "delta_id": "P35-025-CF"
+    },
+    {
+      "a": "Small round stool",
+      "b": "Wooden stool",
+      "match_score": 3,
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "a": "Entry door and frame",
+      "b": "Door",
+      "match_score": 2,
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "a": "Pendant light",
+      "b": "Ceiling pendant light",
+      "match_score": 2,
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "a": "Fireplace and hearth",
+      "b": "Fireplace",
+      "match_score": 2,
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "a": "Patterned rug",
+      "b": "Area rug",
+      "match_score": 2,
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "a": "Dark wood side cabinet",
+      "b": "Sideboard cabinet",
+      "match_score": 2,
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "a": "Spindle back chair",
+      "b": "Wooden chair",
+      "match_score": 2,
+      "delta_id": "P35-026-CF"
+    },
+    {
+      "a": "Coffee tables (nest of 2)",
+      "b": "Nesting coffee tables",
+      "match_score": 2,
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "a": "Cardboard moving boxes",
+      "b": "Cardboard boxes",
+      "match_score": 2,
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "a": "Black bag",
+      "b": "Duffel bag",
+      "match_score": 2,
+      "delta_id": "P35-027-CF"
+    },
+    {
+      "a": "Pendant light fitting",
+      "b": "Pendant light",
+      "match_score": 2,
+      "delta_id": "P35-028-CF"
+    },
+    {
+      "a": "Door frame",
+      "b": "Door frames",
+      "match_score": 1,
+      "delta_id": "P35-028-CF"
+    },
+    {
+      "a": "Main glazed door",
+      "b": "Glazed door and frame",
+      "match_score": 2,
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "a": "Window",
+      "b": "Window and frame",
+      "match_score": 2,
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "a": "Ceiling light chandelier",
+      "b": "Chandelier",
+      "match_score": 2,
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "a": "Pedestal stand",
+      "b": "Pedestal stand with vase",
+      "match_score": 2,
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "a": "Curtains and pole",
+      "b": "Curtains and curtain pole",
+      "match_score": 2,
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "a": "Sheer net curtains",
+      "b": "Net curtains",
+      "match_score": 2,
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "a": "Crystal glassware",
+      "b": "Glassware",
+      "match_score": 2,
+      "delta_id": "P35-029-CF"
+    },
+    {
+      "a": "Single Bed Frame",
+      "b": "Single bed",
+      "match_score": 2,
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "a": "Bedding Set",
+      "b": "Bedding",
+      "match_score": 2,
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "a": "Shaggy Rug",
+      "b": "Rug",
+      "match_score": 2,
+      "delta_id": "P35-030-CF"
+    },
+    {
+      "a": "Books",
+      "b": "Children's books and games",
+      "match_score": 2,
+      "delta_id": "P35-030-CF"
+    }
+  ],
+  "control_unpaired": [
+    {
+      "delta_id": "P35-002-T1",
+      "removed": [
+        "Wall Tiling",
+        "Bathtub",
+        "Bath mixer tap",
+        "Basin mixer tap"
+      ],
+      "added": [
+        "Shower riser rail and head"
+      ]
+    },
+    {
+      "delta_id": "P35-003-T1",
+      "removed": [
+        "Ceiling light fixture",
+        "Cooker control unit",
+        "Kitchen worktops and upstands",
+        "Backsplash tiling",
+        "Extractor hood"
+      ],
+      "added": [
+        "Wall tiles",
+        "Door knob",
+        "Pendant light fitting",
+        "Cooker switch",
+        "Worktop",
+        "Cooker hood"
+      ]
+    },
+    {
+      "delta_id": "P35-004-T1",
+      "removed": [
+        "Kitchen cabinet plinths",
+        "Wall tiles",
+        "Pendant light fixture",
+        "Electrical sockets",
+        "Electric cooker",
+        "Washing-up rack",
+        "Trash bin",
+        "Paper towel holder"
+      ],
+      "added": [
+        "Door handle",
+        "Skirting boards and Kickboards",
+        "Ceiling Pendant Light",
+        "Double Power Sockets",
+        "Freestanding Cooker",
+        "Kitchen Roll Holder",
+        "Storage Jars",
+        "Dish Drainer and Washing Up Items",
+        "Waste Bin"
+      ]
+    },
+    {
+      "delta_id": "P35-005-T1",
+      "removed": [
+        "Shower mixer"
+      ],
+      "added": [
+        "Shower set"
+      ]
+    },
+    {
+      "delta_id": "P35-006-T1",
+      "removed": [
+        "Mosaic wall tiles",
+        "Recessed spotlight",
+        "Shower cubicle"
+      ],
+      "added": [
+        "Shower enclosure",
+        "Shower tray",
+        "Shower unit",
+        "Wash basin mixer tap"
+      ]
+    },
+    {
+      "delta_id": "P35-007-T1",
+      "removed": [
+        "Pendant Light Fitting",
+        "Curtain Batten"
+      ],
+      "added": [
+        "Cupboard door",
+        "Pendant light fixture",
+        "Curtain pole"
+      ]
+    },
+    {
+      "delta_id": "P35-008-T1",
+      "removed": [
+        "Window blinds",
+        "Double bed and headboard",
+        "Bedding and soft furnishings",
+        "Bedside lamps",
+        "Wicker storage chest",
+        "Lotion bottle",
+        "Coaster"
+      ],
+      "added": [
+        "Venetian blinds",
+        "Double bed frame",
+        "Bedding set",
+        "Table lamps",
+        "Wicker laundry basket"
+      ]
+    },
+    {
+      "delta_id": "P35-009-T1",
+      "removed": [
+        "Flooring (Carpet)",
+        "Desk Unit",
+        "Office Chair",
+        "Toy Storage Unit",
+        "Children's Toys"
+      ],
+      "added": [
+        "Ceiling",
+        "Carpet",
+        "Door frame",
+        "Curtain pole",
+        "Rug",
+        "Desk with shelving",
+        "Desk chair",
+        "Storage unit with bins",
+        "Plush toys",
+        "Toy car ramp",
+        "Plastic toy tub",
+        "Lego head storage box",
+        "Children's books",
+        "Robot toy"
+      ]
+    },
+    {
+      "delta_id": "P35-010-T1",
+      "removed": [
+        "Carpet",
+        "Entrance door",
+        "Scatter cushions and throw",
+        "Media devices",
+        "Router / media box",
+        "Framed picture",
+        "Potted houseplant",
+        "Coffee table accessories",
+        "Balcony potted plant"
+      ],
+      "added": [
+        "Flooring",
+        "Entrance doorway threshold strip",
+        "Sheer curtains",
+        "Sofa scatter cushions",
+        "Armchair scatter cushion",
+        "Armchair throw",
+        "Media receiver",
+        "Media player",
+        "Remote control",
+        "Framed artwork",
+        "Houseplant in pot",
+        "Glass bowl",
+        "Scented candle"
+      ]
+    },
+    {
+      "delta_id": "P35-011-T1",
+      "removed": [
+        "Wall socket",
+        "Three-seat sofa",
+        "Desk chair",
+        "Net curtains",
+        "Gold framed mirror",
+        "Framed wall art",
+        "Small metal buckets",
+        "TV box",
+        "Vintage storage case",
+        "Collection of books"
+      ],
+      "added": [
+        "Picture rail",
+        "Door knob",
+        "Light switch",
+        "Leather sofa",
+        "Fireplace insert",
+        "Fireplace hearth",
+        "Zinc cups",
+        "Wall mirror",
+        "Free-standing Bookcase (Wood)",
+        "Ceramic wash basin and pitcher set",
+        "Wooden dining chair",
+        "Framed picture (left wall)",
+        "Metal plant stand",
+        "Assorted books"
+      ]
+    },
+    {
+      "delta_id": "P35-012-T1",
+      "removed": [
+        "Venetian blinds",
+        "Radiator",
+        "Wall bracket",
+        "Nest of coffee tables",
+        "Media unit",
+        "Black travel bag"
+      ],
+      "added": [
+        "Window blinds",
+        "Convector heater",
+        "Nesting coffee tables",
+        "TV stand",
+        "Duffle bag"
+      ]
+    },
+    {
+      "delta_id": "P35-013-T1",
+      "removed": [
+        "Double patio doors",
+        "Hallway storage stand",
+        "Sideboard cabinet",
+        "Key hook rail",
+        "Assorted coats",
+        "Assorted shoes",
+        "Assorted bags"
+      ],
+      "added": [
+        "UPVC glazed exterior door and frame",
+        "Key rack",
+        "Hallway storage unit with coat rack and shoe bench",
+        "Small cupboard"
+      ]
+    },
+    {
+      "delta_id": "P35-014-T1",
+      "removed": [
+        "Pendant light fixture"
+      ],
+      "added": [
+        "Pendant light fitting"
+      ]
+    },
+    {
+      "delta_id": "P35-015-T1",
+      "removed": [
+        "Door frame and architrave (background left)",
+        "Dado rail",
+        "Ceiling light fixture",
+        "Glassware in display cabinet",
+        "Doorbell chime box"
+      ],
+      "added": [
+        "Picture and dado rails",
+        "Window sill",
+        "Light switch",
+        "Chandelier",
+        "Curtains (pair)",
+        "Net curtains",
+        "Display cabinet contents"
+      ]
+    },
+    {
+      "delta_id": "P35-016-T1",
+      "removed": [
+        "Rear door and sidelight",
+        "Shoe cupboard",
+        "Coat and shoe rack unit",
+        "Assorted coats and clothing",
+        "Assorted shoes and bags"
+      ],
+      "added": [
+        "Double-glazed back door and window unit",
+        "Sideboard cabinet",
+        "Hall tree unit",
+        "Thermostat"
+      ]
+    },
+    {
+      "delta_id": "P35-017-T1",
+      "removed": [
+        "Bedding set",
+        "Plush toys",
+        "Toy storage shelving unit",
+        "Wardrobe",
+        "Bookcase",
+        "Toy garage playset",
+        "Plastic storage tubs",
+        "Children's books",
+        "Assorted toys"
+      ],
+      "added": [
+        "Door frame",
+        "Mattress and bedding",
+        "Storage tower",
+        "Under-bed storage bins",
+        "Toy garage and ramp",
+        "Toy cars"
+      ]
+    },
+    {
+      "delta_id": "P35-020-T1",
+      "removed": [
+        "Pendant light",
+        "Kitchen cabinets",
+        "Countertops",
+        "Dish rack and kitchenware",
+        "Canisters",
+        "Paper towel holder"
+      ],
+      "added": [
+        "Window sill",
+        "Kitchen units",
+        "Base unit plinths",
+        "Worktops",
+        "Ceiling light fixture",
+        "Net curtain",
+        "Oven glove",
+        "Coffee maker",
+        "Washing up bowl and dish drainer",
+        "Kitchen roll holder",
+        "Storage jars",
+        "Soap dispensers"
+      ]
+    },
+    {
+      "delta_id": "P35-021-CF",
+      "removed": [
+        "Recessed ceiling downlight",
+        "Shaver socket",
+        "Bath side panel",
+        "Bath mixer tap",
+        "Shower unit",
+        "Wash basin mixer tap",
+        "Toiletry bottle"
+      ],
+      "added": [
+        "Recessed spotlights",
+        "Toiletries"
+      ]
+    },
+    {
+      "delta_id": "P35-023-CF",
+      "removed": [
+        "Carpet",
+        "Wardrobe door",
+        "Curtain track"
+      ],
+      "added": [
+        "Flooring",
+        "Curtain pole"
+      ]
+    },
+    {
+      "delta_id": "P35-024-CF",
+      "removed": [
+        "Bedding set",
+        "Wicker basket",
+        "Decorative plate",
+        "Digital clock",
+        "Clear glass bottle"
+      ],
+      "added": [
+        "Bedding and throw",
+        "Laundry basket",
+        "Decorative dish",
+        "Reed diffuser"
+      ]
+    },
+    {
+      "delta_id": "P35-025-CF",
+      "removed": [
+        "Doorway frame and architrave",
+        "Patio doors and side windows",
+        "Curtain track",
+        "Sofa cushions",
+        "Armchair cushion",
+        "Media boxes",
+        "Photo frames",
+        "Coffee table ornaments"
+      ],
+      "added": [
+        "Entrance door frame and door handle",
+        "Threshold strip",
+        "Patio doors and sidelights",
+        "Media devices and speaker",
+        "Scatter cushions",
+        "Framed photographs",
+        "Coffee table decorative items"
+      ]
+    },
+    {
+      "delta_id": "P35-026-CF",
+      "removed": [
+        "TV media console",
+        "Tall bookshelves",
+        "Framed wall art",
+        "Metal plant stand",
+        "Dark wood sideboard"
+      ],
+      "added": [
+        "Door frame and Architrave",
+        "Power sockets",
+        "TV stand",
+        "Recessed bookcase",
+        "Freestanding bookcase",
+        "Sofa cushions",
+        "Media player",
+        "Framed picture (above sofa)",
+        "Coal bucket",
+        "Small metal pots",
+        "Assorted books"
+      ]
+    },
+    {
+      "delta_id": "P35-027-CF",
+      "removed": [],
+      "added": [
+        "Door frame"
+      ]
+    },
+    {
+      "delta_id": "P35-028-CF",
+      "removed": [
+        "Double power socket"
+      ],
+      "added": [
+        "Double wall socket"
+      ]
+    },
+    {
+      "delta_id": "P35-029-CF",
+      "removed": [
+        "Doorway frame",
+        "Wall socket",
+        "Wall-mounted box",
+        "Glazed display cabinet",
+        "Framed wall pictures",
+        "Vase and artificial flowers"
+      ],
+      "added": [
+        "Dresser cabinet",
+        "Double power socket",
+        "High-level wall switch",
+        "Framed wall art",
+        "Silverware"
+      ]
+    },
+    {
+      "delta_id": "P35-030-CF",
+      "removed": [
+        "Carpet",
+        "Office Desk",
+        "Office Chair",
+        "Storage Drawer Unit",
+        "Door Handle",
+        "Plush Toys",
+        "Toy Garage / Car Ramp",
+        "Plastic Storage Containers",
+        "Alarm Clock",
+        "Window Sill Toy Cars"
+      ],
+      "added": [
+        "Flooring",
+        "Desk and Shelving Unit",
+        "Desk chair",
+        "Wardrobe",
+        "Toy storage unit",
+        "Toy garage playset",
+        "Plastic storage boxes",
+        "Soft toys",
+        "Assorted toy cars"
+      ]
+    }
+  ],
+  "coverage_missed_by_both": [
+    "French doors",
+    "WC",
+    "base unit",
+    "beige carpet",
+    "bookshelves",
+    "carpet",
+    "chair back",
+    "chair upholstery",
+    "charcoal sofa",
+    "coat bench",
+    "cooker side",
+    "cream carpet",
+    "drawer front",
+    "fabric seam",
+    "four chairs",
+    "grey carpet",
+    "grey sofa",
+    "grey wall tiles",
+    "grout",
+    "headboard",
+    "laminate floor",
+    "laminate worktop",
+    "leather sofa",
+    "lower wall tiles",
+    "metal handle",
+    "mixer tap",
+    "oak tabletop",
+    "patterned vinyl floor",
+    "rug edge",
+    "silicone joint",
+    "silicone seal",
+    "sofa arm",
+    "stone wall tiles",
+    "table edge",
+    "table leg",
+    "tiled floor",
+    "timber floor",
+    "timber floorboards",
+    "vanity drawer",
+    "vinyl floor",
+    "walk-in shower",
+    "white kitchen units",
+    "wood-effect units"
+  ],
+  "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00, docs/35)."
+}

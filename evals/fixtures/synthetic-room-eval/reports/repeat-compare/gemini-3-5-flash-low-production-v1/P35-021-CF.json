@@ -1,0 +1,308 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-021-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-021-CF",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Bathroom",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "BAT-011",
+          "checkout_id": "BAT-008",
+          "name": "Bath",
+          "checkin_name": "Bath",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": -1,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "scratch low level left hand side to white bath side panel"
+          ],
+          "new_defects": [
+            "scratch low level left hand side to white bath side panel"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-002-A-wide",
+            "RP-002-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-002-A-wide",
+            "RP-002-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "BAT-001",
+          "checkout_id": "BAT-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "BAT-002",
+          "checkout_id": "BAT-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "BAT-003",
+          "checkout_id": "BAT-003",
+          "name": "Flooring"
+        },
+        {
+          "checkin_id": "BAT-004",
+          "checkout_id": "BAT-004",
+          "name": "Door"
+        },
+        {
+          "checkin_id": "BAT-005",
+          "checkout_id": "BAT-005",
+          "name": "Door frame"
+        },
+        {
+          "checkin_id": "BAT-006",
+          "checkout_id": "BAT-006",
+          "name": "Window"
+        },
+        {
+          "checkin_id": "BAT-007",
+          "checkout_id": "BAT-007",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "BAT-010",
+          "checkout_id": "BAT-012",
+          "name": "Heated towel rail"
+        },
+        {
+          "checkin_id": "BAT-013",
+          "checkout_id": "BAT-009",
+          "name": "Shower screen"
+        },
+        {
+          "checkin_id": "BAT-018",
+          "checkout_id": "BAT-011",
+          "name": "Toilet"
+        },
+        {
+          "checkin_id": "BAT-020",
+          "checkout_id": "BAT-015",
+          "name": "Toilet brush and holder"
+        },
+        {
+          "checkin_id": "BAT-016",
+          "checkout_id": "BAT-010",
+          "name": "Wash hand basin"
+        },
+        {
+          "checkin_id": "BAT-021",
+          "checkout_id": "BAT-016",
+          "name": "Vanity mirror"
+        },
+        {
+          "checkin_id": "BAT-019",
+          "checkout_id": "BAT-014",
+          "name": "Soap dispenser"
+        }
+      ],
+      "removed": [
+        {
+          "id": "BAT-008",
+          "name": "Recessed ceiling downlight",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-002-A-wide"
+          ]
+        },
+        {
+          "id": "BAT-009",
+          "name": "Shaver socket",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-002-A-wide"
+          ]
+        },
+        {
+          "id": "BAT-012",
+          "name": "Bath side panel",
+          "condition": "fair",
+          "defects": [
+            "fine scratch low level left hand side exterior"
+          ],
+          "photo_ids": [
+            "RP-002-A-wide",
+            "RP-002-D-condition"
+          ]
+        },
+        {
+          "id": "BAT-014",
+          "name": "Bath mixer tap",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-002-A-wide"
+          ]
+        },
+        {
+          "id": "BAT-015",
+          "name": "Shower unit",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-002-A-wide"
+          ]
+        },
+        {
+          "id": "BAT-017",
+          "name": "Wash basin mixer tap",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-002-A-wide"
+          ]
+        },
+        {
+          "id": "BAT-022",
+          "name": "Toiletry bottle",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-002-A-wide"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "BAT-013",
+          "name": "Recessed spotlights",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-002-A-wide"
+          ]
+        },
+        {
+          "id": "BAT-017",
+          "name": "Toiletries",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-002-A-wide"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 15,
+    "changed": 1,
+    "unchanged": 14,
+    "removed": 7,
+    "added": 2,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-021-CF",
+    "delta_class": "counterfactual",
+    "parent_scenario_id": "RP-002",
+    "parent_split": "development",
+    "room_type": "Bathroom",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "05b1be22394bbfa97b9b47c16876ed63726f9ead0aaea175039d3ae4af8067b0",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-021-CF.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-002-A-wide.png",
+          "images/openai/gpt-image-2/RP-002-D-condition.png"
+        ],
+        "frame_sha256": [
+          "a6fd3bfa8a25a63d8401b949fbe7d3253e15b7f7b6804333abf46d5c53930f32",
+          "8983a790ffb00ae70a8b61abdb1634ca5120264bd4087aa9a50f89c7eedd5964"
+        ],
+        "item_count": 23
+      },
+      "R2": {
+        "run_id": "P35-021-CF.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-002-A-wide.png",
+          "images/openai/gpt-image-2/RP-002-D-condition.png"
+        ],
+        "frame_sha256": [
+          "a6fd3bfa8a25a63d8401b949fbe7d3253e15b7f7b6804333abf46d5c53930f32",
+          "8983a790ffb00ae70a8b61abdb1634ca5120264bd4087aa9a50f89c7eedd5964"
+        ],
+        "item_count": 18
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}

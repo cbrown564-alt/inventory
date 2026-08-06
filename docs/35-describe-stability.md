@@ -1,6 +1,7 @@
 # 35 — Describe stability: the same room, described twice
 
-*5 Aug 2026. Scoped off the Phase 3.5 delta scoring (docs/31). Not started.*
+*5 Aug 2026. Scoped off the Phase 3.5 delta scoring (docs/31). Phase 0 measured
+6 Aug 2026: **the floor is 91.3% of the 368**. Gate passed; phases proceed.*
 
 ## Decision
 
@@ -108,6 +109,98 @@ schema's `quantity` and `photo_ids` fields compared too**, because a schedule
 that is stable in names and unstable in counts is a different defect with a
 different fix.
 
+## Phase 0 result, 6 Aug 2026 — the floor is nearly the whole number
+
+Instrument 0 ran on all 27 accepted pairs: the cached T0 describe as one run
+and one more call against byte-identical frames, hashes checked equal on both
+sides (`reports/phase0-describe-stability-2026-08-06.json`).
+
+**Describing the same photographs twice reported 336 changes. The delta pairs'
+false changes number 368. The floor is 91.3% of them.**
+
+The gate above asked for the fraction before any fix is proposed. That is the
+fraction, and it is not close to the boundary. But the fraction is only the
+headline; the decomposition is the part that decides what to build.
+
+| | Repeat-describe control | Delta pairs |
+|---|---:|---:|
+| Schedule agreement, exact names | 34.6% | 32.4% |
+| Schedule agreement, normalised | 37.3% | 35.2% |
+| Membership churn per room | 10.7 | 12.0 |
+| Naming churn per room | 4.26 | 4.22 |
+| Condition agreement | 81.7% | 74.3% |
+| Cleanliness agreement | 80.7% | 70.1% |
+| Quantity agreement | 96.1% | 94.4% |
+| Coverage against scene specs | 58.5% / 57.7% | 58.5% / 56.4% |
+| Coverage stability | 77.8% | 77.0% |
+
+**The two columns are almost the same column.** That is the finding, and it is
+stronger than the 91.3%. Two describes of one photograph disagree about the
+room's contents very nearly as much as two describes of *different
+photographs of a changed room*. Going from "the same frames" to "a different
+render, months later, with five enumerated changes in it" adds 1.3 unpaired
+items per room and takes naming churn slightly *down*. The delta signal this
+dataset was built to measure is inside the noise, not above it.
+
+Two things this control moves from suspicion to evidence:
+
+**Synonymy is the mechanism, and it is not the aligner's fault.** The 115
+renames the control's aligner still caught are `Electric oven`/`Oven`,
+`Pedestal wash basin`/`Pedestal basin`, `Vinyl flooring`/`Flooring`,
+`Walls (painted areas)`/`Walls`. The 289 it did not catch are the same
+phenomenon past the point `match_score` can reach — `Extractor hood`/`Cooker
+hood`, `Trash bin`/`Waste bin`, `Paper towel holder`/`Kitchen Roll Holder`,
+`Backsplash tiling`/`Wall tiles`, `Washing-up rack`/`Dish Drainer and Washing
+Up Items`. Every one of those pairs is one object, in one photograph, named
+twice. docs/08's no-synonyms premise was falsified on the delta pairs; this
+removes the last defence that some of it was real change.
+
+**Coverage is a flat gap, not an instability.** 81 of 234
+`intended_visible_items` were named by *neither* run — carpets, WCs, base
+units, French doors, sofas. Coverage stability is 77.8%, so the runs mostly
+agree about what they omit. That third of the problem is not noise and no
+sampling control will touch it; it is arms C and D.
+
+### What the headline number leaves out
+
+336 counts only what a reader is shown, and `needs_classification` shows an
+item only when it got **worse** or gained a defect. 116 of 389 aligned items
+were graded differently by the two runs and **76 of those were never
+reported**: a second run that grades the room *better* passes through compare
+in silence. P35-002 does this wholesale — 14 of 17 aligned items move
+`good`→`excellent` and `cleaned to domestic standard`→`professionally
+cleaned`, and compare reports one change.
+
+So the floor is itself a floor. This is not an argument for widening the gate
+— an improvement is rarely what a deposit turns on, and reporting every one
+would bury the report. It is a reason the compare surface cannot be used to
+measure describe stability, which is why the metric list above does not
+depend on it.
+
+### Gate decision
+
+**Proceed.** The floor is a substantial fraction of the 368 by any reading, so
+the stopping rule "the floor turns out to be small" does not fire and the
+problem is confirmed as description instability rather than perceptual
+difference between two renders.
+
+Two honest limits on that decision:
+
+- 336 against 368 is a comparison of *magnitudes*, not an attribution. It does
+  not establish that the control's 336 are among the delta pairs' 368. Phase 1
+  is what establishes that, and it is now better motivated, not skippable.
+- The near-identity of the two columns is the load-bearing evidence, and it
+  rests on 27 pairs from one generator. It is directional. Real transfer
+  (Phase 5) is unchanged and still binding.
+
+One consequence for the running order. **Arm E stops being a formality.** If
+two calls with identical inputs disagree this much, sampling is a first-order
+suspect rather than a cheap thing to rule out, and the roadmap has been
+ordering arms A–D on the assumption that it is not. Antigravity still does not
+expose temperature, so it is still not testable on this path — that now needs
+recording as a *blocking* gap in the evidence rather than a checkbox, because
+every other arm here is being designed against a cause nobody has excluded.
+
 ## Metrics
 
 Reported per run-pair and pooled, on the repeat-describe control and on the
@@ -144,6 +237,13 @@ aligner to be cleverer — `Towel radiator` and `Heated towel rail` both resolve
 to one entry. This is the intervention the aligner fix could not reach, and it
 is the one docs/08 has been implicitly deferring by treating synonymy as an
 alignment problem.
+
+Phase 0 promoted this from the most likely explanation to the measured one.
+The synonym pairs listed above are drawn from the *control*, where both runs
+read the same photograph, so there is no longer any reading in which
+`Extractor hood` and `Cooker hood` are two objects. It also sized the arm: 115
+renames the aligner catches and 289 unpaired entries it does not, across 27
+rooms.
 
 Risks: a lexicon is a maintenance surface, and an aggressive mapping merges
 genuinely distinct items. Guard with the delta gold — `item_added` and
@@ -196,19 +296,28 @@ enumerates. Attacks coverage and membership churn together, and the detector is
 deterministic on identical pixels — which is the property the whole document is
 short of.
 
-### E. Sampling controls (cheapest to test, possibly already exhausted)
+### E. Sampling controls (promoted 6 Aug 2026 — blocked, and that now matters)
 
 Antigravity does not expose temperature (`run_eval.py` records it as "not
-exposed by Antigravity CLI"), so this arm may be untestable on the current
-path and would need the product's own metered backend to explore — which the
-synthetic dataset's terms forbid. Record as blocked rather than untried if so,
-and do not quietly skip it: if the instability is largely sampling, every other
-arm here is over-engineering.
+exposed by Antigravity CLI"), so this arm is untestable on the current path and
+would need the product's own metered backend to explore — which the synthetic
+dataset's terms forbid. **Recorded as blocked, not untried.**
+
+Phase 0 changed this arm's standing. Two calls with byte-identical inputs
+disagreeing about a third of the schedule is exactly the signature sampling
+would produce, and nothing in the evidence excludes it. The original wording —
+"possibly already exhausted" — assumed the instability was mostly perceptual;
+it is not. So the caveat at the end of this entry is now the live risk rather
+than a hedge: **if the instability is largely sampling, every other arm here is
+over-engineering.** Arms A–D proceed because they are what this path can
+measure, not because sampling has been ruled out, and that distinction belongs
+in any report of their results.
 
 ## Phases
 
-- **Phase 0 — the floor.** Instrument 0 above. Exit: a measured
-  non-determinism floor, and the gate decision recorded either way.
+- **Phase 0 — the floor.** ✅ Done 6 Aug 2026. Floor 336 reported changes,
+  91.3% of the 368; the control and the delta pairs decompose almost
+  identically. Gate passed, decision recorded above.
 - **Phase 1 — attribute the 368.** With the floor known, split the delta-pair
   false changes into non-determinism, legitimate framing difference, and
   generator drift. The Amendment C reviews already name incidental drift per
@@ -260,6 +369,18 @@ arm here is over-engineering.
   value is comparative — re-running an arm against the same 27 pairs and the
   same cached gold — and that value dies if the pairs are regenerated or the
   gold is edited to suit a result.
+
+## Scripts
+
+| Script | Job |
+|---|---|
+| `evals/synthetic/run_repeat_describe.py` | Instrument 0: reuse the cached T0 describe and call it once more on byte-identical frames; refuses any pair whose two runs differ in instruction, prompt, schema, model or frame hashes |
+| `evals/synthetic/score_stability.py` | The metrics above, on both instruments, pooled from summed counts and reported side by side; states the gate fraction and decides nothing |
+| `tests/test_describe_stability.py` | The control's refusals, and each metric against a single named perturbation |
+
+Both read only review-accepted pairs, and the runner goes through
+`run_delta_eval.describe_side` rather than a copy of it — a control whose call
+path had drifted from the runs it is the floor for would measure the drift.
 
 ## Related
 

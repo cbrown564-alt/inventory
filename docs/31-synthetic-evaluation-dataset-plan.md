@@ -1645,6 +1645,8 @@ claim.
 | `evals/synthetic/run_delta_eval.py` | Describe both timepoints of an accepted pair and align them with `compare_inventories`; delta-blind, and refuses a frame that no longer matches the ledger |
 | `evals/synthetic/score_delta.py` | Delta recall, false-change rate, unchanged stability, severity direction |
 | `evals/synthetic/aggregate_delta_scores.py` | Pool per-pair scores from summed counts; decompose false changes and attribute missed condition changes |
+| `evals/synthetic/run_repeat_describe.py` | docs/35 Instrument 0: describe an already-described frame set a second time, so every reported change is non-determinism; refuses two runs that were not the same call |
+| `evals/synthetic/score_stability.py` | docs/35 describe-stability metrics on the repeat control and the delta pairs, reported side by side and never averaged |
 | `evals/synthetic/degrade.py` | Deterministic degradation ladder over accepted images; labels inherited unchanged |
 | `evals/synthetic/review_pass_b.py` | Pinned, scriptable Pass B for validation and sealed records: hashed review prompt, cached raw output, reviewer model id and version |
 | `evals/synthetic/run_eval.py` | Run named off-the-shelf VLM configurations and cache raw output |

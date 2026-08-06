@@ -1,0 +1,295 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-003-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-003-T1",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Kitchen",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [],
+      "unchanged": [
+        {
+          "checkin_id": "KIT-001",
+          "checkout_id": "KIT-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "KIT-002",
+          "checkout_id": "KIT-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "KIT-003",
+          "checkout_id": "KIT-004",
+          "name": "Flooring"
+        },
+        {
+          "checkin_id": "KIT-004",
+          "checkout_id": "KIT-005",
+          "name": "Door"
+        },
+        {
+          "checkin_id": "KIT-005",
+          "checkout_id": "KIT-009",
+          "name": "Window"
+        },
+        {
+          "checkin_id": "KIT-006",
+          "checkout_id": "KIT-008",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "KIT-007",
+          "checkout_id": "KIT-007",
+          "name": "Door frame"
+        },
+        {
+          "checkin_id": "KIT-011",
+          "checkout_id": "KIT-013",
+          "name": "Kitchen base cabinets"
+        },
+        {
+          "checkin_id": "KIT-012",
+          "checkout_id": "KIT-014",
+          "name": "Kitchen wall cabinets"
+        },
+        {
+          "checkin_id": "KIT-016",
+          "checkout_id": "KIT-017",
+          "name": "Electric hob"
+        },
+        {
+          "checkin_id": "KIT-009",
+          "checkout_id": "KIT-011",
+          "name": "Double sockets"
+        },
+        {
+          "checkin_id": "KIT-015",
+          "checkout_id": "KIT-016",
+          "name": "Sink and tap"
+        },
+        {
+          "checkin_id": "KIT-017",
+          "checkout_id": "KIT-018",
+          "name": "Oven"
+        }
+      ],
+      "removed": [
+        {
+          "id": "KIT-008",
+          "name": "Ceiling light fixture",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-010",
+          "name": "Cooker control unit",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-013",
+          "name": "Kitchen worktops and upstands",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-014",
+          "name": "Backsplash tiling",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-018",
+          "name": "Extractor hood",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "KIT-003",
+          "name": "Wall tiles",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-006",
+          "name": "Door knob",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-010",
+          "name": "Pendant light fitting",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-012",
+          "name": "Cooker switch",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-015",
+          "name": "Worktop",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        },
+        {
+          "id": "KIT-019",
+          "name": "Cooker hood",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-003-A-wide",
+            "RP-003-D-condition"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 13,
+    "changed": 0,
+    "unchanged": 13,
+    "removed": 5,
+    "added": 6,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-003-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-003",
+    "parent_split": "development",
+    "room_type": "Kitchen",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "a6f6d500c060b680d1ab91e1264689b15d20b93b87d1e878ac9b26fcabb0f075",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-003-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-003-A-wide.png",
+          "images/openai/gpt-image-2/RP-003-D-condition.png"
+        ],
+        "frame_sha256": [
+          "69c070dee258617fefaed0f9c6b13bd9119a25bfbad66f9bd1fa946accd06dd6",
+          "c854b78cf3942e88d7e253a201c9f071006c0425388bace3b5df57b520c85ac2"
+        ],
+        "item_count": 18
+      },
+      "R2": {
+        "run_id": "P35-003-T1.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-003-A-wide.png",
+          "images/openai/gpt-image-2/RP-003-D-condition.png"
+        ],
+        "frame_sha256": [
+          "69c070dee258617fefaed0f9c6b13bd9119a25bfbad66f9bd1fa946accd06dd6",
+          "c854b78cf3942e88d7e253a201c9f071006c0425388bace3b5df57b520c85ac2"
+        ],
+        "item_count": 19
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}

@@ -1,0 +1,265 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-027-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-027-CF",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Living room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "LIV-002",
+          "checkout_id": "LIV-002",
+          "name": "Walls",
+          "checkin_name": "Walls",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": 0,
+          "checkin_defects": [
+            "Small dark hook eye level right hand side to wall above television"
+          ],
+          "checkout_defects": [
+            "Small black fixture/mounting point high level to right hand side wall above television"
+          ],
+          "new_defects": [
+            "Small black fixture/mounting point high level to right hand side wall above television"
+          ],
+          "resolved_defects": [
+            "Small dark hook eye level right hand side to wall above television"
+          ],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-013-A-wide",
+            "RP-013-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-013-A-wide",
+            "RP-013-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "LIV-014",
+          "checkout_id": "LIV-014",
+          "name": "Cardboard boxes",
+          "checkin_name": "Cardboard moving boxes",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [
+            "Light scuffing and tape residue to exterior of cardboard boxes"
+          ],
+          "new_defects": [
+            "Light scuffing and tape residue to exterior of cardboard boxes"
+          ],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-013-A-wide",
+            "RP-013-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-013-A-wide",
+            "RP-013-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 2
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "LIV-001",
+          "checkout_id": "LIV-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "LIV-003",
+          "checkout_id": "LIV-003",
+          "name": "Flooring"
+        },
+        {
+          "checkin_id": "LIV-004",
+          "checkout_id": "LIV-006",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "LIV-005",
+          "checkout_id": "LIV-004",
+          "name": "Window"
+        },
+        {
+          "checkin_id": "LIV-006",
+          "checkout_id": "LIV-007",
+          "name": "Window blind"
+        },
+        {
+          "checkin_id": "LIV-007",
+          "checkout_id": "LIV-009",
+          "name": "Radiator"
+        },
+        {
+          "checkin_id": "LIV-008",
+          "checkout_id": "LIV-008",
+          "name": "Light switch"
+        },
+        {
+          "checkin_id": "LIV-009",
+          "checkout_id": "LIV-010",
+          "name": "Two-seat sofa"
+        },
+        {
+          "checkin_id": "LIV-011",
+          "checkout_id": "LIV-013",
+          "name": "Television"
+        },
+        {
+          "checkin_id": "LIV-012",
+          "checkout_id": "LIV-012",
+          "name": "TV stand"
+        },
+        {
+          "checkin_id": "LIV-013",
+          "checkout_id": "LIV-016",
+          "name": "Rug"
+        },
+        {
+          "checkin_id": "LIV-010",
+          "checkout_id": "LIV-011",
+          "name": "Nesting coffee tables"
+        },
+        {
+          "checkin_id": "LIV-015",
+          "checkout_id": "LIV-015",
+          "name": "Duffel bag"
+        }
+      ],
+      "removed": [],
+      "added": [
+        {
+          "id": "LIV-005",
+          "name": "Door frame",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-013-A-wide",
+            "RP-013-D-condition"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 15,
+    "changed": 2,
+    "unchanged": 13,
+    "removed": 0,
+    "added": 1,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-027-CF",
+    "delta_class": "counterfactual",
+    "parent_scenario_id": "RP-013",
+    "parent_split": "development",
+    "room_type": "Living room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "bea7d302f8c769d5d7c542f866ce373b2a33dcb2015775b2a5697e5a94a9a22f",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-027-CF.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-013-A-wide.png",
+          "images/openai/gpt-image-2/RP-013-D-condition.png"
+        ],
+        "frame_sha256": [
+          "b2e19525eec763506c9d8b5dd045c27e9c17724e11222b17b23a88ff4db22572",
+          "2684aa517bdcd8634b5b93f2bfa1ab63cba2a71c8352df7b10ca5329edba9ab0"
+        ],
+        "item_count": 15
+      },
+      "R2": {
+        "run_id": "P35-027-CF.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-013-A-wide.png",
+          "images/openai/gpt-image-2/RP-013-D-condition.png"
+        ],
+        "frame_sha256": [
+          "b2e19525eec763506c9d8b5dd045c27e9c17724e11222b17b23a88ff4db22572",
+          "2684aa517bdcd8634b5b93f2bfa1ab63cba2a71c8352df7b10ca5329edba9ab0"
+        ],
+        "item_count": 16
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}

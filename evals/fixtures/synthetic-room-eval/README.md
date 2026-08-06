@@ -186,6 +186,27 @@ floor.
 — from the cached describe records and reports them side by side, never
 averaged. Their difference is the finding.
 
+### Measured result, 6 Aug 2026
+
+**Describing the same photographs twice reported 336 changes — 91.3% of the
+delta pairs' 368 false changes** (`reports/phase0-describe-stability-2026-08-06.json`).
+
+The two instruments decompose almost identically: schedule agreement 34.6%
+(control) against 32.4% (delta), membership churn 10.7 per room against 12.0,
+naming churn 4.26 against 4.22. Two describes of one photograph disagree about
+the room nearly as much as two describes of different photographs of a changed
+room.
+
+The mechanism is synonymy, now visible where no real change is possible:
+`Extractor hood`/`Cooker hood`, `Trash bin`/`Waste bin`, `Paper towel
+holder`/`Kitchen Roll Holder`, `Electric oven`/`Oven`. Separately, 81 of 234
+`intended_visible_items` were named by neither run — a flat coverage gap, not
+an instability.
+
+The 336 understates it. The tenancy gate reports an item only when it got
+worse, so of 116 aligned items graded differently by the two runs, 76 were
+never shown at all.
+
 ### What rejects a delta pair (docs/31 Amendment C, 5 Aug 2026)
 
 A pair fails when the room stops being the same room: geometry, walls, floors,

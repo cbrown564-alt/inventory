@@ -1,0 +1,366 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-015-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-015-T1",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Dining room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "DIN-016",
+          "checkout_id": "DIN-019",
+          "name": "Dining chairs",
+          "checkin_name": "Dining chairs",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": 0,
+          "checkin_defects": [
+            "light scratch/rub mark to top right curve of wooden backrest frame on foreground chair (chest level, right hand side)"
+          ],
+          "checkout_defects": [
+            "light scuff marks and small scratches mid level to top rail of mahogany-finish frame on foreground chair"
+          ],
+          "new_defects": [
+            "light scuff marks and small scratches mid level to top rail of mahogany-finish frame on foreground chair"
+          ],
+          "resolved_defects": [
+            "light scratch/rub mark to top right curve of wooden backrest frame on foreground chair (chest level, right hand side)"
+          ],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "cleaned to domestic standard",
+          "checkin_photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "DIN-001",
+          "checkout_id": "DIN-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "DIN-002",
+          "checkout_id": "DIN-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "DIN-008",
+          "checkout_id": "DIN-003",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "DIN-011",
+          "checkout_id": "DIN-013",
+          "name": "Radiator"
+        },
+        {
+          "checkin_id": "DIN-014",
+          "checkout_id": "DIN-017",
+          "name": "Dining table"
+        },
+        {
+          "checkin_id": "DIN-015",
+          "checkout_id": "DIN-018",
+          "name": "Tablecloth"
+        },
+        {
+          "checkin_id": "DIN-012",
+          "checkout_id": "DIN-011",
+          "name": "Power socket"
+        },
+        {
+          "checkin_id": "DIN-022",
+          "checkout_id": "DIN-024",
+          "name": "Ceramic tableware"
+        },
+        {
+          "checkin_id": "DIN-025",
+          "checkout_id": "DIN-027",
+          "name": "Carpet threshold strip"
+        },
+        {
+          "checkin_id": "DIN-003",
+          "checkout_id": "DIN-005",
+          "name": "Carpeted flooring"
+        },
+        {
+          "checkin_id": "DIN-004",
+          "checkout_id": "DIN-008",
+          "name": "Glass panelled door"
+        },
+        {
+          "checkin_id": "DIN-005",
+          "checkout_id": "DIN-009",
+          "name": "Door frame and doorstop"
+        },
+        {
+          "checkin_id": "DIN-007",
+          "checkout_id": "DIN-006",
+          "name": "Rear window"
+        },
+        {
+          "checkin_id": "DIN-013",
+          "checkout_id": "DIN-014",
+          "name": "Curtain pole"
+        },
+        {
+          "checkin_id": "DIN-017",
+          "checkout_id": "DIN-020",
+          "name": "Display cabinet"
+        },
+        {
+          "checkin_id": "DIN-018",
+          "checkout_id": "DIN-021",
+          "name": "Pedestal stand"
+        },
+        {
+          "checkin_id": "DIN-019",
+          "checkout_id": "DIN-022",
+          "name": "Artificial flower arrangement"
+        },
+        {
+          "checkin_id": "DIN-020",
+          "checkout_id": "DIN-023",
+          "name": "Framed wall pictures"
+        },
+        {
+          "checkin_id": "DIN-021",
+          "checkout_id": "DIN-025",
+          "name": "Crystal glassware"
+        }
+      ],
+      "removed": [
+        {
+          "id": "DIN-006",
+          "name": "Door frame and architrave (background left)",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-009",
+          "name": "Dado rail",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-010",
+          "name": "Ceiling light fixture",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-023",
+          "name": "Glassware in display cabinet",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        },
+        {
+          "id": "DIN-024",
+          "name": "Doorbell chime box",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide",
+            "RP-017-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "DIN-004",
+          "name": "Picture and dado rails",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-007",
+          "name": "Window sill",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-010",
+          "name": "Light switch",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-012",
+          "name": "Chandelier",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-015",
+          "name": "Curtains (pair)",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-016",
+          "name": "Net curtains",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        },
+        {
+          "id": "DIN-026",
+          "name": "Display cabinet contents",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-017-A-wide"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 20,
+    "changed": 1,
+    "unchanged": 19,
+    "removed": 5,
+    "added": 7,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-015-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-017",
+    "parent_split": "validation",
+    "room_type": "Dining room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "4b67157f88c9edda79cd9bdf880a620fbf692109dcc891d0bf56107d3985fa12",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-015-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-017-A-wide.png",
+          "images/openai/gpt-image-2/RP-017-D-condition.png"
+        ],
+        "frame_sha256": [
+          "97596b5483603237e8dae97d04f065cd2255e80f833ca763656ac060683a955b",
+          "18cf9876ad7cdf9912b870e24355422e440a628b269abbfcd38c4791f86b99fb"
+        ],
+        "item_count": 25
+      },
+      "R2": {
+        "run_id": "P35-015-T1.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-017-A-wide.png",
+          "images/openai/gpt-image-2/RP-017-D-condition.png"
+        ],
+        "frame_sha256": [
+          "97596b5483603237e8dae97d04f065cd2255e80f833ca763656ac060683a955b",
+          "18cf9876ad7cdf9912b870e24355422e440a628b269abbfcd38c4791f86b99fb"
+        ],
+        "item_count": 28
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}

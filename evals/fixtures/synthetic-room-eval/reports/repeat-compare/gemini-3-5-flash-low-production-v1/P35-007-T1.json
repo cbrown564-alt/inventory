@@ -1,0 +1,223 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-007-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-007-T1",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Bedroom",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [],
+      "unchanged": [
+        {
+          "checkin_id": "BED-001",
+          "checkout_id": "BED-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "BED-002",
+          "checkout_id": "BED-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "BED-003",
+          "checkout_id": "BED-003",
+          "name": "Flooring"
+        },
+        {
+          "checkin_id": "BED-004",
+          "checkout_id": "BED-004",
+          "name": "Entrance door"
+        },
+        {
+          "checkin_id": "BED-006",
+          "checkout_id": "BED-007",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "BED-007",
+          "checkout_id": "BED-008",
+          "name": "Door frames"
+        },
+        {
+          "checkin_id": "BED-010",
+          "checkout_id": "BED-010",
+          "name": "Radiator"
+        },
+        {
+          "checkin_id": "BED-012",
+          "checkout_id": "BED-013",
+          "name": "Doorstop"
+        },
+        {
+          "checkin_id": "BED-013",
+          "checkout_id": "BED-014",
+          "name": "Threshold strip"
+        },
+        {
+          "checkin_id": "BED-005",
+          "checkout_id": "BED-006",
+          "name": "Window"
+        },
+        {
+          "checkin_id": "BED-009",
+          "checkout_id": "BED-011",
+          "name": "Double power sockets"
+        }
+      ],
+      "removed": [
+        {
+          "id": "BED-008",
+          "name": "Pendant Light Fitting",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-008-A-wide"
+          ]
+        },
+        {
+          "id": "BED-011",
+          "name": "Curtain Batten",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-008-A-wide"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "BED-005",
+          "name": "Cupboard door",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ]
+        },
+        {
+          "id": "BED-009",
+          "name": "Pendant light fixture",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ]
+        },
+        {
+          "id": "BED-012",
+          "name": "Curtain pole",
+          "condition": "excellent",
+          "defects": [],
+          "photo_ids": [
+            "RP-008-A-wide",
+            "RP-008-D-condition"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 11,
+    "changed": 0,
+    "unchanged": 11,
+    "removed": 2,
+    "added": 3,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-007-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-008",
+    "parent_split": "development",
+    "room_type": "Bedroom",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "cf6f8118ac07dfd9d468317a8a7cea9b4092138fd4500d39982e838dde5b07cc",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-007-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-008-A-wide.png",
+          "images/openai/gpt-image-2/RP-008-D-condition.png"
+        ],
+        "frame_sha256": [
+          "ce9bd71f833c4897d66b4d33f789d4014431e7579529ce303107efcee513db02",
+          "cf632ceaec42a54e003cf6687f2f80c10cec6034e1a212aa2edfb90dcda14e4d"
+        ],
+        "item_count": 14
+      },
+      "R2": {
+        "run_id": "P35-007-T1.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-008-A-wide.png",
+          "images/openai/gpt-image-2/RP-008-D-condition.png"
+        ],
+        "frame_sha256": [
+          "ce9bd71f833c4897d66b4d33f789d4014431e7579529ce303107efcee513db02",
+          "cf632ceaec42a54e003cf6687f2f80c10cec6034e1a212aa2edfb90dcda14e4d"
+        ],
+        "item_count": 14
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}

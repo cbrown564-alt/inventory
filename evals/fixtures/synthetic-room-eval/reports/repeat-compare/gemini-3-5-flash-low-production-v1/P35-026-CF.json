@@ -1,0 +1,409 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-026-CF",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-026-CF",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Living room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "LIV-008",
+          "checkout_id": "LIV-010",
+          "name": "Fireplace",
+          "checkin_name": "Fireplace and hearth",
+          "checkin_condition": "good",
+          "checkout_condition": "good",
+          "grade_delta": 0,
+          "cleanliness_delta": 0,
+          "checkin_defects": [
+            "light dusting of white ash and faint cup ring marks low level to slate hearth"
+          ],
+          "checkout_defects": [
+            "light scratch marks mid level to slate hearth surface",
+            "dust and light grey staining to slate hearth surface",
+            "soot and ash residue to cast iron grate and insert"
+          ],
+          "new_defects": [
+            "light scratch marks mid level to slate hearth surface",
+            "dust and light grey staining to slate hearth surface",
+            "soot and ash residue to cast iron grate and insert"
+          ],
+          "resolved_defects": [
+            "light dusting of white ash and faint cup ring marks low level to slate hearth"
+          ],
+          "checkin_cleanliness": "requires cleaning",
+          "checkout_cleanliness": "requires cleaning",
+          "checkin_photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 2
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "LIV-001",
+          "checkout_id": "LIV-001",
+          "name": "Ceiling"
+        },
+        {
+          "checkin_id": "LIV-002",
+          "checkout_id": "LIV-002",
+          "name": "Walls"
+        },
+        {
+          "checkin_id": "LIV-003",
+          "checkout_id": "LIV-003",
+          "name": "Flooring"
+        },
+        {
+          "checkin_id": "LIV-005",
+          "checkout_id": "LIV-007",
+          "name": "Bay window"
+        },
+        {
+          "checkin_id": "LIV-006",
+          "checkout_id": "LIV-004",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "LIV-009",
+          "checkout_id": "LIV-021",
+          "name": "Curtains"
+        },
+        {
+          "checkin_id": "LIV-010",
+          "checkout_id": "LIV-011",
+          "name": "Three-seat sofa"
+        },
+        {
+          "checkin_id": "LIV-011",
+          "checkout_id": "LIV-012",
+          "name": "Coffee table"
+        },
+        {
+          "checkin_id": "LIV-014",
+          "checkout_id": "LIV-023",
+          "name": "Television"
+        },
+        {
+          "checkin_id": "LIV-017",
+          "checkout_id": "LIV-016",
+          "name": "Armchair"
+        },
+        {
+          "checkin_id": "LIV-018",
+          "checkout_id": "LIV-027",
+          "name": "Table lamps"
+        },
+        {
+          "checkin_id": "LIV-019",
+          "checkout_id": "LIV-025",
+          "name": "Wall mirror"
+        },
+        {
+          "checkin_id": "LIV-021",
+          "checkout_id": "LIV-029",
+          "name": "Potted plant"
+        },
+        {
+          "checkin_id": "LIV-016",
+          "checkout_id": "LIV-017",
+          "name": "Wooden stool"
+        },
+        {
+          "checkin_id": "LIV-004",
+          "checkout_id": "LIV-005",
+          "name": "Door"
+        },
+        {
+          "checkin_id": "LIV-007",
+          "checkout_id": "LIV-008",
+          "name": "Ceiling pendant light"
+        },
+        {
+          "checkin_id": "LIV-012",
+          "checkout_id": "LIV-020",
+          "name": "Area rug"
+        },
+        {
+          "checkin_id": "LIV-023",
+          "checkout_id": "LIV-018",
+          "name": "Sideboard cabinet"
+        },
+        {
+          "checkin_id": "LIV-025",
+          "checkout_id": "LIV-019",
+          "name": "Wooden chair"
+        }
+      ],
+      "removed": [
+        {
+          "id": "LIV-013",
+          "name": "TV media console",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-015",
+          "name": "Tall bookshelves",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-020",
+          "name": "Framed wall art",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-022",
+          "name": "Metal plant stand",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-024",
+          "name": "Dark wood sideboard",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "LIV-006",
+          "name": "Door frame and Architrave",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-009",
+          "name": "Power sockets",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-013",
+          "name": "TV stand",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-014",
+          "name": "Recessed bookcase",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-015",
+          "name": "Freestanding bookcase",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-022",
+          "name": "Sofa cushions",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-024",
+          "name": "Media player",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-026",
+          "name": "Framed picture (above sofa)",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide"
+          ]
+        },
+        {
+          "id": "LIV-028",
+          "name": "Coal bucket",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-030",
+          "name": "Small metal pots",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-D-condition"
+          ]
+        },
+        {
+          "id": "LIV-031",
+          "name": "Assorted books",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-012-A-wide",
+            "RP-012-D-condition"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 20,
+    "changed": 1,
+    "unchanged": 19,
+    "removed": 5,
+    "added": 11,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-026-CF",
+    "delta_class": "counterfactual",
+    "parent_scenario_id": "RP-012",
+    "parent_split": "development",
+    "room_type": "Living room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "bea7d302f8c769d5d7c542f866ce373b2a33dcb2015775b2a5697e5a94a9a22f",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-026-CF.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-012-A-wide.png",
+          "images/openai/gpt-image-2/RP-012-D-condition.png"
+        ],
+        "frame_sha256": [
+          "0272b4a1f5441c1a860e83fff482cd60dbb16e913c3ef7d5c2947afd491e55cc",
+          "ab8cd736d3c88b32217b83bbabdcad1d7e3a7c58ec706afe80312095f4900fee"
+        ],
+        "item_count": 25
+      },
+      "R2": {
+        "run_id": "P35-026-CF.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-012-A-wide.png",
+          "images/openai/gpt-image-2/RP-012-D-condition.png"
+        ],
+        "frame_sha256": [
+          "0272b4a1f5441c1a860e83fff482cd60dbb16e913c3ef7d5c2947afd491e55cc",
+          "ab8cd736d3c88b32217b83bbabdcad1d7e3a7c58ec706afe80312095f4900fee"
+        ],
+        "item_count": 33
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}

@@ -1,0 +1,433 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-018-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-018-T1",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Dining room",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "DIN-001",
+          "checkout_id": "DIN-001",
+          "name": "Ceiling",
+          "checkin_name": "Ceiling",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-002",
+          "checkout_id": "DIN-002",
+          "name": "Walls",
+          "checkin_name": "Walls",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-003",
+          "checkout_id": "DIN-003",
+          "name": "Flooring",
+          "checkin_name": "Flooring",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-004",
+          "checkout_id": "DIN-007",
+          "name": "Skirting boards",
+          "checkin_name": "Skirting boards",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-005",
+          "checkout_id": "DIN-004",
+          "name": "French doors",
+          "checkin_name": "French doors",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-007",
+          "checkout_id": "DIN-006",
+          "name": "Door frame",
+          "checkin_name": "Door frame",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-010",
+          "checkout_id": "DIN-010",
+          "name": "Dining table",
+          "checkin_name": "Dining table",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "DIN-011",
+          "checkout_id": "DIN-011",
+          "name": "Dining chairs x6",
+          "checkin_name": "Dining chairs",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 3
+        },
+        {
+          "checkin_id": "DIN-006",
+          "checkout_id": "DIN-005",
+          "name": "Entrance door",
+          "checkin_name": "Internal door",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 2
+        },
+        {
+          "checkin_id": "DIN-008",
+          "checkout_id": "DIN-008",
+          "name": "Pendant light fixture",
+          "checkin_name": "Pendant light",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 2
+        },
+        {
+          "checkin_id": "DIN-009",
+          "checkout_id": "DIN-009",
+          "name": "Double socket",
+          "checkin_name": "Double power socket",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": 0,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "professionally cleaned",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-016-A-wide",
+            "RP-016-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 2
+        }
+      ],
+      "unchanged": [],
+      "removed": [],
+      "added": []
+    }
+  ],
+  "totals": {
+    "matched": 11,
+    "changed": 11,
+    "unchanged": 0,
+    "removed": 0,
+    "added": 0,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-018-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-016",
+    "parent_split": "validation",
+    "room_type": "Dining room",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "4b67157f88c9edda79cd9bdf880a620fbf692109dcc891d0bf56107d3985fa12",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-018-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-016-A-wide.png",
+          "images/openai/gpt-image-2/RP-016-D-condition.png"
+        ],
+        "frame_sha256": [
+          "75498173cb7feb3c5552bc352ee37892db0a8f8a26f6e629d01b97a84ad2020d",
+          "953e96de2b4c7fb1a1264c7829add3426c1f9c4d702f90bd0385c0bdf3efb883"
+        ],
+        "item_count": 11
+      },
+      "R2": {
+        "run_id": "P35-018-T1.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-016-A-wide.png",
+          "images/openai/gpt-image-2/RP-016-D-condition.png"
+        ],
+        "frame_sha256": [
+          "75498173cb7feb3c5552bc352ee37892db0a8f8a26f6e629d01b97a84ad2020d",
+          "953e96de2b4c7fb1a1264c7829add3426c1f9c4d702f90bd0385c0bdf3efb883"
+        ],
+        "item_count": 11
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}

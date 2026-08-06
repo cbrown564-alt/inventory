@@ -1,0 +1,513 @@
+{
+  "checkin": {
+    "address": "synthetic-room-eval P35-009-T1",
+    "inspected_at": "2026-08-05",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "checkout": {
+    "address": "synthetic-room-eval P35-009-T1",
+    "inspected_at": "2026-08-06",
+    "backend": "antigravity-cli/gemini-3.5-flash-low"
+  },
+  "use_case": "tenancy",
+  "labels": {
+    "baseline": "Check-in",
+    "followup": "Check-out"
+  },
+  "comparison": {
+    "title": "Check-out comparison",
+    "intro_note": "This is a discussion sheet: it identifies, evidences and classifies changes between the two reports. It does not price anything — deduction amounts are for the parties (and, failing agreement, the deposit scheme) to settle.",
+    "class_labels": {
+      "fair_wear_and_tear": "Fair wear and tear",
+      "damage": "Damage (tenant)",
+      "cleaning": "Cleaning (tenant)",
+      "landlord_responsibility": "Landlord responsibility",
+      "unclassified": "Unclassified"
+    },
+    "class_tones": {
+      "fair_wear_and_tear": "confirm",
+      "damage": "reject",
+      "cleaning": "reject",
+      "landlord_responsibility": "pend",
+      "unclassified": "muted"
+    },
+    "context_params": [
+      {
+        "key": "tenancy_months",
+        "label": "Tenancy length (months)"
+      },
+      {
+        "key": "occupancy",
+        "label": "Occupancy"
+      }
+    ]
+  },
+  "params": {
+    "context": {},
+    "backend": "offline",
+    "model": null
+  },
+  "rooms": [
+    {
+      "name": "Bedroom",
+      "checkin_room_present": true,
+      "checkout_room_present": true,
+      "changed": [
+        {
+          "checkin_id": "BED-001",
+          "checkout_id": "BED-002",
+          "name": "Walls",
+          "checkin_name": "Walls",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": -1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-003",
+          "checkout_id": "BED-007",
+          "name": "Window",
+          "checkin_name": "Window",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": -1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-005",
+          "checkout_id": "BED-009",
+          "name": "Radiator",
+          "checkin_name": "Radiator",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": -1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-010",
+          "checkout_id": "BED-017",
+          "name": "Wardrobe",
+          "checkin_name": "Wardrobe",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": -1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-010-A-wide"
+          ],
+          "checkout_photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 4
+        },
+        {
+          "checkin_id": "BED-006",
+          "checkout_id": "BED-013",
+          "name": "Single bed frame",
+          "checkin_name": "Bed Frame",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": -1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ],
+          "checkout_photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 3
+        },
+        {
+          "checkin_id": "BED-011",
+          "checkout_id": "BED-004",
+          "name": "Door",
+          "checkin_name": "Bedroom Door",
+          "checkin_condition": "excellent",
+          "checkout_condition": "good",
+          "grade_delta": 1,
+          "cleanliness_delta": -1,
+          "checkin_defects": [],
+          "checkout_defects": [],
+          "new_defects": [],
+          "resolved_defects": [],
+          "checkin_cleanliness": "cleaned to domestic standard",
+          "checkout_cleanliness": "professionally cleaned",
+          "checkin_photo_ids": [
+            "RP-010-A-wide"
+          ],
+          "checkout_photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ],
+          "checkin_regions": [],
+          "checkout_regions": [],
+          "classification": "unclassified",
+          "rationale": "offline backend: no classification performed",
+          "match_score": 2
+        }
+      ],
+      "unchanged": [
+        {
+          "checkin_id": "BED-004",
+          "checkout_id": "BED-010",
+          "name": "Curtains"
+        },
+        {
+          "checkin_id": "BED-007",
+          "checkout_id": "BED-014",
+          "name": "Bedding"
+        },
+        {
+          "checkin_id": "BED-013",
+          "checkout_id": "BED-006",
+          "name": "Skirting boards"
+        },
+        {
+          "checkin_id": "BED-016",
+          "checkout_id": "BED-020",
+          "name": "Under-bed storage boxes"
+        },
+        {
+          "checkin_id": "BED-014",
+          "checkout_id": "BED-026",
+          "name": "Window sill toys"
+        },
+        {
+          "checkin_id": "BED-015",
+          "checkout_id": "BED-008",
+          "name": "Double socket"
+        }
+      ],
+      "removed": [
+        {
+          "id": "BED-002",
+          "name": "Flooring (Carpet)",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-008",
+          "name": "Desk Unit",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-009",
+          "name": "Office Chair",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-012",
+          "name": "Toy Storage Unit",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-017",
+          "name": "Children's Toys",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        }
+      ],
+      "added": [
+        {
+          "id": "BED-001",
+          "name": "Ceiling",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-003",
+          "name": "Carpet",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-005",
+          "name": "Door frame",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-011",
+          "name": "Curtain pole",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-012",
+          "name": "Rug",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-015",
+          "name": "Desk with shelving",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-016",
+          "name": "Desk chair",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-018",
+          "name": "Storage unit with bins",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-019",
+          "name": "Plush toys",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-021",
+          "name": "Toy car ramp",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-022",
+          "name": "Plastic toy tub",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-023",
+          "name": "Lego head storage box",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-024",
+          "name": "Children's books",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        },
+        {
+          "id": "BED-025",
+          "name": "Robot toy",
+          "condition": "good",
+          "defects": [],
+          "photo_ids": [
+            "RP-010-A-wide",
+            "RP-010-D-condition"
+          ]
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "matched": 12,
+    "changed": 6,
+    "unchanged": 6,
+    "removed": 5,
+    "added": 14,
+    "classified": 0
+  },
+  "usage": {
+    "prompt_tokens": 0,
+    "completion_tokens": 0
+  },
+  "stability_eval": {
+    "schema_version": 1,
+    "instrument": "repeat-describe",
+    "dataset_phase": "phase-0-describe-stability",
+    "delta_id": "P35-009-T1",
+    "delta_class": "temporal",
+    "parent_scenario_id": "RP-010",
+    "parent_split": "development",
+    "room_type": "Bedroom",
+    "image_model": "GPT Image 2",
+    "backend_model": "gemini-3.5-flash-low",
+    "prompt_id": "production-v1",
+    "prompt_sha256": "d953a994db06ae4ecbfa332ffd470812048e05bcf5fb59aeffee8771dfc431d5",
+    "instruction_sha256": "cf6f8118ac07dfd9d468317a8a7cea9b4092138fd4500d39982e838dde5b07cc",
+    "rubric": "offline",
+    "sides": {
+      "T0": {
+        "run_id": "P35-009-T1.T0.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-010-A-wide.png",
+          "images/openai/gpt-image-2/RP-010-D-condition.png"
+        ],
+        "frame_sha256": [
+          "3137079b8700635da65a4ef328431d168bef600a4312b2725cfa46f39b10bc08",
+          "7030de80e64e90030ba53df66e13c1781399d8aed9e6fbd6673f1c89108b3a04"
+        ],
+        "item_count": 18
+      },
+      "R2": {
+        "run_id": "P35-009-T1.R2.gemini-3.5-flash-low.production-v1",
+        "frames": [
+          "images/openai/gpt-image-2/RP-010-A-wide.png",
+          "images/openai/gpt-image-2/RP-010-D-condition.png"
+        ],
+        "frame_sha256": [
+          "3137079b8700635da65a4ef328431d168bef600a4312b2725cfa46f39b10bc08",
+          "7030de80e64e90030ba53df66e13c1781399d8aed9e6fbd6673f1c89108b3a04"
+        ],
+        "item_count": 26
+      }
+    },
+    "control_note": "Both sides describe the same frames. There is no room change, no framing change and no generator drift, so every reported change is non-determinism in the describe step.",
+    "evidence_class": "Synthetic development evidence. This measures describe stability on one generator's images and promotes nothing (docs/00)."
+  }
+}
