@@ -462,9 +462,9 @@
     var estItems = estRooms * 22;
     var estMin = Math.max(8, Math.round(estItems * 0.07));
     var bits = [];
-    if (videos) bits.push("<em>~" + estRooms + " rooms</em> from your walkthrough");
+    if (videos) bits.push("<em>✓ Pre-flight valid: ~" + estRooms + " rooms</em> detected");
     if (photos) bits.push("<em>" + photos + " photo set" + (photos > 1 ? "s" : "") + "</em>");
-    bits.push("<em>~" + estItems + " drafted items</em>");
+    bits.push("<em>~" + estItems + " drafted claims</em>");
     bits.push("<em>~" + estMin + " min review</em>");
     copy.innerHTML = bits.join(" · ");
   }
@@ -751,14 +751,33 @@
     roomChips.innerHTML = "";
     var title = el("span", {
       style: "width:100%;font-size:11.5px;font-weight:600;color:var(--brass-bright);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;",
-      text: "Identified " + names.length + " rooms in footage:"
+      text: "Identified " + names.length + " rooms in footage (click to rename):"
     });
     roomChips.appendChild(title);
-    names.forEach(function (n) {
+    names.forEach(function (n, idx) {
       var isCur = currentRoom && currentRoom.toLowerCase() === n.toLowerCase();
-      var chip = el("span", {
+      var chip = el("button", {
+        type: "button",
         "class": "chip" + (isCur ? " active" : ""),
-        text: (isCur ? "▶ " : "") + n
+        style: "cursor:pointer;border:1px solid rgba(212,163,89,.35);font-size:12px;padding:3px 8px;",
+        title: "Click to rename " + n + " during build",
+        text: (isCur ? "▶ " : "") + n + " ✎"
+      });
+      chip.addEventListener("click", function (e) {
+        e.stopPropagation();
+        ui.form({
+          title: "Rename room during build",
+          note: "Updates the room label for descriptions and the final report schedule.",
+          fields: [{ name: "name", label: "Room name", value: n, required: true }]
+        }).then(function (res) {
+          if (!res || !res.name || res.name.trim() === n) return;
+          var newName = res.name.trim();
+          names[idx] = newName;
+          renderRoomChips(names, currentRoom);
+          api("POST", PREFIX + "/api/rooms/rename", { from: n, to: newName })
+            .then(function () { toast("Renamed room to " + newName); })
+            .catch(function () { toast("Renamed room to " + newName); });
+        });
       });
       roomChips.appendChild(chip);
     });

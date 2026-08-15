@@ -1451,6 +1451,13 @@ class ReviewHandler(BaseHandler):
             with st.lock:
                 self._json(dict(st.pdf))
             return
+        if path == "/api/archive":
+            from homeinventory.archive import build_evidence_archive
+            archive_file = st.out_dir / "work" / "evidence-archive.zip"
+            with st.lock:
+                build_evidence_archive(st.capture_dir, st.out_dir, archive_file)
+            self._file(archive_file, "application/zip")
+            return
         if path == "/api/rooms":
             self._json(st.scan_capture())
             return

@@ -1181,13 +1181,48 @@
   }
   .micro-time { font-family: var(--mono); font-size: 11px; color: #94a1b2; }
 
+  /* Defect severity & responsibility taxonomy */
+  .def-taxonomy { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .def-tax-chip {
+    font: 500 var(--fs-xs) var(--ui); padding: 4px 10px; border-radius: var(--r-pill);
+    border: 1px solid rgba(154, 119, 41, .3); background: var(--brass-soft);
+    color: var(--brass-bright); cursor: pointer; transition: all .12s ease;
+  }
+  .def-tax-chip:hover {
+    background: var(--brass); color: #fff; border-color: var(--brass);
+  }
+  .anno-taxonomy-row {
+    display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px;
+  }
+  .def-tax-mini {
+    font: 500 11px var(--ui); padding: 2px 7px; border-radius: 4px;
+    border: 1px solid var(--line); background: var(--panel-2);
+    color: var(--muted); cursor: pointer;
+  }
+  .def-tax-mini:hover { border-color: var(--brass); color: var(--ink); }
+
+  /* Finish Share & Export Bundle Hub */
+  .finish-bundle-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px; margin-top: 14px; width: 100%;
+  }
+  .bundle-card {
+    display: flex; flex-direction: column; padding: 14px 16px;
+    background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: var(--r-md); text-align: left;
+  }
+  .bundle-card .bundle-icon { font-size: 20px; margin-bottom: 6px; }
+  .bundle-card strong { font-size: var(--fs-sm); color: var(--ink); margin-bottom: 4px; }
+  .bundle-card p { font-size: var(--fs-xs); color: var(--muted); margin: 0 0 12px; flex: 1; line-height: 1.45; }
+  .bundle-card .btn { width: 100%; text-align: center; }
+
   /* Mobile review keeps the decisive evidence actions in thumb reach. */
   #mobile-action { display: none; }
 
   /* annotation label popover (shared by lightbox pins) */
   #anno-form { position: fixed; z-index: 95; background: var(--panel);
     border: 1px solid var(--line); border-radius: 12px; padding: 14px;
-    display: none; width: 280px; }
+    display: none; width: 290px; box-shadow: var(--shadow); }
   #anno-form select, #anno-form input { width: 100%; font: 13px var(--ui);
     padding: 8px 10px; margin-bottom: 8px; border: 1px solid var(--line);
     border-radius: 8px; background: var(--paper); color: var(--ink); }
@@ -1392,6 +1427,12 @@
 
 <div id="anno-form">
   <select id="anno-pick"></select>
+  <div class="anno-taxonomy-row">
+    <button class="def-tax-mini" type="button" data-tax="[Fair Wear & Tear]">Wear &amp; tear</button>
+    <button class="def-tax-mini" type="button" data-tax="[Requires Cleaning]">Cleaning</button>
+    <button class="def-tax-mini" type="button" data-tax="[Tenant Action]">Tenant</button>
+    <button class="def-tax-mini" type="button" data-tax="[Pre-existing / Landlord]">Landlord</button>
+  </div>
   <input id="anno-new" type="text" placeholder="…or describe a new defect">
   <div class="row">
     <button class="btn ghost" id="anno-cancel">Cancel</button>
@@ -3258,30 +3299,65 @@
       inner.appendChild(buildIssueCeremonyCard());
       inner.appendChild(el("h2", { text: "Issue record ready" }));
       inner.appendChild(el("p", {
-        text: "Your signature seals this inventory. Open the clean final issue"
-          + " or share the " + (shareSpec.link_noun || "tenant") + " link."
+        text: "Your signature seals this inventory. Open the clean final issue, share the tenant link, or download the evidence bundle below."
       }));
-      handoff.appendChild(inner);
-      var hact = el("div", { "class": "finish-handoff-actions" });
-      hact.appendChild(el("a", {
-        href: PREFIX + "/issue", "class": "btn primary",
-        text: "Open final issue"
+
+      var bundle = el("div", { "class": "finish-bundle-grid" });
+
+      // Card 1: Clean Final Issue
+      var cIssue = el("div", { "class": "bundle-card" });
+      cIssue.appendChild(el("div", { "class": "bundle-icon", text: "📄" }));
+      cIssue.appendChild(el("strong", { text: "Clean Final Issue" }));
+      cIssue.appendChild(el("p", { text: "Attested, read-only HTML report matching the sealed hash." }));
+      cIssue.appendChild(el("a", {
+        href: PREFIX + "/issue", target: "_blank", "class": "btn primary", text: "Open final issue"
       }));
+      bundle.appendChild(cIssue);
+
+      // Card 2: Tenant Review Link
+      var cTenant = el("div", { "class": "bundle-card" });
+      cTenant.appendChild(el("div", { "class": "bundle-icon", text: "🔗" }));
+      cTenant.appendChild(el("strong", { text: (shareSpec.link_noun || "Tenant") + " Link" }));
+      cTenant.appendChild(el("p", { text: "Allows the tenant to review each room, add evidence, and countersign." }));
       if (SHARE_URL) {
-        hact.appendChild(el("button", { type: "button", "class": "btn",
-          text: "Copy " + (shareSpec.link_noun || "tenant") + " link",
-          onclick: copyShareLink }));
+        cTenant.appendChild(el("button", {
+          type: "button", "class": "btn", text: "Copy link",
+          onclick: copyShareLink
+        }));
       } else {
-        hact.appendChild(el("button", { type: "button", "class": "btn",
-          text: "Share tenant link",
-          onclick: function () { enableShareLink(this); } }));
+        cTenant.appendChild(el("button", {
+          type: "button", "class": "btn", text: "Enable share link",
+          onclick: function () { enableShareLink(this); }
+        }));
       }
-      hact.appendChild(el("button", {
-        type: "button", "class": "btn ghost",
-        text: "Preview as landlord",
-        onclick: function () { window.open(PREFIX + "/issue", "_blank"); }
+      bundle.appendChild(cTenant);
+
+      // Card 3: PDF Document
+      var cPdf = el("div", { "class": "bundle-card" });
+      cPdf.appendChild(el("div", { "class": "bundle-icon", text: "📥" }));
+      cPdf.appendChild(el("strong", { text: "PDF Report" }));
+      cPdf.appendChild(el("p", { text: "Formal printed/signed copy for tenancy records and deposit schemes." }));
+      cPdf.appendChild(el("button", {
+        type: "button", "class": "btn ghost", text: "Export / Print PDF",
+        onclick: function () {
+          if (pdfMeta.weasyprint_available !== false) window.open(PREFIX + "/pdf", "_blank");
+          else openPrintPdfFallback();
+        }
       }));
-      handoff.appendChild(hact);
+      bundle.appendChild(cPdf);
+
+      // Card 4: Evidence Archive
+      var cZip = el("div", { "class": "bundle-card" });
+      cZip.appendChild(el("div", { "class": "bundle-icon", text: "📦" }));
+      cZip.appendChild(el("strong", { text: "Evidence Archive" }));
+      cZip.appendChild(el("p", { text: "Tamper-evident ZIP containing all original media, keyframes, and hash logs." }));
+      cZip.appendChild(el("a", {
+        href: PREFIX + "/api/archive", download: "evidence-archive.zip", "class": "btn ghost", text: "Download ZIP"
+      }));
+      bundle.appendChild(cZip);
+
+      inner.appendChild(bundle);
+      handoff.appendChild(inner);
       host.appendChild(handoff);
     }
     updateSubNav();
@@ -4561,6 +4637,39 @@
           suggBox.appendChild(schip);
         });
         body.appendChild(suggBox);
+
+        // Responsibility & Severity Taxonomy chips
+        var TAXONOMY = [
+          { label: "Fair wear & tear", tag: "[Fair Wear & Tear]" },
+          { label: "Requires cleaning", tag: "[Requires Cleaning]" },
+          { label: "Tenant action", tag: "[Tenant Action]" },
+          { label: "Pre-existing / Landlord", tag: "[Pre-existing / Landlord]" },
+          { label: "Maintenance required", tag: "[Maintenance Required]" }
+        ];
+        var taxLabel = el("div", {
+          style: "font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin:12px 0 6px;",
+          text: "Responsibility & Severity Classification:"
+        });
+        var taxBox = el("div", { "class": "def-taxonomy" });
+        TAXONOMY.forEach(function (tax) {
+          var tbtn = el("button", {
+            "class": "def-tax-chip", type: "button", text: tax.label,
+            title: "Add " + tax.label + " classification to defect entry",
+            onclick: function () {
+              if (addIn.value) {
+                addIn.value = tax.tag + " " + addIn.value.trim();
+                addIn.focus();
+              } else {
+                pushUndo("classify " + tax.label, [it]);
+                (it.defects = it.defects || []).push(tax.tag);
+                markDirty(); drawChips();
+              }
+            }
+          });
+          taxBox.appendChild(tbtn);
+        });
+        body.appendChild(taxLabel);
+        body.appendChild(taxBox);
       }, hasDefects);
     defectsDisclosure.id = "item-defects";
     scroll.appendChild(defectsDisclosure);
@@ -4993,12 +5102,17 @@
     f.style.left = Math.min(px, window.innerWidth - 300) + "px";
     f.style.top = Math.min(py + 8, window.innerHeight - 170) + "px";
   }
-  function closeAnnoForm() {
-    document.getElementById("anno-form").style.display = "none";
-    if (pendingRegion && pendingRegion.draftEl) pendingRegion.draftEl.remove();
-    pendingRegion = null;
-  }
   document.getElementById("anno-cancel").addEventListener("click", closeAnnoForm);
+  document.getElementById("anno-form").querySelectorAll(".def-tax-mini").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var tax = btn.getAttribute("data-tax") || "";
+      var inp = document.getElementById("anno-new");
+      if (inp) {
+        inp.value = tax + (inp.value ? " " + inp.value : "");
+        inp.focus();
+      }
+    });
+  });
   document.getElementById("anno-ok").addEventListener("click", function () {
     if (!pendingRegion) return;
     var label = document.getElementById("anno-new").value.trim() ||

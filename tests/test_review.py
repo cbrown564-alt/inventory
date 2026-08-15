@@ -1980,3 +1980,38 @@ def test_ux_start_page_progressive_reveal_and_chime(fresh_server):
     assert "estimateBuildMinutes" in html
     assert "Identified " in html
 
+
+def test_ux_batch2_archive_endpoint_and_bundle_hub(server):
+    """Verify /api/archive returns zipped package and finish includes bundle grid."""
+    base, _state, _out, _cap = server
+    with urllib.request.urlopen(base + "/api/archive") as r:
+        assert r.status == 200
+        assert r.headers.get("Content-Type") == "application/zip"
+        data = r.read()
+        assert data[:2] == b"PK"
+    status, html = _get_text(base + "/review")
+    assert status == 200
+    assert "finish-bundle-grid" in html
+    assert "bundle-card" in html
+    assert "api/archive" in html
+
+
+def test_ux_batch2_defect_taxonomy(server):
+    """Verify defect taxonomy chips and markup in review UI."""
+    base, _state, _out, _cap = server
+    status, html = _get_text(base + "/review")
+    assert status == 200
+    assert "Fair wear & tear" in html
+    assert "Requires cleaning" in html
+    assert "anno-taxonomy-row" in html
+
+
+def test_ux_batch2_interim_chips_and_preflight(fresh_server):
+    """Verify interactive room chips and pre-flight validation status on start page."""
+    base, _httpd, _out, _cap = fresh_server
+    status, start_html = _get_text(base + "/start")
+    assert status == 200
+    assert "click to rename" in start_html
+    assert "Pre-flight valid" in start_html
+
+
