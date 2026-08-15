@@ -1250,6 +1250,9 @@
              placeholder="Search items…"
              data-placeholder-kbd="Search items · ⌘K or /"
              aria-label="Search items" autocomplete="off">
+      <select id="q-room-jump" class="q-room-jump" aria-label="Jump to room">
+        <option value="">Jump to room…</option>
+      </select>
       <div class="filters" id="filters">
         <button data-f="all" aria-pressed="true">All</button>
         <button data-f="pending" aria-pressed="false">Unreviewed</button>
@@ -1258,18 +1261,20 @@
         <button data-f="noev" aria-pressed="false">No evidence</button>
       </div>
       <details class="tools-more">
-        <summary>Sort &amp; bulk</summary>
+        <summary>Sort, bulk &amp; view</summary>
         <div class="row2">
           <select id="sort" aria-label="Sort order">
             <option value="conf" selected>Least confident first</option>
             <option value="room">By room</option>
           </select>
+          <button class="q-tool-btn" id="btn-toggle-all-rooms" type="button">Toggle all rooms</button>
           <button class="btn" id="bulk-routine">Accept routine</button>
           <button class="btn" id="bulk">Accept all remaining</button>
         </div>
       </details>
     </div>
     <div id="queue"></div>
+
   </nav>
   <div id="rail-backdrop"></div>
   <section id="detail"></section>
@@ -2521,17 +2526,43 @@
     });
     var playhead = el("div", { "class": "playhead", style: "left:0%" });
     scrub.appendChild(playhead);
+    var peek = el("div", { "class": "peek" });
+    peek.appendChild(el("img", { alt: "" }));
+    peek.appendChild(el("span", { "class": "t" }));
+    scrub.appendChild(peek);
     scrub.addEventListener("click", function (e) {
       var r = scrub.getBoundingClientRect();
       var t = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width))
               * meta.duration;
       showWalkthroughPlayer(overviewHost, wt, t);
     });
+    scrub.addEventListener("mousemove", function (ev) {
+      var r = scrub.getBoundingClientRect();
+      var f = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width));
+      var t = f * meta.duration;
+      var best = null, bd = 1e9;
+      Object.keys(photoTime).forEach(function (pid) {
+        var pt2 = photoTime[pid];
+        if (!pt2 || pt2.video !== wt.rel || !photoSrc[pid]) return;
+        var diff = Math.abs(pt2.t - t);
+        if (diff < bd) { bd = diff; best = { pid: pid, t: pt2.t }; }
+      });
+      if (!best || !photoSrc[best.pid]) { peek.style.display = "none"; return; }
+      peek.querySelector("img").src = photoSrc[best.pid];
+      peek.querySelector(".t").textContent = fmtT(t);
+      var x = ev.clientX - r.left;
+      peek.style.left = Math.max(70, Math.min(r.width - 70, x)) + "px";
+      peek.style.display = "block";
+    });
+    scrub.addEventListener("mouseleave", function () {
+      peek.style.display = "none";
+    });
     spine.appendChild(scrub);
     wrap.appendChild(spine);
     return wrap;
   }
   function showWalkthroughPlayer(host, wt, seekT) {
+
     var existing = host.querySelector(".wt-player");
     var box, v;
     if (existing) {
@@ -3170,6 +3201,10 @@
     var nameText = el("span", { "class": "item-title" });
     nameText.textContent = it.name || "(unnamed)";
     name.appendChild(nameText);
+    if ((it.defects || []).length) {
+      name.appendChild(el("span", { "class": "q-def-badge",
+        text: "⚠ " + it.defects.length }));
+    }
     var bits = [];
     if ((it.defects || []).length) bits.push((it.defects.length) + " defect" +
       (it.defects.length > 1 ? "s" : ""));
@@ -3178,6 +3213,7 @@
     if (bits.length) name.appendChild(el("span", { "class": "sub",
       text: bits.join(" · ") }));
     row.appendChild(name);
+
     var conf = el("span", { "class": "conf" });
     // confidence is only signal when it is low or when sorting by it
     if (typeof it.confidence === "number" &&
@@ -4127,14 +4163,19 @@
     // primary actions — separated from claim text above
     var act = el("div", { id: "actions" });
     var row = el("div", { "class": "row" });
-    row.appendChild(el("button", {
+    var btnConf = el("button", {
       "class": "btn confirm",
-      text: it.reviewed ? "✓ Confirmed" : "Yes, this is right",
-      onclick: function () { confirmItem(it); } }));
-    row.appendChild(el("button", {
+      onclick: function () { confirmItem(it); } });
+    btnConf.appendChild(document.createTextNode(it.reviewed ? "✓ Confirmed" : "Yes, this is right"));
+    btnConf.appendChild(el("span", { "class": "kbd-hint", text: "Space" }));
+    row.appendChild(btnConf);
+
+    var btnRej = el("button", {
       "class": "btn danger",
-      text: it.rejected ? "Restore item" : "✕ Reject",
-      onclick: function () { rejectItem(it); } }));
+      onclick: function () { rejectItem(it); } });
+    btnRej.appendChild(document.createTextNode(it.rejected ? "Restore item" : "✕ Reject"));
+    btnRej.appendChild(el("span", { "class": "kbd-hint", text: "R" }));
+    row.appendChild(btnRej);
     act.appendChild(row);
     if (it.crop_status === "proposed" && (cropSrc[it.id] || it.crop_path)) {
       var cropRow = el("div", { "class": "row" });
@@ -4233,9 +4274,27 @@
         });
         addBox.appendChild(addIn);
         body.appendChild(addBox);
+
+        // Quick defect suggestions
+        var SUGGESTIONS = ["scuff mark", "paint chip", "limescale", "missing screw", "hairline crack", "water stain", "loose fitting", "scratched surface"];
+        var suggBox = el("div", { "class": "def-suggestions" });
+        SUGGESTIONS.forEach(function (sugg) {
+          if ((it.defects || []).indexOf(sugg) >= 0) return;
+          var schip = el("button", {
+            "class": "def-sugg-chip", type: "button", text: "+ " + sugg,
+            onclick: function () {
+              pushUndo("add defect " + sugg, [it]);
+              (it.defects = it.defects || []).push(sugg);
+              markDirty(); drawChips(); schip.remove();
+            }
+          });
+          suggBox.appendChild(schip);
+        });
+        body.appendChild(suggBox);
       }, hasDefects);
     defectsDisclosure.id = "item-defects";
     scroll.appendChild(defectsDisclosure);
+
 
     // comments
     var cwrap2 = el("div", {});
@@ -4928,6 +4987,48 @@
   document.getElementById("sort").addEventListener("change", function () {
     sortMode = this.value; renderQueue();
   });
+  var roomJumpEl = document.getElementById("q-room-jump");
+  if (roomJumpEl) {
+    function updateRoomJump() {
+      var curVal = roomJumpEl.value;
+      roomJumpEl.innerHTML = '<option value="">Jump to room…</option>';
+      (inv.rooms || []).forEach(function (r) {
+        var op = el("option", { value: r.name, text: r.name + " (" + r.items.length + ")" });
+        if (r.name === curVal) op.selected = true;
+        roomJumpEl.appendChild(op);
+      });
+    }
+    updateRoomJump();
+    roomJumpEl.addEventListener("change", function () {
+      var rName = this.value;
+      if (!rName) return;
+      sortMode = "room";
+      document.getElementById("sort").value = "room";
+      if (roomCollapsed(rName)) {
+        var cIdx = collapsedRooms.indexOf(rName);
+        if (cIdx >= 0) collapsedRooms.splice(cIdx, 1);
+      }
+      renderQueue();
+      var rHead = document.querySelector('.room-group[data-room="' + rName + '"]');
+      if (rHead) rHead.scrollIntoView({ behavior: "smooth", block: "start" });
+      var room = inv.rooms.find(function (r) { return r.name === rName; });
+      if (room && room.items.length) select({ type: "item", id: room.items[0].id });
+    });
+  }
+  var toggleRoomsBtn = document.getElementById("btn-toggle-all-rooms");
+  if (toggleRoomsBtn) {
+    toggleRoomsBtn.addEventListener("click", function () {
+      var allNames = (inv.rooms || []).map(function (r) { return r.name; });
+      if (collapsedRooms.length >= allNames.length) {
+        collapsedRooms = [];
+      } else {
+        collapsedRooms = allNames.slice();
+      }
+      saveCollapsedRooms();
+      renderQueue();
+    });
+  }
+
   var searchBox = document.getElementById("q-search");
   if (!window.matchMedia("(hover: none), (pointer: coarse)").matches &&
       searchBox.getAttribute("data-placeholder-kbd")) {

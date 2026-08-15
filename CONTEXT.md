@@ -11,12 +11,16 @@ A stop/go measurement of whether the live production describe invents or omits g
 _Avoid_: Phase 4, sealed comparison, prompt tournament, synthetic programme (when meaning this check alone), 200-image pilot, false_change_rate (as a describe-check headline)
 
 **Compare check**:
-A later measurement of whether check-in → check-out comparison finds known room changes and ignores non-change. Deferred until the describe check is complete.
-_Avoid_: Delta programme (as a parallel open ambition), Phase 3.5 (as current centre)
+A measurement of whether check-in → check-out comparison finds known room changes on the 27 scored delta pairs, read primarily as aligned-item state signal versus the repeat-describe noise floor. Diagnostic only; does not promote compare behaviour.
+_Avoid_: Delta programme (as an open ambition), Phase 3.5 (as current centre), false_change_rate (as the sole headline)
 
-**Synthetic backlog (retired for now)**:
-Prompt tournament, sealed Phase 4, empty Pass B provisional records, second-generator matched sets, video regeneration, degradation ladder, further delta generation, and mid-flight plan amendments. None of these are live work during the describe check.
-_Avoid_: Calling any of the above a blocker for the describe check
+**Synthetic backlog**:
+What remains after both checks: naming/alignment product work, cleanliness-gate product decision, formal close of the old arms, then degradation ladder → video only if warranted, then real check-in/out for promotion. Owner: `docs/37-synthetic-backlog.md`.
+_Avoid_: Treating prompt tournament, Pass B backlog, or further delta generation as the next move
+
+**Compare-check results note**:
+The single home for the compare-check answer: signal-vs-noise ratios, scored gold recall by kind, cleanliness-gate sensitivity, and stop. Machine artifact: `reports/compare-check-score-2026-08-06.json`.
+_Avoid_: Amending docs/36 as the live status channel
 
 **Diversity patch**:
 The only new still generation allowed before the describe check: one missing GPT Image 2 view each for RP-011, RP-013, RP-021, and RP-018 (four images). No other regeneration.

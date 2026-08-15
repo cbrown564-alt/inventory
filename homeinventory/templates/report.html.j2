@@ -1134,6 +1134,34 @@ rather than silently deleted.</p>
       });
     });
 
+  // Enable click-to-zoom on room gallery figures
+  Array.prototype.forEach.call(
+    document.querySelectorAll("section.room .photos figure, section.room .room-cover"), function (fig) {
+      var img = fig.querySelector("img");
+      if (!img) return;
+      img.style.cursor = "zoom-in";
+      fig.addEventListener("click", function (e) {
+        if (e.target.closest("a, button")) return;
+        var sec = fig.closest("section.room");
+        if (!sec) return;
+        var allFigs = Array.prototype.slice.call(sec.querySelectorAll(".room-cover, .photos figure"));
+        var idx = allFigs.indexOf(fig);
+        var pList = allFigs.map(function (f) {
+          var im = f.querySelector("img");
+          var cap = f.querySelector("figcaption");
+          return {
+            src: im ? im.src : "",
+            label: cap ? cap.textContent.trim() : "",
+            title: sec.querySelector("h2") ? sec.querySelector("h2").textContent.trim() : ""
+          };
+        }).filter(function (p) { return p.src; });
+        if (pList.length && ui && ui.photoViewer) {
+          ui.photoViewer({ photos: pList, index: Math.max(0, idx) });
+        }
+      });
+    });
+
+
   var rows = Array.prototype.slice.call(document.querySelectorAll("tr.item-row"));
   var headings = Array.prototype.slice.call(document.querySelectorAll("tr.category-row"));
   var buttons = Array.prototype.slice.call(document.querySelectorAll(".filter-btn"));

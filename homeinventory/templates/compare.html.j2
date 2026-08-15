@@ -413,6 +413,22 @@
     require human review before any deduction discussion.
   </footer>
 </main>
+{% set pair_items = [] %}
+{% for room in rooms %}{% for c in room.changed %}
+  {% set _ = pair_items.append({
+    "room": room.name,
+    "title": c.name,
+    "left": (c.checkin_photos[0] if c.checkin_photos else {}),
+    "right": (c.checkout_photos[0] if c.checkout_photos else {})
+  }) %}
+{% endfor %}{% endfor %}
+<script type="application/json" id="compare-data">
+{{ pair_items | tojson }}
+</script>
+<script>
+{% include "_ui.js.j2" %}
+</script>
+
 <script>
 "use strict";
 (function () {
@@ -479,7 +495,45 @@
       if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1));
     }, { passive: true });
   });
+
+  // Paired photo viewer
+  var compPairsData = [];
+  try {
+    compPairsData = JSON.parse(document.getElementById("compare-data").textContent || "[]");
+  } catch (e) {}
+
+  if (compPairsData.length && ui && ui.pairedPhotoViewer) {
+    var pairIndexMap = {};
+    compPairsData.forEach(function (cp, i) {
+      pairIndexMap[cp.room + "::" + cp.title] = i;
+    });
+
+    document.querySelectorAll(".pair, .change-card").forEach(function (card) {
+      var rHead = card.closest(".pair-section") ? card.previousElementSibling : null;
+      var cardId = card.getAttribute("data-card-id") || (rHead ? rHead.textContent : "");
+      card.querySelectorAll("img").forEach(function (img) {
+        img.style.cursor = "zoom-in";
+        img.title = "Click to open side-by-side comparison inspection";
+        img.addEventListener("click", function () {
+          var matchedIdx = 0;
+          for (var k in pairIndexMap) {
+            if (cardId.indexOf(k.split("::")[1]) >= 0) {
+              matchedIdx = pairIndexMap[k];
+              break;
+            }
+          }
+          ui.pairedPhotoViewer({
+            pairs: compPairsData,
+            index: matchedIdx,
+            leftLabel: {{ labels.baseline | tojson }},
+            rightLabel: {{ labels.followup | tojson }}
+          });
+        });
+      });
+    });
+  }
 })();
 </script>
 </body>
 </html>
+

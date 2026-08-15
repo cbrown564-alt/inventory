@@ -750,6 +750,11 @@
     var at = stageIndex(s);
     if (at < 0 && !s.stage) return;
 
+    if (!window._buildStart) window._buildStart = Date.now();
+    var elapsedSec = Math.floor((Date.now() - window._buildStart) / 1000);
+    var elapsedStr = Math.floor(elapsedSec / 60) + ":" + ((elapsedSec % 60) < 10 ? "0" : "") + (elapsedSec % 60);
+    buildLede.textContent = "Processing property evidence · " + elapsedStr + " elapsed. You can leave this tab open.";
+
     buildStages.innerHTML = "";
     STAGES.forEach(function (st, i) {
       var li = el("li", { "class": i < at ? "done" : i === at ? "now" : "" });
@@ -782,9 +787,11 @@
         setBuildStatus(s, false);
         setTimeout(pollBuild, 1500);
       } else if (s.status === "done") {
+        window._buildStart = null;
         setBuildStatus({ stage: "done", room_names: s.room_names }, false);
         location.href = PREFIX + "/#overview";
       } else if (s.status === "failed") {
+        window._buildStart = null;
         bBtn.disabled = false;
         setBuildStatus(s, true);
       } else {

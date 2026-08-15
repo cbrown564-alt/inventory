@@ -308,12 +308,24 @@
             }, 0) + " items" }));
     m.appendChild(head);
 
-    var prog = el("div", { "class": "progress-bar" });
-    prog.innerHTML = "Checked <strong>" + viewedCount() + "</strong> of <strong>" +
-      inv.rooms.length + "</strong> rooms · <strong>" +
-      commentCount() + "</strong> comment" + (commentCount() === 1 ? "" : "s");
+    var prog = el("div", { "class": "tenant-progress-bar" });
+    var vCount = viewedCount();
+    var totalR = inv.rooms.length;
+    var pct = totalR ? Math.round(100 * vCount / totalR) : 0;
+    prog.appendChild(el("span", {
+      text: "Checked " + vCount + " of " + totalR + " rooms (" + pct + "%)"
+    }));
+    var track = el("div", { "class": "prog-track" });
+    var fill = el("div", { "class": "prog-fill" });
+    fill.style.width = pct + "%";
+    track.appendChild(fill);
+    prog.appendChild(track);
+    prog.appendChild(el("span", {
+      text: commentCount() + " comment" + (commentCount() === 1 ? "" : "s")
+    }));
     m.appendChild(prog);
   }
+
 
   function renderGallery(m) {
     m.appendChild(el("div", { "class": "howto",
@@ -581,15 +593,17 @@
 
     var thread = el("div", { "class": "c-thread" });
     (it.comments || []).forEach(function (c) {
-      var line = el("div", { "class": "c-line" });
+      var line = el("div", { "class": "c-card" });
+      var whoRole = c.role || "reviewer";
       line.appendChild(el("span", {
-        "class": "who " + (c.role || ""),
-        text: (c.author || "?") + " (" + (c.role || "reviewer") + ")" }));
+        "class": "c-badge " + whoRole,
+        text: (c.author || "?") + " · " + whoRole }));
       if (c.at) line.appendChild(el("span", { "class": "at",
-        text: (c.at + "").slice(0, 16).replace("T", " ") }));
-      line.appendChild(el("div", { text: c.text || "" }));
+        text: " · " + (c.at + "").slice(0, 16).replace("T", " ") }));
+      line.appendChild(el("div", { style: "margin-top:4px;", text: c.text || "" }));
       thread.appendChild(line);
     });
+
     var add = el("div", { "class": "c-add" });
     var pendingPhoto = null;
     var photoInput = el("input", { type: "file", accept: "image/*",
