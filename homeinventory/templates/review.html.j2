@@ -3899,6 +3899,30 @@
       return false;
     };
 
+    ctl.highlightRegion = function (reg) {
+      var old = media.querySelector(".stage-overlay-box");
+      if (old) old.remove();
+      if (!reg) return;
+      var e = curEntry();
+      if (reg.photo_id && e && e.pid && reg.photo_id !== e.pid) {
+        for (var i = 0; i < ctl.entries.length; i++) {
+          if (ctl.entries[i].pid === reg.photo_id) {
+            showFrame(i);
+            break;
+          }
+        }
+      }
+      var rBox = el("div", { "class": "stage-overlay-box" });
+      rBox.style.left = (reg.x * 100) + "%";
+      rBox.style.top = (reg.y * 100) + "%";
+      rBox.style.width = (reg.w * 100) + "%";
+      rBox.style.height = (reg.h * 100) + "%";
+      if (reg.defect) {
+        rBox.appendChild(el("span", { "class": "stage-overlay-label", text: reg.defect }));
+      }
+      media.appendChild(rBox);
+    };
+
     drawStrip();
     showFrame(startIdx);
     updateStageExtraHint();
@@ -4251,6 +4275,13 @@
           markDirty(); drawChips();
           if (stageCtl && stageCtl.refreshPins) stageCtl.refreshPins();
         } });
+      c.addEventListener("mouseenter", function () {
+        var reg = (it.defect_regions || []).find(function (r) { return r.defect === text; });
+        if (reg && stageCtl && stageCtl.highlightRegion) stageCtl.highlightRegion(reg);
+      });
+      c.addEventListener("mouseleave", function () {
+        if (stageCtl && stageCtl.highlightRegion) stageCtl.highlightRegion(null);
+      });
       c.appendChild(el("span", { text: text }));
       c.appendChild(el("span", { "class": "x", text: struck ? "↩" : "✕" }));
       return c;

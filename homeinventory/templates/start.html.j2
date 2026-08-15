@@ -592,7 +592,15 @@
       var isPhoto = f.type.startsWith("image/") || /\.(jpe?g|png|heic|heif)$/i.test(f.name);
       var isVideo = f.type.startsWith("video/") || /\.(mp4|mov|mkv|webm|avi|m4v)$/i.test(f.name);
       if (!isPhoto && !isVideo) {
-        toast("Choose a property photo or walkthrough video");
+        toast("Please choose a supported property photo or walkthrough video");
+        return;
+      }
+      if (f.size <= 0) {
+        toast("Cannot upload empty file: " + f.name);
+        return;
+      }
+      if (isVideo && f.size > 2147483648) { // 2 GiB limit
+        toast("Video exceeds 2 GB limit: " + f.name + " (" + fmtBytes(f.size) + ")");
         return;
       }
       var photoRoom = document.getElementById("photo-room");
@@ -629,6 +637,9 @@
         upList.appendChild(row);
         if (isVideo) probeClientDuration(f, function (dur) {
           row._dims.textContent = dimsText(f.size, dur);
+          if (dur > 0 && dur < 4) {
+            toast("Note: " + f.name + " is very short (" + dur.toFixed(1) + "s). Walkthroughs work best when panning slowly.");
+          }
         });
         startUpload({ file: f, row: row, room: room });
         syncBuildBtn();

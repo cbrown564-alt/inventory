@@ -321,15 +321,18 @@ var ui = (function () {
     var idx = Math.min(Math.max(opts.index || 0, 0), pairs.length - 1);
     var scale = 1, minScale = 1, tx = 0, ty = 0;
     var sync = true;
+    var mode = "split"; // "split" | "curtain"
+    var curtainPct = 50;
 
     var box = el("div", { "class": "pv pv-paired", role: "dialog", "aria-modal": "true",
                           "aria-label": "Comparison photo viewer" });
     var titleEl = el("span", { "class": "pv-pid" });
     var countEl = el("span", { "class": "pv-count" });
     var zoomEl = el("span", { "class": "pv-zoom", text: "100%" });
-    var syncBtn = el("button", { "class": "pv-btn", type: "button", text: "🔗 Sync Pan & Zoom: ON" });
+    var modeBtn = el("button", { "class": "pv-btn", type: "button", text: "◫ Mode: Split" });
+    var syncBtn = el("button", { "class": "pv-btn", type: "button", text: "🔗 Sync: ON" });
 
-    // Left side
+    // Left side (Baseline)
     var leftImg = el("img", { alt: "" });
     var leftCanvas = el("div", { "class": "pv-canvas" }, [leftImg]);
     var leftStage = el("div", { "class": "pv-split" }, [
@@ -337,7 +340,7 @@ var ui = (function () {
       leftCanvas
     ]);
 
-    // Right side
+    // Right side (Followup)
     var rightImg = el("img", { alt: "" });
     var rightCanvas = el("div", { "class": "pv-canvas" }, [rightImg]);
     var rightStage = el("div", { "class": "pv-split" }, [
@@ -347,16 +350,39 @@ var ui = (function () {
 
     var stagePair = el("div", { "class": "pv-stage-pair" }, [leftStage, rightStage]);
 
+    // Curtain wipe stage
+    var curtainLeftCanvas = el("div", { "class": "pv-canvas" }, [el("img", { alt: "" })]);
+    var curtainRightCanvas = el("div", { "class": "pv-canvas" }, [el("img", { alt: "" })]);
+    var curtainBase = el("div", { "class": "pv-curtain-layer" }, [
+      el("span", { "class": "pv-side-lbl", text: (opts.leftLabel || "Baseline") }),
+      curtainLeftCanvas
+    ]);
+    var curtainTop = el("div", { "class": "pv-curtain-top" }, [
+      el("span", { "class": "pv-side-lbl", style: "left:auto;right:12px;", text: (opts.rightLabel || "Followup") }),
+      curtainRightCanvas
+    ]);
+    var curtainLine = el("div", { "class": "pv-curtain-line" }, [
+      el("div", { "class": "pv-curtain-handle", text: "◀ ▶" })
+    ]);
+    var stageCurtain = el("div", { "class": "pv-stage-curtain", style: "display:none;" }, [
+      curtainBase, curtainTop, curtainLine
+    ]);
+
     function apply() {
       var transform = "translate(" + tx + "px," + ty + "px) scale(" + scale + ")";
       leftCanvas.style.transform = transform;
       rightCanvas.style.transform = transform;
+      curtainLeftCanvas.style.transform = transform;
+      curtainRightCanvas.style.transform = transform;
       zoomEl.textContent = Math.round(100 * scale / minScale) + "%";
+      curtainLine.style.left = curtainPct + "%";
+      curtainTop.style.clipPath = "polygon(" + curtainPct + "% 0, 100% 0, 100% 100%, " + curtainPct + "% 100%)";
     }
 
     function fit() {
-      var sw = leftStage.clientWidth || (window.innerWidth / 2);
-      var sh = leftStage.clientHeight || (window.innerHeight - 100);
+      var activeStage = (mode === "curtain") ? stageCurtain : leftStage;
+      var sw = activeStage.clientWidth || (window.innerWidth / (mode === "curtain" ? 1 : 2));
+      var sh = activeStage.clientHeight || (window.innerHeight - 100);
       var iw = Math.max(leftImg.naturalWidth || 1, rightImg.naturalWidth || 1);
       var ih = Math.max(leftImg.naturalHeight || 1, rightImg.naturalHeight || 1);
       minScale = Math.min(sw / iw, sh / ih, 1);
@@ -367,8 +393,9 @@ var ui = (function () {
     }
 
     function clampPan() {
-      var sw = leftStage.clientWidth || (window.innerWidth / 2);
-      var sh = leftStage.clientHeight || (window.innerHeight - 100);
+      var activeStage = (mode === "curtain") ? stageCurtain : leftStage;
+      var sw = activeStage.clientWidth || (window.innerWidth / (mode === "curtain" ? 1 : 2));
+      var sh = activeStage.clientHeight || (window.innerHeight - 100);
       var iw = (Math.max(leftImg.naturalWidth || 1, rightImg.naturalWidth || 1)) * scale;
       var ih = (Math.max(leftImg.naturalHeight || 1, rightImg.naturalHeight || 1)) * scale;
       if (iw <= sw) tx = (sw - iw) / 2;
@@ -379,7 +406,7 @@ var ui = (function () {
 
     function zoomAt(factor, cx, cy, stageEl) {
       var next = Math.min(Math.max(scale * factor, minScale), minScale * 12);
-      var r = (stageEl || leftStage).getBoundingClientRect();
+      var r = (stageEl || (mode === "curtain" ? stageCurtain : leftStage)).getBoundingClientRect();
       var px = (cx - r.left - tx) / scale, py = (cy - r.top - ty) / scale;
       scale = next;
       tx = cx - r.left - px * scale;
@@ -412,15 +439,37 @@ var ui = (function () {
           fit();
           drawRegions(leftCanvas, leftImg, p.left && p.left.regions);
           drawRegions(rightCanvas, rightImg, p.right && p.right.regions);
+          drawRegions(curtainLeftCanvas, curtainLeftCanvas.querySelector("img"), p.left && p.left.regions);
+          drawRegions(curtainRightCanvas, curtainRightCanvas.querySelector("img"), p.right && p.right.regions);
         }
       }
       leftImg.onload = function () { leftLoaded = true; checkDone(); };
       rightImg.onload = function () { rightLoaded = true; checkDone(); };
       leftImg.src = (p.left && p.left.src) || "";
       rightImg.src = (p.right && p.right.src) || "";
+      var cLeftImg = curtainLeftCanvas.querySelector("img");
+      var cRightImg = curtainRightCanvas.querySelector("img");
+      if (cLeftImg) cLeftImg.src = leftImg.src;
+      if (cRightImg) cRightImg.src = rightImg.src;
       if (leftImg.complete) leftLoaded = true;
       if (rightImg.complete) rightLoaded = true;
       checkDone();
+    }
+
+    function setMode(newMode) {
+      mode = newMode;
+      if (mode === "curtain") {
+        stagePair.style.display = "none";
+        stageCurtain.style.display = "block";
+        modeBtn.textContent = "◧ Mode: Wipe";
+        syncBtn.style.display = "none";
+      } else {
+        stagePair.style.display = "flex";
+        stageCurtain.style.display = "none";
+        modeBtn.textContent = "◫ Mode: Split";
+        syncBtn.style.display = "inline-flex";
+      }
+      fit();
     }
 
     function stepTo(d) {
@@ -445,29 +494,62 @@ var ui = (function () {
                             text: label, onclick: onclick });
     }
 
+    modeBtn.onclick = function () {
+      setMode(mode === "split" ? "curtain" : "split");
+    };
+
     syncBtn.onclick = function () {
       sync = !sync;
-      syncBtn.textContent = sync ? "🔗 Sync Pan & Zoom: ON" : "Unlinked Pan & Zoom";
+      syncBtn.textContent = sync ? "🔗 Sync: ON" : "Unlinked";
       syncBtn.style.borderColor = sync ? "var(--brass-bright)" : "rgba(255,255,255,.22)";
     };
 
     box.appendChild(el("div", { "class": "pv-top" }, [
       titleEl, el("span", { "class": "pv-spacer" }),
+      modeBtn,
       syncBtn,
       pvBtn("✕ Close", "Close", close)
     ]));
     box.appendChild(stagePair);
+    box.appendChild(stageCurtain);
     box.appendChild(el("div", { "class": "pv-bottom" }, [
       pvBtn("‹", "Previous pair", function () { stepTo(-1); }),
-      pvBtn("−", "Zoom out", function () { zoomAt(1 / 1.4, leftStage.clientWidth / 2, leftStage.clientHeight / 2, leftStage); }),
+      pvBtn("−", "Zoom out", function () {
+        var activeStg = mode === "curtain" ? stageCurtain : leftStage;
+        zoomAt(1 / 1.4, activeStg.clientWidth / 2, activeStg.clientHeight / 2, activeStg);
+      }),
       zoomEl,
-      pvBtn("+", "Zoom in", function () { zoomAt(1.4, leftStage.clientWidth / 2, leftStage.clientHeight / 2, leftStage); }),
+      pvBtn("+", "Zoom in", function () {
+        var activeStg = mode === "curtain" ? stageCurtain : leftStage;
+        zoomAt(1.4, activeStg.clientWidth / 2, activeStg.clientHeight / 2, activeStg);
+      }),
       pvBtn("Fit", "Fit to screen", fit),
       pvBtn("›", "Next pair", function () { stepTo(1); }),
       countEl
     ]));
 
-    [leftStage, rightStage].forEach(function (stg) {
+    // Curtain line dragging
+    var draggingCurtain = false;
+    function updateCurtainFromEvent(e) {
+      var r = stageCurtain.getBoundingClientRect();
+      var x = e.clientX - r.left;
+      curtainPct = Math.max(0, Math.min(100, (x / r.width) * 100));
+      apply();
+    }
+    curtainLine.addEventListener("pointerdown", function (e) {
+      e.stopPropagation();
+      curtainLine.setPointerCapture(e.pointerId);
+      draggingCurtain = true;
+    });
+    curtainLine.addEventListener("pointermove", function (e) {
+      if (!draggingCurtain) return;
+      updateCurtainFromEvent(e);
+    });
+    curtainLine.addEventListener("pointerup", function () {
+      draggingCurtain = false;
+    });
+
+    [leftStage, rightStage, stageCurtain].forEach(function (stg) {
       stg.addEventListener("wheel", function (e) {
         e.preventDefault();
         zoomAt(e.deltaY < 0 ? 1.18 : 1 / 1.18, e.clientX, e.clientY, stg);
@@ -475,6 +557,7 @@ var ui = (function () {
 
       var drag = null;
       stg.addEventListener("pointerdown", function (e) {
+        if (e.target === curtainLine || curtainLine.contains(e.target)) return;
         stg.setPointerCapture(e.pointerId);
         drag = { x: e.clientX - tx, y: e.clientY - ty };
         stg.classList.add("dragging");

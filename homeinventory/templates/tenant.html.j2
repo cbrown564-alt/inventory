@@ -640,9 +640,35 @@
       });
       photoInput.value = "";
     });
+    var isDispute = false;
+    var typeWrap = el("div", { style: "display:flex;gap:6px;width:100%;margin-bottom:6px;" });
+    var btnNote = el("button", { type: "button", "class": "adj-chip active", text: "📝 Note / Context" });
+    var btnDispute = el("button", { type: "button", "class": "adj-chip", text: "⚠️ Dispute condition" });
+    var disputeNote = el("div", {
+      style: "display:none;font-size:11.5px;color:var(--muted);margin-bottom:6px;width:100%;line-height:1.4;",
+      text: "Disputing flags this item specifically for clerk review. It does not delay moving in or reject the whole report."
+    });
+
+    btnNote.addEventListener("click", function () {
+      isDispute = false;
+      btnNote.classList.add("active");
+      btnDispute.classList.remove("active", "disputed");
+      disputeNote.style.display = "none";
+      input.placeholder = "Add a note or clarification…";
+    });
+    btnDispute.addEventListener("click", function () {
+      isDispute = true;
+      btnDispute.classList.add("active", "disputed");
+      btnNote.classList.remove("active");
+      disputeNote.style.display = "block";
+      input.placeholder = "Explain what differs from the report…";
+    });
+    typeWrap.appendChild(btnNote);
+    typeWrap.appendChild(btnDispute);
+
     var input = el("input", { type: "text",
-      placeholder: "Raise an issue on this item…" });
-    var btn = el("button", { text: "Comment" });
+      placeholder: "Raise an issue or add a note on this item…" });
+    var btn = el("button", { text: "Send" });
     function send() {
       var text = input.value.trim();
       if (!text && !pendingPhoto) return;
@@ -661,17 +687,17 @@
         return;
       }
       btn.disabled = true;
-      var body = { item_id: it.id, text: text, author: savedName };
+      var fullText = (isDispute ? "[Dispute] " : "") + (text || (pendingPhoto ? "Photo evidence attached" : ""));
+      var body = { item_id: it.id, text: fullText, author: savedName };
       if (pendingPhoto) body.attach_path = pendingPhoto;
       api("POST", "/comments", body)
         .then(function () {
           if (!it.comments) it.comments = [];
-          var commentText = text || "Photo evidence attached";
-          it.comments.push({ author: savedName, role: counterparty.key, text: commentText });
+          it.comments.push({ author: savedName, role: counterparty.key, text: fullText });
           btn.disabled = false;
           input.value = "";
           pendingPhoto = null;
-          toast("Comment recorded on " + it.id);
+          toast((isDispute ? "Dispute" : "Comment") + " recorded on " + it.id);
           render();
         }).catch(function (e) {
           btn.disabled = false;
@@ -682,10 +708,15 @@
     input.addEventListener("keydown", function (e) {
       if (e.key === "Enter") send();
     });
-    add.appendChild(photoInput);
-    add.appendChild(photoBtn);
-    add.appendChild(input);
-    add.appendChild(btn);
+    var formRow = el("div", { style: "display:flex;gap:8px;width:100%;flex-wrap:wrap;align-items:center;" });
+    formRow.appendChild(photoInput);
+    formRow.appendChild(photoBtn);
+    formRow.appendChild(input);
+    formRow.appendChild(btn);
+
+    add.appendChild(typeWrap);
+    add.appendChild(disputeNote);
+    add.appendChild(formRow);
     thread.appendChild(add);
     card.appendChild(thread);
     return card;
