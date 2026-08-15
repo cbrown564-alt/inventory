@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A read-only synthetic evidence-room demo for Home Inventory.">
+  <title>Evidence room · Home Inventory demo</title>
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to evidence room</a>
+  <header class="topbar">
+    <a class="wordmark" href="./" aria-label="Home Inventory demo home">
+      <span class="mark" aria-hidden="true">HI</span>
+      <span>Home Inventory <small>demo</small></span>
+    </a>
+    <nav aria-label="Demo sections">
+      <button class="nav-button is-active" data-view="review" type="button">Evidence room</button>
+      <button class="nav-button" data-view="report" type="button">Final issue</button>
+    </nav>
+    <p class="demo-note"><span class="status-dot" aria-hidden="true"></span> Synthetic fixture · read only</p>
+  </header>
+
+  <main id="main-content">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="kicker">A small, inspectable slice</p>
+        <h1 id="page-title" tabindex="-1">Open a property file,<br><em>follow the evidence.</em></h1>
+        <p class="intro-copy">Choose a recorded kitchen observation. Each entry leads to the original frame that supports it and the review decision attached to that evidence.</p>
+      </div>
+      <aside class="trust-note" aria-label="Demo boundary">
+        <span class="seal" aria-hidden="true">⌁</span>
+        <div><strong>Made for review, not magic</strong><br><span>RP-001 is synthetic, read-only, and already reviewed. No upload, AI processing, personal data, or saved changes.</span></div>
+      </aside>
+    </section>
+
+    <section class="review-view" data-panel="review" aria-label="Evidence room">
+      <div class="room-tabs" role="tablist" aria-label="Rooms">
+        <button class="room-tab is-active" id="tab-kitchen" role="tab" aria-selected="true" aria-controls="room-kitchen" data-room="kitchen" type="button">
+          <span>01</span><strong>Kitchen</strong><small>RP-001 · 4 accepted frames</small>
+        </button>
+      </div>
+
+      <div class="room-header">
+        <div><p class="kicker">Synthetic check-in file</p><h2 id="room-title" tabindex="-1">Kitchen</h2></div>
+        <p class="room-meta">RP-001 · 4/4 Pass A accepted · <span class="mono">GPT Image 2</span> · Pass B gold</p>
+      </div>
+
+      <div class="evidence-layout">
+        <aside class="claim-list" aria-label="Claims in this room">
+          <p class="section-label">Claims to inspect</p>
+          <div id="claim-buttons"></div>
+          <p class="queue-hint"><span class="key">↑</span><span class="key">↓</span> move between claims<br><span class="key">Enter</span> open evidence</p>
+        </aside>
+        <article class="evidence-panel" aria-live="polite">
+          <div class="evidence-heading"><div><p class="kicker">Cited evidence</p><h3 id="claim-title">Kitchen units</h3></div><span id="claim-status" class="badge badge-reviewed">Agreed</span></div>
+          <div class="media-stage">
+            <img id="evidence-image" src="../evals/fixtures/synthetic-room-eval/images/openai/gpt-image-2/RP-001-A-wide.png" alt="Synthetic Kitchen wide view showing pale kitchen units, dark worktop, sink, oven, hob and extractor hood">
+            <div class="media-caption"><span id="photo-id" class="mono">A-wide</span><span id="photo-context">Kitchen · wide establishing view · Pass A accepted</span></div>
+          </div>
+          <div id="frame-buttons" class="frame-strip" aria-label="Cited evidence frames"></div>
+          <div class="evidence-details">
+            <div class="claim-copy"><p class="section-label">Observed evidence</p><p id="claim-description">Pale wood-effect fronts; one lower door has the separately recorded small chip.</p><div id="defect-note"></div></div>
+            <dl class="provenance-list"><div><dt>Evidence</dt><dd id="evidence-ref">A-wide · B-reverse · C-inventory · D-condition</dd></div><div><dt>Review</dt><dd id="review-ref">Second review agreed · Conor Brown</dd></div><div><dt>Integrity</dt><dd id="hash-ref" class="mono">6dc1764c…d2ccee0</dd></div></dl>
+          </div>
+          <div class="evidence-actions"><button class="button button-primary" id="report-button" type="button">See the final issue</button><button class="button button-quiet" id="next-button" type="button">Next claim <span aria-hidden="true">→</span></button></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="report-view" data-panel="report" hidden aria-labelledby="report-title">
+      <div class="report-heading"><div><p class="kicker">Final issue preview · read only</p><h2 id="report-title" tabindex="-1">Inventory &amp; schedule of condition</h2><p>Prepared from the reviewed RP-001 synthetic kitchen packet. This is a provenance handoff, not a signed legal document.</p></div><button class="button button-quiet" data-view="review" type="button">← Back to evidence</button></div>
+      <div class="report-sheet">
+        <div class="report-cover"><p class="kicker">Home Inventory / synthetic check-in</p><h3>RP-001</h3><p class="report-address">Modest 1990s UK flat · Kitchen</p><div class="cover-rule"></div><dl><div><dt>Review status</dt><dd>Verified synthetic gold</dd></div><div><dt>Packet</dt><dd class="mono">4 views · 4 accepted</dd></div><div><dt>Provider</dt><dd>GPT Image 2</dd></div></dl></div>
+        <div class="report-summary"><div class="summary-line"><span class="section-label">At a glance</span><strong>Recorded observations</strong><span>Pass B labels · reviewer decisions retained</span></div><div class="report-entry"><span class="entry-ref mono">KITCHEN</span><div><h4>Kitchen units</h4><p>Pale wood-effect fronts; one lower door has the separately recorded small chip.</p><span class="evidence-line mono">Evidence A-wide · B-reverse · C-inventory · D-condition</span></div><span class="badge badge-reviewed">Agreed</span></div><div class="report-entry"><span class="entry-ref mono">DOOR</span><div><h4>Base unit door</h4><p>Small localised chip on the lower edge; the remainder appears intact in this view.</p><span class="evidence-line mono">Evidence D-condition · minor defect</span></div><span class="badge badge-noted">Agreed</span></div><div class="report-entry"><span class="entry-ref mono">NEG-01</span><div><h4>Negative control</h4><p>Wood grain is not mould. No cracked tiles are visible.</p><span class="evidence-line mono">Evidence A-wide · C-inventory · second review agreed</span></div><span class="badge badge-reviewed">Supported</span></div></div>
+      </div>
+      <div class="provenance-explainer"><div><p class="kicker">Why this record is inspectable</p><h3>Every conclusion has a way back.</h3></div><div class="chain"><span>Observed claim</span><b>→</b><span>Original frame</span><b>→</b><span>View ID</span><b>→</b><span>Immutable hash</span></div><p>This demo uses the committed RP-001 GPT Image 2 packet and its recorded review JSON directly. The four original PNGs are served unchanged; their Pass A acceptance, Pass B observations, and second-review decisions are shown as recorded. This page makes no legal or real-property accuracy claim.</p></div>
+    </section>
+  </main>
+
+  <footer><span>Home Inventory · evidence before assertion</span><span>Synthetic fixture · no data leaves this page</span></footer>
+  <script src="demo.js"></script>
+</body>
+</html>
