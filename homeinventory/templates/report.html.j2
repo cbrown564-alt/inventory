@@ -1246,5 +1246,18 @@ rather than silently deleted.</p>
 })();
 </script>
 {% endif %}
+
+{% if room_sections and room_sections|length > 1 %}
+<aside class="floating-room-toc screen-only" aria-label="Room Index">
+  <span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);">Room</span>
+  <select onchange="if (this.value) { var target = document.getElementById(this.value); if (target) target.scrollIntoView({behavior:'smooth'}); this.value=''; }">
+    <option value="">Jump to room…</option>
+    {% for section in room_sections %}
+    <option value="room-{{ section.number }}">{{ section.number }}. {{ section.name }}</option>
+    {% endfor %}
+  </select>
+  <a href="#" class="toc-top-btn" title="Back to top">↑ Top</a>
+</aside>
+{% endif %}
 </body>
 </html>

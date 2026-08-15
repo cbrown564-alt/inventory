@@ -12,7 +12,7 @@
 :root {
   /* paper — the one document world */
   --paper: #f6f3ec; --panel: #fffdf8; --panel-2: #f1ede3;
-  --ink: #22262d; --muted: #626b76; --faint: #969ca6;
+  --ink: #22262d; --muted: #626b76; --faint: #6e7683;
   --line: #e4dfd3; --line-strong: #c8c1b0;
   --brass: #9a7729; --brass-bright: #7d5e1b; --brass-soft: #f0e7d2;
   --confirm: #1d6f4c; --confirm-soft: #e3f0e9;
@@ -74,14 +74,20 @@ button, input, select, textarea { font-family: var(--ui); }
 /* stage defect region highlight on hover */
 .stage-overlay-box {
   position: absolute; border: 2px solid #e06459; background: rgba(224, 100, 89, .22);
-  pointer-events: none; z-index: 5; transition: opacity .15s ease;
+  z-index: 5; transition: opacity .15s ease;
   box-shadow: 0 0 12px rgba(224, 100, 89, .4);
 }
 .stage-overlay-label {
   position: absolute; left: -2px; bottom: 100%; background: #e06459; color: #fff;
   font: 600 11px var(--ui); padding: 2px 7px; border-radius: 3px 3px 0 0;
   white-space: nowrap; max-width: 280px; overflow: hidden; text-overflow: ellipsis;
+  display: inline-flex; align-items: center; gap: 6px;
 }
+.stage-overlay-delete {
+  cursor: pointer; opacity: .8; font-weight: 700; font-size: 12px; line-height: 1;
+  background: none; border: 0; color: #fff; padding: 0; display: inline-flex;
+}
+.stage-overlay-delete:hover { opacity: 1; transform: scale(1.15); }
 
 /* ---------- app header ---------- */
 .app-header {
@@ -459,6 +465,43 @@ button, input, select, textarea { font-family: var(--ui); }
   font: inherit; cursor: pointer; text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* ---------- floating room toc (report screen view) ---------- */
+.floating-room-toc {
+  position: fixed; bottom: 20px; right: 24px; z-index: 40;
+  background: var(--panel); border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill); box-shadow: var(--e-2);
+  padding: 6px 14px; display: flex; align-items: center; gap: 10px;
+  backdrop-filter: blur(8px); max-width: calc(100vw - 48px);
+}
+.floating-room-toc select {
+  font: 600 var(--fs-xs)/1.2 var(--ui); color: var(--ink);
+  background: transparent; border: none; cursor: pointer; padding: 2px 4px;
+}
+.floating-room-toc select:focus { outline: none; }
+.floating-room-toc .toc-top-btn {
+  font: 600 var(--fs-2xs) var(--mono); color: var(--brass-bright);
+  background: var(--brass-soft); border: 1px solid var(--line);
+  border-radius: var(--r-pill); padding: 3px 8px; text-decoration: none;
+}
+.floating-room-toc .toc-top-btn:hover { background: var(--brass); color: #fff; }
+
+/* ---------- item drag-over state (tenant counter-evidence) ---------- */
+.item.drag-over {
+  border-color: var(--brass) !important;
+  background: var(--brass-soft) !important;
+  box-shadow: inset 0 0 0 2px var(--brass);
+}
+
+/* ---------- tenant sticky completion bar ---------- */
+.tenant-sticky-cta {
+  position: sticky; bottom: 0; left: 0; right: 0; z-index: 35;
+  background: var(--panel); border-top: 1.5px solid var(--line-strong);
+  padding: 12px 20px; box-shadow: 0 -4px 16px rgba(43, 36, 20, .12);
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  animation: slideUp .25s cubic-bezier(.16, 1, .3, 1);
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important;

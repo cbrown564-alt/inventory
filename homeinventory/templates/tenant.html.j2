@@ -714,6 +714,37 @@
     formRow.appendChild(input);
     formRow.appendChild(btn);
 
+    card.addEventListener("dragover", function (e) {
+      e.preventDefault();
+      card.classList.add("drag-over");
+    });
+    card.addEventListener("dragleave", function () {
+      card.classList.remove("drag-over");
+    });
+    card.addEventListener("drop", function (e) {
+      e.preventDefault();
+      card.classList.remove("drag-over");
+      var dt = e.dataTransfer;
+      var file = dt && dt.files && dt.files[0];
+      if (!file || !file.type.match(/^image\//)) {
+        toast("Please drop an image file");
+        return;
+      }
+      photoBtn.disabled = true;
+      photoBtn.textContent = "Uploading…";
+      tenantUploadPhoto(file, roomName).then(function (resp) {
+        pendingPhoto = resp.path;
+        photoBtn.disabled = false;
+        photoBtn.textContent = "Photo ✓";
+        photoBtn.classList.add("on");
+        toast("Photo attached to " + it.id + " — add your comment and send");
+      }).catch(function (err) {
+        photoBtn.disabled = false;
+        photoBtn.textContent = "Photo";
+        toast("Could not upload photo: " + err.message);
+      });
+    });
+
     add.appendChild(typeWrap);
     add.appendChild(disputeNote);
     add.appendChild(formRow);
@@ -733,6 +764,36 @@
     }
     renderSign(m);
     renderSignatures(m);
+
+    // sticky completion bar when all items are addressed
+    var allItems = 0, doneItems = 0;
+    (inv.rooms || []).forEach(function (r) {
+      (r.items || []).forEach(function (it) {
+        allItems++;
+        if (agreed[it.id] || ((it.comments || []).some(function (c) { return c.role === counterparty.key; }))) {
+          doneItems++;
+        }
+      });
+    });
+    var alreadySigned = signatures.some(function (s) { return s.party === counterparty.key; });
+    if (allItems > 0 && doneItems >= allItems && !alreadySigned && !payload.share.locked) {
+      var sticky = el("div", { "class": "tenant-sticky-cta" });
+      sticky.appendChild(el("div", {
+        style: "font-weight:600;font-size:13.5px;color:var(--confirm);",
+        text: "✓ All " + allItems + " items reviewed — you are ready to sign and confirm"
+      }));
+      var signBtn = el("button", {
+        "class": "btn confirm",
+        type: "button",
+        text: "Proceed to Sign & Attest ✍",
+        onclick: function () {
+          var sEl = document.querySelector(".sign-section");
+          if (sEl) sEl.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+      sticky.appendChild(signBtn);
+      m.appendChild(sticky);
+    }
   }
 
   render();

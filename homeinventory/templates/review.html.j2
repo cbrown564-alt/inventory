@@ -3394,6 +3394,18 @@
     if (next === i) return;
     select({ type: "room", name: inv.rooms[next].name });
   }
+  function jumpRoomItems(delta) {
+    if (!inv.rooms.length) return;
+    var curRoom = (sel && sel.type === "item" && ix.byId[sel.id] && ix.byId[sel.id].room) || lastRoomName || inv.rooms[0].name;
+    var ri = roomIndex(curRoom);
+    if (ri < 0) ri = 0;
+    var nextRi = Math.max(0, Math.min(inv.rooms.length - 1, ri + delta));
+    if (nextRi === ri) return;
+    var targetRoomName = inv.rooms[nextRi].name;
+    var firstIt = (ix.byRoom[targetRoomName] || [])[0];
+    if (firstIt) select({ type: "item", id: firstIt.id });
+    else select({ type: "room", name: targetRoomName });
+  }
 
   /* ================================================================
      The evidence stage: the item's cited frames on a dark stage, a
@@ -3918,7 +3930,32 @@
       rBox.style.width = (reg.w * 100) + "%";
       rBox.style.height = (reg.h * 100) + "%";
       if (reg.defect) {
-        rBox.appendChild(el("span", { "class": "stage-overlay-label", text: reg.defect }));
+        var rLbl = el("span", { "class": "stage-overlay-label" });
+        rLbl.appendChild(document.createTextNode(reg.defect));
+        if (opts.item) {
+          var delBtn = el("button", {
+            type: "button",
+            "class": "stage-overlay-delete",
+            title: "Remove this defect pin",
+            text: "×"
+          });
+          delBtn.addEventListener("click", function (ev) {
+            ev.stopPropagation();
+            var it = opts.item;
+            if (it && it.defect_regions) {
+              var idx = it.defect_regions.indexOf(reg);
+              if (idx >= 0) {
+                pushUndo("remove defect pin", [it]);
+                it.defect_regions.splice(idx, 1);
+                markDirty();
+                rBox.remove();
+                if (sel && sel.type === "item" && sel.id === it.id) renderItem(it);
+              }
+            }
+          });
+          rLbl.appendChild(delBtn);
+        }
+        rBox.appendChild(rLbl);
       }
       media.appendChild(rBox);
     };
@@ -5173,6 +5210,14 @@
       e.preventDefault();
       if (window.matchMedia("(max-width: 900px)").matches) setRail(true);
       searchBox.focus(); searchBox.select();
+    }
+    else if (e.key === "]" || (e.shiftKey && (e.key === "J" || e.key === "j"))) {
+      e.preventDefault();
+      jumpRoomItems(1);
+    }
+    else if (e.key === "[" || (e.shiftKey && (e.key === "K" || e.key === "k"))) {
+      e.preventDefault();
+      jumpRoomItems(-1);
     }
     else if (viewMode === "room" && sel && sel.type === "room") {
       if (e.key === "j" || e.key === "ArrowRight") { e.preventDefault(); stepRoom(1); }
