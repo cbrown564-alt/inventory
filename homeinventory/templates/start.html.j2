@@ -725,16 +725,55 @@
     overlay.setAttribute("aria-hidden", on ? "false" : "true");
   }
 
-  function renderRoomChips(names) {
+  function playCompletionChime() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var now = ctx.currentTime;
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(587.33, now);
+      osc.frequency.exponentialRampToValueAtTime(880.00, now + 0.15);
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.5);
+    } catch (e) {}
+  }
+
+  function renderRoomChips(names, currentRoom) {
     if (!roomChips || !names || !names.length) {
       if (roomChips) roomChips.hidden = true;
       return;
     }
     roomChips.innerHTML = "";
+    var title = el("span", {
+      style: "width:100%;font-size:11.5px;font-weight:600;color:var(--brass-bright);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px;",
+      text: "Identified " + names.length + " rooms in footage:"
+    });
+    roomChips.appendChild(title);
     names.forEach(function (n) {
-      roomChips.appendChild(el("span", { "class": "chip", text: n }));
+      var isCur = currentRoom && currentRoom.toLowerCase() === n.toLowerCase();
+      var chip = el("span", {
+        "class": "chip" + (isCur ? " active" : ""),
+        text: (isCur ? "▶ " : "") + n
+      });
+      roomChips.appendChild(chip);
     });
     roomChips.hidden = false;
+  }
+
+  function estimateBuildMinutes(s, at) {
+    var roomsCount = (s.room_names && s.room_names.length) || s.rooms_found || (s.room_total || 4);
+    if (at >= 4) return "< 1";
+    if (at === 3) {
+      var remainingRooms = Math.max(1, roomsCount - (s.room_index || 0));
+      return Math.max(1, Math.ceil(remainingRooms * 1.1)) + "";
+    }
+    if (at === 2) return Math.max(2, Math.ceil(roomsCount * 1.2 + 1)) + "";
+    return Math.max(3, Math.ceil(roomsCount * 1.4 + 2)) + "";
   }
 
   function setBuildStatus(s, err) {
@@ -764,7 +803,8 @@
     if (!window._buildStart) window._buildStart = Date.now();
     var elapsedSec = Math.floor((Date.now() - window._buildStart) / 1000);
     var elapsedStr = Math.floor(elapsedSec / 60) + ":" + ((elapsedSec % 60) < 10 ? "0" : "") + (elapsedSec % 60);
-    buildLede.textContent = "Processing property evidence · " + elapsedStr + " elapsed. You can leave this tab open.";
+    var estMins = estimateBuildMinutes(s, at);
+    buildLede.textContent = "Processing property evidence · " + elapsedStr + " elapsed (~" + estMins + " min remaining). You can leave this tab open.";
 
     buildStages.innerHTML = "";
     STAGES.forEach(function (st, i) {
@@ -782,7 +822,7 @@
     }
 
     if (s.room_names && s.room_names.length) {
-      renderRoomChips(s.room_names);
+      renderRoomChips(s.room_names, s.room_name);
     } else if (s.rooms_found && at >= 2) {
       renderRoomChips([]);
       roomChips.hidden = true;
@@ -799,8 +839,12 @@
         setTimeout(pollBuild, 1500);
       } else if (s.status === "done") {
         window._buildStart = null;
+        playCompletionChime();
+        document.title = "✓ Report Ready — Home Inventory";
         setBuildStatus({ stage: "done", room_names: s.room_names }, false);
-        location.href = PREFIX + "/#overview";
+        setTimeout(function () {
+          location.href = PREFIX + "/#overview";
+        }, 300);
       } else if (s.status === "failed") {
         window._buildStart = null;
         bBtn.disabled = false;

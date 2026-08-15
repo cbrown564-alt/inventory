@@ -620,6 +620,24 @@
       });
       add.appendChild(agreeBtn);
     }
+    var photoPreview = el("div", {
+      style: "display:none;align-items:center;gap:8px;padding:6px 10px;background:var(--panel-2);border:1px solid var(--confirm);border-radius:4px;font-size:12px;color:var(--confirm);width:100%;margin-top:4px;"
+    });
+    var photoPrevText = el("span", { text: "📷 Photo evidence attached" });
+    var photoPrevRemove = el("button", {
+      type: "button",
+      style: "margin-left:auto;background:none;border:none;cursor:pointer;font-weight:600;color:var(--danger);font-size:11px;",
+      text: "✕ Remove photo",
+      onclick: function () {
+        pendingPhoto = null;
+        photoBtn.classList.remove("on");
+        photoBtn.textContent = "Photo";
+        photoPreview.style.display = "none";
+      }
+    });
+    photoPreview.appendChild(photoPrevText);
+    photoPreview.appendChild(photoPrevRemove);
+
     var photoBtn = el("button", { type: "button", "class": "photo", text: "Photo" });
     photoBtn.addEventListener("click", function () { photoInput.click(); });
     photoInput.addEventListener("change", function () {
@@ -632,10 +650,12 @@
         photoBtn.disabled = false;
         photoBtn.textContent = "Photo ✓";
         photoBtn.classList.add("on");
+        photoPreview.style.display = "flex";
         toast("Photo ready — add your comment and send");
       }).catch(function (e) {
         photoBtn.disabled = false;
         photoBtn.textContent = "Photo";
+        photoPreview.style.display = "none";
         toast("Could not upload photo: " + e.message);
       });
       photoInput.value = "";
@@ -737,10 +757,12 @@
         photoBtn.disabled = false;
         photoBtn.textContent = "Photo ✓";
         photoBtn.classList.add("on");
+        photoPreview.style.display = "flex";
         toast("Photo attached to " + it.id + " — add your comment and send");
       }).catch(function (err) {
         photoBtn.disabled = false;
         photoBtn.textContent = "Photo";
+        photoPreview.style.display = "none";
         toast("Could not upload photo: " + err.message);
       });
     });
@@ -748,6 +770,7 @@
     add.appendChild(typeWrap);
     add.appendChild(disputeNote);
     add.appendChild(formRow);
+    add.appendChild(photoPreview);
     thread.appendChild(add);
     card.appendChild(thread);
     return card;
