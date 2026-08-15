@@ -390,16 +390,17 @@ def main(argv: list[str] | None = None) -> int:
     b = sub.add_parser("build", help="build a report from a capture folder")
     b.add_argument("capture_dir")
     b.add_argument("-o", "--out", default="report")
-    b.add_argument("--backend", choices=["claude", "openai", "local", "offline"],
+    b.add_argument("--backend", choices=["claude", "openai", "openrouter", "tiered", "local", "offline"],
                    default="openai")
     b.add_argument("--model", default=None,
                    help="model id for the backend: openai default "
                         "gemini-3.5-flash (via Google compat endpoint); "
+                        "openrouter default google/gemini-3.7-flash; "
                         "claude default claude-opus-4-8 (expensive backup for "
                         "hard items); local default qwen3.5:9b (any Ollama "
                         "vision model)")
     b.add_argument("--base-url", default=None,
-                   help="override the API base URL for --backend openai "
+                   help="override the API base URL for --backend openai / openrouter "
                         "(any OpenAI-compatible server)")
     b.add_argument("--address", help="property address for the cover page")
     b.add_argument("--inspector", help="name of the person attesting the report")
@@ -496,7 +497,7 @@ def main(argv: list[str] | None = None) -> int:
                          "retained for compatibility)")
     rv.add_argument("--no-share", action="store_false", dest="share",
                     help="start an owner-only session without a tenant link")
-    rv.add_argument("--backend", choices=["claude", "openai", "local", "offline"],
+    rv.add_argument("--backend", choices=["claude", "openai", "openrouter", "tiered", "local", "offline"],
                     default="openai", help="backend used by 'Re-describe room'")
     rv.add_argument("--model", default=None)
     rv.add_argument("--base-url", default=None)
@@ -538,15 +539,15 @@ def main(argv: list[str] | None = None) -> int:
     c.add_argument("--context", action="append", default=[], metavar="KEY=VALUE",
                    help="comparison context for the rubric (repeatable; e.g. "
                         "tenancy_months=12, scope='full deep clean')")
-    c.add_argument("--backend", choices=["openai", "offline"], default="openai",
+    c.add_argument("--backend", choices=["openai", "openrouter", "offline"], default="openai",
                    help="classification rubric backend; offline skips "
                         "classification (everything 'unclassified')")
     c.add_argument("--model", default=None,
-                   help="rubric model for --backend openai "
+                   help="rubric model for --backend openai / openrouter "
                         "(default gpt-5.4-mini, the model the rubric's IMS "
                         "agreement was measured on — docs/08-compare.md)")
     c.add_argument("--base-url", default=None,
-                   help="override the API base URL for --backend openai")
+                   help="override the API base URL for --backend openai / openrouter")
     c.add_argument("--tenancy-months", type=int, default=None,
                    help="tenancy length in months (tenancy use-case; folded "
                         "into --context; omitted = 'not provided')")

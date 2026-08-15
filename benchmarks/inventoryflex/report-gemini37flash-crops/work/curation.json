@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "overrides": {},
+  "cover_status": {
+    "Balcony": {
+      "status": "confident",
+      "reason": "deliberate_capture",
+      "photo_id": "P004"
+    },
+    "Bathroom": {
+      "status": "confident",
+      "reason": "deliberate_capture",
+      "photo_id": "P028"
+    },
+    "Bedroom": {
+      "status": "confident",
+      "reason": "deliberate_capture",
+      "photo_id": "P040"
+    },
+    "Entrance Hall": {
+      "status": "confident",
+      "reason": "deliberate_capture",
+      "photo_id": "P080"
+    },
+    "Reception & Open Plan Kitchen": {
+      "status": "confident",
+      "reason": "deliberate_capture",
+      "photo_id": "P096"
+    },
+    "Walk In Wardrobe": {
+      "status": "confident",
+      "reason": "deliberate_capture",
+      "photo_id": "P185"
+    }
+  }
+}

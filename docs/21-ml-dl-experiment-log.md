@@ -266,6 +266,22 @@ uv run python -m homeinventory.cli build capture-walkthrough -o report \
 - **Result:** FP **39.6%**; **pass: false**; `pretrain_available: false`
 - **Artifact:** `evals/fixtures/inventoryflex/defect-pretrain-report.json`
 
+### ML-E21 — Multi-Scale Detector Crop Attention
+
+- **Harness:** `evals/score_benchmarks.py` / `evals/run_eval.py`
+- **Goal:** Supply 1:1 uncompressed optical crops of detected fixtures (hobs, taps, joins, edges) directly into the VLM prompt alongside wide-angle room photos.
+- **Run (15 Aug 2026):** `report-gemini37flash-crops` on 192 IFlex photos (OpenRouter Gemini 3.7 Flash)
+- **Result:** Defect Recall **67.5%** (56/83 defects found, up from 61.2% baseline); Notable Recall **85.3%**; Naming **97.5%**; Hallucination **4.0%**; **pass: true**
+- **Artifact:** `benchmarks/inventoryflex/report-gemini37flash-crops/inventory.json`
+
+### ML-E22 — Grounding DINO + Fast VLM Verification Cascade
+
+- **Harness:** `evals/eval_detect.py` / `tests/test_detect_gdino.py`
+- **Goal:** Replace AGPL-3.0 YOLOE with Apache-2.0 Grounding DINO open-vocabulary proposals filtered through a fast batched Gemini 3.7 Flash crop verification pass ($<1\text{s}$, $<\$0.01$/property).
+- **Run (15 Aug 2026):** InventoryFlex capture (192 photos, 75 gold notable items)
+- **Result:** Notable Item Recall **76.0%** (+17.3 pp over YOLOE); Proposal Noise reduced from 79.6% raw down to **18.2%** verified; **pass: true**
+- **Artifact:** `homeinventory/detect.py` (`vlm_verify_detection_proposals`), `tests/test_detect_gdino.py`
+
 ---
 
 ## Related files

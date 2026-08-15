@@ -171,11 +171,19 @@ class GroundingDinoDetector:
         """Item-conditioned grounding via a temporary vocabulary swap."""
         if not queries:
             return []
+        unique_queries = list(dict.fromkeys(queries))
+        # Grounding DINO text encoder has a 256-token limit; chunk queries into
+        # small batches to guarantee prompts never overflow the position embeddings.
+        chunk_size = 10
+        all_dets: list[Detection] = []
         previous = list(self.vocab)
         try:
-            self.vocab = list(dict.fromkeys(queries))
-            self._label_map = {_norm_label(v): v for v in self.vocab}
-            return self.detect(image_path, crops_dir=crops_dir)
+            for i in range(0, len(unique_queries), chunk_size):
+                chunk = unique_queries[i:i + chunk_size]
+                self.vocab = chunk
+                self._label_map = {_norm_label(v): v for v in self.vocab}
+                all_dets.extend(self.detect(image_path, crops_dir=crops_dir))
+            return all_dets
         finally:
             self.vocab = previous
             self._label_map = {_norm_label(v): v for v in self.vocab}

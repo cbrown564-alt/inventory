@@ -315,6 +315,35 @@ class ClaudeBackend:
             content.append({"type": "image",
                             "source": {"type": "base64",
                                        "media_type": media_type, "data": data}})
+        
+        # Multi-scale detail inspection crops (Frontier 1)
+        if detections:
+            crop_entries = []
+            for photo in photos:
+                for det in (detections.get(photo.id) or []):
+                    if det.crop_path and Path(det.crop_path).is_file() and det.confidence >= 0.30:
+                        crop_entries.append((photo.id, det))
+            if crop_entries:
+                content.append({
+                    "type": "text",
+                    "text": (
+                        "High-resolution detail crops of detected items/surfaces in this room "
+                        "(inspect these close-up crops for localized marks, chips, scratches, "
+                        "wear, hairline cracks, limescale, stains, or blemishes):"
+                    )
+                })
+                for photo_id, det in crop_entries[:24]:
+                    crop_type, crop_data = _encode_image(Path(det.crop_path), max_dim=800)
+                    content.append({
+                        "type": "text",
+                        "text": f"Detail crop from Photo {photo_id} showing [{det.label}]:"
+                    })
+                    content.append({
+                        "type": "image",
+                        "source": {"type": "base64",
+                                   "media_type": crop_type, "data": crop_data}
+                    })
+
         content.append({
             "type": "text",
             "text": (
@@ -602,23 +631,35 @@ class OpenAICompatBackend:
     """Any provider speaking the OpenAI chat-completions protocol.
 
     Covers OpenAI itself, Google Gemini (whose OpenAI-compatibility endpoint
-    is selected automatically for gemini-* models), and any other compatible
+    is selected automatically for gemini-* models), OpenRouter (selected for
+    openrouter backend or provider-prefixed models), and any other compatible
     server via --base-url. One whole-room call, like the claude backend.
     """
     name = "openai"
 
     DEFAULT_MODEL = "gemini-3.5-flash"
     GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/openai"
+    OPENROUTER_BASE = "https://openrouter.ai/api/v1"
 
     def __init__(self, model: Optional[str] = None, base_url: Optional[str] = None,
                  api_key: Optional[str] = None, timeout: float = 300.0,
                  system_prompt: str = SYSTEM_PROMPT,
-                 item_schema: dict | None = None):
+                 item_schema: dict | None = None,
+                 name: Optional[str] = None):
         self.model = model or self.DEFAULT_MODEL
+        if name:
+            self.name = name
+        elif base_url and "openrouter.ai" in base_url:
+            self.name = "openrouter"
         self.system_prompt = system_prompt
         self.item_schema = item_schema if item_schema is not None else ITEM_SCHEMA
-        if base_url is None and self.model.startswith("gemini"):
-            base_url = self.GEMINI_BASE
+        if base_url is None:
+            if self.model.startswith(("google/", "anthropic/", "meta-llama/", "mistralai/", "deepseek/", "openrouter/")):
+                base_url = self.OPENROUTER_BASE
+                if not name:
+                    self.name = "openrouter"
+            elif self.model.startswith("gemini"):
+                base_url = self.GEMINI_BASE
         base_url = (base_url or os.environ.get("OPENAI_BASE_URL")
                     or "https://api.openai.com/v1")
         self.base_url = base_url.rstrip("/")
@@ -626,42 +667,58 @@ class OpenAICompatBackend:
         self.timeout = timeout
         if not self.api_key:
             raise DescribeAuthError(
-                "No API key found. Set OPENAI_API_KEY (or GEMINI_API_KEY for "
-                "gemini-* models), or use another --backend."
+                "No API key found. Set OPENAI_API_KEY (or OPENROUTER_API_KEY for "
+                "openrouter / openrouter.ai, or GEMINI_API_KEY for gemini-* models), "
+                "or use another --backend."
             )
 
     @staticmethod
     def _resolve_key(base_url: str) -> Optional[str]:
+        if "openrouter.ai" in base_url:
+            return (os.environ.get("OPENROUTER_API_KEY")
+                    or os.environ.get("OPENAI_API_KEY"))
         if "googleapis.com" in base_url:
             return (os.environ.get("GEMINI_API_KEY")
                     or os.environ.get("GOOGLE_API_KEY"))
         return os.environ.get("OPENAI_API_KEY")
 
     def _post(self, payload: dict) -> dict:
+        import http.client
+        import time
+
         req = urllib.request.Request(
             f"{self.base_url}/chat/completions",
             data=json.dumps(payload).encode(),
             headers={"Content-Type": "application/json",
                      "Authorization": f"Bearer {self.api_key}"})
-        try:
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
-                return json.loads(resp.read().decode("utf-8"))
-        except urllib.error.HTTPError as e:
-            detail = e.read().decode("utf-8", errors="replace")
+        max_retries = 3
+        for attempt in range(max_retries):
             try:
-                detail = json.loads(detail).get("error", {}).get("message", detail)
-            except (ValueError, AttributeError):
-                pass
-            if e.code in (401, 403):
-                raise DescribeAuthError(
-                    f"API key rejected by {self.base_url}: {detail}") from e
-            if e.code == 404:
+                with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                    return json.loads(resp.read().decode("utf-8"))
+            except urllib.error.HTTPError as e:
+                detail = e.read().decode("utf-8", errors="replace")
+                try:
+                    detail = json.loads(detail).get("error", {}).get("message", detail)
+                except (ValueError, AttributeError):
+                    pass
+                if e.code in (401, 403):
+                    raise DescribeAuthError(
+                        f"API key rejected by {self.base_url}: {detail}") from e
+                if e.code == 404:
+                    raise FatalBackendError(
+                        f"Model or endpoint not found at {self.base_url}: {detail}") from e
+                if e.code in (429, 500, 502, 503, 504) and attempt < max_retries - 1:
+                    time.sleep(2 ** attempt)
+                    continue
+                raise RuntimeError(f"API error {e.code}: {detail}") from e
+            except (urllib.error.URLError, http.client.IncompleteRead,
+                    ConnectionResetError, TimeoutError) as e:
+                if attempt < max_retries - 1:
+                    time.sleep(2 ** attempt)
+                    continue
                 raise FatalBackendError(
-                    f"Model or endpoint not found at {self.base_url}: {detail}") from e
-            raise RuntimeError(f"API error {e.code}: {detail}") from e
-        except urllib.error.URLError as e:
-            raise FatalBackendError(
-                f"Cannot reach {self.base_url} ({e.reason})") from e
+                    f"Cannot reach {self.base_url} ({e})") from e
 
     def describe_room(self, room_name, photos, photo_paths, detections):
         content = []
@@ -670,6 +727,34 @@ class OpenAICompatBackend:
             content.append({"type": "text", "text": f"Photo {photo.id}:"})
             content.append({"type": "image_url",
                             "image_url": {"url": f"data:{media_type};base64,{data}"}})
+        
+        # Multi-scale detail inspection crops (Frontier 1)
+        if detections:
+            crop_entries = []
+            for photo in photos:
+                for det in (detections.get(photo.id) or []):
+                    if det.crop_path and Path(det.crop_path).is_file() and det.confidence >= 0.30:
+                        crop_entries.append((photo.id, det))
+            if crop_entries:
+                content.append({
+                    "type": "text",
+                    "text": (
+                        "High-resolution detail crops of detected items/surfaces in this room "
+                        "(inspect these close-up crops for localized marks, chips, scratches, "
+                        "wear, hairline cracks, limescale, stains, or blemishes):"
+                    )
+                })
+                for photo_id, det in crop_entries[:24]:
+                    crop_type, crop_data = _encode_image(Path(det.crop_path), max_dim=800)
+                    content.append({
+                        "type": "text",
+                        "text": f"Detail crop from Photo {photo_id} showing [{det.label}]:"
+                    })
+                    content.append({
+                        "type": "image_url",
+                        "image_url": {"url": f"data:{crop_type};base64,{crop_data}"}
+                    })
+
         content.append({
             "type": "text",
             "text": (
@@ -748,7 +833,7 @@ class TieredBackend:
     name = "tiered"
 
     def __init__(self, draft: DescribeBackend, expert: DescribeBackend | None = None,
-                 expert_model: str = "claude-opus-4-8",
+                 expert_model: str = "claude-opus-5",
                  system_prompt: str = SYSTEM_PROMPT,
                  item_schema: dict | None = None):
         self.draft = draft
@@ -817,18 +902,24 @@ def get_backend(name: str, model: Optional[str] = None,
     schema = build_item_schema(uc)
     prompt = uc.system_prompt
     if name == "claude":
-        return ClaudeBackend(model=model or "claude-opus-4-8",
+        return ClaudeBackend(model=model or "claude-opus-5",
                              system_prompt=prompt, item_schema=schema)
     if name == "openai":
         return OpenAICompatBackend(model=model, base_url=base_url,
-                                   system_prompt=prompt, item_schema=schema)
-    if name == "tiered":
-        draft = OpenAICompatBackend(model=model, base_url=base_url,
                                     system_prompt=prompt, item_schema=schema)
-        return TieredBackend(draft, system_prompt=prompt, item_schema=schema)
+    if name == "openrouter":
+        return OpenAICompatBackend(model=model or "google/gemini-3.7-flash",
+                                   base_url=base_url or OpenAICompatBackend.OPENROUTER_BASE,
+                                   system_prompt=prompt, item_schema=schema,
+                                   name="openrouter")
+    if name == "tiered":
+        draft = OpenAICompatBackend(model=model or "google/gemini-3.7-flash", base_url=base_url,
+                                    system_prompt=prompt, item_schema=schema)
+        expert_model = os.environ.get("HI_EXPERT_MODEL", "claude-opus-5")
+        return TieredBackend(draft, expert_model=expert_model, system_prompt=prompt, item_schema=schema)
     if name == "local":
         return LocalBackend(model=model, system_prompt=prompt, item_schema=schema)
     if name == "offline":
         return OfflineBackend()
     raise ValueError(f"unknown describe backend: {name!r} "
-                     "(expected tiered|claude|openai|local|offline)")
+                     "(expected tiered|claude|openai|openrouter|local|offline)")
