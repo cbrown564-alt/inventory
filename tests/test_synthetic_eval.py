@@ -3,6 +3,7 @@ from collections import Counter
 import hashlib
 import json
 from pathlib import Path
+import shutil
 
 import pytest
 
@@ -306,9 +307,9 @@ def test_antigravity_resume_skips_terminal_packets_and_preserves_partial_files()
 def test_antigravity_retry_loads_full_packet_with_one_actionable_view(tmp_path):
     fixture = tmp_path / "fixture"
     (fixture / "scenarios").mkdir(parents=True)
-    (fixture / "dataset.json").write_text((DATASET / "dataset.json").read_text())
+    shutil.copyfile(DATASET / "dataset.json", fixture / "dataset.json")
     source = DATASET / "scenarios/RP-001.json"
-    (fixture / "scenarios" / source.name).write_text(source.read_text())
+    shutil.copyfile(source, fixture / "scenarios" / source.name)
     rows = write_tasks(fixture)
     for row in rows:
         if row["provider"] != "Google":
@@ -318,7 +319,7 @@ def test_antigravity_retry_loads_full_packet_with_one_actionable_view(tmp_path):
             row["attempts"] = "1"
         else:
             row["status"] = "pass_a_accepted"
-    with (fixture / "tasks.csv").open("w", newline="") as handle:
+    with (fixture / "tasks.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
         writer.writeheader()
         writer.writerows(rows)
@@ -332,14 +333,14 @@ def test_antigravity_retry_loads_full_packet_with_one_actionable_view(tmp_path):
 def test_prompts_are_deterministic_and_task_progress_is_preserved(tmp_path):
     fixture = tmp_path / "fixture"
     (fixture / "scenarios").mkdir(parents=True)
-    (fixture / "dataset.json").write_text((DATASET / "dataset.json").read_text())
+    shutil.copyfile(DATASET / "dataset.json", fixture / "dataset.json")
     for source in (DATASET / "scenarios").glob("*.json"):
-        (fixture / "scenarios" / source.name).write_text(source.read_text())
+        shutil.copyfile(source, fixture / "scenarios" / source.name)
     first = write_tasks(fixture)
-    with (fixture / "tasks.csv").open(newline="") as handle:
+    with (fixture / "tasks.csv").open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     rows[0]["status"] = "review_pending"
-    with (fixture / "tasks.csv").open("w", newline="") as handle:
+    with (fixture / "tasks.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
         writer.writeheader(); writer.writerows(rows)
     second = write_tasks(fixture)
@@ -376,7 +377,7 @@ def test_fixture_validates_accepted_images_and_reports_pending_tasks(tmp_path):
     )
     output = tmp_path / "contact-sheet.html"
     build(DATASET, output)
-    page = output.read_text()
+    page = output.read_text(encoding="utf-8")
     assert "<strong>Status:</strong>" in page
     # 200 matched-design tasks plus the 100-row Gemini Omni bias-check slice.
     assert page.count("<article ") == 300
@@ -395,25 +396,27 @@ def test_fixture_validates_accepted_images_and_reports_pending_tasks(tmp_path):
 
 def test_schema_files_are_valid_json():
     for path in (DATASET / "schemas").glob("*.json"):
-        assert json.loads(path.read_text())["$schema"].endswith("2020-12/schema")
+        schema = json.loads(path.read_text(encoding="utf-8"))["$schema"]
+        assert schema.endswith("2020-12/schema")
 
 
 def test_review_templates_include_structured_negative_controls(tmp_path):
     fixture = tmp_path / "fixture"
     (fixture / "scenarios").mkdir(parents=True)
-    (fixture / "dataset.json").write_text((DATASET / "dataset.json").read_text())
+    shutil.copyfile(DATASET / "dataset.json", fixture / "dataset.json")
     for source in (DATASET / "scenarios").glob("*.json"):
-        (fixture / "scenarios" / source.name).write_text(source.read_text())
+        shutil.copyfile(source, fixture / "scenarios" / source.name)
     write_tasks(fixture)
-    review = json.loads(next((fixture / "reviews").glob("*.json")).read_text())
+    review = json.loads(
+        next((fixture / "reviews").glob("*.json")).read_text(encoding="utf-8"))
     assert review["pass_b"]["negative_controls"] == []
 
 
 def test_verified_pass_b_reviews_keep_rejected_frames_out_of_gold():
     reviews = [
-        json.loads(path.read_text())
+        json.loads(path.read_text(encoding="utf-8"))
         for path in sorted((DATASET / "reviews").glob("RP-*.json"))
-        if json.loads(path.read_text()).get("review_status")
+        if json.loads(path.read_text(encoding="utf-8")).get("review_status")
         == "verified_synthetic_gold"
     ]
     assert len(reviews) == 4
@@ -447,15 +450,15 @@ def test_verified_pass_b_reviews_keep_rejected_frames_out_of_gold():
 def test_record_outputs_pins_hash_and_generation_provenance(tmp_path):
     fixture = tmp_path / "fixture"
     (fixture / "scenarios").mkdir(parents=True)
-    (fixture / "dataset.json").write_text((DATASET / "dataset.json").read_text())
+    shutil.copyfile(DATASET / "dataset.json", fixture / "dataset.json")
     for source in (DATASET / "scenarios").glob("*.json"):
-        (fixture / "scenarios" / source.name).write_text(source.read_text())
+        shutil.copyfile(source, fixture / "scenarios" / source.name)
     rows = write_tasks(fixture)
     output = fixture / rows[0]["output_path"]
     output.parent.mkdir(parents=True)
     output.write_bytes(b"generated image bytes")
     assert record(fixture, "test operator", "1.1.2") == 1
-    with (fixture / "tasks.csv").open(newline="") as handle:
+    with (fixture / "tasks.csv").open(newline="", encoding="utf-8") as handle:
         saved = next(csv.DictReader(handle))
     assert saved["status"] == "review_pending"
     assert saved["operator"] == "test operator"
@@ -464,15 +467,17 @@ def test_record_outputs_pins_hash_and_generation_provenance(tmp_path):
     rejected = reject(fixture, saved["task_id"], ["malformed fixture"])
     assert rejected.is_file()
     assert not output.exists()
-    assert json.loads((fixture / "rejected/manifest.jsonl").read_text())["reasons"] == ["malformed fixture"]
+    manifest = json.loads(
+        (fixture / "rejected/manifest.jsonl").read_text(encoding="utf-8"))
+    assert manifest["reasons"] == ["malformed fixture"]
 
 
 def test_record_outputs_replaces_rejection_operator_on_retry(tmp_path):
     fixture = tmp_path / "fixture"
     (fixture / "scenarios").mkdir(parents=True)
-    (fixture / "dataset.json").write_text((DATASET / "dataset.json").read_text())
+    shutil.copyfile(DATASET / "dataset.json", fixture / "dataset.json")
     source = DATASET / "scenarios/RP-001.json"
-    (fixture / "scenarios" / source.name).write_text(source.read_text())
+    shutil.copyfile(source, fixture / "scenarios" / source.name)
     rows = write_tasks(fixture)
     row = rows[0]
     row["status"] = "retry_pending"
@@ -481,12 +486,12 @@ def test_record_outputs_replaces_rejection_operator_on_retry(tmp_path):
     output = fixture / row["output_path"]
     output.parent.mkdir(parents=True)
     output.write_bytes(b"second attempt")
-    with (fixture / "tasks.csv").open("w", newline="") as handle:
+    with (fixture / "tasks.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
         writer.writeheader()
         writer.writerows(rows)
     record(fixture, "generation operator", "retry tool", provider=row["provider"])
-    with (fixture / "tasks.csv").open(newline="") as handle:
+    with (fixture / "tasks.csv").open(newline="", encoding="utf-8") as handle:
         saved = next(csv.DictReader(handle))
     assert saved["operator"] == "generation operator"
     assert saved["attempts"] == "2"
@@ -495,9 +500,9 @@ def test_record_outputs_replaces_rejection_operator_on_retry(tmp_path):
 def test_imagegen_retry_ledger_pins_prompt_output_and_reference_hashes(tmp_path):
     fixture = tmp_path / "fixture"
     (fixture / "scenarios").mkdir(parents=True)
-    (fixture / "dataset.json").write_text((DATASET / "dataset.json").read_text())
+    shutil.copyfile(DATASET / "dataset.json", fixture / "dataset.json")
     source = DATASET / "scenarios/RP-001.json"
-    (fixture / "scenarios" / source.name).write_text(source.read_text())
+    shutil.copyfile(source, fixture / "scenarios" / source.name)
     rows = write_tasks(fixture)
     openai = [row for row in rows if row["provider"] == "OpenAI"]
     for row in openai:
@@ -509,7 +514,7 @@ def test_imagegen_retry_ledger_pins_prompt_output_and_reference_hashes(tmp_path)
     retry = next(row for row in openai if row["view_id"] == "C-inventory")
     retry["attempts"] = "2"
     retry["operator"] = "Codex GPT Image 2 built-in imagegen"
-    with (fixture / "tasks.csv").open("w", newline="") as handle:
+    with (fixture / "tasks.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
         writer.writeheader()
         writer.writerows(rows)
@@ -598,9 +603,9 @@ def test_google_provenance_audit_does_not_equate_integrity_with_origin():
 def test_complete_pass_a_import_applies_ai_accept_and_protocol_correction(tmp_path):
     fixture = tmp_path / "fixture"
     (fixture / "scenarios").mkdir(parents=True)
-    (fixture / "dataset.json").write_text((DATASET / "dataset.json").read_text())
+    shutil.copyfile(DATASET / "dataset.json", fixture / "dataset.json")
     source = DATASET / "scenarios/RP-001.json"
-    (fixture / "scenarios" / source.name).write_text(source.read_text())
+    shutil.copyfile(source, fixture / "scenarios" / source.name)
     rows = write_tasks(fixture)
     google = [row for row in rows if row["provider"] == "Google"]
     for row in google[:2]:
@@ -610,7 +615,7 @@ def test_complete_pass_a_import_applies_ai_accept_and_protocol_correction(tmp_pa
         row["status"] = "review_pending"
         row["attempts"] = "1"
         row["output_sha256"] = hashlib.sha256(output.read_bytes()).hexdigest()
-    with (fixture / "tasks.csv").open("w", newline="") as handle:
+    with (fixture / "tasks.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=rows[0].keys())
         writer.writeheader()
         writer.writerows(rows)
@@ -639,20 +644,20 @@ def test_complete_pass_a_import_applies_ai_accept_and_protocol_correction(tmp_pa
                 "second_review_agreed": True,
             },
         ],
-    }))
+    }), encoding="utf-8")
     adjudication_path = fixture / "owner.json"
     adjudication_path.write_text(json.dumps({"decisions": [{
         "task_id": google[1]["task_id"],
         "owner_decision": "accept",
         "owner_reason": "required blind absent",
-    }]}))
+    }]}), encoding="utf-8")
     correction_path = fixture / "corrections.json"
     correction_path.write_text(json.dumps({"corrections": [{
         "task_id": google[1]["task_id"],
         "replaces_decision": "accept",
         "final_decision": "reject",
         "reason": "required anchor absent",
-    }]}))
+    }]}), encoding="utf-8")
 
     dry_run = apply(
         fixture, review_path, adjudication_path, correction_path, dry_run=True
@@ -666,13 +671,14 @@ def test_complete_pass_a_import_applies_ai_accept_and_protocol_correction(tmp_pa
         prepare_retries=True,
     )
     assert len(result["retry_moves"]) == 1
-    with (fixture / "tasks.csv").open(newline="") as handle:
+    with (fixture / "tasks.csv").open(newline="", encoding="utf-8") as handle:
         saved = {row["task_id"]: row for row in csv.DictReader(handle)}
     assert saved[google[0]["task_id"]]["status"] == "pass_a_accepted"
     assert saved[google[1]["task_id"]]["status"] == "retry_pending"
     assert not (fixture / google[1]["output_path"]).exists()
     packet_review = json.loads(
-        (fixture / "reviews/RP-001.antigravity-builtin.json").read_text()
+        (fixture / "reviews/RP-001.antigravity-builtin.json")
+        .read_text(encoding="utf-8")
     )
     decisions = {
         frame["frame_id"]: frame["decision"]
@@ -845,7 +851,7 @@ def test_retry_pass_a_checkpoints_and_resumes_completed_batches(
     monkeypatch.setattr(retry_pass_a, "_invoke", interrupted)
     with pytest.raises(RuntimeError, match="simulated interruption"):
         retry_pass_a.review(dataset, output, batch_size=1)
-    partial = json.loads(output.read_text())
+    partial = json.loads(output.read_text(encoding="utf-8"))
     assert partial["status"] == "partial"
     assert len(partial["frames"]) == 1
 
@@ -918,7 +924,7 @@ def test_pass_b_checkpoints_and_resumes_completed_packets(tmp_path, monkeypatch)
     monkeypatch.setattr(pass_b, "_invoke", interrupted)
     with pytest.raises(RuntimeError, match="simulated interruption"):
         pass_b.review(tmp_path, output, batch_size=1)
-    partial = json.loads(output.read_text())
+    partial = json.loads(output.read_text(encoding="utf-8"))
     assert partial["status"] == "partial"
     assert [item["packet_id"] for item in partial["packets"]] == [
         "RP-001.gpt-image-2"
@@ -942,7 +948,7 @@ def test_pass_b_checkpoints_and_resumes_completed_packets(tmp_path, monkeypatch)
 
 def test_phase1_scorer_traces_items_defects_and_evidence_links():
     review = json.loads(
-        (DATASET / "reviews/RP-001.gpt-image-2.json").read_text()
+        (DATASET / "reviews/RP-001.gpt-image-2.json").read_text(encoding="utf-8")
     )
     items = []
     for claim in review["pass_b"]["claims"]:
@@ -980,7 +986,7 @@ def test_phase1_scorer_traces_items_defects_and_evidence_links():
 
 def test_phase1_scorer_allows_visible_defect_on_grouped_item_name():
     review = json.loads(
-        (DATASET / "reviews/RP-001.gpt-image-2.json").read_text()
+        (DATASET / "reviews/RP-001.gpt-image-2.json").read_text(encoding="utf-8")
     )
     record = {
         "run_id": "test-grouped-defect",
