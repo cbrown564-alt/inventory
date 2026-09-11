@@ -10,10 +10,13 @@ def test_archive_includes_capture_and_report_but_not_capabilities(tmp_path):
     capture.mkdir()
     report.mkdir()
     (capture / "walk.mp4").write_bytes(b"video")
-    (report / "inventory.json").write_text('{"address":"1 High St"}')
-    (report / "manifest.json").write_text('{"files":[]}')
-    (report / "share.json").write_text('{"tenant_token":"secret"}')
-    (report / "owner-pairing.json").write_text('{"owner_token":"secret"}')
+    (report / "inventory.json").write_text('{"address":"1 High St"}',
+                                           encoding="utf-8")
+    (report / "manifest.json").write_text('{"files":[]}', encoding="utf-8")
+    (report / "share.json").write_text('{"tenant_token":"secret"}',
+                                       encoding="utf-8")
+    (report / "owner-pairing.json").write_text('{"owner_token":"secret"}',
+                                               encoding="utf-8")
     destination = report / "evidence.zip"
 
     index = build_evidence_archive(capture, report, destination)
@@ -52,7 +55,7 @@ def test_archive_skips_symlinks(tmp_path):
     capture.mkdir()
     report.mkdir()
     outside = tmp_path / "outside.txt"
-    outside.write_text("private")
+    outside.write_text("private", encoding="utf-8")
     (capture / "escape.txt").symlink_to(outside)
     destination = tmp_path / "evidence.zip"
 

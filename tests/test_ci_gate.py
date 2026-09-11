@@ -37,7 +37,8 @@ def test_ci_gate_reference_scores_meet_floors():
     sys.path.insert(0, str(ROOT / "evals"))
     import ci_gate  # noqa: E402
 
-    cfg = json.loads((ROOT / "evals" / "fixtures" / "thresholds.json").read_text())
+    cfg = json.loads((ROOT / "evals" / "fixtures" / "thresholds.json")
+                     .read_text(encoding="utf-8"))
     failures = []
     for ref in cfg["references"]:
         failures.extend(ci_gate.check_reference(ref))

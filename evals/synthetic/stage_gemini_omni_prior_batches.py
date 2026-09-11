@@ -141,7 +141,7 @@ def main() -> None:
         "ledger_effect": "none; existing tasks.csv rows and approved evidence are unchanged",
     }
     path = REPORTS / "gemini-omni-prior-batches-2026-08-03.json"
-    path.write_text(json.dumps(report, indent=2) + "\n")
+    path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(f"Staged {len(records)} Gemini Omni candidates")
     print(path)
 

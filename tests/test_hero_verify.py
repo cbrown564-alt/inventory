@@ -38,7 +38,8 @@ def test_cover_verdict_is_cached_by_room_evidence_and_model(tmp_path,
     verify_rank_one_covers(rooms, tmp_path, work, "model-a")
     assert len(calls) == 1
     assert photo.room_match is True
-    assert json.loads((work / "cover-verification.json").read_text())
+    assert json.loads(
+        (work / "cover-verification.json").read_text(encoding="utf-8"))
 
 
 def test_cover_rerank_promotes_picked_eligible_candidate(tmp_path, monkeypatch):
