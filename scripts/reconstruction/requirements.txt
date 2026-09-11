@@ -1,0 +1,7 @@
+# Isolated optional tooling; deliberately outside the inventory product extras.
+numpy==2.4.6
+opencv-python-headless==5.0.0.93
+Pillow==12.3.0
+pycolmap==4.2.0
+scipy==1.17.1
+# Blender is installed separately: 5.2.0 LTS, ARM64.

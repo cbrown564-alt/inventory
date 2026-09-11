@@ -17,6 +17,7 @@
 | Synthetic VLM evaluation dataset | [`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md) |
 | Synthetic programme status (historical review) | [`36-synthetic-programme-review.md`](36-synthetic-programme-review.md) |
 | Synthetic backlog after describe/compare checks | [`37-synthetic-backlog.md`](37-synthetic-backlog.md) |
+| Exploratory property reconstruction | [`38-property-reconstruction.md`](38-property-reconstruction.md) |
 
 Update the owner instead of creating a second live plan. Implementation and tests own current behavior; dated records explain history.
 
@@ -117,4 +118,5 @@ Update the owner instead of creating a second live plan. Implementation and test
 | 35 | [gemini-omni-creative-exploration](35-gemini-omni-creative-exploration.md) | exploratory | Omni creative/demo threads: product-demo angles, claymation, ghost clerk, kinetic type |
 | 36 | [synthetic-programme-review](36-synthetic-programme-review.md) | record | Historical verdict on docs/31/34/35; next-work pointer moved to [37](37-synthetic-backlog.md) |
 | 37 | [synthetic-backlog](37-synthetic-backlog.md) | active | Post describe/compare-check backlog: naming, cleanliness gate, ladder, real check-out |
+| 38 | [property-reconstruction](38-property-reconstruction.md) | exploratory | Editable Blender model from IMG_5677, sparse evidence, assumptions and local deliverables |
 | — | [market-research-2026-07](market-research-2026-07.md) | active | Competitive map, evidential spec, pricing anchors |
