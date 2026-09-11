@@ -280,7 +280,11 @@ def test_the_record_carries_what_the_backend_returned(tmp_path):
         "Sofa",
         "Rug",
     ]
-    on_disk = json.loads(Path(record_path(tmp_path, "P35-901-T1", MODEL, "t0", "A")).read_text())
+    on_disk = json.loads(
+        Path(record_path(tmp_path, "P35-901-T1", MODEL, "t0", "A")).read_text(
+            encoding="utf-8"
+        )
+    )
     assert on_disk["parsed_output"] == record["parsed_output"]
 
 
