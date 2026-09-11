@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "record_type": "compare_check",
+  "created_at": "2026-08-08T06:50:25.047353+00:00",
+  "pairs": 27,
+  "sources": {
+    "phase0": "phase0-describe-stability-2026-08-06.json",
+    "delta_score": "phase35-delta-score-2026-08-05.json",
+    "delta_review": "phase35-pilot-review-recut-2026-08-05.json",
+    "describe_records": "outputs/delta/antigravity-cli/gemini-3.5-flash-low/production-v1/"
+  },
+  "headline": {
+    "note": "Aligned-item state separates from the noise floor; schedule membership does not. false_change_rate remains dominated by membership churn and is not the compare-check headline.",
+    "items_reported_changed_ratio": 1.79,
+    "condition_disagreement_ratio": 1.37,
+    "cleanliness_disagreement_ratio": 1.51,
+    "delta_recall_pct": 26.6,
+    "false_change_rate_pct": 90.4
+  },
+  "signal_ratios": [
+    {
+      "label": "Naming churn",
+      "control": 115,
+      "delta": 114,
+      "ratio": 0.99,
+      "aligned_state_signal": false
+    },
+    {
+      "label": "Unpaired removals",
+      "control": 138,
+      "delta": 149,
+      "ratio": 1.08,
+      "aligned_state_signal": false
+    },
+    {
+      "label": "Membership churn",
+      "control": 289,
+      "delta": 323,
+      "ratio": 1.12,
+      "aligned_state_signal": false
+    },
+    {
+      "label": "Unpaired additions",
+      "control": 151,
+      "delta": 174,
+      "ratio": 1.15,
+      "aligned_state_signal": false
+    },
+    {
+      "label": "Condition disagreements",
+      "control": 71,
+      "delta": 97,
+      "ratio": 1.37,
+      "aligned_state_signal": true
+    },
+    {
+      "label": "Cleanliness disagreements",
+      "control": 75,
+      "delta": 113,
+      "ratio": 1.51,
+      "aligned_state_signal": true
+    },
+    {
+      "label": "Items reported changed",
+      "control": 47,
+      "delta": 84,
+      "ratio": 1.79,
+      "aligned_state_signal": true
+    }
+  ],
+  "noise_floor": {
+    "control_reported_changes": 336,
+    "delta_reported_changes": 407,
+    "control_grade_disagreements_gated_out": 76,
+    "note": "Every change the control reports is spurious by construction, so control_reported_changes is the non-determinism floor in the same units as the delta pairs' false changes.",
+    "floor_is_itself_a_floor": "control_reported_changes counts only what the tenancy gate shows a reader, and that gate fires solely on a worsening grade or a new defect. A second run that grades the room *better* reports nothing. control_grade_disagreements_gated_out is the aligned items whose grades moved between two runs of the same frames without compare saying so \u2014 real instability the headline number does not contain.",
+    "decision": "Not decided here. docs/35 Phase 0 exits on a measurement, and the decision is recorded against the number by a person.",
+    "delta_false_changes": 368,
+    "delta_score_report": "phase35-delta-score-2026-08-05.json",
+    "floor_share_of_delta_false_changes": 91.3
+  },
+  "delta_score_summary": {
+    "metrics": {
+      "delta_recall": 26.6,
+      "false_change_rate": 90.4,
+      "unchanged_stability": 44.4,
+      "severity_direction_accuracy": 75.0,
+      "immaterial_change_report_rate": 16.7
+    },
+    "counts": {
+      "material_changes": 139,
+      "material_changes_detected": 37,
+      "immaterial_changes": 12,
+      "reported_changes": 407,
+      "false_changes": 368,
+      "unchanged_reported": 294,
+      "directional_changes_scored": 4
+    },
+    "by_change_kind": {
+      "cleanliness": {
+        "gold": 26,
+        "detected": 1,
+        "recall": 3.8
+      },
+      "item_added": {
+        "gold": 35,
+        "detected": 19,
+        "recall": 54.3
+      },
+      "item_removed": {
+        "gold": 18,
+        "detected": 9,
+        "recall": 50.0
+      },
+      "new_defect": {
+        "gold": 33,
+        "detected": 4,
+        "recall": 12.1
+      },
+      "worsened": {
+        "gold": 27,
+        "detected": 4,
+        "recall": 14.8
+      }
+    },
+    "false_change_decomposition": {
+      "counts": {
+        "false_changes": 368,
+        "alignment_churn": 138,
+        "unpaired_removed": 71,
+        "unpaired_added": 86,
+        "changed_bucket": 73
+      },
+      "share_of_false_changes_that_are_alignment_churn": 37.5,
+      "false_change_rate_if_renames_aligned": 85.5,
+      "diagnostic_note": "false_change_rate_if_renames_aligned is a diagnostic, not a corrected metric. The reported rate stands as measured: a landlord reading the report sees both halves of a rename as real changes."
+    },
+    "missed_condition_attribution": {
+      "split_by_aligner": 17,
+      "tracked_but_silent": 17,
+      "never_named": 43
+    }
+  },
+  "cleanliness_gate_sensitivity": [
+    {
+      "gate": "as_shipped",
+      "cleanliness_recall": 3.8,
+      "worsened_recall": 14.8,
+      "delta_recall": 26.6,
+      "false_change_rate": 90.4,
+      "counts": {
+        "material": 139,
+        "material_detected": 37,
+        "cleanliness": 26,
+        "cleanliness_detected": 1,
+        "worsened": 27,
+        "worsened_detected": 4,
+        "false_changes": 368,
+        "reported_changes": 407
+      }
+    },
+    {
+      "gate": "cleanliness_worsening",
+      "cleanliness_recall": 11.5,
+      "worsened_recall": 14.8,
+      "delta_recall": 28.1,
+      "false_change_rate": 90.5,
+      "counts": {
+        "material": 139,
+        "material_detected": 39,
+        "cleanliness": 26,
+        "cleanliness_detected": 3,
+        "worsened": 27,
+        "worsened_detected": 4,
+        "false_changes": 389,
+        "reported_changes": 430
+      }
+    },
+    {
+      "gate": "any_grade_or_cleanliness",
+      "cleanliness_recall": 15.4,
+      "worsened_recall": 18.5,
+      "delta_recall": 29.5,
+      "false_change_rate": 90.9,
+      "counts": {
+        "material": 139,
+        "material_detected": 41,
+        "cleanliness": 26,
+        "cleanliness_detected": 4,
+        "worsened": 27,
+        "worsened_detected": 5,
+        "false_changes": 437,
+        "reported_changes": 481
+      }
+    }
+  ],
+  "evidence_class": "Synthetic development evidence. Delta pairs cannot promote compare behaviour; that is gated on real check-in/check-out evidence (docs/08)."
+}

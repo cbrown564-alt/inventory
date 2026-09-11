@@ -1,0 +1,29 @@
+{
+  "record_type": "describe_check_diversity_patch_owner_eyeball",
+  "recorded_at": "2026-08-06T19:54:00.581750+00:00",
+  "results": [
+    {
+      "task_id": "RP-011.gpt-image-2.C-inventory",
+      "status": "pass_a_accepted",
+      "sha256": "d9641cb212abdde62c936da329bb5c780d83405bf6f8a2fa75db37fcf84d6c6c",
+      "note": "Owner eyeball: balcony door, vertical blinds, radiator, thermostat, sockets present; continuous with A-wide."
+    },
+    {
+      "task_id": "RP-013.gpt-image-2.C-inventory",
+      "status": "pass_a_accepted",
+      "sha256": "2c95afb831fe746ba44e31bbbd097f7d264f67ac61fe4fdbefdcbef3169233c1",
+      "note": "Owner eyeball: window, roller blind, radiator, sockets, skirting present between boxes; continuous with A-wide."
+    },
+    {
+      "task_id": "RP-018.gpt-image-2.D-condition",
+      "status": "generator_failed",
+      "note": "Owner eyeball reject: bath/shower access panel with paint chip, not sink cabinet with swollen door-edge; packet C-inventory still has metal-leg sink."
+    },
+    {
+      "task_id": "RP-021.gpt-image-2.C-inventory",
+      "status": "pass_a_accepted",
+      "sha256": "f4e29ee86cf5a5a652aa9727651b73cfb67d5600c00841bd4358c40b6a876213",
+      "note": "Owner eyeball: smoke alarm, landing light, radiator, skirting present; light switch weak/uncertain; continuous with A-wide."
+    }
+  ]
+}

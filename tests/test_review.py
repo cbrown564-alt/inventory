@@ -1944,3 +1944,74 @@ def test_offline_create_build_review_flow(fresh_server):
                                    condition="good", confidence=0.35,
                                    photo_ids=[p.id for p in room.photos]))
         (out / "inventory.json").write_text(inv.to_json(), encoding="utf-8")
+
+
+def test_ux_review_elements_and_filters(server):
+    """Verify exceptions filter, micro-scrubber, baseline button, and safety pre-flight markup."""
+    base, _state, _out, _cap = server
+    status, html = _get_text(base + "/review")
+    assert status == 200
+    assert 'data-f="exceptions"' in html
+    assert 'id="lb-micro-scrub"' in html
+    assert '±2s Moment scrubber' in html
+    assert 'btn-room-baseline' in html
+    assert 'Safety &amp; compliance audit' in html or 'Safety & compliance audit' in html
+    assert 'tenant-dispute-card' in html
+
+
+def test_ux_tenant_photo_preview(server):
+    """Verify tenant view includes photo evidence attachment preview."""
+    base, _state, _out, _cap = server
+    status, resp = _req("POST", base + "/api/share/enable", {})
+    assert status == 200
+    token = resp["tenant_token"]
+    status, html = _get_text(base + f"/t/{token}")
+    assert status == 200
+    assert "Photo evidence attached" in html
+    assert "Dispute condition" in html
+
+
+def test_ux_start_page_progressive_reveal_and_chime(fresh_server):
+    """Verify start page contains progressive room reveal and audio completion alert."""
+    base, _httpd, _out, _cap = fresh_server
+    status, html = _get_text(base + "/start")
+    assert status == 200
+    assert "playCompletionChime" in html
+    assert "estimateBuildMinutes" in html
+    assert "Identified " in html
+
+
+def test_ux_batch2_archive_endpoint_and_bundle_hub(server):
+    """Verify /api/archive returns zipped package and finish includes bundle grid."""
+    base, _state, _out, _cap = server
+    with urllib.request.urlopen(base + "/api/archive") as r:
+        assert r.status == 200
+        assert r.headers.get("Content-Type") == "application/zip"
+        data = r.read()
+        assert data[:2] == b"PK"
+    status, html = _get_text(base + "/review")
+    assert status == 200
+    assert "finish-bundle-grid" in html
+    assert "bundle-card" in html
+    assert "api/archive" in html
+
+
+def test_ux_batch2_defect_taxonomy(server):
+    """Verify defect taxonomy chips and markup in review UI."""
+    base, _state, _out, _cap = server
+    status, html = _get_text(base + "/review")
+    assert status == 200
+    assert "Fair wear & tear" in html
+    assert "Requires cleaning" in html
+    assert "anno-taxonomy-row" in html
+
+
+def test_ux_batch2_interim_chips_and_preflight(fresh_server):
+    """Verify interactive room chips and pre-flight validation status on start page."""
+    base, _httpd, _out, _cap = fresh_server
+    status, start_html = _get_text(base + "/start")
+    assert status == 200
+    assert "click to rename" in start_html
+    assert "Pre-flight valid" in start_html
+
+

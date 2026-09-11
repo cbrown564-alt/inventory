@@ -997,30 +997,36 @@ rather than silently deleted.</p>
 {% endif %}
 
 <section class="declaration page-break" id="declaration">
-  <h3>Declaration</h3>
-  <p>This inventory was prepared with AI assistance and has been reviewed for
-  accuracy by the undersigned. It provides a fair and accurate record of the
-  contents and internal condition of the property on the date stated. Unless
-  amendments are notified in writing within 7 days of receipt, this inventory
-  will be deemed accepted by all parties.</p>
-  <p class="initials-note print-only">Tenant: please initial each page to confirm you have read this report.</p>
-  {% if inv.signatures %}
-  <div id="signatures">
-    {% for sig in inv.signatures %}
-    <div class="sigcard">
-      <strong>{{ sig.name }}</strong> — {{ sig.role }} — signed {{ sig.signed_at }}
-      {% if sig.via %}<span class="meta">({{ sig.via }})</span>{% endif %}
-      {% if sig.inventory_sha256 %}<div class="hash">attests content sha256
-        {{ sig.inventory_sha256 }}</div>{% endif %}
+  <div class="attest-box">
+    <div class="attest-seal">
+      <span>🛡️ Cryptographic Attestation</span>
+      {% if inv.content_sha256 %}<span>· SHA-256 Verified</span>{% endif %}
     </div>
-    {% endfor %}
-  </div>
-  {% else %}<div id="signatures"></div>{% endif %}
-  <div>
-    <span class="sigline"></span><span class="sigline"></span><br>
-    <span class="meta">Landlord / Agent &nbsp; — date</span>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <span class="meta">Tenant &nbsp; — date</span>
+    <h3>Declaration &amp; Acceptance</h3>
+    <p>This inventory was prepared with AI assistance and has been reviewed for
+    accuracy by the undersigned. It provides a fair and accurate record of the
+    contents and internal condition of the property on the date stated. Unless
+    amendments are notified in writing within 7 days of receipt, this inventory
+    will be deemed accepted by all parties.</p>
+    <p class="initials-note print-only">Tenant: please initial each page to confirm you have read this report.</p>
+    {% if inv.signatures %}
+    <div id="signatures" class="attest-grid">
+      {% for sig in inv.signatures %}
+      <div class="attest-card">
+        <div class="role-title">{{ sig.role | upper }} ATTESTATION</div>
+        <div class="signee-name">{{ sig.name }}</div>
+        <div class="signed-date">Signed {{ sig.signed_at }}{% if sig.via %} <span class="meta">({{ sig.via }})</span>{% endif %}</div>
+        {% if sig.inventory_sha256 %}<div class="hash">Hash: {{ sig.inventory_sha256[:16] }}…{{ sig.inventory_sha256[-16:] }}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}<div id="signatures"></div>{% endif %}
+    <div style="margin-top:22px;">
+      <span class="sigline"></span><span class="sigline"></span><br>
+      <span class="meta">Landlord / Agent &nbsp; — date</span>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <span class="meta">Tenant &nbsp; — date</span>
+    </div>
   </div>
 </section>
 
@@ -1134,6 +1140,34 @@ rather than silently deleted.</p>
       });
     });
 
+  // Enable click-to-zoom on room gallery figures
+  Array.prototype.forEach.call(
+    document.querySelectorAll("section.room .photos figure, section.room .room-cover"), function (fig) {
+      var img = fig.querySelector("img");
+      if (!img) return;
+      img.style.cursor = "zoom-in";
+      fig.addEventListener("click", function (e) {
+        if (e.target.closest("a, button")) return;
+        var sec = fig.closest("section.room");
+        if (!sec) return;
+        var allFigs = Array.prototype.slice.call(sec.querySelectorAll(".room-cover, .photos figure"));
+        var idx = allFigs.indexOf(fig);
+        var pList = allFigs.map(function (f) {
+          var im = f.querySelector("img");
+          var cap = f.querySelector("figcaption");
+          return {
+            src: im ? im.src : "",
+            label: cap ? cap.textContent.trim() : "",
+            title: sec.querySelector("h2") ? sec.querySelector("h2").textContent.trim() : ""
+          };
+        }).filter(function (p) { return p.src; });
+        if (pList.length && ui && ui.photoViewer) {
+          ui.photoViewer({ photos: pList, index: Math.max(0, idx) });
+        }
+      });
+    });
+
+
   var rows = Array.prototype.slice.call(document.querySelectorAll("tr.item-row"));
   var headings = Array.prototype.slice.call(document.querySelectorAll("tr.category-row"));
   var buttons = Array.prototype.slice.call(document.querySelectorAll(".filter-btn"));
@@ -1211,6 +1245,19 @@ rather than silently deleted.</p>
   applyFilters();
 })();
 </script>
+{% endif %}
+
+{% if room_sections and room_sections|length > 1 %}
+<aside class="floating-room-toc screen-only" aria-label="Room Index">
+  <span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);">Room</span>
+  <select onchange="if (this.value) { var target = document.getElementById(this.value); if (target) target.scrollIntoView({behavior:'smooth'}); this.value=''; }">
+    <option value="">Jump to room…</option>
+    {% for section in room_sections %}
+    <option value="room-{{ section.number }}">{{ section.number }}. {{ section.name }}</option>
+    {% endfor %}
+  </select>
+  <a href="#" class="toc-top-btn" title="Back to top">↑ Top</a>
+</aside>
 {% endif %}
 </body>
 </html>

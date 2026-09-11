@@ -330,8 +330,73 @@ a segmentation result.
    explicitly. It is free to fix with `ffmpeg -an` and it is currently an
    automatic escalation on every silent clip.
 
+## Triage — 6 Aug 2026
+
+*Decided by [`36-synthetic-programme-review.md`](36-synthetic-programme-review.md)
+§6.3, applied through `evals/synthetic/triage_video_arm.py`, recorded in
+`video/reports/phase36-video-arm-triage-2026-08-06.json`. Item 4 of "What has to
+happen next" above — "regenerate day 1 against accepted references only" — is
+superseded by this section.*
+
+The question was regenerate or suspend. The answer is neither wholesale, because
+this arm is **five independent questions sharing a generator and a budget**, and
+the docs/35 Phase 0 describe-stability floor — two runs on byte-identical pixels
+agreeing on 34.6% of the schedule — lands on them unevenly. That floor did not
+exist when this document was written, and it is the only new fact needed to
+decide.
+
+| Use case | Disposition | Why |
+|---|---|---|
+| **VU-5** ×2 | **`retry_pending` — regenerate** | A hallucination test, not a recall test. Non-determinism does not rescue a hallucination: a claim about geometry the camera never reached is wrong whichever run emits it. The probe's only `both_ways` case. Its day-1 failure was on the *control* arm, which is exactly the ambiguity a correct reference resolves. |
+| **VU-1** ×2 | `suspended` | A recall difference between two describe runs on different inputs, at n=2 clips, against that floor. The measurement shape Phase 0 invalidated in the image arm. |
+| **VU-3** ×1 | `suspended` | "Does one spoken cue move any metric" at n=1. The input control is the cleanest in the probe — byte-identical footage, audio stripped — and the measurement either side is still one describe run. |
+| **VU-2** ×1 | `suspended` | Not reached by the floor; boundary timing is not a describe schedule. Suspended on its own ceiling: n=1 on the strongest boundary cue that exists, where this document already grants a hit is weak. |
+| **VU-4** ×3 | `retired` | Terminal on its reference, and already dominated by Amendment B's free degradation ladder. Recorded, not decided. |
+
+Two clips, not nine. Well inside one day of the ten-clip ceiling — though
+generation was never the cost here; dual independent Pass A over a 1 fps strip
+is.
+
+**Why VU-5 is worth the last attempt.** It closes either way. A hold clip that
+honours the instruction is the first positive-capable result this probe can
+produce, feeding docs/00 and docs/29. One that breaches its must-never-be-visible
+list again is a clean negative about controllability: the counterfactual has no
+control arm on this generator, and the arm closes with a finding instead of a
+question mark. Every other use case here leaves the arm open on either branch.
+
+**`suspended` is a status, and it means something specific.** Not
+`generator_failed` — the generator did not fail on VU-1/2/3, they were never
+re-run. Not an absence of schedule. It records that the *measurement* is
+under-powered against a floor that has now been measured, so reviving them
+requires a design change that makes them readable, not a free afternoon. The
+tooling refuses to default a new use case into any of the three.
+
+**The sunk cost that is not one.** `repair_gemini_omni_views.py`, the Pass A
+import and the three reference adjudications are already paid for and are *not*
+wasted by suspension: they corrected 36 misfiled views in the parent image
+ledger, a real defect in docs/31's dataset independent of any video. "The
+fixture is repaired, so we should use it" is not a reason to generate, and it is
+the argument most likely to feel like one.
+
+**If VU-5 is never run.** Its question re-homes rather than dying — any real
+capture where what sits behind a closed door is known gives the same guarantee,
+and buys transfer, which this arm can never buy under B9. The counter is that
+docs/26 is itself an open gate that has not produced its verdict, and moving a
+live question into a stalled document is how questions disappear.
+
+A cheaper precursor exists and is worth checking first: RP-019 has three
+accepted GPT stills. If those frames happen to exclude the cupboard rear, the
+hallucination half runs today for free — describe them, check for claims about
+the rear. It does not replace VU-5, because four static views give no matched
+pair and no pinned must-never-be-visible list, so it yields the hallucination arm
+and not the recall arm. Same logic that put the degradation ladder in front of
+VU-4.
+
 ## Related
 
+- `docs/36-synthetic-programme-review.md` — the review that triaged this arm and
+  owns the synthetic programme's status.
+- `docs/35-describe-stability.md` — the Phase 0 floor the triage turns on.
 - `docs/31-synthetic-evaluation-dataset-plan.md` — parent dataset, Phase 3.5
   delta pairs, the review and gold contract this inherits.
 - `docs/26-capture-strategy-experiment.md` — the real photo-vs-video experiment

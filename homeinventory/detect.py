@@ -272,6 +272,95 @@ def verify_detection_proposals(
     }
 
 
+def vlm_verify_detection_proposals(
+        by_photo: dict[str, list[Detection]],
+        *,
+        model: Optional[str] = None,
+        high_confidence: float = 0.60,
+        min_support: int = 2,
+) -> dict[str, list[Detection]]:
+    """Two-stage precision cascade (ML-E10/E12 production wiring, docs/22 §5.1).
+
+    Accepts high-confidence and multi-photo supported proposals directly.
+    For lower-confidence proposals with crops, runs a fast batch VLM verification
+    to filter out false detections and keep genuine items.
+    """
+    import json
+    from .dotenv import load_dotenv
+    from .ml_api import vlm_api_available
+
+    load_dotenv()
+    target_model = model or "google/gemini-3.7-flash"
+    if not vlm_api_available(target_model):
+        return verify_detection_proposals(by_photo, min_support=min_support,
+                                          high_confidence=high_confidence)
+
+    support: dict[str, set[str]] = {}
+    for photo_id, detections in by_photo.items():
+        for detection in detections:
+            support.setdefault(detection.label.lower(), set()).add(photo_id)
+
+    verified_by_photo: dict[str, list[Detection]] = {pid: [] for pid in by_photo}
+    unverified: list[tuple[str, Detection]] = []
+
+    for photo_id, detections in by_photo.items():
+        for det in detections:
+            if det.confidence >= high_confidence or len(support.get(det.label.lower(), ())) >= min_support:
+                verified_by_photo[photo_id].append(det)
+            elif det.crop_path and Path(det.crop_path).is_file():
+                unverified.append((photo_id, det))
+
+    if not unverified:
+        return verified_by_photo
+
+    try:
+        from .describe import OpenAICompatBackend
+        import base64
+        backend = OpenAICompatBackend(model=target_model)
+
+        candidates = unverified[:30]
+        content = [{
+            "type": "text",
+            "text": (
+                "You are an expert visual quality verifier for a property inventory. "
+                "For each numbered crop image below, determine if the proposed object label "
+                "is genuinely present and recognizable in the crop.\n"
+                "Return a JSON object with a list of verified 1-based indices: "
+                '{"valid_indices": [1, 3, ...]}'
+            )
+        }]
+        for idx, (photo_id, det) in enumerate(candidates, start=1):
+            crop_path = Path(det.crop_path)
+            data = base64.b64encode(crop_path.read_bytes()).decode()
+            content.append({
+                "type": "text",
+                "text": f"Crop {idx}: Proposed label '{det.label}' (from photo {photo_id})"
+            })
+            content.append({
+                "type": "image_url",
+                "image_url": {"url": f"data:image/jpeg;base64,{data}"}
+            })
+
+        resp = backend._post({
+            "model": backend.model,
+            "messages": [{"role": "user", "content": content}],
+            "response_format": {"type": "json_object"},
+        })
+        raw = resp["choices"][0]["message"]["content"]
+        data = json.loads(raw)
+        valid_indices = set(data.get("valid_indices") or [])
+
+        for idx, (photo_id, det) in enumerate(candidates, start=1):
+            if idx in valid_indices:
+                verified_by_photo[photo_id].append(det)
+    except Exception as exc:
+        log.warning("VLM detection proposal verification failed (%s) — falling back to heuristic", exc)
+        return verify_detection_proposals(by_photo, min_support=min_support,
+                                          high_confidence=high_confidence)
+
+    return verified_by_photo
+
+
 class Detector:
     """Lazy-loading YOLOE wrapper; `available` is False if the stack is missing."""
 

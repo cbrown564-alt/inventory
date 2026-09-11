@@ -12,4 +12,9 @@ def vlm_api_available(model: str) -> bool:
             os.environ.get("ANTHROPIC_API_KEY")
             or os.environ.get("ANTHROPIC_AUTH_TOKEN")
         )
-    return bool(os.environ.get("OPENAI_API_KEY") or os.environ.get("GEMINI_API_KEY"))
+    return bool(
+        os.environ.get("OPENAI_API_KEY")
+        or os.environ.get("GEMINI_API_KEY")
+        or os.environ.get("OPENROUTER_API_KEY")
+        or os.environ.get("GOOGLE_API_KEY")
+    )

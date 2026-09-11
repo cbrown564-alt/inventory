@@ -386,6 +386,16 @@ superseding their 4 Aug reject of that pair; it still has one review, not two.
 
 ## Current execution status — 3 Aug 2026 (Amendment B)
 
+> **Superseded on status, 6 Aug 2026 by [`36-synthetic-programme-review.md`](36-synthetic-programme-review.md).**
+> Phases 1–3 below are recorded as *in progress* and *review-blocked*. docs/36
+> re-reads them against the docs/35 Phase 0 measurement and reclassifies them as
+> **superseded**: the metric they feed — one describe run against reviewed gold
+> — has a run-to-run noise band wider than any effect they were designed to
+> detect, so completing them does not produce a prompt decision. The phase table
+> below carries the reclassification inline. Everything else in this document —
+> the gold contract, terms, splits, publication ban, Amendments A–C — is
+> unchanged and this document remains their owner.
+
 Read against the ledger, not against the narrative. `tasks.csv` currently
 holds **126 `pass_a_accepted`** (85 OpenAI, 41 Google), **39
 `generator_failed`** (12 OpenAI, 27 Google), **13 `retry_pending`** and
@@ -401,23 +411,29 @@ Complete four-view packets, which is the number room-level scoring depends on:
 
 | Phase | Status | Evidence |
 |---|---|---|
-| 1 — representative slice | **Complete** | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. |
-| 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. |
-| 3 — development and validation | **In progress; blocked on Pass B, not on generation** | 46 of 50 packet review records are `provisional`. Only the four Phase-1 records are `verified_synthetic_gold`. Every remaining generation task could complete tomorrow and Phase 4 would still be blocked. Amendment B repairs generation (B2–B4) and tiers Pass B (B5–B6). |
+| 1 — representative slice | **Superseded, 6 Aug 2026** (was: complete) | Four immutable Antigravity CLI vision runs compared the two frozen prompts. The candidate improved defect recall from 50% to 100% and removed one unsupported defect, but item recall fell 6.2 percentage points, so no prompt winner was frozen. **docs/36 §3: that 6.2pp is inside the run-to-run noise measured on 6 Aug — four runs with no repeat control could not have separated the prompts. It is a finding about the method, not about the prompts, and must stop being cited as the latter.** |
+| 2 — extract the pattern | **Complete** | 25 scenarios, the 200-task queue, review templates, static review page, generator slices and hashed development/validation/sealed splits are implemented. Unaffected by docs/36; the apparatus is sound and the delta and stability instruments are built on it. |
+| 3 — development and validation | **Superseded, 6 Aug 2026** (was: in progress, blocked on Pass B) | 73 of 77 packet review records are `provisional`; only the four Phase-1 records are `verified_synthetic_gold`. Framed as review-blocked, this reads as one push from useful. **docs/36 §6.2: the Pass B backlog feeds item recall computed from a single describe run, and that run reproduces ~34.6% of its own schedule on identical input. Cut the backlog rather than clearing it, unless a decision that needs those labels can be named with the run count that would make it readable.** The same rule retires generation yield as a programme metric, which closes B2's repair pass and B4's new validation specs. |
 | 3.5 — delta pairs | **Complete and scored, 5 Aug 2026** | Promoted to the programme's centre by B7. Thirty pairs generated, re-adjudicated under Amendment C to 27 accept / 3 reject, gold corrected, and all 27 scored through `run_delta_eval.py`: **delta recall 26.6%, false-change rate 90.4%**, with condition changes (cleanliness 3.8%) missed at roughly a fifth the rate of presence changes (item_added 54.3%). A `match_score` defect found here is fixed, for 17 fewer false changes at no cost to recall. Development evidence only; it does not promote compare behaviour. |
-| 4 — sealed comparison | **Not started** | Downstream of a validation prompt decision that has not been made. Validation holds two complete GPT packets, so no decision is currently possible on it; B4 addresses that. The amended order admits a per-task prompt assignment as a winner. |
-| 5 — real transfer | **Not started** | Downstream of Phase 4. The separate native-resolution evidence gate also remains open. |
+| 4 — sealed comparison | **Not started; re-scoped 6 Aug 2026** | Downstream of a validation prompt decision that has not been made. **docs/36 §3: at one run per arm that decision is not available at any packet count, so B4's new validation specifications do not unblock it. A sealed comparison becomes possible again only with a repeat-run design whose arm separation exceeds the measured noise, and that design does not exist yet.** |
+| 5 — real transfer | **Not started** | Downstream of Phase 4. The separate native-resolution evidence gate also remains open. Unchanged by docs/36 and still the only path that promotes anything. |
 
 Phases 4 and 5 are recorded as *not started* rather than *dependency-blocked*.
 They are downstream of work that has not been done, which is a schedule fact
 rather than an external obstruction.
 
-**Status after the 3 Aug 200-image amendment:** Phase 3 is review-blocked.
-The 57 Gemini Omni candidates have an owner-reported passing review but are
-not yet promoted into the task ledger. The 20 newly generated GPT Image 2
-rows and the two earlier `RP-019` replacements remain `review_pending`. The
-historical retry decisions and their atomic application remain part of the
-review record.
+**Status after the 3 Aug 200-image amendment:** *superseded by the 4 Aug import
+and by docs/36.* The 57 Gemini Omni candidates were imported into the ledger on
+4 Aug through `import_gemini_omni_pass_a.py` after
+`repair_gemini_omni_views.py` re-filed 36 positionally-misassigned views
+(docs/34 "What has to happen next", item 1). `tasks.csv` therefore now holds
+**300 rows: 143 `pass_a_accepted`** (85 OpenAI, 58 Google), 39
+`generator_failed`, 43 `not_generated`, 25 `owner_review_pending`, 22
+`pending`, 15 `pass_a_rejected`, 13 `retry_pending` — not the 3 Aug counts
+above, which are left unedited as the dated record. The historical retry
+decisions and their atomic application remain part of the review record.
+Per docs/36 §6.2 these counts are now a provenance record rather than a
+progress metric; do not resume generation to close them out.
 
 The quota responses are provider-internal limits reached through Antigravity
 CLI; they are not metered image API calls made by this project. Resume Phase 3
@@ -1709,6 +1725,13 @@ so it was unreachable.*
 
 ## Related owners
 
+- `docs/36-synthetic-programme-review.md` — **owns the verdict on this
+  programme's phases.** Reclassifies Phases 1 and 3 as superseded, re-scopes
+  Phase 4, and carries the work order. This document still owns the dataset,
+  its gold contract and its terms.
+- `docs/35-describe-stability.md` — the describe-instability measurement that
+  Phase 3.5's scoring uncovered, and the source of the reclassification.
+- `docs/34-synthetic-video-probe.md` — the video arm over these scenarios.
 - `docs/00-north-star.md` — real-property v1 success criteria.
 - `docs/04-backend-comparison.md` — backend benchmark evidence.
 - `docs/19-ml-dl-exploration-plan.md` — weight-training and classical ML work.

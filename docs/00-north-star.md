@@ -59,6 +59,19 @@ gates below.
   generated and awaiting independent Pass A. Phase 3 remains review-blocked;
   Google service slices must be reported separately
   ([`31-synthetic-evaluation-dataset-plan.md`](31-synthetic-evaluation-dataset-plan.md)).
+  **Updated 6 Aug 2026 — the paragraph above is superseded on status.**
+  Describing the *same frames twice* reproduces only 34.6% of the schedule, so
+  the prompt comparison reported here was never powered to separate the two
+  prompts: its 6.2pp item-recall drop is a measurement of the method, not of
+  the prompts, and must stop being cited as the latter. Phases 1 and 3 are
+  reclassified **superseded**, not blocked — the Pass B backlog and the
+  remaining generation do not lead to a prompt decision, so completing them is
+  not the next move. What is: exclude sampling on the free local backend, then
+  cut or justify the backlog. Phase 3.5 stands and is unaffected — 27 scored
+  delta pairs, **delta recall 26.6%, false-change rate 90.4%**, condition
+  changes missed at roughly a fifth the rate of presence changes
+  ([`36-synthetic-programme-review.md`](36-synthetic-programme-review.md),
+  [`35-describe-stability.md`](35-describe-stability.md)).
 - A preliminary Property A V0/V1/`P2+` matrix exists, but it is not the
   qualifying capture decision: it used a non-independent proxy, omitted P1
   and protocol-valid P2, and did not measure review-to-issue burden. Independent

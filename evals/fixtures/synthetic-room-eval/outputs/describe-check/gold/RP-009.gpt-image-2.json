@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "record_type": "describe_check_gold",
+  "packet_id": "RP-009.gpt-image-2",
+  "scenario_id": "RP-009",
+  "room_type": "Bedroom",
+  "generator": "GPT Image 2",
+  "gold_method": "spec-seeded + gemini-3.5-flash cross-family fill",
+  "created_at": "2026-08-06T20:48:25.087769+00:00",
+  "image_sha256": {
+    "A-wide": "6eb364bbe95da6993d7a7c6f99e89304e73af4f1ff34641528b00742f429ac96",
+    "B-reverse": "36f0a3cdf5f68dae9020eeebd73e1d81de61c101a08db134f6413694d218cd77",
+    "C-inventory": "9d9bd5cda01112c27ca062c826dc0aab5d6aea915652d518b77984a0bd479342",
+    "D-condition": "23afa7f2c9ec40ae14adb7c280e3e60184a3c90de3fdaa2c5d1f4ab2c45e2d30"
+  },
+  "claims": [
+    {
+      "name": "double bed",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "headboard",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "bedside tables",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "wardrobe",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "cream carpet",
+      "aliases": [
+        "carpet"
+      ],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "door",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "chest of drawers",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "wall mirror",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "radiator",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "ceiling light",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "bay window",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "curtains",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "blind",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "sockets",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "drawer front",
+      "aliases": [],
+      "condition": "fair",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [
+        "two short scratches beside the top drawer handle"
+      ],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "metal handle",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "skirting board",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "walls",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "ai_fill"
+    },
+    {
+      "name": "ceiling",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "cleaned to domestic standard",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "ai_fill"
+    }
+  ],
+  "spot_check": {
+    "status": "owner_accepted",
+    "accepted_at": "2026-08-06T22:01:22.993089+00:00",
+    "accepted_by": "project owner",
+    "rule": "Owner reviews every defect claim, every post-score invent/omit disagreement, plus a small random sample of other claims.",
+    "note": "Owner accepted all seven defect claims on 2026-08-06."
+  }
+}

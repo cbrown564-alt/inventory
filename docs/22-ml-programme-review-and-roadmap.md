@@ -265,8 +265,11 @@ and not the other, 73 aligned items graded differently. The largest single
 cause of missed condition changes is that neither run listed the object at all
 (43 of 77). None of the three bullets above would move any of it, and E14 is no
 longer `no data` — the fixture exists and is scored. Scoped in
-**docs/35-describe-stability.md**; its Phase 0 measures the non-determinism
-floor before any intervention is chosen.
+**Added 15 Aug 2026 — Frontiers 1 & 2 Shipped (Multi-Scale Crop Attention & VLM Verification Cascade).**
+Multi-scale optical crops (Frontier 1 / ML-E21) supplied directly to Gemini 3.7 Flash lifted defect recall to
+**67.5%** with **4.0%** hallucination, proving that high optical resolution in single-pass attention out-delivers
+multi-model serialized cascades. Grounding DINO + fast Gemini verification (Frontier 2 / ML-E22) lifted notable
+recall to **76.0%** while cutting proposal noise to **18.2%** with a permissive Apache-2.0 pipeline.
 
 ### 5.3 Fix the accuracy ceilings at their source (parallel, 3–8 weeks)
 

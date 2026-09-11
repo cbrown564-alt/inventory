@@ -1112,13 +1112,117 @@
              color: #c8d0da; }
   #lb-hint { font-size: 11px; color: #5f6c7c; }
 
+  /* Room baseline bulk verify */
+  .btn-room-baseline {
+    margin-top: 8px; width: 100%; padding: 6px 10px;
+    font: 600 var(--fs-xs) var(--ui); color: var(--confirm);
+    background: var(--confirm-soft); border: 1px solid rgba(29,111,76,.25);
+    border-radius: var(--r-sm); cursor: pointer; display: flex;
+    align-items: center; justify-content: center; gap: 4px;
+    transition: all .15s ease;
+  }
+  .btn-room-baseline:hover {
+    background: var(--confirm); color: #fff; border-color: var(--confirm);
+  }
+  .room-baseline-banner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; margin-bottom: 14px; padding: 12px 14px;
+    background: var(--confirm-soft); border: 1px solid rgba(29,111,76,.25);
+    border-radius: var(--r-md);
+  }
+  .room-baseline-banner .baseline-copy strong {
+    font: 600 var(--fs-sm) var(--ui); color: var(--confirm); display: block;
+  }
+  .room-baseline-banner .baseline-copy p {
+    font-size: var(--fs-xs); color: var(--muted); margin: 2px 0 0;
+  }
+
+  /* Safety & statutory pre-flight */
+  .finish-safety-audit { display: grid; gap: 10px; }
+  .safety-item-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+  .safety-item-row {
+    display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+    background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+  }
+  .safety-icon { font-size: 16px; flex-shrink: 0; }
+  .safety-meta { flex: 1; font-size: var(--fs-sm); }
+  .safety-room { color: var(--muted); font-size: var(--fs-xs); }
+
+  /* Tenant dispute resolution */
+  .tenant-dispute-card {
+    margin: 8px 0; padding: 12px 14px; background: rgba(109,77,146,.08);
+    border: 1px solid rgba(109,77,146,.25); border-radius: var(--r-md);
+  }
+  .tenant-dispute-card .t-head {
+    display: flex; align-items: center; gap: 8px; font-weight: 600;
+    font-size: var(--fs-xs); color: var(--tenant); margin-bottom: 6px;
+  }
+  .tenant-dispute-card .t-actions {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;
+  }
+  .tenant-dispute-card .t-actions button {
+    font-size: 12px; padding: 4px 10px;
+  }
+
+  /* Lightbox micro-scrubber */
+  .lb-micro-scrub {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; padding: 6px 14px; border-top: 1px solid #232c38;
+    background: rgba(10,13,18,.8); flex-wrap: wrap; width: 100%;
+  }
+  .micro-lbl { font: 600 var(--fs-xs) var(--mono); color: var(--brass-bright); }
+  .micro-buttons { display: flex; gap: 4px; align-items: center; }
+  .micro-btn {
+    font-size: 11px; padding: 4px 9px; font-family: var(--mono);
+  }
+  .micro-btn.keyframe {
+    border-color: var(--brass); color: var(--brass-bright); font-weight: 600;
+  }
+  .micro-time { font-family: var(--mono); font-size: 11px; color: #94a1b2; }
+
+  /* Defect severity & responsibility taxonomy */
+  .def-taxonomy { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .def-tax-chip {
+    font: 500 var(--fs-xs) var(--ui); padding: 4px 10px; border-radius: var(--r-pill);
+    border: 1px solid rgba(154, 119, 41, .3); background: var(--brass-soft);
+    color: var(--brass-bright); cursor: pointer; transition: all .12s ease;
+  }
+  .def-tax-chip:hover {
+    background: var(--brass); color: #fff; border-color: var(--brass);
+  }
+  .anno-taxonomy-row {
+    display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px;
+  }
+  .def-tax-mini {
+    font: 500 11px var(--ui); padding: 2px 7px; border-radius: 4px;
+    border: 1px solid var(--line); background: var(--panel-2);
+    color: var(--muted); cursor: pointer;
+  }
+  .def-tax-mini:hover { border-color: var(--brass); color: var(--ink); }
+
+  /* Finish Share & Export Bundle Hub */
+  .finish-bundle-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px; margin-top: 14px; width: 100%;
+  }
+  .bundle-card {
+    display: flex; flex-direction: column; padding: 14px 16px;
+    background: var(--panel-2); border: 1px solid var(--line);
+    border-radius: var(--r-md); text-align: left;
+  }
+  .bundle-card .bundle-icon { font-size: 20px; margin-bottom: 6px; }
+  .bundle-card strong { font-size: var(--fs-sm); color: var(--ink); margin-bottom: 4px; }
+  .bundle-card p { font-size: var(--fs-xs); color: var(--muted); margin: 0 0 12px; flex: 1; line-height: 1.45; }
+  .bundle-card .btn { width: 100%; text-align: center; }
+
   /* Mobile review keeps the decisive evidence actions in thumb reach. */
   #mobile-action { display: none; }
 
   /* annotation label popover (shared by lightbox pins) */
   #anno-form { position: fixed; z-index: 95; background: var(--panel);
     border: 1px solid var(--line); border-radius: 12px; padding: 14px;
-    display: none; width: 280px; }
+    display: none; width: 290px; box-shadow: var(--shadow); }
   #anno-form select, #anno-form input { width: 100%; font: 13px var(--ui);
     padding: 8px 10px; margin-bottom: 8px; border: 1px solid var(--line);
     border-radius: 8px; background: var(--paper); color: var(--ink); }
@@ -1250,26 +1354,32 @@
              placeholder="Search items…"
              data-placeholder-kbd="Search items · ⌘K or /"
              aria-label="Search items" autocomplete="off">
+      <select id="q-room-jump" class="q-room-jump" aria-label="Jump to room">
+        <option value="">Jump to room…</option>
+      </select>
       <div class="filters" id="filters">
         <button data-f="all" aria-pressed="true">All</button>
         <button data-f="pending" aria-pressed="false">Unreviewed</button>
+        <button data-f="exceptions" aria-pressed="false">Exceptions</button>
         <button data-f="crops" aria-pressed="false">Crop review</button>
         <button data-f="defects" aria-pressed="false">Defects</button>
         <button data-f="noev" aria-pressed="false">No evidence</button>
       </div>
       <details class="tools-more">
-        <summary>Sort &amp; bulk</summary>
+        <summary>Sort, bulk &amp; view</summary>
         <div class="row2">
           <select id="sort" aria-label="Sort order">
             <option value="conf" selected>Least confident first</option>
             <option value="room">By room</option>
           </select>
+          <button class="q-tool-btn" id="btn-toggle-all-rooms" type="button">Toggle all rooms</button>
           <button class="btn" id="bulk-routine">Accept routine</button>
           <button class="btn" id="bulk">Accept all remaining</button>
         </div>
       </details>
     </div>
     <div id="queue"></div>
+
   </nav>
   <div id="rail-backdrop"></div>
   <section id="detail"></section>
@@ -1300,10 +1410,29 @@
     <button class="lb-btn" id="lb-next" aria-label="Next photo">›</button>
     <span id="lb-hint">Scroll to zoom · drag to pan · double-click a pin to remove it</span>
   </div>
+  <div id="lb-micro-scrub" class="lb-micro-scrub" hidden>
+    <span class="micro-lbl">±2s Moment scrubber</span>
+    <div class="micro-buttons">
+      <button class="lb-btn micro-btn" type="button" data-step="-2.0" title="Seek 2 seconds back">−2.0s</button>
+      <button class="lb-btn micro-btn" type="button" data-step="-1.0" title="Seek 1 second back">−1.0s</button>
+      <button class="lb-btn micro-btn" type="button" data-step="-0.5" title="Seek 0.5 seconds back">−0.5s</button>
+      <button class="lb-btn micro-btn keyframe" type="button" data-step="0" title="Reset to keyframe timestamp">● Keyframe</button>
+      <button class="lb-btn micro-btn" type="button" data-step="0.5" title="Seek 0.5 seconds forward">+0.5s</button>
+      <button class="lb-btn micro-btn" type="button" data-step="1.0" title="Seek 1 second forward">+1.0s</button>
+      <button class="lb-btn micro-btn" type="button" data-step="2.0" title="Seek 2 seconds forward">+2.0s</button>
+    </div>
+    <span id="lb-micro-time" class="micro-time"></span>
+  </div>
 </div>
 
 <div id="anno-form">
   <select id="anno-pick"></select>
+  <div class="anno-taxonomy-row">
+    <button class="def-tax-mini" type="button" data-tax="[Fair Wear & Tear]">Wear &amp; tear</button>
+    <button class="def-tax-mini" type="button" data-tax="[Requires Cleaning]">Cleaning</button>
+    <button class="def-tax-mini" type="button" data-tax="[Tenant Action]">Tenant</button>
+    <button class="def-tax-mini" type="button" data-tax="[Pre-existing / Landlord]">Landlord</button>
+  </div>
   <input id="anno-new" type="text" placeholder="…or describe a new defect">
   <div class="row">
     <button class="btn ghost" id="anno-cancel">Cancel</button>
@@ -1601,6 +1730,11 @@
     if ((it.defects || []).length) reasons.push("a drafted defect");
     if (it.category === "safety") reasons.push("a safety item");
     if (it.category === "meter") reasons.push("a meter reading");
+    if ((it.comments || []).some(function (c) {
+      return (c.text || "").indexOf("[Dispute]") >= 0 || c.role === "tenant" || c.attach_path;
+    })) {
+      reasons.push("tenant dispute / evidence");
+    }
     return reasons;
   }
   function nextDecision() {
@@ -1635,6 +1769,59 @@
     return ix.items.filter(function (it) {
       return triageBucket(it) === "routine";
     });
+  }
+  function roomRoutineOpen(room) {
+    return (room.items || []).filter(function (it) {
+      return !isDone(it) && !it.rejected && (!it.defects || !it.defects.length) &&
+             it.condition !== "poor" && it.condition !== "fair" &&
+             !(it.comments || []).length;
+    });
+  }
+  function verifyRoomBaseline(room) {
+    var open = roomRoutineOpen(room);
+    if (!open.length) {
+      toast("No unconfirmed routine items in " + room.name);
+      return;
+    }
+    ui.confirmDialog({
+      title: "Verify clean baseline for " + room.name + "?",
+      message: "Confirm " + open.length + " routine item" + (open.length > 1 ? "s" : "") +
+               " in " + room.name + " with no reported defects.",
+      note: "You can undo this anytime with ⌘Z / Ctrl+Z.",
+      confirmLabel: "Confirm " + open.length + " items"
+    }).then(function (yes) {
+      if (!yes) return;
+      pushUndo("verify baseline for " + room.name, open);
+      open.forEach(function (i) { i.reviewed = true; i.rejected = false; });
+      markDirty();
+      renderProgress();
+      renderQueue();
+      if (viewMode === "overview") renderOverview();
+      else if (viewMode === "room") renderRoom(room);
+      toast("Confirmed " + open.length + " clean item" + (open.length > 1 ? "s" : "") + " in " + room.name);
+    });
+  }
+  function safetyComplianceAudit() {
+    var meters = [], alarms = [], keys = [];
+    var meterRx = /\b(meter|electric|electricity|gas|water|consumer unit|fuse box|fuseboard)\b/i;
+    var alarmRx = /\b(smoke|alarm|detector|carbon monoxide|co\s*alarm|heat detector)\b/i;
+    var keyRx = /\b(key|keys|fob|access card|entry)\b/i;
+
+    ix.items.forEach(function (it) {
+      var hay = (it.name || "") + " " + (it.description || "") + " " + (it.category || "");
+      if (meterRx.test(hay)) meters.push(it);
+      else if (alarmRx.test(hay)) alarms.push(it);
+      else if (keyRx.test(hay)) keys.push(it);
+    });
+
+    var allSafety = meters.concat(alarms).concat(keys);
+    return {
+      meters: meters,
+      alarms: alarms,
+      keys: keys,
+      total: allSafety.length,
+      unreviewed: allSafety.filter(function (it) { return !isDone(it); })
+    };
   }
   function renderTrustMeter(stats) {
     var cov = coverageSummary();
@@ -1896,9 +2083,10 @@
 
   /* ---------- progress ---------- */
   function filterCounts() {
-    var pending = 0, defects = 0, noev = 0, crops = 0;
+    var pending = 0, defects = 0, noev = 0, crops = 0, exceptions = 0;
     ix.items.forEach(function (it) {
       if (!isDone(it)) pending++;
+      if (decisionReasons(it).length > 0 && !isDone(it)) exceptions++;
       if ((it.defects || []).length || (it.rejected_defects || []).length) {
         defects++;
       }
@@ -1907,12 +2095,12 @@
         crops++;
       }
     });
-    return { all: ix.items.length, pending: pending, crops: crops,
-             defects: defects, noev: noev };
+    return { all: ix.items.length, pending: pending, exceptions: exceptions,
+             crops: crops, defects: defects, noev: noev };
   }
   var FILTER_LABELS = {
-    all: "All", pending: "Unreviewed", crops: "Crop review",
-    defects: "Defects", noev: "No evidence"
+    all: "All", pending: "Unreviewed", exceptions: "Exceptions",
+    crops: "Crop review", defects: "Defects", noev: "No evidence"
   };
   function updateFilterBadges() {
     var c = filterCounts();
@@ -2475,6 +2663,22 @@
       mfill.style.width = total ? (100 * doneN / total) + "%" : "0";
       meter.appendChild(mfill);
       body.appendChild(meter);
+
+      var rOpen = roomRoutineOpen(room);
+      if (rOpen.length > 0) {
+        var baseBtn = el("button", {
+          type: "button",
+          "class": "btn-room-baseline",
+          text: "✓ Verify " + rOpen.length + " clean",
+          title: "Confirm " + rOpen.length + " routine item" + (rOpen.length > 1 ? "s" : "") + " in " + room.name + " without defects",
+          onclick: function (e) {
+            e.stopPropagation();
+            verifyRoomBaseline(room);
+          }
+        });
+        body.appendChild(baseBtn);
+      }
+
       card.appendChild(body);
       (land ? features : grid).appendChild(card);
     }
@@ -2521,17 +2725,43 @@
     });
     var playhead = el("div", { "class": "playhead", style: "left:0%" });
     scrub.appendChild(playhead);
+    var peek = el("div", { "class": "peek" });
+    peek.appendChild(el("img", { alt: "" }));
+    peek.appendChild(el("span", { "class": "t" }));
+    scrub.appendChild(peek);
     scrub.addEventListener("click", function (e) {
       var r = scrub.getBoundingClientRect();
       var t = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width))
               * meta.duration;
       showWalkthroughPlayer(overviewHost, wt, t);
     });
+    scrub.addEventListener("mousemove", function (ev) {
+      var r = scrub.getBoundingClientRect();
+      var f = Math.max(0, Math.min(1, (ev.clientX - r.left) / r.width));
+      var t = f * meta.duration;
+      var best = null, bd = 1e9;
+      Object.keys(photoTime).forEach(function (pid) {
+        var pt2 = photoTime[pid];
+        if (!pt2 || pt2.video !== wt.rel || !photoSrc[pid]) return;
+        var diff = Math.abs(pt2.t - t);
+        if (diff < bd) { bd = diff; best = { pid: pid, t: pt2.t }; }
+      });
+      if (!best || !photoSrc[best.pid]) { peek.style.display = "none"; return; }
+      peek.querySelector("img").src = photoSrc[best.pid];
+      peek.querySelector(".t").textContent = fmtT(t);
+      var x = ev.clientX - r.left;
+      peek.style.left = Math.max(70, Math.min(r.width - 70, x)) + "px";
+      peek.style.display = "block";
+    });
+    scrub.addEventListener("mouseleave", function () {
+      peek.style.display = "none";
+    });
     spine.appendChild(scrub);
     wrap.appendChild(spine);
     return wrap;
   }
   function showWalkthroughPlayer(host, wt, seekT) {
+
     var existing = host.querySelector(".wt-player");
     var box, v;
     if (existing) {
@@ -2913,6 +3143,49 @@
         body.appendChild(el("button", { type: "button", "class": "btn",
           text: "Continue review", onclick: startReview }));
       } : null, pend ? "warn" : "ok"));
+
+    var safety = safetyComplianceAudit();
+    var safetyWarn = safety.unreviewed.length > 0;
+    var safetyMsg = safetyWarn
+      ? safety.unreviewed.length + " safety / compliance item(s) unreviewed — verify meters, alarms & keys."
+      : (safety.total > 0
+         ? "All detected statutory meters (" + safety.meters.length + "), alarms (" + safety.alarms.length + "), and keys (" + safety.keys.length + ") verified."
+         : "No explicit statutory items flagged in footage — verify alarms & meters manually if required.");
+    list.appendChild(finishStep(safetyWarn ? "!" : "\u2713", "Safety & compliance audit",
+      safetyMsg,
+      function (body) {
+        var wrap = el("div", { "class": "finish-safety-audit" });
+        if (safety.unreviewed.length > 0) {
+          var unrevTitle = el("p", { "class": "finish-step-note", text: "The following statutory/safety items need verification:" });
+          wrap.appendChild(unrevTitle);
+          var ul = el("ul", { "class": "safety-item-list" });
+          safety.unreviewed.forEach(function (it) {
+            var li = el("li", { "class": "safety-item-row" });
+            var room = ix.roomOf[it.id];
+            var icon = /\b(meter|electric|gas|water)\b/i.test(it.name || "") ? "⚡" : /\b(smoke|alarm|co|detector)\b/i.test(it.name || "") ? "🚨" : "🔑";
+            li.appendChild(el("span", { "class": "safety-icon", text: icon }));
+            var itemMeta = el("div", { "class": "safety-meta" });
+            itemMeta.appendChild(el("strong", { text: it.name || it.id }));
+            if (room) itemMeta.appendChild(el("span", { "class": "safety-room", text: " · " + room.name }));
+            li.appendChild(itemMeta);
+            var btn = el("button", {
+              type: "button", "class": "btn ghost", text: "Verify claim",
+              onclick: function () { startReview(it.id); }
+            });
+            li.appendChild(btn);
+            ul.appendChild(li);
+          });
+          wrap.appendChild(ul);
+        } else if (safety.total > 0) {
+          var okText = el("p", { "class": "finish-step-note", text: "✓ All recorded utility meters, smoke/CO alarms, and access keys are reviewed and confirmed." });
+          wrap.appendChild(okText);
+        } else {
+          var advText = el("p", { "class": "finish-step-note", text: "Advisory: No smoke detectors or utility meters were detected in the walkthrough footage. Ensure required statutory alarms and meter readings are recorded in tenancy documents." });
+          wrap.appendChild(advText);
+        }
+        body.appendChild(wrap);
+      }, safetyWarn ? "warn" : "ok"));
+
     var pdfUnavailable = pdfMeta.weasyprint_available === false;
     var pdfState = pdfUnavailable ? "print"
       : pdfStatus === "running" ? "running"
@@ -3026,30 +3299,65 @@
       inner.appendChild(buildIssueCeremonyCard());
       inner.appendChild(el("h2", { text: "Issue record ready" }));
       inner.appendChild(el("p", {
-        text: "Your signature seals this inventory. Open the clean final issue"
-          + " or share the " + (shareSpec.link_noun || "tenant") + " link."
+        text: "Your signature seals this inventory. Open the clean final issue, share the tenant link, or download the evidence bundle below."
       }));
-      handoff.appendChild(inner);
-      var hact = el("div", { "class": "finish-handoff-actions" });
-      hact.appendChild(el("a", {
-        href: PREFIX + "/issue", "class": "btn primary",
-        text: "Open final issue"
+
+      var bundle = el("div", { "class": "finish-bundle-grid" });
+
+      // Card 1: Clean Final Issue
+      var cIssue = el("div", { "class": "bundle-card" });
+      cIssue.appendChild(el("div", { "class": "bundle-icon", text: "📄" }));
+      cIssue.appendChild(el("strong", { text: "Clean Final Issue" }));
+      cIssue.appendChild(el("p", { text: "Attested, read-only HTML report matching the sealed hash." }));
+      cIssue.appendChild(el("a", {
+        href: PREFIX + "/issue", target: "_blank", "class": "btn primary", text: "Open final issue"
       }));
+      bundle.appendChild(cIssue);
+
+      // Card 2: Tenant Review Link
+      var cTenant = el("div", { "class": "bundle-card" });
+      cTenant.appendChild(el("div", { "class": "bundle-icon", text: "🔗" }));
+      cTenant.appendChild(el("strong", { text: (shareSpec.link_noun || "Tenant") + " Link" }));
+      cTenant.appendChild(el("p", { text: "Allows the tenant to review each room, add evidence, and countersign." }));
       if (SHARE_URL) {
-        hact.appendChild(el("button", { type: "button", "class": "btn",
-          text: "Copy " + (shareSpec.link_noun || "tenant") + " link",
-          onclick: copyShareLink }));
+        cTenant.appendChild(el("button", {
+          type: "button", "class": "btn", text: "Copy link",
+          onclick: copyShareLink
+        }));
       } else {
-        hact.appendChild(el("button", { type: "button", "class": "btn",
-          text: "Share tenant link",
-          onclick: function () { enableShareLink(this); } }));
+        cTenant.appendChild(el("button", {
+          type: "button", "class": "btn", text: "Enable share link",
+          onclick: function () { enableShareLink(this); }
+        }));
       }
-      hact.appendChild(el("button", {
-        type: "button", "class": "btn ghost",
-        text: "Preview as landlord",
-        onclick: function () { window.open(PREFIX + "/issue", "_blank"); }
+      bundle.appendChild(cTenant);
+
+      // Card 3: PDF Document
+      var cPdf = el("div", { "class": "bundle-card" });
+      cPdf.appendChild(el("div", { "class": "bundle-icon", text: "📥" }));
+      cPdf.appendChild(el("strong", { text: "PDF Report" }));
+      cPdf.appendChild(el("p", { text: "Formal printed/signed copy for tenancy records and deposit schemes." }));
+      cPdf.appendChild(el("button", {
+        type: "button", "class": "btn ghost", text: "Export / Print PDF",
+        onclick: function () {
+          if (pdfMeta.weasyprint_available !== false) window.open(PREFIX + "/pdf", "_blank");
+          else openPrintPdfFallback();
+        }
       }));
-      handoff.appendChild(hact);
+      bundle.appendChild(cPdf);
+
+      // Card 4: Evidence Archive
+      var cZip = el("div", { "class": "bundle-card" });
+      cZip.appendChild(el("div", { "class": "bundle-icon", text: "📦" }));
+      cZip.appendChild(el("strong", { text: "Evidence Archive" }));
+      cZip.appendChild(el("p", { text: "Tamper-evident ZIP containing all original media, keyframes, and hash logs." }));
+      cZip.appendChild(el("a", {
+        href: PREFIX + "/api/archive", download: "evidence-archive.zip", "class": "btn ghost", text: "Download ZIP"
+      }));
+      bundle.appendChild(cZip);
+
+      inner.appendChild(bundle);
+      handoff.appendChild(inner);
       host.appendChild(handoff);
     }
     updateSubNav();
@@ -3113,6 +3421,7 @@
   function visible(it) {
     if (query && !matchesQuery(it)) return false;
     if (filter === "pending") return !isDone(it);
+    if (filter === "exceptions") return !isDone(it) && decisionReasons(it).length > 0;
     if (filter === "crops") {
       return it.crop_status === "proposed" && (cropSrc[it.id] || it.crop_path);
     }
@@ -3170,6 +3479,10 @@
     var nameText = el("span", { "class": "item-title" });
     nameText.textContent = it.name || "(unnamed)";
     name.appendChild(nameText);
+    if ((it.defects || []).length) {
+      name.appendChild(el("span", { "class": "q-def-badge",
+        text: "⚠ " + it.defects.length }));
+    }
     var bits = [];
     if ((it.defects || []).length) bits.push((it.defects.length) + " defect" +
       (it.defects.length > 1 ? "s" : ""));
@@ -3178,6 +3491,7 @@
     if (bits.length) name.appendChild(el("span", { "class": "sub",
       text: bits.join(" · ") }));
     row.appendChild(name);
+
     var conf = el("span", { "class": "conf" });
     // confidence is only signal when it is low or when sorting by it
     if (typeof it.confidence === "number" &&
@@ -3357,6 +3671,18 @@
     var next = Math.max(0, Math.min(inv.rooms.length - 1, i + delta));
     if (next === i) return;
     select({ type: "room", name: inv.rooms[next].name });
+  }
+  function jumpRoomItems(delta) {
+    if (!inv.rooms.length) return;
+    var curRoom = (sel && sel.type === "item" && ix.byId[sel.id] && ix.byId[sel.id].room) || lastRoomName || inv.rooms[0].name;
+    var ri = roomIndex(curRoom);
+    if (ri < 0) ri = 0;
+    var nextRi = Math.max(0, Math.min(inv.rooms.length - 1, ri + delta));
+    if (nextRi === ri) return;
+    var targetRoomName = inv.rooms[nextRi].name;
+    var firstIt = (ix.byRoom[targetRoomName] || [])[0];
+    if (firstIt) select({ type: "item", id: firstIt.id });
+    else select({ type: "room", name: targetRoomName });
   }
 
   /* ================================================================
@@ -3863,6 +4189,55 @@
       return false;
     };
 
+    ctl.highlightRegion = function (reg) {
+      var old = media.querySelector(".stage-overlay-box");
+      if (old) old.remove();
+      if (!reg) return;
+      var e = curEntry();
+      if (reg.photo_id && e && e.pid && reg.photo_id !== e.pid) {
+        for (var i = 0; i < ctl.entries.length; i++) {
+          if (ctl.entries[i].pid === reg.photo_id) {
+            showFrame(i);
+            break;
+          }
+        }
+      }
+      var rBox = el("div", { "class": "stage-overlay-box" });
+      rBox.style.left = (reg.x * 100) + "%";
+      rBox.style.top = (reg.y * 100) + "%";
+      rBox.style.width = (reg.w * 100) + "%";
+      rBox.style.height = (reg.h * 100) + "%";
+      if (reg.defect) {
+        var rLbl = el("span", { "class": "stage-overlay-label" });
+        rLbl.appendChild(document.createTextNode(reg.defect));
+        if (opts.item) {
+          var delBtn = el("button", {
+            type: "button",
+            "class": "stage-overlay-delete",
+            title: "Remove this defect pin",
+            text: "×"
+          });
+          delBtn.addEventListener("click", function (ev) {
+            ev.stopPropagation();
+            var it = opts.item;
+            if (it && it.defect_regions) {
+              var idx = it.defect_regions.indexOf(reg);
+              if (idx >= 0) {
+                pushUndo("remove defect pin", [it]);
+                it.defect_regions.splice(idx, 1);
+                markDirty();
+                rBox.remove();
+                if (sel && sel.type === "item" && sel.id === it.id) renderItem(it);
+              }
+            }
+          });
+          rLbl.appendChild(delBtn);
+        }
+        rBox.appendChild(rLbl);
+      }
+      media.appendChild(rBox);
+    };
+
     drawStrip();
     showFrame(startIdx);
     updateStageExtraHint();
@@ -4127,14 +4502,19 @@
     // primary actions — separated from claim text above
     var act = el("div", { id: "actions" });
     var row = el("div", { "class": "row" });
-    row.appendChild(el("button", {
+    var btnConf = el("button", {
       "class": "btn confirm",
-      text: it.reviewed ? "✓ Confirmed" : "Yes, this is right",
-      onclick: function () { confirmItem(it); } }));
-    row.appendChild(el("button", {
+      onclick: function () { confirmItem(it); } });
+    btnConf.appendChild(document.createTextNode(it.reviewed ? "✓ Confirmed" : "Yes, this is right"));
+    btnConf.appendChild(el("span", { "class": "kbd-hint", text: "Space" }));
+    row.appendChild(btnConf);
+
+    var btnRej = el("button", {
       "class": "btn danger",
-      text: it.rejected ? "Restore item" : "✕ Reject",
-      onclick: function () { rejectItem(it); } }));
+      onclick: function () { rejectItem(it); } });
+    btnRej.appendChild(document.createTextNode(it.rejected ? "Restore item" : "✕ Reject"));
+    btnRej.appendChild(el("span", { "class": "kbd-hint", text: "R" }));
+    row.appendChild(btnRej);
     act.appendChild(row);
     if (it.crop_status === "proposed" && (cropSrc[it.id] || it.crop_path)) {
       var cropRow = el("div", { "class": "row" });
@@ -4210,6 +4590,13 @@
           markDirty(); drawChips();
           if (stageCtl && stageCtl.refreshPins) stageCtl.refreshPins();
         } });
+      c.addEventListener("mouseenter", function () {
+        var reg = (it.defect_regions || []).find(function (r) { return r.defect === text; });
+        if (reg && stageCtl && stageCtl.highlightRegion) stageCtl.highlightRegion(reg);
+      });
+      c.addEventListener("mouseleave", function () {
+        if (stageCtl && stageCtl.highlightRegion) stageCtl.highlightRegion(null);
+      });
       c.appendChild(el("span", { text: text }));
       c.appendChild(el("span", { "class": "x", text: struck ? "↩" : "✕" }));
       return c;
@@ -4233,21 +4620,133 @@
         });
         addBox.appendChild(addIn);
         body.appendChild(addBox);
+
+        // Quick defect suggestions
+        var SUGGESTIONS = ["scuff mark", "paint chip", "limescale", "missing screw", "hairline crack", "water stain", "loose fitting", "scratched surface"];
+        var suggBox = el("div", { "class": "def-suggestions" });
+        SUGGESTIONS.forEach(function (sugg) {
+          if ((it.defects || []).indexOf(sugg) >= 0) return;
+          var schip = el("button", {
+            "class": "def-sugg-chip", type: "button", text: "+ " + sugg,
+            onclick: function () {
+              pushUndo("add defect " + sugg, [it]);
+              (it.defects = it.defects || []).push(sugg);
+              markDirty(); drawChips(); schip.remove();
+            }
+          });
+          suggBox.appendChild(schip);
+        });
+        body.appendChild(suggBox);
+
+        // Responsibility & Severity Taxonomy chips
+        var TAXONOMY = [
+          { label: "Fair wear & tear", tag: "[Fair Wear & Tear]" },
+          { label: "Requires cleaning", tag: "[Requires Cleaning]" },
+          { label: "Tenant action", tag: "[Tenant Action]" },
+          { label: "Pre-existing / Landlord", tag: "[Pre-existing / Landlord]" },
+          { label: "Maintenance required", tag: "[Maintenance Required]" }
+        ];
+        var taxLabel = el("div", {
+          style: "font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin:12px 0 6px;",
+          text: "Responsibility & Severity Classification:"
+        });
+        var taxBox = el("div", { "class": "def-taxonomy" });
+        TAXONOMY.forEach(function (tax) {
+          var tbtn = el("button", {
+            "class": "def-tax-chip", type: "button", text: tax.label,
+            title: "Add " + tax.label + " classification to defect entry",
+            onclick: function () {
+              if (addIn.value) {
+                addIn.value = tax.tag + " " + addIn.value.trim();
+                addIn.focus();
+              } else {
+                pushUndo("classify " + tax.label, [it]);
+                (it.defects = it.defects || []).push(tax.tag);
+                markDirty(); drawChips();
+              }
+            }
+          });
+          taxBox.appendChild(tbtn);
+        });
+        body.appendChild(taxLabel);
+        body.appendChild(taxBox);
       }, hasDefects);
     defectsDisclosure.id = "item-defects";
     scroll.appendChild(defectsDisclosure);
+
 
     // comments
     var cwrap2 = el("div", {});
     function drawComments() {
       cwrap2.innerHTML = "";
+      var tenantDispute = (it.comments || []).find(function (c) {
+        return c.role === "tenant" || (c.text || "").indexOf("[Dispute]") >= 0;
+      });
+      if (tenantDispute) {
+        var dCard = el("div", { "class": "tenant-dispute-card" });
+        var dHead = el("div", { "class": "t-head", text: "⚠️ Tenant Feedback / Dispute" });
+        dCard.appendChild(dHead);
+        dCard.appendChild(el("p", {
+          style: "margin:0 0 6px;font-size:13px;color:var(--ink);",
+          text: (tenantDispute.author ? tenantDispute.author + ": " : "") + tenantDispute.text
+        }));
+        var actions = el("div", { "class": "t-actions" });
+        actions.appendChild(el("button", {
+          type: "button", "class": "btn", text: "✓ Accept & update",
+          onclick: function () {
+            pushUndo("resolve dispute " + it.id, [it]);
+            (it.comments = it.comments || []).push({
+              author: inv.inspected_by || "reviewer", role: "landlord",
+              text: "[Resolution] Accepted tenant note. Condition updated.", at: new Date().toISOString()
+            });
+            it.reviewed = true;
+            markDirty(); renderItem(it); renderProgress(); renderQueue();
+            toast("Accepted tenant note on " + it.id);
+          }
+        }));
+        actions.appendChild(el("button", {
+          type: "button", "class": "btn ghost", text: "Maintain original",
+          onclick: function () {
+            pushUndo("maintain original " + it.id, [it]);
+            (it.comments = it.comments || []).push({
+              author: inv.inspected_by || "reviewer", role: "landlord",
+              text: "[Resolution] Original claim maintained per walkthrough evidence.", at: new Date().toISOString()
+            });
+            it.reviewed = true;
+            markDirty(); renderItem(it); renderProgress(); renderQueue();
+            toast("Maintained original claim on " + it.id);
+          }
+        }));
+        actions.appendChild(el("button", {
+          type: "button", "class": "btn ghost", text: "Add joint note",
+          onclick: function () {
+            ui.form({
+              title: "Add Joint Agreed Note",
+              note: "Note agreed with tenant regarding condition of " + (it.name || it.id),
+              fields: [{ name: "note", label: "Agreed wording", required: true }]
+            }).then(function (res) {
+              if (!res || !res.note) return;
+              pushUndo("add joint note " + it.id, [it]);
+              (it.comments = it.comments || []).push({
+                author: inv.inspected_by || "reviewer", role: "landlord",
+                text: "[Joint Agreed Note] " + res.note, at: new Date().toISOString()
+              });
+              it.reviewed = true;
+              markDirty(); renderItem(it); renderProgress(); renderQueue();
+              toast("Added joint note to " + it.id);
+            });
+          }
+        }));
+        dCard.appendChild(actions);
+        cwrap2.appendChild(dCard);
+      }
       (it.comments || []).forEach(function (c) {
         var line = el("div", { "class": "c-line" });
         line.appendChild(el("span", {
           "class": "who " + (c.role || "landlord"),
           text: (c.author || "?") + " (" + (c.role || "reviewer") + ")" }));
         if (c.at) line.appendChild(el("span", { "class": "at",
-          text: (c.at + "").slice(0, 16).replace("T", " ") }));
+          text: " · " + (c.at + "").slice(0, 16).replace("T", " ") }));
         line.appendChild(el("div", { text: c.text || "" }));
         cwrap2.appendChild(line);
       });
@@ -4411,6 +4910,17 @@
       playBtn.hidden = !(cur.pid && photoTime[cur.pid] &&
         videos[photoTime[cur.pid].video] &&
         !videoFail[photoTime[cur.pid].video]);
+
+      var microScrub = document.getElementById("lb-micro-scrub");
+      if (microScrub) {
+        var hasVid = !!(pt && pt.video && videos[pt.video] && !videoFail[pt.video]);
+        microScrub.hidden = !hasVid;
+        if (hasVid) {
+          var timeEl = document.getElementById("lb-micro-time");
+          if (timeEl) timeEl.textContent = fmtT(pt.t);
+        }
+      }
+
       img.onload = function () { fit(); drawRegions(); };
       img.src = cur.src;
       if (img.complete && img.naturalWidth) { fit(); drawRegions(); }
@@ -4445,6 +4955,39 @@
       close();
       if (stageCtl && stageCtl.key) stageCtl.key("v");
     });
+
+    var microScrubEl = document.getElementById("lb-micro-scrub");
+    if (microScrubEl) {
+      microScrubEl.querySelectorAll(".micro-btn").forEach(function (b) {
+        b.addEventListener("click", function () {
+          if (!cur || !cur.pid || !photoTime[cur.pid]) return;
+          var pt = photoTime[cur.pid];
+          var step = parseFloat(b.getAttribute("data-step") || "0");
+          var targetT = Math.max(0, pt.t + step);
+          var timeEl = document.getElementById("lb-micro-time");
+          if (timeEl) timeEl.textContent = fmtT(targetT) + (step !== 0 ? " (" + (step > 0 ? "+" : "") + step.toFixed(1) + "s)" : " (keyframe)");
+          if (step === 0) {
+            img.src = cur.src;
+            return;
+          }
+          var near = null, bd = 1e9;
+          Object.keys(photoTime).forEach(function (pid2) {
+            var pt2 = photoTime[pid2];
+            if (pt2.video === pt.video && photoSrc[pid2]) {
+              var dd = Math.abs(pt2.t - targetT);
+              if (dd < bd) { bd = dd; near = pid2; }
+            }
+          });
+          if (near && photoSrc[near] && bd < 1.2) {
+            img.src = photoSrc[near];
+          } else {
+            close();
+            enterVideo(targetT, true);
+          }
+        });
+      });
+    }
+
     document.getElementById("lb-in").addEventListener("click", function () {
       var r = stage.getBoundingClientRect();
       zoomAt(1.4, r.left + r.width / 2, r.top + r.height / 2);
@@ -4559,12 +5102,17 @@
     f.style.left = Math.min(px, window.innerWidth - 300) + "px";
     f.style.top = Math.min(py + 8, window.innerHeight - 170) + "px";
   }
-  function closeAnnoForm() {
-    document.getElementById("anno-form").style.display = "none";
-    if (pendingRegion && pendingRegion.draftEl) pendingRegion.draftEl.remove();
-    pendingRegion = null;
-  }
   document.getElementById("anno-cancel").addEventListener("click", closeAnnoForm);
+  document.getElementById("anno-form").querySelectorAll(".def-tax-mini").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var tax = btn.getAttribute("data-tax") || "";
+      var inp = document.getElementById("anno-new");
+      if (inp) {
+        inp.value = tax + (inp.value ? " " + inp.value : "");
+        inp.focus();
+      }
+    });
+  });
   document.getElementById("anno-ok").addEventListener("click", function () {
     if (!pendingRegion) return;
     var label = document.getElementById("anno-new").value.trim() ||
@@ -4674,6 +5222,21 @@
     var panelBody = el("div", { "class": "room-panel-body" });
     panel.appendChild(panelBody);
     grid.appendChild(panel);
+
+    var rOpen = roomRoutineOpen(room);
+    if (rOpen.length > 0) {
+      var baseBanner = el("div", { "class": "room-baseline-banner" });
+      var baseCopy = el("div", { "class": "baseline-copy" });
+      baseCopy.appendChild(el("strong", { text: rOpen.length + " clean item" + (rOpen.length > 1 ? "s" : "") + " unconfirmed" }));
+      baseCopy.appendChild(el("p", { text: "No defects flagged. Verify these claims in one step." }));
+      baseBanner.appendChild(baseCopy);
+      baseBanner.appendChild(el("button", {
+        type: "button", "class": "btn primary",
+        text: "✓ Verify " + rOpen.length + " clean items",
+        onclick: function () { verifyRoomBaseline(room); }
+      }));
+      panelBody.appendChild(baseBanner);
+    }
 
     var renameRow = el("div", { "class": "add-form" });
     var renameInput = el("input", { type: "text", value: room.name,
@@ -4928,6 +5491,48 @@
   document.getElementById("sort").addEventListener("change", function () {
     sortMode = this.value; renderQueue();
   });
+  var roomJumpEl = document.getElementById("q-room-jump");
+  if (roomJumpEl) {
+    function updateRoomJump() {
+      var curVal = roomJumpEl.value;
+      roomJumpEl.innerHTML = '<option value="">Jump to room…</option>';
+      (inv.rooms || []).forEach(function (r) {
+        var op = el("option", { value: r.name, text: r.name + " (" + r.items.length + ")" });
+        if (r.name === curVal) op.selected = true;
+        roomJumpEl.appendChild(op);
+      });
+    }
+    updateRoomJump();
+    roomJumpEl.addEventListener("change", function () {
+      var rName = this.value;
+      if (!rName) return;
+      sortMode = "room";
+      document.getElementById("sort").value = "room";
+      if (roomCollapsed(rName)) {
+        var cIdx = collapsedRooms.indexOf(rName);
+        if (cIdx >= 0) collapsedRooms.splice(cIdx, 1);
+      }
+      renderQueue();
+      var rHead = document.querySelector('.room-group[data-room="' + rName + '"]');
+      if (rHead) rHead.scrollIntoView({ behavior: "smooth", block: "start" });
+      var room = inv.rooms.find(function (r) { return r.name === rName; });
+      if (room && room.items.length) select({ type: "item", id: room.items[0].id });
+    });
+  }
+  var toggleRoomsBtn = document.getElementById("btn-toggle-all-rooms");
+  if (toggleRoomsBtn) {
+    toggleRoomsBtn.addEventListener("click", function () {
+      var allNames = (inv.rooms || []).map(function (r) { return r.name; });
+      if (collapsedRooms.length >= allNames.length) {
+        collapsedRooms = [];
+      } else {
+        collapsedRooms = allNames.slice();
+      }
+      saveCollapsedRooms();
+      renderQueue();
+    });
+  }
+
   var searchBox = document.getElementById("q-search");
   if (!window.matchMedia("(hover: none), (pointer: coarse)").matches &&
       searchBox.getAttribute("data-placeholder-kbd")) {
@@ -5041,6 +5646,14 @@
       e.preventDefault();
       if (window.matchMedia("(max-width: 900px)").matches) setRail(true);
       searchBox.focus(); searchBox.select();
+    }
+    else if (e.key === "]" || (e.shiftKey && (e.key === "J" || e.key === "j"))) {
+      e.preventDefault();
+      jumpRoomItems(1);
+    }
+    else if (e.key === "[" || (e.shiftKey && (e.key === "K" || e.key === "k"))) {
+      e.preventDefault();
+      jumpRoomItems(-1);
     }
     else if (viewMode === "room" && sel && sel.type === "room") {
       if (e.key === "j" || e.key === "ArrowRight") { e.preventDefault(); stepRoom(1); }

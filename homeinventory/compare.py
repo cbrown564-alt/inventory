@@ -396,9 +396,13 @@ def get_rubric_backend(name: str, spec: ComparisonSpec,
                        base_url: Optional[str] = None):
     if name == "openai":
         return OpenAIRubric(spec, model=model, base_url=base_url)
+    if name == "openrouter":
+        from .describe import OpenAICompatBackend
+        return OpenAIRubric(spec, model=model or "google/gemini-3.7-flash",
+                            base_url=base_url or OpenAICompatBackend.OPENROUTER_BASE)
     if name == "offline":
         return OfflineRubric()
-    raise ValueError(f"unknown compare backend: {name!r} (expected openai|offline)")
+    raise ValueError(f"unknown compare backend: {name!r} (expected openai|openrouter|offline)")
 
 
 # --------------------------------------------------------------------------

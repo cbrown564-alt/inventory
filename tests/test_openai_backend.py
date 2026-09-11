@@ -18,7 +18,7 @@ def _photos(tmp_path, n):
 
 
 def test_no_key_is_fatal(monkeypatch):
-    for var in ("OPENAI_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY"):
+    for var in ("OPENAI_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "OPENROUTER_API_KEY"):
         monkeypatch.delenv(var, raising=False)
     with pytest.raises(DescribeAuthError):
         OpenAICompatBackend()
@@ -27,9 +27,31 @@ def test_no_key_is_fatal(monkeypatch):
 def test_gemini_model_routes_to_google(monkeypatch):
     monkeypatch.setenv("GEMINI_API_KEY", "g-key")
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     b = OpenAICompatBackend(model="gemini-3.1-flash-lite")
     assert "googleapis.com" in b.base_url
     assert b.api_key == "g-key"
+
+
+def test_openrouter_model_routes_to_openrouter(monkeypatch):
+    monkeypatch.setenv("OPENROUTER_API_KEY", "or-key")
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    b = OpenAICompatBackend(model="google/gemini-3.7-flash")
+    assert "openrouter.ai" in b.base_url
+    assert b.api_key == "or-key"
+    assert b.name == "openrouter"
+
+
+def test_get_backend_openrouter(monkeypatch):
+    from homeinventory.describe import get_backend
+    monkeypatch.setenv("OPENROUTER_API_KEY", "or-key")
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    b = get_backend("openrouter")
+    assert b.model == "google/gemini-3.7-flash"
+    assert "openrouter.ai" in b.base_url
+    assert b.api_key == "or-key"
+    assert b.name == "openrouter"
 
 
 def test_explicit_base_url_wins(monkeypatch):

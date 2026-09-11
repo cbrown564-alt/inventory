@@ -329,6 +329,12 @@ def run_build(opts: BuildOptions, *,
         if not detector.available:
             log.warning("detector unavailable — continuing without crops/hints")
         else:
+            if not opts.no_detect_verify:
+                from .detect import vlm_verify_detection_proposals
+                detections = vlm_verify_detection_proposals(
+                    detections,
+                    model=opts.model or "google/gemini-3.7-flash",
+                )
             from .curate import (load_overrides,
                                  rerank_covers_with_detections)
             promoted = rerank_covers_with_detections(

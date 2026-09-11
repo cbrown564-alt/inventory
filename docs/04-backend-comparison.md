@@ -40,6 +40,7 @@ MoE sidesteps that on hardware with enough system RAM.
 |---|---|---|
 | **`claude`** | Quality ceiling; signed report | `claude-opus-4-8` (`claude-haiku-4-5` for budget) |
 | **`openai`** | Any OpenAI-compatible API — OpenAI, Gemini compat endpoint, custom `--base-url` | `gpt-4.1-mini`; benchmark uses `gpt-5.4-mini` |
+| **`openrouter`** | Any OpenRouter endpoint — Google, Anthropic, Meta, DeepSeek via unified gateway | `google/gemini-3.7-flash` |
 | **`local`** | Open-weight VLM through Ollama; £0/run, offline | `qwen3.5:9b` (lighter fallback); **`gemma4:26b`** recommended |
 
 ## Results
@@ -50,12 +51,15 @@ hallucination. Targets from `evals/README.md`.
 | Backend (run) | notable recall ≥90 | halluc. ≤5 | naming ≥85 | cond-exact ≥70 | within-one ≥95 | defect ≥75 |
 |---|---|---|---|---|---|---|
 | **claude-v4** ★ signed report | 88.0 | **2.8** | 94.8 | **93.2** | 100 | **71.3** |
-| gpt54mini-v4 (best OpenAI tier) | **90.7** | 14.7 | **96.8** | 83.1 | 100 | 64.8 |
+| **gemini37flash-crops** (Frontier 1 — OpenRouter) 🚀 | 85.3 | **4.0** | **97.5** | 49.4 | 100 | **67.5** |
+| **gemini37flash-defect-tuned** (OpenRouter) | 85.3 | **4.9** | 95.2 | **96.2** | 100 | 65.1 |
+| **gemini37flash-opus5-tiered** (Tiered OpenRouter→Opus) | 85.3 | 5.4 | 96.2 | 44.7 | 98.7 | 63.8 |
 | gemini-3.5-flash (describe eval) | 82.7 | 5.0 | 93.8 | 72.0 | 100 | 64.6 |
+| gpt54mini-v4 (best OpenAI tier) | **90.7** | 14.7 | **96.8** | 83.1 | 100 | 64.8 |
 | **gemma4:26b** (best local) | 72.0 | 23.8 | **97.4** | **91.7** | 100 | 57.7 |
 | qwen9b-v2 (light local fallback) | 72.0 | 25.7 | 96.3 | 75.0 | 98.7 | 60.8 |
 
-★ Quality default for describe. Per-run JSON:
+★ Quality default for signed describe. Per-run JSON:
 `benchmarks/inventoryflex/report-<run>/inventory.json`.
 
 ### Underperforming or non-competitive runs
@@ -78,7 +82,8 @@ history; v4 is the OpenAI tier to compare against.
 
 | Use case | Backend | Notes |
 |---|---|---|
-| Signed report | `claude` opus-4-8, v4 prompt | Lowest hallucination; best condition grading |
+| Signed report | `claude` opus-4-8, v4 prompt | Lowest hallucination (2.8%); best condition grading |
+| High-efficiency production frontier | `openrouter` gemini-3.7-flash (with crops) | **67.5% defect recall**, 4.0% hallucination, 97.5% naming at ~$0.14/property |
 | Prompt / cost iteration | `openai` gpt-5.4-mini, v4 prompt | Higher recall; accept higher hallucination |
 | Video segmentation | `gemini-3.5-flash` | Already default (`docs/11`); describe eval did not displace claude |
 | £0 local draft + review | `local` gemma4:26b | Best local naming/grading; needs `docs/05` review loop |
@@ -101,6 +106,24 @@ homeinventory build benchmarks/inventoryflex/capture \
   -o benchmarks/inventoryflex/report-gemini35flash \
   --backend openai --model gemini-3.5-flash
 python evals/run_eval.py benchmarks/inventoryflex/report-gemini35flash/inventory.json \
+  evals/fixtures/inventoryflex/labels.json
+```
+
+**gemini-3.7-flash describe (OpenRouter) & Multi-Scale Crop Attention.** Evaluated in August 2026.
+Standalone Gemini 3.7 Flash with multi-scale detector crop attention (`report-gemini37flash-crops`)
+achieves **67.5% defect recall** (56/83 defects found) with **4.0% hallucination** (beating the ≤5.0% ceiling)
+and **97.5% naming accuracy** at only ~$0.14 per property.
+
+A tiered trial (`report-gemini37flash-opus5-tiered`) routing Gemini drafts to Claude Opus 5 on hard items
+produced detailed professional wording but scored **63.8% defect recall** with **5.4% hallucination** at higher cost
+(~$0.26). Dedicated uncompressed optical crops supplied directly in single-pass Gemini attention provide superior defect
+grounding compared to multi-model cascading. Reproduce:
+
+```bash
+homeinventory build benchmarks/inventoryflex/capture \
+  -o benchmarks/inventoryflex/report-gemini37flash-crops \
+  --backend openrouter --model google/gemini-3.7-flash --no-pdf
+python evals/run_eval.py benchmarks/inventoryflex/report-gemini37flash-crops/inventory.json \
   evals/fixtures/inventoryflex/labels.json
 ```
 

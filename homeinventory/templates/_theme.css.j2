@@ -12,7 +12,7 @@
 :root {
   /* paper — the one document world */
   --paper: #f6f3ec; --panel: #fffdf8; --panel-2: #f1ede3;
-  --ink: #22262d; --muted: #626b76; --faint: #969ca6;
+  --ink: #22262d; --muted: #626b76; --faint: #6e7683;
   --line: #e4dfd3; --line-strong: #c8c1b0;
   --brass: #9a7729; --brass-bright: #7d5e1b; --brass-soft: #f0e7d2;
   --confirm: #1d6f4c; --confirm-soft: #e3f0e9;
@@ -69,7 +69,25 @@ body.stage { background:
 button, input, select, textarea { font-family: var(--ui); }
 .mono { font-family: var(--mono); }
 ::selection { background: var(--brass-soft); }
-:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
+:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+/* stage defect region highlight on hover */
+.stage-overlay-box {
+  position: absolute; border: 2px solid #e06459; background: rgba(224, 100, 89, .22);
+  z-index: 5; transition: opacity .15s ease;
+  box-shadow: 0 0 12px rgba(224, 100, 89, .4);
+}
+.stage-overlay-label {
+  position: absolute; left: -2px; bottom: 100%; background: #e06459; color: #fff;
+  font: 600 11px var(--ui); padding: 2px 7px; border-radius: 3px 3px 0 0;
+  white-space: nowrap; max-width: 280px; overflow: hidden; text-overflow: ellipsis;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.stage-overlay-delete {
+  cursor: pointer; opacity: .8; font-weight: 700; font-size: 12px; line-height: 1;
+  background: none; border: 0; color: #fff; padding: 0; display: inline-flex;
+}
+.stage-overlay-delete:hover { opacity: 1; transform: scale(1.15); }
 
 /* ---------- app header ---------- */
 .app-header {
@@ -248,6 +266,172 @@ button, input, select, textarea { font-family: var(--ui); }
           padding: 1px 6px; white-space: nowrap; max-width: 260px;
           overflow: hidden; text-overflow: ellipsis; }
 
+/* ---------- paired photo lightbox (ui.pairedPhotoViewer) ---------- */
+.pv-stage-pair { display: flex; flex: 1; min-height: 0; position: relative; }
+.pv-split { flex: 1; position: relative; overflow: hidden; cursor: grab;
+            touch-action: none; border-right: 1px solid rgba(255,255,255,.15); }
+.pv-split:last-child { border-right: none; }
+.pv-split.dragging { cursor: grabbing; }
+.pv-side-lbl {
+  position: absolute; top: 12px; left: 12px; z-index: 5;
+  background: rgba(8, 10, 14, .85); color: #e8ecf1;
+  font: 600 11px var(--ui); letter-spacing: .08em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: var(--r-pill);
+  border: 1px solid rgba(255,255,255,.16); backdrop-filter: blur(4px);
+}
+.pv-sync-tag {
+  color: var(--brass-bright); font-size: 11px; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* curtain wipe comparison mode */
+.pv-stage-curtain {
+  flex: 1; min-height: 0; position: relative; overflow: hidden; cursor: grab;
+  touch-action: none;
+}
+.pv-stage-curtain.dragging { cursor: grabbing; }
+.pv-curtain-layer {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+}
+.pv-curtain-top {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+}
+.pv-curtain-line {
+  position: absolute; top: 0; bottom: 0; width: 2px; background: #e5c47f;
+  z-index: 10; pointer-events: auto; cursor: ew-resize;
+  box-shadow: 0 0 8px rgba(0, 0, 0, .6);
+}
+.pv-curtain-handle {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 32px; height: 32px; border-radius: 50%; background: #e5c47f; color: #14100a;
+  display: flex; align-items: center; justify-content: center; font: 700 11px var(--ui);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .5); cursor: ew-resize; user-select: none;
+}
+
+/* ---------- adjudication liability triage (compare surface) ---------- */
+.adj-triage-bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px;
+}
+.adj-triage-label {
+  font: 600 11px var(--ui); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted);
+}
+.adj-chip {
+  font: 500 12px/1.3 var(--ui); padding: 3px 10px; border-radius: var(--r-pill);
+  border: 1px solid var(--line-strong); background: var(--panel); color: var(--muted);
+  cursor: pointer; transition: all .15s ease;
+}
+.adj-chip:hover { border-color: var(--brass); color: var(--ink); }
+.adj-chip.active.wear-tear {
+  background: var(--confirm-soft); border-color: var(--confirm); color: var(--confirm);
+  font-weight: 600;
+}
+.adj-chip.active.tenant-liability {
+  background: var(--danger-soft); border-color: var(--danger); color: var(--danger);
+  font-weight: 600;
+}
+.adj-chip.active.disputed {
+  background: var(--brass-soft); border-color: var(--brass); color: var(--brass-bright);
+  font-weight: 600;
+}
+
+/* ---------- formal declaration & attestation (report surface) ---------- */
+.attest-box {
+  background: var(--panel); border: 1.5px solid var(--line-strong);
+  border-radius: var(--r-lg); padding: 24px 28px; margin: 24px 0;
+  box-shadow: var(--e-1); position: relative;
+}
+.attest-seal {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 600 11px var(--mono); color: var(--brass-bright); letter-spacing: .06em;
+  text-transform: uppercase; background: var(--brass-soft);
+  border: 1px solid rgba(154, 119, 41, .3); border-radius: var(--r-pill);
+  padding: 4px 12px; margin-bottom: 14px;
+}
+.attest-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; margin-top: 18px;
+}
+.attest-card {
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-md);
+  padding: 14px 16px;
+}
+.attest-card .role-title {
+  font: 600 11px var(--ui); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 4px;
+}
+.attest-card .signee-name {
+  font: 600 15px var(--display); color: var(--ink);
+}
+.attest-card .signed-date {
+  font: 12px var(--ui); color: var(--muted); margin-top: 4px;
+}
+.attest-card .hash {
+  font: 10px var(--mono); color: var(--faint); word-break: break-all; margin-top: 6px;
+}
+
+/* ---------- defect suggestions & queue enhancements ---------- */
+.def-suggestions {
+  display: flex; flex-wrap: wrap; gap: 4px 6px; margin-top: 6px;
+}
+.def-sugg-chip {
+  font: 11.5px/1.3 var(--ui); color: var(--muted);
+  background: var(--paper); border: 1px dashed var(--line-strong);
+  border-radius: var(--r-pill); padding: 2px 8px; cursor: pointer;
+  transition: all .12s ease;
+}
+.def-sugg-chip:hover {
+  border-color: var(--brass); color: var(--brass-bright);
+  background: var(--brass-soft);
+}
+.q-def-badge {
+  display: inline-flex; align-items: center; gap: 2px;
+  background: var(--danger-soft); color: var(--danger);
+  font: 600 10px/1.2 var(--mono); padding: 1px 5px;
+  border-radius: 4px; margin-left: 6px; vertical-align: 1px;
+}
+.q-room-jump {
+  width: 100%; font: var(--fs-sm) var(--ui);
+  padding: 7px 10px; border: 1px solid var(--line);
+  border-radius: var(--r-sm); background: var(--panel);
+  color: var(--ink); margin-bottom: var(--sp-2);
+}
+.q-tool-btn {
+  font: 500 11.5px var(--ui); color: var(--muted); background: transparent;
+  border: 1px solid var(--line); border-radius: var(--r-sm);
+  padding: 3px 8px; cursor: pointer; transition: all .15s;
+}
+.q-tool-btn:hover { color: var(--ink); border-color: var(--line-strong); background: var(--panel); }
+.kbd-hint {
+  font-family: var(--mono); font-size: 10px; font-weight: 400;
+  opacity: .75; margin-left: 5px; letter-spacing: 0;
+}
+
+/* ---------- tenant progress & comment styling ---------- */
+.tenant-progress-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 10px 16px; background: var(--panel);
+  border: 1px solid var(--line); border-radius: var(--r-md);
+  margin: 18px 0; font-size: var(--fs-sm); box-shadow: var(--e-1);
+}
+.tenant-progress-bar .prog-track {
+  flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden;
+}
+.tenant-progress-bar .prog-fill {
+  height: 100%; background: var(--confirm); transition: width .3s ease;
+}
+.c-card {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: var(--r-sm); padding: 10px 12px; margin: 8px 0;
+}
+.c-badge {
+  display: inline-block; font: 600 10px/1.2 var(--ui);
+  text-transform: uppercase; letter-spacing: .06em;
+  padding: 2px 6px; border-radius: var(--r-pill);
+}
+.c-badge.tenant { background: rgba(109,77,146,.12); color: var(--tenant); }
+.c-badge.landlord, .c-badge.inspector { background: var(--brass-soft); color: var(--brass-bright); }
+
 /* ---------- exhibit caption (docs/14 P2/P6 — one grammar everywhere) ---------- */
 .exhibit {
   font-family: var(--mono); font-size: var(--fs-xs); line-height: 1.45;
@@ -282,7 +466,46 @@ button, input, select, textarea { font-family: var(--ui); }
   text-underline-offset: 2px;
 }
 
+/* ---------- floating room toc (report screen view) ---------- */
+.floating-room-toc {
+  position: fixed; bottom: 20px; right: 24px; z-index: 40;
+  background: var(--panel); border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill); box-shadow: var(--e-2);
+  padding: 6px 14px; display: flex; align-items: center; gap: 10px;
+  backdrop-filter: blur(8px); max-width: calc(100vw - 48px);
+}
+.floating-room-toc select {
+  font: 600 var(--fs-xs)/1.2 var(--ui); color: var(--ink);
+  background: transparent; border: none; cursor: pointer; padding: 2px 4px;
+}
+.floating-room-toc select:focus { outline: none; }
+.floating-room-toc .toc-top-btn {
+  font: 600 var(--fs-2xs) var(--mono); color: var(--brass-bright);
+  background: var(--brass-soft); border: 1px solid var(--line);
+  border-radius: var(--r-pill); padding: 3px 8px; text-decoration: none;
+}
+.floating-room-toc .toc-top-btn:hover { background: var(--brass); color: #fff; }
+
+/* ---------- item drag-over state (tenant counter-evidence) ---------- */
+.item.drag-over {
+  border-color: var(--brass) !important;
+  background: var(--brass-soft) !important;
+  box-shadow: inset 0 0 0 2px var(--brass);
+}
+
+/* ---------- tenant sticky completion bar ---------- */
+.tenant-sticky-cta {
+  position: sticky; bottom: 0; left: 0; right: 0; z-index: 35;
+  background: var(--panel); border-top: 1.5px solid var(--line-strong);
+  padding: 12px 20px; box-shadow: 0 -4px 16px rgba(43, 36, 20, .12);
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  animation: slideUp .25s cubic-bezier(.16, 1, .3, 1);
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important;
                            animation-duration: .01ms !important; }
 }
+
+

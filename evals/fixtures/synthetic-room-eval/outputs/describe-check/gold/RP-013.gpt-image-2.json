@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "record_type": "describe_check_gold",
+  "packet_id": "RP-013.gpt-image-2",
+  "scenario_id": "RP-013",
+  "room_type": "Living room",
+  "generator": "GPT Image 2",
+  "gold_method": "spec-seeded + gemini-3.5-flash cross-family fill",
+  "created_at": "2026-08-06T20:48:56.680860+00:00",
+  "image_sha256": {
+    "A-wide": "b2e19525eec763506c9d8b5dd045c27e9c17724e11222b17b23a88ff4db22572",
+    "B-reverse": "914bf30a954bcb74daf10b416ff567c1229ef103855c84cb0ba7d5f5847851bd",
+    "C-inventory": "2c95afb831fe746ba44e31bbbd097f7d264f67ac61fe4fdbefdcbef3169233c1",
+    "D-condition": "2684aa517bdcd8634b5b93f2bfa1ab63cba2a71c8352df7b10ca5329edba9ab0"
+  },
+  "claims": [
+    {
+      "name": "charcoal sofa",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "nested tables",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "television stand",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "moving boxes",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "laminate floor",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "entrance door",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "radiator",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "coat hooks",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "floor lamp",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "boxes",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "window",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "roller blind",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "C-inventory"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "sockets",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "C-inventory"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "skirting",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "B-reverse",
+        "C-inventory",
+        "D-condition"
+      ],
+      "source": "spec+ai_fill"
+    },
+    {
+      "name": "table leg",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "rug edge",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "D-condition"
+      ],
+      "source": "spec"
+    },
+    {
+      "name": "walls",
+      "aliases": [],
+      "condition": "good",
+      "cleanliness": "requires cleaning",
+      "defects": [],
+      "evidence_frame_ids": [
+        "A-wide",
+        "B-reverse",
+        "C-inventory"
+      ],
+      "source": "ai_fill"
+    }
+  ],
+  "spot_check": {
+    "status": "owner_accepted",
+    "accepted_at": "2026-08-06T22:01:22.993089+00:00",
+    "accepted_by": "project owner",
+    "rule": "Owner reviews every defect claim, every post-score invent/omit disagreement, plus a small random sample of other claims.",
+    "note": "Owner accepted all seven defect claims on 2026-08-06."
+  }
+}

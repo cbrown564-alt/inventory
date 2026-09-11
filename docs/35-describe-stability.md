@@ -315,9 +315,39 @@ in any report of their results.
 
 ## Phases
 
+> **Reordered 6 Aug 2026 by [`36-synthetic-programme-review.md`](36-synthetic-programme-review.md) §6.1.**
+> Arm E is not blocked on the *question*, only on the Antigravity path.
+> `homeinventory/describe.py:366` — `LocalBackend` — takes `temperature` and
+> defaults to `0.0` through Ollama: free, unmetered, and outside this
+> programme's terms rule, which binds *"every vision run for this dataset"*, and
+> an instrument check produces no labels that enter the scored set. **Phase 0.5
+> runs the repeat-describe control on `LocalBackend` at `temperature=0` and
+> `0.7` before Phase 1 begins.** If temperature-0 still churns, sampling is
+> excluded and arms A–D proceed with the risk closed rather than hedged; if it
+> does not, arms A–D shrink to a lexicon question. A local model's variance is
+> not `gemini-3.5-flash-low`'s and this yields a *mechanism*, never a magnitude.
+
 - **Phase 0 — the floor.** ✅ Done 6 Aug 2026. Floor 336 reported changes,
   91.3% of the 368; the control and the delta pairs decompose almost
   identically. Gate passed, decision recorded above.
+- **Phase 0.5 — exclude sampling.** The local-backend control above. Ordered
+  in front of Phase 1 because every arm below is designed against a cause
+  nobody has excluded, and this is the cheapest thing that can exclude it.
+  **Instrument built 6 Aug 2026** (`evals/synthetic/run_local_stability.py`);
+  awaiting a run on a machine with Ollama. Two design points the build forced,
+  neither of them optional:
+  - **Both runs are fresh.** Phase 0 reuses the cached T0 describe as its first
+    run; this cannot, because those records are `gemini-3.5-flash-low` through
+    Antigravity and pairing one against an Ollama run measures the gap between
+    two backends. So the arm costs 2 calls per pair, not 1 — 40 calls over the
+    first 10 accepted pairs, 108 over all 27.
+  - **The local path does not carry `production-v1`.** It carries
+    `homeinventory.describe.SYSTEM_PROMPT`, because that is what "the production
+    describe path" means. Churn here is therefore not comparable like-for-like
+    with the 336, which is consistent with this arm answering mechanism rather
+    than magnitude, but it is a second reason the numbers cannot be quoted
+    beside Phase 0's. Records land under `outputs/local-stability/` with their
+    own backend and prompt ids so nothing can mistake them for dataset gold.
 - **Phase 1 — attribute the 368.** With the floor known, split the delta-pair
   false changes into non-determinism, legitimate framing difference, and
   generator drift. The Amendment C reviews already name incidental drift per
@@ -376,7 +406,11 @@ in any report of their results.
 |---|---|
 | `evals/synthetic/run_repeat_describe.py` | Instrument 0: reuse the cached T0 describe and call it once more on byte-identical frames; refuses any pair whose two runs differ in instruction, prompt, schema, model or frame hashes |
 | `evals/synthetic/score_stability.py` | The metrics above, on both instruments, pooled from summed counts and reported side by side; states the gate fraction and decides nothing |
+| `evals/synthetic/run_local_stability.py` | Phase 0.5: two independent describes of the same frames through `LocalBackend`, at temperature 0 and 0.7, pooled with the Phase 0 metrics; refuses to start if `HI_TEMPERATURE` or any other sampling override is set in the environment |
+| `evals/synthetic/delta_baseline.py` | The 27 pairs as a CI gate (docs/36 §6.4): re-derives compare and score from the committed describe records and holds them to their 5 Aug numbers, with the gold's hash pinned |
 | `tests/test_describe_stability.py` | The control's refusals, and each metric against a single named perturbation |
+| `tests/test_local_stability.py` | The sampling override refusal, the arm/record separation from dataset gold, and the Item round trip every metric depends on |
+| `tests/test_delta_baseline.py` | Each pin against a single breach, the gold digest against each gold field, and one real re-derivation against the committed 5 Aug report |
 
 Both read only review-accepted pairs, and the runner goes through
 `run_delta_eval.describe_side` rather than a copy of it — a control whose call
@@ -384,6 +418,9 @@ path had drifted from the runs it is the floor for would measure the drift.
 
 ## Related
 
+- `docs/36-synthetic-programme-review.md` — reads this document's Phase 0
+  against the whole synthetic programme, reorders arm E in front of A–D, and
+  owns the work order that follows.
 - `docs/31-synthetic-evaluation-dataset-plan.md` — the delta pairs, the gold
   contract, and the scored result this is scoped from.
 - `docs/08-compare.md` — the compare surface, the alignment tiers, and the

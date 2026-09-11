@@ -36,5 +36,31 @@
         "defect_recall": 60.0
       }
     }
+  ],
+  "_delta_baselines_doc": "docs/36 §6.4. The 27 scored delta pairs, re-derived from committed describe records through compare_inventories and score_delta on every gate run. Describes are NOT re-run; what is gated is homeinventory/compare.py, which is the only product code this programme has moved. Floors and ceilings are the 5 Aug 2026 measurement, so only a regression trips them. gold_sha256 covers every scored spec's changes/observed_changes/retracted_changes: a gold edit must be re-pinned in the same commit, which is what separates a correction from a quiet re-baseline.",
+  "delta_baselines": [
+    {
+      "name": "phase35-delta-pairs",
+      "dataset_dir": "evals/fixtures/synthetic-room-eval",
+      "review": "evals/fixtures/synthetic-room-eval/reports/phase35-pilot-review-recut-2026-08-05.json",
+      "summary": "evals/fixtures/synthetic-room-eval/reports/phase35-pilot-summary-2026-08-05.json",
+      "model": "gemini-3.5-flash-low",
+      "prompt": "production-v1",
+      "pairs_scored": 27,
+      "gold_sha256": "52257dea3e656192eb995c723bd301e8a69c7a32a8f068dc0fa5038b29e84c68",
+      "floors": {
+        "delta_recall": 26.6,
+        "unchanged_stability": 44.4,
+        "severity_direction_accuracy": 75.0,
+        "recall_item_added": 54.3,
+        "recall_item_removed": 50.0,
+        "recall_worsened": 14.8,
+        "recall_new_defect": 12.1,
+        "recall_cleanliness": 3.8
+      },
+      "ceilings": {
+        "false_change_rate": 90.4
+      }
+    }
   ]
 }

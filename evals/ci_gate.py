@@ -115,12 +115,32 @@ def offline_build_smoke() -> list[str]:
     return failures
 
 
+def check_delta_baselines(cfg: dict) -> list[str]:
+    """Hold the docs/35 delta pairs to their scored numbers (docs/36 §6.4).
+
+    Imported lazily because it pulls in the whole ``evals.synthetic`` package,
+    and a repository checked out without the synthetic fixtures should still
+    get the reference gate rather than an ImportError.
+    """
+    specs = cfg.get("delta_baselines", [])
+    if not specs:
+        return []
+    from evals.synthetic.delta_baseline import check as check_delta_baseline
+
+    failures: list[str] = []
+    for spec in specs:
+        failures.extend(check_delta_baseline(spec, _resolve))
+    return failures
+
+
 def run_gate(thresholds_path: Path, *, skip_build: bool = False) -> int:
     cfg = json.loads(thresholds_path.read_text(encoding="utf-8"))
     failures: list[str] = []
 
     for ref in cfg.get("references", []):
         failures.extend(check_reference(ref))
+
+    failures.extend(check_delta_baselines(cfg))
 
     if not skip_build:
         failures.extend(offline_build_smoke())

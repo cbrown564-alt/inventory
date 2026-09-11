@@ -11,8 +11,8 @@ dist/
 mobileclip_blt.ts
 
 # local runs (committed example lives in examples/)
-report/
-capture/
+/report/
+/capture/
 /tmp-*
 
 # benchmark run outputs: keep the scored json/html, not the copied photos
@@ -22,6 +22,14 @@ benchmarks/*/report-*/photos/
 benchmarks/*/report-*/work/crops/
 benchmarks/*/report-*/inventory.pdf
 benchmarks/*/report-*/inventory-issue.html
+benchmarks/**/capture/
+
+# synthetic eval generated outputs
+evals/**/outputs/**/capture/
+evals/**/outputs/**/report/photos/
+evals/**/outputs/**/report/work/
+evals/**/outputs/**/report/*.html
+evals/**/outputs/**/report/manifest.json
 
 # local smoke-test capture from docs/09 (regenerate with homeinventory capture)
 capture-smoke/

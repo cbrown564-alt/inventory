@@ -194,6 +194,12 @@
       <span class="hero-stat"><b>{{ result.totals.added }}</b> new at {{ labels.followup | lower }}</span>
       <span class="hero-stat"><b>{{ result.totals.removed }}</b> missing at {{ labels.followup | lower }}</span>
     </div>
+    <div class="adj-triage-bar" id="adj-summary" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line);">
+      <span class="adj-triage-label">Adjudication Triage:</span>
+      <span class="adj-chip active wear-tear" id="adj-count-wt">0 Fair Wear & Tear</span>
+      <span class="adj-chip active tenant-liability" id="adj-count-tl">0 Tenant Liability</span>
+      <span class="adj-chip active disputed" id="adj-count-dp">0 Pre-existing / Disputed</span>
+    </div>
   </section>
 
   <h2>Grade-delta summary</h2>
@@ -219,11 +225,11 @@
     <table class="delta" id="delta-table">
       <thead><tr>
         <th>Item</th><th>Room</th><th>{{ labels.baseline }}</th><th>{{ labels.followup }}</th>
-        <th>Δ</th><th>Classification</th><th>Evidence</th>
+        <th>Δ</th><th>Classification</th><th>Adjudication</th><th>Evidence</th>
       </tr></thead>
       <tbody>
       {% for room in rooms %}{% for c in room.changed %}
-        <tr data-cls="{{ c.classification or 'unclassified' }}">
+        <tr data-cls="{{ c.classification or 'unclassified' }}" data-item-key="{{ room.name }}::{{ c.name }}">
           <td>{{ c.name }}{% if c.checkin_name != c.name %}
               <div class="meta">{{ labels.baseline | lower }}: “{{ c.checkin_name }}”</div>{% endif %}
             {% if c.new_defects %}<ul class="defects">
@@ -240,6 +246,13 @@
             {%- else %}0{% endif %}</td>
           <td><span class="cls {{ c.classification or 'unclassified' }}">
               {{ class_labels.get(c.classification or "unclassified") }}</span></td>
+          <td>
+            <div class="adj-triage-bar" style="margin:0;">
+              <button class="adj-chip" data-triage="wt" title="Mark as Fair Wear & Tear">Wear &amp; Tear</button>
+              <button class="adj-chip" data-triage="tl" title="Mark as Tenant Liability">Liability</button>
+              <button class="adj-chip" data-triage="dp" title="Mark as Pre-existing / Disputed">Disputed</button>
+            </div>
+          </td>
           <td class="meta">{{ labels.baseline | lower }}: {{ c.checkin_photo_ids | join(", ") or "—" }}<br>
               {{ labels.followup | lower }}: {{ c.checkout_photo_ids | join(", ") or "—" }}</td>
         </tr>
@@ -251,7 +264,8 @@
   <div class="change-cards" id="change-cards">
     {% for room in rooms %}{% for c in room.changed %}
     <article class="change-card" data-cls="{{ c.classification or 'unclassified' }}"
-             data-card-id="{{ room.name }}-{{ c.name }}">
+             data-card-id="{{ room.name }}-{{ c.name }}"
+             data-item-key="{{ room.name }}::{{ c.name }}">
       <div class="head">
         <span class="name">{{ c.name }}</span>
         <span class="room">{{ room.name }}</span>
@@ -266,6 +280,12 @@
           {%- elif c.grade_delta > 0 %}▼{{ c.grade_delta }}
           {%- elif c.grade_delta < 0 %}▲{{ -c.grade_delta }}
           {%- else %}0{% endif %}</span>
+      </div>
+      <div class="adj-triage-bar" style="margin: 8px 0;">
+        <span class="adj-triage-label">Triage:</span>
+        <button class="adj-chip" data-triage="wt">Wear &amp; Tear</button>
+        <button class="adj-chip" data-triage="tl">Tenant Liability</button>
+        <button class="adj-chip" data-triage="dp">Disputed</button>
       </div>
       {% if c.new_defects %}<ul class="defects">
         {% for d in c.new_defects %}<li>{{ d }}</li>{% endfor %}
@@ -413,6 +433,22 @@
     require human review before any deduction discussion.
   </footer>
 </main>
+{% set pair_items = [] %}
+{% for room in rooms %}{% for c in room.changed %}
+  {% set _ = pair_items.append({
+    "room": room.name,
+    "title": c.name,
+    "left": (c.checkin_photos[0] if c.checkin_photos else {}),
+    "right": (c.checkout_photos[0] if c.checkout_photos else {})
+  }) %}
+{% endfor %}{% endfor %}
+<script type="application/json" id="compare-data">
+{{ pair_items | tojson }}
+</script>
+<script>
+{% include "_ui.js.j2" %}
+</script>
+
 <script>
 "use strict";
 (function () {
@@ -479,7 +515,98 @@
       if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1));
     }, { passive: true });
   });
+
+  // Adjudication Triage state management
+  var TRIAGE_KEY = "hi-triage-" + window.location.pathname;
+  var triageData = {};
+  try {
+    triageData = JSON.parse(localStorage.getItem(TRIAGE_KEY) || "{}");
+  } catch (e) {}
+
+  function updateTriageSummary() {
+    var wt = 0, tl = 0, dp = 0;
+    for (var k in triageData) {
+      if (triageData[k] === "wt") wt++;
+      else if (triageData[k] === "tl") tl++;
+      else if (triageData[k] === "dp") dp++;
+    }
+    var wtEl = document.getElementById("adj-count-wt");
+    var tlEl = document.getElementById("adj-count-tl");
+    var dpEl = document.getElementById("adj-count-dp");
+    if (wtEl) wtEl.textContent = wt + " Fair Wear & Tear";
+    if (tlEl) tlEl.textContent = tl + " Tenant Liability";
+    if (dpEl) dpEl.textContent = dp + " Pre-existing / Disputed";
+  }
+
+  function syncTriageUI() {
+    document.querySelectorAll("[data-item-key]").forEach(function (row) {
+      var k = row.getAttribute("data-item-key");
+      var current = triageData[k];
+      row.querySelectorAll("[data-triage]").forEach(function (btn) {
+        var t = btn.getAttribute("data-triage");
+        var active = current === t;
+        btn.classList.toggle("active", active);
+        btn.classList.toggle("wear-tear", active && t === "wt");
+        btn.classList.toggle("tenant-liability", active && t === "tl");
+        btn.classList.toggle("disputed", active && t === "dp");
+      });
+    });
+    updateTriageSummary();
+  }
+
+  document.querySelectorAll("[data-triage]").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var parent = btn.closest("[data-item-key]");
+      if (!parent) return;
+      var k = parent.getAttribute("data-item-key");
+      var t = btn.getAttribute("data-triage");
+      if (triageData[k] === t) delete triageData[k];
+      else triageData[k] = t;
+      try { localStorage.setItem(TRIAGE_KEY, JSON.stringify(triageData)); } catch (err) {}
+      syncTriageUI();
+    });
+  });
+  syncTriageUI();
+
+  // Paired photo viewer
+  var compPairsData = [];
+  try {
+    compPairsData = JSON.parse(document.getElementById("compare-data").textContent || "[]");
+  } catch (e) {}
+
+  if (compPairsData.length && ui && ui.pairedPhotoViewer) {
+    var pairIndexMap = {};
+    compPairsData.forEach(function (cp, i) {
+      pairIndexMap[cp.room + "::" + cp.title] = i;
+    });
+
+    document.querySelectorAll(".pair, .change-card").forEach(function (card) {
+      var rHead = card.closest(".pair-section") ? card.previousElementSibling : null;
+      var cardId = card.getAttribute("data-card-id") || (rHead ? rHead.textContent : "");
+      card.querySelectorAll("img").forEach(function (img) {
+        img.style.cursor = "zoom-in";
+        img.title = "Click to open side-by-side comparison inspection";
+        img.addEventListener("click", function () {
+          var matchedIdx = 0;
+          for (var k in pairIndexMap) {
+            if (cardId.indexOf(k.split("::")[1]) >= 0) {
+              matchedIdx = pairIndexMap[k];
+              break;
+            }
+          }
+          ui.pairedPhotoViewer({
+            pairs: compPairsData,
+            index: matchedIdx,
+            leftLabel: {{ labels.baseline | tojson }},
+            rightLabel: {{ labels.followup | tojson }}
+          });
+        });
+      });
+    });
+  }
 })();
 </script>
 </body>
 </html>
+

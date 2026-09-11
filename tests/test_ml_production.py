@@ -15,6 +15,8 @@ def test_vlm_cover_defaults_off_without_credentials(monkeypatch):
     monkeypatch.delenv("ANTHROPIC_AUTH_TOKEN", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.delenv("GOOGLE_API_KEY", raising=False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     assert vlm_api_available("gemini-3.5-flash") is False
     assert should_enable_vlm_cover(no_vlm_cover=False, model="gemini-3.5-flash") is False
     assert should_enable_vlm_cover(no_vlm_cover=True, model="claude-opus-4-8") is False
@@ -46,6 +48,8 @@ def test_seam_refine_skips_without_credentials(tmp_path, monkeypatch):
     monkeypatch.delenv("ANTHROPIC_AUTH_TOKEN", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.delenv("GOOGLE_API_KEY", raising=False)
+    monkeypatch.delenv("OPENROUTER_API_KEY", raising=False)
     assert seam_refine_available("gemini-3.5-flash") is False
     video = tmp_path / "walk.mp4"
     video.write_bytes(b"not-a-real-video")
