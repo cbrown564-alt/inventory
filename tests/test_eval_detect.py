@@ -5,6 +5,9 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "evals"))
 import eval_detect  # noqa: E402
+import pytest
+
+pytestmark = pytest.mark.eval
 
 
 def test_gold_matches_any_label():

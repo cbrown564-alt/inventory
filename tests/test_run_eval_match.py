@@ -1,6 +1,10 @@
 """Regression: short fuzzy tokens must not false-match."""
 
+import pytest
+
 from evals.run_eval import name_match
+
+pytestmark = pytest.mark.eval
 
 
 def test_door_does_not_fuzzy_match_floor_alias():

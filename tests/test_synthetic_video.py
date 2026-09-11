@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pytest
 
+pytestmark = pytest.mark.eval
+
 from evals.synthetic.apply_video_pass_a import apply
 from evals.synthetic.build_video_strip import (
     SILENT_MAX_DBFS,

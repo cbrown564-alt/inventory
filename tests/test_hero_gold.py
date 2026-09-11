@@ -14,6 +14,7 @@ from evals.hero_gold import (
     validate_gold_document,
 )
 
+pytestmark = pytest.mark.eval
 
 ROOT = Path(__file__).resolve().parents[1]
 HERO_GOLD = ROOT / "evals/fixtures/own-property/hero-gold.json"

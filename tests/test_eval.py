@@ -1,10 +1,14 @@
 import pathlib
 import sys
 
+import pytest
+
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "evals"))
 import run_eval  # noqa: E402
 
 from homeinventory.schema import Inventory, Item, Room  # noqa: E402
+
+pytestmark = pytest.mark.eval
 
 
 def test_name_match_substring_and_aliases():

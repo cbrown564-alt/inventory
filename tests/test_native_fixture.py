@@ -4,6 +4,8 @@ import pytest
 
 from benchmarks.native_fixture import audit_fixture, freeze, initialise
 
+pytestmark = pytest.mark.eval
+
 
 def _fact(prefix: str, count: int) -> list[dict]:
     return [

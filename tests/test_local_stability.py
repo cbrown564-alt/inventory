@@ -18,6 +18,8 @@ from pathlib import Path
 
 import pytest
 
+pytestmark = pytest.mark.eval
+
 from homeinventory.describe import ITEM_SCHEMA, SYSTEM_PROMPT, _parse_items
 from homeinventory.schema import Item, Photo
 

@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import pytest
+
 from evals.synthetic.compare_check import signal_ratios
+
+pytestmark = pytest.mark.eval
 
 
 def test_signal_ratios_mark_aligned_state_not_membership() -> None:

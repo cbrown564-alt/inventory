@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""CI regression gate: score reference runs and smoke-test the offline pipeline.
+"""Local eval regression gate: score reference runs and smoke-test the offline pipeline.
+
+Product CI is ``pytest -q -m "not eval"``. This script is the optional
+eval-harness check, not a GitHub Actions job.
 
 Usage:
     python evals/ci_gate.py

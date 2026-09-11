@@ -8,6 +8,9 @@ from PIL import Image
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "evals"))
 import eval_hero_cover  # noqa: E402
+import pytest
+
+pytestmark = pytest.mark.eval
 
 
 def _write_grey_jpeg(path: pathlib.Path, value: int) -> None:

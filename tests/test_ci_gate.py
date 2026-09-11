@@ -1,13 +1,16 @@
-"""Tests for the eval CI regression gate."""
+"""Tests for the local eval regression gate."""
 
 import json
 import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
+@pytest.mark.eval
 def test_ci_gate_passes():
     proc = subprocess.run(
         [sys.executable, str(ROOT / "evals" / "ci_gate.py")],
@@ -33,6 +36,7 @@ def test_repo_has_no_tracked_ignored_files():
     )
 
 
+@pytest.mark.eval
 def test_ci_gate_reference_scores_meet_floors():
     sys.path.insert(0, str(ROOT / "evals"))
     import ci_gate  # noqa: E402
@@ -45,6 +49,7 @@ def test_ci_gate_reference_scores_meet_floors():
     assert failures == [], failures
 
 
+@pytest.mark.eval
 def test_score_benchmarks_runs():
     proc = subprocess.run(
         [sys.executable, str(ROOT / "evals" / "score_benchmarks.py"), "--json"],

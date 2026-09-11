@@ -8,6 +8,9 @@ from PIL import Image
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "evals"))
 import eval_describe_pool  # noqa: E402
+import pytest
+
+pytestmark = pytest.mark.eval
 
 
 def _synthetic_report(tmp_path: pathlib.Path) -> pathlib.Path:

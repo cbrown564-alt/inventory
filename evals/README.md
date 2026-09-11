@@ -53,9 +53,10 @@ python evals/run_eval.py /tmp/eval-out/inventory.json evals/fixtures/<case>/labe
 Run the same case against `--backend offline` (and later `local`) to quantify the
 open-source-only quality gap instead of guessing at it.
 
-### CI regression gate
+### Local regression gate
 
-Committed reference runs are scored on every push/PR:
+Committed reference runs and the docs/36 delta-pair pins are scored by a
+local command, not by GitHub Actions. Product CI is `pytest -q -m "not eval"`.
 
 ```sh
 python evals/ci_gate.py
@@ -160,7 +161,7 @@ All scripts live under `evals/`. Paths below are from the repo root; prefer
 |---|---|---|
 | `run_eval.py` | Score one `inventory.json` against a fixture `labels.json` | `uv run python evals/run_eval.py report/inventory.json evals/fixtures/inventoryflex/labels.json` |
 | `score_benchmarks.py` | Score every committed `benchmarks/inventoryflex/report-*/` run | `uv run python evals/score_benchmarks.py` |
-| `ci_gate.py` | CI regression gate vs `fixtures/thresholds.json` + offline build smoke | `uv run python evals/ci_gate.py` |
+| `ci_gate.py` | Local eval gate vs `fixtures/thresholds.json` + offline build smoke | `uv run python evals/ci_gate.py` |
 
 Metrics and v1 targets: table above. See `docs/01-scope-and-architecture.md` §5.
 

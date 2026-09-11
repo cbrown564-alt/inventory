@@ -1,5 +1,5 @@
 {
-  "_doc": "Regression floors for committed reference runs scored in CI. Metrics omitted here are not gated. hallucination_rate uses a ceiling (max), all others use a floor (min).",
+  "_doc": "Regression floors for committed reference runs scored by evals/ci_gate.py. Metrics omitted here are not gated. hallucination_rate uses a ceiling (max), all others use a floor (min).",
   "references": [
     {
       "name": "sample-report",
