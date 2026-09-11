@@ -3,6 +3,10 @@
 *Start here. For v1 scope and the singular path forward, read
 [`00-north-star.md`](00-north-star.md) first.*
 
+## Architecture reviews
+
+- [Architecture, documentation and product review — 11 September 2026](architecture-review-2026-09-11.md): dated assessment of commit `1f73dcadd80b220a6f8eb01c5cf6b532dd832f5b`, with simplification recommendations and evaluation findings. Proposals are not an adopted implementation plan; later changes are outside the reviewed snapshot.
+
 ## Canonical owners
 
 | Concern | Owner |
