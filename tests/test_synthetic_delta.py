@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pytest
 
+pytestmark = pytest.mark.eval
+
 from evals.synthetic.build_delta_tasks import (
     DELTA_VIEWS,
     build_prompt,

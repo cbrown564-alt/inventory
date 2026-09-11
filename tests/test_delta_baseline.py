@@ -18,6 +18,8 @@ from pathlib import Path
 
 import pytest
 
+pytestmark = pytest.mark.eval
+
 from evals.synthetic.delta_baseline import GOLD_FIELDS, check, gold_digest, rederive
 
 ROOT = Path(__file__).resolve().parents[1]

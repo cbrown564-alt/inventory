@@ -16,6 +16,8 @@ from pathlib import Path
 
 import pytest
 
+pytestmark = pytest.mark.eval
+
 from evals.synthetic.build_delta_tasks import DELTA_VIEWS
 from evals.synthetic.run_eval import _sha256_file
 from evals.synthetic.run_repeat_describe import (

@@ -1,4 +1,8 @@
+import pytest
+
 from benchmarks.quality_gate import evaluate
+
+pytestmark = pytest.mark.eval
 
 
 def test_quality_gate_requires_native_resolution_and_all_three_metrics():

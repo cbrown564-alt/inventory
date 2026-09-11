@@ -7,6 +7,8 @@ import shutil
 
 import pytest
 
+pytestmark = pytest.mark.eval
+
 import evals.synthetic.review_pass_a as retry_pass_a
 import evals.synthetic.review_pass_b as pass_b
 from evals.synthetic.build_review import build

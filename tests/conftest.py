@@ -1,4 +1,8 @@
-"""Pytest configuration — repo root on sys.path for evals imports."""
+"""Pytest configuration — repo root on sys.path for evals imports.
+
+Evaluation harnesses are marked ``eval`` and excluded from product CI
+(``pytest -m "not eval"``).
+"""
 
 import sys
 from pathlib import Path

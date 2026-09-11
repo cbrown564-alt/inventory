@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import pytest
+
 from evals.synthetic.describe_check import seed_claims
+
+pytestmark = pytest.mark.eval
 
 
 def test_seed_claims_attaches_defect_to_overlapping_item() -> None:

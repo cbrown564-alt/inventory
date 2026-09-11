@@ -53,3 +53,10 @@ include = ["homeinventory*"]
 
 [tool.setuptools.package-data]
 homeinventory = ["templates/*.j2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = [".git", ".venv", "output"]
+markers = [
+    "eval: research and evaluation harnesses; not the product CI contract",
+]

@@ -9,10 +9,12 @@ Keep capture, review, correction, reporting, and comparison traceable. Preserve 
 Inspect the review UI and generated HTML or PDF after relevant changes. Use the environment and commands in `README.md`; focused checks include:
 
 ```sh
-python -m pytest
+python -m pytest -q -m "not eval"
 homeinventory check <capture-directory>
 homeinventory review <capture-directory> -o <report-directory>
 ```
+
+`pytest -m "not eval"` is the product contract CI runs. Evaluation harnesses stay in-tree and run with `pytest -q -m eval` or a path under `tests/`.
 
 Do not run paid or network-backed inference unless the task authorizes it.
 
