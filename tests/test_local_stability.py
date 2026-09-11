@@ -145,6 +145,20 @@ def test_records_land_outside_the_scored_output_tree(tmp_path):
     assert "delta" not in relative and "repeat" not in relative
 
 
+def test_ollama_model_tags_are_legal_directory_names(tmp_path):
+    """Ollama tags use a colon; Windows refuses that as a directory name.
+
+    The record still names the real model. Only the path segment is rewritten,
+    so a Windows CI runner can mkdir the cache tree.
+    """
+    directory = records_dir(tmp_path, MODEL, "t0")
+    assert ":" not in "".join(directory.relative_to(tmp_path).parts)
+    assert "/" not in "".join(directory.relative_to(tmp_path).parts)
+    record = describe_local(_run(tmp_path), tmp_path, StubBackend(0.0))
+    assert record["backend_model"] == MODEL
+    assert Path(record_path(tmp_path, "P35-901-T1", MODEL, "t0", "A")).is_file()
+
+
 def test_the_record_names_the_local_backend_and_not_the_frozen_prompt(tmp_path):
     """``production-v1`` is the dataset's frozen prompt; this path does not use it.
 

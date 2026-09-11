@@ -127,6 +127,11 @@ def assert_clean_sampling_env(env: dict[str, str] | None = None) -> None:
         )
 
 
+def path_safe_model(model: str) -> str:
+    """Ollama tags (``qwen3.5:9b``) are not legal Windows directory names."""
+    return model.replace(":", "_").replace("/", "_")
+
+
 def records_dir(dataset_dir: Path, model: str, arm: str) -> Path:
     """Beside the dataset's outputs, never inside them.
 
@@ -135,7 +140,12 @@ def records_dir(dataset_dir: Path, model: str, arm: str) -> Path:
     anybody reading the tree will look to find that out.
     """
     return (
-        dataset_dir / "outputs" / "local-stability" / BACKEND_ID / model / arm
+        dataset_dir
+        / "outputs"
+        / "local-stability"
+        / BACKEND_ID
+        / path_safe_model(model)
+        / arm
     )
 
 
