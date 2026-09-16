@@ -15,22 +15,12 @@ from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from .usecases.base import CoverField
 
-# Industry-standard vocabularies (AIIC/TDS practice). Ordinal, best -> worst.
 CONDITION_GRADES = ["new", "excellent", "good", "fair", "poor"]
 CLEANLINESS_GRADES = ["professionally cleaned", "cleaned to domestic standard", "requires cleaning"]
 
 CATEGORIES = [
-    "structure",      # ceiling, walls, woodwork, doors, windows, flooring
-    "fixture",        # light fittings, sockets, radiators, blinds, built-ins
-    "appliance",
-    "furniture",
-    "soft furnishing",
-    "electronics",
-    "kitchenware",
-    "decor",
-    "safety",         # smoke/CO alarms, extinguishers
-    "meter",
-    "other",
+    "structure", "fixture", "appliance", "furniture", "soft furnishing",
+    "electronics", "kitchenware", "decor", "safety", "meter", "other",
 ]
 
 
@@ -40,7 +30,6 @@ def _norm_grade(value: Optional[str], allowed: list[str]) -> Optional[str]:
     v = value.strip().lower()
     if v in allowed:
         return v
-    # tolerate common variants from model output
     aliases = {
         "very good": "excellent", "ok": "fair", "okay": "fair", "worn": "fair",
         "damaged": "poor", "used - good": "good", "as new": "new",
@@ -53,69 +42,67 @@ def _norm_grade(value: Optional[str], allowed: list[str]) -> Optional[str]:
 
 @dataclass
 class Photo:
-    """A source image (original photo or extracted video keyframe)."""
-    id: str                    # e.g. "P012"
-    path: str                  # path relative to the capture root
+    id: str
+    path: str
     room: str
     sha256: str = ""
-    captured_at: Optional[str] = None   # ISO-like, from EXIF (native or stamped keyframes)
-    source_video: Optional[str] = None  # set when extracted from a video
-    # True for the sharp frame sampled immediately after a detected room
-    # boundary. This preserves useful acquisition provenance for curation.
+    captured_at: Optional[str] = None
+    source_video: Optional[str] = None
     cover_anchor: bool = False
     note: Optional[str] = None
-    # curation (docs/15 M2): what is *shown by default*, never what exists.
-    # hero is a 1-based display rank within the room (None = disclosed tier);
-    # quality is the within-room 0..1 score the election used.
     hero: Optional[int] = None
     quality: Optional[float] = None
-    # two-tier pools (docs/15, ML-E3): flags only — describe pool stays dense;
-    # presentation pool uses strict cover gates for human-facing surfaces.
     describe_eligible: Optional[bool] = None
     presentation_eligible: Optional[bool] = None
 
 
 @dataclass
 class Item:
-    id: str                    # e.g. "KIT-003"
+    id: str
     name: str
     category: str = "other"
-    description: str = ""      # material/colour/brand detail
-    condition: Optional[str] = None      # CONDITION_GRADES
-    cleanliness: Optional[str] = None    # CLEANLINESS_GRADES
+    description: str = ""
+    # Stable machine identity. `name` remains human-readable presentation text.
+    # Legacy inventories may leave these unset; normalise() safely derives an
+    # item_type only for known, unambiguous aliases.
+    item_type: Optional[str] = None
+    subtype: Optional[str] = None
+    attributes: dict[str, str] = field(default_factory=dict)
+    instance_key: Optional[str] = None
+    ontology_version: Optional[str] = None
+    condition: Optional[str] = None
+    cleanliness: Optional[str] = None
     defects: list[str] = field(default_factory=list)
     quantity: int = 1
-    est_value_band: Optional[str] = None  # "<£50" | "£50-250" | "£250-1000" | ">£1000"
+    est_value_band: Optional[str] = None
     photo_ids: list[str] = field(default_factory=list)
-    crop_path: Optional[str] = None      # detector crop used as report thumbnail
-    # Item-conditioned grounding (merge.attach_detector_crops):
-    #   auto     — high-confidence match, safe to show without crop review
-    #   proposed — attached but needs accept/reject in the crop review queue
-    #   accepted / rejected — human decision on a proposed crop
+    crop_path: Optional[str] = None
     crop_confidence: Optional[float] = None
-    crop_status: Optional[str] = None    # auto|proposed|accepted|rejected
+    crop_status: Optional[str] = None
     detector_label: Optional[str] = None
-    confidence: Optional[float] = None   # describe-backend confidence 0..1
-
-    # --- review & attestation state (docs/05-review-experience.md) ---
-    # Rejected claims are struck through, never silently deleted, so the report
-    # can honestly say "AI suggested, reviewer rejected".
-    reviewed: bool = False               # a human confirmed this item
-    rejected: bool = False               # whole item struck by the reviewer
+    confidence: Optional[float] = None
+    reviewed: bool = False
+    rejected: bool = False
     rejected_defects: list[str] = field(default_factory=list)
-    not_inspected: Optional[str] = None  # "not tested" | "not visible"
-    added_by: Optional[str] = None       # "reviewer" when human-added; None = AI
-    # Defect photo regions, normalised 0..1:
-    #   {"defect": str, "photo_id": str, "x": f, "y": f, "w": f, "h": f}
+    not_inspected: Optional[str] = None
+    added_by: Optional[str] = None
     defect_regions: list[dict] = field(default_factory=list)
-    # Per-item comments from any party:
-    #   {"author": str, "role": "landlord"|"agent"|"tenant", "text": str, "at": iso}
     comments: list[dict] = field(default_factory=list)
 
     def normalise(self) -> "Item":
+        from .ontology import (ITEM_TYPE_BY_KEY, ONTOLOGY_VERSION,
+                               canonicalize_name, category_for)
+
         self.condition = _norm_grade(self.condition, CONDITION_GRADES)
         self.cleanliness = _norm_grade(self.cleanliness, CLEANLINESS_GRADES)
-        if self.category not in CATEGORIES:
+        if self.item_type not in ITEM_TYPE_BY_KEY:
+            self.item_type = canonicalize_name(self.name)
+        if self.item_type:
+            # Canonical identity owns category; this removes another source of
+            # model-to-model drift while retaining the old field for reports.
+            self.category = category_for(self.item_type)
+            self.ontology_version = self.ontology_version or ONTOLOGY_VERSION
+        elif self.category not in CATEGORIES:
             self.category = "other"
         self.quantity = max(1, int(self.quantity or 1))
         return self
@@ -124,12 +111,9 @@ class Item:
 @dataclass
 class Room:
     name: str
-    summary: str = ""          # overall decorative order / cleanliness narrative
+    summary: str = ""
     items: list[Item] = field(default_factory=list)
     photos: list[Photo] = field(default_factory=list)
-    # rank-1 cover confidence (docs/18, docs/00 Pillar 2): ``confident`` when
-    # E5/E7 plus optional semantic validation trust the establishing cover;
-    # ``review_required`` when the pipeline would rather flag than ship silently.
     cover_status: Optional[str] = None
     cover_review_reason: Optional[str] = None
 
@@ -138,28 +122,21 @@ class Room:
 class Inventory:
     property_address: str = ""
     inspected_by: str = ""
-    inspected_at: str = field(
-        default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d")
-    )
+    inspected_at: str = field(default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d"))
     report_type: str = "Inventory & Schedule of Condition"
-    # Optional cover / clerk-style metadata (M2 PDF polish)
     agent_name: str = ""
     agent_phone: str = ""
-    property_type: str = ""          # e.g. "1 Bedroom furnished apartment"
+    property_type: str = ""
     tenant_name: str = ""
     landlord_name: str = ""
     report_ref: str = ""
     use_case: str = "tenancy"
     parties: dict = field(default_factory=dict)
-    # Section 1 Schedule of Condition rows: {"ref", "name", "condition"}
     schedule_summary: list[dict] = field(default_factory=list)
     rooms: list[Room] = field(default_factory=list)
     notes: str = ""
     tool_version: str = "0.1.0"
     describe_backend: str = ""
-    # Signature blocks, appended at signing time (Level 1/3 review):
-    #   {"role": "landlord"|"agent"|"tenant", "name": str, "signed_at": iso,
-    #    "inventory_sha256": hash of the content signed, "via": str}
     signatures: list[dict] = field(default_factory=list)
 
     def to_json(self) -> str:
@@ -169,21 +146,16 @@ class Inventory:
     def from_json(text: str) -> "Inventory":
         raw = json.loads(text)
 
-        def known(cls, d):  # tolerate fields written by newer versions
+        def known(cls, d):
             return {k: v for k, v in d.items() if k in cls.__dataclass_fields__}
 
         rooms = []
         for r in raw.get("rooms", []):
             items = [Item(**known(Item, i)).normalise() for i in r.get("items", [])]
             photos = [Photo(**known(Photo, p)) for p in r.get("photos", [])]
-            rooms.append(Room(
-                name=r["name"],
-                summary=r.get("summary", ""),
-                items=items,
-                photos=photos,
-                cover_status=r.get("cover_status"),
-                cover_review_reason=r.get("cover_review_reason"),
-            ))
+            rooms.append(Room(name=r["name"], summary=r.get("summary", ""), items=items,
+                              photos=photos, cover_status=r.get("cover_status"),
+                              cover_review_reason=r.get("cover_review_reason")))
         keep = {k: v for k, v in raw.items() if k != "rooms"}
         inv = Inventory(**known(Inventory, keep))
         inv.rooms = rooms
@@ -196,16 +168,12 @@ class Inventory:
         return sum(len(r.photos) for r in self.rooms)
 
     def reviewed_count(self) -> int:
-        return sum(1 for r in self.rooms for i in r.items
-                   if i.reviewed or i.rejected)
+        return sum(1 for r in self.rooms for i in r.items if i.reviewed or i.rejected)
 
     def content_sha256(self) -> str:
-        """Hash of everything a signature attests to (the signatures themselves
-        are excluded so countersigning doesn't invalidate the first party)."""
         body = asdict(self)
         body.pop("signatures", None)
-        canon = json.dumps(body, sort_keys=True, ensure_ascii=False,
-                           separators=(",", ":"))
+        canon = json.dumps(body, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
         return hashlib.sha256(canon.encode("utf-8")).hexdigest()
 
 
