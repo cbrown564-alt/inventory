@@ -11,6 +11,9 @@ Unknown names are *not* collapsed together. Each unresolved surface name gets
 its own namespaced key so a broad ``unknown`` bucket cannot manufacture
 agreement. Repeated items are multisets, so quantity/decomposition differences
 remain visible.
+
+The analysis is deterministic over committed cached records; touching this
+file intentionally triggers the dedicated correspondence workflow on PRs.
 """
 from __future__ import annotations
 
@@ -58,8 +61,6 @@ def _agreement(names_a: list[str], names_b: list[str], key) -> dict[str, Any]:
 
 
 def _items(record: dict) -> list[dict]:
-    # Cached describe records use the model response under output.items. Keep a
-    # narrow compatibility fallback for records that stored items at top level.
     output = record.get("output") or record.get("response") or record
     return list(output.get("items") or [])
 
