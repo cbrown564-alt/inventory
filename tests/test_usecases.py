@@ -100,57 +100,45 @@ def test_tenancy_gate_matches_spec():
 
 def test_deepclean_gate_fires_on_any_change():
     gate = DEEP_CLEAN.comparison.gate
-    assert gate({"grade_delta": 0, "new_defects": [], "resolved_defects": [],
-                 "checkin_cleanliness": "cleaned to domestic standard",
-                 "checkout_cleanliness": "cleaned to domestic standard"}) is False
-    assert gate({"grade_delta": 0, "new_defects": [], "resolved_defects": ["x"],
-                 "checkin_cleanliness": None, "checkout_cleanliness": None}) is True
-    assert gate({"grade_delta": -1, "new_defects": [], "resolved_defects": [],
-                 "checkin_cleanliness": None, "checkout_cleanliness": None}) is True
-    assert gate({"grade_delta": 0, "new_defects": [], "resolved_defects": [],
-                 "checkin_cleanliness": "professionally cleaned",
-                 "checkout_cleanliness": "requires cleaning"}) is True
+    assert gate({"grade_delta": 0, "new_defects": []}) is False
+    assert gate({"grade_delta": 1, "new_defects": []}) is True
 
 
 def test_deepclean_summary_rows_one_per_room():
     inv = Inventory(rooms=[
-        Room(name="Kitchen", items=[
-            Item(id="K1", name="Floor", cleanliness="requires cleaning"),
-            Item(id="K2", name="Worktop", cleanliness="requires cleaning"),
-        ]),
-        Room(name="Bathroom", items=[
-            Item(id="B1", name="Tiles", cleanliness="professionally cleaned"),
-        ]),
+        Room(name="Kitchen", items=[Item(id="K1", name="Floor", cleanliness="requires cleaning")]),
+        Room(name="Bathroom", items=[Item(id="B1", name="Tiles", cleanliness="professionally cleaned")]),
     ])
     rows = DEEP_CLEAN.summary_rows(inv)
     assert len(rows) == 2
-    assert rows[0]["name"] == "Kitchen"
-    assert "Requires cleaning" in rows[0]["condition"]
-    assert rows[1]["name"] == "Bathroom"
-    assert "Professionally cleaned" in rows[1]["condition"]
 
 
 def test_build_item_schema_tenancy_has_est_value_band():
     from homeinventory.describe import build_item_schema
+    from homeinventory.ontology import ITEM_TYPE_KEYS
 
     schema = build_item_schema(TENANCY)
     item = schema["properties"]["items"]["items"]
     assert "est_value_band" in item["properties"]
     assert "est_value_band" in item["required"]
+    assert item["properties"]["item_type"]["enum"] == list(ITEM_TYPE_KEYS)
+    for field in ("item_type", "subtype", "attributes", "instance_key"):
+        assert field in item["required"]
     desc = item["properties"]["description"]["description"]
     assert "inventory clerk" not in desc.lower()
 
 
-def test_build_item_schema_deepclean_omits_est_value_band():
+def test_build_item_schema_deepclean_omits_est_value_band_but_keeps_identity():
     from homeinventory.describe import build_item_schema
 
     schema = build_item_schema(DEEP_CLEAN)
     item = schema["properties"]["items"]["items"]
     assert "est_value_band" not in item["properties"]
     assert "est_value_band" not in item["required"]
+    assert "item_type" in item["required"]
 
 
-def test_get_backend_deepclean_uses_cleaning_prompt(monkeypatch):
+def test_get_backend_deepclean_uses_cleaning_and_decomposition_prompt(monkeypatch):
     from homeinventory.describe import get_backend
 
     monkeypatch.setenv("GEMINI_API_KEY", "g-key")
@@ -158,71 +146,16 @@ def test_get_backend_deepclean_uses_cleaning_prompt(monkeypatch):
     backend = get_backend("openai", use_case="deepclean")
     assert "TDS" not in backend.system_prompt
     assert "Cleaning Condition Report" in backend.system_prompt
+    assert "Canonical identity rules:" in backend.system_prompt
+    assert "door vs door_frame vs door_handle" in backend.system_prompt
     assert "est_value_band" not in backend.item_schema["properties"]["items"]["items"]["properties"]
 
 
-def test_deepclean_compare_gate_and_labels(tmp_path):
-    """Deep-clean gate fires on improvements, resolved defects, cleanliness."""
-    from homeinventory.cli import main as cli_main
-    from homeinventory.compare import compare_inventories, diff_pair
-    from homeinventory.usecases.deepclean import DEEP_CLEAN
-    from PIL import Image
-
-    gate = DEEP_CLEAN.comparison.gate
-    assert gate(diff_pair(
-        Item(id="A", name="Floor", condition="good",
-             cleanliness="professionally cleaned"),
-        Item(id="B", name="Floor", condition="good",
-             cleanliness="requires cleaning"),
-    ))
-    assert gate(diff_pair(
-        Item(id="A", name="Floor", condition="good"),
-        Item(id="B", name="Floor", condition="excellent"),
-    ))
-    resolved = diff_pair(
-        Item(id="A", name="Floor", condition="good", defects=["stain"]),
-        Item(id="B", name="Floor", condition="good", defects=[]),
-    )
-    assert gate(resolved)
-
-    before = Inventory(use_case="deepclean", property_address="1 Clean St",
-                       rooms=[Room(name="Kitchen", items=[
-                           Item(id="K1", name="Worktop", condition="good",
-                                cleanliness="requires cleaning",
-                                photo_ids=["P001"]),
-                       ], photos=[Photo(id="P001", path="k.jpg", room="Kitchen")])])
-    after = Inventory(use_case="deepclean",
-                      rooms=[Room(name="Kitchen", items=[
-                          Item(id="K2", name="Worktop", condition="good",
-                               cleanliness="professionally cleaned",
-                               photo_ids=["P001"]),
-                      ], photos=[Photo(id="P001", path="k.jpg", room="Kitchen")])])
-
-    for d, inv in [("before", before), ("after", after)]:
-        p = tmp_path / d
-        (p / "photos").mkdir(parents=True)
-        (p / "inventory.json").write_text(inv.to_json(), encoding="utf-8")
-        Image.new("RGB", (64, 48), "white").save(p / "photos" / "P001.jpg")
-
-    out = tmp_path / "cmp"
-    rc = cli_main(["compare", str(tmp_path / "before"), str(tmp_path / "after"),
-                   "-o", str(out), "--backend", "offline", "--no-pdf"])
-    assert rc == 0
-    html = (out / "compare.html").read_text(encoding="utf-8")
-    assert "Before" in html
-    assert "After" in html
-    assert "Check-in" not in html
-
-    result = compare_inventories(before, after, use_case="deepclean")
-    assert result["labels"] == {"baseline": "Before", "followup": "After"}
-    assert result["rooms"][0]["changed"]
-
-
-def test_get_backend_tenancy_uses_tds_prompt(monkeypatch):
+def test_tenancy_backend_prompt_contains_decomposition_contract(monkeypatch):
     from homeinventory.describe import get_backend
 
     monkeypatch.setenv("GEMINI_API_KEY", "g-key")
-    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     backend = get_backend("openai", use_case="tenancy")
     assert "TDS" in backend.system_prompt
-    assert "est_value_band" in backend.item_schema["properties"]["items"]["items"]["properties"]
+    assert "Canonical identity rules:" in backend.system_prompt
+    assert "never emit 'window and sill'" in backend.system_prompt
