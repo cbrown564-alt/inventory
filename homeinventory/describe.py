@@ -132,6 +132,6 @@ _impl._parse_items = _parse_items
 
 # Refresh the public back-compat schema after patching. The default get_backend
 # path builds a fresh schema per use case; this constant is for direct imports.
-from .usecases import TENANCY as _TENANCY  # noqa: E402
+from .usecases.tenancy import TENANCY as _TENANCY  # noqa: E402
 ITEM_SCHEMA = build_item_schema(_TENANCY)
 _impl.ITEM_SCHEMA = ITEM_SCHEMA
