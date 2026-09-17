@@ -1,0 +1,23 @@
+name: Canonical correspondence
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  cached-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -e '.[dev]'
+      - name: Score frozen cached outputs
+        run: |
+          python -m evals.synthetic.score_canonical_correspondence --out /tmp/canonical.json
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/canonical.json'))
+          print('CANONICAL_RESULT_START')
+          print(json.dumps({'ontology_version':r['ontology_version'],'frozen_inputs':r['frozen_inputs'],'phase0_reference':r.get('phase0_reference'),'repeat_control':r['repeat_control']['pooled'],'delta_pairs':r['delta_pairs']['pooled'],'unknown_surface_names':r['surface_audit']['unknown_surface_names'],'many_surface_collapses':r['surface_audit']['many_surface_collapses']},indent=2))
+          print('CANONICAL_RESULT_END')
+          PY
