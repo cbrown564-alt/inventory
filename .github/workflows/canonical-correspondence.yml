@@ -2,11 +2,6 @@ name: Canonical correspondence
 
 on:
   pull_request:
-    paths:
-      - 'homeinventory/ontology.py'
-      - 'evals/synthetic/score_canonical_correspondence.py'
-      - 'evals/fixtures/synthetic-room-eval/outputs/**'
-      - '.github/workflows/canonical-correspondence.yml'
   workflow_dispatch:
 
 jobs:
