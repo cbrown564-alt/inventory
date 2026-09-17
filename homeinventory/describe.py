@@ -6,7 +6,7 @@ at generation time rather than reconstructed from report prose afterwards.
 """
 from __future__ import annotations
 
-from .canonical_contract import canonical_item_schema, validate_canonical_payload
+from .canonical_contract import build_canonical_item_schema, validate_decomposition
 from .ontology import ONTOLOGY_VERSION
 from .schema import (CATEGORIES, CLEANLINESS_GRADES, CONDITION_GRADES, Item,
                      Photo)
@@ -15,7 +15,7 @@ from .usecases.base import UseCase
 
 def build_item_schema(uc: UseCase) -> dict:
     """Build the production room schema with canonical item identity required."""
-    canonical = canonical_item_schema()["properties"]
+    canonical = build_canonical_item_schema(include_value_band=False)["properties"]["items"]["items"]["properties"]
     item_props = {
         "name": {
             "type": "string",
@@ -93,13 +93,16 @@ def _parse_items(data: dict, photos: list[Photo]) -> tuple[str, list[Item]]:
     items: list[Item] = []
     for raw in data.get("items", []):
         ids = [i for i in (raw.get("photo_ids") or []) if i in valid_ids] or all_ids
-        validate_canonical_payload({
-            "item_type": raw.get("item_type"),
-            "display_name": raw.get("name", "Unidentified item"),
-            "subtype": raw.get("subtype"),
-            "attributes": raw.get("attributes") or {},
-            "instance_key": raw.get("instance_key"),
+        errors = validate_decomposition({
+            "ontology_version": ONTOLOGY_VERSION,
+            "items": [{
+                "item_type": raw.get("item_type"),
+                "display_name": raw.get("name", "Unidentified item"),
+                "quantity": raw.get("quantity") or 1,
+            }],
         })
+        if errors:
+            raise ValueError("; ".join(errors))
         items.append(Item(
             id="",
             name=raw.get("name", "Unidentified item"),
