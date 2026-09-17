@@ -1,3 +1,6 @@
+import pytest
+
+from homeinventory.ontology import ONTOLOGY_VERSION
 from homeinventory.schema import (CONDITION_GRADES, Inventory, Item, Photo,
                                   Room, _norm_grade)
 
@@ -10,10 +13,22 @@ def test_norm_grade_aliases():
     assert _norm_grade(None, CONDITION_GRADES) is None
 
 
-def test_item_normalise():
-    it = Item(id="X", name="TV", category="banana", quantity=0, condition="ok")
+@pytest.mark.parametrize(
+    ("name", "expected_item_type", "expected_category"),
+    [
+        ("TV", "television", "electronics"),
+        ("Mystery bespoke object", None, "other"),
+    ],
+)
+def test_item_normalise(name, expected_item_type, expected_category):
+    it = Item(id="X", name=name, category="banana", quantity=0, condition="ok")
     it.normalise()
-    assert it.category == "other"
+    assert it.name == name
+    assert it.item_type == expected_item_type
+    assert it.category == expected_category
+    assert it.ontology_version == (
+        ONTOLOGY_VERSION if expected_item_type is not None else None
+    )
     assert it.quantity == 1
     assert it.condition == "fair"
 
