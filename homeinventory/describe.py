@@ -1,12 +1,12 @@
 """Describe backends with ontology-constrained machine identity.
 
 The backend transports live in ``_describe_impl``. This module owns the
-model-facing schema and parser contract so canonical identity is established
-at generation time rather than reconstructed from report prose afterwards.
+model-facing schema, parser and prompt contract so canonical identity is
+established at generation time rather than reconstructed from report prose.
 """
 from __future__ import annotations
 
-from .canonical_contract import build_canonical_item_schema, validate_decomposition
+from .canonical_contract import DECOMPOSITION_RULES, build_canonical_item_schema, validate_decomposition
 from .ontology import ONTOLOGY_VERSION
 from .schema import CATEGORIES, CLEANLINESS_GRADES, CONDITION_GRADES, Item, Photo
 from .usecases.base import UseCase
@@ -43,6 +43,14 @@ def build_item_schema(uc: UseCase) -> dict:
         "required": ["room_summary", "items"],
         "additionalProperties": False,
     }
+
+
+def canonical_system_prompt(base_prompt: str) -> str:
+    """Append the frozen ontology decomposition contract to a use-case prompt."""
+    marker = "Canonical identity rules:"
+    if marker in base_prompt:
+        return base_prompt
+    return base_prompt.rstrip() + "\n\n" + DECOMPOSITION_RULES.strip() + "\n"
 
 
 from . import _describe_impl as _impl  # noqa: E402
@@ -105,8 +113,42 @@ def _parse_items(data: dict, photos: list[Photo]) -> tuple[str, list[Item]]:
     return data.get("room_summary", ""), items
 
 
+def get_backend(name: str, model=None, base_url=None, use_case=None):
+    """Build a backend using the canonical schema and decomposition prompt.
+
+    Offline mode has no model prompt. Local compact mode remains compatible
+    with its intentionally smaller response schema; its system prompt still
+    receives the identity rules so a future full-schema local run has the same
+    task definition.
+    """
+    from .usecases import DEFAULT_USE_CASE, get_use_case
+
+    uc = get_use_case(use_case or DEFAULT_USE_CASE)
+    schema = build_item_schema(uc)
+    prompt = canonical_system_prompt(uc.system_prompt)
+    if name == "claude":
+        return _impl.ClaudeBackend(model=model or "claude-opus-5", system_prompt=prompt, item_schema=schema)
+    if name == "openai":
+        return _impl.OpenAICompatBackend(model=model, base_url=base_url, system_prompt=prompt, item_schema=schema)
+    if name == "openrouter":
+        return _impl.OpenAICompatBackend(model=model or "google/gemini-3.7-flash",
+            base_url=base_url or _impl.OpenAICompatBackend.OPENROUTER_BASE,
+            system_prompt=prompt, item_schema=schema, name="openrouter")
+    if name == "tiered":
+        draft = _impl.OpenAICompatBackend(model=model or "google/gemini-3.7-flash", base_url=base_url,
+            system_prompt=prompt, item_schema=schema)
+        expert_model = _impl.os.environ.get("HI_EXPERT_MODEL", "claude-opus-5")
+        return _impl.TieredBackend(draft, expert_model=expert_model, system_prompt=prompt, item_schema=schema)
+    if name == "local":
+        return _impl.LocalBackend(model=model, system_prompt=prompt, item_schema=schema)
+    if name == "offline":
+        return _impl.OfflineBackend()
+    raise ValueError(f"unknown describe backend: {name!r} (expected tiered|claude|openai|openrouter|local|offline)")
+
+
 _impl.build_item_schema = build_item_schema
 _impl._parse_items = _parse_items
+_impl.get_backend = get_backend
 
 from .usecases.tenancy import TENANCY as _TENANCY  # noqa: E402
 ITEM_SCHEMA = build_item_schema(_TENANCY)
