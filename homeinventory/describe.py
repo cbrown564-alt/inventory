@@ -1,6 +1,6 @@
 """Describe backends with ontology-constrained machine identity.
 
-The backend transports live in ``_describe_impl``.  This module owns the
+The backend transports live in ``_describe_impl``. This module owns the
 model-facing schema and parser contract so canonical identity is established
 at generation time rather than reconstructed from report prose afterwards.
 """
@@ -8,8 +8,7 @@ from __future__ import annotations
 
 from .canonical_contract import build_canonical_item_schema, validate_decomposition
 from .ontology import ONTOLOGY_VERSION
-from .schema import (CATEGORIES, CLEANLINESS_GRADES, CONDITION_GRADES, Item,
-                     Photo)
+from .schema import CATEGORIES, CLEANLINESS_GRADES, CONDITION_GRADES, Item, Photo
 from .usecases.base import UseCase
 
 
@@ -46,45 +45,63 @@ def build_item_schema(uc: UseCase) -> dict:
     }
 
 
-# Import transports only after build_item_schema exists. A star import excludes
-# underscore-prefixed helpers, but those helpers are part of this module's
-# historical API and are used by tests/eval scripts. Re-export them explicitly
-# below to keep the describe.py split transparent to existing callers.
 from . import _describe_impl as _impl  # noqa: E402
 from ._describe_impl import *  # noqa: E402,F401,F403
+# Star-import intentionally excludes private names. describe.py historically
+# exposed several helpers used by tests, benchmarks and eval tooling, so keep
+# the module split API-transparent.
 for _compat_name in dir(_impl):
     if (_compat_name.startswith("_") and not _compat_name.startswith("__")
-            and _compat_name not in {"_parse_items"}):
+            and _compat_name != "_parse_items"):
         globals().setdefault(_compat_name, getattr(_impl, _compat_name))
 
 
 def _parse_items(data: dict, photos: list[Photo]) -> tuple[str, list[Item]]:
-    """Persist model-emitted canonical identity after defensive validation."""
+    """Parse both canonical production payloads and legacy/compact payloads.
+
+    Canonical outputs are strictly validated. Legacy and compact local outputs
+    predate item_type and retain their old semantics; this is required for
+    cached eval records and the intentionally smaller local response schema.
+    """
     valid_ids = {p.id for p in photos}
     all_ids = [p.id for p in photos]
     items: list[Item] = []
     for raw in data.get("items", []):
         ids = [i for i in (raw.get("photo_ids") or []) if i in valid_ids] or all_ids
-        errors = validate_decomposition({
-            "ontology_version": ONTOLOGY_VERSION,
-            "items": [{
-                "item_type": raw.get("item_type"),
-                "display_name": raw.get("name", "Unidentified item"),
-                "quantity": raw.get("quantity") or 1,
-            }],
-        })
-        if errors:
-            raise ValueError("; ".join(errors))
-        items.append(Item(
+        canonical = raw.get("item_type") is not None
+        if canonical:
+            errors = validate_decomposition({
+                "ontology_version": ONTOLOGY_VERSION,
+                "items": [{
+                    "item_type": raw.get("item_type"),
+                    "display_name": raw.get("name", "Unidentified item"),
+                    "quantity": raw.get("quantity") or 1,
+                }],
+            })
+            if errors:
+                raise ValueError("; ".join(errors))
+        item = Item(
             id="", name=raw.get("name", "Unidentified item"),
             item_type=raw.get("item_type"), subtype=raw.get("subtype"),
             attributes=dict(raw.get("attributes") or {}), instance_key=raw.get("instance_key"),
-            ontology_version=ONTOLOGY_VERSION, category=raw.get("category", "other"),
-            description=raw.get("description", ""), condition=raw.get("condition"),
-            cleanliness=raw.get("cleanliness"), defects=list(raw.get("defects") or []),
-            quantity=int(raw.get("quantity") or 1), est_value_band=raw.get("est_value_band"),
-            photo_ids=ids, confidence=raw.get("confidence"),
-        ).normalise())
+            ontology_version=ONTOLOGY_VERSION if canonical else None,
+            category=raw.get("category", "other"), description=raw.get("description", ""),
+            condition=raw.get("condition"), cleanliness=raw.get("cleanliness"),
+            defects=list(raw.get("defects") or []), quantity=int(raw.get("quantity") or 1),
+            est_value_band=raw.get("est_value_band"), photo_ids=ids, confidence=raw.get("confidence"),
+        ).normalise()
+        if not canonical:
+            # Preserve the historical compact/legacy parser contract. Ontology
+            # backfill remains available when loading persisted inventories via
+            # Inventory.from_json, but a compact inference response is not
+            # silently promoted into the constrained-generation experiment.
+            item.item_type = None
+            item.subtype = None
+            item.attributes = {}
+            item.instance_key = None
+            item.ontology_version = None
+            item.category = raw.get("category", "other") if raw.get("category", "other") in CATEGORIES else "other"
+        items.append(item)
     return data.get("room_summary", ""), items
 
 
