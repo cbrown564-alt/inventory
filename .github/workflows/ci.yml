@@ -15,3 +15,21 @@ jobs:
           python-version: "3.11"
       - run: pip install -e ".[dev]"
       - run: pytest -q -m "not eval" --strict-markers
+      - name: Temporary cached canonical correspondence analysis
+        run: |
+          python -m evals.synthetic.score_canonical_correspondence --out /tmp/canonical.json
+          python - <<'PY'
+          import json
+          r = json.load(open("/tmp/canonical.json"))
+          print("CANONICAL_RESULT_START")
+          print(json.dumps({
+              "ontology_version": r["ontology_version"],
+              "frozen_inputs": r["frozen_inputs"],
+              "phase0_reference": r.get("phase0_reference"),
+              "repeat_control": r["repeat_control"]["pooled"],
+              "delta_pairs": r["delta_pairs"]["pooled"],
+              "unknown_surface_names": r["surface_audit"]["unknown_surface_names"],
+              "many_surface_collapses": r["surface_audit"]["many_surface_collapses"],
+          }, indent=2))
+          print("CANONICAL_RESULT_END")
+          PY
